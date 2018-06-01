@@ -1,0 +1,50 @@
+
+        //       Список часто покупаемых с данным товаров формируется по следующему принципу
+        //       товары, покупаемые вместе с данным, того же автора        ($query_number = 1)
+        //       товары, покупаемые вместе с данным, того же исполнителя   ($query_number = 2)
+        //       товары, покупаемые вместе с данным, той же подкатегории   ($query_number = 3)
+        //       товары, покупаемые вместе с данным, той же категории      ($query_number = 4)
+        //       остальные товары, покупаемые вместе с данным              ($query_number = 5)
+
+
+ALTER TABLE `audio_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `books_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `maps_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `musicsheets_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `music_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `pereodics_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `printed_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `soft_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+ALTER TABLE `video_catalog` ADD  `avail_for_order` TINYINT NOT NULL DEFAULT  '1', ADD INDEX (  `avail_for_order` );
+
+ALTER TABLE  `audio_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `books_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `maps_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `musicsheets_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `music_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `pereodics_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `printed_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `soft_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+ALTER TABLE  `video_categories` ADD  `avail_items_count` INT NOT NULL DEFAULT  '0';
+
+
+
+https://www.google.fi/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CDEQFjAA&url=http%3A%2F%2Fwww.ruslania.com%2Flanguage-2%2Fentity-1%2Fcontext-577%2Fauthor-16415.html&ei=CvEuUoLUGIzItAa8woCoCw&usg=AFQjCNFgqtUEBbu1W9gM32Gov8MrxAgNeA&sig2=pGRmY6aBnkjCTdEAZpp_IA&bvm=bv.51773540,d.Yms
+http://ruslania2.com/language-2/entity-1/context-577/author-16415.html
+
+
+UPDATE adlibris_asn
+SET entity = CASE
+WHEN entity=1 THEN 10
+WHEN entity=2 THEN 20
+WHEN entity=3 THEN 40
+WHEN entity=4 THEN 30
+WHEN entity=5 THEN 50
+WHEN entity=6 THEN 15
+WHEN entity=7 THEN 22
+WHEN entity=8 THEN 24
+WHEN entity=9 THEN 60
+ELSE entity
+END
+
+SELECT COUNT(*), entity FROM adlibris_asn GROUP BY entity
