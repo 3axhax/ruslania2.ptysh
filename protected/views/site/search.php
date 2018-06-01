@@ -3,7 +3,7 @@
 <div class="container content_books">
 <div class="row">
 
-		<div class="listgoods span10" style="float: right;">
+		<div class="listgoods span10">
 		
             <?php if (!empty($items)) : ?>
                 <p><?=$ui->item('DID_YOU_MEAN'); ?></p>
@@ -106,9 +106,7 @@ shuffle($serGoods);
 ?>
 
  <div class="span2">
-     <h2 class="poht" style="margin-top: 0; margin-bottom: 20px;">
-Вы сморели:
-</h2>
+     <h2 class="poht" style="margin-top: 0; margin-bottom: 20px;"><?= $ui->item('A_NEW_VIEWD_ITEMS'); ?>:</h2>
 
 
 <div class="you_view">
