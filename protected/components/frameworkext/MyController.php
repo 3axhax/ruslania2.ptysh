@@ -9,6 +9,7 @@ class MyController extends CController
     protected $uid = 0;
     protected $sid = 0;
     protected $sessionID = 0;
+    protected $_canonicalPath = null;
 
     public function GetAvail($avail)
     {
@@ -225,5 +226,7 @@ class MyController extends CController
         }
         return Yii::app()->params['DefaultLanguage'];
     }
+
+    function getCanonicalPath() { return $this->_canonicalPath; }
 
 }
