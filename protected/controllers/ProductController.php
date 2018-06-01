@@ -287,9 +287,9 @@ class ProductController extends MyController
 			$path = substr($path, 0, $ind);
 		}
 
-		$realPath = ProductHelper::CreateUrl($item);
-		if ($realPath === $path) return false;
-		return $realPath . $query;
+		$this->_canonicalPath = ProductHelper::CreateUrl($item);
+		if ($this->_canonicalPath === $path) return false;
+		return $this->_canonicalPath . $query;
 
 	}
 }

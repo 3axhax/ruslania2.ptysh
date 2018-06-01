@@ -35,6 +35,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
     <head>
         <title><?= $this->pageTitle; ?></title>
         <meta name="keywords" content="<?=$this->pageKeywords?>">
+        <?php if ($canonicalPath = $canonicalPath->getCanonicalPath()): ?>
+            <link rel="canonical" href="<?= $canonicalPath ?>"/>
+        <?php endif; ?>
         <meta name="description" content="<?=$this->pageDescription?>">
         <META name="verify-v1" content="eiaXbp3vim/5ltWb5FBQR1t3zz5xo7+PG7RIErXIb/M="/>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
