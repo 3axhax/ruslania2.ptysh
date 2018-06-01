@@ -1605,7 +1605,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 
                 <div class="copyright">
 
-                    2017 © <b>Ruslania</b> - All rights Reserved
+                    2017 © <span class="title__bold">Ruslania</span> - All rights Reserved
 
                 </div>
 
