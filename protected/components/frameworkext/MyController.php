@@ -230,8 +230,11 @@ class MyController extends CController
 
     function getCanonicalPath() {
         //если есть постраничный вывод, то не показываем canonical для гугла
-        var_dump($this->_canonicalPath);
         if (($this->_maxPages !== false)&&($this->_getUserAgent() === 'google')) return '';
+        $curPage = (int) Yii::app()->getRequest()->getParam('page');
+        //в задании про canonical написано сделать на всех страницах
+        //а взадании про пагинацию на страницах начаная со второй
+        if (($this->_maxPages !== false)&&($curPage < 2)) return '';
 
         return $this->_canonicalPath;
     }

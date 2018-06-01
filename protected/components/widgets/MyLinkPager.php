@@ -15,7 +15,7 @@ class MyLinkPager extends CLinkPager
 		$params = $this->getGetParams();
 		$params['page'] = $page;
 		
-		if ($_GET['qa'] == '') {
+		if (isset($_GET['qa']) && ($_GET['qa'] == '')) {
 			$params['char'] = $char;
 		}
 		$urlParams = '';
@@ -39,6 +39,22 @@ class MyLinkPager extends CLinkPager
 	
 	private function getGetParams()
 	{
+
+		$path = urldecode(getenv('REQUEST_URI'));
+		$ind = mb_strpos($path, "?", null, 'utf-8');
+		$q = ($ind === false)?'':mb_substr($path, $ind, null, 'utf-8');
+		unset($path);
+
+		$query = $_GET;
+		foreach ($query as $k=>$v) {
+			//убираю параметры, которые кто-то зачем-то в скриптах положил в $_GET
+			if (!preg_match("/\b" . $k . "\b/ui", $q)) unset($query[$k]);
+			//пустые параметры тоже уберу, их не доложно быть
+			elseif ($v === '') unset($query[$k]);
+		}
+		return $query;
+
+		//Исправил потому, что если адрес /books/?cavail=1 то будет формировать /books/?cavail=1&avail=1&page=2
 		$res = [];
 		
 		$paramsStart = strpos(Yii::app()->request->url, '?');
@@ -53,7 +69,7 @@ class MyLinkPager extends CLinkPager
 			if(strpos($params, strtolower($key)) !== false and strtolower($key) != 'page')
 				$res[$key] = $val;
 		}
-		
+
 		return $res;
 	}
    
