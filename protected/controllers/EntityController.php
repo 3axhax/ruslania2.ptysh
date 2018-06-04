@@ -77,9 +77,7 @@ class EntityController extends MyController {
             $cat = array_shift($cat);
             if (!empty($cat['title_en'])) $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($cat));
         }
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
 
 		
@@ -263,9 +261,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $c = new Category();
         $tree = $c->GetCategoriesTree($entity);
@@ -285,9 +281,7 @@ class EntityController extends MyController {
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         if ($char !== null) $dataForPath['char'] = $char;
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $abc = array();
         $lang = Yii::app()->language;
@@ -316,9 +310,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $s = new Series;
         $list = $s->GetList($entity, Yii::app()->language);
@@ -344,9 +336,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($list[0]));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $totalItems = $s->GetTotalItems($entity, $sid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -380,9 +370,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['mid'] = $mid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($media));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $totalItems = $m->GetTotalItems($entity, $mid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -414,9 +402,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($publisher));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -440,9 +426,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $a = new CommonAuthor();
 
@@ -497,9 +481,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($author));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $totalItems = $a->GetTotalItems($entity, $aid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -534,9 +516,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new Performer;
         $lang = Yii::app()->language;
@@ -561,9 +541,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoActor();
         $lang = Yii::app()->language;
@@ -586,9 +564,7 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new Binding())->getAll($entity);
 
@@ -603,9 +579,7 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('audiostreams', $entity))
             throw new CHttpException(404);
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
 
         $list = (new VideoAudioStream)->getAll($entity);
@@ -621,9 +595,7 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('subtitles', $entity))
             throw new CHttpException(404);
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new VideoSubtitle)->getAll($entity);
 
@@ -638,9 +610,7 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('media', $entity))
             throw new CHttpException(404);
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new Media())->getAll($entity);
 
@@ -655,9 +625,7 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('magazinetype', $entity))
             throw new CHttpException(404);
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new TypeRetriever)->getAll($entity);
 
@@ -672,9 +640,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoDirector();
         $lang = Yii::app()->language;
@@ -699,9 +665,7 @@ class EntityController extends MyController {
         if ($entity === false) $entity = Entity::BOOKS;
 
 
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+       $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new YearRetriever)->getAll($entity);
 
@@ -726,9 +690,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($performer));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -770,9 +732,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['did'] = $did;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($director->attributes));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -807,9 +767,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($actor->attributes));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -844,9 +802,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle->attributes));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -880,9 +836,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['bid'] = $bid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($bData));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -910,9 +864,7 @@ class EntityController extends MyController {
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         if ((int) $year > 0) $dataForPath['year'] = $year;
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -942,9 +894,7 @@ class EntityController extends MyController {
 		
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['type'] = $type;
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -974,9 +924,7 @@ class EntityController extends MyController {
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         if ((int) $year > 0) $dataForPath['year'] = $year;
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1011,9 +959,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($stream->attributes));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1047,9 +993,7 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['tid'] = $tid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($type->attributes));
-        if (($realPath = $this->_checkUrl($dataForPath)) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
 
@@ -1095,9 +1039,7 @@ class EntityController extends MyController {
     public function actionGift()
     {
         $entity = Entity::PERIODIC;
-        if (($realPath = $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $o = new Offer();
         $group = $o->GetItems(Offer::INDEX_PAGE, $entity);
@@ -1112,9 +1054,8 @@ class EntityController extends MyController {
 
     /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
      * если совпадают, то возвращаю false
-     * иначе возвращаю адрес реальной страницы, на которую можно будет делать редирект
+     * иначе редирект или 404
      * @param array $data параметры для формирования пути
-     * @return bool|string
      */
     private function _checkUrl($data) {
    		$path = getenv('REQUEST_URI');
@@ -1127,18 +1068,21 @@ class EntityController extends MyController {
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
 
-        //редирект с page=1
-        $countPage1 = 0;
-        $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);
-        if ($countPage1 > 0) {
-            $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
-            if ($query === '?') $query = '';
-            return $this->_canonicalPath . $query;
+   		if ($this->_canonicalPath === $path) {
+            //редирект с page=1
+            $countPage1 = 0;
+            $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);
+            if ($countPage1 > 0) {
+                $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+                if ($query === '?') $query = '';
+                $this->redirect($this->_canonicalPath . $query, true, 301);
+            }
+            //редирект с page=1
+            return;
         }
-        //редирект с page=1
 
-   		if ($this->_canonicalPath === $path) return false;
-   		return $this->_canonicalPath . $query;
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query);
+        throw new CHttpException(404);
 
    	}
 

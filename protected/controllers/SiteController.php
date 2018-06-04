@@ -20,18 +20,14 @@ class SiteController extends MyController {
     }
 
     public function actionSale() {
-        if (($realPath = $this->_checkUrl(array())) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array());
 
         $this->breadcrumbs[] = Yii::app()->ui->item('MENU_SALE');
         $this->render('sale');
     }
 
     public function actionLandingpage() {
-        if (($realPath = $this->_checkUrl(array())) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array());
 
         Yii::app()->language = 'fi';
         $this->breadcrumbs[] = 'Landingpage';
@@ -98,9 +94,7 @@ class SiteController extends MyController {
     }
 
     public function actionStatic($page) {
-        if (($realPath = $this->_checkUrl(array('page' => $page))) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array('page' => $page));
 
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
         if ($page == 'sitemap') $file = (new Sitemap)->builder();
@@ -223,9 +217,7 @@ class SiteController extends MyController {
             $this->ResponseJson($ret);
         }
 
-        if (($realPath = $this->_checkUrl(array())) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array());
 
         $this->breadcrumbs[] = Yii::app()->ui->item('YM_CONTEXT_PERSONAL_LOGIN');
 
@@ -251,9 +243,7 @@ class SiteController extends MyController {
             $this->ResponseJson($ret);
         }
 
-        if (($realPath = $this->_checkUrl(array())) !== false) {
-   		    $this->redirect($realPath, true, 301);
-   	    }
+        $this->_checkUrl(array());
 
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
         $this->render('register', array('model' => $user));
@@ -289,6 +279,7 @@ class SiteController extends MyController {
         $this->searchFilters = array('e' => $e, 'page' => $page);
 
         Yii::app()->session['SearchData'] = array('q' => $origSearch, 'time' => time(), 'e' => $e);
+var_dump($origSearch);
         if (empty($origSearch)) {
             if (Yii::app()->request->isAjaxRequest)
                 $this->ResponseJson(array());
@@ -1100,9 +1091,8 @@ class SiteController extends MyController {
 
     /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
      * если совпадают, то возвращаю false
-     * иначе возвращаю адрес реальной страницы, на которую можно будет делать редирект
+     * иначе редирект или 404
      * @param array $data параметры для формирования пути
-     * @return bool|string
      */
     private function _checkUrl($data) {
    		$path = urldecode(getenv('REQUEST_URI'));
@@ -1119,9 +1109,11 @@ class SiteController extends MyController {
             default: $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage); break;
         }
 
-   		if ($this->_canonicalPath === $path) return false;
-   		return $this->_canonicalPath . $query;
+   		if ($this->_canonicalPath === $path) return;
 
-   	}
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query);
+        throw new CHttpException(404);
+
+    }
 
 }

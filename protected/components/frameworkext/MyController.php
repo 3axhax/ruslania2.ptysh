@@ -234,7 +234,7 @@ class MyController extends CController
         $curPage = (int) Yii::app()->getRequest()->getParam('page');
         //в задании про canonical написано сделать на всех страницах
         //а взадании про пагинацию на страницах начаная со второй
-        if (($this->_maxPages !== false)&&($curPage < 2)) return '';
+//        if (($this->_maxPages !== false)&&($curPage < 2)) return '';
 
         return $this->_canonicalPath;
     }
@@ -285,6 +285,25 @@ class MyController extends CController
         if (mb_strpos($ua, 'yandex', null, 'utf-8')) return 'yandex';
         if (mb_strpos($ua, 'google', null, 'utf-8')) return 'google';
         return '';
+    }
+
+    /** функция запускается, если адрес, с которого зашли на страницу не соответствует адресу, который должен быть (реальный адрес)
+     * на 04.06.18 старыми адресами считаются
+     * - адреса заканчивающиеся на ".html" или
+     * - адреса заканчивающиеся не на "/"
+     * - адреса без наименования
+     * реальные адреса заканчиваются на "/"
+     * функция делает редирект на реальный адрес, если старый адрес похож на реальный
+     * @param $oldPage
+     * @param $realPage
+     * @param $query
+     */
+    protected function _redirectOldPages($oldPage, $realPage, $query) {
+        if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
+        elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
+        elseif (preg_match("/(\d+)\/?/", $oldPage)) $oldPage = $realPage;
+
+        if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
     }
 
 }

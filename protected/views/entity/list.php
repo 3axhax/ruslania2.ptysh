@@ -104,7 +104,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                                 if (count(Category::exists_subcategoryes($entity, $cat['id']))) {
                                     echo '<a href="javascript:;" class="open_subcat subcatlvl'.($lvl+1).'" onclick="show_sc($(\'ul.sc' . $cat['id'] . '\'), $(this), '.($lvl+1).')"></a>';
                                 }
-                                echo '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($cat['title_en']))) . '">' . ProductHelper::GetTitle($cat) . '</a>';
+                                echo '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))) . '">' . ProductHelper::GetTitle($cat) . '</a>';
 
 
 								getSubCategoryes($entity, $cat['id'], $lvl + 1);
@@ -122,7 +122,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                             <? if (count(Category::exists_subcategoryes($entity, $cat['id']))) {?>
                             <a href="javascript:;" class="open_subcat subcatlvl1" onclick="show_sc($('ul.sc<?= $cat['id'] ?>'), $(this), 1)"></a>
                             <?} ?>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($cat['title_en']))); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
 
 
 

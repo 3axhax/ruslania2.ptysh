@@ -96,9 +96,11 @@ return array(
             'cacheID' => 'schemaCache', // туда же закешируем, куда и схему
             'showScriptName' => false,
 //            'suffix' => '/',
+            'urlSuffix'=>'/',
             'rules' => array(
                 '/' => 'site/index',
-                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
+//                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
+                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>' => 'product/view',
 
                 'sale' => 'site/sale',
