@@ -271,6 +271,11 @@ class ProductController extends MyController
 
         if(empty($data)) throw new CHttpException(404);
 
+		if (($entity == Entity::PERIODIC) && (!empty($data['issues_year'])))
+        {
+            $data['issues_year'] = Periodic::getCountIssues($data['issues_year']);
+        }
+
         $this->render('view', array('item' => $data, 'entity' => $entity));
     }
 
