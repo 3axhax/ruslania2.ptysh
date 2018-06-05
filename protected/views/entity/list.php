@@ -33,16 +33,16 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                 <?php endif; */?>
             </div>
 			<div class="sortbox langsel">
-                <?php //if (isset($_GET['ha'])): ?>
+                <?php if (!isset($_GET['ha'])): ?>
                     <?php $this->widget('SelectSimulator', array('items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id), 'paramName'=>'lang')); ?>
-                <?php /*else: ?>
+                <?php else: ?>
                 <form method="GET">
                     <?= CHtml::dropDownList('lang', (int) Yii::app()->getRequest()->getParam('lang'), ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id), array('onchange' => '$(this).closest(\'form\').submit()', 'style'=>'width: auto;')); ?>
 					<?php if ($sort = Yii::app()->getRequest()->getParam('sort')) : ?>
 					<input type="hidden" name="sort" value="<?=$sort?>"/>
 					<?php endif; ?>
                 </form>
-                <?php endif;*/ ?>
+                <?php endif; ?>
             </div>
 			<div style="margin: 5px 0 ;">
 			<?//=sprintf($ui->item('X items here'), $total)?>
@@ -87,7 +87,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                 <ul class="left_list divider">
 
                     <li><a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid)) ?>">
-                            <b><?=((!$cid) ? Entity::GetTitle($entity) : $title_cat); ?></b>
+                            <span class="title__bold"><?=((!$cid) ? Entity::GetTitle($entity) : $title_cat); ?></span>
                         </a>
                     </li>
                     <?php

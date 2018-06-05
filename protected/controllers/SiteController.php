@@ -10,7 +10,7 @@ class SiteController extends MyController {
         return array(array('allow',
                 'actions' => array('update', 'error', 'index', 'categorylistjson', 'static',
                     'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                    'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter', 'ourstore', 'addcomments', 'loadhistorysubs'),
+                    'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
                 'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                     'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs'),
@@ -92,6 +92,9 @@ class SiteController extends MyController {
     public function actionStatic($page) {
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
         if ($page == 'sitemap') $file = (new Sitemap)->builder();
+        if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
+        if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
+
         if (!file_exists($file)) {
             throw new CHttpException(404);
         }

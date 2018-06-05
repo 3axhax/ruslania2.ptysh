@@ -4,12 +4,16 @@ class ProductController extends MyController
 {
     public function actionView($entity, $id)
     {
-        
+
 		$entity = Entity::ParseFromString($entity);
         if($entity === false) throw new CHttpException(404);
 
         $product = new Product();
         $data = $product->GetProduct($entity, $id);
+
+	    if (($realPath = $this->_checkUrl($data)) !== false) {
+		    $this->redirect($realPath, true, 301);
+	    }
 
         $c = new Cart;
         $cart = $c->GetCart($this->uid, $this->sid);
@@ -269,6 +273,28 @@ class ProductController extends MyController
 
         if(empty($data)) throw new CHttpException(404);
 
+		if (($entity == Entity::PERIODIC) && (!empty($data['issues_year'])))
+        {
+            $data['issues_year'] = Periodic::getCountIssues($data['issues_year']);
+        }
+
         $this->render('view', array('item' => $data, 'entity' => $entity));
     }
+
+	private function _checkUrl($item) {
+		if (empty($item)) return false;
+
+		$path = urldecode(getenv('REQUEST_URI'));
+		$ind = mb_strpos($path, "?", null, 'utf-8');
+		$query = '';
+		if ($ind !== false) {
+			$query = mb_substr($path, $ind, null, 'utf-8');
+			$path = substr($path, 0, $ind);
+		}
+
+		$realPath = ProductHelper::CreateUrl($item);
+		if ($realPath === $path) return false;
+		return $realPath . $query;
+
+	}
 }

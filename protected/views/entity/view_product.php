@@ -38,11 +38,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	<div class="span11 to_cart"><h1 class="title"><?= ProductHelper::GetTitle($item); ?></h1>
 	
 	<? if ($item['title_original']) : ?>
-	<div class="authors row" style="margin-bottom:0;">
-		<span class="nameprop span1" style="overflow: hidden;
-    text-align: left;
-    background: none;">Оригинальное название:</span> 
-		<div class="span2" style="float: left; margin-left: 5px; width: 345px;"> <?=$item['title_original']?></div>
+	<div class="authors" style="margin-bottom:10px;">
+		<div style="float: left;width: 220px;">Оригинальное название:</div>
+		<div style="padding-left: 253px;"><?=$item['title_original']?></div>
+        <div class="clearBoth"></div>
 	</div>
 	<? endif; ?>
 	
@@ -135,7 +134,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			  <?php if (!empty($item['Media'])) : ?>
                <div><span class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></span>
                 <a class="cprop"
-                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<b>' . $item['Zone']['title'] . '</b>'); ?>
+                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
                     <a class="pointerhand"
                        href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
                         <img src="/pic1/q1.gif" width="16" height="16"
@@ -202,7 +201,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <?php
                 $langs = array();
                 foreach ($item['Languages'] as $lang) {
-                    $langs[] = '<b>' . Language::GetTitleByID($lang['language_id']) . '</b>';
+                    $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
                 }
 
                 echo implode(', ', $langs);
@@ -287,7 +286,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if (!empty($item['Media'])) : ?>
                 <br /><span class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></span>
                 <a class="cprop"
-                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<b>' . $item['Zone']['title'] . '</b>'); ?>
+                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
                     <a class="pointerhand"
                        href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
                         <img src="/pic1/q1.gif" width="16" height="16"
@@ -304,12 +303,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if (!empty($item['issn'])) : ?>
                 <br /><span class="nameprop">ISSN:</span> <?= $item['issn']; ?>
             <?php endif; ?>
-
-            
-
-            
-
-            <?php //if (!empty($item['issues_year'])) $this->renderPartial('/entity/_issues_year', array('item' => $item)) ?>
 
             <?php if (!empty($item['requirements'])) : ?>
                 <br /><span class="nameprop"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</span> <?= $item['requirements']; ?>
@@ -359,12 +352,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 					
 					<div class="clearBoth"></div>
 					
-					
-					
-					<?=
-                    $this->renderPartial('/entity/_issues_year', array('key' => 'ITEM',
-                        'item' => $item));
-                    ?>
+                    <?=$item['issues_year']['description']?>
 					
 					<div class="clearBoth"></div>
 					
@@ -494,7 +482,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                    
                         <?php if (!empty($pdf)) : ?>
                         <div id="staticfiles<?= $item['id']; ?>">
-                            <b><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></b> 
+                            <span class="title__bold"><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></span> 
                             <ul class="staticfile">
                                 <?php $pdfCounter = 1; ?>
                                 <?php foreach ($pdf as $file) : ?>
@@ -509,6 +497,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
+                    <div class="clearBoth"></div>
             <?php endif; ?>
 				
 				<? $count_add = 1;
@@ -539,15 +528,15 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				
             <?php endif; ?>
 			
-			<? if ($item['entity'] == Entity::PERIODIC) { ?>
+			<?/* if ($item['entity'] == Entity::PERIODIC) { */?><!--
 				<div style="height: 18px;"></div>
 				
 				
 				
-				<?php $lookinside = false; if (!empty($item['Lookinside'])) : ?>
+				<?php /*$lookinside = false; if (!empty($item['Lookinside'])) : */?>
 				<div class="link__container" style="float: left; width: 170px;">
                 <?php
-				$lookinside = true;
+/*				$lookinside = true;
                 $images = array();
                 $audio = array();
                 $pdf = array();
@@ -568,86 +557,66 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     }
                 }
                 $images = implode('|', $images);
-                ?>
+                */?>
                 
-                <?php if ($item['entity'] == Entity::AUDIO) : ?>
-                    <a href="javascript:;" style="width: 131px; margin-right: 30px;"  data-iid="<?= $item['id']; ?>" data-audio="<?= implode('|', $audio); ?>" class="read_book">Смотреть</a>
+                <?php /*if ($item['entity'] == Entity::AUDIO) : */?>
+                    <a href="javascript:;" style="width: 131px; margin-right: 30px;"  data-iid="<?/*= $item['id']; */?>" data-audio="<?/*= implode('|', $audio); */?>" class="read_book">Смотреть</a>
 					
-                    <div id="audioprog<?= $item['id']; ?>" class="audioprogress">
+                    <div id="audioprog<?/*= $item['id']; */?>" class="audioprogress">
                         <img src="/pic1/isplaying.gif" class="lookinside audiostop"/><br/>
-                        <span id="audionow<?= $item['id']; ?>"></span> / <span id="audiototal<?= $item['id']; ?>"></span>
+                        <span id="audionow<?/*= $item['id']; */?>"></span> / <span id="audiototal<?/*= $item['id']; */?>"></span>
 
                     </div>
                     <div class="clearBoth"></div>
 
 
-                <?php else : ?>
-					<a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
-                         data-iid="<?= $item['id']; ?>"
-                         data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
-                         data-images="<?= CHtml::encode($images); ?>" style="width: 131px; margin-right: 30px;" class="read_book"><?=$ui->item('A_NEW_VIEW')?></a>
+                <?php /*else : */?>
+					<a href="<?/*= CHtml::encode($first['img']); */?>" onclick="return false;"
+                         data-iid="<?/*= $item['id']; */?>"
+                         data-pdf="<?/*= CHtml::encode(implode('|', array())); */?>"
+                         data-images="<?/*= CHtml::encode($images); */?>" style="width: 131px; margin-right: 30px;" class="read_book"><?/*=$ui->item('A_NEW_VIEW')*/?></a>
 				
                    
-                        <?php if (!empty($pdf)) : ?>
-                        <div id="staticfiles<?= $item['id']; ?>" style="margin-top: 10px;">
-                            <b><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></b> 
+                        <?php /*if (!empty($pdf)) : */?>
+                        <div id="staticfiles<?/*= $item['id']; */?>" style="margin-top: 10px;">
+                            <span class="title__bold"><?/*= $ui->item('MSG_BTN_LOOK_INSIDE'); */?></span>
                             <ul class="staticfile">
-                                <?php $pdfCounter = 1; ?>
-                                <?php foreach ($pdf as $file) : ?>
-                                    <?php $file2 = '/pictures/lookinside/' . $file; ?>
+                                <?php /*$pdfCounter = 1; */?>
+                                <?php /*foreach ($pdf as $file) : */?>
+                                    <?php /*$file2 = '/pictures/lookinside/' . $file; */?>
                                     <li>
-                                        <a target="_blank" href="<?= $file2; ?>"><img
-                                                src="/css/pdf.png"/><?= $pdfCounter . '.pdf'; ?></a>
+                                        <a target="_blank" href="<?/*= $file2; */?>"><img
+                                                src="/css/pdf.png"/><?/*= $pdfCounter . '.pdf'; */?></a>
                                     </li>
-                                    <?php $pdfCounter++; ?>
-                                <?php endforeach; ?>
+                                    <?php /*$pdfCounter++; */?>
+                                <?php /*endforeach; */?>
                             </ul>
                         </div>
-                    <?php endif; ?>
-                <?php endif; ?>
+                    <?php /*endif; */?>
+                <?php /*endif; */?>
 				</div>
-            <?php endif; ?>
+            <?php /*endif; */?>
 				
 				
-			<? } ?>
+			--><?/* } */?>
 			
 			<?php if ($item['entity'] == Entity::PERIODIC) : ?>
 
-                <?php
-                $ie = $item['issues_year'];
-
-                if ($ie < 12) {
-                    $inOneMonth = $ie / 12;
-                    $show3Months = false;
-                    $show6Months = false;
-
-                    $tmp1 = $inOneMonth * 3;
-                    if (ctype_digit("$tmp1"))
-                        $show3Months = true;
-                    $tmp2 = $inOneMonth * 6;
-                    if (ctype_digit("$tmp2"))
-                        $show6Months = true;
-                }
-                else {
-                    $show3Months = true;
-                    $show6Months = true;
-                }
-                ?>
 				<div class="mb5 link__deliver" style="color:#0A6C9D; float: left;">
                     <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
                 </div>
 				<div style="height: 23px; clear: both"></div>
                 <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;">
-                    <?php if ($show3Months) : ?>
-                        <option value="3">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - 3 <?= $ui->item('A_NEW_NUM'); ?></option>
+                    <?php if ($item['issues_year']['show3Months']) : ?>
+                        <option value="3">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
 
-                    <?php if ($show6Months) : ?>
-                        <option value="6">6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - 6 <?= $ui->item('A_NEW_NUMS'); ?></option>
+                    <?php if ($item['issues_year']['show6Months']) : ?>
+                        <option value="6">6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
 
                     <option value="12" selected="selected">
-                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - 12 <?= $ui->item('A_NEW_NUMS'); ?></option>
+                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $ui->item('A_NEW_NUMS'); ?></option>
                 </select>
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
                 

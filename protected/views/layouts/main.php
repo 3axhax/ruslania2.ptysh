@@ -173,7 +173,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             url:'/site/search',
             cache : false,
 			hideOnSelect: false,
-            dynamicData:{ avail: function() { return $('.checkbox_box .avail').val(); } },
+            dynamicData:{ avail: function() { return $('#js_avail').val(); } },
             formatItem:function (data, $item, q)
             {
 					var ret = '';
@@ -233,6 +233,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 								//<a class="cart-action add_cart<?if (Yii::app()->language == 'es') echo ' no_img';?>" data-action="add" style="width: 162px;font-size: 13px; margin-left: 18px; color: #fff;" data-entity="'+data[i].entity+'" data-id="'+data[i].id+'" data-quantity="1" href="javascript:;" onclick="add2Cart($(this).attr(\'data-action\'),     $(this).attr(\'data-entity\'),$(this).attr(\'data-id\'),$(this).attr(\'data-quantity\'),null,$(this));"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
 								
 								}
+                                else {
+                                    ret += '<div class="row_item"><a href="'+data[i].url+'">'+data[i].title+'</a></div>';
+                                }
 							}
 							
 							

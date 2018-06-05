@@ -359,6 +359,9 @@ $entityKey = Entity::GetUrlKey($entity);
                 <button type="submit" onclick="return false;" style="border: none; background: none; padding: 0; color:#fff;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></button>
             </a>
 
+        <?php $style = '10px'; if ($item['entity'] == Entity::VIDEO) { $style = '0'; echo '<div style="height: 20px;"></div>'; } ?>
+    			<a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"
+                               data-id="<?= $item['id']; ?>" class="addmark cart-action" style="margin-left: <?=$style?>">&nbsp;</a>
     </form>
 
         <?php else : ?><?php if ($item['entity'] != Entity::VIDEO) : ?>
@@ -376,15 +379,12 @@ $entityKey = Entity::GetUrlKey($entity);
                     <?php endif; ?>
                 
                 <?php endif; ?>
-				
+                <?php $style = '10px'; if ($item['entity'] == Entity::VIDEO) { $style = '0'; echo '<div style="height: 20px;"></div>'; } ?>
+            			<a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"
+                                       data-id="<?= $item['id']; ?>" class="addmark cart-action" style="margin-left: <?=$style?>">&nbsp;</a>
+
             <?php endif; ?>
-				<?php $style = '10px'; if ($item['entity'] == Entity::VIDEO) { $style = '0'; echo '<div style="height: 20px;"></div>'; } ?>
-				
-				
-			
-			<a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"
-                           data-id="<?= $item['id']; ?>" class="addmark cart-action" style="margin-left: <?=$style?>">&nbsp;</a>
-	
+
 </div>
 
 </div>

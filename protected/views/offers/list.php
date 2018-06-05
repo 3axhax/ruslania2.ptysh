@@ -46,9 +46,11 @@
 						?>
 					
 					
-                        <div><a class="title_item_recomend" href="<?=Yii::app()->createUrl('offers/view', array('oid' => $item['id'],
-                                                                               'title' => ProductHelper::ToAscii($title))); ?>"><?=$title_item?>!</a> <span class="date_recomend"><?=Yii::app()->dateFormatter->format('dd MMM yyyy', $item['creation_date']); ?></span></div>
-<?=CHtml::encode($title); ?>
+                        <div>
+<a class="title_item_recomend" href="<?=Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title))); ?>"><?= /*$title_item*/CHtml::encode($title) ?>!</a>
+<span class="date_recomend"><?=Yii::app()->dateFormatter->format('dd MMM yyyy', $item['creation_date']); ?></span>
+                        </div>
+<?=CHtml::encode(ProductHelper::GetDescription($item->attributes)); ?>
 							
 							<?
 							if (count($offer[Entity::GetTitle($entity)]['items'])) {
