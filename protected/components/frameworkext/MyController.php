@@ -104,15 +104,30 @@ class MyController extends CController
     public function beforeRender($view)
     {
         //if(empty($this->pageTitle))
-        if(empty($this->pageTitle) && is_array($this->breadcrumbs))
-        {
+        if (is_array($this->breadcrumbs)) {
             $title  = array();
             foreach($this->breadcrumbs as $idx=>$data)
             {
                 if(is_numeric($idx)) $title[] = $data;
                 else $title[] = $idx;
             }
-            $this->pageTitle = implode(' &gt; ', $title);
+            if(empty($this->pageTitle))
+            {
+                $this->pageTitle = implode(' &gt; ', $title);
+                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                }
+                $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
+            }
+            if (empty($this->pageDescription)) {
+                $this->pageDescription = implode(' &gt; ', $title);
+                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                    $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                }
+            }
+            if (empty($this->pageKeywords)) {
+                $this->pageKeywords = implode(' ', $title);
+            }
         }
         return true;
     }
@@ -258,6 +273,8 @@ class MyController extends CController
             if (!preg_match("/\b" . $k . "\b/ui", $q)) unset($query[$k]);
             //пустые параметры тоже уберу, их не доложно быть
             elseif ($v === '') unset($query[$k]);
+            //эти параметры в куках, убираю
+            elseif (in_array($k, array('avail', 'currency', 'language'))) unset($query[$k]);
         }
         $curPage = 1;
         if (isset($query['page'])) $curPage = max($curPage, (int)$query['page']);
