@@ -12,7 +12,7 @@ class ProductController extends MyController
         $data = $product->GetProduct($entity, $id);
 
 	    $this->_checkUrl($data);
-
+	    
         $c = new Cart;
         $cart = $c->GetCart($this->uid, $this->sid);
         foreach($cart as $item)

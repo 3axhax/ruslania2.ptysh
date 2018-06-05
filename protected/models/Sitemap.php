@@ -22,10 +22,10 @@ class Sitemap {
 		'audiostreams'=>array(  '', 'AUDIO_STREAMS',            'audiostreamslist', 'byaudiostream'),
 		'subtitles'=>array(     '', 'Credits',                  'subtitleslist',    'bysubtitle'),
 		'media'=>array(         '', 'A_NEW_FILTER_TYPE2',       'medialist',        'bymedia'),
-		'magazinetype'=>array(  '', 'A_NEW_TYPE_IZD',           'types',            'bytype'),
+		'magazinetype'=>array(  '', 'A_NEW_TYPE_IZD',           'typeslist',            'bytype'),
 	);
 	private $_tagsAll = array(
-		'years'=>array('', 'A_NEW_FILTER_YEAR', 'years', 'byyear'),
+		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear'),
 	);
 
 	private $_staticPages = array(
@@ -105,7 +105,8 @@ class Sitemap {
 		}
 		foreach ($this->_tagsAll as $tag=>$param) {
 			if (!empty($param[2])) {
-				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity))) . '">' . Yii::app()->ui->item($param[1]) . '</a>');
+				$href = Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity)));
+				$this->_putFile('<li><a href="' . $href . '">' . Yii::app()->ui->item($param[1]) . '</a>');
 				$this->_putFile('</li>');
 			}
 		}

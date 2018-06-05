@@ -37,14 +37,14 @@ KnockoutForm::RegisterScripts();
                             <th valign="middle"
                                 class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
 								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('SHIPPING'); ?></th>
-                            <th valign="middle" align="center"  style="width:70px;"
-                                class="cart1header1"><?= $ui->item("Price"); ?></th>
+                            <!--<th valign="middle" align="center"  style="width:70px;"
+                                class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
                                 class="cart1header1"><?= $ui->item("CART_COL_QUANTITY"); ?></th>
                             <th valign="middle" align="center"  style="width:70px;"
-                                class="cart1header1"><?= $ui->item("CART_COL_SUBTOTAL_PRICE"); ?></th>
-                            <th valign="middle" align="center"  style="width:80px;"
-                                class="cart1header1"><?= $ui->item("CART_COL_ITEM_MOVE_TO_SUSPENDED"); ?></th>
+                                class="cart1header1"><?= $ui->item("CART_COL_PRICE"); ?></th>
+                         <!--   <th valign="middle" align="center"  style="width:80px;"
+                                class="cart1header1"><?= $ui->item("CART_COL_ITEM_MOVE_TO_SUSPENDED"); ?></th>-->
                             <th valign="middle" align="center" style="width:70px;"
                                 class="cart1header1"><?= $ui->item("CART_COL_DELETE"); ?></th>
                         </tr>
@@ -73,14 +73,14 @@ KnockoutForm::RegisterScripts();
 							 <td valign="middle" align="center" class="cart1contents1">
                 <span data-bind="text: AvailablityText"><?= htmlspecialchars($cart['AvailablityText']) ?></span>
             </td>
-                            <td valign="middle" nowrap="true" align="center" class="cart1contents1 center">
+                           <!-- <td valign="middle" nowrap="true" align="center" class="cart1contents1 center">
                                 <span data-bind="text: $root.ReadyPriceStr($data), visible: DiscountPercent() == 0"><?= ((float)$cart['DiscountPercent']>0)?'':$cart['ReadyPriceStr'] ?></span>
                                 <div data-bind="visible: DiscountPercent() > 0">
                                     <s data-bind="text: PriceOriginal"><?= ((float)$cart['DiscountPercent']>0)?$cart['PriceOriginal']:'' ?></s><br/>
                                     <span data-bind="text: $root.ReadyPriceStr($data)"><?= ((float)$cart['DiscountPercent']>0)?$cart['ReadyPriceStr']:'' ?></span>
                                 </div>
 
-                            </td>
+                            </td>-->
 <!--                            <td align="center" class="center cart1contents1">-->
 <!--                                <span data-bind="text: VAT"></span>%-->
 <!--                            </td>-->
@@ -94,9 +94,9 @@ KnockoutForm::RegisterScripts();
                                 <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
                                 <?=Currency::ToSign(Yii::app()->currency); ?>
                             </td>
-                            <td valign="middle" align="center" class="cart1contents1">
+                           <!-- <td valign="middle" align="center" class="cart1contents1">
                                 <a href="javascript:;" data-bind="click: $root.ToMark"><img src="/new_img/add_mark.png" /></a>
-                            </td>
+                            </td> -->
                             <td valign="middle" align="center" class="cart1contents1">
                                 <a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"><img src="/new_img/del_cart.png" /></a>
                             </td>
