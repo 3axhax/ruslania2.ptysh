@@ -81,8 +81,10 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
 			
 		</div>
         <div class="span2">
+<?php $this->widget('LinksToList', array('entity'=>$entity)); ?>
+<?php $this->widget('LeftCategories', array('entity'=>$entity, 'cid'=>$cid, 'catTitle'=>$title_cat)); ?>
 
-			<?php if (!empty($categoryList)) : ?>
+			<?php /*if (!empty($categoryList)) : ?>
                 <h2 class="cattitle">Категории:</h2>
                 <ul class="left_list divider">
 
@@ -136,7 +138,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
 				<a href="<?=Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($entity))); ?>" class="order_start" style="width: 100%"><?=$ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?></a>
 
                 <div style="height: 47px"></div>
-            <?php endif; ?>
+            <?php endif; */?>
 
             <?php $lang = Yii::app()->language;?>
 
