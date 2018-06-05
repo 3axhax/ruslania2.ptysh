@@ -279,7 +279,7 @@ class SiteController extends MyController {
         $this->searchFilters = array('e' => $e, 'page' => $page);
 
         Yii::app()->session['SearchData'] = array('q' => $origSearch, 'time' => time(), 'e' => $e);
-var_dump($origSearch);
+//var_dump($origSearch);
         if (empty($origSearch)) {
             if (Yii::app()->request->isAjaxRequest)
                 $this->ResponseJson(array());

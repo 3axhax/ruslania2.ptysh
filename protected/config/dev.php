@@ -64,7 +64,12 @@ return CMap::mergeArray(
                          'logFile' => 'warnings.log',
                          'categories' => 'mywarnings.*',
                      ),
-
+/*                     array( // -- CWebLogRoute --------------------------- внизу страницы показывает логи
+                         'class'=>'CWebLogRoute',
+//                         'levels'=>'error, warning, trace, profile, info',
+                         'levels'=>'profile',
+                         'enabled'=>true,
+                     ),*/
                  )),
          ),
 
