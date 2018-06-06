@@ -364,6 +364,7 @@ class Category {
 	}
 	
 	public function getCatsBreadcrumbs($entity, $code) {
+        $arr = array();
 		if ($code) {
 			
 			$arr = self::getCatsBreadcrumbs2($entity, $code);

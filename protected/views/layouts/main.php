@@ -45,6 +45,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
         <META name="verify-v1" content="eiaXbp3vim/5ltWb5FBQR1t3zz5xo7+PG7RIErXIb/M="/>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+<?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
+    <meta name="robots" content="noindex">
+<?php endif; ?>
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
         <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
 		<link rel="stylesheet" href="/css/template_styles.css" />
