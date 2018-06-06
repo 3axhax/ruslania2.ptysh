@@ -39,279 +39,336 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	
 	<? if ($item['title_original']) : ?>
 	<div class="authors" style="margin-bottom:10px;">
-		<div style="float: left;width: 220px;">Оригинальное название:</div>
+		<div style="float: left;width: 220px;" class="nameprop"><?= $ui->item("ORIGINAL_NAME") ?>:</div>
 		<div style="padding-left: 253px;"><?=$item['title_original']?></div>
         <div class="clearBoth"></div>
 	</div>
 	<? endif; ?>
-	
-	<? if ($item['type']) : ?> 
+
+	<? if ($item['type']) : ?>
 	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?
-	
-	
-	
+
+
+
 	 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
-	 
+
 	 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
                     'entity' => $entityKey,
                     'type' => $item['type'])).'">' . ProductHelper::GetTitle($binding) . '</a>';
-	
+
 	endif;
 	?>
-	
-	<?php if (!empty($item['Authors'])) : ?>
-                <div class="authors">
-                    <span class="nameprop"><?= sprintf($ui->item("WRITTEN_BY"), ''); ?></span>
-                    <?php
-                    foreach ($item['Authors'] as $author) {
-                        $authorTitle = ProductHelper::GetTitle($author);
-                        $tmp[] = '<a href="' . Yii::app()->createUrl('entity/byauthor', array('entity' => $entityKey,
-                                    'aid' => $author['id'],
-                                    'title' => ProductHelper::ToAscii($authorTitle))) . '" class="cprop">'
-                                . $authorTitle . '</a>';
-                    }
-                    ?>
 
-                    <?= implode(', ', $tmp); ?>
-
+	<?php if (!empty($item['Authors'])) :
+        foreach ($item['Authors'] as $author) {
+            $authorTitle = ProductHelper::GetTitle($author);
+            $tmp[] = '<a href="' . Yii::app()->createUrl('entity/byauthor', array('entity' => $entityKey,
+                    'aid' => $author['id'],
+                    'title' => ProductHelper::ToAscii($authorTitle))) . '" class="cprop">'
+                . $authorTitle . '</a>';
+        }
+        ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("WRITTEN_BY"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $tmp); ?></div>
+                    <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
             <?php Yii::endProfile($item['id'] . '_authors'); ?>
 
 
-            <?php if (!empty($item['Performers'])) : ?>
-                <div class="authors">
-                    <span class="nameprop"><?= sprintf($ui->item("READ_BY"), ''); ?></span>
-                    <?php
-                    $tmp = array();
-                    foreach ($item['Performers'] as $performer) {
-                        $tmp[] = '<a href="' . Yii::app()->createUrl('entity/byperformer', array('entity' => $entityKey,
-                                    'pid' => $performer['id'],
-                                    'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($performer)))) . '" class="cprop">'
-                                . ProductHelper::GetTitle($performer) . '</a>';
-                    }
-
-                    echo implode(', ', $tmp);
-                    ?>
+            <?php if (!empty($item['Performers'])) :
+                $tmp = array();
+                foreach ($item['Performers'] as $performer) {
+                    $tmp[] = '<a href="' . Yii::app()->createUrl('entity/byperformer', array('entity' => $entityKey,
+                            'pid' => $performer['id'],
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($performer)))) . '" class="cprop">'
+                        . ProductHelper::GetTitle($performer) . '</a>';
+                }
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("READ_BY"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $tmp); ?></div>
+                    <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($item['Directors'])) : ?>
-                <div class="authors">
-                    <span class="nameprop"><?= sprintf($ui->item("DIRECTOR_IS"), ''); ?></span>
-					<?php foreach ($item['Directors'] as $director) : ?><a href="<?=
-                        Yii::app()->createUrl('entity/bydirector', array('entity' => $entityKey,
+            <?php if (!empty($item['Directors'])) :
+                $ret = array();
+                foreach ($item['Directors'] as $director) :
+                    $ret[] = '<a href="' . Yii::app()->createUrl('entity/bydirector', array('entity' => $entityKey,
                             'did' => $director['id'],
-                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($director))));
-                        ?>"
-                           class="cprop"><?= ProductHelper::GetTitle($director); ?></a>
-                       <?php endforeach; ?>
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($director)))) . '" class="cprop">' . ProductHelper::GetTitle($director) . '</a>';
+                    ?>
+                <?php endforeach;
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("DIRECTOR_IS"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $ret); ?></div>
+                    <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($item['Actors'])) : ?>
-                <div class="authors row" style="margin-bottom:0;">
-					<span class="nameprop span1" style="overflow: hidden;
-    text-align: left;
-    background: none;"><?=sprintf($ui->item("VIDEO_ACTOR_IS"),'')?></span>
-                    
-					<div class="span2" style="float: left; margin-left: 20px; width: 345px;">
-						<?php
-						$ret = array();
-						foreach ($item['Actors'] as $actor) {
-							$ret[] = '<a href="' . Yii::app()->createUrl('entity/byactor', array('entity' => $entityKey,
-										'aid' => $actor['id'],
-										'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($actor)))) . '" class="cprop">' . ProductHelper::GetTitle($actor) . '</a>';
-						}
-						echo implode(', ', $ret);
-						?>
-					</div>
-					<div class="clearfix"></div>
+            <?php if (!empty($item['Actors'])) :
+                $ret = array();
+                foreach ($item['Actors'] as $actor) {
+                    $ret[] = '<a href="' . Yii::app()->createUrl('entity/byactor', array('entity' => $entityKey,
+                            'aid' => $actor['id'],
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($actor)))) . '" class="cprop">' . ProductHelper::GetTitle($actor) . '</a>';
+                }
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("VIDEO_ACTOR_IS"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $ret); ?></div>
+                    <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
 			
 			  <?php if (!empty($item['Media'])) : ?>
-               <div><span class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></span>
-                <a class="cprop"
-                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
-                    <a class="pointerhand"
-                       href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
-                        <img src="/pic1/q1.gif" width="16" height="16"
-                             title="<?= $ui->item("MSG_SHOW_ZONE_INFO"); ?>"
-                             style="position:relative;top:-1px;left:10px;"></a><br/>
+                  <div class="authors" style="margin-bottom:5px;">
+                      <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></div>
+                      <div style="padding-left: 253px;">
+                          <a class="cprop" href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a>
+                          <?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
+                              <a class="pointerhand"
+                                 href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
+                                  <img src="/pic1/q1.gif" width="16" height="16"
+                                       title="<?= $ui->item("MSG_SHOW_ZONE_INFO"); ?>"
+                                       style="position:relative;top:-1px;left:10px;"></a><br/>
 
-                <?php endif; ?></div>
+                          <?php endif; ?>
+                      </div>
+                      <div class="clearBoth"></div>
+                  </div>
             <?php endif; ?>
 			
 			
 			
 			<?php if (!empty($item['playtime'])) : ?>
-
-                <div><span class="nameprop"><?= sprintf($ui->item('MSG_AUDIO_PLAYING_TIME'),'');?></span><? echo $item['playtime']; ?></div>
-
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MSG_AUDIO_PLAYING_TIME"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= $item['playtime'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 			
 			<?php if (!empty($item['cds'])) : ?>
-                <div><span class="nameprop">CDs:</span> <?= $item['cds']; ?></div>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop">CDs</div>
+                    <div style="padding-left: 253px;"><?= $item['cds'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 			
 			<?php if (!empty($items['dvds'])) : ?>
-                <div><span class="nameprop">DVDs:</span> <?=$item['dvds']; ?></div>
-            <?php endif; ?>
-
-            <?php if (!empty($item['Subtitles'])) : ?>
-                <div class="authors">
-					<span class="nameprop"><?=sprintf($ui->item("VIDEO_CREDITS_IS"), '');?></span>
-                    <?php
-                    $ret = array();
-                    foreach ($item['Subtitles'] as $subtitle) {
-                        $ret[] = '<a href="' . Yii::app()->createUrl('entity/bysubtitle', array('entity' => $entityKey,
-                                    'sid' => $subtitle['id'],
-                                    'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle)))) . '" class="cprop">' . ProductHelper::GetTitle($subtitle) . '</a>';
-                    }
-                    echo implode(', ', $ret);
-                    ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop">DVDs</div>
+                    <div style="padding-left: 253px;"><?= $item['dvds'] ?></div>
+                    <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($item['AudioStreams'])) : ?>
-                <div class="authors">
-					<span class="nameprop"><?=($ui->item("AUDIO_STREAMS") . ': ') ?></span>
-                    <?php
-                    $ret = array();
-                    foreach ($item['AudioStreams'] as $stream) {
-                        $ret[] = '<a href="' . Yii::app()->createUrl('entity/byaudiostream', array('entity' => $entityKey,
-                                    'sid' => $stream['id'],
-                                    'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($stream)))) . '" class="cprop">' . ProductHelper::GetTitle($stream) . '</a>';
-                    }
-                    echo implode(', ', $ret);
-                    ?>
+            <?php if (!empty($item['Subtitles'])) :
+                $ret = array();
+                foreach ($item['Subtitles'] as $subtitle) {
+                    $ret[] = '<a href="' . Yii::app()->createUrl('entity/bysubtitle', array('entity' => $entityKey,
+                            'sid' => $subtitle['id'],
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle)))) . '" class="cprop">' . ProductHelper::GetTitle($subtitle) . '</a>';
+                }
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("VIDEO_CREDITS_IS"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $ret) ?></div>
+                    <div class="clearBoth"></div>
                 </div>
+            <?php endif; ?>
 
+            <?php if (!empty($item['AudioStreams'])) :
+                $ret = array();
+                foreach ($item['AudioStreams'] as $stream) {
+                    $ret[] = '<a href="' . Yii::app()->createUrl('entity/byaudiostream', array('entity' => $entityKey,
+                            'sid' => $stream['id'],
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($stream)))) . '" class="cprop">' . ProductHelper::GetTitle($stream) . '</a>';
+                }
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("AUDIO_STREAMS"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $ret) ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 			
 			<?php if (!empty($item['Country'])) : ?>
-                <div><span class="nameprop"><?= sprintf($ui->item("COUNTRY_OF_ORIGIN"),'')?></span>
-                <?= ProductHelper::GetTitle($item['Country']); ?></div>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("COUNTRY_OF_ORIGIN"), ''); ?></div>
+                    <div style="padding-left: 253px;"><?= ProductHelper::GetTitle($item['Country']) ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 			
-			 <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) : ?>
-                <span class="nameprop"><?= $ui->item('CATALOGINDEX_CHANGE_LANGUAGE'); ?>:</span>
-                <?php
-                $langs = array();
-                foreach ($item['Languages'] as $lang) {
-                    $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
-                }
-
-                echo implode(', ', $langs);
-                ?>
+			 <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) :
+                 $langs = array();
+                 foreach ($item['Languages'] as $lang) {
+                     $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
+                 }
+                 ?>
+                 <div class="authors" style="margin-bottom:5px;">
+                     <div style="float: left;" class="nameprop"><?= $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
+                     <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
+                     <div class="clearBoth"></div>
+                 </div>
             <?php endif; ?>
 			
 			<?php if (!empty($item['format'])) : ?>
-				<div><span class="nameprop">Формат:</span> <?=$item['format']; ?>
-				</div>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= $ui->item("Media"); ?></div>
+                    <div style="padding-left: 253px;"><?= $item['format'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
 			<?php endif; ?>
 			
-			 <?php if (!empty($item['Publisher'])) : ?>
-                <div><?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?><span class="nameprop">
-                <?= sprintf($ui->item("PUBLISHED_BY"), ''); ?></span> <a class="cprop" href="<?=
-                Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
+			 <?php if (!empty($item['Publisher'])) :
+             $pubTitle = ProductHelper::GetTitle($item['Publisher']);?>
+        <div class="authors" style="margin-bottom:5px;">
+            <div style="float: left;" class="nameprop"><?= sprintf($ui->item("PUBLISHED_BY"), '') ?></div>
+            <div style="padding-left: 253px;">
+                <a class="cprop" href="<?= Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
                     'pid' => $item['Publisher']['id'],
                     'title' => ProductHelper::ToAscii($pubTitle)));
-                ?>"><?= $pubTitle; ?></a><?php endif; ?>
-				
-				
+                ?>"><?= $pubTitle; ?></a>
+            </div>
+            <div class="clearBoth"></div>
+        </div>
+            <?php endif; ?>
+
 				<?php if (!empty($item['year'])) : ?>
-               <div><span class="nameprop">
-                <?=$ui->item('A_NEW_YEAR');?>:</span> <a href="<?=
-                Yii::app()->createUrl('entity/byyear', array(
-                    'entity' => $entityKey,
-                    'year' => $item['year']));
-                ?>"><?=$item['year']?></a></div><?php endif; ?>
+                    <div class="authors" style="margin-bottom:5px;">
+                        <div style="float: left;" class="nameprop"><?= $ui->item('A_NEW_YEAR') ?></div>
+                        <div style="padding-left: 253px;">
+                            <a href="<?= Yii::app()->createUrl('entity/byyear', array(
+                                'entity' => $entityKey,
+                                'year' => $item['year']));
+                            ?>"><?=$item['year']?></a>
+                        </div>
+                        <div class="clearBoth"></div>
+                    </div>
+                <?php endif; ?>
 				
 				<?php if (!empty($item['release_year'])) : ?>
-               <div><span class="nameprop">
-                <?=$ui->item('A_NEW_YEAR_REAL');?>:</span> <a href="<?=
-                Yii::app()->createUrl('entity/byyearrelease', array(
-                    'entity' => $entityKey,
-                    'year' => $item['release_year']));
-                ?>"><?=$item['release_year']?></a></div><?php endif; ?>
-				
-				
-			
-			
-				<?php if (!empty($item['binding_id'])) : ?>
-                 <div><span class="nameprop"><?=$ui->item('A_NEW_PEREP')?>:</span> <?
-					
-					$row = Binding::GetBinding($entity, $item['binding_id']);
-					echo $row['title_' . Yii::app()->language];
-					
-				 ?></div>
+                    <div class="authors" style="margin-bottom:5px;">
+                        <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_YEAR_REAL"); ?></div>
+                        <div style="padding-left: 253px;">
+                            <a href="<?= Yii::app()->createUrl('entity/byyearrelease', array(
+                                'entity' => $entityKey,
+                                'year' => $item['release_year']));
+                            ?>"><?=$item['release_year']?></a>
+                        </div>
+                        <div class="clearBoth"></div>
+                    </div>
+                <?php endif; ?>
+
+				<?php if (!empty($item['binding_id'])) :
+                    $row = (new Binding)->GetBinding($entity, $item['binding_id']);
+                    ?>
+                    <div class="authors" style="margin-bottom:5px;">
+                        <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_PEREP"); ?></div>
+                        <div style="padding-left: 253px;"><?= $row['title_' . Yii::app()->language] ?></div>
+                        <div class="clearBoth"></div>
+                    </div>
 				<?php endif; ?>
 			
 			<?php if (!empty($item['numpages'])) : ?>
-                 <div><span class="nameprop"><?= sprintf($ui->item('A_NEW_COUNT_PAGE'),'');?>:</span> <? echo $item['numpages']; ?></div>
-				<?php endif; ?>
-			
-			
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_COUNT_PAGE"); ?></div>
+                    <div style="padding-left: 253px;"><?= $item['numpages'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
+            <?php endif; ?>
+
 			<?php if (!empty($item['isbn'])) : ?>
-                <div><span class="nameprop">ISBN:</span> <?= $item['isbn']; ?></div>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop">ISBN</div>
+                    <div style="padding-left: 253px;"><?= $item['isbn'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 			<?php if (!empty($item['eancode'])) : ?>
-                <div><span class="nameprop">EAN:</span> <?= $item['eancode']; ?></div>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop">EAN</div>
+                    <div style="padding-left: 253px;"><?= $item['eancode'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
-			
-			
-			
-			
-			
-			<?php if ($item['entity'] == Entity::PERIODIC) : ?>
+
+    <?php if ($item['entity'] == Entity::PERIODIC) : ?>
 			
 				
             <?php if (!empty($item['size'])) : ?>
-                <div><span class="nameprop"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></span><? echo $item['size']; ?>
-            </div><?php endif; ?>
-
-            
-
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></div>
+                <div style="padding-left: 253px;"><?= $item['size'] ?></div>
+                <div class="clearBoth"></div>
+            </div>
+            <?php endif; ?>
 
             <?php if (!empty($item['Series'])) : ?>
-               <div><span class="nameprop"><?= sprintf($ui->item("SERIES_IS"), ''); ?></span>
-                <a class="cprop"
-                   href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a></div>
-               
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= sprintf($ui->item('SERIES_IS'),'');?></div>
+                <div style="padding-left: 253px;">
+                    <a class="cprop" href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a>
+                </div>
+                <div class="clearBoth"></div>
+            </div>
             <?php endif; ?>
 
             <?php if (!empty($item['Media'])) : ?>
-                <br /><span class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></span>
-                <a class="cprop"
-                   href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a><?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
-                    <a class="pointerhand"
-                       href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
-                        <img src="/pic1/q1.gif" width="16" height="16"
-                             title="<?= $ui->item("MSG_SHOW_ZONE_INFO"); ?>"
-                             style="position:relative;top:4px;left:10px;"></a><br/>
 
-                <?php endif; ?>
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= sprintf($ui->item('MEDIA_TYPE_OF'),'');?></div>
+                <div style="padding-left: 253px;">
+                    <a class="cprop" href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a>
+                    <?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
+                        <a class="pointerhand" href="<?= Yii::app()->createUrl('site/static', array('page' => 'zone_info')); ?>" target="_blank">
+                            <img src="/pic1/q1.gif" width="16" height="16" title="<?= $ui->item("MSG_SHOW_ZONE_INFO"); ?>" style="position:relative;top:4px;left:10px;">
+                        </a>
+                    <?php endif; ?>
+                </div>
+                <div class="clearBoth"></div>
+            </div>
             <?php endif; ?>
 
             <?php if (!empty($item['catalogue'])) : ?>
-                <br /><span class="nameprop">Catalogue N:</span> <?= $item['catalogue']; ?><br/>
-            <?php endif; ?>
+        <div class="authors" style="margin-bottom:5px;">
+            <div style="float: left;" class="nameprop">Catalogue N:</div>
+            <div style="padding-left: 253px;"><?= $item['catalogue']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
+        <?php endif; ?>
 
             <?php if (!empty($item['issn'])) : ?>
-                <br /><span class="nameprop">ISSN:</span> <?= $item['issn']; ?>
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop">ISSN:</div>
+                <div style="padding-left: 253px;"><?= $item['issn']; ?></div>
+                <div class="clearBoth"></div>
+            </div>
             <?php endif; ?>
 
             <?php if (!empty($item['requirements'])) : ?>
-                <br /><span class="nameprop"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</span> <?= $item['requirements']; ?>
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</div>
+                <div style="padding-left: 253px;"><?= $item['requirements']; ?></div>
+                <div class="clearBoth"></div>
+            </div>
             <?php endif; ?>
 
 
             <?php if (!empty($item['index'])) : ?>
-                <br /><span class="nameprop"><?= sprintf($ui->item("PERIOD_INDEX"), '');?></span>
-                <?=$item['index']; ?>
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("PERIOD_INDEX"), ''); ?></div>
+                <div style="padding-left: 253px;"><?= $item['index']; ?></div>
+                <div class="clearBoth"></div>
+            </div>
             <?php endif ?>
 
             
@@ -324,7 +381,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			
 			
 			
-			<? endif; ?>
+    <? endif; ?>
 			
 			
 			<?php

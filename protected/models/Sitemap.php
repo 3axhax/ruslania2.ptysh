@@ -25,7 +25,7 @@ class Sitemap {
 		'magazinetype'=>array(  '', 'A_NEW_TYPE_IZD',           'typeslist',            'bytype'),
 	);
 	private $_tagsAll = array(
-		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear'),
+		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear', array('pereodics_catalog')),
 	);
 
 	private $_staticPages = array(
