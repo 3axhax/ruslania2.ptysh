@@ -440,7 +440,9 @@ class EntityController extends MyController {
 
 		$list_count = 10;
 
-		if ($_GET['qa']) {
+        $lists = $a->GetAuthorsBySearch($char, $lang, $entity);
+
+        if (!empty($_GET['qa'])) {
 
 			
 
@@ -454,8 +456,6 @@ class EntityController extends MyController {
 
 		}
 		
-		$lists = $a->GetAuthorsBySearch($char, $lang, $entity);
-
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS');
 
