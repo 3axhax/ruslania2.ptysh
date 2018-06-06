@@ -26,7 +26,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 // запись переменной в сессию. Следующие способы использования эквивалентны:
 
 //echo $language;
-
 ?>
 
 
@@ -812,6 +811,11 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <br /><span class="nameprop">Catalogue N:</span> <?= $item['catalogue']; ?><br/>
             <?php endif; ?>
 
+<?php if (
+                    in_array($entity, array(Entity::PRINTED, Entity::MAPS, Entity::SOFT, Entity::VIDEO, ))
+                    || (($entity == Entity::SHEETMUSIC)&&($item['code'] == 47))
+            ) : ?>
+<?php else: ?>
             <?php if (!empty($item['eancode'])) : ?>
                 <br /><span class="nameprop">ISBN:</span> <?= $item['eancode']; ?>
             <?php endif; ?>
@@ -842,7 +846,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			<?php if (!empty($item['isbn10'])) : ?>
                 <br /><span class="nameprop">ISBN:</span> <?= $item['isbn10']; ?>
             <?php endif; ?>
-
+<?php endif; ?>
             
 
             
