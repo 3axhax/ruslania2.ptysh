@@ -285,14 +285,17 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 </div>
             <?php endif; ?>
 
-			<?php if (!empty($item['isbn'])) : ?>
+			<?php if (!empty($item['isbn'])) :
+                $name = 'ISBN';
+                if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
+                ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop">ISBN</div>
+                    <div style="float: left;" class="nameprop"><?= $name ?></div>
                     <div style="padding-left: 253px;"><?= $item['isbn'] ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
-			<?php if (!empty($item['eancode'])) : ?>
+			<?php if (!empty($item['eancode'])&&($entity != Entity::SHEETMUSIC)) : ?>
                 <div class="authors" style="margin-bottom:5px;">
                     <div style="float: left;" class="nameprop">EAN</div>
                     <div style="padding-left: 253px;"><?= $item['eancode'] ?></div>
@@ -815,36 +818,39 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     in_array($entity, array(Entity::PRINTED, Entity::MAPS, Entity::SOFT, Entity::VIDEO, ))
                     || (($entity == Entity::SHEETMUSIC)&&($item['code'] == 47))
             ) : ?>
-<?php else: ?>
-            <?php if (!empty($item['eancode'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['eancode']; ?>
+<?php else:
+                    $name = 'ISBN';
+                    if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
+                    ?>
+            <?php if (!empty($item['eancode'])&&($entity != Entity::SHEETMUSIC)): ?>
+                <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn2'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn2']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn2']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn3'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn3']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn3']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn4'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn4']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn4']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn5'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn5']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn5']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn6'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn6']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn6']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn7'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn7']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn7']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn8'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn8']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn8']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn9'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn9']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn9']; ?>
             <?php endif; ?>
 			<?php if (!empty($item['isbn10'])) : ?>
-                <br /><span class="nameprop">ISBN:</span> <?= $item['isbn10']; ?>
+                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn10']; ?>
             <?php endif; ?>
 <?php endif; ?>
             
