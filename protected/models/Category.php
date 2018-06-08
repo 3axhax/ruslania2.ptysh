@@ -271,8 +271,10 @@ class Category {
     }
 
     public function getFilterAuthor($entity, $cid, $page = 1,$lang='', $site_lang='') {
-        if ($entity == 60 OR $entity == 30 OR $entity == 40)
-            return array();
+        if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+//        if ($entity == 60 OR $entity == 30 OR $entity == 40)
+//            return array();
         if ($page != 0) $limit = (($page - 1) * 50) . ',50';
 		$sql = '';
 		if ($lang!='') {

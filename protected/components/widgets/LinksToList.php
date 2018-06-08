@@ -1,26 +1,28 @@
 <?php
-/*Created by Кирилл (05.06.2018 21:23)*/
+/*Created by Кирилл (05.06.2018 21:23)
+	<?php if (Entity::checkEntityParam($entity, 'category')): ?>
+		<a href="<?=Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($entity))); ?>" class="order_start" style="width: 100%"><?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?></a>
+	<?php endif; ?>
+
+*/
 
 class LinksToList extends CWidget {
 	protected $_params = array('links'=>['publisher', 'authors', 'series', 'actors', 'directors']);//здесь массив начальных значений
-	/**
-	 * @var Sitemap
-	 */
-	protected $_sitemap;
 
 	function __set($name, $value) {
 		if ($value !== null) $this->_params[$name] = $value;
 	}
 
 	function init() {
-		$this->_sitemap = new Sitemap();
-		list($tags, $tagsAll) = $this->_sitemap->getTags();
+		$sitemap = new Sitemap();
+		list($tags, $tagsAll) = $sitemap->getTags();
 		foreach ($tags as $linkName=>$tag) {
 			if (!in_array($linkName, $this->_params['links'])) $this->_params['links'][] = $linkName;
 		}
 		foreach ($tagsAll as $linkName=>$tag) {
 			if (!in_array($linkName, $this->_params['links'])) $this->_params['links'][] = $linkName;
 		}
+		$this->_params['links'][] = 'category';
 	}
 
 	function run() {
@@ -35,6 +37,15 @@ class LinksToList extends CWidget {
 		if (empty($links)) return;
 
 		$this->render('links_to_list', array('links'=>$links));
+	}
+
+	private function _categoryLink() {
+		if (!$this->_checkByEntity('category')) return array();
+
+		return array(
+			'name'=>Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'),
+			'href'=>Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
+		);
 	}
 
 	private function _publisherLink() {
@@ -150,7 +161,7 @@ class LinksToList extends CWidget {
 	}
 
 	private function _checkByEntity($linkName) {
-		return $this->_sitemap->checkTagByEntity($linkName, $this->_params['entity']);
+		return Entity::checkEntityParam($this->_params['entity'], $linkName);
 	}
 
 

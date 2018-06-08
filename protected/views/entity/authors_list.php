@@ -94,11 +94,39 @@
             <div class="text charbox">
 			
 				<form method="get" class="search_aut">
-				
-				<input type="text" name="qa" value="<?=$_GET['qa']?>"/>
-				
+                    <input type="text" name="qa" value="<?=$_GET['qa']?>"/>
+<?php /*
+				<input type="hidden" name="qa" value="<?=$_GET['qa']?>"/>
+                <input type="text" name="new_qa" class="find_author interactive_find" autocomplete="off" disabled value="<?= Yii::app()->getRequest()->getParam('qa') ?>" placeholder="Поиск автора">
+                    <script>
+                        var author_search = [];
+                        console.log('lang=<?=$lang?>');
+                        $.ajax({
+                            url: '/entity/getauthordata',
+                            data: {entity: '<?=$entity?>', lang: '<?=$lang?>', cid: '<?=$cid?>'},
+                            type: 'GET',
+                            beforeSend: function () {
+                                $(".find_author").attr('disabled', true);
+                                $(".find_author").val('Загрузка...');
+                            },
+                            success: function (data) {
+                                author_search = JSON.parse(data);
+                                var search_auth = [];
+                                $.each(author_search, function(index, value) {
+                                    if ((value != '') && (value != null) ) search_auth[index] = value;
+                                });
+                                interactiveSearch('.find_author', search_auth, 'qa', '.search_result_author');
+                                $(".find_author").attr('disabled', false);
+                                $(".find_author").val('');
+                            },
+                            error: function (data) {
+                                console.log("Error response");
+                            },
+                        });
+                    </script>
+*/ ?>
 				<input type="submit" value="Поиск"/>
-				
+
 				</form>
 			
                 <?php foreach($abc as $item) : ?>

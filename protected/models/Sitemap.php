@@ -119,6 +119,8 @@ class Sitemap {
 		return false;
 	}
 
-	function checkTagByEntity($tag, $entity) { return $this->_checkTagByEntity($tag, $entity); }
+	function checkTagByEntity($tag, $entity) {
+		return Entity::checkEntityParam($entity, $tag);
+	}
 
 }

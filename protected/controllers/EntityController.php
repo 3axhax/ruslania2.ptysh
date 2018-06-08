@@ -438,7 +438,7 @@ class EntityController extends MyController {
         if (empty($char) && !empty($abc))
         $char = $abc[array_rand($abc)]['first_' . $lang];
 
-		$list_count = 10;
+//		$list_count = 10;
 
         $lists = $a->GetAuthorsBySearch($char, $lang, $entity);
 
@@ -447,12 +447,12 @@ class EntityController extends MyController {
 			
 
 			$list = $lists['rows'];
-			$list_count = $lists['count'];
+//			$list_count = $lists['count'];
 
 		} else {
 
 			$list = $a->GetAuthorsByFirstChar($char, $lang, $entity);
-			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity));
+//			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
 
 		}
 		

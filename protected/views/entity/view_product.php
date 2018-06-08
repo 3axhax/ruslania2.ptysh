@@ -295,7 +295,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
-			<?php if (!empty($item['eancode'])&&($entity != Entity::SHEETMUSIC)) : ?>
+			<?php if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::SHEETMUSIC, /*Entity::BOOKS*/)))) : ?>
                 <div class="authors" style="margin-bottom:5px;">
                     <div style="float: left;" class="nameprop">EAN</div>
                     <div style="padding-left: 253px;"><?= $item['eancode'] ?></div>
@@ -822,9 +822,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     $name = 'ISBN';
                     if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
                     ?>
-            <?php if (!empty($item['eancode'])&&($entity != Entity::SHEETMUSIC)): ?>
+            <?php /*if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::SHEETMUSIC, Entity::MUSIC)))): ?>
                 <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
-            <?php endif; ?>
+            <?php endif;*/ ?>
 			<?php if (!empty($item['isbn2'])) : ?>
                 <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn2']; ?>
             <?php endif; ?>
