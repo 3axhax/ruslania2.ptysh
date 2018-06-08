@@ -19,7 +19,7 @@ KnockoutForm::RegisterScripts();
             <div id="cart">
 			
 				<p style="display: none"data-bind="visible: CartItems().length > 0">
-                                    <?=$ui->item('new (shopping cart)'); ?>
+                                    <?//=$ui->item('new (shopping cart)'); ?>
                                 </p>
 			
                 <div data-bind="visible: FirstLoad" class="center cartload"<?php if($isCart):?> style="display: none;"<?php endif; ?>>
@@ -126,9 +126,25 @@ KnockoutForm::RegisterScripts();
                         </tr>
                         <tr>
                             <td colspan="8" class="order_start_box" class="cart1header2" align="right">
-                                <a href="/cart/doorder" class="order_start" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                                    <button type="submit" onclick="return false;" style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></button>
+                            
+                            <? if (Yii::app()->user->isGuest) { ?>
+                            
+                                <a href="/cart/variants" class="order_start" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
                                 </a>
+                                
+                                <?
+                                
+                                }else {
+                                   ?>
+                                   <a href="/cart/doorder" class="order_start" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
+                                </a>
+                                   <? 
+                                }
+                                
+                                ?>
+                                
                             </td>
                         </tr>
                     </table>

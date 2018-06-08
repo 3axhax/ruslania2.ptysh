@@ -233,19 +233,27 @@ class SitemapXMLCommand extends CConsoleCommand {
 
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			$rootLastmod = 0;
 			$items = $this->_query($this->_sqlCategorys($params['site_table'], $params['site_category_table']));
 			if ($items->count() > 0) {
 				foreach ($items as $item) {
-					$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $item['id']));
+					$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $item['id'], 'title'=>ProductHelper::ToAscii($item['title'])));
 					$urlXml = $xml->addChild('url');
 					$urlXml->addChild('loc', $url);
-					$lastmod = max($lastmod, (int)$item['dateAdd']);
+					$rootLastmod = max($rootLastmod, (int)$item['dateAdd']);
 					if ($this->_isLastmod) $urlXml->addChild('lastmod', date('c', (int)$item['dateAdd']));
 					if ($this->_isChangefreq) $urlXml->addChild('changefreq', 'never');
 					if ($this->_isPriority) $urlXml->addChild('priority', '0.7');
 				}
 				unset($items);
 			}
+			$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+			$urlXml = $xml->addChild('url');
+			$urlXml->addChild('loc', $url);
+			if ($this->_isLastmod) $urlXml->addChild('lastmod', date('c', $rootLastmod));
+			if ($this->_isChangefreq) $urlXml->addChild('changefreq', 'never');
+			if ($this->_isPriority) $urlXml->addChild('priority', '0.7');
+			$lastmod = max($lastmod, $rootLastmod);
 		}
 		return [$this->_saveFile($xml, 'sitemap-categories.xml'), $lastmod];
 	}
@@ -644,7 +652,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 
 	private function _sqlCategorys($table, $eTable) {
 		$sql = ''.
-			'select t.id, t.title_ru, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_en title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `' . $eTable . '` t ' .
 				'join `' . $table . '` tI on (tI.code = t.id) '.
 			'group by t.id '.

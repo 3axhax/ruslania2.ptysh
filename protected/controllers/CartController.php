@@ -5,7 +5,7 @@ class CartController extends MyController
     public function accessRules()
     {
         return array(array('allow',
-                           'actions' => array('view', 'doorder', 'doorderjson', 'dorequest', 'getall', 'getcount', 'add', 'mark',
+                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark',
                                               'changequantity', 'remove',),
                            'users' => array('*')),
 
@@ -102,7 +102,38 @@ class CartController extends MyController
 
         $this->ResponseJson(array('Items' => $cartItems));
     }
-
+   
+    public function actionRegister() {
+        
+         if (Yii::app()->user->isGuest)
+        {
+            
+            $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_LOGIN') . ' / ' . Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
+            
+            $this->render('register_form', array());
+        
+        } else {
+            
+            $this->redirect('/cart/doorder/');
+            
+        }
+        
+    }
+    
+    public function actionVariants() {
+        
+        if (Yii::app()->user->isGuest)
+        {
+            
+            $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_LOGIN') . ' / ' . Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
+            
+            $this->render('variants', array());
+        
+        } else {
+            $this->redirect('/cart/doorder/');
+        }
+    }
+    
     public function actionDoOrder()
     {
         $data = $this->GetFormRequest();
@@ -114,7 +145,9 @@ class CartController extends MyController
         if (Yii::app()->user->isGuest)
         {
             $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_LOGIN') . ' / ' . Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
-            $this->render('login_or_register');
+            //$this->render('login_or_register');
+            $this->render('login_form');
+            //$this->render('variants', array());
             return;
         }
 
