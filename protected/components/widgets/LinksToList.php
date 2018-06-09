@@ -7,7 +7,7 @@
 */
 
 class LinksToList extends CWidget {
-	protected $_params = array('links'=>['publisher', 'authors', 'series', 'actors', 'directors']);//здесь массив начальных значений
+	protected $_params = array('links'=>['category', 'publisher', 'authors', 'series', 'actors', 'directors']);//здесь массив начальных значений
 
 	function __set($name, $value) {
 		if ($value !== null) $this->_params[$name] = $value;
@@ -22,7 +22,6 @@ class LinksToList extends CWidget {
 		foreach ($tagsAll as $linkName=>$tag) {
 			if (!in_array($linkName, $this->_params['links'])) $this->_params['links'][] = $linkName;
 		}
-		$this->_params['links'][] = 'category';
 	}
 
 	function run() {

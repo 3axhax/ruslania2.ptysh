@@ -24,7 +24,9 @@
 	</li>
 	<?php endforeach; ?>
 	<?php if ($hide): ?>
-		<li onclick="$(this).hide().siblings().show();" style="text-align: right; padding-bottom: 20px; cursor: pointer; background: url(../new_img/arrow_down.gif) no-repeat right;"></li>
+		<li onclick="$(this).hide().siblings().show();" class="category_all">
+			<?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?>
+		</li>
 	<?php endif; ?>
 </ul>
 

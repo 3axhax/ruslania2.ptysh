@@ -2615,3 +2615,16 @@ input.add_cart {
     border-radius: 2px;
     text-align: center;
 }
+
+li.category_all {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 9px 0;
+    text-align: center;
+    font-size: 14px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    cursor: pointer;
+    background: rgb(117, 132, 149) url(../new_img/dd_white.png) no-repeat 95%;
+    width: 100%;
+}
