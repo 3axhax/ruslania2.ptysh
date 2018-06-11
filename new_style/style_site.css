@@ -1544,6 +1544,10 @@ h1.title_char {
 	text-align: center;
 	border-radius: 3px;
 }
+.text.charbox a.page_detail_link {
+    width: auto;
+    margin-left: 10px;
+}
 
 input[type=text]:focus {
 	box-shadow: none;
@@ -1553,6 +1557,12 @@ input[type=text]:focus {
 	
 	background: #dddddd;
 	text-decoration: none;
+}
+
+.text.charbox a.page_detail_link:hover, .text.charbox a.page_detail_link:focus,.text.charbox a.page_detail_link.active {
+
+    background: none;
+    text-decoration: underline;
 }
 
 .search_aut{ position: relative; margin-bottom: 15px; }
@@ -2430,9 +2440,9 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
 .mp_list li .row_item td.name { padding-left: 20px;}
 .mp_list li .row_item td.pic a { display: block; width: 86px; overflow: hidden; }
 
-.search_box .loading { display: none; font-size: 12px; color: #aaa; position: absolute; right: 100px; top: 17px; }
+.search_box .loading, .search_aut .loading { display: none; font-size: 12px; color: #aaa; position: absolute; right: 100px; top: 17px; }
 
-.search_box.mp_busy .loading { display: block; }
+.search_box.mp_busy .loading, .search_aut.mp_busy .loading { display: block; }
 
 .list.authors:after {
 	clear: both;

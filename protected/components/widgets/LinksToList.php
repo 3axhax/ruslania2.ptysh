@@ -42,7 +42,7 @@ class LinksToList extends CWidget {
 		if (!$this->_checkByEntity('category')) return array();
 
 		return array(
-			'name'=>Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'),
+			'name'=>Yii::app()->ui->item('ALL_CATEGORY'),
 			'href'=>Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
 		);
 	}
