@@ -4,7 +4,7 @@ $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 ?>
-<div class="row">    
+<div class="row">
     <div class="span1" style="overflow: hidden">
         <?php if (isset($isList) && $isList) : ?>
             <a href="<?= $url; ?>">

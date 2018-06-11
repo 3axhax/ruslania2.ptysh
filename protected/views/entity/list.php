@@ -66,10 +66,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                     $key = 'itemlist_' . $entity . '_' . $item['id'];
                     ?>
                     <li>
-                        <?php /*echo '<pre>';
-                        print_r($item['DeliveryTime']);
-                        echo '</pre>';*/?>
-                        <?php $this->renderPartial('_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
+                        <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
                 <?php endforeach; ?>
             </ul>

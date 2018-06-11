@@ -524,7 +524,9 @@ class Category {
         $year_max = $post['year_max'];
 
         $cost_min = $post['min_cost'];
+        $cost_min = (float)str_replace(',','.', $cost_min);
         $cost_max = $post['max_cost'];
+        $cost_max = (float)str_replace(',','.', $cost_max);
 
         $binding_id = $post['binding_id'];
         $search = $post['name_search'];
