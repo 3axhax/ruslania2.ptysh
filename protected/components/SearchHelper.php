@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class SearchHelper
 {
@@ -266,7 +266,6 @@ class SearchHelper
         $q = '@(title_ru,title_rut,title_fi,title_en)  ' . $search->EscapeString($query);
 		
 		$search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
-		
         $res = $search->query($q, 'products');
 
         $totalFound = $res['total_found'];

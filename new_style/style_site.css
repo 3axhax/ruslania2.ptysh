@@ -2582,10 +2582,12 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
     height: 200px;
     overflow: auto;
 }
-.select_simulator:active ul.ss_select, .select_simulator ul.ss_select:hover {display: block;}
+.select_simulator:active ul.ss_select, .select_simulator ul.ss_select:hover {display: block;width: 290px;left: 0;}
 .select_simulator ul.ss_select li {
     background-color: #ffffff;
     padding: 2px 10px;
+    border-left: 2px inset;
+    border-right: 2px inset;
 }
 .select_simulator .ss_selected {
     width: 250px;

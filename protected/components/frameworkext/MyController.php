@@ -4,9 +4,13 @@ class MyController extends CController
 {
     public $breadcrumbs = array();
     public $pageTitle;
+    public $pageKeywords;
+    public $pageDescription;
     protected $uid = 0;
     protected $sid = 0;
     protected $sessionID = 0;
+    protected $_canonicalPath = null;//адрес страницы canonical
+    protected $_maxPages = false;// признак, что на странице есть пагинация (false - нету, число - количество страниц)
 
     public function GetAvail($avail)
     {
@@ -100,15 +104,30 @@ class MyController extends CController
     public function beforeRender($view)
     {
         //if(empty($this->pageTitle))
-        if(empty($this->pageTitle) && is_array($this->breadcrumbs))
-        {
+        if (is_array($this->breadcrumbs)) {
             $title  = array();
             foreach($this->breadcrumbs as $idx=>$data)
             {
                 if(is_numeric($idx)) $title[] = $data;
                 else $title[] = $idx;
             }
-            $this->pageTitle = implode(' &gt; ', $title);
+            if(empty($this->pageTitle))
+            {
+                $this->pageTitle = implode(' &gt; ', $title);
+                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                }
+                $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
+            }
+            if (empty($this->pageDescription)) {
+                $this->pageDescription = implode(' &gt; ', $title);
+                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                    $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                }
+            }
+            if (empty($this->pageKeywords)) {
+                $this->pageKeywords = implode(' ', $title);
+            }
         }
         return true;
     }
@@ -222,6 +241,86 @@ class MyController extends CController
             }
         }
         return Yii::app()->params['DefaultLanguage'];
+    }
+
+    function getCanonicalPath() {
+        //если есть постраничный вывод, то не показываем canonical для гугла
+        if (($this->_maxPages !== false)&&($this->_getUserAgent() === 'google')) return '';
+        $curPage = (int) Yii::app()->getRequest()->getParam('page');
+        //в задании про canonical написано сделать на всех страницах
+        //а взадании про пагинацию на страницах начаная со второй
+//        if (($this->_maxPages !== false)&&($curPage < 2)) return '';
+
+        return $this->_canonicalPath;
+    }
+
+    /**
+     * @return array ('next'=>адрес следующей страницы, 'prev'=>адрес предыдущей страницы) или пустой массив если не надо
+     */
+    function getNextPrevPath() {
+        if (empty($this->_canonicalPath)) return array();
+        if ($this->_maxPages === false) return array();
+
+        $path = urldecode(getenv('REQUEST_URI'));
+        $ind = mb_strpos($path, "?", null, 'utf-8');
+        $q = ($ind === false)?'':mb_substr($path, $ind, null, 'utf-8');
+        unset($path);
+
+        $paths = array();
+        $query = $_GET;
+        foreach ($query as $k=>$v) {
+            //убираю параметры, которые кто-то зачем-то в скриптах положил в $_GET
+            if (!preg_match("/\b" . $k . "\b/ui", $q)) unset($query[$k]);
+            //пустые параметры тоже уберу, их не доложно быть
+            elseif ($v === '') unset($query[$k]);
+            //эти параметры в куках, убираю
+            elseif (in_array($k, array('avail', 'currency', 'language'))) unset($query[$k]);
+        }
+        $curPage = 1;
+        if (isset($query['page'])) $curPage = max($curPage, (int)$query['page']);
+        if ($this->_maxPages > 1) $curPage = min($curPage, $this->_maxPages);
+        $nextPage = $curPage + 1;
+        $prevPage = $curPage - 1;
+        if ($prevPage === 1) {
+            unset($query['page']);
+            if (empty($query)) $paths['prev'] = $this->_canonicalPath;
+            else $paths['prev'] = $this->_canonicalPath . '?' . http_build_query($query);
+        }
+        elseif ($prevPage > 1) {
+            $query['page'] = $prevPage;
+            $paths['prev'] = $this->_canonicalPath . '?' . http_build_query($query);
+        }
+        if ($nextPage < $this->_maxPages) {
+            $query['page'] = $nextPage;
+            $paths['next'] = $this->_canonicalPath . '?' . http_build_query($query);
+        }
+        return $paths;
+    }
+
+    protected function _getUserAgent() {
+        $ua = mb_strtolower(getenv('HTTP_USER_AGENT'), 'utf-8');
+        if (mb_strpos($ua, 'yandex', null, 'utf-8')) return 'yandex';
+        if (mb_strpos($ua, 'google', null, 'utf-8')) return 'google';
+        return '';
+    }
+
+    /** функция запускается, если адрес, с которого зашли на страницу не соответствует адресу, который должен быть (реальный адрес)
+     * на 04.06.18 старыми адресами считаются
+     * - адреса заканчивающиеся на ".html" или
+     * - адреса заканчивающиеся не на "/"
+     * - адреса без наименования
+     * реальные адреса заканчиваются на "/"
+     * функция делает редирект на реальный адрес, если старый адрес похож на реальный
+     * @param $oldPage
+     * @param $realPage
+     * @param $query
+     */
+    protected function _redirectOldPages($oldPage, $realPage, $query) {
+        if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
+        elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
+        elseif (preg_match("/(\d+)\/?/", $oldPage)) $oldPage = $realPage;
+
+        if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
     }
 
 }

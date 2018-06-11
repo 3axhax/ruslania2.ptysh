@@ -19,7 +19,7 @@
         $key = 'itemlist_' . $entity . '_' . $item['id'];
         ?>
         <li>
-            <?php $this->renderPartial('_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
+            <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
         </li>
     <?php endforeach; ?>
 </ul>

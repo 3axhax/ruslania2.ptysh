@@ -1,11 +1,11 @@
-<?php
+<?php  /**@var $this MyController*/
 $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::app()->language : 'ru';
 ?>
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
         <div class="span10 listgoods" style="float: right;">
 
-            <h1 class="titlename"><?=((!$cid) ? $ui->item('A_NEW_GOODS_RAZD_TITLE') . ': ' . Entity::GetTitle($entity) : $ui->item('A_NEW_GOODS_CAT_TITLE') . ': ' . $title_cat); ?></h1>
+            <h1 class="titlename"><?=((!$cid) ? $ui->item('A_NEW_GOODS_RAZD_TITLE') . ': ' . Entity::GetTitle($entity) : $ui->item('A_NEW_GOODS_CAT_TITLE') . ': ' . $title_cat); ?><?php if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1): ?> &ndash; <?= $ui->item('PAGES_N', $page) ?> <?php endif; ?></h1>
 			
 			<? if ($entity == 100) : ?>
 			Ведётся оптимизация раздела...
@@ -66,10 +66,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                     $key = 'itemlist_' . $entity . '_' . $item['id'];
                     ?>
                     <li>
-                        <?php /*echo '<pre>';
-                        print_r($item['DeliveryTime']);
-                        echo '</pre>';*/?>
-                        <?php $this->renderPartial('_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
+                        <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -81,8 +78,10 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
 			
 		</div>
         <div class="span2">
+<?php $this->widget('LinksToList', array('entity'=>$entity)); ?>
+<?php $this->widget('LeftCategories', array('entity'=>$entity, 'cid'=>$cid, 'catTitle'=>$title_cat)); ?>
 
-			<?php if (!empty($categoryList)) : ?>
+			<?php /*if (!empty($categoryList)) : ?>
                 <h2 class="cattitle">Категории:</h2>
                 <ul class="left_list divider">
 
@@ -104,7 +103,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                                 if (count(Category::exists_subcategoryes($entity, $cat['id']))) {
                                     echo '<a href="javascript:;" class="open_subcat subcatlvl'.($lvl+1).'" onclick="show_sc($(\'ul.sc' . $cat['id'] . '\'), $(this), '.($lvl+1).')"></a>';
                                 }
-                                echo '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($cat['title_en']))) . '">' . ProductHelper::GetTitle($cat) . '</a>';
+                                echo '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))) . '">' . ProductHelper::GetTitle($cat) . '</a>';
 
 
 								getSubCategoryes($entity, $cat['id'], $lvl + 1);
@@ -122,7 +121,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                             <? if (count(Category::exists_subcategoryes($entity, $cat['id']))) {?>
                             <a href="javascript:;" class="open_subcat subcatlvl1" onclick="show_sc($('ul.sc<?= $cat['id'] ?>'), $(this), 1)"></a>
                             <?} ?>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($cat['title_en']))); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
 
 
 
@@ -136,7 +135,7 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
 				<a href="<?=Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($entity))); ?>" class="order_start" style="width: 100%"><?=$ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?></a>
 
                 <div style="height: 47px"></div>
-            <?php endif; ?>
+            <?php endif; */?>
 
             <?php $lang = Yii::app()->language;?>
 

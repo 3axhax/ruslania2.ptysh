@@ -70,7 +70,7 @@
 			
 			<?
 			
-			if ($tmp > 1) {
+			if (count($tmp) > 1) {
 				
 				echo $tmp[0] . ',...';
 				

@@ -20,11 +20,15 @@ class SiteController extends MyController {
     }
 
     public function actionSale() {
+        $this->_checkUrl(array());
+
         $this->breadcrumbs[] = Yii::app()->ui->item('MENU_SALE');
         $this->render('sale');
     }
 
     public function actionLandingpage() {
+        $this->_checkUrl(array());
+
         Yii::app()->language = 'fi';
         $this->breadcrumbs[] = 'Landingpage';
         $this->render('landingpage');
@@ -90,6 +94,8 @@ class SiteController extends MyController {
     }
 
     public function actionStatic($page) {
+        $this->_checkUrl(array('page' => $page));
+
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
         if ($page == 'sitemap') $file = (new Sitemap)->builder();
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
@@ -211,6 +217,8 @@ class SiteController extends MyController {
             $this->ResponseJson($ret);
         }
 
+        $this->_checkUrl(array());
+
         $this->breadcrumbs[] = Yii::app()->ui->item('YM_CONTEXT_PERSONAL_LOGIN');
 
         $this->render('login');
@@ -234,6 +242,8 @@ class SiteController extends MyController {
             }
             $this->ResponseJson($ret);
         }
+
+        $this->_checkUrl(array());
 
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
         $this->render('register', array('model' => $user));
@@ -269,7 +279,7 @@ class SiteController extends MyController {
         $this->searchFilters = array('e' => $e, 'page' => $page);
 
         Yii::app()->session['SearchData'] = array('q' => $origSearch, 'time' => time(), 'e' => $e);
-
+//var_dump($origSearch);
         if (empty($origSearch)) {
             if (Yii::app()->request->isAjaxRequest)
                 $this->ResponseJson(array());
@@ -748,6 +758,7 @@ class SiteController extends MyController {
 
         $paginatorInfo = new CPagination($totalFound);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalFound/Yii::app()->params['ItemsPerPage']);
         $this->searchResults = $totalFound;		
 		
 		
@@ -968,8 +979,10 @@ class SiteController extends MyController {
         $data['binding_id'] = $data['binding'];
         $data['year_min'] = $ymin;
         $data['year_max'] = $ymax;
-        $data['min_cost'] = $cmin;
-        $data['max_cost'] = $cmax;
+        $cmin = str_replace(',','.',$cmin);
+        $cmax = str_replace(',','.',$cmax);
+        $data['min_cost'] = (real)$cmin;
+        $data['max_cost'] = (real)$cmax;
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
@@ -1077,4 +1090,32 @@ class SiteController extends MyController {
 				}
 		}
 	}
+
+    /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
+     * если совпадают, то возвращаю false
+     * иначе редирект или 404
+     * @param array $data параметры для формирования пути
+     */
+    private function _checkUrl($data) {
+   		$path = urldecode(getenv('REQUEST_URI'));
+   		$ind = mb_strpos($path, "?", null, 'utf-8');
+   		$query = '';
+   		if ($ind !== false) {
+   			$query = mb_substr($path, $ind, null, 'utf-8');
+   			$path = substr($path, 0, $ind);
+   		}
+        $typePage = $this->action->id;
+
+        switch ($typePage) {
+            case 'static': $this->_canonicalPath = Yii::app()->createUrl('site/static', $data); break;
+            default: $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage); break;
+        }
+
+   		if ($this->_canonicalPath === $path) return;
+
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query);
+        throw new CHttpException(404);
+
+    }
+
 }

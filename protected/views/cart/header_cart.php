@@ -44,7 +44,7 @@
                                 </p></div>
                                     </div>
                                     <div class="b-basket-list__calc" style="    max-width: 125px;">
-                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" /></a> <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 50px;" 
+                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" class="grayscale" /></a> <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 50px;" 
                                        data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a>  
                                     </div>
                                     <div class="b-basket-list__cross js-close-item" data-bind="click: function(data, event) { cvm_1.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"></div>
@@ -61,7 +61,7 @@
 					
 					<div class="b-basket-list__bottom">
                                 <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+(CartItems().length-3)+' <?=$ui->item('A_NEW_CART_MORE_ORDER2')?> ', visible: CartItems().length > 3"></a></div>
-                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="/cart/doorder"><?=$ui->item('CONFIRM_ORDER');?></a></div>
+                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="/cart/"><?=$ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
                             </div>
 

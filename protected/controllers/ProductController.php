@@ -11,10 +11,8 @@ class ProductController extends MyController
         $product = new Product();
         $data = $product->GetProduct($entity, $id);
 
-	    if (($realPath = $this->_checkUrl($data)) !== false) {
-		    $this->redirect($realPath, true, 301);
-	    }
-
+	    $this->_checkUrl($data);
+	    
         $c = new Cart;
         $cart = $c->GetCart($this->uid, $this->sid);
         foreach($cart as $item)
@@ -282,7 +280,7 @@ class ProductController extends MyController
     }
 
 	private function _checkUrl($item) {
-		if (empty($item)) return false;
+		if (empty($item)) return;
 
 		$path = urldecode(getenv('REQUEST_URI'));
 		$ind = mb_strpos($path, "?", null, 'utf-8');
@@ -292,9 +290,10 @@ class ProductController extends MyController
 			$path = substr($path, 0, $ind);
 		}
 
-		$realPath = ProductHelper::CreateUrl($item);
-		if ($realPath === $path) return false;
-		return $realPath . $query;
+		$this->_canonicalPath = ProductHelper::CreateUrl($item);
+		if ($this->_canonicalPath === $path) return;
 
+		$this->_redirectOldPages($path, $this->_canonicalPath, $query);
+		throw new CHttpException(404);
 	}
 }

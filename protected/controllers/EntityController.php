@@ -28,6 +28,7 @@ class EntityController extends MyController {
 
         if ($res['total_found'] > 0) {
             $paginatorInfo = new CPagination($res['total_found']);
+            $this->_maxPages = ceil($res['total_found']/$paginatorInfo::DEFAULT_PAGE_SIZE);
             $matches = $res['matches'];
             $ids = array();
             foreach ($matches as $match) {
@@ -63,12 +64,22 @@ class EntityController extends MyController {
     }
 
     public function actionList($entity, $cid = 0, $sort = 0, $avail = true) {
-        
+
 		$entity = Entity::ParseFromString($entity);
-        if ($entity === false)
-            $entity = Entity::BOOKS;
+        if ($entity === false) $entity = Entity::BOOKS;
 		
-		
+        $category = new Category();
+
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        if (!empty($cid)) {
+            $dataForPath['cid'] = $cid;
+            $cat = $category->GetByIds($entity, array($cid));
+            $cat = array_shift($cat);
+            if (!empty($cat['title_en'])) $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($cat));
+        }
+        $this->_checkUrl($dataForPath);
+
+
 		
 		if ($_GET['lang'] != '') {
 			$lang = $_GET['lang'];
@@ -91,7 +102,6 @@ class EntityController extends MyController {
 		$avail = $this->GetAvail($avail);
         
 
-        $category = new Category();
 
 		$maxminyear = $category->getFilterSlider($entity, $cid);
         $pubs = $category->getFilterPublisher($entity, $cid,1,$lang);
@@ -146,8 +156,9 @@ class EntityController extends MyController {
             if ($i == $cnt - 1) {
                 array_push($this->breadcrumbs, $pTitle);
                 $selectedCategory = $p;
-            } else
-                $this->breadcrumbs[$pTitle] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $p['id']));
+            } else {
+                $this->breadcrumbs[$pTitle] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $p['id'], 'title'=>ProductHelper::ToAscii($pTitle)));
+            }
             $ids[] = $p['id'];
         }
 
@@ -160,6 +171,7 @@ class EntityController extends MyController {
 
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
 		$items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
@@ -206,6 +218,7 @@ class EntityController extends MyController {
 			$totalItems = Category::count_filter($entity, $cid, $data);
 			$paginatorInfo = new CPagination($totalItems);
 			$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+            $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
 			 $filter_data = $data;
 		}
 
@@ -217,7 +230,22 @@ class EntityController extends MyController {
         Yii::app()->session['last_e'] = $entity;
 
         $filter_data['avail'] = 1;
-
+        
+        
+        if ($entity == 10) {
+            
+            switch (Yii::app()->language) {
+                
+               case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
+                break;
+                case 'en': 
+                //$this->pageTitle = 'Ruslania.com bookstore in Finland - buy Russian books online in '.geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
+                break;
+            }
+            
+        }
+        
+        
 		$this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
@@ -232,6 +260,8 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $c = new Category();
         $tree = $c->GetCategoriesTree($entity);
@@ -248,6 +278,11 @@ class EntityController extends MyController {
             $entity = Entity::BOOKS;
 
         $p = new Publisher();
+
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        if ($char !== null) $dataForPath['char'] = $char;
+        $this->_checkUrl($dataForPath);
+
         $abc = array();
         $lang = Yii::app()->language;
         if ($lang != 'ru' && $lang != 'en')
@@ -270,9 +305,13 @@ class EntityController extends MyController {
     }
 
     public function actionSeriesList($entity) {
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $s = new Series;
         $list = $s->GetList($entity, Yii::app()->language);
 
@@ -294,9 +333,15 @@ class EntityController extends MyController {
         if (empty($list))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['sid'] = $sid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($list[0]));
+        $this->_checkUrl($dataForPath);
+
         $totalItems = $s->GetTotalItems($entity, $sid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $s->GetItems($entity, $sid, $paginatorInfo, $sort, Yii::app()->language, $avail);
@@ -322,9 +367,15 @@ class EntityController extends MyController {
         if (empty($media))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['mid'] = $mid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($media));
+        $this->_checkUrl($dataForPath);
+
         $totalItems = $m->GetTotalItems($entity, $mid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($m->GetItems($entity, $mid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -348,9 +399,15 @@ class EntityController extends MyController {
         if (empty($publisher))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['pid'] = $pid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($publisher));
+        $this->_checkUrl($dataForPath);
+
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($p->GetItems($entity, $pid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -368,6 +425,8 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $a = new CommonAuthor();
 
@@ -419,9 +478,15 @@ class EntityController extends MyController {
         $a = new CommonAuthor();
         $author = $a->GetById($aid);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['aid'] = $aid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($author));
+        $this->_checkUrl($dataForPath);
+
         $totalItems = $a->GetTotalItems($entity, $aid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $a->GetItems($entity, $aid, $paginatorInfo, $sort, Yii::app()->language, $avail);
@@ -451,6 +516,8 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $p = new Performer;
         $lang = Yii::app()->language;
         if ($lang != 'ru' && $lang != 'en')
@@ -469,9 +536,12 @@ class EntityController extends MyController {
     }
 
     public function actionActorList($entity) {
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoActor();
         $lang = Yii::app()->language;
@@ -493,6 +563,9 @@ class EntityController extends MyController {
     public function actionBindingsList($entity) {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $list = (new Binding())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -505,6 +578,9 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if (!$this->_checkTagByEntity('audiostreams', $entity))
             throw new CHttpException(404);
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
 
         $list = (new VideoAudioStream)->getAll($entity);
 
@@ -519,6 +595,8 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('subtitles', $entity))
             throw new CHttpException(404);
 
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $list = (new VideoSubtitle)->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -531,6 +609,8 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if (!$this->_checkTagByEntity('media', $entity))
             throw new CHttpException(404);
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $list = (new Media())->getAll($entity);
 
@@ -545,6 +625,8 @@ class EntityController extends MyController {
         if (!$this->_checkTagByEntity('magazinetype', $entity))
             throw new CHttpException(404);
 
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $list = (new TypeRetriever)->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -557,6 +639,8 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoDirector();
         $lang = Yii::app()->language;
@@ -576,8 +660,13 @@ class EntityController extends MyController {
     }
 
     public function actionYearsList($entity) {
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
+
+
+       $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $list = (new YearRetriever)->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -598,9 +687,15 @@ class EntityController extends MyController {
         if (empty($performer))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['pid'] = $pid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($performer));
+        $this->_checkUrl($dataForPath);
+
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($p->GetItems($entity, $pid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -634,6 +729,11 @@ class EntityController extends MyController {
         if (empty($director))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['did'] = $did;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($director->attributes));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_DIRECTORS')] = Yii::app()->createUrl('entity/directorlist', array('entity' => Entity::GetUrlKey($entity)));
@@ -642,6 +742,7 @@ class EntityController extends MyController {
         $totalItems = $vd->GetTotalItems($entity, $did, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($vd->GetItems($entity, $did, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -663,6 +764,11 @@ class EntityController extends MyController {
         if (empty($actor))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['aid'] = $aid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($actor->attributes));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_ACTORS')] = Yii::app()->createUrl('entity/actorlist', array('entity' => Entity::GetUrlKey($entity)));
@@ -671,6 +777,7 @@ class EntityController extends MyController {
         $totalItems = $va->GetTotalItems($entity, $aid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($va->GetItems($entity, $aid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -692,6 +799,11 @@ class EntityController extends MyController {
         if (empty($subtitle))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['sid'] = $sid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle->attributes));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('Credits')] = Yii::app()->createUrl('entity/subtitleslist', array('entity' => Entity::GetUrlKey($entity)));
@@ -700,6 +812,7 @@ class EntityController extends MyController {
         $totalItems = $vs->GetTotalItems($entity, $sid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($vs->GetItems($entity, $sid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -720,6 +833,11 @@ class EntityController extends MyController {
         if (empty($bData))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['bid'] = $bid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($bData));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('Binding')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
@@ -728,6 +846,7 @@ class EntityController extends MyController {
         $totalItems = $binding->GetTotalItems($entity, $bid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($binding->GetItems($entity, $bid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -743,6 +862,10 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        if ((int) $year > 0) $dataForPath['year'] = $year;
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_FILTER_YEAR')] = Yii::app()->createUrl('entity/yearslist', array('entity' => Entity::GetUrlKey($entity)));
@@ -753,6 +876,7 @@ class EntityController extends MyController {
         $totalItems = $yr->GetTotalItems($entity, $year, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($yr->GetItems($entity, $year, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -768,6 +892,10 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 		
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['type'] = $type;
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPE_IZD')] = Yii::app()->createUrl('entity/typeslist', array('entity' => Entity::GetUrlKey($entity)));
@@ -778,6 +906,7 @@ class EntityController extends MyController {
         $totalItems = $yr->GetTotalItems($entity, $type, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($yr->GetItems($entity, $type, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -793,6 +922,10 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        if ((int) $year > 0) $dataForPath['year'] = $year;
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('IN_YEAR'), $year);
@@ -802,6 +935,7 @@ class EntityController extends MyController {
         $totalItems = $yr->GetTotalItems2($entity, $year, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($yr->GetItems2($entity, $year, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -822,6 +956,11 @@ class EntityController extends MyController {
         if (empty($stream))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['sid'] = $sid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($stream->attributes));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('AUDIO_STREAMS')] = Yii::app()->createUrl('entity/audiostreamslist', array('entity' => Entity::GetUrlKey($entity)));
@@ -830,6 +969,7 @@ class EntityController extends MyController {
         $totalItems = $s->GetTotalItems($entity, $sid, $avail);
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($s->GetItems($entity, $sid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
@@ -850,10 +990,16 @@ class EntityController extends MyController {
         if (empty($type))
             throw new CHttpException(404);
 
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['tid'] = $tid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($type->attributes));
+        $this->_checkUrl($dataForPath);
+
         $title = Entity::GetTitle($entity, Yii::app()->language);
 
         $totalItems = $mt->GetTotalItems($entity, $tid, $avail);
         $paginatorInfo = new CPagination($totalItems);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
         $sort = SortOptions::GetDefaultSort($sort);
 
@@ -893,6 +1039,8 @@ class EntityController extends MyController {
     public function actionGift()
     {
         $entity = Entity::PERIODIC;
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
         $o = new Offer();
         $group = $o->GetItems(Offer::INDEX_PAGE, $entity);
         $this->render('gift', array('entity' => $entity, 'group' => current($group)['items']));
@@ -904,6 +1052,39 @@ class EntityController extends MyController {
    		return false;
    	}
 
+    /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
+     * если совпадают, то возвращаю false
+     * иначе редирект или 404
+     * @param array $data параметры для формирования пути
+     */
+    private function _checkUrl($data) {
+   		$path = getenv('REQUEST_URI');
+   		$ind = mb_strpos($path, "?", null, 'utf-8');
+   		$query = '';
+   		if ($ind !== false) {
+   			$query = mb_substr($path, $ind, null, 'utf-8');
+   			$path = substr($path, 0, $ind);
+   		}
+        $typePage = $this->action->id;
+        $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
+
+   		if ($this->_canonicalPath === $path) {
+            //редирект с page=1
+            $countPage1 = 0;
+            $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);
+            if ($countPage1 > 0) {
+                $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+                if ($query === '?') $query = '';
+                $this->redirect($this->_canonicalPath . $query, true, 301);
+            }
+            //редирект с page=1
+            return;
+        }
+
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query);
+        throw new CHttpException(404);
+
+   	}
 
 
 }
