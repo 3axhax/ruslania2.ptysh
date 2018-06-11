@@ -979,8 +979,10 @@ class SiteController extends MyController {
         $data['binding_id'] = $data['binding'];
         $data['year_min'] = $ymin;
         $data['year_max'] = $ymax;
-        $data['min_cost'] = $cmin;
-        $data['max_cost'] = $cmax;
+        $cmin = str_replace(',','.',$cmin);
+        $cmax = str_replace(',','.',$cmax);
+        $data['min_cost'] = (real)$cmin;
+        $data['max_cost'] = (real)$cmax;
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);

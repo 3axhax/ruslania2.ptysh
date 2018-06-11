@@ -185,6 +185,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             dynamicData:{ avail: function() { return $('#js_avail').val(); } },
             formatItem:function (data, $item, q)
             {
+                console.log(data);
 					var ret = '';
 					
 					if (data.Counts != undefined) {

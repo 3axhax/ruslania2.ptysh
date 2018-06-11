@@ -4,7 +4,7 @@ $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 ?>
-<div class="row">    
+<div class="row">
     <div class="span1" style="position: relative">
         <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
         <?php if (isset($isList) && $isList) : ?>
@@ -186,7 +186,7 @@ $entityKey = Entity::GetUrlKey($entity);
         <div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 200, $url)); ?></div>
 		
 		<? if  ($item['isbn']) : ?>
-			
+
 			<div style="margin-top: 16px;">ISBN: <?=str_replace('-','',$item['isbn'])?></div>
 		
 		<? endif; ?>
