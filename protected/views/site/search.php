@@ -20,7 +20,7 @@
             <div class="text" style="margin-top: 7px;">
                 <?= sprintf($ui->item("X items found"), $paginatorInfo->getItemCount()); ?>
 				
-							
+			
 				
             </div>
             <ul class="items">

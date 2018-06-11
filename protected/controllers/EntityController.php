@@ -1017,6 +1017,7 @@ class EntityController extends MyController {
     {
         $category = new Category();
         $author = $category->getFilterAuthor($_GET['entity'], $_GET['cid'],0,'',$_GET['lang']);
+//        $author = $category->getFilterAuthor((int) Yii::app()->getRequest()->getParam('entity'), (int) Yii::app()->getRequest()->getParam('cid'));
         print_r(json_encode($author));
         return true;
     }

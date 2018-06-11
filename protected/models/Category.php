@@ -288,6 +288,8 @@ class Category {
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
         if ($site_lang == '') $site_lang = 'ru';
+        if (isset(Yii::app()->language)) $site_lang = Yii::app()->language;
+
         if ($cid > 0) {
             $sql = 'SELECT ba.author_id, aa.title_'.$site_lang.' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
