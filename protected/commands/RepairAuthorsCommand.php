@@ -10,13 +10,37 @@ class RepairAuthorsCommand extends CConsoleCommand {
 	private $_apostropheAuthors = array();//авторы, у которых есть апострофы. Надо, что бы сравнить О'Генри и О. Генри и О.Генри
 
 	public function actionIndex() {
+
 		foreach ($this->_query($this->_sql100()) as $author) {
 			$author = $this->_checkInitials($author);
 			if (!empty($author['repair_title_ru'])) $this->_update($author);
 		}
+
+		//заполняю массив с апострофами, что бы похожие записи не изменять
+		foreach ($this->_query($this->_sqlApostrophe()) as $author) {
+			$this->_apostropheAuthors[$author['id']] = preg_replace("/\W+/iu", '', $author['title_ru']);
+		}
+
+		foreach ($this->_query($this->_sqlInitials()) as $author) {
+			if (!$this->_isApostrophe($author['title_ru'])) {
+				$author = $this->_checkInitials($author);
+				if (!empty($author['repair_title_ru'])) $this->_update($author);
+			}
+		}
+
 	}
 
-	private function _fillApostropheAuthors() {
+	/** проверяет похож автор на одного из авторов с апострофами
+	 * @param $author
+	 * @return bool
+	 */
+	private function _isApostrophe($author) {
+		$author = preg_replace("/\W+/iu", '', $author);
+		foreach ($this->_apostropheAuthors as $id => $authorApostrophe) {
+			if (mb_strpos($author, $authorApostrophe) === 0) return true;
+			if (mb_strpos($authorApostrophe, $author) === 0) return true;
+		}
+		return false;
 	}
 
 	/** если получилось определить фамилию, то дополняю массив ключами "repair_.." и исправляю поле "first_.."
