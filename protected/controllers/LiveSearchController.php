@@ -3,6 +3,10 @@
 
 class LiveSearchController extends MyController {
 
+	function actionGeneral() {
+		var_dump(Yii::app()->search);
+	}
+
 	function actionAuthors() {
 		if (!$this->_check('authors')) return;
 
