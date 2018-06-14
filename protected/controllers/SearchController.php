@@ -37,8 +37,10 @@ class SearchController extends MyController {
 			return;
 		}
 
+		/**
+		 *
+		 */
 		$search = SearchHelper::Create();
-
 		$result = array();
 
 		$pp = Yii::app()->params['ItemsPerPage'];

@@ -816,46 +816,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <br /><span class="nameprop">Catalogue N:</span> <?= $item['catalogue']; ?><br/>
             <?php endif; ?>
 
-<?php if (
-                    in_array($entity, array(Entity::PRINTED, Entity::MAPS, Entity::SOFT, Entity::VIDEO, ))
-                    || (($entity == Entity::SHEETMUSIC)&&($item['code'] == 47))
-            ) : ?>
-<?php else:
-                    $name = 'ISBN';
-                    if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
-                    ?>
-            <?php if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::PERIODIC)))): ?>
-                <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn2'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn2']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn3'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn3']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn4'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn4']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn5'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn5']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn6'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn6']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn7'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn7']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn8'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn8']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn9'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn9']; ?>
-            <?php endif; ?>
-			<?php if (!empty($item['isbn10'])) : ?>
-                <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn10']; ?>
-            <?php endif; ?>
-<?php endif; ?>
-            
+
 
             
 
@@ -880,8 +841,47 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <br /><span class="nameprop">
                 <?= $ui->item('Stock_id'); ?>:</span> <?= $item['stock_id']; ?>
             <?php endif; ?>
-			
-		<?php endif; ?>	
+
+                <?php if (
+                    /*in_array($entity, array(Entity::PRINTED, Entity::MAPS, Entity::SOFT, Entity::VIDEO, ))
+                    || */(($entity == Entity::SHEETMUSIC)&&($item['code'] == 47))
+                ) : ?>
+                <?php else:
+                    $name = 'ISBN';
+                    if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
+                    ?>
+                    <?php if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::PERIODIC)))): ?>
+                    <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn2'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn2']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn3'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn3']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn4'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn4']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn5'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn5']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn6'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn6']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn7'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn7']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn8'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn8']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn9'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn9']; ?>
+                <?php endif; ?>
+                    <?php if (!empty($item['isbn10'])) : ?>
+                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn10']; ?>
+                <?php endif; ?>
+            <?php endif; ?>
+		<?php endif; ?>
 	</div>
 	
 	

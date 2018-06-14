@@ -95,7 +95,7 @@
 			
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
-                    <input type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
+                    <input placeholder="<?= $ui->item('NAME_AUTHOR_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
 				    <input type="submit" value="Поиск"/>
 
 				</form>
