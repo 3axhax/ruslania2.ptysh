@@ -5,7 +5,7 @@ class CartController extends MyController
     public function accessRules()
     {
         return array(array('allow',
-                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark',
+                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark', 'noregister',
                                               'changequantity', 'remove',),
                            'users' => array('*')),
 
@@ -118,6 +118,25 @@ class CartController extends MyController
             
         }
         
+    }
+    
+    public function actionNoRegister() {
+        //$cart = new Cart;
+        //$cartItems = array();
+        //$tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid), $this->uid);
+        //foreach($tmp as $item)
+        //{
+          //  $item['Title'] = str_replace('"', '\\"', $item['Title']); // из-за того, что это идет в JSON в виде строки в do_order.php и ломает парсеру жизнь
+            //if($item['IsAvailable'])
+           //     $cartItems[] = $item;
+        //}
+
+        $u = new User;
+        $addresses = $u->GetAddresses($this->uid);
+
+        $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
+        $this->breadcrumbs[] = 'Оформление заказа';
+        $this->render('no_register');
     }
     
     public function actionVariants() {

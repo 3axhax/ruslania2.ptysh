@@ -299,8 +299,8 @@ class Product
 			
 		}
 		
-		if ($entity == 60)
-            return array();
+		if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
 		$entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
         $tbl_author = $entities[$entity]['author_table'];

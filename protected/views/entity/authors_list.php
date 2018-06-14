@@ -94,25 +94,24 @@
             <div class="text charbox">
 			
 				<form method="get" class="search_aut">
-                    <input type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
+                    <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
+                    <input placeholder="<?= $ui->item('NAME_AUTHOR_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
 				    <input type="submit" value="Поиск"/>
 
 				</form>
                 <script type="text/javascript">
-//                    scriptLoader('modules/autocomplete.js').callFunction(function(){
-//                        autocomplete().init({'idText':'js_search_authors', data:<?//= json_encode(array('entity'=>$entity, 'lang'=>$lang)) ?>//});
-//                    });
                     $(document).ready(function() {
+                        var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
+//                        var csrf = $('meta[name=csrf]').attr('content').split('=');
+//                        dataPost[csrf[0]] = csrf[1];
                         $('#js_search_authors').marcoPolo({
-                            minChars:3,
+                            minChars:1,
                             cache : false,
                             hideOnSelect: false,
-                            url:'/entity/getauthordata',
-                            data:<?= json_encode(array('entity'=>$entity, 'lang'=>$lang)) ?>,
+                            url:'/liveSearch/authors',
+                            data:dataPost,
                             formatItem:function (data, $item, q) {
-                                console.log(data, $item, q);
-                                var result = '<div>qqqqqqqqqq</div>';
-                                return result;
+                                return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
                             }
                         });
                     });
