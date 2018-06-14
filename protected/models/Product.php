@@ -104,7 +104,10 @@ class Product
                 $item['DeliveryTime'] = $d->vendorData->deliveryTime->attributes;
             }
             else $item['DeliveryTime'] = false;
-            //$item['status'] = Product::GetStatusProduct($item['entity'], $item['id']);
+
+            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            $real_price = $price[DiscountManager::WITH_VAT_WORLD];
+            $item['real_price'] = $real_price;
 
             $ret[] = $item;
         }
