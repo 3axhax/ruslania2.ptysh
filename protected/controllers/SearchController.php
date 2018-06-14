@@ -472,6 +472,7 @@ class SearchController extends MyController {
 
 
 		$totalFound = $s;
+		$abstract = array();
 
 		if (Yii::app()->request->isAjaxRequest) {
 
