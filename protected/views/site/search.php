@@ -4,7 +4,16 @@
 <div class="row">
 
 		<div class="listgoods span10">
-		
+
+<?php if (!empty($abstractInfo)): ?>
+    <div style="margin-bottom: 20px;">
+    <?php $dataForSearch = array('q'=>$q,'avail'=>$this->GetAvail(1));
+            foreach ($abstractInfo as $eNum=>$counts): $dataForSearch['e'] = $eNum; ?>
+                <div class="row_category"><?= $q ?> <span><?= $ui->item('A_NEW_SEARCH_IN_CAT') ?> <?= Entity::GetTitle($eNum) ?></span> <a href="/site/search?<?= http_build_query($dataForSearch) ?>" class="result_search_count"><?= $counts ?></a></div>
+            <?php endforeach; ?>
+        </div>
+<?php endif; ?>
+
             <?php if (!empty($items)) : ?>
                 <p><?=$ui->item('DID_YOU_MEAN'); ?></p>
                 <ul class="items">
