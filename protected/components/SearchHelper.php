@@ -263,7 +263,8 @@ class SearchHelper
             foreach ($filters as $name => $value)
                 $search->SetFilter($name, array($value));
 
-        $q = '@(title_ru,title_rut,title_fi,title_en)  ' . $search->EscapeString($query);
+        //$q = '@(title_ru,title_rut,title_fi,title_en)  ' . $search->EscapeString($query);
+        $q = '@* ' . $search->EscapeString($query);
 		
 		$search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
         $res = $search->query($q, 'products');

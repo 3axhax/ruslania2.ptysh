@@ -18,9 +18,9 @@ class SearchController extends MyController {
 
 		$page = $this->_getNumPage();
 
-		$this->getEntitys($q);
-		$this->getDidYouMean($q);
-		$this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+//		$this->getEntitys($q);
+//		$this->getDidYouMean($q);
+//		$this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
 
 		$abstractInfo = $this->getEntitys($q);
 
@@ -46,7 +46,7 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@(title_ru,title_rut,title_fi,title_en) ' . $this->_search->EscapeString($query);
+		$q = '@* ' . $this->_search->EscapeString($query);
 		$groupby = array(
 			'field'=>'entity',
 			'mode'=>SPH_GROUPBY_ATTR,
@@ -64,7 +64,7 @@ class SearchController extends MyController {
 		return $result;
 	}
 
-	function getDidYouMean($query) {
+	function getDidYouMean($q) {
 		$authors = $this->_getAuthors($q);
 		$publishers = $this->_getPublishers($q);
 		return array_merge($authors, $publishers);
@@ -86,7 +86,7 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@(title_ru,title_rut,title_fi,title_en)  ' . $this->_search->EscapeString($query);
+		$q = '@* ' . $this->_search->EscapeString($query);
 
 		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
 		$res = $this->_search->query($q, 'products');
@@ -107,7 +107,7 @@ class SearchController extends MyController {
 					$this->_search->SetFilter($name, array($value));
 				}
 			}
-			$res = $this->search->query($query, $index);
+			$res = $this->_search->query($query, $index);
 
 			if ($res['total_found'] > 0) {
 				foreach ($res['matches'] as $key => $match) {
