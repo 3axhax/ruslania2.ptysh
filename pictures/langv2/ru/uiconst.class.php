@@ -1042,6 +1042,7 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_VIEW_ALL_CATEGORY' => 'Показать все категории',
 'A_NEW_SETTINGS_FILTER' => 'Фильтры',
 'A_NEW_SEARCH_CAT' => 'Поиск внутри категории',
+'A_NEW_SEARCH_ENT' => 'Поиск внутри Раздела',
 'A_NEW_NAME_ISBN' => 'По названию,ISBN',
 'A_NEW_FILTER_ALL' => 'Все',
 'A_NEW_FILTER_AUTHOR' => 'Автор',

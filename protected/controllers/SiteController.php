@@ -967,7 +967,7 @@ class SiteController extends MyController {
             return $this->_keyPrefix = md5('Yii.' . get_class($this) . '.' . Yii::app()->getId());
     }
 
-    function actionGGfilter($entity = 0, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
+    function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
                             $izda = '0', $seria = '0', $cmin = '0', $cmax = '0', $binding = '0', $langsel = '',
                             $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
 
@@ -980,6 +980,8 @@ class SiteController extends MyController {
         $_GET['formatVideo'] = $_POST['formatVideo'];
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
         $_GET['langsel'] = $_POST['langsel'];
+        if (isset($_GET['entity'])) $entity = $_GET['entity'];
+
 
         //записываем фильтр в сессию каждой категории
         if (Yii::app()->session['filter_e' . $entity . '_c_' . $cid] != serialize($_GET)) {
@@ -1001,6 +1003,7 @@ class SiteController extends MyController {
         $data['min_cost'] = (real)$cmin;
         $data['max_cost'] = (real)$cmax;
 
+        //print_r($entity); die();
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);

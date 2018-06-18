@@ -148,7 +148,13 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                 <input type="hidden" name="cid_val" class="cid_val" value="<?= $cid ?>"/>
                 <input type="hidden" name="sort" class="sort" value="<?= (Yii::app()->getRequest()->getParam('sort')) ? Yii::app()->getRequest()->getParam('sort') : 12 ?>"/>
                 <div class="form-row">
-                    <label class="title"><?=$ui->item('A_NEW_SEARCH_CAT'); ?></label>
+                    <?php
+                        $title_search = $ui->item('A_NEW_SEARCH_CAT').': "'.$title_cat.'"';
+                        if($cid == 0) {
+                            $title_search =  $ui->item('A_NEW_SEARCH_ENT').': "'.Entity::GetTitle($entity).'"';
+                        }
+                    ?>
+                    <label class="title"><?=$title_search; ?></label>
                     <input type="text" class="search inp" placeholder="<?=$ui->item('A_NEW_NAME_ISBN'); ?>" name="name_search" onkeyup="if ($(this).val().length > 2) { show_result_count($(this)); } else { $('.box_select_result_count').hide(1); }"/>
                     <div class="box_select_result_count">
                         <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div> <?=$ui->item('A_NEW_FILTER_SELECT')?>:

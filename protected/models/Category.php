@@ -514,7 +514,7 @@ class Category {
         return $filter_ret;
     }
 
-    public function count_filter($entity, $cid, $post) {
+    public function count_filter($entity = 15, $cid, $post) {
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
