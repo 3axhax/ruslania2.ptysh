@@ -271,8 +271,10 @@ class Category {
     }
 
     public function getFilterAuthor($entity, $cid, $page = 1,$lang='', $site_lang='') {
-        if ($entity == 60 OR $entity == 30 OR $entity == 40)
-            return array();
+        if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+//        if ($entity == 60 OR $entity == 30 OR $entity == 40)
+//            return array();
         if ($page != 0) $limit = (($page - 1) * 50) . ',50';
 		$sql = '';
 		if ($lang!='') {
@@ -286,6 +288,8 @@ class Category {
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
         if ($site_lang == '') $site_lang = 'ru';
+        if (isset(Yii::app()->language)) $site_lang = Yii::app()->language;
+
         if ($cid > 0) {
             $sql = 'SELECT ba.author_id, aa.title_'.$site_lang.' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
@@ -364,6 +368,7 @@ class Category {
 	}
 	
 	public function getCatsBreadcrumbs($entity, $code) {
+        $arr = array();
 		if ($code) {
 			
 			$arr = self::getCatsBreadcrumbs2($entity, $code);
@@ -509,7 +514,7 @@ class Category {
         return $filter_ret;
     }
 
-    public function count_filter($entity, $cid, $post) {
+    public function count_filter($entity = 15, $cid, $post) {
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];

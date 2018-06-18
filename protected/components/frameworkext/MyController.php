@@ -318,7 +318,7 @@ class MyController extends CController
     protected function _redirectOldPages($oldPage, $realPage, $query) {
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
-        elseif (preg_match("/(\d+)\/?/", $oldPage)) $oldPage = $realPage;
+        elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, $oldPage, null, 'utf-8') !== false)) $oldPage = $realPage;
 
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
     }

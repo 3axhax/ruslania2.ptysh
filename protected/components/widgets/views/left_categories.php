@@ -24,10 +24,10 @@
 	</li>
 	<?php endforeach; ?>
 	<?php if ($hide): ?>
-		<li onclick="$(this).hide().siblings().show();" style="text-align: right; padding-bottom: 20px; cursor: pointer;">показать все</li>
+		<li onclick="$(this).hide().siblings().show();" class="category_all">
+			<?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?>
+		</li>
 	<?php endif; ?>
 </ul>
-
-<a href="<?=Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey($entity))); ?>" class="order_start" style="width: 100%"><?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?></a>
 
 <div style="height: 47px"></div>

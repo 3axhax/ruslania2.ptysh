@@ -18,13 +18,15 @@ class CommonAuthor extends CMyActiveRecord
         $data = $entities[$entity];
         if(!array_key_exists('author_table', $data)) return array();
 
-        $sql = 'SELECT DISTINCT(first_'.$lang.') AS first_'.$lang.' FROM all_authorslist AS al '
+        $sql = 'SELECT al.first_'.$lang.' AS first_'.$lang.' FROM all_authorslist AS al '
               .'JOIN '.$data['author_table'].' AS j ON al.id=j.author_id '
-              .'ORDER BY al.title_'.$lang.' ASC';
+            .'group by ord(al.first_'.$lang.') '.
+              'ORDER BY ord(al.title_'.$lang.') ASC '.
+            '';
               //.'ORDER BY first_'.$lang;
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		// return $rows;
 		
 		$filterRows = [];
@@ -43,6 +45,17 @@ class CommonAuthor extends CMyActiveRecord
 
     public function GetAuthorsByFirstChar($char, $lang, $entity)
     {
+
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $authors = SearchAuthors::get()->getBegin(
+            $entity,
+            $char,
+            array(),
+            ($page-1)*150 . ', 150'
+        );
+        return $authors;
+
         $entities = Entity::GetEntitiesList();
         $data = $entities[$entity];
         if(!array_key_exists('author_table', $data)) return array();
@@ -54,16 +67,32 @@ class CommonAuthor extends CMyActiveRecord
 		$limit = ' LIMIT ' . ($page*50) . ', 150 ';
 		
 		
-        $sql = 'SELECT DISTINCT(title_'.$lang.'), al.id FROM all_authorslist AS al '
-            .'JOIN '.$data['author_table'].' AS j ON al.id=j.author_id '
-            .'WHERE first_'.$lang.'=:char '
-            .'ORDER BY title_'.$lang.' ASC '.$limit;
+        $sql = ''.
+            'SELECT title_'.$lang.', al.id '.
+            'FROM all_authorslist AS al '.
+                'JOIN '.$data['author_table'].' AS j ON al.id=j.author_id '.
+            'WHERE ord(first_'.$lang.')=ord(:char) '.
+            'group by al.id '.
+            'ORDER BY title_'.$lang.' ASC '.
+            $limit;
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':char' => $char));
         return $rows;
     }
 	
 	public function GetAuthorsBySearch($char, $lang, $entity) {
-		
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $count = true;
+        $authors = SearchAuthors::get()->getLike(
+            $entity,
+            (string)Yii::app()->getRequest()->getParam('qa'),
+            array(),
+            ($page-1)*150 . ', 150',
+            false,
+            $count
+        );
+        return array('rows'=>$authors, 'count'=>$count);
+
 		$entities = Entity::GetEntitiesList();
         $data = $entities[$entity];
         if(!array_key_exists('author_table', $data)) return array();

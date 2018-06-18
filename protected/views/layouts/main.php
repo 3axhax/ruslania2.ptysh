@@ -45,6 +45,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
         <META name="verify-v1" content="eiaXbp3vim/5ltWb5FBQR1t3zz5xo7+PG7RIErXIb/M="/>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+<?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
+    <meta name="robots" content="noindex">
+<?php endif; ?>
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
         <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
 		<link rel="stylesheet" href="/css/template_styles.css" />
@@ -176,13 +179,12 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 		}
 		
         $('#Search').marcoPolo({
-            url:'/site/search',
+            url:'<?= isset($_GET['ha'])?'/liveSearch/general':'/site/search'?>',
             cache : false,
 			hideOnSelect: false,
             dynamicData:{ avail: function() { return $('#js_avail').val(); } },
             formatItem:function (data, $item, q)
             {
-                console.log(data);
 					var ret = '';
 					
 					if (data.Counts != undefined) {
@@ -223,7 +225,13 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                             '';
 
 
-							
+                            for (var i=0; i<data.length;i++) {
+                                if (!data[i].is_product) {
+                                    ret += '<div class="row_item"><?= $ui->item('DID_YOU_MEAN') ?></div>';
+                                    break;
+                                }
+                            }
+
 							for (var i=0; i<data.length;i++)
 							{
 								
@@ -991,7 +999,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                         <a href="/"><img src="/new_img/logo.png" alt=""/></a>
                     </div>
                     <div class="span10">
-                        <form method="get" action="/site/search" id="srch">
+                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
                             <div class="search_box">
 								<div class="loading"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?=$ui->item('A_NEW_PLACEHOLDER_SEARCH');?>" id="Search" value="<?=$_GET['q']?>"/>

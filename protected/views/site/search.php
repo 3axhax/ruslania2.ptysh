@@ -20,65 +20,7 @@
             <div class="text" style="margin-top: 7px;">
                 <?= sprintf($ui->item("X items found"), $paginatorInfo->getItemCount()); ?>
 				
-				<?
-				if ($paginatorInfo->getItemCount() == 0) {
-				$arr = json_decode(file_get_contents('http://speller.yandex.net/services/spellservice.json/checkText?text='.urlencode($_GET['q'])));
-?><?
-
-function textswitch ($text)
-{
-	$str_search = array("q","w","e","r","t","y","u","i","o","p","[","]",
-   "a","s","d","f","g","h","j","k","l",";","'",
-   "z","x","c","v","b","n","m",",",".","Q","W","E","R","T","Y","U","I","O","P","[","]",
-   "A","S","D","F","G","H","J","K","L",";","'",
-   "Z","X","C","V","B","N","M",",","."
-   
-   );
-	$str_replace = array(
-   "й","ц","у","к","е","н","г","ш","щ","з","х","ъ",
-   "ф","ы","в","а","п","р","о","л","д","ж","э",
-   "я","ч","с","м","и","т","ь","б","ю","Й","Ц","У","К","Е","Н","Г","Ш","Щ","З","Х","Ъ",
-   "Ф","Ы","В","А","П","Р","О","Л","Д","Ж","Э",
-   "Я","Ч","С","М","И","Т","Ь","Б","Ю"
-   );
-   return str_replace($str_search, $str_replace, $text);
-}
-
-$arr2 = json_decode(file_get_contents('http://speller.yandex.net/services/spellservice.json/checkText?text='.urlencode(textswitch($_GET['q']))));
-
-if ($arr[0]->s) {
-	?><br /><br />Возможно вы имели в виду:<br /><?
-	foreach($arr[0]->s as $k) {
-		
-		$sql = 'SELECT * FROM `all_authorslist` WHERE title_'.Yii::app()->language. ' LIKE "%'.$k.'%" LIMIT 1';
-		
-		$res = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		if (!count($res)) continue;
-		
-		echo '<div style="margin: 10px 0;"><a href="/site/search/?q='.$k.'&avail='.$_GET['avail'].'">' . $k . '</a></div>';
-	}
-} elseif (textswitch($_GET['q']) != $_GET['q']) {
-	?><br /><br />Возможно вы имели в виду:<br />
-	
-	<? echo '<div style="margin: 10px 0;"><a href="/site/search/?q='.textswitch($_GET['q']).'&avail='.$_GET['avail'].'">' . textswitch($_GET['q']) . '</a></div>';?>
-	
-	<? if ($arr2[0]->s) {
-	foreach($arr2[0]->s as $k) {
-		
-		$sql = 'SELECT * FROM `all_authorslist` WHERE title_'.Yii::app()->language. ' LIKE "%'.$k.'%" LIMIT 1';
-		
-		$res = Yii::app()->db->createCommand($sql)->queryAll();
-		
-		if (!count($res)) continue;
-		
-		echo '<div style="margin: 10px 0;"><a href="/site/search/?q='.$k.'&avail='.$_GET['avail'].'">' . $k . '</a></div>';
-	}
-	}
-}
-				}
-?>
-				
+			
 				
             </div>
             <ul class="items">

@@ -81,10 +81,10 @@ class Entity {
             50 => array('title' => 'Печатная продукция', 'site_id' => 5, 'table' => 'tblPrinted', 'site_table' => 'printed_catalog',
                 'entity' => 'printed', 'model' => 'Printed',
                 'site_category_table' => 'printed_categories',
-                'author_table' => 'printed_authors',
-                'author_entity_field' => 'printed_id',
+//                'author_table' => 'printed_authors',
+//                'author_entity_field' => 'printed_id',
                 'uikey' => 'A_GOTOPRINTED',
-                'with' => array('authors', 'publisher', 'category', 'subcategory', 'lookinside', 'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
+                'with' => array(/*'authors', */'publisher', 'category', 'subcategory', 'lookinside', 'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
             ),
             60 => array('title' => 'Карты', 'site_id' => 9, 'table' => 'tblMaps', 'site_table' => 'maps_catalog',
                 'entity' => 'maps', 'model' => 'Maps',
@@ -205,4 +205,13 @@ class Entity {
         return $rows;
     }
 
+    static function checkEntityParam($entity, $paramName) {
+        if (!self::IsValid($entity)) return false;
+        $settings = self::GetEntitiesList()[$entity];
+        switch ($paramName) {
+            case 'years': if ($entity == self::PERIODIC) return false; break;
+            default: if (!in_array($paramName, $settings['with'])) return false; break;
+        }
+        return true;
+    }
 }

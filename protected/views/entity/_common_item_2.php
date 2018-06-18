@@ -185,9 +185,12 @@ $entityKey = Entity::GetUrlKey($entity);
 		
         <div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 200, $url)); ?></div>
 		
-		<? if  ($item['isbn']) : ?>
+		<? if  (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC, Entity::BOOKS))) :
+            $name = 'ISBN';
+            if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
+            ?>
 
-			<div style="margin-top: 16px;">ISBN: <?=str_replace('-','',$item['isbn'])?></div>
+			<div style="margin-top: 16px;"><?= $name ?>: <?=str_replace('-','',$item['isbn'])?></div>
 		
 		<? endif; ?>
 		

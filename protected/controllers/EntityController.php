@@ -435,27 +435,23 @@ class EntityController extends MyController {
             $lang = 'en';
         $abc = $a->GetABC($lang, $entity);
 
-        if (empty($char) && !empty($abc))
-        $char = $abc[array_rand($abc)]['first_' . $lang];
+//        if (empty($char) && !empty($abc)) $char = $abc[array_rand($abc)]['first_' . $lang];
 
-		$list_count = 10;
+//		$list_count = 10;
 
-		if ($_GET['qa']) {
 
-			
-
+        if (!empty($_GET['qa'])) {
+            $lists = $a->GetAuthorsBySearch($char, $lang, $entity);
 			$list = $lists['rows'];
-			$list_count = $lists['count'];
-
-		} else {
-
-			$list = $a->GetAuthorsByFirstChar($char, $lang, $entity);
-			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity));
+//			$list_count = $lists['count'];
 
 		}
+        elseif (!empty($char)) {
+			$list = $a->GetAuthorsByFirstChar($char, $lang, $entity);
+//			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
+		}
+        else $list = array();
 		
-		$lists = $a->GetAuthorsBySearch($char, $lang, $entity);
-
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS');
 
@@ -851,9 +847,11 @@ class EntityController extends MyController {
 
         $items = $totalItems > 0 ? $this->AppendCartInfo($binding->GetItems($entity, $bid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
-        $this->render('list', array('entity' => $entity,
+        $this->render('list', array(
+            'entity' => $entity,
             'items' => $items,
-            'paginatorInfo' => $paginatorInfo));
+            'paginatorInfo' => $paginatorInfo
+        ));
     }
 
     public function actionByYear($entity, $year, $sort = null, $avail = true) {

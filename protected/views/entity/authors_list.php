@@ -94,13 +94,29 @@
             <div class="text charbox">
 			
 				<form method="get" class="search_aut">
-				
-				<input type="text" name="qa" value="<?=$_GET['qa']?>"/>
-				
-				<input type="submit" value="Поиск"/>
-				
+                    <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
+                    <input placeholder="<?= $ui->item('NAME_AUTHOR_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
+				    <input type="submit" value="Поиск"/>
+
 				</form>
-			
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
+//                        var csrf = $('meta[name=csrf]').attr('content').split('=');
+//                        dataPost[csrf[0]] = csrf[1];
+                        $('#js_search_authors').marcoPolo({
+                            minChars:1,
+                            cache : false,
+                            hideOnSelect: false,
+                            url:'/liveSearch/authors',
+                            data:dataPost,
+                            formatItem:function (data, $item, q) {
+                                return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
+                            }
+                        });
+                    });
+                </script>
+
                 <?php foreach($abc as $item) : ?>
 				<?if (trim($item['first_'.$lang]) == '') continue;?>
                     <a class="<?=(($item['first_'.$lang] == $_GET['char']) ? 'active' : '')?>" href="<?=Yii::app()->createUrl('entity/authorlist',
