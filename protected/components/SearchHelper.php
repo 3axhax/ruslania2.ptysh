@@ -620,7 +620,7 @@ class SearchHelper
     }
 
 
-    private static function ProcessPersons($roles, $ids, $filters=array())
+    static function ProcessPersons($roles, $ids, $filters=array())
     {
         if (!is_array($ids) || count($ids) == 0) return array();
 
