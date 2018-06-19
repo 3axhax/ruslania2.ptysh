@@ -431,23 +431,21 @@ class EntityController extends MyController {
         $a = new CommonAuthor();
 
         $lang = Yii::app()->language;
-        if ($lang != 'ru' && $lang != 'en')
-            $lang = 'en';
+        if ($lang != 'ru' && $lang != 'en') $lang = 'en';
+
         $abc = $a->GetABC($lang, $entity);
 
 //        if (empty($char) && !empty($abc)) $char = $abc[array_rand($abc)]['first_' . $lang];
 
-//		$list_count = 10;
-
-
+		$list_count = 0;
         if (!empty($_GET['qa'])) {
             $lists = $a->GetAuthorsBySearch($char, $lang, $entity);
 			$list = $lists['rows'];
-//			$list_count = $lists['count'];
+			$list_count = $lists['count'];
 
 		}
         elseif (!empty($char)) {
-			$list = $a->GetAuthorsByFirstChar($char, $lang, $entity);
+			list($list, $list_count) = $a->GetAuthorsByFirstChar($char, $lang, $entity);
 //			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
 		}
         else $list = array();
@@ -455,13 +453,14 @@ class EntityController extends MyController {
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS');
 
+        $paginatorInfo = false;
+        if ($list_count > count($list)) {
+            $paginatorInfo = new CPagination($list_count);
+            $paginatorInfo->setPageSize(150);
+            $paginatorInfo->route = 'AuthorList';
+        }
 
-
-			//$paginatorInfo = new CPagination($list_count);
-			//$paginatorInfo->setPageSize(150);
-			//$paginatorInfo->route = 'AuthorList';
-
-        $this->render('authors_list', array('entity' => $entity, 'abc' => $abc, 'list' => $list, 'lang' => $lang,'chasdr'=>$char));
+        $this->render('authors_list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo, 'abc' => $abc, 'list' => $list, 'lang' => $lang,'chasdr'=>$char));
     }
 
     public function actionByAuthor($entity, $aid, $sort = null, $avail = true) {
@@ -516,44 +515,75 @@ class EntityController extends MyController {
 
         $p = new Performer;
         $lang = Yii::app()->language;
-        if ($lang != 'ru' && $lang != 'en')
-            $lang = 'ru';
-        $list = $p->GetPerformerList($entity, $lang, $char);
-        $abc = array();
+        if ($lang != 'ru' && $lang != 'en') $lang = 'ru';
+
+        if (!empty($_GET['qa'])) {
+            list($list, $list_count) = $p->getPerformersBySearch($entity);
+        }
+        else {
+            list($list, $list_count) = $p->GetPerformerList($entity, Yii::app()->language);
+        }
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_AUDIO_AZ_PROPERTYLIST_PERFORMERS');
 
-        $this->render('authors_list', array('entity' => $entity, 'abc' => $abc,
+        $paginatorInfo = false;
+        if ($list_count > count($list)) {
+            $paginatorInfo = new CPagination($list_count);
+            $paginatorInfo->setPageSize(10);
+            $paginatorInfo->route = 'performerlist';
+        }
+
+        $this->render('authors_list', array(
+            'entity' => $entity,
+            'abc' => array(),
+            'paginatorInfo' => $paginatorInfo,
             'list' => $list,
             'idName' => 'pid',
             'lang' => $lang,
-            'url' => 'entity/byperformer'));
+            'url' => 'entity/byperformer',
+            'liveAction'=>'performers'
+        ));
     }
 
     public function actionActorList($entity) {
 
         $entity = Entity::ParseFromString($entity);
-        if ($entity === false)
-            $entity = Entity::BOOKS;
+        if ($entity === false) $entity = Entity::VIDEO;
 
         $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoActor();
         $lang = Yii::app()->language;
-        if ($lang != 'ru' && $lang != 'en')
-            $lang = 'ru';
-        $list = $p->GetActorList($entity, $lang);
-        $abc = array();
+        if ($lang != 'ru' && $lang != 'en') $lang = 'ru';
+
+        if (!empty($_GET['qa'])) {
+            list($list, $list_count) = $p->getActorsBySearch($entity);
+        }
+        else {
+            list($list, $list_count) = $p->GetActorList($entity, Yii::app()->language);
+        }
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_ACTORS');
 
-        $this->render('authors_list', array('entity' => $entity, 'abc' => $abc,
+        $paginatorInfo = false;
+        if ($list_count > count($list)) {
+            $paginatorInfo = new CPagination($list_count);
+            $paginatorInfo->setPageSize(10);
+            $paginatorInfo->route = 'ActorList';
+        }
+
+        $this->render('authors_list', array(
+            'entity' => $entity,
+            'abc' => array(),
+            'paginatorInfo' => $paginatorInfo,
             'list' => $list,
             'idName' => 'aid',
             'lang' => $lang,
-            'url' => 'entity/byactor'));
+            'url' => 'entity/byactor',
+            'liveAction'=>'actors'
+        ));
     }
 
     public function actionBindingsList($entity) {
@@ -751,14 +781,12 @@ class EntityController extends MyController {
     public function actionByActor($entity, $aid, $sort = null, $avail = true) {
         $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
-        if ($entity != Entity::VIDEO)
-            throw new CHttpException(404);
+        if ($entity != Entity::VIDEO) throw new CHttpException(404);
 
         $va = new VideoActor();
-        $actor = CommonAuthor::model()->findByPk($aid);
+        $actor = $va->GetById($aid);
 
-        if (empty($actor))
-            throw new CHttpException(404);
+        if (empty($actor)) throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['aid'] = $aid;

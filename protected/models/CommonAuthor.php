@@ -45,16 +45,17 @@ class CommonAuthor extends CMyActiveRecord
 
     public function GetAuthorsByFirstChar($char, $lang, $entity)
     {
-
+        $counts = 0;
         $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
         $page = min($page, 100000);
         $authors = SearchAuthors::get()->getBegin(
             $entity,
             $char,
             array(),
-            ($page-1)*150 . ', 150'
+            ($page-1)*150 . ', 150',
+            $counts
         );
-        return $authors;
+        return array($authors, $counts);
 
         $entities = Entity::GetEntitiesList();
         $data = $entities[$entity];
@@ -82,16 +83,16 @@ class CommonAuthor extends CMyActiveRecord
 	public function GetAuthorsBySearch($char, $lang, $entity) {
         $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
         $page = min($page, 100000);
-        $count = true;
+        $counts = 0;
         $authors = SearchAuthors::get()->getLike(
             $entity,
             (string)Yii::app()->getRequest()->getParam('qa'),
             array(),
             ($page-1)*150 . ', 150',
             false,
-            $count
+            $counts
         );
-        return array('rows'=>$authors, 'count'=>$count);
+        return array('rows'=>$authors, 'count'=>$counts);
 
 		$entities = Entity::GetEntitiesList();
         $data = $entities[$entity];

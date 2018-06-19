@@ -2,11 +2,19 @@
 
 class VideoActor
 {
-    public function GetByIds($ids)
-    {
-        $sql = 'SELECT * FROM video_actorslist WHERE id IN ('.implode(',', $ids).')';
+    private $_perToPage = 150;
+    public function GetByIds($ids) {
+        //$sql = 'SELECT * FROM video_actorslist WHERE id IN ('.implode(',', $ids).')';
+        $sql = 'SELECT * FROM all_persons WHERE real_id IN ('.implode(',', $ids).') and (entity = 40) ';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
+    }
+
+    public function GetById($id) {
+        $rows = $this->GetByIds(array($id));
+        if (empty($rows)) return array();
+
+        return array_shift($rows);
     }
 
     public function GetTotalItems($entity, $aid, $avail)
@@ -44,8 +52,29 @@ class VideoActor
         return Product::FlatResult($data);
     }
 
-    public function GetActorList($entity, $lang)
-    {
+    public function getActorsBySearch($entity) {
+        $page = max((int)Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchActors::get()->getLike(
+            $entity,
+            (string)Yii::app()->getRequest()->getParam('qa'),
+            array(),
+            ($page - 1) * $this->_perToPage . ', ' . $this->_perToPage,
+            false,
+            $counts
+        );
+        return array($items, $counts);
+    }
+
+    public function GetActorList($entity, $lang) {
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchActors::get()->getAll($entity, ($page-1)*$this->_perToPage . ', ' . $this->_perToPage, $counts);
+        return array($items, $counts);
+
+
         if($entity != Entity::VIDEO) return array();
         $sql = 'SELECT * FROM video_actorslist ORDER BY title_'.$lang;
         $rows = Yii::app()->db->createCommand($sql)->queryAll();

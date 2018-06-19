@@ -26,6 +26,44 @@ class LiveSearchController extends MyController {
 		$this->ResponseJson($authors);
 	}
 
+	function actionActors() {
+		if (!$this->_check('actors')) return;
+
+		$entity = Yii::app()->getRequest()->getParam('entity');
+		$items = SearchActors::get()->getActors($entity, (string)Yii::app()->getRequest()->getParam('q'));
+
+		$url ='/entity/byactor';
+		$param = array('entity' => Entity::GetUrlKey($entity), 'aid' => 0, 'title' => '');
+		$titleField = 'title_' . SearchActors::get()->getSiteLang();
+		foreach ($items as $i=>$item) {
+			$items[$i]['title'] = $item[$titleField];
+			unset($items[$i][$titleField]);
+			$param['aid'] = $item['id'];
+			$param['title'] = ProductHelper::ToAscii($items[$i]['title']);
+			$items[$i]['href'] = Yii::app()->createUrl($url, $param);
+		}
+		$this->ResponseJson($items);
+	}
+
+	function actionPerformers() {
+		if (!$this->_check('performers')) return;
+
+		$entity = Yii::app()->getRequest()->getParam('entity');
+		$items = SearchPerformers::get()->getPerformers($entity, (string)Yii::app()->getRequest()->getParam('q'));
+
+		$url ='/entity/byperformer';
+		$param = array('entity' => Entity::GetUrlKey($entity), 'pid' => 0, 'title' => '');
+		$titleField = 'title_' . SearchPerformers::get()->getSiteLang();
+		foreach ($items as $i=>$item) {
+			$items[$i]['title'] = $item[$titleField];
+			unset($items[$i][$titleField]);
+			$param['pid'] = $item['id'];
+			$param['title'] = ProductHelper::ToAscii($items[$i]['title']);
+			$items[$i]['href'] = Yii::app()->createUrl($url, $param);
+		}
+		$this->ResponseJson($items);
+	}
+
 
 	private function _check($tag) {
 		$requers = Yii::app()->getRequest();

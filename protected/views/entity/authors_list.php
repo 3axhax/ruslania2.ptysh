@@ -92,10 +92,10 @@
 
 
             <div class="text charbox">
-			
+			    <?php if (empty($liveAction)) $liveAction = 'authors'?>
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
-                    <input placeholder="<?= $ui->item('NAME_AUTHOR_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
+                    <input placeholder="<?= $ui->item('NAME_' . mb_strtoupper($liveAction) . '_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
 				    <input type="submit" value="Поиск"/>
 
 				</form>
@@ -108,7 +108,7 @@
                             minChars:1,
                             cache : false,
                             hideOnSelect: false,
-                            url:'/liveSearch/authors',
+                            url:'/liveSearch/<?= $liveAction ?>',
                             data:dataPost,
                             formatItem:function (data, $item, q) {
                                 return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
@@ -125,13 +125,13 @@
                     <?if (trim($item['first_'.$lang]) == 'Z') echo '<br>';?>
                 <?php endforeach; ?>
             </div>
-			<? if ($_GET['char'] != '') {?>
+			<?php if ($_GET['char'] != ''):?>
 			<h1 class="title_char"><?=$_GET['char']?></h1>
-			<?}?>
+			<?php endif; ?>
             <div class="text">
                 <ul class="list authors" id="al">
-                    <?php $url ='/entity/byauthor'; ?>
-                    <?php $idName = isset($idName) ? $idName : 'aid'; ?>
+                    <?php if (empty($url)) $url ='/entity/byauthor'; ?>
+                    <?php if (empty($idName)) $idName = 'aid'; ?>
                     <?php foreach($list as $item) : ?>
                         <?php $title = $item['title_'.$lang]; ?>
                         <li style="margin-bottom: 10px;"><a href="<?=Yii::app()->createUrl($url,
@@ -143,6 +143,7 @@
 					
                 </ul>
 				<div class="clearfix"></div>
+                <?php if ($paginatorInfo) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
             </div>
 			
             <!-- /content -->
