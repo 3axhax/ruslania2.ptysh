@@ -274,21 +274,61 @@ class EntityController extends MyController {
 
     public function actionPublisherList($entity, $char = null) {
         $entity = Entity::ParseFromString($entity);
-        if ($entity === false)
-            $entity = Entity::BOOKS;
+        if ($entity === false) $entity = Entity::BOOKS;
 
-        $p = new Publisher();
+        $a = new Publisher();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         if ($char !== null) $dataForPath['char'] = $char;
         $this->_checkUrl($dataForPath);
 
-        $abc = array();
         $lang = Yii::app()->language;
-        if ($lang != 'ru' && $lang != 'en')
-            $lang = 'en';
+        if ($lang != 'ru' && $lang != 'en') $lang = 'en';
 
-        if ($entity == Entity::SHEETMUSIC) {
+        $abc = $a->GetABC($lang, $entity);
+
+//        if (empty($char) && !empty($abc)) $char = $abc[array_rand($abc)]['first_' . $lang];
+
+        $list_count = 0;
+        if (!empty($_GET['qa'])) {
+            $lists = $a->GetPublishersBySearch($char, $lang, $entity);
+            $list = $lists['rows'];
+            $list_count = $lists['count'];
+        }
+        elseif (!empty($char)) {
+            list($list, $list_count) = $a->GetPublishersByFirstChar($char, $lang, $entity);
+//			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
+        }
+        else {
+            list($list, $list_count) = $a->getPublisherList($entity, Yii::app()->language);;
+        }
+
+        $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_PUBLISHERS');
+
+        $paginatorInfo = false;
+        if ($list_count > count($list)) {
+            $paginatorInfo = new CPagination($list_count);
+            $paginatorInfo->setPageSize($a->getPerToPage());
+            $paginatorInfo->route = 'publisherlist';
+        }
+
+        $this->render('authors_list', array(
+            'entity' => $entity,
+            'abc' => $abc,
+            'paginatorInfo' => $paginatorInfo,
+            'list' => $list,
+            'idName' => 'pid',
+            'lang' => $lang,
+            'url' => 'entity/bypublisher',
+            'liveAction'=>'publishers',
+            'route'=>'entity/publisherlist',
+        ));
+
+
+
+
+/*        if ($entity == Entity::SHEETMUSIC) {
             $list = $p->GetAll($entity, $lang);
         } else {
             $abc = $p->GetABC($lang, $entity);
@@ -301,7 +341,7 @@ class EntityController extends MyController {
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_PUBLISHERS');
 
-        $this->render('publisher_list', array('entity' => $entity, 'abc' => $abc, 'list' => $list, 'lang' => $lang));
+        $this->render('publisher_list', array('entity' => $entity, 'abc' => $abc, 'list' => $list, 'lang' => $lang));*/
     }
 
     public function actionSeriesList($entity) {
@@ -456,7 +496,7 @@ class EntityController extends MyController {
         $paginatorInfo = false;
         if ($list_count > count($list)) {
             $paginatorInfo = new CPagination($list_count);
-            $paginatorInfo->setPageSize(150);
+            $paginatorInfo->setPageSize($a->getPerToPage());
             $paginatorInfo->route = 'AuthorList';
         }
 

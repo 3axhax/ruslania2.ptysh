@@ -1,7 +1,8 @@
 <?php
 
-class Publisher extends CMyActiveRecord
-{
+class Publisher extends CMyActiveRecord {
+    private $_perToPage = 150;
+    function getPerToPage() {return $this->_perToPage; }
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -12,20 +13,50 @@ class Publisher extends CMyActiveRecord
         return 'all_publishers';
     }
 
-    public function GetABC($lang, $entity)
-    {
-        $sql = 'SELECT DISTINCT(first_'.$lang.') AS first_'.$lang.' '
+    public function GetABC($lang, $entity) {
+        $entityParam = Entity::GetEntitiesList()[$entity];
+        $tableItems = $entityParam['site_table'];
+        $sql = ''.
+            'SELECT t.first_' . $lang . ' '.
+            'FROM all_publishers AS t '.
+                'JOIN ' . $tableItems . ' AS tI ON (tI.publisher_id = t.id) '.
+            'group by ord(t.first_'.$lang.') '.
+            'ORDER BY ord(t.title_'.$lang.') ASC '.
+        '';
+/*        $sql = 'SELECT DISTINCT(first_'.$lang.') AS first_'.$lang.' '
               .'FROM `all_publishers` AS al '
               .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
               .'WHERE e.entity=:entity '
-              .'ORDER BY first_'.$lang;
+              .'ORDER BY first_'.$lang;*/
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity' => $entity));
-        return $rows;
+//        return $rows;
+        $filterRows = [];
+        $i = 0;
+        foreach($rows as $key => $value)
+        {
+            if(preg_match('/^\p{L}+$/u', $value['first_'.$lang]))
+            {
+                $filterRows[$i]['first_'.$lang] = $value['first_'.$lang];
+                $i++;
+            }
+        }
+
+        return $filterRows;
     }
 
-    public function GetPublishersByFirstChar($char, $lang, $entity)
-    {
+    public function GetPublishersByFirstChar($char, $lang, $entity) {
+        $counts = 0;
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $authors = SearchPublishers::get()->getBegin(
+            $entity,
+            $char,
+            array(),
+            ($page-1)*150 . ', 150',
+            $counts
+        );
+        return array($authors, $counts);
         $sql = 'SELECT * FROM all_publishers AS al '
               .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
               .'WHERE first_'.$lang.'=:char AND e.entity=:entity '
@@ -110,5 +141,29 @@ class Publisher extends CMyActiveRecord
             .'ORDER BY title_'.$lang;
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity' => $entity));
         return $rows;
+    }
+
+    public function GetPublishersBySearch($char, $lang, $entity) {
+        $page = max((int)Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $authors = SearchPublishers::get()->getLike(
+            $entity,
+            (string)Yii::app()->getRequest()->getParam('qa'),
+            array(),
+            ($page - 1) * $this->_perToPage . ', ' . $this->_perToPage,
+            false,
+            $counts
+        );
+        return array('rows' => $authors, 'count' => $counts);
+    }
+
+    public function getPublisherList($entity, $lang, $char=null)
+    {
+        $page = max((int)Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchPublishers::get()->getAll($entity, ($page - 1) * $this->_perToPage . ', ' . $this->_perToPage, $counts);
+        return array($items, $counts);
     }
 }

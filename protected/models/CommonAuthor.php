@@ -1,7 +1,8 @@
 <?php
 
-class CommonAuthor extends CMyActiveRecord
-{
+class CommonAuthor extends CMyActiveRecord {
+    private $_perToPage = 150;
+    function getPerToPage() {return $this->_perToPage; }
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -18,11 +19,13 @@ class CommonAuthor extends CMyActiveRecord
         $data = $entities[$entity];
         if(!array_key_exists('author_table', $data)) return array();
 
-        $sql = 'SELECT al.first_'.$lang.' AS first_'.$lang.' FROM all_authorslist AS al '
-              .'JOIN '.$data['author_table'].' AS j ON al.id=j.author_id '
-            .'group by ord(al.first_'.$lang.') '.
-              'ORDER BY ord(al.title_'.$lang.') ASC '.
-            '';
+        $sql = ''.
+            'SELECT al.first_'.$lang.' AS first_'.$lang.' '.
+            'FROM all_authorslist AS al '.
+                'JOIN '.$data['author_table'].' AS j ON (al.id=j.author_id) '.
+            'group by ord(al.first_'.$lang.') '.
+            'ORDER BY ord(al.title_'.$lang.') ASC '.
+        '';
               //.'ORDER BY first_'.$lang;
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
@@ -52,7 +55,7 @@ class CommonAuthor extends CMyActiveRecord
             $entity,
             $char,
             array(),
-            ($page-1)*150 . ', 150',
+            ($page-1)*$this->_perToPage . ', ' . $this->_perToPage,
             $counts
         );
         return array($authors, $counts);
@@ -88,7 +91,7 @@ class CommonAuthor extends CMyActiveRecord
             $entity,
             (string)Yii::app()->getRequest()->getParam('qa'),
             array(),
-            ($page-1)*150 . ', 150',
+            ($page-1)*$this->_perToPage . ', ' . $this->_perToPage,
             false,
             $counts
         );

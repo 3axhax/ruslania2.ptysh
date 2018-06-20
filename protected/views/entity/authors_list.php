@@ -117,9 +117,12 @@
                     });
                 </script>
 
-                <?php foreach($abc as $item) : ?>
-				<?if (trim($item['first_'.$lang]) == '') continue;?>
-                    <a class="<?=(($item['first_'.$lang] == $_GET['char']) ? 'active' : '')?>" href="<?=Yii::app()->createUrl('entity/authorlist',
+                <?php if (empty($route)) $route = 'entity/authorlist';
+                foreach($abc as $item) :
+				if (trim($item['first_'.$lang]) == '') continue;
+
+                    ?>
+                    <a class="<?=(($item['first_'.$lang] == $_GET['char']) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
                         array('entity' => Entity::GetUrlKey($entity), 'char' => $item['first_'.$lang])); ?>"
                        ><?=$item['first_'.$lang]; ?></a>
                     <?if (trim($item['first_'.$lang]) == 'Z') echo '<br>';?>

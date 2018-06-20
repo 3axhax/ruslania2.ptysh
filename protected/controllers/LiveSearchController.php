@@ -57,7 +57,7 @@ class LiveSearchController extends MyController {
 		foreach ($items as $i=>$item) {
 			$items[$i]['title'] = $item[$titleField];
 			unset($items[$i][$titleField]);
-			$param['aid'] = $item['id'];
+			$param['did'] = $item['id'];
 			$param['title'] = ProductHelper::ToAscii($items[$i]['title']);
 			$items[$i]['href'] = Yii::app()->createUrl($url, $param);
 		}
@@ -73,6 +73,25 @@ class LiveSearchController extends MyController {
 		$url ='/entity/byperformer';
 		$param = array('entity' => Entity::GetUrlKey($entity), 'pid' => 0, 'title' => '');
 		$titleField = 'title_' . SearchPerformers::get()->getSiteLang();
+		foreach ($items as $i=>$item) {
+			$items[$i]['title'] = $item[$titleField];
+			unset($items[$i][$titleField]);
+			$param['pid'] = $item['id'];
+			$param['title'] = ProductHelper::ToAscii($items[$i]['title']);
+			$items[$i]['href'] = Yii::app()->createUrl($url, $param);
+		}
+		$this->ResponseJson($items);
+	}
+
+	function actionPublishers() {
+		if (!$this->_check('publisher')) return;
+
+		$entity = Yii::app()->getRequest()->getParam('entity');
+		$items = SearchPublishers::get()->getPublishers($entity, (string)Yii::app()->getRequest()->getParam('q'));
+
+		$url ='/entity/bypublisher';
+		$param = array('entity' => Entity::GetUrlKey($entity), 'pid' => 0, 'title' => '');
+		$titleField = 'title_' . SearchPublishers::get()->getSiteLang();
 		foreach ($items as $i=>$item) {
 			$items[$i]['title'] = $item[$titleField];
 			unset($items[$i][$titleField]);
