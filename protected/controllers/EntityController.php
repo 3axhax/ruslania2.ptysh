@@ -849,10 +849,13 @@ class EntityController extends MyController {
     public function actionByActor($entity, $aid, $sort = null, $avail = true) {
         $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
-        if ($entity != Entity::VIDEO) throw new CHttpException(404);
+
+        if (!Entity::checkEntityParam($entity, 'actors')) throw new CHttpException(404);
 
         $va = new VideoActor();
-        $actor = $va->GetById($aid);
+        //$actor = $va->GetById($aid);
+        $actor = CommonAuthor::model()->findByPk($aid);
+//        $this->widget('Debug', array($actor, CommonAuthor::model()->findByPk($aid)));
 
         if (empty($actor)) throw new CHttpException(404);
 
@@ -1162,7 +1165,7 @@ class EntityController extends MyController {
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
 
-   		if ($this->_canonicalPath === $path) {
+        if ($this->_canonicalPath === $path) {
             //редирект с page=1
             $countPage1 = 0;
             $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);

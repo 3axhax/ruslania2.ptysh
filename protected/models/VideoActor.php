@@ -7,7 +7,8 @@ class VideoActor
     public function GetByIds($ids) {
         //$sql = 'SELECT * FROM video_actorslist WHERE id IN ('.implode(',', $ids).')';
         $sql = ''.
-            'SELECT real_id id, title_' . SearchActors::get()->getSiteLang() . ', description_file_' . SearchActors::get()->getSiteLang() . ' '.
+            //'SELECT real_id id, title_' . SearchActors::get()->getSiteLang() . ', description_file_' . SearchActors::get()->getSiteLang() . ' '.
+            'SELECT * '.
             'FROM all_persons '.
             'WHERE real_id IN ('.implode(',', $ids).') '.
 //                'and (entity = 40) '.
