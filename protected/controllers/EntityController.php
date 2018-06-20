@@ -570,7 +570,7 @@ class EntityController extends MyController {
         $paginatorInfo = false;
         if ($list_count > count($list)) {
             $paginatorInfo = new CPagination($list_count);
-            $paginatorInfo->setPageSize(10);
+            $paginatorInfo->setPageSize($p->getPerToPage());
             $paginatorInfo->route = 'ActorList';
         }
 
@@ -663,16 +663,44 @@ class EntityController extends MyController {
 
     public function actionDirectorList($entity) {
         $entity = Entity::ParseFromString($entity);
-        if ($entity === false)
-            $entity = Entity::BOOKS;
+        if ($entity === false) $entity = Entity::VIDEO;
 
         $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $p = new VideoDirector();
         $lang = Yii::app()->language;
-        if ($lang != 'ru' && $lang != 'en')
-            $lang = 'ru';
-        $list = $p->GetDirectorList($entity, $lang);
+        if ($lang != 'ru' && $lang != 'en') $lang = 'ru';
+
+        if (!empty($_GET['qa'])) {
+            list($list, $list_count) = $p->getDirectorsBySearch($entity);
+        }
+        else {
+            list($list, $list_count) = $p->GetDirectorList($entity, Yii::app()->language);
+        }
+
+        $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_DIRECTORS');
+
+        $paginatorInfo = false;
+        if ($list_count > count($list)) {
+            $paginatorInfo = new CPagination($list_count);
+            $paginatorInfo->setPageSize($p->getPerToPage());
+            $paginatorInfo->route = 'directorlist';
+        }
+
+        $this->render('authors_list', array(
+            'entity' => $entity,
+            'abc' => array(),
+            'paginatorInfo' => $paginatorInfo,
+            'list' => $list,
+            'idName' => 'did',
+            'lang' => $lang,
+            'url' => 'entity/bydirector',
+            'liveAction'=>'directors'
+        ));
+
+
+/*        $list = $p->GetDirectorList($entity, $lang);
         $abc = array();
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -682,7 +710,7 @@ class EntityController extends MyController {
             'list' => $list,
             'idName' => 'did',
             'lang' => $lang,
-            'url' => 'entity/bydirector'));
+            'url' => 'entity/bydirector'));*/
     }
 
     public function actionYearsList($entity) {

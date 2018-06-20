@@ -1162,4 +1162,5 @@ IBAN DE79514303006474790001 <br>
 	'NAME_AUTHORS_BY_SEARCH'=>'Начните вводить имя автора',
 	'NAME_ACTORS_BY_SEARCH'=>'Начните вводить имя актера',
 	'NAME_PERFORMERS_BY_SEARCH'=>'Начните вводить имя исполнителя',
+	'NAME_DIRECTORS_BY_SEARCH'=>'Начните вводить имя режисера',
 );

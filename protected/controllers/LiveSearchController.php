@@ -45,6 +45,25 @@ class LiveSearchController extends MyController {
 		$this->ResponseJson($items);
 	}
 
+	function actionDirectors() {
+		if (!$this->_check('directors')) return;
+
+		$entity = Yii::app()->getRequest()->getParam('entity');
+		$items = SearchDirectors::get()->getDirectors($entity, (string)Yii::app()->getRequest()->getParam('q'));
+
+		$url ='/entity/bydirector';
+		$param = array('entity' => Entity::GetUrlKey($entity), 'did' => 0, 'title' => '');
+		$titleField = 'title_' . SearchDirectors::get()->getSiteLang();
+		foreach ($items as $i=>$item) {
+			$items[$i]['title'] = $item[$titleField];
+			unset($items[$i][$titleField]);
+			$param['aid'] = $item['id'];
+			$param['title'] = ProductHelper::ToAscii($items[$i]['title']);
+			$items[$i]['href'] = Yii::app()->createUrl($url, $param);
+		}
+		$this->ResponseJson($items);
+	}
+
 	function actionPerformers() {
 		if (!$this->_check('performers')) return;
 

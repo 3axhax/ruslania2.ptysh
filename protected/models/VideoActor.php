@@ -3,9 +3,17 @@
 class VideoActor
 {
     private $_perToPage = 150;
+    function getPerToPage() {return $this->_perToPage; }
     public function GetByIds($ids) {
         //$sql = 'SELECT * FROM video_actorslist WHERE id IN ('.implode(',', $ids).')';
-        $sql = 'SELECT * FROM all_persons WHERE real_id IN ('.implode(',', $ids).') and (entity = 40) ';
+        $sql = ''.
+            'SELECT real_id id, title_' . SearchActors::get()->getSiteLang() . ', description_file_' . SearchActors::get()->getSiteLang() . ' '.
+            'FROM all_persons '.
+            'WHERE real_id IN ('.implode(',', $ids).') '.
+//                'and (entity = 40) '.
+            'group by real_id '.
+//            'order by if (entity = ' . Entity::VIDEO . ', 0, 1) ' .
+        '';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
     }

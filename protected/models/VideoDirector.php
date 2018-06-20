@@ -2,6 +2,8 @@
 
 class VideoDirector
 {
+    private $_perToPage = 150;
+    function getPerToPage() {return $this->_perToPage; }
     public function GetTotalItems($entity, $did, $avail)
     {
         if ($entity != Entity::VIDEO) return 0;
@@ -40,11 +42,32 @@ class VideoDirector
         return Product::FlatResult($data);
     }
 
-    public function GetDirectorList($entity, $lang)
-    {
+    public function GetDirectorList($entity, $lang) {
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchDirectors::get()->getAll($entity, ($page-1)*$this->_perToPage . ', ' . $this->_perToPage, $counts);
+        return array($items, $counts);
+
         if($entity != Entity::VIDEO) return array();
         $sql = 'SELECT * FROM video_directorslist ORDER BY title_'.$lang;
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
     }
+
+    public function getDirectorsBySearch($entity) {
+        $page = max((int)Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchDirectors::get()->getLike(
+            $entity,
+            (string)Yii::app()->getRequest()->getParam('qa'),
+            array(),
+            ($page - 1) * $this->_perToPage . ', ' . $this->_perToPage,
+            false,
+            $counts
+        );
+        return array($items, $counts);
+    }
+
 }

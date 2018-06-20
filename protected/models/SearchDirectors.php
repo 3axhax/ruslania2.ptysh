@@ -1,12 +1,12 @@
 <?php
-/*Created by Кирилл (19.06.2018 20:15)*/
+/*Created by Кирилл (20.06.2018 19:17)*/
 
-class SearchActors {
+class SearchDirectors {
 	static private $_self = null;
 	private $_siteLang = 'ru';
 
 	/**
-	 * @return SearchActors
+	 * @return SearchDirectors
 	 */
 	static function get() {
 		if (self::$_self === null) self::$_self = new self;
@@ -25,23 +25,23 @@ class SearchActors {
 	function getAll($entity, $limit, &$counts) {
 		$sql = ''.
 			'select sql_calc_found_rows t.real_id id, t.title_' . $this->_siteLang . ' '.
-			//'from video_actorslist t '.
+			//'from video_directorslist t '.
 			'from all_persons t '.
-				'join video_actors tIA on (tIA.person_id = t.real_id) '.
-				'join video_catalog tI on (tI.id = tIA.video_id) and (tI.avail_for_order = 1) '.
+			'join video_directors tIA on (tIA.person_id = t.real_id) '.
+			'join video_catalog tI on (tI.id = tIA.video_id) and (tI.avail_for_order = 1) '.
 //			'where (t.entity = ' . (int) $entity . ') '.
 			'group by t.real_id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
-		'';
+			'';
 		$items = Yii::app()->db->createCommand($sql)->queryAll();
 		$sql = 'select found_rows();';
 		$counts = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $items;
 	}
 
-	function getActors($entity, $q, $limit = 20) {
-		if (!Entity::checkEntityParam($entity, 'actors')) return array();
+	function getDirectors($entity, $q, $limit = 20) {
+		if (!Entity::checkEntityParam($entity, 'directors')) return array();
 		if ($q == '') return array();
 
 		$items = array();
@@ -67,26 +67,26 @@ class SearchActors {
 
 	function getLike($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false) {
 		if ($q == '') return array();
-		if (!Entity::checkEntityParam($entity, 'actors')) return array();
+		if (!Entity::checkEntityParam($entity, 'directors')) return array();
 
 		$entityParam = Entity::GetEntitiesList()[$entity];
 		$tableItems = $entityParam['site_table'];
-		$tableItemsAuctors = 'video_actors';
-		$tableAuctors = 'all_persons';//'video_actorslist';
+		$tableItemsAuctors = 'video_directors';
+		$tableAuctors = 'all_persons';//'video_directorslist';
 		$fieldIdItem = 'video_id';
 
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.real_id id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuctors . ' t '.
-				'join ' . $tableItemsAuctors . ' tIA on (tIA.person_id = t.real_id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+			'join ' . $tableItemsAuctors . ' tIA on (tIA.person_id = t.real_id) '.
+			'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
-//				'and (t.entity = ' . (int) $entity . ') '.
-				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+//			'and (t.entity = ' . (int) $entity . ') '.
+			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.real_id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
-		'';
+			'';
 		$qStr = $q . '%';
 		if (!$isBegin) $qStr = '%' . $qStr;
 		$items = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $qStr));
