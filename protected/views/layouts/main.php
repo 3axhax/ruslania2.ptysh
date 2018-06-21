@@ -177,7 +177,15 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                 }
 			}
 		}
-		
+
+        <?php
+			$act = array();
+			$act = array(1, ' active');
+			if (isset($_GET['avail'])) {
+				if ($_GET['avail'] == '1') $act = array(1, ' active');
+				else $act = array('', '');
+			}
+		?>
         $('#Search').marcoPolo({
             url:'<?= isset($_GET['ha'])?'/liveSearch/general':'/site/search'?>',
             cache : false,
@@ -186,7 +194,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             formatItem:function (data, $item, q)
             {
 					var ret = '';
-					
+                <?php if (isset($_GET['ha'])): ?>
+                ret += data;
+                <?php else: ?>
 					if (data.Counts != undefined) {
 						
 						for (var i = 1; i < 10; i++) {
@@ -206,14 +216,6 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 						if ( data.length > 0) {
 							ret += '<div class="title_goods">'+
                                 '<div class="red_checkbox" onclick="check_search($(this), \'js_avail\')" style="float: right;">';
-                         			<?php
-                         				$act = array();
-                         				$act = array(1, ' active');
-                         				if (isset($_GET['avail'])) {
-                         					if ($_GET['avail'] == '1') $act = array(1, ' active');
-                         					else $act = array('', '');
-                         				}
-                         			?>
                                 ret += ''+
                                      '<span class="checkbox" style="height: 10px; padding-top: 2px;">'+
                                          '<span class="check<?=$act[1]?>"></span>'+
@@ -257,10 +259,10 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 						}
 						
 					}
+					<?php endif; ?>
+//					console.log(ret);
 					
-					//console.log(ret);
-					
-					return ret;
+                return ret;
                
             }
 

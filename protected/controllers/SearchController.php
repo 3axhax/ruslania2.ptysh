@@ -56,12 +56,14 @@ class SearchController extends MyController {
 		if (empty($res['matches'])) return array();
 
 		$result = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
+
 		foreach ($res['matches'] as $data) {
 		    if (!empty($data['attrs']['@count'])) {
 			    $result[$data['attrs']['@groupby']] = $data['attrs']['@count'];
 		    }
 		}
-		return $result;
+		return array_filter($result);
 	}
 
 	function getDidYouMean($q) {
@@ -88,10 +90,12 @@ class SearchController extends MyController {
 
 		$q = '@* ' . $this->_search->EscapeString($query);
 
-		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
-		$res = $this->_search->query($q, 'products');
-		$result = SearchHelper::ProcessProducts($res);
-		return $result;
+		$this->_search->SetSortMode(SPH_SeORT_ATTR_DESC, "in_shop");
+		$find = $this->_search->query($q, 'products');
+		if (empty($find)) return array();
+
+		$product = SearchHelper::ProcessProducts($find);
+		return SearchHelper::ProcessProducts2($product);
 	}
 
 	private function _queryIndex($query, $index, $limit) {
@@ -101,7 +105,7 @@ class SearchController extends MyController {
 			if (empty($query)) continue;
 
 			$this->_search->resetCriteria();
-			$this->_search->SetLimits(0, 3);
+			if ($limit > 0) $this->_search->SetLimits(0, $limit);
 			if (!empty($filters)) {
 				foreach ($filters as $name => $value) {
 					$this->_search->SetFilter($name, array($value));
@@ -125,12 +129,38 @@ class SearchController extends MyController {
 	}
 
 	protected function _getAuthors($query) {
-		$result = $this->_queryIndex($query, 'authors', 3);
+		$result = $this->_queryIndex($query, 'authors', 0);
 		if (empty($result)) return array();
+
+		$limit = 3;
+		$authorsWithItems = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) {
+			if (Entity::checkEntityParam($entity, 'authors')) {
+				$ids = array();
+				foreach ($result as $id=>$item) {
+					if ($entity == $item['entity']) $ids[$item['real_id']] = $id;
+				}
+				if (!empty($ids)) {
+					$sql = ''.
+						'select author_id '.
+						'from ' . $set['author_table'] . ' '.
+						'where (author_id in (' . implode(',',array_keys($ids)) . ')) '.
+						'group by author_id '.
+						'order by field(author_id, ' . implode(',',array_keys($ids)) . ') '.
+						'limit ' . ($limit - count($authorsWithItems)) .
+					';';
+					foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $author) {
+						$authorsWithItems[$ids[$author]] = $result[$ids[$author]];
+					}
+				}
+			}
+			if (count($authorsWithItems) >= $limit) break;
+		}
+		if (empty($authorsWithItems)) return array();
 
 		$roles = array();
 		$ids = array();
-		foreach($result as $r) {
+		foreach($authorsWithItems as $r) {
 			$roles[$r['aentity']][$r['real_id']] = $r;
 			$ids[] = $r['real_id'];
 		}
@@ -143,17 +173,35 @@ class SearchController extends MyController {
 	}
 
 	protected function _getPublishers($query) {
-		$result = $this->_queryIndex($query, 'publishers', 3);
+		$result = $this->_queryIndex($query, 'publishers', 0);
 		if (empty($result)) return array();
 
-		$ids = array_keys($result);
-		$idList = implode(', ', $ids);
+		$limit = 3;
+		$ids = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) {
+			if (Entity::checkEntityParam($entity, 'publisher')) {
+				$sql = ''.
+					'select publisher_id '.
+					'from ' . $set['site_table'] . ' '.
+					'where (publisher_id in (' . implode(',',array_keys($result)) . ')) '.
+					'group by publisher_id '.
+					'order by field(publisher_id, ' . implode(',',array_keys($result)) . ') '.
+					'limit ' . ($limit - count($ids)) .
+				';';
+				foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $publisher) {
+					$ids[$publisher] = $entity;
+				}
+			}
+			if (count($ids) >= $limit) break;
+		}
+		if (empty($ids)) return array();
+
+		$idList = implode(', ', array_keys($ids));
 
 		$sql = ''.
 			'SELECT * '.
 			'FROM all_publishers AS p '.
-				'JOIN all_publishers_entity AS pe ON (p.id=pe.publisher) '.
-			'WHERE id IN (' . $idList . ') '.
+			'WHERE p.id IN (' . $idList . ') '.
 			'ORDER BY FIELD(id, ' . $idList . ') '.
 		'';
 
@@ -161,6 +209,7 @@ class SearchController extends MyController {
 		$ret = array();
 
 		foreach ($rows as $row) {
+			$row['entity'] = $ids[$row['id']];
 			$item = array();
 			$itemTitle = ProductHelper::GetTitle($row);
 			$title = Entity::GetTitle($row['entity']) . '; ' . sprintf(Yii::app()->ui->item('PUBLISHED_BY'), '<b>' . $itemTitle . '</b>');

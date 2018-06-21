@@ -4,7 +4,32 @@
 class LiveSearchController extends MyController {
 
 	function actionGeneral() {
-		var_dump(Yii::app()->search);
+		$result = array();
+		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
+		if (!empty($q)) {
+			$sController = new SearchController($this->getId(), $this->getModule());
+			$sController->beforeAction($this->getAction());
+
+			$list = $sController->getList($q, 1, 10);
+
+			$abstractInfo = $sController->getEntitys($q);
+			if (!empty($abstractInfo))
+				$result[] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
+
+			if (!empty($list))
+				$result[] = $this->renderPartial('/search/live_header', array('q' => $q), true);
+
+			$didYouMean = $sController->getDidYouMean($q);
+			if (!empty($didYouMean))
+				$result[] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
+
+			if (!empty($list)) {
+				foreach ($list as $row) {
+					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
+				}
+			}
+		}
+		$this->ResponseJson($result);
 	}
 
 	function actionAuthors() {
