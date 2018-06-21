@@ -26,7 +26,7 @@ class SearchDirectors {
 		$sql = ''.
 			'select sql_calc_found_rows t.real_id id, t.title_' . $this->_siteLang . ' '.
 			//'from video_directorslist t '.
-			'from all_persons t '.
+			'from all_authorslist t '.
 			'join video_directors tIA on (tIA.person_id = t.real_id) '.
 			'join video_catalog tI on (tI.id = tIA.video_id) and (tI.avail_for_order = 1) '.
 //			'where (t.entity = ' . (int) $entity . ') '.
@@ -72,7 +72,7 @@ class SearchDirectors {
 		$entityParam = Entity::GetEntitiesList()[$entity];
 		$tableItems = $entityParam['site_table'];
 		$tableItemsAuctors = 'video_directors';
-		$tableAuctors = 'all_persons';//'video_directorslist';
+		$tableAuctors = 'all_authorslist';//'video_directorslist';
 		$fieldIdItem = 'video_id';
 
 		$sql = ''.

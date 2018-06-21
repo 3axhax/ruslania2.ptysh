@@ -24,13 +24,13 @@ class SearchActors {
 
 	function getAll($entity, $limit, &$counts) {
 		$sql = ''.
-			'select sql_calc_found_rows t.real_id id, t.title_' . $this->_siteLang . ' '.
+			'select sql_calc_found_rows t.id id, t.title_' . $this->_siteLang . ' '.
 			//'from video_actorslist t '.
-			'from all_persons t '.
-				'join video_actors tIA on (tIA.person_id = t.real_id) '.
+			'from all_authorslist t '.
+				'join video_actors tIA on (tIA.person_id = t.id) '.
 				'join video_catalog tI on (tI.id = tIA.video_id) and (tI.avail_for_order = 1) '.
 //			'where (t.entity = ' . (int) $entity . ') '.
-			'group by t.real_id '.
+			'group by t.id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
@@ -72,18 +72,18 @@ class SearchActors {
 		$entityParam = Entity::GetEntitiesList()[$entity];
 		$tableItems = $entityParam['site_table'];
 		$tableItemsAuctors = 'video_actors';
-		$tableAuctors = 'all_persons';//'video_actorslist';
+		$tableAuctors = 'all_authorslist';//'video_actorslist';
 		$fieldIdItem = 'video_id';
 
 		$sql = ''.
-			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.real_id id, t.title_' . $this->_siteLang . ' '.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuctors . ' t '.
-				'join ' . $tableItemsAuctors . ' tIA on (tIA.person_id = t.real_id) '.
+				'join ' . $tableItemsAuctors . ' tIA on (tIA.person_id = t.id) '.
 				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
 //				'and (t.entity = ' . (int) $entity . ') '.
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
-			'group by t.real_id '.
+			'group by t.id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
