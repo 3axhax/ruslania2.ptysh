@@ -330,15 +330,18 @@ class ProductHelper
     public static function IsShelfId($q)
     {
         if (!is_numeric($q)) return false;
-        $len = strlen($q);
+        $len = mb_strlen($q, 'utf-8');
         if ($len < 6 || $len > 8) return false;
         $q .= '';
-        $firstSigns = $q[0] . $q[1];
+        $firstSigns = mb_substr($q, 0, 2, 'utf-8');
 
-        $shelfs = array('15', '20', '24', '22', '40', '50', '60', '30');
+        $shelfs = array();
+        foreach (Entity::GetEntitiesList() as $entity=>$set) {
+            if ($entity != 10) $shelfs[] = $entity;
+        }
 
-        if (strlen($q) == 6 && in_array($firstSigns, $shelfs)) return true;
-        if (strlen($q) == 8 && $firstSigns == '10') return true;
+        if ($len == 6 && in_array($firstSigns, $shelfs)) return true;
+        if ($len == 8 && $firstSigns == '10') return true;
         return false;
     }
 

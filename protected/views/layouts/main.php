@@ -187,14 +187,14 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 			}
 		?>
         $('#Search').marcoPolo({
-            url:'<?= isset($_GET['ha'])?'/liveSearch/general':'/site/search'?>',
+            url:'<?= !isset($_GET['old'])?'/liveSearch/general':'/site/search'?>',
             cache : false,
 			hideOnSelect: false,
             dynamicData:{ avail: function() { return $('#js_avail').val(); } },
             formatItem:function (data, $item, q)
             {
 					var ret = '';
-                <?php if (isset($_GET['ha'])): ?>
+                <?php if (!isset($_GET['old'])): ?>
                 ret += data;
                 <?php else: ?>
 					if (data.Counts != undefined) {
@@ -1001,7 +1001,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                         <a href="/"><img src="/new_img/logo.png" alt=""/></a>
                     </div>
                     <div class="span10">
-                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
+                        <form method="get" action="<?= !isset($_GET['old'])?'/search/general':'/site/search' ?>" id="srch">
                             <div class="search_box">
 								<div class="loading"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?=$ui->item('A_NEW_PLACEHOLDER_SEARCH');?>" id="Search" value="<?=$_GET['q']?>"/>

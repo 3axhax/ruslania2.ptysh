@@ -34,6 +34,24 @@ class SearchController extends MyController {
 			'paginatorInfo' => $paginatorInfo));
 	}
 
+	function isCode($q) {
+		$code = '';
+		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
+		if (ProductHelper::IsEan($q)) $code = 'eancode';
+		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
+		return $code;
+	}
+
+	function getByCode($code, $q) {
+		$q = preg_replace("/\D/iu", '', $q);
+		$this->_search->SetFilter($code, array($q));
+		$find = $this->_search->query('', 'products');
+		if (empty($find)) return array();
+
+		$product = SearchHelper::ProcessProducts($find);
+		return SearchHelper::ProcessProducts2($product);
+	}
+
 	function getEntitys($query) {
 		$this->_search->resetCriteria();
 		$filters = array();
@@ -69,7 +87,8 @@ class SearchController extends MyController {
 	function getDidYouMean($q) {
 		$authors = $this->_getAuthors($q);
 		$publishers = $this->_getPublishers($q);
-		return array_merge($authors, $publishers);
+		$categories = $this->_getCategories($q);
+		return array_merge($authors, $categories, $publishers);
 	}
 
 	function getList($query, $page, $pp) {
@@ -214,7 +233,6 @@ class SearchController extends MyController {
 			$itemTitle = ProductHelper::GetTitle($row);
 			$title = Entity::GetTitle($row['entity']) . '; ' . sprintf(Yii::app()->ui->item('PUBLISHED_BY'), '<b>' . $itemTitle . '</b>');
 
-			$item['is_product'] = false;
 			$item['url'] = Yii::app()->createUrl('entity/bypublisher',
 				array('entity' => Entity::GetUrlKey($row['entity']),
 					'title' => ProductHelper::ToAscii($itemTitle),
@@ -225,6 +243,36 @@ class SearchController extends MyController {
 			$ret[] = $item;
 		}
 
+		return $ret;
+	}
+
+	protected function _getCategories($query) {
+		$result = $this->_queryIndex($query, 'categories', 3);
+//		$this->widget('Debug', array($result));
+		if (empty($result)) return array();
+
+		$where = array();
+		foreach($result as $cat) {
+			$where[] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
+		}
+
+		if(empty($where)) return array();
+
+		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $where);
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$ret = array();
+		foreach ($rows as $item) {
+			$itemTitle = ProductHelper::GetTitle($item);
+			$row = array();
+			$row['url'] = Yii::app()->createUrl('entity/list', array('cid' => $item['real_id'],
+				'title' => ProductHelper::ToAscii($itemTitle),
+				'entity' => Entity::GetUrlKey($item['entity'])));
+			$row['title'] = Entity::GetTitle($item['entity']) . ' - ' . Yii::app()->ui->item('Related categories') . ': <b>' . $itemTitle . '</b>';
+			$row['is_product'] = false;
+			$row['orig_data'] = $item;
+			$ret[] = $row;
+		}
 		return $ret;
 	}
 
