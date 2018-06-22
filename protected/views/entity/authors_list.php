@@ -136,13 +136,14 @@
                     <?php if (empty($url)) $url ='/entity/byauthor'; ?>
                     <?php if (empty($idName)) $idName = 'aid'; ?>
                     <?php foreach($list as $item) : ?>
-                        <?php $title = $item['title_'.$lang]; ?>
+                        <?php $title = $item['title_'.$lang];
+                        if (preg_match("/\w/iu", $title)): ?>
                         <li style="margin-bottom: 10px;"><a href="<?=Yii::app()->createUrl($url,
                                 array('entity' => Entity::GetUrlKey($entity),
                                       $idName => $item['id'],
                                       'title' => ProductHelper::ToAscii($title)
                                 )); ?>" title="<?=$title; ?>"><?=$title; ?></a></li>
-                    <?php endforeach; ?>
+                    <?php endif; endforeach; ?>
 					
                 </ul>
 				<div class="clearfix"></div>
