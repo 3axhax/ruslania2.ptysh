@@ -1,0 +1,384 @@
+--
+-- Структура таблицы `seo_path_update`
+--
+
+DROP TABLE IF EXISTS `seo_path_update`;
+CREATE TABLE IF NOT EXISTS `seo_path_update` (
+  `entity` tinyint(4) unsigned NOT NULL,
+  `route` tinytext CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `seo_redirects`
+--
+
+DROP TABLE IF EXISTS `seo_redirects`;
+CREATE TABLE IF NOT EXISTS `seo_redirects` (
+  `entity` int(10) unsigned NOT NULL,
+  `route` tinytext NOT NULL,
+  `id` int(10) unsigned NOT NULL,
+  `path` varchar(250) NOT NULL,
+  PRIMARY KEY (`path`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DELIMITER ;;
+
+CREATE TRIGGER `all_authorslist_ai` AFTER INSERT ON `all_authorslist` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 0, route = "entity/byauthor";
+END;;
+
+CREATE TRIGGER `all_authorslist_au` AFTER UPDATE ON `all_authorslist` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 0, route = "entity/byauthor|entity/byactor|entity/bydirector";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `books_series_ai` AFTER INSERT ON `books_series` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 10, route = "entity/byseries";
+END;;
+
+CREATE TRIGGER `books_series_au` AFTER UPDATE ON `books_series` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 10, route = "entity/byseries";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `musicsheets_series_ai` AFTER INSERT ON `musicsheets_series` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 15, route = "entity/byseries";
+END;;
+
+CREATE TRIGGER `musicsheets_series_au` AFTER UPDATE ON `musicsheets_series` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 15, route = "entity/byseries";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `music_series_ai` AFTER INSERT ON `music_series` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "entity/byseries";
+END;;
+
+CREATE TRIGGER `music_series_au` AFTER UPDATE ON `music_series` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "entity/byseries";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `soft_series_ai` AFTER INSERT ON `soft_series` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 24, route = "entity/byseries";
+END;;
+
+CREATE TRIGGER `soft_series_au` AFTER UPDATE ON `soft_series` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 24, route = "entity/byseries";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `all_publishers_ai` AFTER INSERT ON `all_publishers` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 0, route = "entity/bypublisher";
+END;;
+
+CREATE TRIGGER `all_publishers_au` AFTER UPDATE ON `all_publishers` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 0, route = "entity/bypublisher";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `books_bindings_ai` AFTER INSERT ON `books_bindings` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 10, route = "entity/bybinding";
+END;;
+
+CREATE TRIGGER `books_bindings_au` AFTER UPDATE ON `books_bindings` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 10, route = "entity/bybinding";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `musicsheets_bindings_ai` AFTER INSERT ON `musicsheets_bindings` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 15, route = "entity/bybinding";
+END;;
+
+CREATE TRIGGER `musicsheets_bindings_au` AFTER UPDATE ON `musicsheets_bindings` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 15, route = "entity/bybinding";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `maps_bindings_ai` AFTER INSERT ON `maps_bindings` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 60, route = "entity/bybinding";
+END;;
+
+CREATE TRIGGER `maps_bindings_au` AFTER UPDATE ON `maps_bindings` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_en != OLD.title_en) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 60, route = "entity/bybinding";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `all_media_ai` AFTER INSERT ON `all_media` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 0, route = "entity/bymedia";
+END;;
+
+CREATE TRIGGER `all_media_au` AFTER UPDATE ON `all_media` FOR EACH ROW
+BEGIN
+	IF ((NEW.title != OLD.title)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 0, route = "entity/bymedia";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `audio_performerslist_ai` AFTER INSERT ON `audio_performerslist` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 20, route = "entity/byperformer";
+END;;
+
+CREATE TRIGGER `audio_performerslist_au` AFTER UPDATE ON `audio_performerslist` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 20, route = "entity/byperformer";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `music_performerslist_ai` AFTER INSERT ON `music_performerslist` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "entity/byperformer";
+END;;
+
+CREATE TRIGGER `music_performerslist_au` AFTER UPDATE ON `music_performerslist` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "entity/byperformer";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `video_creditslist_ai` AFTER INSERT ON `video_creditslist` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "entity/bysubtitle";
+END;;
+
+CREATE TRIGGER `video_creditslist_au` AFTER UPDATE ON `video_creditslist` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi) OR (NEW.title_de != OLD.title_de) OR (NEW.title_fr != OLD.title_fr) OR (NEW.title_it != OLD.title_it) OR (NEW.title_es != OLD.title_es) OR (NEW.title_se != OLD.title_se)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "entity/bysubtitle";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `video_audiostreamlist_ai` AFTER INSERT ON `video_audiostreamlist` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "entity/byaudiostream";
+END;;
+
+CREATE TRIGGER `video_audiostreamlist_au` AFTER UPDATE ON `video_audiostreamlist` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi) OR (NEW.title_de != OLD.title_de) OR (NEW.title_fr != OLD.title_fr) OR (NEW.title_it != OLD.title_it) OR (NEW.title_es != OLD.title_es) OR (NEW.title_se != OLD.title_se)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "entity/byaudiostream";
+	END IF;
+END;;
+
+
+
+
+CREATE TRIGGER `pereodics_types_ai` AFTER INSERT ON `pereodics_types` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "entity/bytype";
+END;;
+
+CREATE TRIGGER `pereodics_types_au` AFTER UPDATE ON `pereodics_types` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "entity/bytype";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `all_categories_ai` AFTER INSERT ON `all_categories` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 0, route = "entity/categorylist";
+END;;
+
+CREATE TRIGGER `all_categories_au` AFTER UPDATE ON `all_categories` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 0, route = "entity/categorylist";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `books_catalog_ai` AFTER INSERT ON `books_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 10, route = "product/view";
+END;;
+
+CREATE TRIGGER `books_catalog_au` AFTER UPDATE ON `books_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 10, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `musicsheets_catalog_ai` AFTER INSERT ON `musicsheets_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 15, route = "product/view";
+END;;
+
+CREATE TRIGGER `musicsheets_catalog_au` AFTER UPDATE ON `musicsheets_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 15, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `audio_catalog_ai` AFTER INSERT ON `audio_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 20, route = "product/view";
+END;;
+
+CREATE TRIGGER `audio_catalog_au` AFTER UPDATE ON `audio_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 20, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `music_catalog_ai` AFTER INSERT ON `music_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 22, route = "product/view";
+END;;
+
+CREATE TRIGGER `music_catalog_au` AFTER UPDATE ON `music_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 22, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `pereodics_catalog_ai` AFTER INSERT ON `pereodics_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 30, route = "product/view";
+END;;
+
+CREATE TRIGGER `pereodics_catalog_au` AFTER UPDATE ON `pereodics_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 30, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `printed_catalog_ai` AFTER INSERT ON `printed_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 50, route = "product/view";
+END;;
+
+CREATE TRIGGER `printed_catalog_au` AFTER UPDATE ON `printed_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 50, route = "product/view";
+	END IF;
+END;;
+
+
+
+
+
+CREATE TRIGGER `maps_catalog_ai` AFTER INSERT ON `maps_catalog` FOR EACH ROW
+BEGIN
+    insert into seo_path_update set id = NEW.id, entity = 60, route = "product/view";
+END;;
+
+CREATE TRIGGER `maps_catalog_au` AFTER UPDATE ON `maps_catalog` FOR EACH ROW
+BEGIN
+	IF ((NEW.title_ru != OLD.title_ru) OR (NEW.title_en != OLD.title_en) OR (NEW.title_rut != OLD.title_rut) OR (NEW.title_fi != OLD.title_fi)) THEN
+        insert into seo_path_update set id = OLD.id, entity = 60, route = "product/view";
+	END IF;
+END;;
+
+
+DELIMITER ;
