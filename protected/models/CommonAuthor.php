@@ -1,8 +1,7 @@
 <?php
 
-class CommonAuthor extends CMyActiveRecord {
-    private $_perToPage = 150;
-    function getPerToPage() {return $this->_perToPage; }
+class CommonAuthor extends CMyActiveRecord
+{
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -19,13 +18,11 @@ class CommonAuthor extends CMyActiveRecord {
         $data = $entities[$entity];
         if(!array_key_exists('author_table', $data)) return array();
 
-        $sql = ''.
-            'SELECT al.first_'.$lang.' AS first_'.$lang.' '.
-            'FROM all_authorslist AS al '.
-                'JOIN '.$data['author_table'].' AS j ON (al.id=j.author_id) '.
-            'group by ord(al.first_'.$lang.') '.
-            'ORDER BY ord(al.title_'.$lang.') ASC '.
-        '';
+        $sql = 'SELECT al.first_'.$lang.' AS first_'.$lang.' FROM all_authorslist AS al '
+              .'JOIN '.$data['author_table'].' AS j ON al.id=j.author_id '
+            .'group by ord(al.first_'.$lang.') '.
+              'ORDER BY ord(al.title_'.$lang.') ASC '.
+            '';
               //.'ORDER BY first_'.$lang;
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
@@ -55,7 +52,7 @@ class CommonAuthor extends CMyActiveRecord {
             $entity,
             $char,
             array(),
-            ($page-1)*$this->_perToPage . ', ' . $this->_perToPage,
+            ($page-1)*150 . ', 150',
             $counts
         );
         return array($authors, $counts);
@@ -86,16 +83,16 @@ class CommonAuthor extends CMyActiveRecord {
 	public function GetAuthorsBySearch($char, $lang, $entity) {
         $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
         $page = min($page, 100000);
-        $counts = 0;
+        $count = true;
         $authors = SearchAuthors::get()->getLike(
             $entity,
             (string)Yii::app()->getRequest()->getParam('qa'),
             array(),
-            ($page-1)*$this->_perToPage . ', ' . $this->_perToPage,
+            ($page-1)*150 . ', 150',
             false,
-            $counts
+            $count
         );
-        return array('rows'=>$authors, 'count'=>$counts);
+        return array('rows'=>$authors, 'count'=>$count);
 
 		$entities = Entity::GetEntitiesList();
         $data = $entities[$entity];

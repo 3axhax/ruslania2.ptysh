@@ -5,7 +5,7 @@ class CartController extends MyController
     public function accessRules()
     {
         return array(array('allow',
-                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark', 'noregister',
+                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result',
                                               'changequantity', 'remove',),
                            'users' => array('*')),
 
@@ -118,6 +118,78 @@ class CartController extends MyController
             
         }
         
+    }
+    
+    public function actionResult() {
+        
+        $post = $_POST;
+        if (Yii::app()->request->isPostRequest) {
+        $titul = $post['Address']['receiver_title_name'];
+        $fam = $post['Address']['receiver_last_name'];    
+        $name = $post['Address']['receiver_first_name'];    
+        $otch = $post['Address']['receiver_middle_name'];    
+        $country = $post['Address']['country'];    
+        $stat = $post['Address']['state_id'];    
+        $city = $post['Address']['city'];    
+        $post_index = $post['Address']['postindex'];    
+        $address = $post['Address']['streetaddress'];    
+        $email = $post['Address']['contact_email'];    
+        $phone = $post['Address']['contact_phone'];    
+        $comment = $post['Address']['notes'];    
+        
+        if ($fam AND $name AND $country AND $city AND $post_index AND $address AND $email AND $phone) {
+            
+            
+        /* 
+         * 
+         * 1. Для начала создаем покупателя и получаем его ID
+         * 2. Выполняем вход покупателя 
+         * 3. Добавляем адрес в базу с привязкой покупателя к этому
+         * адресу
+         * 4. Создаем заказ на этого покупателя
+         * 5. Определяем каким способом он выбрал оплату и делаем
+         * переадресацию на соответствующую страницу где уже будет 
+         * написан код с переадресацией на страницу сервиса оплаты 
+         * 
+         */
+        
+        /*
+         *  1. Для начала создаем покупателя и получаем его ID
+         */
+        
+            $psw  = rand(1000000, 9999999);
+            
+        $langID = Language::ConvertToInt(Yii::app()->language);
+        $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
+        . 'mail_maps_news, mail_music_news, mail_musicsheets_news, mail_soft_news, mail_video_news, currency) VALUES '
+        . '(:login, :pwd, :fName, :lName, :lang, 1, 1, 1, 1, 1, 1, 1, :currency)';
+        $ret = Yii::app()->db->createCommand($sql)->execute(array(
+            ':login' => $email,
+            ':pwd' => $psw,
+            ':fName' => $name,
+            ':lName' => $fam,
+            ':lang' => $langID,
+            ':currency' => Yii::app()->currency));
+               
+        /*
+         * 2. Добавляем адрес в базу с привязкой покупателя к этому 
+         * адресу
+         */
+        
+            $identity = new RuslaniaUserIdentity($email, $psw);
+            $identity->authenticate();
+            Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
+            $cart = new Cart();
+            $cart->UpdateCartToUid($this->sid, $identity->getId());
+            
+            
+            
+        } else {
+            echo '0';   
+        }
+        
+        
+        }
     }
     
     public function actionNoRegister() {

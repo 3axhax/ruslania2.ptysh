@@ -247,7 +247,7 @@ class SearchController extends MyController {
 	}
 
 	protected function _getCategories($query) {
-		$result = $this->_queryIndex($query, 'categories', 3);
+		$result = $this->_queryIndex($query, 'categories', 0);
 //		$this->widget('Debug', array($result));
 		if (empty($result)) return array();
 
