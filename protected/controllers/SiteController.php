@@ -264,6 +264,16 @@ class SiteController extends MyController {
         return true;
     }
 
+    protected function _endOfWord($n, $e1 = "", $e234 = "", $e567890 = ""){
+        switch (true){
+            case ($n%10 == 1): $r = $e1; break;
+            case ($n%10 >= 2 && $n%10 <= 4): $r = $e234; break;
+            default: $r = $e567890; break;
+        }
+        if ($n%100 >= 10 && $n%100 <= 20) $r = $e567890;
+        return $r;
+    }
+
     public function actionSearch($q = '', $e = 0, $page = 0, $avail = 1) {
         $avail = $this->GetAvail($avail);
         $page = intVal($page);
@@ -299,6 +309,7 @@ class SiteController extends MyController {
 
         $pp = Yii::app()->params['ItemsPerPage'];
         // Ищем товар
+        $abstractInfo = array();
         $resArray = array();
         // Вдруг это складской номер
         if (ProductHelper::IsShelfId($origSearch)) {
@@ -464,6 +475,11 @@ class SiteController extends MyController {
 
             $totalFound = 0;
             $realProducts = SearchHelper::SearchInProducts($q, $searchFilters, $page, $pp, $totalFound);
+
+            foreach ($realProducts as $eNum=>$ids) {
+                $abstractInfo[mb_substr($eNum, 1, null, 'utf-8')] = count($ids) . ' ' . $this->_endOfWord(count($ids), Yii::app()->ui->item('A_NEW_SEARCH_RES_COUNT3'), Yii::app()->ui->item('A_NEW_SEARCH_RES_COUNT2'), Yii::app()->ui->item('A_NEW_SEARCH_RES_COUNT1'));
+            }
+
             $products = array_merge($products, $realProducts);
 			
 			//var_dump($products);
@@ -767,6 +783,7 @@ class SiteController extends MyController {
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
         $this->render('search', array('q' => $q, 'items' => $result,
             'products' => $products,
+            'abstractInfo'=>$abstractInfo,
             'paginatorInfo' => $paginatorInfo));
     }
 
@@ -938,7 +955,6 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-
 			echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST);
         }
     }

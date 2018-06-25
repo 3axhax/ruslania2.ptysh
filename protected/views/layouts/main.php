@@ -177,16 +177,26 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                 }
 			}
 		}
-		
+
+        <?php
+			$act = array();
+			$act = array(1, ' active');
+			if (isset($_GET['avail'])) {
+				if ($_GET['avail'] == '1') $act = array(1, ' active');
+				else $act = array('', '');
+			}
+		?>
         $('#Search').marcoPolo({
-            url:'<?= isset($_GET['ha'])?'/liveSearch/general':'/site/search'?>',
+            url:'<?= !isset($_GET['old'])?'/liveSearch/general':'/site/search'?>',
             cache : false,
 			hideOnSelect: false,
             dynamicData:{ avail: function() { return $('#js_avail').val(); } },
             formatItem:function (data, $item, q)
             {
 					var ret = '';
-					
+                <?php if (!isset($_GET['old'])): ?>
+                ret += data;
+                <?php else: ?>
 					if (data.Counts != undefined) {
 						
 						for (var i = 1; i < 10; i++) {
@@ -206,14 +216,6 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 						if ( data.length > 0) {
 							ret += '<div class="title_goods">'+
                                 '<div class="red_checkbox" onclick="check_search($(this), \'js_avail\')" style="float: right;">';
-                         			<?php
-                         				$act = array();
-                         				$act = array(1, ' active');
-                         				if (isset($_GET['avail'])) {
-                         					if ($_GET['avail'] == '1') $act = array(1, ' active');
-                         					else $act = array('', '');
-                         				}
-                         			?>
                                 ret += ''+
                                      '<span class="checkbox" style="height: 10px; padding-top: 2px;">'+
                                          '<span class="check<?=$act[1]?>"></span>'+
@@ -257,10 +259,10 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 						}
 						
 					}
+					<?php endif; ?>
+//					console.log(ret);
 					
-					//console.log(ret);
-					
-					return ret;
+                return ret;
                
             }
 
@@ -404,44 +406,6 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 
             })
             
-            function show_items() {
-                
-                var create_url;
-                
-                create_url = '/site/ggfilter/entity/'+$('form.filter input.entity_val').val()+
-                    '/cid/'+$('form.filter input.cid_val').val()+'/author/'+$('form.filter .form-row input[name=author]').val()+
-                    '/avail/'+$('form.filter .form-row input[name=avail]').val()+
-                    '/ymin/'+$('form.filter .form-row input.year_inp_mini').val()+'/ymax/'+$('form.filter .form-row input.year_inp_max').val()+
-                    '/izda/'+$('form.filter .form-row input[name=izda]').val()+
-                    '/seria/'+(($('form.filter .form-row input[name=seria]').val()) ? ($('form.filter .form-row input[name=seria]').val()) : '0')+
-                    '/cmin/'+$('form.filter .form-row input.cost_inp_mini').val()+'/cmax/'+$('form.filter .form-row input.cost_inp_max').val()+
-                    '/langsel/'+$('form.filter input.lang').val();
-
-                var bindings = [];
-                var i = 0;
-                $('.bindings input[type=checkbox]:checked').each(function() {
-                    
-                    bindings[i] = $(this).val();
-                    
-                    i++;
-                });
-                
-                var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-                $('.span10.listgoods').html('<?=$ui->item('A_NEW_LOAD2'); ?>');
-                $.post(create_url, { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
-                    search_name : $('form.filter .search.inp').val(), sort : $('form.filter .sort').val(),
-                    formatVideo : $('#formatVideo').val(),
-                    langVideo : $('#langVideo').val(),
-                    subtitlesVideo : $('#subtitlesVideo').val(),
-                }, function(data) {
-                    $('.span10.listgoods').html(data);
-                    $('.box_select_result_count').hide(1);
-                    $(window).scrollTop(0);
-                })
-                
-            }
-            
             var mini_map_isOn = 0;
             var TimerId;
             
@@ -462,44 +426,6 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                             clearTimeout(TimerId);
                     })
             })
-            function show_result_count(cont) {
-
-                $('.box_select_result_count').hide(1);
-                $('.loader_gif').remove();
-                $('.res_count').html(' ');
-                $('.box_select_result_count').removeAttr('current_box');
-                $('.box_select_result_count', cont.parents('.form-row')).attr('current_box', 'yes');
-
-
-                var frm = $('form.filter').serialize();
-                var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-                frm = frm + '&' + csrf[0] + '=' + csrf[1];
-
-                $.ajax({
-                    url: '/site/gtfilter/',
-                    type: "POST",
-                    data: frm,
-                    beforeSend: function(){
-                        $('.box_select_result_count', cont.parents('.form-row')).show();
-                        $('.box_select_result_count', cont.parents('.form-row')).append('<img class="loader_gif" src="/new_img/source.gif" width="20">');
-                        $('.box_select_result_count a', cont.parents('.form-row')).hide();
-                    },
-                    success: function (data) {
-                        if ($('.box_select_result_count', cont.parents('.form-row')).attr('current_box') == 'yes') {
-                            $('.loader_gif').remove();
-                            $('.box_select_result_count a', cont.parents('.form-row')).show();
-                            $('.box_select_result_count img', cont.parents('.form-row')).hide();
-                            if (data == '0') {
-                                $('.box_select_result_count a', cont.parents('.form-row')).hide();
-                            }
-
-                            $('.box_select_result_count .res_count', cont.parents('.form-row')).html(data);
-                            $('.box_select_result_count', cont.parents('.form-row')).show(1);
-                        }
-                    }
-                });
-            }
 
             function change_all_binding(event, binding_all = false)
             {
@@ -516,21 +442,6 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                 else {
                     event.target.parentElement.parentElement.children[2].firstElementChild.checked = false;
                 }
-            }
-
-            function select_item(item, inp_name) {
-                var id = item.attr('rel');
-                //$('.list_dd', item.parent().parent().parent().parent()).scrollTop(0);
-
-                $('div', item.parent()).removeClass('selact');
-
-                item.addClass('selact');
-
-                if (!$(item).parent().parent().is('div.interactive_search')) $('.text span', item.parent().parent().parent().parent()).html(item.html());
-                $('.list_dd', item.parent().parent().parent().parent()).hide();
-                $('input[name=' + inp_name + ']', item.parent().parent().parent().parent()).val(id);
-
-                show_result_count(item);
             }
 
             function show_sc(cont, c, lvl) {
@@ -999,7 +910,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                         <a href="/"><img src="/new_img/logo.png" alt=""/></a>
                     </div>
                     <div class="span10">
-                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
+                        <form method="get" action="<?= !isset($_GET['old'])?'/search/general':'/site/search' ?>" id="srch">
                             <div class="search_box">
 								<div class="loading"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?=$ui->item('A_NEW_PLACEHOLDER_SEARCH');?>" id="Search" value="<?=$_GET['q']?>"/>

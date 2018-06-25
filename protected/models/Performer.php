@@ -2,8 +2,14 @@
 
 class Performer
 {
-    public function GetPerformerList($entity, $lang, $char=null)
-    {
+    private $_perToPage = 150;
+    public function GetPerformerList($entity, $lang, $char=null) {
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchPerformers::get()->getAll($entity, ($page-1)*$this->_perToPage . ', ' . $this->_perToPage, $counts);
+        return array($items, $counts);
+
         $havePersormers = array(Entity::AUDIO, Entity::MUSIC);
         if(!in_array($entity, $havePersormers)) return array();
 
@@ -24,21 +30,38 @@ class Performer
         return $rows;
     }
 
+    public function getPerformersBySearch($entity) {
+        $page = max((int)Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+        $counts = 0;
+        $items = SearchPerformers::get()->getLike(
+            $entity,
+            (string)Yii::app()->getRequest()->getParam('qa'),
+            array(),
+            ($page - 1) * $this->_perToPage . ', ' . $this->_perToPage,
+            false,
+            $counts
+        );
+        return array($items, $counts);
+    }
 
-    public function GetById($entity, $pid)
-    {
-        $havePersormers = array(Entity::AUDIO, Entity::MUSIC);
-        if(!in_array($entity, $havePersormers)) return false;
 
-        $sql = 'SELECT * FROM all_authorslist WHERE id=:pid';
+    public function GetById($entity, $pid) {
+        if (!Entity::checkEntityParam($entity, 'performers')) return array();
+//        $havePersormers = array(Entity::AUDIO, Entity::MUSIC);
+//        if(!in_array($entity, $havePersormers)) return false;
+        $entityParam = Entity::GetEntitiesList()[$entity];
+
+        $sql = 'SELECT * FROM ' . $entityParam['performer_table_list'] . ' WHERE id=:pid limit 1';
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':pid' => $pid));
         return $row;
     }
 
     public function GetTotalItems($entity, $pid, $avail)
     {
-        $havePersormers = array(Entity::AUDIO, Entity::MUSIC);
-        if(!in_array($entity, $havePersormers)) return 0;
+        if (!Entity::checkEntityParam($entity, 'performers')) return array();
+//        $havePersormers = array(Entity::AUDIO, Entity::MUSIC);
+//        if(!in_array($entity, $havePersormers)) return 0;
 
         $entities = Entity::GetEntitiesList();
         $data = $entities[$entity];
@@ -47,9 +70,12 @@ class Performer
 
         if($avail)
         {
-            $sql = 'SELECT COUNT(*) FROM ' . $data['performer_table'] . ' AS a '
-                .'JOIN '.$data['site_table'].' AS b ON a.'.$data['performer_field'].'=b.id '
-                .'WHERE person_id=:id AND b.avail_for_order=1';
+            $sql = ''.
+                'SELECT COUNT(*) '.
+                'FROM ' . $data['performer_table'] . ' AS a '.
+                'JOIN '.$data['site_table'].' AS b ON (a.'.$data['performer_field'].'=b.id) '.
+                'WHERE a.performer_id=:id AND b.avail_for_order=1'.
+            '';
 
         }
         else
@@ -68,7 +94,7 @@ class Performer
         $dp = Entity::CreateDataProvider($entity);
         $criteria = $dp->getCriteria();
         $criteria->join = 'JOIN ' . $data['performer_table'] . ' AS j ON j.' . $data['performer_field'] . '=t.id ';
-        $criteria->addCondition('j.person_id=:pid');
+        $criteria->addCondition('j.performer_id=:pid');
         if(!empty($avail))
             $criteria->addCondition('t.avail_for_order=1');
 

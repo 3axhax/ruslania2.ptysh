@@ -528,12 +528,12 @@ class Category {
         $izda = $post['izda'];
         $seria = $post['seria'];
 
-        $year_min = $post['year_min'];
-        $year_max = $post['year_max'];
+        $year_min = (isset($post['year_min']) && $post['year_min'] != '') ? $post['year_min'] : 1900;
+        $year_max = (isset($post['year_max']) && $post['year_max'] != '') ? $post['year_max'] : 2050;
 
-        $cost_min = $post['min_cost'];
+        $cost_min = (isset($post['min_cost']) && $post['min_cost'] != '') ? $post['min_cost'] : 0;
         $cost_min = (float)str_replace(',','.', $cost_min);
-        $cost_max = $post['max_cost'];
+        $cost_max = (isset($post['max_cost']) && $post['max_cost'] != '') ? $post['max_cost'] : 10000;
         $cost_max = (float)str_replace(',','.', $cost_max);
 
         $binding_id = $post['binding_id'];

@@ -4,543 +4,277 @@ class SearchController extends MyController {
 	//количество в результате поиска
 	private $_counts = null;
 
-	private $searchQuery = '';
-	private $searchResults = 0;
-	private $searchFilters = array();
+	/**
+	 * @var DGSphinxSearch
+	 */
+	private $_search;
 
-	public function actionGeneral($q = '', $e = 0, $page = 0, $avail = 1) {
-		$avail = $this->GetAvail($avail);
-		$page = intVal($page);
-		$page = $page - 1;
-		if ($page < 0)
-			$page = 0;
-		$e = abs(intVal($e));
-
-		$origSearch = trim($q);
-		$this->searchQuery = $origSearch;
-		$products = array();
-
-		$this->searchFilters = array('e' => $e, 'page' => $page);
-
-		Yii::app()->session['SearchData'] = array('q' => $origSearch, 'time' => time(), 'e' => $e);
-//var_dump($origSearch);
-		if (empty($origSearch)) {
-			if (Yii::app()->request->isAjaxRequest)
-				$this->ResponseJson(array());
-
-			// постраничный результат
-
-			$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
-			$this->render('search', array('result' => array(),
-				'q' => $q, 'products' => array(),
-				'paginatorInfo' => new CPagination(0)));
+	function actionGeneral() {
+		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
+		if (empty($q)) {
+			$this->_viewEmpty($q);
 			return;
 		}
 
-		$search = SearchHelper::Create();
+		$page = $this->_getNumPage();
+
+//		$this->getEntitys($q);
+//		$this->getDidYouMean($q);
+//		$this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+
+		$abstractInfo = $this->getEntitys($q);
+
+		$paginatorInfo = new CPagination(array_sum($abstractInfo));
+		$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+
+		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
+		$this->render('list', array('q' => $q, 'items' => $this->getDidYouMean($q),
+			'products' => $this->getList($q, $page, Yii::app()->params['ItemsPerPage']),
+			'abstractInfo'=>$abstractInfo,
+			'paginatorInfo' => $paginatorInfo));
+	}
+
+	function isCode($q) {
+		$code = '';
+		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
+		if (ProductHelper::IsEan($q)) $code = 'eancode';
+		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
+		return $code;
+	}
+
+	function getByCode($code, $q) {
+		$q = preg_replace("/\D/iu", '', $q);
+		$this->_search->SetFilter($code, array($q));
+		$find = $this->_search->query('', 'products');
+		if (empty($find)) return array();
+
+		$product = SearchHelper::ProcessProducts($find);
+		return SearchHelper::ProcessProducts2($product);
+	}
+
+	function getEntitys($query) {
+		$this->_search->resetCriteria();
+		$filters = array();
+		$avail = $this->GetAvail(1);
+		if ($avail) $filters['avail'] = 1;
+
+		if (!empty($filters)) {
+			foreach ($filters as $name => $value) {
+				$this->_search->SetFilter($name, array($value));
+			}
+		}
+
+		$q = '@* ' . $this->_search->EscapeString($query);
+		$groupby = array(
+			'field'=>'entity',
+			'mode'=>SPH_GROUPBY_ATTR,
+			'order'=>'@group desc',
+		);
+		$res = $this->_search->groupby($groupby)->query($q, 'products');
+		if (empty($res['matches'])) return array();
 
 		$result = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
-		$pp = Yii::app()->params['ItemsPerPage'];
-		// Ищем товар
-		$resArray = array();
-		// Вдруг это складской номер
-		if (ProductHelper::IsShelfId($origSearch)) {
-			$search->SetFilter('stock_id', array($origSearch));
-			$resArray = $search->query('', 'products');
-		} else if (ProductHelper::IsEan($origSearch)) {
-			$search->SetFilter('eancode', array($origSearch));
-			$resArray = $search->query('', 'products');
-		} else if (ProductHelper::IsIsbn($origSearch)) {
-			$matches = array();
-			if (preg_match_all('|\d+|', $origSearch, $matches)) {
-				$isbn = implode('', $matches[0]);
-				$search->SetFilter('isbnnum', array($isbn));
-				$resArray = $search->query('', 'products');
+		foreach ($res['matches'] as $data) {
+		    if (!empty($data['attrs']['@count'])) {
+			    $result[$data['attrs']['@groupby']] = $data['attrs']['@count'];
+		    }
+		}
+		return array_filter($result);
+	}
+
+	function getDidYouMean($q) {
+		$authors = $this->_getAuthors($q);
+		$publishers = $this->_getPublishers($q);
+		$categories = $this->_getCategories($q);
+		return array_merge($authors, $categories, $publishers);
+	}
+
+	function getList($query, $page, $pp) {
+		$this->_search->resetCriteria();
+		$this->_search->SetLimits(($page-1)*$pp, $pp);
+
+		$filters = array();
+		$avail = $this->GetAvail(1);
+		if ($avail) $filters['avail'] = 1;
+		$e = (int) Yii::app()->getRequest()->getParam('e');
+		if (Entity::IsValid($e)) $filters['entity'] = $e;
+
+		if (!empty($filters)) {
+			foreach ($filters as $name => $value) {
+				$this->_search->SetFilter($name, array($value));
 			}
-		} else {
-			$products = array();
-			$searchFilters = array();
-			if (!empty($e))
-				$searchFilters['entity'] = $e;
-
-			$publishersResult = SearchHelper::SearchInPublishers($q, $searchFilters);
-			$authorsResult = SearchHelper::SearchInPersons($q, $searchFilters);
-
-			$categoriesResult = SearchHelper::SearchInCategories($q, $searchFilters);
-			$seriesResult = array(); //$this->SearchInSeries($search, $q, $e);
-
-			//var_dump($authorsResult);
-
-			$authorsIds = array();
-			foreach ($authorsResult as $author)
-				$authorsIds[] = $author['orig_data']['id'];
-			$publishersIds = array();
-			foreach ($publishersResult as $publisher)
-				$publishersIds[] = $publisher['orig_data']['id'];
-			$categoriesIds = array();
-			foreach ($categoriesResult as $cat)
-				$categoriesIds[] = $cat['orig_data']['id'];
-			$seriesIds = array();
-
-			$expando = array();
-			$arr = array();
-			if (!empty($publishersIds)) {
-				$expando['publisher_id'] = $publishersIds;
-				array_push($arr, 'publisher_id');
-			}
-			if (!empty($authorsIds)) {
-				$expando['author'] = $authorsIds;
-				array_push($arr, 'author');
-			}
-			if (!empty($categoriesIds)) {
-				$expando['category'] = $categoriesIds;
-				array_push($arr, 'category');
-			}
-
-//            echo '<pre>';
-//            var_dump($expando);
-
-			$len = count($arr);
-			$list = array();
-
-			for ($i = 1; $i < (1 << $len); $i++) {
-				$c = array();
-				for ($j = 0; $j < $len; $j++)
-					if ($i & (1 << $j))
-						$c[] = $arr[$j];
-
-				if (count($c) >= 2)
-					$list[] = $c;
-			}
-
-			$list = array_reverse($list);
-			$filters = array();
-			foreach ($list as $data) {
-				$search->ResetFilters();
-				foreach ($data as $filter) {
-//                    echo '<li>'.$filter.' - '.print_r($expando[$filter], true);
-					$search->SetFilter($filter, $expando[$filter]);
-				}
-
-				$res = $search->query('', 'products');
-				$tmpFilter = array();
-				$alreadyCategory = array();
-				$alreadyAuthors = array();
-				$alreadyPublishers = array();
-
-				if ($res['total_found'] > 0) {
-					foreach ($res['matches'] as $match) {
-						$attrs = $match['attrs'];
-						$categories = $attrs['category'];
-						$authors = $attrs['author'];
-						$publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
-						if (!empty($publisher) && !in_array($publisher, $alreadyPublishers)) {
-							$tmpFilter['publisher_id'][] = $publisher;
-							$alreadyPublishers[] = $publisher;
-						}
-
-						foreach ($categories as $cat) {
-							if (array_key_exists('category', $expando) && in_array($cat, $expando['category']) && !in_array($cat, $alreadyCategory)
-							) {
-								$tmpFilter['category'][] = $cat;
-								$alreadyCategory[] = $cat;
-							}
-						}
-
-						foreach ($authors as $a) {
-							if (array_key_exists('author', $expando) && in_array($a, $expando['author']) && !in_array($a, $alreadyAuthors)
-							) {
-								$tmpFilter['author'][] = $a;
-								$alreadyAuthors[] = $a;
-							}
-						}
-					}
-					$filters[implode(' ', $data)] = $tmpFilter;
-				}
-			}
-
-			$filterResult = array();
-			foreach ($filters as $filter) {
-				$fParams = $this->GetCombinations($filter);
-				foreach ($fParams as $param) {
-					$url = Yii::app()->createUrl('entity/filter', $param);
-					$keys = array_keys($param);
-					$titles = array();
-					foreach ($keys as $key) {
-						if ($key == 'author') {
-							foreach ($authorsResult as $a) {
-								if ($a['orig_data']['id'] == $param[$key]) {
-									$t = substr(Yii::app()->ui->item('YM_FILTER_WRITTEN_BY'), 0, 5);
-									$titles[] = $t . ': <b>' . ProductHelper::GetTitle($a['orig_data']) . '</b>';
-									break;
-								}
-							}
-						} else if ($key == 'publisher_id') {
-							foreach ($publishersResult as $p) {
-								if ($p['orig_data']['id'] == $param[$key]) {
-									$titles[] = Yii::app()->ui->item('Published by') . ': <b>' . ProductHelper::GetTitle($p['orig_data']) . '</b>';
-									break;
-								}
-							}
-						} else if ($key == 'category') {
-							foreach ($categoriesResult as $c) {
-								if ($c['orig_data']['id'] == $param[$key]) {
-									$titles[] = Yii::app()->ui->item('Related categories') . ': <b>' . ProductHelper::GetTitle($c['orig_data']) . '</b>';
-									break;
-								}
-							}
-						}
-					}
-
-					$filterResult[] = array('title' => implode('; ', $titles),
-						'url' => $url, 'is_product' => false);
-				}
-			}
-
-			$search->ResetFilters();
-			if (!empty($e) && true)
-				$search->SetFilter('entity', array($e));
-			if ($avail)
-				$searchFilters['avail'] = 1;
-			//$searchFilters['avail'] = $avail ? 1 : 0;
-			//$search->SetSortMode(SPH_SORT_ATTR_DESC, "avail");
-
-			$totalFound = 0;
-			$realProducts = SearchHelper::SearchInProducts($q, $searchFilters, $page, $pp, $totalFound);
-			$products = array_merge($products, $realProducts);
-
-			//var_dump($products);
-
-			$tF = 0;
-			$prodCrossAuthors = SearchHelper::SearchCrossProdAuthors($q, $searchFilters, $authorsResult, $page, $pp, $tF);
-			$products = array_merge($prodCrossAuthors['Items'], $products);
-
-			$totalFound += $tF;
-
-			//$k = array();
-			$s = 0;
-
-			$products2 = array();
-
-			foreach($products as $e=>$ids) {
-
-				$k = array();
-
-				$ids = (array)$ids;
-
-
-				if (count($ids)) {
-
-					foreach ($ids as $id) {
-
-						if (!in_array($id, $k)) {
-							$k[] = $id;
-							$s++;
-						}
-
-					}
-
-				}
-
-				$products2[$e] = $k;
-
-			}
-
-			$products = SearchHelper::ProcessProducts2($products2);
-
-
-
-			//var_dump($products);
-
-			//сортировка товаров
-
-			$arr_order = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$arr_order2 = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$arr_not_order = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$arr_not_avail = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
-
-
-
-			/* разбиваем на страницы */
-			$page_count = Yii::app()->params['ItemsPerPage'];
-
-			$curpage = (int) $_GET['page'];
-
-			if (!$curpage) $curpage = 1;
-
-			$min = ($curpage-1) * $page_count;
-
-			if ($min == 0) { $min = 1; }
-
-			$max = $min+$page_count;
-
-			//var_dump($page_count);
-
-			$i = 0;
-
-			$products2 = array();
-
-			foreach($products as $e=>$ids) {
-
-
-				$i++;
-
-				if ($i<$min OR $max<=$i) continue;
-
-				$products2[(string)$e] = $ids;
-
-
-
-			}
-
-
-			$products = $products2;
-
-
-			if (count($filterResult) > 3)
-				$filterResult = array_splice($filterResult, 0, 3);
-			$result = array_merge($result, $filterResult);
-			if (count($authorsResult) > 3)
-				$authorsResult = array_splice($authorsResult, 0, 3);
-			$result = array_merge($result, $authorsResult);
-			if (count($categoriesResult) > 3)
-				$categoriesResult = array_splice($categoriesResult, 0, 3);
-			$result = array_merge($result, $categoriesResult);
-
-			if (count($publishersResult) > 3)
-				$publishersResult = array_splice($publishersResult, 0, 3);
-			$result = array_merge($result, $publishersResult);
-			$result = array_merge($result, $seriesResult);
-
-
 		}
 
-		if (!empty($resArray)) {
-			$t = SearchHelper::ProcessProducts($resArray);
-			$s = 0;
+		$q = '@* ' . $this->_search->EscapeString($query);
 
-			$products2 = array();
+		$this->_search->SetSortMode(SPH_SeORT_ATTR_DESC, "in_shop");
+		$find = $this->_search->query($q, 'products');
+		if (empty($find)) return array();
 
-			foreach($t as $e=>$ids) {
+		$product = SearchHelper::ProcessProducts($find);
+		return SearchHelper::ProcessProducts2($product);
+	}
 
-				$k = array();
+	private function _queryIndex($query, $index, $limit) {
+		$pre = SearchHelper::BuildKeywords($query, $index);
+		$result = array();
+		foreach ($pre['Queries'] as $query) {
+			if (empty($query)) continue;
 
-				foreach ($ids as $id) {
+			$this->_search->resetCriteria();
+			if ($limit > 0) $this->_search->SetLimits(0, $limit);
+			if (!empty($filters)) {
+				foreach ($filters as $name => $value) {
+					$this->_search->SetFilter($name, array($value));
+				}
+			}
+			$res = $this->_search->query($query, $index);
 
-					if (!in_array($id, $k)) {
-						$k[] = $id;
-						$s++;
+			if ($res['total_found'] > 0) {
+				foreach ($res['matches'] as $key => $match) {
+					$d = array('key' => $key);
+					$attrs = $match['attrs'];
+					foreach ($attrs as $name => $value) {
+						$d[$name] = $value;
 					}
-
+					$result[$key] = $d;
 				}
-
-				$products2[$e] = $k;
-
+				break; // если нашли по какому-то запросу, то ниже уже не идем
 			}
+		}
+		return $result;
+	}
 
-			$products = SearchHelper::ProcessProducts2($products2);
+	protected function _getAuthors($query) {
+		$result = $this->_queryIndex($query, 'authors', 0);
+		if (empty($result)) return array();
 
-
-
-			//var_dump($products);
-
-			//сортировка товаров
-
-			$arr_order = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
+		$limit = 3;
+		$authorsWithItems = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) {
+			if (Entity::checkEntityParam($entity, 'authors')) {
+				$ids = array();
+				foreach ($result as $id=>$item) {
+					if ($entity == $item['entity']) $ids[$item['real_id']] = $id;
 				}
-
-			});
-
-			$arr_order2 = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
+				if (!empty($ids)) {
+					$sql = ''.
+						'select author_id '.
+						'from ' . $set['author_table'] . ' '.
+						'where (author_id in (' . implode(',',array_keys($ids)) . ')) '.
+						'group by author_id '.
+						'order by field(author_id, ' . implode(',',array_keys($ids)) . ') '.
+						'limit ' . ($limit - count($authorsWithItems)) .
+					';';
+					foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $author) {
+						$authorsWithItems[$ids[$author]] = $result[$ids[$author]];
+					}
 				}
-
-			});
-
-			$arr_not_order = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$arr_not_avail = array_filter($products, function ($arr) {
-
-				if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
-
-					return true;
-
-				}
-
-			});
-
-			$products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
-
-
-
-			/* разбиваем на страницы */
-			$page_count = Yii::app()->params['ItemsPerPage'];
-
-			$curpage = (int) $_GET['page'];
-
-			if (!$curpage) $curpage = 1;
-
-			$min = ($curpage-1) * $page_count;
-
-			if ($min == 0) { $min = 1; }
-
-			$max = $min+$page_count;
-
-			//var_dump($page_count);
-
-			$i = 0;
-
-			$products2 = array();
-
-			foreach($products as $e=>$ids) {
-
-
-				$i++;
-
-				if ($i<$min OR $max<=$i) continue;
-
-				$products2[(string)$e] = $ids;
-
-
-
 			}
+			if (count($authorsWithItems) >= $limit) break;
+		}
+		if (empty($authorsWithItems)) return array();
 
-
-			$products = $products2;
-
-
-			//$products = array_merge($products, $t);
-			$totalFound = count($products);
+		$roles = array();
+		$ids = array();
+		foreach($authorsWithItems as $r) {
+			$roles[$r['aentity']][$r['real_id']] = $r;
+			$ids[] = $r['real_id'];
 		}
 
+		$ids = array_unique($ids);
+		if (empty($ids)) return array();
 
+		$result = SearchHelper::ProcessPersons($roles, $ids);
+		return $result;
+	}
 
+	protected function _getPublishers($query) {
+		$result = $this->_queryIndex($query, 'publishers', 0);
+		if (empty($result)) return array();
 
-		$totalFound = $s;
-		$abstract = array();
-
-		if (Yii::app()->request->isAjaxRequest) {
-
-			$products = array_values($products);
-
-			foreach ($result as $idx => $data)
-				unset($result[$idx]['orig_data']);
-			$arr = array_merge($result, $products);
-
-			$this->searchResults = count($arr);
-
-			$ents = Entity::GetEntitiesList();
-
-			foreach($arr as $k => $goods) {
-
-				$curCount = (int) $r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']][1];
-
-				$r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']] = array($q,$curCount+1, 'в разделе '. Entity::GetTitle($goods['entity']), '/site/search?q='.$q.'&e='.$goods['entity'].'&avail='.$avail);
-
+		$limit = 3;
+		$ids = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) {
+			if (Entity::checkEntityParam($entity, 'publisher')) {
+				$sql = ''.
+					'select publisher_id '.
+					'from ' . $set['site_table'] . ' '.
+					'where (publisher_id in (' . implode(',',array_keys($result)) . ')) '.
+					'group by publisher_id '.
+					'order by field(publisher_id, ' . implode(',',array_keys($result)) . ') '.
+					'limit ' . ($limit - count($ids)) .
+				';';
+				foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $publisher) {
+					$ids[$publisher] = $entity;
+				}
 			}
+			if (count($ids) >= $limit) break;
+		}
+		if (empty($ids)) return array();
 
-			$r[] = $arr;
+		$idList = implode(', ', array_keys($ids));
 
+		$sql = ''.
+			'SELECT * '.
+			'FROM all_publishers AS p '.
+			'WHERE p.id IN (' . $idList . ') '.
+			'ORDER BY FIELD(id, ' . $idList . ') '.
+		'';
 
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+		$ret = array();
 
-			$this->ResponseJson($r);
+		foreach ($rows as $row) {
+			$row['entity'] = $ids[$row['id']];
+			$item = array();
+			$itemTitle = ProductHelper::GetTitle($row);
+			$title = Entity::GetTitle($row['entity']) . '; ' . sprintf(Yii::app()->ui->item('PUBLISHED_BY'), '<b>' . $itemTitle . '</b>');
+
+			$item['url'] = Yii::app()->createUrl('entity/bypublisher',
+				array('entity' => Entity::GetUrlKey($row['entity']),
+					'title' => ProductHelper::ToAscii($itemTitle),
+					'pid' => $row['id']
+				));
+			$item['title'] = $title;
+			$item['orig_data'] = $row;
+			$ret[] = $item;
 		}
 
-		$paginatorInfo = new CPagination($totalFound);
-		$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-		$this->_maxPages = ceil($totalFound/Yii::app()->params['ItemsPerPage']);
-		$this->searchResults = $totalFound;
-
-
-
-		print_r($result);
-		echo '<br><br>';
-		print_r($products);
-		// постраничный результат
-		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
-//		$this->render('search', array('q' => $q, 'items' => $result,
-//			'products' => $products,
-//			'paginatorInfo' => $paginatorInfo));
+		return $ret;
 	}
 
-	/*	function actionGeneral() {
-			$q = trim((string) Yii::app()->getRequest()->getParam('q'));
-			if (empty($q)) {
-				$this->_viewEmpty($q);
-				return;
-			}
+	protected function _getCategories($query) {
+		$result = $this->_queryIndex($query, 'categories', 3);
+//		$this->widget('Debug', array($result));
+		if (empty($result)) return array();
 
-			$avail = $this->GetAvail(1);
-			$page = $this->_getNumPage();
-		}*/
+		$where = array();
+		foreach($result as $cat) {
+			$where[] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
+		}
 
-	function getEntitys() {
+		if(empty($where)) return array();
 
+		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $where);
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$ret = array();
+		foreach ($rows as $item) {
+			$itemTitle = ProductHelper::GetTitle($item);
+			$row = array();
+			$row['url'] = Yii::app()->createUrl('entity/list', array('cid' => $item['real_id'],
+				'title' => ProductHelper::ToAscii($itemTitle),
+				'entity' => Entity::GetUrlKey($item['entity'])));
+			$row['title'] = Entity::GetTitle($item['entity']) . ' - ' . Yii::app()->ui->item('Related categories') . ': <b>' . $itemTitle . '</b>';
+			$row['is_product'] = false;
+			$row['orig_data'] = $item;
+			$ret[] = $row;
+		}
+		return $ret;
 	}
-
-	function getDidYouMean() {
-
-	}
-
-	function getList() {
-
-	}
-
 
 
 	public function afterAction($action) {
@@ -549,6 +283,13 @@ class SearchController extends MyController {
 		$e = (int) Yii::app()->getRequest()->getParam('e');
 		SearchHelper::LogSearch(Yii::app()->user->id, $q, array('e' => $e, 'page' => $this->_getNumPage()), (int)$this->_counts);
 	}
+
+	function beforeAction($action) {
+		$result = parent::beforeAction($action);
+		if ($result) $this->_search = SearchHelper::Create();
+		return $result;
+	}
+
 
 
 	private function _getNumPage() {
@@ -566,6 +307,30 @@ class SearchController extends MyController {
 				'paginatorInfo' => new CPagination(0),
 			)
 		);
+	}
+
+	private function _filterManyInShop($arr) {
+		$isShop = (int)$arr['in_shop'];
+		$avail = (int)$arr['avail_for_order'];
+		return ($isShop > 5) && ($avail > 0);
+	}
+
+	private function _filterFewInShop($arr) {
+		$isShop = (int)$arr['in_shop'];
+		$avail = (int)$arr['avail_for_order'];
+		return ($isShop <= 5) && ($avail > 0);
+	}
+
+	private function _filterUnderOrder($arr) {
+		$isShop = (int)$arr['in_shop'];
+		$avail = (int)$arr['avail_for_order'];
+		return ($isShop === 0) && ($avail > 0);
+	}
+
+	private function _filterNotAvailable($arr) {
+		$isShop = (int)$arr['in_shop'];
+		$avail = (int)$arr['avail_for_order'];
+		return ($isShop === 0) && ($avail === 0);
 	}
 
 }

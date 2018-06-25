@@ -46,11 +46,11 @@ class ProductHelper
 			
 			$tmp = $ret;
 			if ($cnt > 0) {
-			$len = mb_strlen(trim($item[$key]));
+			$len = mb_strlen(trim($item[$key]), 'utf-8');
 			$pos = false;
             
             if($len > $cnt) {
-				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt);
+				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
 				if($len > 0) $tmp .= '...';
 			}	
 				
@@ -73,13 +73,13 @@ class ProductHelper
         if(Yii::app()->language == 'ru' && isset($item[$sKey.'_ru']) && !empty($item[$sKey.'_ru']))
         {
 			
-			$ret = mb_strlen(trim($item[$sKey.'_ru']));
+			$ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
 			$tmp = $ret;
 			if ($cnt > 0) {
-			$len = mb_strlen(trim($item[$sKey.'_ru']));
+			$len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
 			$pos = false;
             if($len > $cnt) {
-				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt);
+				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
 				if($len > 0) $tmp .= '...';
 			}	
 			}
@@ -93,13 +93,13 @@ class ProductHelper
             {
                 if(array_key_exists($key, $item) && !empty($item[$key])) {
 					
-					$ret = mb_strlen(trim($item[$sKey.'_ru']));
+					$ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
 					$tmp = $ret;
 					if ($cnt > 0) {
-						$len = mb_strlen(trim($item[$sKey.'_ru']));
+						$len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
 						$pos = false;
 						
-						if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt);
+						if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
 						if($len > 0) $tmp .= '...';
 						
 					}
@@ -107,6 +107,7 @@ class ProductHelper
 				}				
             }
         }
+        return '';
     }
 
     public static function FormatCurrency()
@@ -329,15 +330,18 @@ class ProductHelper
     public static function IsShelfId($q)
     {
         if (!is_numeric($q)) return false;
-        $len = strlen($q);
+        $len = mb_strlen($q, 'utf-8');
         if ($len < 6 || $len > 8) return false;
         $q .= '';
-        $firstSigns = $q[0] . $q[1];
+        $firstSigns = mb_substr($q, 0, 2, 'utf-8');
 
-        $shelfs = array('15', '20', '24', '22', '40', '50', '60', '30');
+        $shelfs = array();
+        foreach (Entity::GetEntitiesList() as $entity=>$set) {
+            if ($entity != 10) $shelfs[] = $entity;
+        }
 
-        if (strlen($q) == 6 && in_array($firstSigns, $shelfs)) return true;
-        if (strlen($q) == 8 && $firstSigns == '10') return true;
+        if ($len == 6 && in_array($firstSigns, $shelfs)) return true;
+        if ($len == 8 && $firstSigns == '10') return true;
         return false;
     }
 
