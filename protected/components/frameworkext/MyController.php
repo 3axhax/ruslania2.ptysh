@@ -61,25 +61,7 @@ class MyController extends CController
     {
         parent::__construct($id, $module);
 
-        $lang = Yii::app()->params['DefaultLanguage'];
-
-        if (isset($_GET['language']))
-        {
-            $lang = $_GET['language'];
-        }
-        else if (Yii::app()->user->hasState('language'))
-        {
-            $lang = Yii::app()->user->getState('language');
-        }
-        else if (isset(Yii::app()->request->cookies['v2language']))
-        {
-            $lang = Yii::app()->request->cookies['v2language']->value;
-        }
-
-        $validLangs = Yii::app()->params['ValidLanguages'];
-        if(!in_array($lang, $validLangs)) $lang = Yii::app()->params['DefaultLanguage'];
-
-        $this->SetNewLanguage($lang);
+//        $this->_langSet();
 
         $currency = Currency::EUR;
         if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
@@ -92,6 +74,35 @@ class MyController extends CController
         $cookie->expire = time() + (60*60*24*365); // (1 year)
         Yii::app()->request->cookies['currency'] = $cookie;
         Yii::app()->currency = $currency;
+//        $this->widget('Debug', array(
+//            $this->getActionParams(),
+//            Yii::app()->getUrlManager()->parseUrl(Yii::app()->getRequest())
+//        ));
+    }
+
+    private function _langSet() {
+        $lang = Yii::app()->params['DefaultLanguage'];
+        $params = $this->getActionParams();
+
+        if (!empty($params['language'])) {
+            $lang = $params['language'];
+        }
+        elseif (isset($_GET['language'])) {
+            $lang = $_GET['language'];
+        }
+        elseif (Yii::app()->user->hasState('language')) {
+            $lang = Yii::app()->user->getState('language');
+        }
+        elseif (isset(Yii::app()->request->cookies['v2language'])) {
+            $lang = Yii::app()->request->cookies['v2language']->value;
+        }
+
+        $validLangs = Yii::app()->params['ValidLanguages'];
+        if(!in_array($lang, $validLangs)) $lang = Yii::app()->params['DefaultLanguage'];
+
+        $this->SetNewLanguage($lang);
+
+//        $this->widget('Debug', array($params, MyUrlManager::rules));
     }
 
     public function filters()

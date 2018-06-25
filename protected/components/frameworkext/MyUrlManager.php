@@ -52,4 +52,8 @@ class MyUrlManager extends CUrlManager
 //        return $ret;
 //    }
 
+    function parseUrl($request) {
+        return parent::parseUrl($request);
+    }
+
 }

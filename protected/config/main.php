@@ -1,6 +1,9 @@
 <?php
 
 $entities = 'books|audio|periodics|printed|video|maps|soft|music|sheetmusic';
+$ValidLanguages = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+$languages = implode('|', $ValidLanguages);
+$ValidLanguages[] = 'rut';
 
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
@@ -98,6 +101,7 @@ return array(
 //            'suffix' => '/',
             'urlSuffix'=>'/',
             'rules' => array(
+                '<language:(' . $languages . ')>'=> 'site/index',
                 '/' => 'site/index',
 //                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
@@ -242,7 +246,7 @@ return array(
 
     'params' => array(
         'DefaultLanguage' => 'ru',
-        'ValidLanguages' => array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'se', 'es'),
+        'ValidLanguages' => $ValidLanguages,
         'ItemsPerPage' => 40,
         'LoginDuration' => 2592000, // 30 days
         'MerchantAuthHash' => '6pKF4jkv97zmqBJ3ZL8gUw5DfT2NMQ',

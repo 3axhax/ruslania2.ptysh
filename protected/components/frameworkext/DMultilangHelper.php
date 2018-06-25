@@ -6,18 +6,27 @@ class DMultilangHelper
     {
         $domains = explode('/', ltrim($url, '/'));
 		
-		
-		
-        $isLangExists = in_array($domains[0], Yii::app()->params['ValidLanguages']);
+/*        $isLangExists = in_array($domains[0], Yii::app()->params['ValidLanguages']);
         $isDefaultLang = $domains[0] == Yii::app()->params['DefaultLanguage'];
 
-        if ($isLangExists && !$isDefaultLang)
-        {
+        if ($isLangExists && !$isDefaultLang) {
 			
             $lang = array_shift($domains);
             Yii::app()->language = $lang;
         
-		}
+		}*/
+
+        $validLanguages = Yii::app()->params['ValidLanguages'];
+
+        $langs = array(
+            $domains[0],
+            Yii::app()->getRequest()->getParam('language'),
+            Yii::app()->params['DefaultLanguage'],
+        );
+
+        foreach ($langs as $lang) {
+            if (!empty($lang)&&in_array($lang, $validLanguages)) Yii::app()->language = $lang;
+        }
 
         return '/' . implode('/', $domains);
     }
