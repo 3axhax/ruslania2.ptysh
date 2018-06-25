@@ -1,5 +1,15 @@
 <h1 class="titlename"><?=((!$cid) ? $ui->item('A_NEW_GOODS_RAZD_TITLE') . ': ' . Entity::GetTitle($entity) : $ui->item('A_NEW_GOODS_CAT_TITLE') . ': ' . $title_cat); ?></h1>
 
+<?php
+$lang = Yii::app()->language;
+?>
+
+<div class="top-filters">
+    <?php $this->widget('TopFilters', array(
+        'lang' => $lang,
+        'entity' => $entity,
+        'cid' => $cid)); ?>
+</div>
 <div class="sortbox" style="float: right;">
     <?=$ui->item('A_NEW_FILTER_SORT_FOR')?>
     <?php

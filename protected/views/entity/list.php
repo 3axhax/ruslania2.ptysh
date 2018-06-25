@@ -1,5 +1,6 @@
 <?php  /**@var $this MyController*/
 $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::app()->language : 'ru';
+$lang = Yii::app()->language;
 ?>
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
@@ -10,7 +11,14 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
 			<? if ($entity == 100) : ?>
 			Ведётся оптимизация раздела...
 			<? else : ?>
-			
+
+            <div class="top-filters">
+                <?php $this->widget('TopFilters', array(
+                        'lang' => $lang,
+                        'entity' => $entity,
+                        'cid' => $cid)); ?>
+            </div>
+
             <div class="sortbox" style="float: right;">
                 <?php //if (isset($_GET['ha'])): ?>
                     <?=$ui->item('A_NEW_FILTER_SORT_FOR')?>
@@ -137,11 +145,9 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                 <div style="height: 47px"></div>
             <?php endif; */?>
 
-            <?php $lang = Yii::app()->language;?>
-
             <h2 class="filter"><?=$ui->item('A_NEW_SETTINGS_FILTER'); ?>:</h2>
 
-            <form method="get" action="" class="filter">
+            <form method="get" action="" class="filter-old">
 
                 <input type="hidden" name="lang" class="lang" value="<?= Yii::app()->getRequest()->getParam('lang'); ?>"/>
                 <input type="hidden" name="entity_val" class="entity_val" value="<?= $entity ?>"/>
@@ -179,71 +185,6 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                                 </div>
                                 <ul class="search_result search_result_author"></ul>
                             </div>
-                        <script>
-                            var author_search = [];
-                            console.log('lang=<?=$lang?>');
-                            $.ajax({
-                                url: '/entity/getauthordata',
-                                data: {entity: '<?=$entity?>', lang: '<?=$lang?>', cid: '<?=$cid?>'},
-                                type: 'GET',
-                                beforeSend: function () {
-                                    $(".find_author").attr('disabled', true);
-                                    $(".find_author").val('Загрузка...');
-                                },
-                                success: function (data) {
-                                    author_search = JSON.parse(data);
-                                    var search_auth = [];
-                                    $.each(author_search, function(index, value) {
-                                        if ((value != '') && (value != null) ) search_auth[index] = value;
-                                    });
-                                    interactiveSearch('.find_author', search_auth, 'author', '.search_result_author');
-                                    $(".find_author").attr('disabled', false);
-                                    $(".find_author").val('');
-                                },
-                                error: function (data) {
-                                    console.log("Error response");
-                                },
-                            });
-                        </script>
-
-                        <!--Старый селект-->
-                        <!--<div class="dd_box_select" style="z-index: 20">
-
-                            <div class="arrow_d" onclick="$('.list_dd', $(this).parent()).toggle()"></div>
-                            <input type="hidden" name="author" value="0">
-
-                            <div class="text" onclick="$('.list_dd', $(this).parent()).toggle()">
-                                <span><?/*if ($filter_data['author'] == '' OR $filter_data['author'] == '0') { echo $ui->item('A_NEW_FILTER_ALL'); } else { $row = CommonAuthor::GetById($filter_data['author']); echo $row['title_' . Yii::app()->language]; }*/?></span>
-                            </div>
-                            <div class="list_dd authors_dd">
-                                <div class="items">
-                                    <div class="rows">
-                                        <div class="item" rel="0" onclick="select_item($(this), 'author')"><?/*=$ui->item('A_NEW_FILTER_ALL'); */?></div>
-                                        <?php
-/*                                        foreach ($authors as $author => $binfo) {
-                                            $row = CommonAuthor::GetById($binfo['author_id']);
-                                            if (!$row['id'] OR $row['id'] == '0')
-                                                continue;
-                                            $name_publ = $row['title_' . Yii::app()->language];
-                                            if (!trim($name_publ))
-                                                continue;
-
-											$selact = ' selact';
-
-											if ($row['id'] != $filter_data['author']) {
-												$selact = '';
-											}
-
-                                            echo '<div class="item'.$selact.'" rel="' . $row['id'] . '" onclick="select_item($(this), \'author\')">' . $name_publ . '</div>';
-                                        }
-                                        */?>
-
-                                    </div>
-                                    <div class="load_items"></div>
-                                </div>
-                            </div>
-                        </div>-->
-
                     </div> <?php } ?>
 
                 <div class="form-row">
@@ -432,31 +373,6 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
                             </div>
                             <ul class="search_result search_result_izda"></ul>
                         </div>
-                        <script>
-                            var izda_search = [];
-                            $.ajax({
-                                url: '/entity/getizdadata',
-                                data: 'entity=<?=$entity?>&lang=<?=$lang?>&cid=<?=$cid?>',
-                                type: 'GET',
-                                beforeSend: function () {
-                                    $(".find_izda").attr('disabled', true);
-                                    $(".find_izda").val('Загрузка...');
-                                },
-                                success: function (data) {
-                                    izda_search = JSON.parse(data);
-                                    var search_izd = [];
-                                    $.each(izda_search, function(index, value) {
-                                        if ((value != '') && (value != null) ) search_izd[index] = value;
-                                    });
-                                    interactiveSearch('.find_izda', search_izd, 'izda', '.search_result_izda');
-                                    $(".find_izda").attr('disabled', false);
-                                    $(".find_izda").val('');
-                                },
-                                error: function () {
-                                    console.log("Error response");
-                                },
-                            });
-                        </script>
                     </div> <?php }
 
                 if (!empty($series)) { ?>
@@ -576,33 +492,5 @@ $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::a
         //это для случая, когда нет js
         $('.js_without').toggle();
     });
-    function interactiveSearch(classInput, data, inp_name, result) {
-        $(classInput).bind("change keyup input click", function () {
-            if (this.value.length >= 2) {
-                $(result).html(findEqual(this.value, data)).fadeIn();
-            }
-            else {
-                $(classInput).prev().val(0);
-                select_item($(this), inp_name);
-                $(result).fadeOut();
-            }
-        });
 
-        $(result).hover(function () {
-            $(classInput).blur();
-        });
-
-        $(result).on("click", "li", function () {
-            $(classInput).val($(this).text());
-            $(result).fadeOut();
-        });
-
-        function findEqual(value, availableValue) {
-            result_value = '';
-            availableValue.forEach(function (item, index) {
-               if (item.toLowerCase().indexOf(value.toLowerCase()) != -1) result_value += '<li rel="' + index + '" onclick="select_item($(this), \''+inp_name+'\')">' + item + '</li>';
-            });
-            return result_value;
-        }
-    }
 </script>

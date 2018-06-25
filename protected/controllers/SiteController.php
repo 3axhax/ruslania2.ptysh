@@ -990,7 +990,6 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-
 			echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST);
         }
     }
