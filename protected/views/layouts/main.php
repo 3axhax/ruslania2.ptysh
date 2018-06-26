@@ -29,7 +29,11 @@ if (Yii::app()->getRequest()->cookies['showSelLang']->value != '1') {
 	Yii::app()->language = $this->getPreferLanguage();
 }
 
+$url = $_SERVER['REQUEST_URI'];
 
+$ex = explode('/', $url);
+
+$url = $ex[1];
 
 $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
     <head>
@@ -871,7 +875,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
         <div class="header_logo_search_cart">
         
 <?php $mess = Yii::app()->ui->item('MSG_MAIN_WELCOME_INTERNATIONAL_ORDERS');
-    if ($mess):
+    if ($mess AND $url != 'cart'):
 ?>
 		<div class="alert_bg" style="display: block">
             <div class="container">
@@ -880,7 +884,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             </div>
         </div>
 <?php endif; ?>
-
+        
+        <? if ($url != 'cart') : ?>    
+            
         <div class="light_gray_menu">
             <div class="container">
                 <ul>
@@ -903,12 +909,23 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                 </ul>
             </div>
         </div>
-
+        
+        <? endif; ?>
+        
 			<div class="container">
                 <div class="row">
                     <div class="span1 logo">
                         <a href="/"><img src="/new_img/logo.png" alt=""/></a>
                     </div>
+                    
+                     <? if ($ex[2] != '') : ?>
+                    
+                     <a href="/cart/" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+                     
+                     <? endif; ?>
+                     
+                     <? if ($url != 'cart') : ?>
+                    
                     <div class="span10">
                         <form method="get" action="<?= !isset($_GET['old'])?'/search/general':'/site/search' ?>" id="srch">
                             <div class="search_box">
@@ -1033,6 +1050,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
                        
 
                     </div>
+                     
+                     <? endif; ?>
+                     
                 </div>
 
 
@@ -1046,6 +1066,9 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
 				$('.dd_box').removeClass('show_dd');
             })
         </script>
+        
+        <? if ($url != 'cart') : ?> 
+        
         <div class="index_menu">
 
             <div class="container">
@@ -1431,12 +1454,16 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             </div>
 
         </div>
-
+        
+        <? endif; ?>
+        
         </div>
 		
 
         <?= $content; ?>
 
+        
+         <? if ($url != 'cart') : ?> 
 
         <div class="footer">
 
@@ -1538,7 +1565,7 @@ $ui = Yii::app()->ui; ?><!DOCTYPE html><html>
             </div>
 
         </div>
-
+<? endif; ?>
 		
 		<link rel="stylesheet" href="/css/magnific-popup.css" >
 		<div id="periodic-price-form" class="white-popup-block mfp-hide white-popup">

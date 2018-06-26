@@ -101,7 +101,6 @@ return array(
 //            'suffix' => '/',
             'urlSuffix'=>'/',
             'rules' => array(
-                '<language:(' . $languages . ')>'=> 'site/index',
                 '/' => 'site/index',
 //                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),

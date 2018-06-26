@@ -2,24 +2,21 @@
 
 class MyUrlManager extends CUrlManager
 {
-    public static function RewriteCurrent($controller, $lang)
-    {
-        $params = $_GET;
-        unset($params['language']);
-        $ctrl = $controller->id;
-        $action = $controller->action->id;
-        $param = 'language='.$lang;
+    public $urlRuleClass = 'MyUrlRule';
 
-        if ($action == 'error') {
-            $url = '/' . Yii::app()->getRequest()->pathInfo;
+    public static function RewriteCurrent($controller, $lang) {
+        if ($lang === 'rut') {
+            $params = $_GET;
+            unset($params['language']);
+            $ctrl = $controller->id;
+            $action = $controller->action->id;
+            $param = 'language='.$lang;
+            if ($action == 'error') $url = '/' . Yii::app()->getRequest()->pathInfo;
+            else $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
+            if(strpos($url, '?') === false) $url .= '?'.$param;
+            else $url .= '&'.$param;
         }
-        else {
-            $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
-        }
-
-        if(strpos($url, '?') === false) $url .= '?'.$param;
-        else $url .= '&'.$param;
-
+        else $url = '/' . $lang . '/' . Yii::app()->getRequest()->pathInfo;
         return $url;
     }
 
@@ -52,8 +49,40 @@ class MyUrlManager extends CUrlManager
 //        return $ret;
 //    }
 
+    function init() {
+        $this->cacheID .= '_' . Yii::app()->language;
+        parent::init();
+    }
     function parseUrl($request) {
-        return parent::parseUrl($request);
+        $result = parent::parseUrl($request);
+        return $result;
     }
 
+    function createUrl($route,$params=array(),$ampersand='&') {
+        $result = parent::createUrl($route,$params,$ampersand);
+        return $result;
+    }
+
+    protected function createUrlDefault($route,$params,$ampersand) {
+        $language = Yii::app()->language;
+        if (!empty($language)) $route = $language . '/' . $route;
+        return parent::createUrlDefault($route,$params,$ampersand);
+    }
+
+
+}
+
+class MyUrlRule extends CUrlRule {
+    function createUrl($manager,$route,$params,$ampersand) {
+        $url = parent::createUrl($manager,$route,$params,$ampersand);
+        if ($url !== false) {
+            $language = Yii::app()->language;
+            if (!empty($language)) $url = $language . '/' . $url;
+        }
+        return $url;
+    }
+
+    function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
+         return parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
+    }
 }
