@@ -565,7 +565,7 @@ class SiteController extends MyController {
 			$arr_order = array_filter($products, function ($arr) {
 			
 			if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-				
+           
 				return true;
 				
 			}
@@ -1165,7 +1165,12 @@ class SiteController extends MyController {
             default: $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage); break;
         }
 
-   		if ($this->_canonicalPath === $path) return;
+        $canonicalPath = $this->_canonicalPath;
+        $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+        }
+   		if ($canonicalPath === $path) return;
 
         $this->_redirectOldPages($path, $this->_canonicalPath, $query);
         throw new CHttpException(404);

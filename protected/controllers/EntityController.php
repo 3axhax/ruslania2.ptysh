@@ -1160,12 +1160,18 @@ class EntityController extends MyController {
    		$query = '';
    		if ($ind !== false) {
    			$query = mb_substr($path, $ind, null, 'utf-8');
-   			$path = substr($path, 0, $ind);
+   			$path = mb_substr($path, 0, $ind, 'utf-8');
    		}
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
 
-        if ($this->_canonicalPath === $path) {
+        $canonicalPath = $this->_canonicalPath;
+        $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+        }
+
+        if ($canonicalPath === $path) {
             //редирект с page=1
             $countPage1 = 0;
             $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);

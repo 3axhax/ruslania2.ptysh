@@ -2,9 +2,13 @@
 
 class DMultilangHelper
 {
-    public static function processLangInUrl($url)
-    {
-        $domains = explode('/', ltrim($url, '/'));
+
+    public static function processLangInUrl($url) {
+        $ind = mb_strpos($url, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $domains = explode('/', ltrim(mb_substr($url, 0, $ind, 'utf-8'), '/'));
+        }
+        else $domains = explode('/', ltrim($url, '/'));
 		
 /*        $isLangExists = in_array($domains[0], Yii::app()->params['ValidLanguages']);
         $isDefaultLang = $domains[0] == Yii::app()->params['DefaultLanguage'];
@@ -17,18 +21,50 @@ class DMultilangHelper
 		}*/
 
         $validLanguages = Yii::app()->params['ValidLanguages'];
+        $paramLang = (string)Yii::app()->getRequest()->getParam('language');
 
         $langs = array(
-            $domains[0],
-            Yii::app()->getRequest()->getParam('language'),
-            Yii::app()->params['DefaultLanguage'],
+            'byPath'=>$domains[0],
+            'byParam'=>$paramLang,
+            'default'=>Yii::app()->params['DefaultLanguage'],
         );
 
-        foreach ($langs as $lang) {
-            if (!empty($lang)&&in_array($lang, $validLanguages)) Yii::app()->language = $lang;
-        }
+        foreach ($langs as $by=>$lang) {
+            if (!empty($lang)&&in_array($lang, $validLanguages)) {
+                Yii::app()->language = $lang;
+                switch ($by) {
+                    case 'byPath':
+                        if ($paramLang !== '') {
+                            //если адрес начинается с языка, то из параметров убираю language
+                            $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url);
+                            $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
+                            $url = preg_replace("/\?+$/ui", '', $url);
+                            Yii::app()->getRequest()->redirect($url,true,301);
+                        }
+                        break;
+                    case 'byParam':
+                        if (Yii::app()->language !== 'rut') {
+                            //если язык в паметрах и не rut
+                            $url = preg_replace("/\blanguage=" . Yii::app()->language . "\b/ui", '', $url, -1);
+                            $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
+                            $url = preg_replace("/\?+$/ui", '', $url);
+                            Yii::app()->getRequest()->redirect(implode('/', array(Yii::app()->language, ltrim($url, '/'))),true,301);
+                        }
+                        break;
+                    default:
+                        if (($paramLang !== '')&&(Yii::app()->language !== $paramLang)) throw new CHttpException(404);
 
-        return '/' . implode('/', $domains);
+                        if ($paramLang !== '') {
+                            $url = preg_replace("/\blanguage=" . Yii::app()->language . "\b/ui", '', $url, -1);
+                            $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
+                            $url = preg_replace("/\?+$/ui", '', $url);
+                        }
+                        Yii::app()->getRequest()->redirect(implode('/', array(Yii::app()->language, ltrim($url, '/'))),true,301);
+                        break;
+                }
+                return;
+            }
+        }
     }
 
     public static function addLangToUrl($url)

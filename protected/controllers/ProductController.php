@@ -291,7 +291,12 @@ class ProductController extends MyController
 		}
 
 		$this->_canonicalPath = ProductHelper::CreateUrl($item);
-		if ($this->_canonicalPath === $path) return;
+		$canonicalPath = $this->_canonicalPath;
+		$ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+		if ($ind !== false) {
+			$canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+		}
+		if ($canonicalPath === $path) return;
 
 		$this->_redirectOldPages($path, $this->_canonicalPath, $query);
 		throw new CHttpException(404);

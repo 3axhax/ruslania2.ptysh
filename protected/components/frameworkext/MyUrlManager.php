@@ -7,16 +7,13 @@ class MyUrlManager extends CUrlManager
     public static function RewriteCurrent($controller, $lang) {
         if ($lang === 'rut') {
             $params = $_GET;
-            unset($params['language']);
+            $params['language'] = $lang;
             $ctrl = $controller->id;
             $action = $controller->action->id;
-            $param = 'language='.$lang;
-            if ($action == 'error') $url = '/' . Yii::app()->getRequest()->pathInfo;
+            if ($action == 'error') $url = '/' . Yii::app()->getRequest()->getPathInfo();
             else $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
-            if(strpos($url, '?') === false) $url .= '?'.$param;
-            else $url .= '&'.$param;
         }
-        else $url = '/' . $lang . '/' . Yii::app()->getRequest()->pathInfo;
+        else $url = '/' . $lang . '/' . Yii::app()->getRequest()->getPathInfo();
         return $url;
     }
 
@@ -74,10 +71,11 @@ class MyUrlManager extends CUrlManager
 
 class MyUrlRule extends CUrlRule {
     function createUrl($manager,$route,$params,$ampersand) {
+        $language = Yii::app()->language;
+        if ($language === 'rut') $params['language'] = $language;
         $url = parent::createUrl($manager,$route,$params,$ampersand);
         if ($url !== false) {
-            $language = Yii::app()->language;
-            if (!empty($language)) $url = $language . '/' . $url;
+            if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
         }
         return $url;
     }

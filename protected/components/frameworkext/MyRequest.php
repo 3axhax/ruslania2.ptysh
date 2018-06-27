@@ -6,10 +6,9 @@ class MyRequest extends CHttpRequest
 
     private $_requestUri = null;
 
-    public function getRequestUri()
-    {
-        if ($this->_requestUri === null)
-            $this->_requestUri = DMultilangHelper::processLangInUrl(parent::getRequestUri());
+    public function getRequestUri() {
+        parent::getRequestUri();
+        DMultilangHelper::processLangInUrl($this->_requestUri);
 
         return $this->_requestUri;
     }
