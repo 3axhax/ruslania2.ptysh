@@ -321,12 +321,29 @@ class MyController extends CController
      * - адреса заканчивающиеся не на "/"
      * - адреса без наименования
      * реальные адреса заканчиваются на "/"
+     *
+     * 27.06.18 какая-то неразбериха, решение Дениса:
+     *
+    https://ruslania.com/video/6279/gogol-nachalo
+    https://ruslania.com/video/6279/gogol-nachalo/qweqwewqe
+    https://ruslania.com/video/6279/gogol-nachalosdfsdfasdf
+    https://ruslania.com/video/6279
+    https://ruslania.com/video/6279/
+
+    должны редиректить 301 на https://ruslania.com/video/6279/gogol-nachalo/
+    а если учесть последнюю задачу по переделке структуры url на сайте, то должно редиректить уже на
+    https://ruslania.com/ru/video/6279-gogol-nachalo/
+     * делаю редирект на реальный адрес всегда
+     *
      * функция делает редирект на реальный адрес, если старый адрес похож на реальный
      * @param $oldPage
      * @param $realPage
      * @param $query
      */
     protected function _redirectOldPages($oldPage, $realPage, $query) {
+        $this->redirect($realPage . $query, true, 301);
+        return;
+
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
         elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, $oldPage, null, 'utf-8') !== false)) $oldPage = $realPage;
