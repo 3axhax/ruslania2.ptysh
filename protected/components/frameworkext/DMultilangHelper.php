@@ -48,18 +48,20 @@ class DMultilangHelper
                             $url = preg_replace("/\blanguage=" . Yii::app()->language . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
                             $url = preg_replace("/\?+$/ui", '', $url);
-                            Yii::app()->getRequest()->redirect(implode('/', array(Yii::app()->language, ltrim($url, '/'))),true,301);
+                            $url = '/' . implode('/', array(Yii::app()->language, ltrim($url, '/')));
+                            Yii::app()->getRequest()->redirect($url,true,301);
                         }
                         break;
                     default:
                         if (($paramLang !== '')&&(Yii::app()->language !== $paramLang)) throw new CHttpException(404);
 
                         if ($paramLang !== '') {
-                            $url = preg_replace("/\blanguage=" . Yii::app()->language . "\b/ui", '', $url, -1);
+                            $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
                             $url = preg_replace("/\?+$/ui", '', $url);
                         }
-                        Yii::app()->getRequest()->redirect(implode('/', array(Yii::app()->language, ltrim($url, '/'))),true,301);
+                        $url = '/' . implode('/', array(Yii::app()->language, ltrim($url, '/')));
+                        Yii::app()->getRequest()->redirect($url,true,301);
                         break;
                 }
                 return;
