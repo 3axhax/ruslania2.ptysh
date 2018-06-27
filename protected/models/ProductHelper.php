@@ -16,9 +16,10 @@ class ProductHelper
     }
     
     
-    public static function GetTitle($item, $sKey = 'title', $cnt = 0)
+    public static function GetTitle($item, $sKey = 'title', $cnt = 0, $lang = null)
     {
         if (empty($item)) return Yii::app()->ui->item('NO_DATA');
+        if (empty($lang)) $lang = Yii::app()->language;
         $langs = array($sKey . '_se' => $sKey . '_en',
                        $sKey . '_fr' => $sKey . '_en',
                        $sKey . '_de' => $sKey . '_en',
@@ -28,7 +29,7 @@ class ProductHelper
                        $sKey . '_es' => $sKey . '_en',
         );
 
-        $key = $sKey . '_' . Yii::app()->language;
+        $key = $sKey . '_' . $lang;
         $ret = '';
         while (true)
         {
@@ -70,7 +71,7 @@ class ProductHelper
             }
         }
 
-        if(Yii::app()->language == 'ru' && isset($item[$sKey.'_ru']) && !empty($item[$sKey.'_ru']))
+        if($lang == 'ru' && isset($item[$sKey.'_ru']) && !empty($item[$sKey.'_ru']))
         {
 			
 			$ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
@@ -199,7 +200,7 @@ class ProductHelper
         return $tmp;
     }
 
-    public static function CreateUrl($item)
+    public static function CreateUrl($item, $lang = null)
     {
         if ($item === false) return '';
         
@@ -209,9 +210,14 @@ class ProductHelper
 		
 		//var_dump($item);
 		
-        $title = self::ToAscii(self::GetTitle($item));
-        return Yii::app()->createUrl('product/view', array('entity' => $item['entity'], 'id' => $item['id'],
-                                                           'title' => $title));
+        $title = self::ToAscii(self::GetTitle($item, 'title', 0, $lang));
+        $params = array(
+            'entity' => $item['entity'],
+            'id' => $item['id'],
+            'title' => $title,
+        );
+        if (!empty($lang)&&($lang !== Yii::app()->language)) $params['__langForUrl'] = $lang;
+        return Yii::app()->createUrl('product/view', $params);
     }
 
     public static function ToAscii($str, $options = array())

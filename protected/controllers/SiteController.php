@@ -1161,8 +1161,32 @@ class SiteController extends MyController {
         $typePage = $this->action->id;
 
         switch ($typePage) {
-            case 'static': $this->_canonicalPath = Yii::app()->createUrl('site/static', $data); break;
-            default: $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage); break;
+            case 'static':
+                $this->_canonicalPath = Yii::app()->createUrl('site/static', $data);
+                foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+                    if ($lang !== 'rut') {
+                        if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                        else {
+                            $_data = $data;
+                            $_data['__langForUrl'] = $lang;
+                            $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/static', $_data);
+                        }
+                    }
+                }
+                break;
+            default:
+                $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage);
+                foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+                    if ($lang !== 'rut') {
+                        if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                        else {
+                            $_data = $data;
+                            $_data['__langForUrl'] = $lang;
+                            $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/' . $typePage, $_data);
+                        }
+                    }
+                }
+                break;
         }
 
         $canonicalPath = $this->_canonicalPath;

@@ -10,6 +10,7 @@ class MyController extends CController
     protected $sid = 0;
     protected $sessionID = 0;
     protected $_canonicalPath = null;//адрес страницы canonical
+    protected $_otherLangPaths = array();
     protected $_maxPages = false;// признак, что на странице есть пагинация (false - нету, число - количество страниц)
 
     public function GetAvail($avail)
@@ -264,6 +265,8 @@ class MyController extends CController
 
         return $this->_canonicalPath;
     }
+
+    function getOtherPangPaths() { return $this->_otherLangPaths; }
 
     /**
      * @return array ('next'=>адрес следующей страницы, 'prev'=>адрес предыдущей страницы) или пустой массив если не надо

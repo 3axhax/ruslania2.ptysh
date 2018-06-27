@@ -11,6 +11,8 @@ class ProductController extends MyController
         $product = new Product();
         $data = $product->GetProduct($entity, $id);
 
+	    if(empty($data)) throw new CHttpException(404);
+
 	    $this->_checkUrl($data);
 	    
         $c = new Cart;
@@ -269,8 +271,6 @@ class ProductController extends MyController
         
         //
 
-        if(empty($data)) throw new CHttpException(404);
-
 		if (($entity == Entity::PERIODIC) && (!empty($data['issues_year'])))
         {
             $data['issues_year'] = Periodic::getCountIssues($data['issues_year']);
@@ -290,7 +290,13 @@ class ProductController extends MyController
 			$path = substr($path, 0, $ind);
 		}
 
-		$this->_canonicalPath = ProductHelper::CreateUrl($item);
+		$this->_canonicalPath = ProductHelper::CreateUrl($item, Yii::app()->language);
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+				else $this->_otherLangPaths[$lang] = ProductHelper::CreateUrl($item, $lang);
+			}
+		}
 		$canonicalPath = $this->_canonicalPath;
 		$ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
 		if ($ind !== false) {
