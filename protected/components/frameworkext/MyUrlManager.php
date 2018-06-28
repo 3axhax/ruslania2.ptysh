@@ -5,34 +5,51 @@ class MyUrlManager extends CUrlManager
     public $urlRuleClass = 'MyUrlRule';
 
     public static function RewriteCurrent($controller, $lang) {
+        $query = (string)Yii::app()->getRequest()->getQueryString();
         if ($lang === 'rut') {
-            $params = $_GET;
-            $params['language'] = $lang;
-            $ctrl = $controller->id;
             $action = $controller->action->id;
-            if ($action == 'error') $url = '/' . Yii::app()->getRequest()->getPathInfo();
-            else $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
+            if ($action == 'error') {
+                $url = '/' . Yii::app()->getRequest()->getPathInfo() . '/';
+                if (!empty($query)) $url .= '?' . $query;
+            }
+            else {
+                $params = $_GET;
+                $params['language'] = $lang;
+                if (!empty($params['avail'])) unset($params['avail']);
+                $ctrl = $controller->id;
+                $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
+            }
         }
-        else $url = '/' . $lang . '/' . Yii::app()->getRequest()->getPathInfo();
+        else {
+            $langPages = $controller->getOtherPangPaths();
+            if (!empty($langPages[$lang])) $url = $langPages[$lang];
+            else $url = '/' . $lang . '/' . Yii::app()->getRequest()->getPathInfo() . '/';
+            if (!empty($query)) $url .= '?' . $query;
+       }
         return $url;
     }
 
-    public static function RewriteCurrency($controller, $currency)
-    {
-        $params = $_GET;
-        unset($params['currency']);
-        $ctrl = $controller->id;
-        $param = 'currency='.$currency;
-        $action = $controller->action->id;
-        if ($action == 'error') {
-            $url = '/' . Yii::app()->getRequest()->pathInfo;
-        }
-        else {
-            $url = Yii::app()->createUrl($ctrl . '/' . $action, $params);
-        }
+    public static function RewriteCurrency($controller, $currency) {
+/*        $query = (string)Yii::app()->getRequest()->getQueryString();
 
-        if(strpos($url, '?') === false) $url .= '?'.$param;
-        else $url .= '&'.$param;
+        $url = Yii::app()->getRequest()->getPathInfo() . '/';
+        if (Yii::app()->language !== 'rut') $url = '/' . Yii::app()->language . '/' . $url;
+
+        $query = preg_replace("/\bcurrency=\d?\b/ui", '', $query);
+        $query = preg_replace(array("/[&]{2,}/ui"), array('&'), $query);
+
+        if (!empty($query)) $query .= '&';
+        $query .= 'currency=' . $currency;
+        return $url . '?' . $query;*/
+
+
+        $params = $_GET;
+        $params['currency'] = $currency;
+        if (!empty($params['avail'])) unset($params['avail']);
+        $ctrl = $controller->id;
+        $action = $controller->action->id;
+        if ($action == 'error') $url = '/' . Yii::app()->getRequest()->pathInfo;
+        else $url = Yii::app()->createUrl($ctrl . '/' . $action, $params);
 
         return $url;
     }
