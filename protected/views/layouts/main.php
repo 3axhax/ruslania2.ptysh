@@ -201,7 +201,7 @@ else $act = array('', '');
 }
 ?>
                     $('#Search').marcoPolo({
-                        url: '<?= !isset($_GET['old'])?'/liveSearch/general':'/site/search' ?>',
+                        url: '<?= !isset($_GET['old'])?Yii::app()->createUrl('liveSearch/general'):'/site/search' ?>',
                         cache: false,
                         hideOnSelect: false,
                         dynamicData: {avail: function () {
