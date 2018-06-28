@@ -29,4 +29,15 @@ class ProductLang {
 		return array_filter($result);
 	}
 
+	static function getShortLang() {
+		$sql = ''.
+			'select tL.id, tL.title_en title '.
+			'from languages tL ' .
+		'';
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+		$result = array();
+		foreach ($rows as $row) $result[(int)$row['id']] = mb_strtolower($row['title'], 'utf-8');
+		return $result;
+	}
+
 }

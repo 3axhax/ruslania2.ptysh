@@ -95,15 +95,32 @@ class MyUrlRule extends CUrlRule {
         }
         unset($params['__langForUrl']);
 
-        if ($language === 'rut') $params['language'] = $language;
+        $langGood = '';
+        if (!empty($params['lang'])) {
+            $langGoods = ProductLang::getShortLang();
+            if (isset($langGoods[$params['lang']])) $langGood = $langGoods[$params['lang']];
+        }
+        if ($language === 'rut') {
+            $params['language'] = $language;
+            $langGood = '';
+        }
+        else unset($params['lang']);
         $url = parent::createUrl($manager,$route,$params,$ampersand);
         if ($url !== false) {
+            if (!empty($langGood)) $url = $langGood . '/' . $url;
             if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
         }
         return $url;
     }
 
     function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
-         return parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
+        $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
+        if (($result === 'entity/list')&&!empty($_GET['lang'])) {
+            $langGoods = ProductLang::getShortLang();
+            $langId = array_search($_GET['lang'], $langGoods);
+            if (empty($langId)) return false;
+            $_GET['lang'] = $langId;
+        }
+        return $result;
     }
 }
