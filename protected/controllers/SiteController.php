@@ -87,6 +87,18 @@ class SiteController extends MyController {
     }
 
     public function actionIndex() {
+        $this->_canonicalPath = Yii::app()->createUrl('site/index');
+        foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+            if ($lang !== 'rut') {
+                if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                else {
+                    $_data = array();
+                    $_data['__langForUrl'] = $lang;
+                    $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/index', $_data);
+                }
+            }
+        }
+
         $o = new Offer();
         $groups = $o->GetItems(Offer::INDEX_PAGE);
         $count = 1;

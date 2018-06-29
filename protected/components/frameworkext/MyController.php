@@ -65,22 +65,22 @@ class MyController extends CController
 //        $this->_langSet();
 
         $currency = Currency::EUR;
+
         if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
 
-        if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
-        else if(Yii::app()->user->hasState('currency')) $currency = Yii::app()->user->getState('currency');
-        else if(isset(Yii::app()->request->cookies['currency'])) $currency = Yii::app()->request->cookies['currency']->value;
-        if(!in_array($currency, Currency::GetList())) $currency = Currency::EUR;
+        if (Yii::app()->getRequest()->cookies['showSelLang']->value) {
+            if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
+            else if(Yii::app()->user->hasState('currency')) $currency = Yii::app()->user->getState('currency');
+            else if(isset(Yii::app()->request->cookies['currency'])) $currency = Yii::app()->request->cookies['currency']->value;
+            if(!in_array($currency, Currency::GetList())) $currency = Currency::EUR;
 
-        Yii::app()->user->setState('currency', $currency);
-        $cookie = new CHttpCookie('currency', $currency);
-        $cookie->expire = time() + (60*60*24*365); // (1 year)
-        Yii::app()->request->cookies['currency'] = $cookie;
+            Yii::app()->user->setState('currency', $currency);
+            $cookie = new CHttpCookie('currency', $currency);
+            $cookie->expire = time() + (60*60*24*365); // (1 year)
+            Yii::app()->request->cookies['currency'] = $cookie;
+        }
+
         Yii::app()->currency = $currency;
-//        $this->widget('Debug', array(
-//            $this->getActionParams(),
-//            Yii::app()->getUrlManager()->parseUrl(Yii::app()->getRequest())
-//        ));
     }
 
     private function _langSet() {

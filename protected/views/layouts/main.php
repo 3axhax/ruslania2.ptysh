@@ -505,7 +505,7 @@ else $act = array('', '');
 
                 opentip.deactivate();
 
-                $.post('/cart/' + action, post, function (json)
+                $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
                 {
 
                     var json = JSON.parse(json);
@@ -641,12 +641,9 @@ else $act = array('', '');
                     add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
                 });
 
-                elems.click(function ()
+                $(elems).click(function ()
                 {
                     //alert(1);
-
-
-
 
                     var $el = $(this);
                     var $parent = $el.closest('.to_cart');
@@ -699,7 +696,13 @@ else $act = array('', '');
                             null,
                             $el
                             );
-
+                    
+                    <?php if (in_array('cart', $url)) : ?>
+                        
+                       location.href=location.href;
+                        
+                    <?php endif; ?>
+                    
                     return false;
                 });
 
@@ -827,18 +830,6 @@ else $act = array('', '');
     <body>
         <?
 
-        if ($_GET['sel'] == '1') { 
-
-        $cookie = new CHttpCookie('showSelLang', '1');
-
-        $cookie->expire = time() + (60*60*24*20000); // 20000 days
-
-        Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
-
-        if (isset($_GET['language'])) Yii::app()->language = $_GET['language'];
-
-        }
-
         if (Yii::app()->getRequest()->cookies['showSelLang']->value == '' OR Yii::app()->getRequest()->cookies['showSelLang']->value == '0') {
 
         ?>
@@ -856,7 +847,7 @@ else $act = array('', '');
             <? endif; ?>
 
             <div class="box_btns">
-                <a href="?language=<?= Yii::app()->language ?>&sel=1" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
+                <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language); ?>?sel=1" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
                 <a href="javascript:;" onclick="$('.lang_yesno_box').hide();
                                         $('.lang_yesno_box.select_lang').show();" class="btn_no"><?= $ui->item('A_NEW_BTN_NO'); ?> <? if (Yii::app()->language != 'en') : ?>(No)<? endif; ?></a>
             </div>
@@ -873,13 +864,13 @@ else $act = array('', '');
             <? endif; ?>
             <div class="row">
                 <ul class="list_languages">
-                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru'); ?>&sel=1"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
-                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi'); ?>&sel=1"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
-                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en'); ?>&sel=1"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
-                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de'); ?>&sel=1"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
-                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr'); ?>&sel=1"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
-                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es'); ?>&sel=1"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
-                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se'); ?>&sel=1"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
+                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru'); ?>?sel=1"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
+                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi'); ?>?sel=1"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
+                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en'); ?>?sel=1"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
+                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de'); ?>?sel=1"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
+                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr'); ?>?sel=1"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
+                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es'); ?>?sel=1"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
+                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se'); ?>?sel=1"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
 
                 </ul>
             </div>
@@ -1089,7 +1080,7 @@ else $act = array('', '');
             <div style="height: 10px;"></div>
             <script>
                 $(document).ready(function () {
-                    $('a', $('.dd_box .tabs li')[0]).click();
+                    //$('a', $('.dd_box .tabs li')[0]).click();
                     // $('li.dd_box .content').jScrollPane({scrollbarWidth:18, showArrows:true});
                     $('.dd_box').removeClass('show_dd');
                 })
