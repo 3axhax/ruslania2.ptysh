@@ -429,10 +429,10 @@ class Product
 
         $cat_id = (int) $cat_id;
         if ($cat_id > 0) {
-            $join['t'] = 'join `' . $tbl . '` t as (t.id = tL.item_id) and ((t.code = ' . $cat_id . ') OR (t.subcode = ' . $cat_id . ')) and (avail_for_order > 0)';
+            $join['t'] = 'join `' . $tbl . '` t on (t.id = tL.item_id) and ((t.code = ' . $cat_id . ') OR (t.subcode = ' . $cat_id . ')) and (t.avail_for_order > 0)';
         }
         $sql = ''.
-            'select count(distinct tL.language_id) '.
+            'select count(*) '.
             'from all_items_languages tL '.
             implode(' ', $join) . ' '.
             'where ' . implode(' and ', $condition) . ' '.

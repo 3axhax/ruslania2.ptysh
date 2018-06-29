@@ -1261,11 +1261,16 @@ class EntityController extends MyController {
    		$query = '';
    		if ($ind !== false) {
    			$query = mb_substr($path, $ind, null, 'utf-8');
-   			$path = mb_substr($path, 0, $ind, 'utf-8');
+            $query = preg_replace("/\blang=\d+\b/ui", '', $query);
+            $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+            if ($query === '?') $query = '';
+
+            $path = mb_substr($path, 0, $ind, 'utf-8');
    		}
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
         if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
+
         foreach (Yii::app()->params['ValidLanguages'] as $lang) {
             if ($lang !== 'rut') {
                 if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
