@@ -1189,6 +1189,7 @@ class SiteController extends MyController {
                 break;
         }
 
+        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
         $canonicalPath = $this->_canonicalPath;
         $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
         if ($ind !== false) {

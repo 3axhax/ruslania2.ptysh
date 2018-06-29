@@ -31,7 +31,7 @@ class ProductLang {
 
 	static function getShortLang() {
 		$sql = ''.
-			'select tL.id, tL.title_en title '.
+			'select tL.id, tL.in_path title '.
 			'from languages tL ' .
 		'';
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();

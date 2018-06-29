@@ -71,6 +71,9 @@ class EntityController extends MyController {
         $category = new Category();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $langTitles = array();
         if (!empty($cid)) {
             $dataForPath['cid'] = $cid;
@@ -1262,6 +1265,7 @@ class EntityController extends MyController {
    		}
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
+        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
         foreach (Yii::app()->params['ValidLanguages'] as $lang) {
             if ($lang !== 'rut') {
                 if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;

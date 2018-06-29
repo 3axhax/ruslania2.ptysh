@@ -291,6 +291,7 @@ class ProductController extends MyController
 		}
 
 		$this->_canonicalPath = ProductHelper::CreateUrl($item, Yii::app()->language);
+		if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
 		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
 			if ($lang !== 'rut') {
 				if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;

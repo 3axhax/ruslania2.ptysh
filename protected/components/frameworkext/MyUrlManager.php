@@ -117,7 +117,8 @@ class MyUrlRule extends CUrlRule {
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
         if (($result === 'entity/list')&&!empty($_GET['lang'])) {
             $langGoods = ProductLang::getShortLang();
-            $langId = array_search($_GET['lang'], $langGoods);
+            if (is_numeric($_GET['lang'])&&!empty($langGoods[$_GET['lang']])) $langId = $_GET['lang'];
+            else $langId = array_search($_GET['lang'], $langGoods);
             if (empty($langId)) return false;
             $_GET['lang'] = $langId;
         }
