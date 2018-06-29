@@ -103,6 +103,7 @@ return array(
             'rules' => array(
                 '/' => 'site/index',
 //                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
+                '<entity:(' . $entities . ')>/<id:(\d+)>-<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>' => 'product/view',
 
@@ -114,12 +115,30 @@ return array(
                 'me' => 'client/me',
 
                 '<entity:(' . $entities . ')>/filter' => 'entity/filter',
+                '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
                 '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>/<title:(.+)>' => 'entity/list',
                 '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>' => 'entity/list',
                 '<entity:(' . $entities . ')>' => 'entity/list',
+                '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
                 '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>/<title:(.+)>' => 'entity/list',
                 '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>' => 'entity/list',
                 '<lang:(\w+)>/<entity:(' . $entities . ')>' => 'entity/list',
+
+                '<entity:(' . $entities . ')>/series/<sid:(\d+)>-<title:(.+)>' => 'entity/byseries',
+                '<entity:(' . $entities . ')>/publishers/<pid:(\d+)>-<title:(.+)>' => 'entity/bypublisher',
+                '<entity:(' . $entities . ')>/authors/<aid:(\d+)>-<title:(.+)>' => 'entity/byauthor',
+                '<entity:(' . $entities . ')>/performers/<pid:(\d+)>-<title:(.+)>' => 'entity/byperformer',
+                '<entity:(' . $entities . ')>/actors/<aid:(\d+)>-<title:(.+)>' => 'entity/byactor',
+                '<entity:(' . $entities . ')>/directors/<did:(\d+)>-<title:(.+)>' => 'entity/bydirector',
+                '<entity:(' . $entities . ')>/bindings/<bid:(\d+)>-<title:(.+)>' => 'entity/bybinding',
+                '<entity:(' . $entities . ')>/audiostreams/<sid:(\d+)>-<title:(.+)>' => 'entity/byaudiostream',
+                '<entity:(' . $entities . ')>/subtitles/<sid:(\d+)>-<title:(.+)>' => 'entity/bysubtitle',
+                '<entity:(' . $entities . ')>/media/<mid:(\d+)>-<title:(.+)>' => 'entity/bymedia',
+                '<entity:(' . $entities . ')>/types/<type:(\d+)>' => 'entity/bytype',
+                '<entity:(' . $entities . ')>/bymagazinetype/<tid:(\d+)>-<title:(.+)>' => 'entity/bymagazinetype',
+                '<entity:(' . $entities . ')>/years/<year:(\d{4})>' => 'entity/byyear',
+                '<entity:(' . $entities . ')>/yearreleases/<year:(\d{4})>' => 'entity/byyearrelease',
+
                 '<entity:(' . $entities . ')>/byseries/<sid:(\d+)>/<title:(.+)>' => 'entity/byseries',
                 '<entity:(' . $entities . ')>/bypublisher/<pid:(\d+)>/<title:(.+)>' => 'entity/bypublisher',
                 '<entity:(' . $entities . ')>/byauthor/<aid:(\d+)>/<title:(.+)>' => 'entity/byauthor',

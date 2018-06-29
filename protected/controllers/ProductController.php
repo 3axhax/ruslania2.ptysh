@@ -258,7 +258,7 @@ class ProductController extends MyController
 				
 				$title2 = ProductHelper::GetTitle($a);
 				
-				$this->breadcrumbs[$title2] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $a['id']));
+				$this->breadcrumbs[$title2] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $a['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($a))));
 				
 			}
 			
