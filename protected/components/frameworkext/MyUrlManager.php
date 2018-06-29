@@ -14,7 +14,7 @@ class MyUrlManager extends CUrlManager
             }
             else {
                 $params = $_GET;
-                $params['language'] = $lang;
+                $params['__langForUrl'] = $lang;
                 if (!empty($params['avail'])) unset($params['avail']);
                 $ctrl = $controller->id;
                 $url = Yii::app()->createUrl($ctrl.'/'.$action, $params);
@@ -24,7 +24,10 @@ class MyUrlManager extends CUrlManager
             $langPages = $controller->getOtherPangPaths();
             if (!empty($langPages[$lang])) $url = $langPages[$lang];
             else $url = '/' . $lang . '/' . Yii::app()->getRequest()->getPathInfo() . '/';
-            if (!empty($query)) $url .= '?' . $query;
+
+            if (!empty($query)
+                &&(Yii::app()->language !== 'rut')//это чтоб убрать lang и language из адреса
+            ) $url .= '?' . $query;
        }
         return $url;
     }
@@ -96,18 +99,29 @@ class MyUrlRule extends CUrlRule {
         unset($params['__langForUrl']);
 
         $langGood = '';
+        $langGoodId = 0;
         if (!empty($params['lang'])) {
             $langGoods = ProductLang::getShortLang();
-            if (isset($langGoods[$params['lang']])) $langGood = $langGoods[$params['lang']];
+            if (isset($langGoods[$params['lang']])) {
+                $langGood = $langGoods[$params['lang']];
+                $langGoodId = $params['lang'];
+            }
         }
-        if ($language === 'rut') {
-            $params['language'] = $language;
-            $langGood = '';
-        }
-        else unset($params['lang']);
+        unset($params['lang']);
+
+        if ($language === 'rut') $params['language'] = $language;
         $url = parent::createUrl($manager,$route,$params,$ampersand);
+
         if ($url !== false) {
-            if (!empty($langGood)) $url = $langGood . '/' . $url;
+            if (!empty($langGood)) {
+                if ($language === 'rut') {
+                    if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?';
+                    else $url .= '&';
+                    $url .= 'lang=' . $langGoodId;
+                }
+                else $url = $langGood . '/' . $url;
+            }
+
             if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
         }
         return $url;
