@@ -65,6 +65,8 @@ class MyController extends CController
 //        $this->_langSet();
 
         $currency = Currency::EUR;
+        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
+
         if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
         else if(Yii::app()->user->hasState('currency')) $currency = Yii::app()->user->getState('currency');
         else if(isset(Yii::app()->request->cookies['currency'])) $currency = Yii::app()->request->cookies['currency']->value;
