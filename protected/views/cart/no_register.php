@@ -1,4 +1,4 @@
-<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<hr />
 
 <style>
     label.seld {
@@ -38,11 +38,65 @@
     .cartorder .p2 { margin: 15px 0;}
     .cartorder .p3 { margin: 15px 0;}
     
+    
+    .select_dd { position: relative; }
+    .select_dd_popup { position: absolute; top: 29px; background: #fff; max-height: 400px; width: 340px; border: 1px solid #ccc; z-index: 9999; display: none; overflow-y: auto; }
+        
+    .select_dd_popup .item {
+        padding: 5px 10px;
+    }
+    
+    .select_dd_popup .item:hover {
+        background-color: #ccc;
+        cursor: pointer;
+    }
+    
 </style>
 
 <script>
     
+    function select_row(cont) {
+        
+        $('.select_dd_box input').val(cont.html());
+        $('.select_dd_popup').html('');
+        $('.select_dd_popup').hide();
+    }
+    
+    function postindex_input(cont) {
+        
+        if (cont.val().length >= 3) {
+            
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            
+            $.post('/cart/loadsp/', { s : cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+                
+                if (data == '') {
+                    $('.select_dd_popup', cont.parent().parent()).html('');
+        $('.select_dd_popup', cont.parent().parent()).hide();
+        
+                } else {
+                
+                $('.select_dd_popup', cont.parent().parent()).html(data);
+                $('.select_dd_popup', cont.parent().parent()).show();
+                
+        }
+                
+             });
+
+        } else {
+            $('.select_dd_popup', cont.parent().parent()).hide();
+        }
+    
+    }
+    
     $(document).ready(function() {
+        
+        $(document).click(function (event) {
+				if ($(event.target).closest(".select_dd_box").length)
+				return;
+				$('.select_dd_popup').hide();
+				event.stopPropagation();
+			});
         
         $('.cartorder .row label.seld').slice(0,1).css('border', '1px solid #64717f');
         $('input[type=radio]', $('.cartorder .row label.seld').slice(0,1)).attr('checked', 'true');
@@ -63,12 +117,12 @@
             $('.check', cont).removeClass('active');
             $(cont).css('border', '1px solid #ccc');
             if (inputId == undefined) $('.avail', cont).val('');
-            else $('#'+inputId).removeAttr('checked', 'true');
+            else $('#'+inputId, cont).removeAttr('checked');
         } else {
             $('.check', cont).addClass('active');
             $(cont).css('border', '1px solid #64717f');
             if (inputId == undefined) $('.avail', cont).val('1');
-            else $('#'+inputId).attr('checked', 'true');
+            else $('#'+inputId, cont).attr('checked', 'true');
         }
         
     }
@@ -86,7 +140,13 @@
         $('.selp:visible').slice(0,1).css('border', '1px solid #64717f');
     }
     
+    function showALL() {
+        $('.spay .selp').show();
+    }
+    
     function hide_oplata(oplata) {
+        
+        
         
         $('.oplata'+oplata).hide();
         
@@ -109,9 +169,14 @@
         
         var frmall = frm1+'&'+frm2;
         
-        $.post('/cart/result/', frmall, function(data) {
+        $.post('/cart/valid/', frmall, function(data) {
             
-            alert(data);
+            if (data != '0') {
+                
+                $('#add-address').submit();
+                
+            }
+            
             
         });
         
@@ -120,117 +185,9 @@
     }
 </script>
 
-<div class="container cartorder">
-    <form class="no_register1" method="post">
-    <div class="p1">1. Где и как вы хотите получить заказ?</div>
+<div class="container cartorder" style="margin-bottom: 20px;">
     
-    <div class="row">
-        
-        <?php
-            $country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
-            //if ($country == 'FI' or $country == 'fi') {
-        ?>
-        
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all();">
-            Забрать в магазине
-            <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            
-            <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
-        </label>
-        
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype3'); hide_oplata(1)">
-            Smart Post
-            <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            
-            <input type="radio" id="dtype3" value="2" name="dtype" style="display: none;" />
-        </label> <?//php  } ?>
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype2'); hide_oplata(1)">
-            Доставка почтой
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype2" value="0" name="dtype" style="display: none;" />
-        </label>
-</div>        
-        <div class="clearfix"></div>
-        
-        <div class="p2">2. Как вам будет удобнее оплатить заказ?</div>
-        
-        <div class="row spay">
-        
-        <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'dtype0')">
-            Оплата в магазине
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype0" value="1" name="ptype" style="display: none;" />
-        </label>    
-            
-        <label class="selp span3 oplata2" onclick="check_cart_sel($(this),'selp', 'dtype1')">
-            PayPal
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype1" value="2" name="ptype" style="display: none;" />
-        </label>
-            
-        <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')">
-            PayTrail
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype2" value="3" name="ptype" style="display: none;" />
-        </label>
-            
-        <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'dtype3')">
-            Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС 
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype3" value="4" name="ptype" style="display: none;" />
-        </label>
-        
-        <label class="selp span3 oplata5" onclick="check_cart_sel($(this),'selp', 'dtype4')">
-            Alipay
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype4" value="5" name="ptype" style="display: none;" />
-        </label> 
-        
-        <label class="selp span3 oplata6" onclick="check_cart_sel($(this),'selp', 'dtype5')">
-            ApplePay
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype5" value="6" name="ptype" style="display: none;" />
-        </label> 
-            
-        <label class="selp span3 oplata7" onclick="check_cart_sel($(this),'selp', 'dtype6')">
-            Предоплата на банковский счет в Финляндии
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype6" value="7" name="ptype" style="display: none;" />
-        </label>
-            
-        <label class="selp span3 oplata8" onclick="check_cart_sel($(this),'selp', 'dtype7')">
-            Предоплата на банковский счет в России
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype7" value="8" name="ptype" style="display: none;" />
-        </label>    
-            
-        </div>    
-          </form>  
-         <div class="clearfix"></div>
-        
-        <div class="p3">3. Укажите ваши личные данные</div>
+    
         
         <?php
 
@@ -248,7 +205,8 @@
    
         
         
-   <a href="javascript:;" class="order_start" style="width: 248px; margin-left: 320px; display: block" onclick="sendforma()">Оформить заказ</a>     
+
+        <a href="javascript:;" class="order_start" style="width: 248px; margin-left: 320px; display: block" onclick="sendforma()">Оформить заказ</a>     
     
    
    
