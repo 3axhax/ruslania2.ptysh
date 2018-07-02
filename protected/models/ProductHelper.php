@@ -15,7 +15,27 @@ class ProductHelper
         return $string;
     }
     
-    
+    public static function GetAuthorTitle($id ,$lang = 'ru') {
+        $key = 'title_' . $lang;
+        $sql = 'SELECT '.$key.' as title FROM all_authorslist WHERE id='.$id;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        return $row[0]['title'];
+    }
+
+    public static function GetPublisherTitle($id ,$lang = 'ru') {
+        $key = 'title_' . $lang;
+        $sql = 'SELECT '.$key.' as title FROM all_publishers WHERE id='.$id;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        return $row[0]['title'];
+    }
+
+    public static function GetSeriesTitle($id , $entity,$lang = 'ru') {
+        $key = 'title_' . $lang;
+        $sql = 'SELECT '.$key.' as title FROM all_series WHERE id='.$id.' AND entity='.$entity;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        return $row[0]['title'];
+    }
+
     public static function GetTitle($item, $sKey = 'title', $cnt = 0)
     {
         if (empty($item)) return Yii::app()->ui->item('NO_DATA');

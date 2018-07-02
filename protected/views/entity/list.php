@@ -14,8 +14,11 @@ $lang = Yii::app()->language;
 
             <div class="top-filters">
                 <?php $this->widget('TopFilters', array(
+                        'filters' => $filters,
                         'lang' => $lang,
                         'entity' => $entity,
+                        'title_cat' => $title_cat,
+                        'filter_data' => $filter_data,
                         'cid' => $cid)); ?>
             </div>
 
@@ -168,296 +171,29 @@ $lang = Yii::app()->language;
                         <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
                     </div>
                 </div>
-                <?php if (!empty($authors)) { ?>
-                    <div class="form-row">
-                        <div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                            <span class="res_count"></span>
-                            <a href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                        </div>
-                        <label class="title"><?=$ui->item('A_NEW_FILTER_AUTHOR'); ?></label>
-                            <div class="dd_box_select dd_box_select--botspace interactive_search" style="z-index: 40">
-                                <div class="text">
-                                    <input type="hidden" name="author" oninput="console.log(1)" value="0">
-                                    <input type="text" name="new_author" class="find_author interactive_find" autocomplete="off" disabled
-                                           value="Загрузка..." placeholder="Поиск автора">
-                                </div>
-                                <ul class="search_result search_result_author"></ul>
-                            </div>
-                    </div> <?php } ?>
 
-                <div class="form-row">
-                    <div class="box_select_result_count">
-                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                        <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                        <span class="res_count"></span>
-                        <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                    </div>
-                    <label class="title"><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?></label>
-                    <div class="dd_box_select" style="z-index: 19">
-
-                        <div class="arrow_d" onclick="$('.list_dd', $(this).parent()).toggle()"></div>
-                        <input type="hidden" name="avail" value="1">
-                        <div class="text" onclick="$('.list_dd', $(this).parent()).toggle()"><span><?=(($filter_data['avail'] == 0) ? $ui->item('A_NEW_FILTER_ALL') : $ui->item('A_NEW_FILTER_AVAIL') ); ?></span></div>
-                        <div class="list_dd">
-                            <div class="items">
-                                <div class="rows">
-
-                                    <div class="item<?=(($filter_data['avail'] == 0) ? ' select' : '' ); ?>" rel="0" onclick="select_item($(this), 'avail')"><?=$ui->item('A_NEW_FILTER_ALL'); ?></div>
-                                    <div class="item<?=(($filter_data['avail'] == 1) ? ' select' : '' ); ?>" rel="1" onclick="select_item($(this), 'avail')"><?=$ui->item('A_NEW_FILTER_AVAIL')?></div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-				<? if ($langVideo) {?>
-
-				<div class="form-row"><div class="box_select_result_count">
-                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                        <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                        <span class="res_count"></span>
-                        <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                    </div>
-                    <label class="title">Язык звуковой дорожки</label>
-                    <div class="dd_box_select" style="z-index: 18">
-
-                        <div class="arrow_d" onclick="$('.list_dd', $(this).parent()).toggle()"></div>
-                        <input type="hidden" name="langVideo" value="<?=(isset($filter_data['langVideo']) && ($filter_data['langVideo'] != '')) ? $filter_data['langVideo'] : 0?>" id="langVideo">
-                        <div class="text" onclick="$('.list_dd', $(this).parent()).toggle()">
-                            <span><?= (isset($filter_data['langVideo']) && ($filter_data['langVideo'] != false)) ? VideoAudioStream::model()->findByPk($filter_data['langVideo'])['title_'.$siteLang] : 'Язык звуковой дорожки'?></span>
-                        </div>
-                        <div class="list_dd">
-                            <div class="items">
-                                <div class="rows">
-									<div class="item" rel="0" onclick="select_item($(this), 'langVideo')"><?=$ui->item('A_NEW_FILTER_ALL'); ?></div>
-									 <? foreach ($langVideo as $k => $lang) { ?>
-									
-                                    <div class="item <?= ((isset($filter_data['langVideo'])) && ($lang['id'] == (int)$filter_data['langVideo'])) ? 'selact' : ''?>" rel="<?=$lang['id']?>" onclick="select_item($(this), 'langVideo')"><?=ProductHelper::GetTitle($lang);?></div>
-									
-									 <? } ?>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-				<? } ?>
-
-                <? if ($langSubtitles) {?>
-
-                    <div class="form-row"><div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                            <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                        </div>
-                        <label class="title">Язык субтитров</label>
-                        <div class="dd_box_select" style="z-index: 17">
-
-                            <div class="arrow_d" onclick="$('.list_dd', $(this).parent()).toggle()"></div>
-                            <input type="hidden" name="langSubtitles" value="<?=(isset($filter_data['subtitlesVideo']) && ($filter_data['subtitlesVideo'] != '')) ? $filter_data['subtitlesVideo'] : 0?>" id="subtitlesVideo">
-                            <div class="text" onclick="$('.list_dd', $(this).parent()).toggle()">
-                                <span><?= (isset($filter_data['subtitlesVideo']) && ($filter_data['subtitlesVideo'] != false)) ? VideoSubtitle::model()->findByPk($filter_data['subtitlesVideo'])['title_'.$siteLang] : 'Язык субтитров'?></span>
-                            </div>
-                            <div class="list_dd">
-                                <div class="items">
-                                    <div class="rows">
-                                        <div class="item" rel="0" onclick="select_item($(this), 'langSubtitles')"><?=$ui->item('A_NEW_FILTER_ALL'); ?></div>
-                                        <? foreach ($langSubtitles as $k => $lang) { ?>
-
-                                            <div class="item <?= ((isset($filter_data['subtitlesVideo'])) && ($lang['id'] == (int)$filter_data['subtitlesVideo'])) ? 'selact' : ''?>" rel="<?=$lang['id']?>" onclick="select_item($(this), 'langSubtitles')"><?=ProductHelper::GetTitle($lang);?></div>
-
-                                        <? } ?>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                <? } ?>
-
-                <? if ($formatVideo) {?>
-
-                    <div class="form-row"><div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                            <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                        </div>
-                        <label class="title">Формат Видео</label>
-                        <div class="dd_box_select" style="z-index: 16">
-
-                            <div class="arrow_d" onclick="$('.list_dd', $(this).parent()).toggle()"></div>
-                            <input type="hidden" name="formatVideo" value="<?=(isset($filter_data['formatVideo']) && ($filter_data['formatVideo'] != '')) ? $filter_data['formatVideo'] : 0?>" id="formatVideo">
-                            <div class="text" onclick="$('.list_dd', $(this).parent()).toggle()">
-                                <?php $m = new Media()?>
-                                <span><?= (isset($filter_data['formatVideo']) && ($filter_data['formatVideo'] != false)) ? $m->GetMedia(Entity::VIDEO, $filter_data['formatVideo'])['title'] : 'Формат видео'?></span>
-                            </div>
-                            <div class="list_dd">
-                                <div class="items">
-                                    <div class="rows">
-                                        <div class="item" rel="0" onclick="select_item($(this), 'formatVideo')"><?=$ui->item('A_NEW_FILTER_ALL'); ?></div>
-                                        <? foreach ($formatVideo as $k => $lang) { ?>
-
-                                            <div class="item <?= ((isset($filter_data['formatVideo'])) && ($lang['id'] == (int)$filter_data['formatVideo'])) ? 'selact' : ''?>" rel="<?=$lang['id']?>" onclick="select_item($(this), 'formatVideo')"><?=$lang['title'];?></div>
-
-                                        <? } ?>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                <? } ?>
-
-
-				<? if ($filter_year[1]) : ?>
-                <div class="form-row"><div class="box_select_result_count">
-                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                        <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                        <span class="res_count"></span>
-                        <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                    </div>
-
-                    <label class="title"><?=$ui->item('A_NEW_FILTER_YEAR')?></label>
-
-					<?
-						$max_year = $filter_year[1];
-						$min_year = $filter_year[0];
-
-
-
-						if ($filter_data['ymin'] != '') {
-
-							$filter_year[0] = $filter_data['ymin'];
-
-						}
-
-
-						if ($filter_data['ymax'] != '') {
-
-							$filter_year[1] = $filter_data['ymax'];
-
-						}
-					?>
-
-                    <input type="text" value="<?=($filter_year[1]-1)?>" class="inp_mini year_inp_mini inp" name="year_min"  onblur="show_result_count($(this))"/>-<input type="text" value="<?=$filter_year[1]?>" name="year_max" class="inp_max year_inp_max inp" onblur="show_result_count($(this))" />
-
-                    <div id="slider_year"></div>
-
-
-
-                </div>
-				<? endif;?>
-
-                <?php if (!empty($pubs)) { ?>
-                    <div class="form-row"><div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                            <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                        </div>
-                        <label class="title"><?=$ui->item('A_NEW_FILTER_PUBLISHER')?></label>
-
-                        <div class="dd_box_select dd_box_select--botspace interactive_search" style="z-index: 15">
-                            <div class="text">
-                                <input type="hidden" name="izda" value="0">
-                                <input type="text" name="new_izda" class="find_izda interactive_find" autocomplete="off" disabled
-                                       value="Загрузка..." placeholder="Поиск издания">
-                            </div>
-                            <ul class="search_result search_result_izda"></ul>
-                        </div>
-                    </div> <?php }
-
-                if (!empty($series)) { ?>
-
-                    <div class="form-row"><div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                            <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                        </div>
-                        <label class="title"><?=$ui->item('A_NEW_FILTER_SERIES')?></label>
-
-                        <div class="dd_box_select dd_box_select--botspace interactive_search" style="z-index: 14">
-                            <div class="text">
-                                <input type="hidden" name="seria" value="0">
-                                <input type="text" name="new_series" class="find_series interactive_find" autocomplete="off" disabled
-                                       value="Загрузка..." placeholder="Поиск серии">
-                            </div>
-                            <ul class="search_result search_result_series"></ul>
-                        </div>
-                        <script>
-                            var series_search = [];
-                            $.ajax({
-                                url: '/entity/getseriesdata',
-                                data: 'entity=<?=$entity?>&lang=<?=$lang?>&cid=<?=$cid?>',
-                                type: 'GET',
-                                beforeSend: function () {
-                                    $(".find_series").attr('disabled', true);
-                                    $(".find_series").val('Загрузка...');
-                                },
-                                success: function (data) {
-                                    series_search = JSON.parse(data);
-                                    var search_series = [];
-                                    $.each(series_search, function(index, value) {
-                                        if ((value != '') && (value != null) ) search_series[index] = value;
-                                    });
-                                    interactiveSearch('.find_series', search_series, 'seria', '.search_result_series');
-                                    $(".find_series").attr('disabled', false);
-                                    $(".find_series").val('');
-                                },
-                                error: function () {
-                                    console.log("Error response");
-                                },
-                            });
-                        </script>
-
-                    </div> <?php } ?>
-
-					<? if ($filter_year[3]) : ?>
-
-
-                <div class="form-row"><div class="box_select_result_count">
-                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                        <div class="close" onclick="$(this).parent().hide()">x</div><?=$ui->item('A_NEW_FILTER_SELECT')?>:
-                        <span class="res_count"></span>
-                        <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                    </div>
-                    <label class="title"><?=$ui->item('CART_COL_PRICE');?></label>
-                    <input type="text" value="<?=$filter_year[2]?>" class="inp_mini cost_inp_mini inp" name="min_cost" onblur="show_result_count($(this))"/>-<input type="text" value="<?=$filter_year[3]?>" class="inp_max cost_inp_max inp" name="max_cost" onblur="show_result_count($(this))"/>
-                    <div id="slider_cost"></div>
-
-                   </div>
-				<? endif; ?>
-                <?php if (!empty($bgs)) { ?>
+                <?php /*if (!empty($bgs)) { */?><!--
                     <div class="form-row bindings">
                         <div class="box_select_result_count">
                             <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div> <?=$ui->item('A_NEW_FILTER_SELECT')?>:
+                            <div class="close" onclick="$(this).parent().hide()">x</div> <?/*=$ui->item('A_NEW_FILTER_SELECT')*/?>:
                             <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
+                            <a  href="javascript:;" onclick="show_items()"><?/*=$ui->item('A_NEW_FILTER_VIEW')*/?></a>
                         </div>
-                        <label class="title"><?
+                        <label class="title"><?/*
 						if ($entity == 10 OR $entity == 15) {
 							 echo $ui->item('A_NEW_FILTER_TYPE1');
 						} else {
 							echo $ui->item('A_NEW_FILTER_TYPE2');
 						}
 
-						?></label>
+						*/?></label>
 
 
-                    <label><input type="checkbox" class="" name="binding_id[]" value="0" onchange="change_all_binding(event, true);show_result_count($(this));" <?= ($filter_data['binding_id']) ? '' : 'checked'?>/> Все</label>
+                    <label><input type="checkbox" class="" name="binding_id[]" value="0" onchange="change_all_binding(event, true);show_result_count($(this));" <?/*= ($filter_data['binding_id']) ? '' : 'checked'*/?>/> Все</label>
 
                         <?php
-                        foreach ($bgs as $bg => $binfo) {
+/*                        foreach ($bgs as $bg => $binfo) {
                             $row = Binding::GetBinding($entity, $binfo['binding_id']);
                             $title = 'title_' . Yii::app()->language;
                             if ($entity == 22 OR $entity == 24) {
@@ -475,10 +211,10 @@ $lang = Yii::app()->language;
 
                             echo '<label><input '.$sel.' type="checkbox" class="" name="binding_id[]" value="' . $row['id'] . '" onchange="show_result_count($(this));change_all_binding(event)"/> ' . str_replace('/', ' / ', $row[$title]) . '</label>';
                         }
-                        ?>
+                        */?>
 
 
-                    </div><?php } ?>
+                    </div>--><?php /*} */?>
                 <input type="submit" value="<?= $ui->item('BTN_SEARCH_ALT') ?>" class="js_without">
             </form>
 

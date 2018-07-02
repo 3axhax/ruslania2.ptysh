@@ -542,7 +542,7 @@ class Category {
 
         $formatVideo = $post ['formatVideo'];
         $langVideo = $post ['langVideo'];
-        $subtitlesVideo = $post ['langSubtitles'];
+        $subtitlesVideo = $post ['subtitlesVideo'];
 
 		if (!$langsel) {
 			if (Yii::app()->getRequest()->cookies['langsel']->value) {

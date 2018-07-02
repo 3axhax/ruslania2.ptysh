@@ -62,13 +62,16 @@ function interactiveSearch(classInput, data, inp_name, result) {
 // Живой поиск для Author
 function liveFindAuthor(entity, lang, cid) {
     var author_search = [];
+    var find_author = $(".find_author");
     $.ajax({
         url: '/entity/getauthordata',
         data: {entity: entity, lang: lang, cid: cid},
         type: 'GET',
         beforeSend: function () {
-            $(".find_author").attr('disabled', true);
-            $(".find_author").val('Загрузка...');
+            if (find_author.val() == '') {
+                find_author.attr('disabled', true);
+                find_author.val('Загрузка...');
+            }
         },
         success: function (data) {
             author_search = JSON.parse(data);
@@ -77,8 +80,10 @@ function liveFindAuthor(entity, lang, cid) {
                 if ((value != '') && (value != null) ) search_auth[index] = value;
             });
             interactiveSearch('.find_author', search_auth, 'author', '.search_result_author');
-            $(".find_author").attr('disabled', false);
-            $(".find_author").val('');
+            if (find_author.attr('disabled') == 'disabled') {
+                find_author.attr('disabled', false);
+                find_author.val('');
+            }
         },
         error: function (data) {
             console.log("Error response");
@@ -89,13 +94,16 @@ function liveFindAuthor(entity, lang, cid) {
 // Живой поиск для Izda
 function liveFindIzda(entity, lang, cid) {
     var izda_search = [];
+    let find_izda = $(".find_izda");
     $.ajax({
         url: '/entity/getizdadata',
         data: {entity: entity, lang: lang, cid: cid},
         type: 'GET',
         beforeSend: function () {
-            $(".find_izda").attr('disabled', true);
-            $(".find_izda").val('Загрузка...');
+            if (find_izda.val() == '') {
+                find_izda.attr('disabled', true);
+                find_izda.val('Загрузка...');
+            }
         },
         success: function (data) {
             izda_search = JSON.parse(data);
@@ -104,8 +112,10 @@ function liveFindIzda(entity, lang, cid) {
                 if ((value != '') && (value != null) ) search_izd[index] = value;
             });
             interactiveSearch('.find_izda', search_izd, 'izda', '.search_result_izda');
-            $(".find_izda").attr('disabled', false);
-            $(".find_izda").val('');
+            if (find_izda.attr('disabled') == 'disabled') {
+                find_izda.attr('disabled', false);
+                find_izda.val('');
+            }
         },
         error: function () {
             console.log("Error response");
@@ -115,13 +125,16 @@ function liveFindIzda(entity, lang, cid) {
 
 function liveFindSeries(entity, lang, cid) {
     var series_search = [];
+    find_series = $(".find_series");
     $.ajax({
         url: '/entity/getseriesdata',
         data: {entity: entity, lang: lang, cid: cid},
         type: 'GET',
         beforeSend: function () {
-            $(".find_series").attr('disabled', true);
-            $(".find_series").val('Загрузка...');
+            if (find_series.val() == '') {
+                find_series.attr('disabled', true);
+                find_series.val('Загрузка...');
+            }
         },
         success: function (data) {
             series_search = JSON.parse(data);
@@ -130,8 +143,10 @@ function liveFindSeries(entity, lang, cid) {
                 if ((value != '') && (value != null)) search_series[index] = value;
             });
             interactiveSearch('.find_series', search_series, 'seria', '.search_result_series');
-            $(".find_series").attr('disabled', false);
-            $(".find_series").val('');
+            if (find_series.attr('disabled') == 'disabled') {
+                find_series.attr('disabled', false);
+                find_series.val('');
+            }
         },
         error: function () {
             console.log("Error response");
@@ -157,7 +172,6 @@ function show_result_count() {
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
-
     $.ajax({
         url: '/site/gtfilter/',
         type: "POST",
@@ -175,7 +189,6 @@ function show_result_count() {
 function show_items() {
 
     var create_url;
-
     create_url = '/site/ggfilter' +
         '/entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
         '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
@@ -188,26 +201,49 @@ function show_items() {
         '/cmin/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/cmax/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
         '/langsel/'+(( langsel = $('form.filter input.lang').val()) ? langsel : '');
-console.log(create_url);
     var bindings = [];
     var i = 0;
-    $('.bindings input[type=checkbox]:checked').each(function() {
+    $('.bindings:checked').each(function() {
         bindings[i] = $(this).val();
         i++;
     });
-
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-    $('.span10.listgoods').html('Загрузка...');
-    $.post(create_url, { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
-        search_name : $('form.filter .search.inp').val(), sort : $('form.filter .sort').val(),
-        formatVideo : $('#formatVideo').val(),
-        langVideo : $('#langVideo').val(),
-        subtitlesVideo : $('#subtitlesVideo').val(),
-    }, function(data) {
-        $('.span10.listgoods').html(data);
-        $('.box_select_result_count').hide(1);
-        $(window).scrollTop(0);
-    })
+    $.ajax({
+        url: create_url,
+        type: "POST",
+        data: { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
+            search_name : $('form.filter .search.inp').val(), sort : $('form.filter .sort').val(),
+            formatVideo : $('#formatVideo').val(),
+            langVideo : $('#langVideo').val(),
+            subtitlesVideo : $('#subtitlesVideo').val(),
+        },
+        beforeSend: function(){
+            $('.span10.listgoods').html('Загрузка...');
+        },
+        success: function (data) {
+            $('.span10.listgoods').html(data);
+            $('.box_select_result_count').hide(1);
+            $(window).scrollTop(0);
+        }
+    });
+}
+
+// Управление фильтром по типу/переплету
+function change_all_binding(event, binding_all = false)
+{
+    if (binding_all) {
+        if (event.target.checked) {
+            otherBinding = event.target.parentElement.nextElementSibling;
+            do
+            {
+                otherBinding.firstElementChild.checked = false;
+            }
+            while (otherBinding = otherBinding.nextElementSibling)
+        }
+    }
+    else {
+        event.target.parentElement.parentElement.children[1].firstElementChild.checked = false;
+    }
 }
 

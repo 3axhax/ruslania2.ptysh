@@ -2698,6 +2698,7 @@ input.prod-filter__input {
 input.prod-filter__input.search{
     background: url('/new_img/lupa.png') right 10px center no-repeat;
     padding-right: 25px;
+    width: 150px;
 }
 input.prod-filter__input:focus,
 .prod-filter__input.x{
