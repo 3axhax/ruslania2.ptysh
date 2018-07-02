@@ -65,6 +65,8 @@ class EntityController extends MyController {
 
     public function actionList($entity, $cid = 0, $sort = 0, $avail = true) {
 
+        $filters = [];
+
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
 		
@@ -92,9 +94,7 @@ class EntityController extends MyController {
         }
         $this->_checkUrl($dataForPath, $langTitles);
 
-
-		
-		if ($_GET['lang'] != '') {
+        if ($_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
 				$lang = '';
@@ -110,44 +110,24 @@ class EntityController extends MyController {
 			
 		}
 
-
-
 		$avail = $this->GetAvail($avail);
-        
 
+		$filters['max-min'] = $category->getFilterSlider($entity, $cid);
+		$filters['author'] = true;
 
-		$maxminyear = $category->getFilterSlider($entity, $cid);
-        $pubs = $category->getFilterPublisher($entity, $cid,1,$lang);
-        $series = $category->getFilterSeries($entity, $cid,1,$lang);
-        $authors = $category->getFilterAuthor($entity, $cid,1,$lang);
-		//получаем языки категории
-		$langs = $category->getFilterLangs($entity, $cid);
-		
-		$langVideo = array();
-		
+        if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
+        if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
+
 		if ($entity == 40) {
-			
-			$langVideo = $category->getFilterLangsVideo($entity, $cid);
-			
+		    $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
+		    $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
+            $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
 		}
-
-        $langSubtitles = array();
-
-        if ($entity == 40) {
-
-            $langSubtitles = $category->getSubtitlesVideo($entity, $cid);
-
-        }
-
-        $formatVideo = array();
-
-        if ($entity == 40) {
-
-            $formatVideo = $category->getFilterFormatVideo($entity, $cid);
-
-        }
 		
-        $bg = $category->getFilterBinding($entity, $cid);
+        $filters['binding'] = $category->getFilterBinding($entity, $cid);
+
+        //получаем языки категории
+        $langs = $category->getFilterLangs($entity, $cid);
 
         $catList = $category->GetCategoryList($entity, $cid);
 
@@ -204,15 +184,6 @@ class EntityController extends MyController {
 			$title_cat = ProductHelper::GetTitle($selectedCategory);
 		}
 
-		$filter_data = array(
-		'author'=>'',
-		'binding_id'=>array(),
-		'year_min'=>'',
-		'year_max'=>'',
-		'min_cost'=>'',
-		'max_cost'=>''
-		);
-
         if (Yii::app()->session['filter_e' . $entity . '_c_' . $cid] != '') {
 
             $data = unserialize(Yii::app()->session['filter_e' . $entity . '_c_' . $cid]); //получаем строку из сессии
@@ -223,16 +194,12 @@ class EntityController extends MyController {
 			$items = $cat->result_filter($data, $lang);
 
 			$data['binding_id'] = $data['binding'];
-			$data['year_min'] = $ymin;
-			$data['year_max'] = $ymax;
-			$data['min_cost'] = $cmin;
-			$data['max_cost'] = $cmax;
 
 			$totalItems = Category::count_filter($entity, $cid, $data);
 			$paginatorInfo = new CPagination($totalItems);
 			$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-            $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
-			 $filter_data = $data;
+			$this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+			$filter_data = $data;
 		}
 
         if (isset(Yii::app()->session['last_e'])
@@ -263,9 +230,7 @@ class EntityController extends MyController {
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'cid'=>$cid, 'filter_data' => $filter_data,
-            'info' => $categoryInfo, 'filter_year' => $maxminyear,
-            'bgs' => $bg, 'pubs' => $pubs, 'series'=>$series, 'authors'=>$authors, 'langs'=>$langs,
-            'langVideo'=>$langVideo, 'langSubtitles' => $langSubtitles, 'formatVideo' => $formatVideo,
+            'info' => $categoryInfo, 'filters' => $filters, 'langs'=>$langs,
             'title_cat'=>$title_cat, 'cat_id'=>$selectedCategory, 'total'=>$totalItems));
     }
 

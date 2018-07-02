@@ -1035,12 +1035,10 @@ class SiteController extends MyController {
         }
 
         $data = unserialize(Yii::app()->session['filter_e' . $entity . '_c_' . $cid]); //получаем строку из сессии
-        //var_dump($data);
 
         $cat = new Category();
         $items = $cat->result_filter($data);
 
-        //$data['binding_id'] = (array) unserialize($data['binding']);
         $data['binding_id'] = $data['binding'];
         $data['year_min'] = $ymin;
         $data['year_max'] = $ymax;
@@ -1049,7 +1047,6 @@ class SiteController extends MyController {
         $data['min_cost'] = (real)$cmin;
         $data['max_cost'] = (real)$cmax;
 
-        //print_r($entity); die();
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
@@ -1057,9 +1054,26 @@ class SiteController extends MyController {
         $path = $cat->GetCategoryPath($entity, $cid);
         $selectedCategory = array_pop($path);
 
+        $category = new Category();
+        $filters['max-min'] = $category->getFilterSlider($entity, $cid);
+
+        $filters['author'] = true;
+        if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
+        if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
+
+        if ($entity == 40) {
+            $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
+            $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
+            $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
+        }
+
+        $filters['binding'] = $category->getFilterBinding($entity, $cid);
+
         $this->renderPartial('list_ajax', array(
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginator,
+            'filter_data' => $data,
+            'filters' => $filters,
             'title_cat' => ProductHelper::GetTitle($selectedCategory),
             'cid' => $cid
         ));

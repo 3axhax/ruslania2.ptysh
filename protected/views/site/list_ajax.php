@@ -6,8 +6,11 @@ $lang = Yii::app()->language;
 
 <div class="top-filters">
     <?php $this->widget('TopFilters', array(
+        'filters' => $filters,
         'lang' => $lang,
         'entity' => $entity,
+        'title_cat' => $title_cat,
+        'filter_data' => $filter_data,
         'cid' => $cid)); ?>
 </div>
 <div class="sortbox" style="float: right;">

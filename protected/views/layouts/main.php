@@ -442,21 +442,6 @@ else $act = array('', '');
                 })
             })
 
-            function change_all_binding(event, binding_all = false)
-            {
-                if (binding_all) {
-                    if (event.target.checked) {
-                        otherBinding = event.target.parentElement.nextElementSibling;
-                        do
-                        {
-                            otherBinding.firstElementChild.checked = false;
-                        } while (otherBinding = otherBinding.nextElementSibling)
-                    }
-                } else {
-                    event.target.parentElement.parentElement.children[2].firstElementChild.checked = false;
-            }
-            }
-
             function show_sc(cont, c, lvl) {
 
                 if (cont.css('display') == 'none') {

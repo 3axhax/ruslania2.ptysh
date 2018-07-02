@@ -7,30 +7,32 @@
 
     <!--Основной блок фильтров-->
     <div class="prod-filter__row">
+
+        <!--Поиск по категории/разделу-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Поиск по категории:</label>
+            <label class="prod-filter__label" for=""><?= $title_search?></label>
             <input type="text" class="prod-filter__input search" placeholder="По названию,ISBN" name="name_search" />
         </div>
-
         <!--Фильтр по авторам-->
+        <?php if (isset($filters['author']) && $filters['author'] == true):?>
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Автор:</label>
+            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_AUTHOR'); ?>:</label>
             <div class="text">
-                <input type="hidden" name="author" value="0">
-                <input type="text" class="find_author prod-filter__input prod-filter__input--m clearable"
+                <input type="hidden" name="author" value="<?=($author = (isset($filter_data['author']) && $filter_data['author'] != 0)) ? $filter_data['author'] : 0?>">
+                <input type="text" class="find_author prod-filter__input prod-filter__input--m clearable <?= ($author) ? 'x' : ''?>"
                        placeholder="По автору" autocomplete="off" name="new_author"
-                       disabled value="Загрузка..."/>
+                       <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author']).'"' : 'disabled value="Загрузка..."' ?>/>
             </div>
             <ul class="search_result search_result_author"></ul>
             <script>
                 liveFindAuthor(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
             </script>
         </div>
+        <?php endif;?>
 
         <!--Фильтр по наличию-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Наличие:</label>
-            <input type="hidden" name="avail" value="1">
+            <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
             <select class="prod-filter__input prod-filter__input--m" name="avail" onchange="show_result_count()">
                 <option value="0">Всё</option>
                 <option value="1" selected>В наличии</option>
@@ -39,20 +41,24 @@
 
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Цена:</label>
+            <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
             <div class="prod-filter__row">
-                <input type="text" value="" class="prod-filter__input prod-filter__input--s cost_inp_mini clearable" placeholder="5.0" name="min_cost" onchange="show_result_count()"/>
+                <input type="text" value="<?= ($min_p = (isset($filters['max-min'][2]) && $filters['max-min'][2] != '')) ? $filters['max-min'][2] : '' ?>"
+                       class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
+                       placeholder="5.0" name="min_cost" onchange="show_result_count()"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
-                <input type="text" value="" class="prod-filter__input prod-filter__input--s cost_inp_max clearable" placeholder="500.0" name="max_cost" onchange="show_result_count()"/>
+                <input type="text" value="<?= ($max_p = (isset($filters['max-min'][3]) && $filters['max-min'][3] != '')) ? $filters['max-min'][3] : '' ?>"
+                       class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
+                       placeholder="500.0" name="max_cost" onchange="show_result_count()"/>
             </div>
         </div>
 
         <!--Кнопки управления-->
         <div class="prod-filter__col prod-filter__col--grow">
-            <span class="prod-filter__more" id="more-filter-toggle">Ещё</span>
+            <span class="prod-filter__more" id="more-filter-toggle"><?= $ui->item('A_NEW_MORE'); ?></span>
         </div>
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items()">
-            Применить <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
+            <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
     </div>
 
@@ -61,52 +67,134 @@
 
         <!--Фильтр по году-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Год:</label>
+            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
             <div class="prod-filter__row">
-                <input type="text" value="" name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable" placeholder="1900" onchange="show_result_count()"/>
+                <input type="text" value="<?= ($min_y = (isset($filters['max-min'][0]) && $filters['max-min'][0] != '')) ? $filters['max-min'][0] : '' ?>"
+                       name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
+                       placeholder="1900" onchange="show_result_count()"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
-                <input type="text" value="" name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable" placeholder="2018" onchange="show_result_count()"/>
+                <input type="text" value="<?= ($max_y = (isset($filters['max-min'][1]) && $filters['max-min'][1] != '')) ? $filters['max-min'][1] : '' ?>"
+                       name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
+                       placeholder="2018" onchange="show_result_count()"/>
             </div>
         </div>
 
-        <!--Фильтр по издательству-->
+        <?php if (isset($filters['publisher']) && $filters['publisher'] == true):?>
+            <!--Фильтр по издательству-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Издательство:</label>
+            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <div class="text">
-                <input type="hidden" name="izda" value="0">
-                <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable"
-                       placeholder="Все" name="name_publish"
-                       autocomplete="off" disabled value="Загрузка..."/>
+                <input type="hidden" name="izda" value="<?=($izda = (isset($filter_data['izda']) && $filter_data['izda'] != 0)) ? $filter_data['izda'] : 0?>">
+                <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($izda) ? 'x' : ''?>"
+                       placeholder="Все" name="name_publish" autocomplete="off"
+                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['izda']).'"' : 'disabled value="Загрузка..."' ?>/>
             </div>
             <ul class="search_result search_result_izda"></ul>
             <script>
                 liveFindIzda(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
             </script>
         </div>
+        <?php endif;?>
 
-        <!--Фильтр по серии-->
+        <?php if (isset($filters['series']) && $filters['series'] == true):?>
+            <!--Фильтр по серии-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for="">Серия:</label>
+            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
             <div class="text">
-                <input type="hidden" name="seria" value="0">
-                <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable"
-                       autocomplete="off" disabled
-                       value="Загрузка..." placeholder="Все">
+                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['seria']) && $filter_data['seria'] != 0)) ? $filter_data['seria'] : 0?>">
+                <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
+                       autocomplete="off" placeholder="Все"
+                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['seria'], $entity).'"' : 'disabled value="Загрузка..."' ?> />
             </div>
             <ul class="search_result search_result_series"></ul>
             <script>
                 liveFindSeries(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
             </script>
         </div>
+        <?php endif;?>
 
-
-        <div class="prod-filter__col--grow">
-            <label class="prod-filter__label" for="">Формат:</label>
-
-            <label class="prod-filter__checkbox"><input type="checkbox" class="" name="binding_id[]" value="0" onchange="change_all_binding(event, true);show_result_count($(this));" checked=""> Все</label>
-            <label class="prod-filter__checkbox"><input type="checkbox" class="" name="binding_id[]" value="1" onchange="show_result_count($(this));change_all_binding(event)"> Переплет</label>
-            <label class="prod-filter__checkbox"><input type="checkbox" class="" name="binding_id[]" value="2" onchange="show_result_count($(this));change_all_binding(event)"> Мягкая обложка</label>
+        <?php if (isset($filters['langVideo']) && $filters['langVideo'] == true):?>
+            <!--Фильтр по языку звуковой дорожки-->
+        <div class="prod-filter__col">
+            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_VIDEO')?>:</label>
+            <select class="prod-filter__input prod-filter__input--m"
+                    name="langVideo" onchange="show_result_count()" id="langVideo">
+                <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                <?php foreach ($filters['langVideo'] as $k => $lang) :?>
+                    <option value="<?=$lang['id']?>" <?= ((isset($filter_data['langVideo'])) && ($lang['id'] == (int)$filter_data['langVideo'])) ? 'selected' : ''?>>
+                        <?=ProductHelper::GetTitle($lang);?>
+                    </option>
+                <?php endforeach;?>
+            </select>
         </div>
+        <?php endif; ?>
+
+        <?php if (isset($filters['langSubtitles']) && $filters['langSubtitles'] == true):?>
+            <!--Фильтр по языку субтитров-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_SUBTITLES')?>:</label>
+                <select class="prod-filter__input prod-filter__input--m"
+                        name="subtitlesVideo" onchange="show_result_count()" id="subtitlesVideo">
+                    <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                    <?php foreach ($filters['langSubtitles'] as $k => $lang) :?>
+                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['langSubtitles'])) && ($lang['id'] == (int)$filter_data['langSubtitles'])) ? 'selected' : ''?>>
+                            <?=ProductHelper::GetTitle($lang);?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($filters['formatVideo']) && $filters['formatVideo'] == true):?>
+            <!--Фильтр формату видео-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_FORMAT_VIDEO')?>:</label>
+                <select class="prod-filter__input prod-filter__input--m"
+                        name="formatVideo" onchange="show_result_count()" id="formatVideo">
+                    <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                    <?php foreach ($filters['formatVideo'] as $k => $lang) :?>
+                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['formatVideo'])) && ($lang['id'] == (int)$filter_data['formatVideo'])) ? 'selected' : ''?>>
+                            <?=$lang['title'];?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($filters['binding']) && !empty($filters['binding'])):?>
+            <!--Фильтр по типу/переплету-->
+        <div class="prod-filter__col--grow">
+            <label class="prod-filter__label" for="">
+                <?php if ($entity == 10 OR $entity == 15) echo $ui->item('A_NEW_FILTER_TYPE1');
+                else echo $ui->item('A_NEW_FILTER_TYPE2'); ?>
+                :</label>
+
+            <label class="prod-filter__checkbox">
+                <input type="checkbox" class="bindings" name="binding_id[]" value="0"
+                       onchange="change_all_binding(event, true);show_result_count($(this));" checked="">
+                <?= $ui->item('A_NEW_FILTER_ALL')?></label>
+            <?php
+            foreach ($filters['binding'] as $bg => $binfo) {
+                $row = Binding::GetBinding($entity, $binfo['binding_id']);
+                $title = 'title_' . Yii::app()->language;
+                if ($entity == 22 OR $entity == 24) {
+                    $row = Media::GetMedia($entity, $binfo['media_id']);
+                    $title = 'title';
+                }
+                if (!$row['id'])
+                    continue;
+                $sel = '';
+                if (isset($filter_data['binding_id']) && in_array($row['id'], $filter_data['binding_id'])) {
+                    $sel = 'checked="checked"';
+                }
+                echo    '<label  class="prod-filter__checkbox">
+                        <input '.$sel.' type="checkbox" class="bindings" name="binding_id[]" value="' . $row['id'] . '" 
+                        onchange="change_all_binding(event);show_result_count();"/> 
+                        ' . str_replace('/', ' / ', $row[$title]) . '</label>';
+            }
+            ?>
+        </div>
+        <?php endif;?>
     </div>
 </form>
 <script>
