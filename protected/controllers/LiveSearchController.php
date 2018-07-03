@@ -16,7 +16,10 @@ class LiveSearchController extends MyController {
 				if (!empty($list)) $isCode = true;
 			}
 
-			if (!$isCode) $list = $sController->getList($q, 1, 10);
+			if (!$isCode) {
+				$list = $sController->getList($q, 1, 10);
+				$list = $sController->inDescription($list, $q);
+			}
 
 
 			if (!$isCode) {
@@ -35,7 +38,6 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!empty($list)) {
-				$list = $sController->inDescription($list, $q);
 				foreach ($list as $row) {
 					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
 				}

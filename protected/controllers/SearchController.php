@@ -50,7 +50,7 @@ class SearchController extends MyController {
 		if (empty($find)) return array();
 
 		$product = SearchHelper::ProcessProducts($find);
-		return SearchHelper::ProcessProducts2($product);
+		return SearchHelper::ProcessProducts2($product, false);
 	}
 
 	function getEntitys($query) {

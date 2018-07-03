@@ -201,7 +201,7 @@ else $act = array('', '');
 }
 ?>
                     $('#Search').marcoPolo({
-                        url: '<?= isset($_GET['ha'])?Yii::app()->createUrl('liveSearch/general'):'/site/search' ?>',
+                        url: '<?= !isset($_GET['old'])?Yii::app()->createUrl('liveSearch/general'):'/site/search' ?>',
                         cache: false,
                         hideOnSelect: false,
                         dynamicData: {avail: function () {
@@ -210,7 +210,7 @@ else $act = array('', '');
                         formatItem: function (data, $item, q)
                         {
                             var ret = '';
-<?php if (isset($_GET['ha'])): ?>
+<?php if (!isset($_GET['old'])): ?>
                             ret += data;
 <?php else: ?>
                             if (data.Counts != undefined) {
