@@ -111,6 +111,25 @@ class SearchController extends MyController {
 		$q = '@* ' . $this->_search->EscapeString($query);
 
 		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
+//		$this->_search->SetSortMode(SPH_SORT_RELEVANCE);
+//		$this->_search->SetSortMode(SPH_MATCH_EXTENDED2);
+		/*$this->_search->SetFieldWeights(array(
+			'title_ru'=>10000,
+			'title_rut'=>800,
+			'title_en'=>10000,
+			'title_fi'=>10000,
+			'title_eco'=>10000,
+			'description_ru'=>60,
+			'description_rut'=>40,
+			'description_en'=>60,
+			'description_fi'=>60,
+			'description_de'=>60,
+			'description_fr'=>60,
+			'description_es'=>60,
+			'description_se'=>60,
+		));
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");*/
+
 		$find = $this->_search->query($q, 'products');
 		if (empty($find)) return array();
 
