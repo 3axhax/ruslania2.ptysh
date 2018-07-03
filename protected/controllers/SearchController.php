@@ -39,6 +39,7 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
+//		Debug::staticRun(array($code));
 		return $code;
 	}
 

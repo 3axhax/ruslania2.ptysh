@@ -4,6 +4,7 @@
 class LiveSearchController extends MyController {
 
 	function actionGeneral() {
+
 		$result = array();
 		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
 		if (!empty($q)) {
