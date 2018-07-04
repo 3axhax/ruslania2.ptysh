@@ -397,7 +397,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
                 <?php if ($item['entity'] == Entity::PERIODIC) : ?>
 					
-					<div class="clearBoth" style="height: 10px;"></div>
+                    <div class="clearBoth" style="height: 10px;"></div>
 					
 					<?=
                     $this->renderPartial('/entity/_priceInfo', array('key' => 'PERIODIC_FIN',
@@ -411,14 +411,14 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                         'price' => $price));
                     ?>
 					
-					<div class="clearBoth"></div>
+                    <div class="clearBoth"></div>
 					
                     <?=$item['issues_year']['description']?>
 					
-					<div class="clearBoth"></div>
+                    <div class="clearBoth"></div>
 					
-
                 <?php else : ?>
+                        
                     <?=
                     $this->renderPartial('/entity/_priceInfo_notperiodica', array('key' => 'ITEM',
                         'item' => $item,
@@ -786,7 +786,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <br><span class="nameprop">DVDs:</span> <?=$item['dvds']; ?>
             <?php endif; ?>
 
-            
+            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'])) ?>
 
            
 
