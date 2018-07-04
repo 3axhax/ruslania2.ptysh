@@ -1075,6 +1075,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
 	<? } ?>
 
+<?php $this->widget('Banners', array()) ?>
+
 
 <script type="text/javascript">
 	$(document).ready(function () {

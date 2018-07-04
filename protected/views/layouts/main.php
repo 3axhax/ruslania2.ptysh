@@ -54,7 +54,7 @@ $ui = Yii::app()->ui;
         <?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
         <meta name="robots" content="noindex">
         <?php endif; ?>
-        <?php foreach ($this->getOtherPangPaths() as $lang=>$path): ?>
+        <?php foreach ($this->getOtherLangPaths() as $lang=>$path): ?>
         <link rel="alternate" href="<?= $path ?>" hreflang="<?= $lang ?>">
         <?php endforeach; ?>
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>

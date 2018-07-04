@@ -70,7 +70,7 @@ $lang = Yii::app()->language;
                 ?>
 
             <ul class="items">
-                <?php foreach ($items as $item) : ?>
+                <?php $i=0; foreach ($items as $item) : $i++;?>
                     <?php
 
                     $item['entity'] = $entity;
@@ -79,6 +79,11 @@ $lang = Yii::app()->language;
                     <li>
                         <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
+                    <?php if ($i == 2): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'topInList')) ?></li>
+                    <?php elseif ($i == 20): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'centerInList')) ?></li>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
 		

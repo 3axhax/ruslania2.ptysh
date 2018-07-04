@@ -268,7 +268,7 @@ class MyController extends CController
         return $this->_canonicalPath;
     }
 
-    function getOtherPangPaths() { return $this->_otherLangPaths; }
+    function getOtherLangPaths() { return $this->_otherLangPaths; }
 
     /**
      * @return array ('next'=>адрес следующей страницы, 'prev'=>адрес предыдущей страницы) или пустой массив если не надо

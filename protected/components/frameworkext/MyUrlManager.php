@@ -21,7 +21,7 @@ class MyUrlManager extends CUrlManager
             }
         }
         else {
-            $langPages = $controller->getOtherPangPaths();
+            $langPages = $controller->getOtherLangPaths();
             if (!empty($langPages[$lang])) $url = $langPages[$lang];
             else {
                 $pathInfo = Yii::app()->getRequest()->getPathInfo();
