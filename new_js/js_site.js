@@ -170,10 +170,9 @@ function show_result_count() {
 
     var frm = $('form.filter').serialize();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
-
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
     $.ajax({
-        url: '/site/gtfilter/',
+        url: '/ru/site/gtfilter/',
         type: "POST",
         data: frm,
         beforeSend: function(){
@@ -181,6 +180,9 @@ function show_result_count() {
         },
         success: function (data) {
             $('#loader-filter').html('&nbsp;('+data+')');
+        },
+        error: function (data) {
+            console.log('Error response: '+data);
         }
     });
 }
