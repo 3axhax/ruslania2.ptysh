@@ -10,7 +10,7 @@ class MyLinkPager extends CLinkPager
 		if($hidden || $selected)
 			$class.=' '.($hidden ? $this->hiddenPageCssClass : $this->selectedPageCssClass);
 		
-		$char = $this->htmlOptions['char'];
+		$char = (isset($this->htmlOptions['char'])) ? $this->htmlOptions['char'] : '';
 		
 		$params = $this->getGetParams();
 		$params['page'] = $page;

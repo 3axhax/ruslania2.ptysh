@@ -93,14 +93,14 @@ class EntityController extends MyController {
 
         }
         $this->_checkUrl($dataForPath, $langTitles);
-
-        if ($_GET['lang'] != '') {
+        $lang = '';
+        if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
 				$lang = '';
 			}
 
-		} elseif (Yii::app()->getRequest()->cookies['langsel']->value) {
+		} elseif (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 			
 			$lang = Yii::app()->getRequest()->cookies['langsel']->value;
 			

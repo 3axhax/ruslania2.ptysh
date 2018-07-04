@@ -44,7 +44,7 @@ class DiscountManager
         $priceFin = 0;
         $priceWorld = 0;
 
-        if ($item['entity'] == Entity::PERIODIC)
+        if (isset($item['entity']) && $item['entity'] == Entity::PERIODIC)
         {
             $price = $item['sub_fin_year'];
             $priceFin = $item['sub_fin_year'];
@@ -52,7 +52,7 @@ class DiscountManager
         }
         else
         {
-            $priceWorld = $priceFin = $price = $item['brutto'];
+            $priceWorld = $priceFin = $price = (isset($item['brutto'])) ? $item['brutto'] : 0;
         }
 
         $campaignDiscount = self::CalcDiscount($item);
@@ -83,7 +83,7 @@ class DiscountManager
             $id = floatVal($item['discount']);
             if($id > 0)
             {
-                if($item['entity'] == Entity::PERIODIC) $itemDiscount = $item['discount']; //$itemDiscount = $item['discount'] * 100;
+                if(isset($item['entity']) && $item['entity'] == Entity::PERIODIC) $itemDiscount = $item['discount']; //$itemDiscount = $item['discount'] * 100;
                 else $itemDiscount = (1 - ($item['discount'] / $price)) * 100;
             }
         }
@@ -91,7 +91,7 @@ class DiscountManager
         if(!empty($itemDiscount))
             $allDiscounts[] = array('Type' => self::TYPE_ITEM, 'Value' => $itemDiscount);
 
-        $haveFreeShipping = (isset($item['unitweight_skip']) && $item['unitweight_skip'] > 0) || $item['entity'] == Entity::PERIODIC;
+        $haveFreeShipping = (isset($item['unitweight_skip']) && $item['unitweight_skip'] > 0) || (isset($item['entity']) && $item['entity'] == Entity::PERIODIC);
 
         $maxDiscount = null;
         foreach($allDiscounts as $discount)
@@ -132,7 +132,7 @@ class DiscountManager
 
         // HACK! REMOVE IT
         $oldPercent = $percent;
-        if($item['entity'] == Entity::PERIODIC && $item['id'] == 319 && $percent > 14 && $percent < 15)
+        if(isset($item['entity']) && $item['entity'] == Entity::PERIODIC && $item['id'] == 319 && $percent > 14 && $percent < 15)
         {
             $percent = 0;
         }
@@ -141,7 +141,7 @@ class DiscountManager
         $newALVPriceWorld = $newALV0PriceWorld * (1 + ($vat/100));
 
         // HACK! REMOVE IT
-        if($item['entity'] == Entity::PERIODIC && $item['id'] == 319)
+        if(isset($item['entity']) && $item['entity'] == Entity::PERIODIC && $item['id'] == 319)
         {
             $percent = $oldPercent;
         }

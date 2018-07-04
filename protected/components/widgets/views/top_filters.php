@@ -175,11 +175,13 @@
                 <?= $ui->item('A_NEW_FILTER_ALL')?></label>
             <?php
             foreach ($filters['binding'] as $bg => $binfo) {
-                $row = Binding::GetBinding($entity, $binfo['binding_id']);
-                $title = 'title_' . Yii::app()->language;
                 if ($entity == 22 OR $entity == 24) {
                     $row = Media::GetMedia($entity, $binfo['media_id']);
                     $title = 'title';
+                }
+                else {
+                    $row = Binding::GetBinding($entity, $binfo['binding_id']);
+                    $title = 'title_' . Yii::app()->language;
                 }
                 if (!$row['id'])
                     continue;
