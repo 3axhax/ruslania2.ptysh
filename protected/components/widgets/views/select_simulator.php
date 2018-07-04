@@ -12,11 +12,13 @@
      <ul class="ss_select">
  <?php foreach ($items as $id=>$name):
      if ($selected !== $id):
-     if (empty($id)) unset($dataParam[$paramName]);
-     else $dataParam[$paramName] = $id;
+         if (empty($id)) unset($dataParam[$paramName]);
+         else $dataParam[$paramName] = $id;
+     //$href = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid));
+     $href = Yii::app()->createUrl($route, $dataParam);
  ?>
          <li>
-             <a href="<?= $href . (empty($dataParam)?'':'?' . http_build_query($dataParam))?>"><?=$name?></a>
+             <a href="<?= $href ?>"><?=$name?></a>
          </li>
  <?php endif; endforeach; ?>
     </ul>

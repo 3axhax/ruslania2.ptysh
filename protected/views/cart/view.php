@@ -7,13 +7,24 @@
  */
 
 KnockoutForm::RegisterScripts();
+
+
+$url = explode('?', $_SERVER['REQUEST_URI']);
+$url = trim($url[0], '/');
+
+$ex = explode('?', $url);
+
+$ex = explode('/', $ex[0]);
+
+$url = $ex;
+
 ?>
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+            <hr />
 <div class="container cabinet">
 			
 			<div class="row">
 
-			<div class="span10">
+			<div class=" <? if (!in_array('cart',$url)) : ?>span10<? else : ?><? endif; ?>">
 			
 			<h1 class="title">Корзина</h1>
             <div id="cart">
@@ -85,8 +96,9 @@ KnockoutForm::RegisterScripts();
 <!--                                <span data-bind="text: VAT"></span>%-->
 <!--                            </td>-->
                             <td valign="middle" align="center" class="cart1contents1" nowrap>
-                                <!--<a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" /></a>-->
-                                <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <!--<a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a> -->
+                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" /></a>
+                                
+                                <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a>
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="entity[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Entity'] ?>">
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="type[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Price2Use'] ?>">
                             </td>
@@ -125,19 +137,20 @@ KnockoutForm::RegisterScripts();
                             
                         </tr>
                         <tr>
-                            <td colspan="8" class="order_start_box" class="cart1header2" align="right">
+                            <td style="padding-left: 0;"> <a href="/" style="float: left; color: #ff0000;">Продолжить покупки</a></td>
+                            <td colspan="7" class="order_start_box" class="cart1header2" align="right">
                             
-                            <? if (Yii::app()->user->isGuest) { ?>
-                            
-                                <a href="/cart/variants" class="order_start" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                            <?php if (Yii::app()->user->isGuest) { ?>
+                           
+                                <a href="/cart/variants" class="order_start" style="background-color: #ed2024" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                     <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
                                 </a>
+                                 
+                                <?php
                                 
-                                <?
-                                
-                                }else {
+                                } else {
                                    ?>
-                                   <a href="/cart/doorder" class="order_start" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                   <a href="/cart/doorder" class="order_start" style="background-color: #ed2024" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                     <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
                                 </a>
                                    <? 
@@ -173,13 +186,134 @@ KnockoutForm::RegisterScripts();
             <!-- /content -->
         </div>
 
+                            
+                             <? if (!in_array('cart',$url)) : ?>
+                            
+                            
                 <div class="span2">
 
              				<?php $this->renderPartial('/site/_me_left'); ?>
 
              			</div>
+                            
+                            <? endif; ?>
         </div>
-        </div>
+    
+    
+    
+    <?php
+    
+    $o = new Offer;
+    
+    $groups = $o->GetItemsAll(999);
+    
+    //echo var_dump($groups);
+    ?>
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.more_goods ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 4,
+                slidesToScroll: 4
+            });
+        });
+    </script>
+
+<div class="news_box" style="margin-top: 40px;">
+
+
+		<div class="">
+			<div class="title">
+				Добавьте выгодные предложения в корзину      
+				<div class="pult">
+					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
+					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
+				</div>
+			</div>
+		</div>
+    
+    <div class="more_goods" style="overflow: hidden">
+    <ul class="books">
+    <?php
+
+	foreach ($groups as $k) : 
+	
+	if ($k['entity'] == '') { $k['entity'] = 10; }
+	
+	?>
+	
+	<?php
+	
+	$product = Product::GetProduct($k['entity'], $k['id']);
+	$url = ProductHelper::CreateUrl($product);
+	
+	
+	echo  '	<li>
+        
+    <div class="img" style="min-height: 130px; position: relative">';
+        $this->renderStatusLables($product['status']);
+    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    </div>
+ 
+	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
+		
+		if ($product['isbn']) {
+			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';
+		}
+		
+		if ($product['year']) {
+			
+			echo '<div>'.$ui->item('A_NEW_YEAR') . ': ' . $product['year'].'</div>';
+			
+		}
+		
+		if ($product['binding_id']) {
+		
+		$row = Binding::GetBinding($k['entity'], $product['binding_id']);
+		echo $row['title_' . Yii::app()->language];	
+		
+		}
+		
+		$price = DiscountManager::GetPrice(Yii::app()->user->id, $product);
+	
+		echo '
+        
+    	<div class="cost">';
+		if (!empty($price[DiscountManager::DISCOUNT])) :
+            echo '<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
+            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
+                '.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
+            </span>';
+
+        else :
+
+            echo '<span class="price">'.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
+        
+        </span>';
+
+        endif;
+	echo '</div>
+                    <div class="nds">'. ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . $ui->item('WITHOUT_VAT') .'</div>
+                    <div class="addcart">
+                        <a class="cart-action" data-action="add" data-entity="'. $k['entity'] .'"
+               data-id="'. $k['id'] .'" data-quantity="1"
+               href="javascript:;">'.$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART').'</a>
+                    </div>                   </li>'; ?>
+
+
+					
+					
+		<?php endforeach; ?>			
+</ul>
+</div>
+
+
+</div>
+</div>
+
+
+
 <script type="text/javascript">
 
     var csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -255,7 +389,7 @@ KnockoutForm::RegisterScripts();
                 (
                     $.ajax({
                         type: "POST",
-                        url: '/cart/mark',
+                        url: '<?=Yii::app()->createUrl('cart/')?>mark',
                         data: obj,
                         dataType: 'json'
                     })
@@ -284,7 +418,7 @@ KnockoutForm::RegisterScripts();
                     (
                         $.ajax({
                             type: "POST",
-                            url: '/cart/remove',
+                            url: '<?=Yii::app()->createUrl('cart/')?>remove',
                             data: obj,
                             dataType: 'json'
                         })
@@ -342,7 +476,7 @@ KnockoutForm::RegisterScripts();
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -372,7 +506,7 @@ KnockoutForm::RegisterScripts();
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -395,7 +529,7 @@ KnockoutForm::RegisterScripts();
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -403,7 +537,7 @@ KnockoutForm::RegisterScripts();
                     data.InfoField('');
 //                console.log(json);
                 data.Quantity(json.quantity);
-				update_header_cart();
+		update_header_cart();
             }, 'json');
         };
 
@@ -417,7 +551,7 @@ KnockoutForm::RegisterScripts();
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
             {
 //                console.log(json);
                 data.Quantity(json.quantity);
@@ -469,7 +603,7 @@ KnockoutForm::RegisterScripts();
 </script>
 
 
-
+<div style="height: 20px;"></div>
 
 
 

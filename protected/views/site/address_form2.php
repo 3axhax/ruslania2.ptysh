@@ -1,11 +1,140 @@
 <?php $form = $this->beginWidget('KnockoutForm', array(
                                                       'model' => $model,
-                                                      'action' => $mode == 'new' ? '/site/addaddress' : '/site/editaddress',
+                                                      'action' => $mode == 'new' ? '/cart/result/' : '/cart/result/',
                                                       'id' => 'add-address',
                                                       'viewModel' => 'addressVM',
                                                       'afterAjaxSubmit' => $afterAjax,
                                                       'htmlOptions' => array('class' => 'address text'),
                                                  )); ?>
+
+<div class="p1">1. Где и как вы хотите получить заказ?</div>
+    
+    <div class="row">
+        
+        <?php
+            $country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
+            //if ($country == 'FI' or $country == 'fi') {
+        ?>
+        
+        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.select_dd_box').hide()">
+            Забрать в магазине
+            <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            
+            <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
+        </label>
+        
+        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype3'); showALL(); hide_oplata(1); hide_oplata(8); $('.select_dd_box').show()">
+            Smart Post
+            <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            
+            <input type="radio" id="dtype3" value="2" name="dtype" style="display: none;" />
+        </label> <?//php  } ?>
+        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.select_dd_box').hide()">
+            Доставка почтой
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype2" value="0" name="dtype" style="display: none;" />
+        </label>
+</div>        
+        <div class="clearfix"></div>
+        
+        <div class="select_dd_box" style="margin: 20px 0; display: none; ">
+            
+            <div class="select_dd">
+                <div class="select_dd_input"><input type="text" placeholder="Введите индекс где хотие забрать отправление" onkeyup="postindex_input($(this))"></div>
+                
+                <div class="select_dd_popup">
+                    
+                     
+                    
+                </div>
+                
+                
+            </div>
+            
+        </div>
+        
+        
+        
+        
+        <div class="p2">2. Как вам будет удобнее оплатить заказ?</div>
+        
+        <div class="row spay">
+        
+        <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'dtype0')">
+            Оплата в магазине
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype0" value="1" name="ptype" style="display: none;" />
+        </label>    
+            
+        <label class="selp span3 oplata2" onclick="check_cart_sel($(this),'selp', 'dtype1')">
+            PayPal
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype1" value="2" name="ptype" style="display: none;" />
+        </label>
+            
+        <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')">
+            PayTrail
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype2" value="3" name="ptype" style="display: none;" />
+        </label>
+            
+        <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'dtype3')">
+            Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС 
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype3" value="4" name="ptype" style="display: none;" />
+        </label>
+        
+        <label class="selp span3 oplata5" onclick="check_cart_sel($(this),'selp', 'dtype4')">
+            Alipay
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype4" value="5" name="ptype" style="display: none;" />
+        </label> 
+        
+        <label class="selp span3 oplata6" onclick="check_cart_sel($(this),'selp', 'dtype5')">
+            ApplePay
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype5" value="6" name="ptype" style="display: none;" />
+        </label> 
+            
+        <label class="selp span3 oplata7" onclick="check_cart_sel($(this),'selp', 'dtype6')">
+            Предоплата на банковский счет в Финляндии
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype6" value="7" name="ptype" style="display: none;" />
+        </label>
+            
+        <label class="selp span3 oplata8" onclick="check_cart_sel($(this),'selp', 'dtype7')">
+            Предоплата на банковский счет в России
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype7" value="8" name="ptype" style="display: none;" />
+        </label>    
+            
+        </div>    
+        
+         <div class="clearfix"></div>
+        
+        <div class="p3">3. Укажите ваши личные данные</div>
 
 <table cellspacing="3" border="0" data-bind="visible: errors().length > 0">
     <tbody>

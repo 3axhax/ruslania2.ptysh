@@ -93,6 +93,54 @@ class Offer extends CMyActiveRecord
 
         return $fullInfo;
     }
+    
+    public function GetItemsAll($oid, $entity = false)
+    {
+        $key = 'Offer_'.$oid;
+
+        $fullInfo = Yii::app()->dbCache->get($key);
+
+        if($fullInfo === false)
+        {
+            //вместо * достаточно entity_id, item_id
+            if (!$entity) {
+                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
+                $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
+            }
+            else {
+                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
+                $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid, ':entity' => $entity));
+            }
+
+            $items = array();
+            foreach($rows as $row)
+            {
+                $items[$row['entity_id']][] = $row['item_id'];
+            }
+
+            $p = new Product();
+            $fullInfo = array();
+            foreach($items as $entity=>$ids)
+            {
+                $tmp = array();
+                $list = $p->GetProductsV2($entity, $ids, true);
+                foreach($items[$entity] as $iid)
+                {
+                    if(!isset($list[$iid])) continue;
+                    $av = Availability::GetStatus($list[$iid]);
+                    if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
+
+                    if(isset($list[$iid])) $tmp[] = $list[$iid];
+                }
+
+                $fullInfo = $tmp;
+            }
+
+            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCache']);
+        }
+
+        return $fullInfo;
+    }
 
     public function GetItemsV2($oid)
     {

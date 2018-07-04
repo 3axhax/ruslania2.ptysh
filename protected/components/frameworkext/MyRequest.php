@@ -6,10 +6,11 @@ class MyRequest extends CHttpRequest
 
     private $_requestUri = null;
 
-    public function getRequestUri()
-    {
-        if ($this->_requestUri === null)
-            $this->_requestUri = DMultilangHelper::processLangInUrl(parent::getRequestUri());
+    public function getRequestUri() {
+        if ($this->_requestUri === null) {
+            $this->_requestUri = parent::getRequestUri();
+            DMultilangHelper::processLangInUrl($this->_requestUri);
+        }
 
         return $this->_requestUri;
     }
@@ -24,6 +25,16 @@ class MyRequest extends CHttpRequest
         return DMultilangHelper::addLangToUrl($this->getRequestUri());
     }
 
+    function getPathInfo() {
+        $path = parent::getPathInfo();
+        $language = Yii::app()->language;
+        if (!empty($language)) {
+            $langLen = mb_strlen($language, 'utf-8');
+            if ($path == $language) $path = '';
+            elseif (mb_strpos($path, $language . '/', null, 'utf-8') === 0) $path = mb_substr($path, $langLen+1, null, 'utf-8');
+        }
+        return $path;
+    }
 
     public function validateCsrfToken($event)
     {
@@ -33,7 +44,7 @@ class MyRequest extends CHttpRequest
             $route = Yii::app()->getUrlManager()->parseUrl(Yii::app()->getRequest());
 
             $explode = explode('/', $route);
-            if(count($explode > 2))
+            if(count($explode) > 2)
             {
                 $explode = array_splice($explode, 0, 2);
                 $route = implode('/', $explode);

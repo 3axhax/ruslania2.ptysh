@@ -8,7 +8,7 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static',
+                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch',
                     'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                     'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
                 'users' => array('*')),
@@ -87,6 +87,18 @@ class SiteController extends MyController {
     }
 
     public function actionIndex() {
+        $this->_canonicalPath = Yii::app()->createUrl('site/index');
+        foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+            if ($lang !== 'rut') {
+                if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                else {
+                    $_data = array();
+                    $_data['__langForUrl'] = $lang;
+                    $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/index', $_data);
+                }
+            }
+        }
+
         $o = new Offer();
         $groups = $o->GetItems(Offer::INDEX_PAGE);
         $count = 1;
@@ -223,7 +235,42 @@ class SiteController extends MyController {
 
         $this->render('login');
     }
-
+    
+    public function actionAllSearch() {
+        
+        
+        $ser = new Series();
+        $rows = $ser->allSearch();
+        
+        if (!$_GET['page']) {
+            $_GET['page'] = 1;
+        }
+        
+        $count = ceil($rows/1500);
+        $p = $_GET['page'] * 1500;
+        $limit = (($_GET['page']-1) * 1500) . ',1500';
+        
+        for ($i = 0; $i < $count; $i++) {
+            
+            if ($_GET['page']-1 == $i) {
+                echo ($i+1).'&nbsp;&nbsp;&nbsp;';
+                continue;
+            }
+            
+            echo '<a href="?page='.($i+1).'">'.($i+1).'</a>&nbsp;&nbsp;&nbsp;';
+        
+        }
+        echo '<br /><br />';
+        $sql = 'SELECT * FROM `users_search_log` ORDER BY date_of LIMIT '.$limit;
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        
+        foreach ($rows as $key) {
+            
+            echo $key['query'].'<br />';
+            
+        }
+    }
+    
     public function actionRegister() {
         $user = new User('register');
         if (Yii::app()->request->isPostRequest) {
@@ -530,7 +577,7 @@ class SiteController extends MyController {
 			$arr_order = array_filter($products, function ($arr) {
 			
 			if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-				
+           
 				return true;
 				
 			}
@@ -1140,11 +1187,41 @@ class SiteController extends MyController {
         $typePage = $this->action->id;
 
         switch ($typePage) {
-            case 'static': $this->_canonicalPath = Yii::app()->createUrl('site/static', $data); break;
-            default: $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage); break;
+            case 'static':
+                $this->_canonicalPath = Yii::app()->createUrl('site/static', $data);
+                foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+                    if ($lang !== 'rut') {
+                        if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                        else {
+                            $_data = $data;
+                            $_data['__langForUrl'] = $lang;
+                            $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/static', $_data);
+                        }
+                    }
+                }
+                break;
+            default:
+                $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage);
+                foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+                    if ($lang !== 'rut') {
+                        if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                        else {
+                            $_data = $data;
+                            $_data['__langForUrl'] = $lang;
+                            $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/' . $typePage, $_data);
+                        }
+                    }
+                }
+                break;
         }
 
-   		if ($this->_canonicalPath === $path) return;
+        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
+        $canonicalPath = $this->_canonicalPath;
+        $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+        }
+   		if ($canonicalPath === $path) return;
 
         $this->_redirectOldPages($path, $this->_canonicalPath, $query);
         throw new CHttpException(404);

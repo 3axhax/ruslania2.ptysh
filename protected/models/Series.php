@@ -63,7 +63,14 @@ class Series extends CMyActiveRecord
 
         return Product::FlatResult($data);
     }
-
+    
+     public function allSearch()
+    {
+        $sql = 'SELECT count(*) as cnt FROM `users_search_log`';
+        $rows = Yii::app()->db->createCommand($sql)->queryScalar();
+        return $rows;
+    }
+    
     public static function Url($item)
     {
         return

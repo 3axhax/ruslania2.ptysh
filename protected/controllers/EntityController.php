@@ -73,21 +73,34 @@ class EntityController extends MyController {
         $category = new Category();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
+        $langTitles = array();
         if (!empty($cid)) {
             $dataForPath['cid'] = $cid;
             $cat = $category->GetByIds($entity, array($cid));
-            $cat = array_shift($cat);
-            if (!empty($cat['title_en'])) $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($cat));
-        }
-        $this->_checkUrl($dataForPath);
+            if (empty($cat)) throw new CHttpException(404);
 
-        if ($_GET['lang'] != '') {
+            $cat = array_shift($cat);
+            $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($cat));
+            foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+                if ($_lang !== 'rut') {
+                    if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                    else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($cat, 'title', 0, $_lang));
+                }
+            }
+
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
+        $lang = '';
+        if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
 				$lang = '';
 			}
 
-		} elseif (Yii::app()->getRequest()->cookies['langsel']->value) {
+		} elseif (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 			
 			$lang = Yii::app()->getRequest()->cookies['langsel']->value;
 			
@@ -341,7 +354,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($list[0]));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($list[0], 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $totalItems = $s->GetTotalItems($entity, $sid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -375,7 +396,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['mid'] = $mid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($media));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($media, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $totalItems = $m->GetTotalItems($entity, $mid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -407,7 +436,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($publisher));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($publisher, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -481,7 +518,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($author));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($author, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $totalItems = $a->GetTotalItems($entity, $aid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -749,7 +794,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($performer));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($performer, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $totalItems = $p->GetTotalItems($entity, $pid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -791,7 +844,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['did'] = $did;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($director->attributes));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($director->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -827,7 +888,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($actor->attributes));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($actor->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -862,7 +931,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle->attributes));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -896,7 +973,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['bid'] = $bid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($bData));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($bData, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1021,7 +1106,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($stream->attributes));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($stream->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1055,7 +1148,15 @@ class EntityController extends MyController {
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['tid'] = $tid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($type->attributes));
-        $this->_checkUrl($dataForPath);
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($type->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
 
@@ -1119,18 +1220,41 @@ class EntityController extends MyController {
      * иначе редирект или 404
      * @param array $data параметры для формирования пути
      */
-    private function _checkUrl($data) {
+    private function _checkUrl($data, $langTitles = array()) {
    		$path = getenv('REQUEST_URI');
    		$ind = mb_strpos($path, "?", null, 'utf-8');
    		$query = '';
    		if ($ind !== false) {
    			$query = mb_substr($path, $ind, null, 'utf-8');
-   			$path = substr($path, 0, $ind);
+            $query = preg_replace("/\blang=\d+\b/ui", '', $query);
+            $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+            if ($query === '?') $query = '';
+
+            $path = mb_substr($path, 0, $ind, 'utf-8');
    		}
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('entity/' . $typePage, $data);
+        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
 
-        if ($this->_canonicalPath === $path) {
+        foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+            if ($lang !== 'rut') {
+                if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                else {
+                    $_data = $data;
+                    if (isset($data['title'])&&isset($langTitles[$lang])) $_data['title'] = $langTitles[$lang];
+                    $_data['__langForUrl'] = $lang;
+                    $this->_otherLangPaths[$lang] = Yii::app()->createUrl('entity/' . $typePage, $_data);
+                }
+            }
+        }
+
+        $canonicalPath = $this->_canonicalPath;
+        $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+        }
+
+        if ($canonicalPath === $path) {
             //редирект с page=1
             $countPage1 = 0;
             $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);

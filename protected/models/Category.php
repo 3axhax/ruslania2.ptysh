@@ -663,7 +663,7 @@ class Category {
         $cnt = Yii::app()->dbCache->get($key);
 	
 		if (!isset($_GET['lang'])) {
-			if (Yii::app()->getRequest()->cookies['langsel']->value) {
+			if (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 				$_GET['lang'] = Yii::app()->getRequest()->cookies['langsel']->value;
 			}
 		}
@@ -671,7 +671,7 @@ class Category {
         if ($cnt === false) {
             if ($category_id == 0) {
 				
-				if ($_GET['lang']) {
+				if (isset($_GET['lang'])) {
 					
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].')';
 					
@@ -681,7 +681,7 @@ class Category {
 				
 			} else {
 				
-				if ($_GET['lang']) {
+				if (isset($_GET['lang'])) {
 					
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].') AND (t.code = '.$category_id.' OR t.subcode = '.$category_id.')';
 					

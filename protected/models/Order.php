@@ -280,6 +280,9 @@ class Order extends CMyActiveRecord
         {
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
+            
+            var_dump($ex);
+            
             return 0;
         }
     }

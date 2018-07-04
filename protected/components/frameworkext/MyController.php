@@ -10,6 +10,7 @@ class MyController extends CController
     protected $sid = 0;
     protected $sessionID = 0;
     protected $_canonicalPath = null;//адрес страницы canonical
+    protected $_otherLangPaths = array();
     protected $_maxPages = false;// признак, что на странице есть пагинация (false - нету, число - количество страниц)
 
     public function GetAvail($avail)
@@ -61,18 +62,41 @@ class MyController extends CController
     {
         parent::__construct($id, $module);
 
-        $lang = Yii::app()->params['DefaultLanguage'];
+//        $this->_langSet();
 
-        if (isset($_GET['language']))
-        {
+        $currency = Currency::EUR;
+
+        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
+
+        if (Yii::app()->getRequest()->cookies['showSelLang']->value) {
+            if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
+            else if(Yii::app()->user->hasState('currency')) $currency = Yii::app()->user->getState('currency');
+            else if(isset(Yii::app()->request->cookies['currency'])) $currency = Yii::app()->request->cookies['currency']->value;
+            if(!in_array($currency, Currency::GetList())) $currency = Currency::EUR;
+
+            Yii::app()->user->setState('currency', $currency);
+            $cookie = new CHttpCookie('currency', $currency);
+            $cookie->expire = time() + (60*60*24*365); // (1 year)
+            Yii::app()->request->cookies['currency'] = $cookie;
+        }
+
+        Yii::app()->currency = $currency;
+    }
+
+    private function _langSet() {
+        $lang = Yii::app()->params['DefaultLanguage'];
+        $params = $this->getActionParams();
+
+        if (!empty($params['language'])) {
+            $lang = $params['language'];
+        }
+        elseif (isset($_GET['language'])) {
             $lang = $_GET['language'];
         }
-        else if (Yii::app()->user->hasState('language'))
-        {
+        elseif (Yii::app()->user->hasState('language')) {
             $lang = Yii::app()->user->getState('language');
         }
-        else if (isset(Yii::app()->request->cookies['v2language']))
-        {
+        elseif (isset(Yii::app()->request->cookies['v2language'])) {
             $lang = Yii::app()->request->cookies['v2language']->value;
         }
 
@@ -81,17 +105,7 @@ class MyController extends CController
 
         $this->SetNewLanguage($lang);
 
-        $currency = Currency::EUR;
-        if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
-        else if(Yii::app()->user->hasState('currency')) $currency = Yii::app()->user->getState('currency');
-        else if(isset(Yii::app()->request->cookies['currency'])) $currency = Yii::app()->request->cookies['currency']->value;
-        if(!in_array($currency, Currency::GetList())) $currency = Currency::EUR;
-
-        Yii::app()->user->setState('currency', $currency);
-        $cookie = new CHttpCookie('currency', $currency);
-        $cookie->expire = time() + (60*60*24*365); // (1 year)
-        Yii::app()->request->cookies['currency'] = $cookie;
-        Yii::app()->currency = $currency;
+//        $this->widget('Debug', array($params, MyUrlManager::rules));
     }
 
     public function filters()
@@ -254,6 +268,8 @@ class MyController extends CController
         return $this->_canonicalPath;
     }
 
+    function getOtherPangPaths() { return $this->_otherLangPaths; }
+
     /**
      * @return array ('next'=>адрес следующей страницы, 'prev'=>адрес предыдущей страницы) или пустой массив если не надо
      */
@@ -310,12 +326,29 @@ class MyController extends CController
      * - адреса заканчивающиеся не на "/"
      * - адреса без наименования
      * реальные адреса заканчиваются на "/"
+     *
+     * 27.06.18 какая-то неразбериха, решение Дениса:
+     *
+    https://ruslania.com/video/6279/gogol-nachalo
+    https://ruslania.com/video/6279/gogol-nachalo/qweqwewqe
+    https://ruslania.com/video/6279/gogol-nachalosdfsdfasdf
+    https://ruslania.com/video/6279
+    https://ruslania.com/video/6279/
+
+    должны редиректить 301 на https://ruslania.com/video/6279/gogol-nachalo/
+    а если учесть последнюю задачу по переделке структуры url на сайте, то должно редиректить уже на
+    https://ruslania.com/ru/video/6279-gogol-nachalo/
+     * делаю редирект на реальный адрес всегда
+     *
      * функция делает редирект на реальный адрес, если старый адрес похож на реальный
      * @param $oldPage
      * @param $realPage
      * @param $query
      */
     protected function _redirectOldPages($oldPage, $realPage, $query) {
+        $this->redirect($realPage . $query, true, 301);
+        return;
+
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
         elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, $oldPage, null, 'utf-8') !== false)) $oldPage = $realPage;

@@ -410,22 +410,40 @@ class Product
 		
 		$entities = Entity::GetEntitiesList();
 					$tbl = $entities[$entity]['site_table'];
-					
-					$sql = 'SELECT ln.id FROM `all_items_languages` AS ail, `languages` AS ln, `'.$tbl.'` AS t WHERE ail.language_id = '.$lang.' AND
-					ail.entity = '.$entity.' AND
-					ail.item_id = t.id';
-					
-					if ($cat_id != '') {
-					
-						$sql .= ' AND (t.code = '.$cat_id.' OR t.subcode = '.$cat_id.')';
-					
-					}
-					
-					$rows = Yii::app()->db->createCommand($sql)->queryAll(true, array());
+
+        //совсем не правильный запрос
+//					$sql = 'SELECT ln.id FROM `all_items_languages` AS ail, `languages` AS ln, `'.$tbl.'` AS t WHERE ail.language_id = '.$lang.' AND
+//					ail.entity = '.$entity.' AND
+//					ail.item_id = t.id';
+//        if ($cat_id != '') {
+//
+//            $sql .= ' AND (t.code = '.$cat_id.' OR t.subcode = '.$cat_id.')';
+//
+//        }
+
+        $condition = array(
+            'language_id'=>'(tL.language_id = ' . (int)$lang . ')',
+            'entity'=>'(tL.entity = ' . (int)$entity . ')',
+        );
+        $join = array();
+
+        $cat_id = (int) $cat_id;
+        if ($cat_id > 0) {
+            $join['t'] = 'join `' . $tbl . '` t on (t.id = tL.item_id) and ((t.code = ' . $cat_id . ') OR (t.subcode = ' . $cat_id . ')) and (t.avail_for_order > 0)';
+        }
+        $sql = ''.
+            'select count(*) '.
+            'from all_items_languages tL '.
+            implode(' ', $join) . ' '.
+            'where ' . implode(' and ', $condition) . ' '.
+        '';
+
+
+//					$rows = Yii::app()->db->createCommand($sql)->queryScalar(array());
 					
 					//var_dump($sql);
 					
-					return count($rows);
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array());
 		
 	}
 

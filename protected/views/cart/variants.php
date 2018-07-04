@@ -1,4 +1,4 @@
-<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><?php $refresh = isset($refresh) && $refresh;
+<hr /><?php $refresh = isset($refresh) && $refresh;
       $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 
 ?>

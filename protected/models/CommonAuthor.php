@@ -55,7 +55,7 @@ class CommonAuthor extends CMyActiveRecord {
             $entity,
             $char,
             array(),
-            ($page-1)*$this->_perToPage . ', ' . $this->_perToPage,
+            ($page-1)*150 . ', 150',
             $counts
         );
         return array($authors, $counts);
