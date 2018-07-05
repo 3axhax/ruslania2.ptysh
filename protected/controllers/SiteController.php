@@ -1060,6 +1060,7 @@ class SiteController extends MyController {
         $filters['author'] = true;
         if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
         if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
+        if ($entity != 30) $filters['years'] = true;
 
         if ($entity == 40) {
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
