@@ -93,14 +93,14 @@ class EntityController extends MyController {
 
         }
         $this->_checkUrl($dataForPath, $langTitles);
-
-        if ($_GET['lang'] != '') {
+        $lang = '';
+        if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
 				$lang = '';
 			}
 
-		} elseif (Yii::app()->getRequest()->cookies['langsel']->value) {
+		} elseif (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 			
 			$lang = Yii::app()->getRequest()->cookies['langsel']->value;
 			
@@ -117,6 +117,7 @@ class EntityController extends MyController {
 
         if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
         if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
+        if ($entity != 30) $filters['years'] = true;
 
 		if ($entity == 40) {
 		    $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);

@@ -201,34 +201,32 @@ class Category {
             $sql = '';
 
             if ($lang != '') {
-
                 $sql = ' AND tc.id IN (SELECT item_id FROM `all_items_languages` WHERE language_id = ' . $lang . ' AND entity = ' . $entity . ')';
-
             }
 
             if ($site_lang == '') $site_lang = 'ru';
 
             if ($cid > 0) {
-                $sql = 'SELECT tc.publisher_id, ap.title_'.$site_lang.' as title FROM ' . $tbl . ' as tc, all_publishers as ap '.
+                $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
                 'WHERE (tc.`code`=:code OR tc.`subcode`=:code) AND tc.avail_for_order=1' . $sql .' '.
                 'AND ap.id = tc.publisher_id '.
-                'GROUP BY tc.publisher_id ORDER BY ap.title_'.$site_lang. (($page != 0) ? (' LIMIT ' . $limit) : '');
+                'GROUP BY tc.publisher_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
             } else {
-                $sql = 'SELECT tc.publisher_id, ap.title_'.$site_lang.' as title FROM ' . $tbl . ' as tc, all_publishers as ap '.
+                $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
                 'WHERE tc.avail_for_order=1' . $sql. ' '.
                 'AND ap.id = tc.publisher_id '.
-                'GROUP BY tc.publisher_id ORDER BY ap.title_'.$site_lang. (($page != 0) ? (' LIMIT ' . $limit) : '');
+                'GROUP BY tc.publisher_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
             }
 
             $izd = [];
             foreach ($rows as $row) {
-                $izd[(int)$row['publisher_id']] = $row['title'];
+                $izd[(int)$row['publisher_id']]['ru'] = $row['title_ru'];
+                if ($row['title_en'] != $row['title_ru'])
+                    $izd[(int)$row['publisher_id']]['en'] = $row['title_en'];
             }
             return $izd;
-            return $rows;
-
         }
     }
 
@@ -250,21 +248,27 @@ class Category {
         //$tbl_binding = $entities[$entity]['binding_table'];
         if ($site_lang == '') $site_lang = 'ru';
         if ($cid > 0) {
-            $sql = 'SELECT tc.series_id, st.title_'.$site_lang.' as title FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
             WHERE (tc.`code`=:code OR tc.`subcode`=:code) 
-            AND tc.avail_for_order=1 AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.' 
-            GROUP BY st.title_'.Yii::app()->language. (($page != 0) ? (' LIMIT ' . $limit) : '');
+            AND tc.avail_for_order=1 AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.
+            (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT tc.series_id, st.title_'.$site_lang.' as title FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
-            WHERE tc.avail_for_order=1  AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.' 
-            GROUP BY st.title_'.Yii::app()->language. (($page != 0) ? (' LIMIT ' . $limit) : '');
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
+            WHERE tc.avail_for_order=1  AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.
+                (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
 
         $series = [];
         foreach ($rows as $row) {
-            $series[(int)$row['series_id']] = $row['title'];
+            $series[(int)$row['series_id']]['ru'] = $row['title_ru'];
+            if ($row['title_rut'] != $row['title_ru'])
+                $series[(int)$row['series_id']]['rut'] = $row['title_rut'];
+            if ($row['title_en'] != $row['title_ru'] && $row['title_en'] != $row['title_rut'])
+                $series[(int)$row['series_id']]['en'] = $row['title_en'];
+            if ($row['title_fi'] != $row['title_ru'] && $row['title_fi'] != $row['title_rut'] && $row['title_fi'] != $row['title_en'])
+                $series[(int)$row['series_id']]['fi'] = $row['title_fi'];
         }
         return $series;
         return $rows;
@@ -291,23 +295,28 @@ class Category {
         if (isset(Yii::app()->language)) $site_lang = Yii::app()->language;
 
         if ($cid > 0) {
-            $sql = 'SELECT ba.author_id, aa.title_'.$site_lang.' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
             AND ba.author_id=aa.id 
-            GROUP BY ba.author_id ORDER BY aa.title_'.$site_lang. (($page != 0) ? (' LIMIT ' . $limit) : '');
+            GROUP BY ba.author_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT ba.author_id, aa.title_'.$site_lang.' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
             WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
             AND ba.author_id=aa.id 
-            GROUP BY ba.author_id ORDER BY aa.title_'.$site_lang. (($page != 0) ? (' LIMIT ' . $limit) : '');
+            GROUP BY ba.author_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
         $authors = [];
         foreach ($rows as $row) {
-            $authors[(int)$row['author_id']] = $row['title'];
+            $authors[(int)$row['author_id']]['ru'] = $row['title_ru'];
+            if ($row['title_rut'] != $row['title_ru'])
+                $authors[(int)$row['author_id']]['rut'] = $row['title_rut'];
+            if ($row['title_en'] != $row['title_ru'] && $row['title_en'] != $row['title_rut'])
+                $authors[(int)$row['author_id']]['en'] = $row['title_en'];
+            if ($row['title_fi'] != $row['title_ru'] && $row['title_fi'] != $row['title_rut'] && $row['title_fi'] != $row['title_en'])
+                $authors[(int)$row['author_id']]['fi'] = $row['title_fi'];
         }
-        //print_r($authors);
         return $authors;
     }
 
@@ -528,8 +537,10 @@ class Category {
         $izda = $post['izda'];
         $seria = $post['seria'];
 
-        $year_min = (isset($post['year_min']) && $post['year_min'] != '') ? $post['year_min'] : 1900;
-        $year_max = (isset($post['year_max']) && $post['year_max'] != '') ? $post['year_max'] : 2050;
+        if ($entity != 30) {
+            $year_min = (isset($post['year_min']) && $post['year_min'] != '') ? $post['year_min'] : 1900;
+            $year_max = (isset($post['year_max']) && $post['year_max'] != '') ? $post['year_max'] : 2050;
+        }
 
         $cost_min = (isset($post['min_cost']) && $post['min_cost'] != '') ? $post['min_cost'] : 0;
         $cost_min = (float)str_replace(',','.', $cost_min);
@@ -575,7 +586,7 @@ class Category {
         if (mb_strlen($search) > 2) {
             $query[] = '(bc.title_'.Yii::app()->language.' LIKE "%'.$search.'%" OR bc.isbn LIKE "%'.$search.'%")';
         }
-        if ($year_min != '' AND $year_max != '') {
+        if ($entity != 30 && $year_min != '' && $year_max != '') {
             $query[] = '(bc.year >= ' . $year_min . ' AND bc.year <= ' . $year_max . ')';
         }
         if ($cost_min != '' AND $cost_max != '') {
@@ -663,7 +674,7 @@ class Category {
         $cnt = Yii::app()->dbCache->get($key);
 	
 		if (!isset($_GET['lang'])) {
-			if (Yii::app()->getRequest()->cookies['langsel']->value) {
+			if (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 				$_GET['lang'] = Yii::app()->getRequest()->cookies['langsel']->value;
 			}
 		}
@@ -671,7 +682,7 @@ class Category {
         if ($cnt === false) {
             if ($category_id == 0) {
 				
-				if ($_GET['lang']) {
+				if (isset($_GET['lang'])) {
 					
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].')';
 					
@@ -681,7 +692,7 @@ class Category {
 				
 			} else {
 				
-				if ($_GET['lang']) {
+				if (isset($_GET['lang'])) {
 					
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].') AND (t.code = '.$category_id.' OR t.subcode = '.$category_id.')';
 					

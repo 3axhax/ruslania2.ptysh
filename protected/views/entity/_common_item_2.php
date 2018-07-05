@@ -27,7 +27,7 @@ $entityKey = Entity::GetUrlKey($entity);
 
         <a href="<?= $url; ?>" class="title"><?= ProductHelper::GetTitle($item); ?></a>
 		
-		<? if ($item['title_original'] == '0000000000') : ?>
+		<? if (isset($item['title_original']) && $item['title_original'] == '0000000000') : ?>
 		<div><span class="nameprop">Оригинальное название:</span> <?=$item['title_original']?>
 		
 		</div>
@@ -143,14 +143,14 @@ $entityKey = Entity::GetUrlKey($entity);
             ?>
         <?php endif; ?>
 
-		<? if  ($item['year']) : ?>
+		<? if  (isset($item['year'])) : ?>
 			
 			<br><span><?=$ui->item('A_NEW_YEAR');?>: <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
                                 'year' => $item['year'])); ?>"><?=$item['year']?></a></span>
 		
 		<? endif; ?>
 		
-		<? if  ($item['release_year']) : ?>
+		<? if  (isset($item['release_year'])) : ?>
 			
 			
 			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_REAL');?>: <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
@@ -170,7 +170,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		
 		<?
 			
-			if ($item['type']) {
+			if (isset($item['type'])) {
 			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>: </span><?
 			 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
 			 
