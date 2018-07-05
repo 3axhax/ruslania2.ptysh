@@ -29,13 +29,18 @@ class DMultilangHelper
             'default'=>Yii::app()->params['DefaultLanguage'],
         );
 
+
         $showSelLang = Yii::app()->getRequest()->cookies['showSelLang']->value;
-        if ($_GET['sel'] == '1') {
+        if (!empty($_GET['sel'])) {
             $cookie = new CHttpCookie('showSelLang', '1');
             $cookie->expire = time() + (60*60*24*20000); // 20000 days
             Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
             $showSelLang = 1;
         }
+
+//        $ext = array_pop($domains);
+//        Debug::staticRun(array($ext));
+//        if (preg_match("/\.css$/ui", $ext)||preg_match("/\.js$/ui", $ext)) $showSelLang = 0;
 
         foreach ($langs as $by=>$lang) {
             if (!empty($lang)&&in_array($lang, $validLanguages)) {
