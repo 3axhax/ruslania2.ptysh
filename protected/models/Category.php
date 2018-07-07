@@ -201,12 +201,12 @@ class Category {
                 $bindingIds = array();
                 foreach ($bindings as $binding) $bindingIds[] = $binding['ID'];
 
-                $condition = array('avail'=>'(avail_for_order = 1)', 'bindings'=>'(binding_id in (' . implode(',',$bindingIds) . '))') ;
+                $condition = array('bindings'=>'(binding_id in (' . implode(',',$bindingIds) . '))', 'avail'=>'(avail_for_order = 1)', ) ;
                 if ($cid > 0) $condition['cat'] = '(`code` = ' . $cid . ' OR `subcode` = ' . $cid . ')';
 
                 $sql = ''.
                     'select binding_id '.
-                    'from ' . $tbl . ' '.
+                    'from ' . $tbl . ' use index (binding_id) './/mysql почему то сам не правильно определяет индекс
                     'where ' . implode(' and ', $condition) . ' '.
                     'group by binding_id '.
                 '';
