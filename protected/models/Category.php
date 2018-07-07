@@ -31,11 +31,41 @@ class Category {
     }
 
     function getFilterSlider($entity, $cid) {
-		
-		if ($entity != 30) {
-		
+        if (!Entity::checkEntityParam($entity, 'years')) return null;
+
+        $cid = (int) $cid;
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
+        $condition = array();
+        $condition['avail'] = '(avail_for_order = 1)';
+        if ($cid > 0) $condition['cat'] = '(`code` = ' . $cid . ' OR `subcode` = ' . $cid . ')';
+
+        $result = array();
+        //2 запроса потому, что нет возможности подобрать индекс
+        $sql = ''.
+            'select max(year) as max_year, min(year) as min_year '.
+            'from ' . $tbl . ' '.
+            'where ' . implode(' and ', $condition) . ' '.
+            'limit 1 '.
+        '';
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+        $result[] = empty($row['min_year'])?0:$row['min_year'];
+        $result[] = empty($row['max_year'])?0:$row['max_year'];
+
+        $sql = ''.
+            'select max(brutto) as cost_max, min(brutto) as cost_min '.
+            'from ' . $tbl . ' '.
+            'where ' . implode(' and ', $condition) . ' '.
+            'limit 1 '.
+            '';
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+        $result[] = empty($row['cost_min'])?0:$row['cost_min'];
+        $result[] = empty($row['cost_max'])?0:$row['cost_max'];
+
+        return $result;
+
+/*
+
         if ($cid > 0) {
             $sql = 'SELECT MAX(year) as max_year, MIN(year) as min_year, MAX(brutto) as cost_max, MIN(brutto) as cost_min FROM ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) AND avail_for_order=1';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
@@ -44,8 +74,7 @@ class Category {
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
 
-        return array($rows[0]['min_year'], $rows[0]['max_year'], $rows[0]['cost_min'], $rows[0]['cost_max']);
-		}
+        return array($rows[0]['min_year'], $rows[0]['max_year'], $rows[0]['cost_min'], $rows[0]['cost_max']);*/
     }
 	
     function getYearExists($entity, $cid) {
@@ -68,7 +97,7 @@ class Category {
 
 	public function getFilterLangs($entity, $cid) {
 		
-		$entities = Entity::GetEntitiesList();
+		/*$entities = Entity::GetEntitiesList();
 		$tbl = $entities[$entity]['site_table'];
 					
 		$sql = 'SELECT ln.id as lnid, ln.title_'.Yii::app()->language.' AS lntitle FROM `all_items_languages` AS ail, `languages` AS ln, `'.$tbl.'` AS t WHERE ln.id = ail.language_id AND ail.entity = '.$entity.' AND ail.item_id = t.id';
@@ -81,9 +110,13 @@ class Category {
 					
 		$sql .= ' GROUP BY ln.id ORDER BY ln.id ASC';
 					
-		$rows = Yii::app()->db->createCommand($sql)->queryAll();	
-		
-		
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();	*/
+
+        $cat = $this->GetByIds($entity, $cid);
+        if (!empty($cat)) $cat = array_pop($cat);
+		$langs = ProductLang::getLangItems($entity, $cat);
+        $rows = array();
+        foreach ($langs as $id=>$lang) $rows[] = array('lnid'=>$lang['id'], 'lntitle'=>$lang['title']);
 		
 		return $rows;
 
@@ -156,39 +189,46 @@ class Category {
     }
 
     public function getFilterBinding($entity, $cid) {
-        if ($entity != 15 AND $entity != 10) {
-
-            if ($entity == 22 OR $entity == 24) {
-
+        $cid = (int) $cid;
+//        if (!Entity::checkEntityParam($entity, 'binding')) return array();
+        switch ($entity) {
+            case 15:case 10:
                 $entities = Entity::GetEntitiesList();
                 $tbl = $entities[$entity]['site_table'];
-                //$tbl_binding = $entities[$entity]['binding_table'];
+                $bindings = (new ProductHelper)->GetBindingListForSelect($entity);
+                if (empty($bindings)) return array();
+
+                $bindingIds = array();
+                foreach ($bindings as $binding) $bindingIds[] = $binding['ID'];
+
+                $condition = array('avail'=>'(avail_for_order = 1)', 'bindings'=>'(binding_id in (' . implode(',',$bindingIds) . '))') ;
+                if ($cid > 0) $condition['cat'] = '(`code` = ' . $cid . ' OR `subcode` = ' . $cid . ')';
+
+                $sql = ''.
+                    'select binding_id '.
+                    'from ' . $tbl . ' '.
+                    'where ' . implode(' and ', $condition) . ' '.
+                    'group by binding_id '.
+                '';
+                $rows = Yii::app()->db->createCommand($sql)->queryAll();
+                return $rows;
+                break;
+            case 22:case 24:
+                $entities = Entity::GetEntitiesList();
+                $tbl = $entities[$entity]['site_table'];
                 if ($cid > 0) {
                     $sql = 'SELECT media_id FROM ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) AND avail_for_order=1 GROUP BY media_id';
                     $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
-                } else {
+                }
+                else {
                     $sql = 'SELECT media_id FROM ' . $tbl . ' WHERE avail_for_order=1 GROUP BY media_id';
                     $rows = Yii::app()->db->createCommand($sql)->queryAll();
                 }
 
-                return $rows;
-            } else {
-
-                return array();
-            }
+            return $rows;
+                break;
         }
-        $entities = Entity::GetEntitiesList();
-        $tbl = $entities[$entity]['site_table'];
-        $tbl_binding = $entities[$entity]['binding_table'];
-        if ($cid > 0) {
-            $sql = 'SELECT binding_id FROM ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) AND avail_for_order=1 AND `binding_id` IN ( SELECT id FROM `'.$tbl_binding.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%" ) GROUP BY binding_id';
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
-        } else {
-            $sql = 'SELECT binding_id FROM ' . $tbl . ' WHERE avail_for_order=1     AND binding_id IN ( SELECT id FROM `'.$tbl_binding.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%" ) GROUP BY binding_id';
-            $rows = Yii::app()->db->createCommand($sql)->queryAll();
-        }
-
-        return $rows;
+        return array();
     }
 
     public function getFilterPublisher($entity, $cid, $page = 1, $lang = '', $site_lang='') {
@@ -834,6 +874,9 @@ class Category {
 
         if (is_array($ids)) $sql = 'SELECT * FROM ' . $table . ' WHERE id IN (' . implode(',', $ids) . ')';
         if (is_int($ids)) $sql = 'SELECT * FROM ' . $table . ' WHERE id='.$ids;
+
+        if (empty($sql)) return array();
+
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
     }

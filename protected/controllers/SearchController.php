@@ -15,6 +15,7 @@ class SearchController extends MyController {
 			$this->_viewEmpty($q);
 			return;
 		}
+//		Debug::staticRun(array(Yii::app()->getComponent()));
 
 		$page = $this->_getNumPage();
 
