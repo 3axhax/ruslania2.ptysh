@@ -14,18 +14,18 @@
 $url = explode('?', $_SERVER['REQUEST_URI']);
 $url = trim($url[0], '/');
 
-if (isset($_GET['langsel'])) {
-
-Yii::app()->getRequest()->cookies['langsel'] = new CHttpCookie('langsel', $_GET['langsel']);
-
-}
+//if (isset($_GET['langsel'])) {
+//
+//Yii::app()->getRequest()->cookies['langsel'] = new CHttpCookie('langsel', $_GET['langsel']);
+//
+//}
 
 $entity = Entity::ParseFromString($url);
 
-if (Yii::app()->getRequest()->cookies['showSelLang']->value != '1') {
-
-Yii::app()->language = $this->getPreferLanguage();
-}
+//if (Yii::app()->getRequest()->cookies['showSelLang']->value != '1') {
+//
+//Yii::app()->language = $this->getPreferLanguage();
+//}
 
 $url = explode('?', $_SERVER['REQUEST_URI']);
 $url = trim($url[0], '/');
@@ -54,7 +54,7 @@ $ui = Yii::app()->ui;
         <?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
         <meta name="robots" content="noindex">
         <?php endif; ?>
-        <?php foreach ($this->getOtherPangPaths() as $lang=>$path): ?>
+        <?php foreach ($this->getOtherLangPaths() as $lang=>$path): ?>
         <link rel="alternate" href="<?= $path ?>" hreflang="<?= $lang ?>">
         <?php endforeach; ?>
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
@@ -815,7 +815,7 @@ else $act = array('', '');
     <body>
         <?
 
-        if (Yii::app()->getRequest()->cookies['showSelLang']->value == '' OR Yii::app()->getRequest()->cookies['showSelLang']->value == '0') {
+        if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
         ?>
 
@@ -930,17 +930,17 @@ else $act = array('', '');
                     <? if (!in_array('cart',$url)) : ?>
 
                     <div class="span10">
-                        <form method="get" action="<?= !isset($_GET['old'])?'/search/general':'/site/search' ?>" id="srch">
+                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
                             <div class="search_box">
                                 <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
-                                <input type="text" name="q" class="search_text" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= (isset($_GET['q'])) ? $_GET['q'] : '' ?>"/>
+                                <input type="text" name="q" class="search_text" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
                                 <input type="submit" class="search_run" value=""><!--<img src="/new_img/btn_search.png" class="search_run" alt="" onclick="$('#srch').submit()"/>-->
                             </div>
 
                             <div class="pult">
 
                                 <ul>
-                                    <li class="sm"><a href="/advsearch<? if ($entity) { echo '?e='.$entity; } elseif (isset($_GET['e'])) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+                                    <li class="sm"><a href="/advsearch<? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
                                     <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
                                     <?php /*
                                       <li class="chb">

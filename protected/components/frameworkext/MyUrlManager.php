@@ -21,9 +21,13 @@ class MyUrlManager extends CUrlManager
             }
         }
         else {
-            $langPages = $controller->getOtherPangPaths();
+            $langPages = $controller->getOtherLangPaths();
             if (!empty($langPages[$lang])) $url = $langPages[$lang];
-            else $url = '/' . $lang . '/' . Yii::app()->getRequest()->getPathInfo() . '/';
+            else {
+                $pathInfo = Yii::app()->getRequest()->getPathInfo();
+                if (!empty($pathInfo)&&($pathInfo !== '/')) $url = '/' . $lang . '/' . $pathInfo . '/';
+                else $url = '/' . $lang . '/';
+            }
 
             if (!empty($query)
                 &&(Yii::app()->language !== 'rut')//это чтоб убрать lang и language из адреса

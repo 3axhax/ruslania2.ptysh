@@ -30,13 +30,15 @@ $(document).on('input', '.clearable', function(){
 
 //Функция живого поиска
 function interactiveSearch(classInput, data, inp_name, result) {
+    //console.log(data);
     $(classInput).bind("change keyup input click", function () {
         if (this.value.length >= 2) {
-            if ((val = findEqual(this.value, data)) != '') $(result).html(val).fadeIn();
+            if ((val = findEqual(this.value, data)) != '') {
+                $(result).html(val).fadeIn();
+            }
         }
         else {
             $(classInput).prev().val(0);
-            select_item($(this), inp_name);
             $(result).fadeOut();
         }
     });
@@ -53,7 +55,11 @@ function interactiveSearch(classInput, data, inp_name, result) {
     function findEqual(value, availableValue) {
         result_value = '';
         availableValue.forEach(function (item, index) {
-            if (item.toLowerCase().indexOf(value.toLowerCase()) != -1) result_value += '<li rel="' + index + '" onclick="select_item($(this), \''+inp_name+'\')">' + item + '</li>';
+            i = index;
+            $.each(item, function (index, val) {
+                if (val.toLowerCase().indexOf(value.toLowerCase()) != -1) result_value += '<li rel="' + i + '" onclick="select_item($(this), \''+inp_name+'\')">' + val + '</li>';
+            });
+
         });
         return result_value;
     }
@@ -162,18 +168,17 @@ function select_item(item, inp_name) {
     $('.list_dd', item.parent().parent().parent().parent()).hide();
     $('input[name=' + inp_name + ']', item.parent().parent().parent().parent()).val(id);
 
-    show_result_count(item);
+    show_result_count();
 }
 
 // Подсчёт результатов фильтра
-function show_result_count() {
+function show_result_count(url = '/ru/site/gtfilter/') {
 
     var frm = $('form.filter').serialize();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
-
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
     $.ajax({
-        url: '/site/gtfilter/',
+        url: url,
         type: "POST",
         data: frm,
         beforeSend: function(){
@@ -181,6 +186,9 @@ function show_result_count() {
         },
         success: function (data) {
             $('#loader-filter').html('&nbsp;('+data+')');
+        },
+        error: function (data) {
+            console.log('Error response');
         }
     });
 }
@@ -189,7 +197,7 @@ function show_result_count() {
 function show_items() {
 
     var create_url;
-    create_url = '/site/ggfilter' +
+    create_url = '/ru/site/ggfilter' +
         '/entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
         '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
@@ -213,7 +221,8 @@ function show_items() {
         url: create_url,
         type: "POST",
         data: { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
-            search_name : $('form.filter .search.inp').val(), sort : $('form.filter .sort').val(),
+            name_search : $('#name_search').val(),
+            sort : $('form.filter .sort').val(),
             formatVideo : $('#formatVideo').val(),
             langVideo : $('#langVideo').val(),
             subtitlesVideo : $('#subtitlesVideo').val(),

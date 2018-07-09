@@ -36,17 +36,17 @@ class ProductHelper
         return $row[0]['title'];
     }
 
-    public static function GetTitle($item, $sKey = 'title', $cnt = 0)
+    public static function GetTitle($item, $sKey = 'title', $cnt = 0, $lang = null)
     {
         if (empty($item)) return Yii::app()->ui->item('NO_DATA');
         if (empty($lang)) $lang = Yii::app()->language;
         $langs = array($sKey . '_se' => $sKey . '_en',
-                       $sKey . '_fr' => $sKey . '_en',
-                       $sKey . '_de' => $sKey . '_en',
-                       $sKey . '_fi' => $sKey . '_en',
-                       $sKey . '_en' => $sKey . '_rut',
-                       $sKey . '_rut' => $sKey . '_ru',
-                       $sKey . '_es' => $sKey . '_en',
+            $sKey . '_fr' => $sKey . '_en',
+            $sKey . '_de' => $sKey . '_en',
+            $sKey . '_fi' => $sKey . '_en',
+            $sKey . '_en' => $sKey . '_rut',
+            $sKey . '_rut' => $sKey . '_ru',
+            $sKey . '_es' => $sKey . '_en',
         );
 
         $key = $sKey . '_' . $lang;
@@ -63,23 +63,23 @@ class ProductHelper
         }
 
         if(!empty($ret)) {
-			
-			
-			$tmp = $ret;
-			if ($cnt > 0) {
-			$len = mb_strlen(trim($item[$key]), 'utf-8');
-			$pos = false;
-            
-            if($len > $cnt) {
-				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
-				if($len > 0) $tmp .= '...';
-			}	
-				
-			}
-			
+
+
+            $tmp = $ret;
+            if ($cnt > 0) {
+                $len = mb_strlen(trim($item[$key]), 'utf-8');
+                $pos = false;
+
+                if($len > $cnt) {
+                    if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
+                    if($len > 0) $tmp .= '...';
+                }
+
+            }
+
             return $tmp;
-			
-		} 
+
+        }
 
         // Найти первую непустую колонку
         foreach($langs as $lang=>$data)
@@ -93,18 +93,18 @@ class ProductHelper
 
         if($lang == 'ru' && isset($item[$sKey.'_ru']) && !empty($item[$sKey.'_ru']))
         {
-			
-			$ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
-			$tmp = $ret;
-			if ($cnt > 0) {
-			$len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
-			$pos = false;
-            if($len > $cnt) {
-				if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
-				if($len > 0) $tmp .= '...';
-			}	
-			}
-			
+
+            $ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+            $tmp = $ret;
+            if ($cnt > 0) {
+                $len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+                $pos = false;
+                if($len > $cnt) {
+                    if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
+                    if($len > 0) $tmp .= '...';
+                }
+            }
+
             return $tmp;
         }
         else
@@ -113,19 +113,19 @@ class ProductHelper
             foreach($keys as $key)
             {
                 if(array_key_exists($key, $item) && !empty($item[$key])) {
-					
-					$ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
-					$tmp = $ret;
-					if ($cnt > 0) {
-						$len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
-						$pos = false;
-						
-						if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
-						if($len > 0) $tmp .= '...';
-						
-					}
-					return $tmp;	
-				}				
+
+                    $ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+                    $tmp = $ret;
+                    if ($cnt > 0) {
+                        $len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+                        $pos = false;
+
+                        if($len > $cnt) $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
+                        if($len > 0) $tmp .= '...';
+
+                    }
+                    return $tmp;
+                }
             }
         }
         return '';

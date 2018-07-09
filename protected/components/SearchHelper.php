@@ -437,7 +437,7 @@ class SearchHelper
         return $result;
     }
 	
-	public static function ProcessProducts2($ids)
+	public static function ProcessProducts2($ids, $fillAjaxData = true)
     {
 		
         $result = array();
@@ -463,7 +463,7 @@ class SearchHelper
 				
 				$key = $entity . '-' . $item['id'];
 
-                if (Yii::app()->request->isAjaxRequest)
+                if (Yii::app()->request->isAjaxRequest && $fillAjaxData)
                 {
                     $row = array();
                     $row['is_product'] = true;

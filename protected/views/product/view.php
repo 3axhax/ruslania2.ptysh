@@ -87,3 +87,4 @@
 	<?php endif; ?>
 
 </div>
+<?php $this->widget('Banners', array('type'=>'slider')) ?>

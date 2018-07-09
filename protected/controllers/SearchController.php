@@ -39,6 +39,7 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
+//		Debug::staticRun(array($code));
 		return $code;
 	}
 
@@ -49,7 +50,7 @@ class SearchController extends MyController {
 		if (empty($find)) return array();
 
 		$product = SearchHelper::ProcessProducts($find);
-		return SearchHelper::ProcessProducts2($product);
+		return SearchHelper::ProcessProducts2($product, false);
 	}
 
 	function getEntitys($query) {
@@ -109,12 +110,118 @@ class SearchController extends MyController {
 
 		$q = '@* ' . $this->_search->EscapeString($query);
 
-		$this->_search->SetSortMode(SPH_SeORT_ATTR_DESC, "in_shop");
+		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
+//		$this->_search->SetSortMode(SPH_SORT_RELEVANCE);
+//		$this->_search->SetSortMode(SPH_MATCH_EXTENDED2);
+		/*$this->_search->SetFieldWeights(array(
+			'title_ru'=>10000,
+			'title_rut'=>800,
+			'title_en'=>10000,
+			'title_fi'=>10000,
+			'title_eco'=>10000,
+			'description_ru'=>60,
+			'description_rut'=>40,
+			'description_en'=>60,
+			'description_fi'=>60,
+			'description_de'=>60,
+			'description_fr'=>60,
+			'description_es'=>60,
+			'description_se'=>60,
+		));
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");*/
+
 		$find = $this->_search->query($q, 'products');
 		if (empty($find)) return array();
 
 		$product = SearchHelper::ProcessProducts($find);
-		return SearchHelper::ProcessProducts2($product);
+		return SearchHelper::ProcessProducts2($product, false);
+	}
+
+	/** функция проверяет найденное в title_. Если не нашло, то в результирующий массив добавляет inDescription
+	 * @param $list
+	 * @param $query
+	 * @param int $countChars
+	 * @return mixed
+	 */
+	function inDescription($list, $query, $countChars = 100) {
+		foreach ($list as $k=>$item) {
+			$isTitle = false;
+
+			foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+				if (empty($item['title_' . $lang])) continue;
+
+				if (mb_strpos($item['title_' . $lang], $query, null, 'utf-8') !== false) {
+					$isTitle = true;
+					break;
+				}
+			}
+			if ($isTitle) continue;
+
+			foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+				if (empty($item['description_' . $lang])) continue;
+
+				if (($pos = mb_strpos($item['description_' . $lang], $query, null, 'utf-8')) !== false) {
+					$list[$k]['inDescription'] = '';
+					$posStart = 0;
+					if ($pos >= ceil($countChars/2)) {
+						$list[$k]['inDescription'] .= '... ';
+						$posStart = mb_strpos($item['description_' . $lang], ' ', $pos - ceil($countChars/2), 'utf-8');
+					}
+					$posEnd = mb_strpos($item['description_' . $lang], ' ', $pos + mb_strlen($query, 'utf-8'), 'utf-8');
+					$list[$k]['inDescription'] .= mb_substr($item['description_' . $lang], $posStart, ($pos-$posStart), 'utf-8');
+					$list[$k]['inDescription'] .= '<span class="title__bold">' . $query . '</span>';
+					$list[$k]['inDescription'] .= mb_substr($item['description_' . $lang], ($pos+mb_strlen($query, 'utf-8')), ($posEnd - ($pos+mb_strlen($word, 'utf-8'))), 'utf-8');
+
+					if ($posEnd < mb_strlen($item['description_' . $lang])) $list[$k]['inDescription'] .= ' ...';
+					break;
+				}
+			}
+
+		}
+		return $list;
+
+		/*		горе от ума
+		foreach ($list as $k=>$item) {
+					$isTitle = false;
+					$words = array_filter(preg_split("/\W+/ui", $query), function($word){ return mb_strlen($word, 'utf-8') > 2; });
+					if (empty($words)) continue;
+
+					foreach ($words as $word) {
+						foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+							if (empty($item['title_' . $lang])) continue;
+
+							if (mb_strpos($item['title_' . $lang], $word, null, 'utf-8') !== false) {
+								$isTitle = true;
+								break 2;
+							}
+						 }
+					}
+					if ($isTitle) continue;
+
+					foreach ($words as $word) {
+						foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+							if (empty($item['description_' . $lang])) continue;
+
+							if (($pos = mb_strpos($item['description_' . $lang], $word, null, 'utf-8')) !== false) {
+								$list[$k]['inDescription'] = '';
+								$posStart = 0;
+								if ($pos >= ceil($countChars/2)) {
+									$list[$k]['inDescription'] .= '... ';
+									$posStart = mb_strpos($item['description_' . $lang], ' ', $pos - ceil($countChars/2), 'utf-8');
+								}
+								$posEnd = mb_strpos($item['description_' . $lang], ' ', $pos + mb_strlen($word, 'utf-8'), 'utf-8');
+								$list[$k]['inDescription'] .= mb_substr($item['description_' . $lang], $posStart, ($pos-$posStart), 'utf-8');
+								$list[$k]['inDescription'] .= '<span class="title__bold">' . $word . '</span>';
+								$list[$k]['inDescription'] .= mb_substr($item['description_' . $lang], ($pos+mb_strlen($word, 'utf-8')), ($posEnd - ($pos+mb_strlen($word, 'utf-8'))), 'utf-8');
+
+								if ($posEnd < mb_strlen($item['description_' . $lang])) $list[$k]['inDescription'] .= ' ...';
+								break 2;
+							}
+						}
+					}
+
+				}
+		*/
 	}
 
 	private function _queryIndex($query, $index, $limit) {

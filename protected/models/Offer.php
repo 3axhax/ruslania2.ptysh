@@ -11,6 +11,17 @@ class Offer extends CMyActiveRecord
     const FREE_SHIPPING = 777;
     const ALLE_2_EURO = 999;
 
+    static function getMode($id) {
+        //<mode:firms|uni|lib|fs|alle2>
+        switch($id) {
+            case self::FIRMS: return 'firms';
+            case self::LIBRARY: return 'lib';
+            case self::UNI: return 'uni';
+            case self::FREE_SHIPPING: return 'fs';
+            case self::ALLE_2_EURO: return 'alle2';
+        }
+        return '';
+    }
     public static function model($className = __CLASS__)
     {
         return parent::model($className);

@@ -87,14 +87,20 @@ class SiteController extends MyController {
     }
 
     public function actionIndex() {
-        $this->_canonicalPath = Yii::app()->createUrl('site/index');
-        foreach (Yii::app()->params['ValidLanguages'] as $lang) {
-            if ($lang !== 'rut') {
-                if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
-                else {
-                    $_data = array();
-                    $_data['__langForUrl'] = $lang;
-                    $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/index', $_data);
+        if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
+            $this->_canonicalPath = '/';
+            $this->_otherLangPaths['x-default'] = '/';
+        }
+        else {
+            $this->_canonicalPath = Yii::app()->createUrl('site/index');
+            foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+                if ($lang !== 'rut') {
+                    if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                    else {
+                        $_data = array();
+                        $_data['__langForUrl'] = $lang;
+                        $this->_otherLangPaths[$lang] = Yii::app()->createUrl('site/index', $_data);
+                    }
                 }
             }
         }
@@ -1019,7 +1025,7 @@ class SiteController extends MyController {
 
         /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/cmin/1000/cmax/9000/ */
 
-        $_GET['name_search'] = $_POST['search_name'];
+        $_GET['name_search'] = $_POST['name_search'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
         $_GET['binding'] = $_POST['binding_id'];
         $_GET['langVideo'] = $_POST['langVideo'];

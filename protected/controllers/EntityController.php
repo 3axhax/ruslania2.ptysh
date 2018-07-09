@@ -214,20 +214,15 @@ class EntityController extends MyController {
         
         
         if ($entity == 10) {
-            
             switch (Yii::app()->language) {
-                
-               case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
+                case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
                 break;
                 case 'en': 
                 //$this->pageTitle = 'Ruslania.com bookstore in Finland - buy Russian books online in '.geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
                 break;
             }
-            
         }
-        
-        
-		$this->render('list', array('categoryList' => $catList,
+        $this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'cid'=>$cid, 'filter_data' => $filter_data,

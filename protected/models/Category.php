@@ -489,8 +489,11 @@ class Category {
         
         if (mb_strlen($search) > 2) {
             
-            $criteria->addCondition('t.title_'.Yii::app()->language.' LIKE "%'.$search.'%" OR isbn LIKE "%'.$search.'%"');
-            
+            //$criteria->addCondition('t.title_'.Yii::app()->language.' LIKE "%'.$search.'%" OR isbn LIKE "%'.$search.'%"');
+            $criteria->addCondition('t.title_ru LIKE "%'.$search.'%" OR t.title_rut LIKE "%'.$search.'%" 
+            OR t.title_en LIKE "%'.$search.'%" OR t.title_fi LIKE "%'.$search.'%" 
+            OR isbn LIKE "%'.$search.'%"');
+
         }
 		
 		if ($_GET['sort']) {
@@ -584,7 +587,9 @@ class Category {
             $query[] = 'bc.series_id = ' . $seria;
         }
         if (mb_strlen($search) > 2) {
-            $query[] = '(bc.title_'.Yii::app()->language.' LIKE "%'.$search.'%" OR bc.isbn LIKE "%'.$search.'%")';
+            $query[] = '(bc.title_ru LIKE "%'.$search.'%" OR bc.title_rut LIKE "%'.$search.'%"
+            OR bc.title_en LIKE "%'.$search.'%" OR bc.title_fi LIKE "%'.$search.'%" 
+            OR bc.isbn LIKE "%'.$search.'%")';
         }
         if ($entity != 30 && $year_min != '' && $year_max != '') {
             $query[] = '(bc.year >= ' . $year_min . ' AND bc.year <= ' . $year_max . ')';

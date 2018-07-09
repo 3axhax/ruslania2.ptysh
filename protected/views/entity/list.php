@@ -70,7 +70,7 @@ $lang = Yii::app()->language;
                 ?>
 
             <ul class="items">
-                <?php foreach ($items as $item) : ?>
+                <?php $i=0; foreach ($items as $item) : $i++;?>
                     <?php
 
                     $item['entity'] = $entity;
@@ -79,6 +79,11 @@ $lang = Yii::app()->language;
                     <li>
                         <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
+                    <?php if ($i == 2): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'topInList')) ?></li>
+                    <?php elseif ($i == 20): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'centerInList')) ?></li>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
 		
@@ -163,58 +168,16 @@ $lang = Yii::app()->language;
                             $title_search =  $ui->item('A_NEW_SEARCH_ENT').': "'.Entity::GetTitle($entity).'"';
                         }
                     ?>
-                    <label class="title"><?=$title_search; ?></label>
-                    <input type="text" class="search inp" placeholder="<?=$ui->item('A_NEW_NAME_ISBN'); ?>" name="name_search" onkeyup="if ($(this).val().length > 2) { show_result_count($(this)); } else { $('.box_select_result_count').hide(1); }"/>
+                    <!--<label class="title"><?/*=$title_search; */?></label>
+                    <input type="text" class="search inp" placeholder="<?/*=$ui->item('A_NEW_NAME_ISBN'); */?>" name="name_search" onkeyup="if ($(this).val().length > 2) { show_result_count($(this)); } else { $('.box_select_result_count').hide(1); }"/>
                     <div class="box_select_result_count">
-                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div> <?=$ui->item('A_NEW_FILTER_SELECT')?>:
+                        <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div> <?/*=$ui->item('A_NEW_FILTER_SELECT')*/?>:
                         <span class="res_count"></span>
-                        <a  href="javascript:;" onclick="show_items()"><?=$ui->item('A_NEW_FILTER_VIEW')?></a>
-                    </div>
+                        <a  href="javascript:;" onclick="show_items()"><?/*=$ui->item('A_NEW_FILTER_VIEW')*/?></a>
+                    </div>-->
                 </div>
 
-                <?php /*if (!empty($bgs)) { */?><!--
-                    <div class="form-row bindings">
-                        <div class="box_select_result_count">
-                            <div class="arrow"><img src="/new_img/arrow_select.png" alt=""></div>
-                            <div class="close" onclick="$(this).parent().hide()">x</div> <?/*=$ui->item('A_NEW_FILTER_SELECT')*/?>:
-                            <span class="res_count"></span>
-                            <a  href="javascript:;" onclick="show_items()"><?/*=$ui->item('A_NEW_FILTER_VIEW')*/?></a>
-                        </div>
-                        <label class="title"><?/*
-						if ($entity == 10 OR $entity == 15) {
-							 echo $ui->item('A_NEW_FILTER_TYPE1');
-						} else {
-							echo $ui->item('A_NEW_FILTER_TYPE2');
-						}
 
-						*/?></label>
-
-
-                    <label><input type="checkbox" class="" name="binding_id[]" value="0" onchange="change_all_binding(event, true);show_result_count($(this));" <?/*= ($filter_data['binding_id']) ? '' : 'checked'*/?>/> Все</label>
-
-                        <?php
-/*                        foreach ($bgs as $bg => $binfo) {
-                            $row = Binding::GetBinding($entity, $binfo['binding_id']);
-                            $title = 'title_' . Yii::app()->language;
-                            if ($entity == 22 OR $entity == 24) {
-                                $row = Media::GetMedia($entity, $binfo['media_id']);
-                                $title = 'title';
-                            }
-                            if (!$row['id'])
-                                continue;
-
-							$sel = '';
-
-							if (isset($filter_data['binding_id']) && in_array($row['id'], $filter_data['binding_id'])) {
-								$sel = 'checked="checked"';
-							}
-
-                            echo '<label><input '.$sel.' type="checkbox" class="" name="binding_id[]" value="' . $row['id'] . '" onchange="show_result_count($(this));change_all_binding(event)"/> ' . str_replace('/', ' / ', $row[$title]) . '</label>';
-                        }
-                        */?>
-
-
-                    </div>--><?php /*} */?>
                 <input type="submit" value="<?= $ui->item('BTN_SEARCH_ALT') ?>" class="js_without">
             </form>
 
