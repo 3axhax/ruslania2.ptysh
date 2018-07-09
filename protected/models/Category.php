@@ -746,7 +746,7 @@ class Category {
 				}
 				
 			}
-                
+
 
             $cnt = Yii::app()->db->createCommand($sql)->queryScalar();
             Yii::app()->dbCache->set($key, $cnt, Yii::app()->params['DbCacheTime']);
@@ -778,15 +778,55 @@ class Category {
         return $ret;
     }
 
-    public function GetItems($entity, $cid, $paginator, $sort, $lang, $avail, $lang = '') {
-		$dp = Entity::CreateDataProvider($entity);
+    public function GetItems($entity, $cid, $paginator, $sort, $language, $avail, $lang = '') {
+        $lang = (int) $lang;
+        $dp = Entity::CreateDataProvider($entity);
+        $condition = $join = array();
+        if (!empty($avail)) $condition['avail'] = '(t.avail_for_order=1)';
+        if (!empty($cid)) {
+            $allChildren = $this->GetChildren($entity, $cid);
+            if (count($allChildren) > 0) {
+                array_push($allChildren, $cid);
+                $ids = '(' . implode(',', $allChildren) . ')';
+                $condition['category'] = '(code IN ' . $ids . ' OR subcode IN ' . $ids . ')';
+            }
+            else {
+                $condition['category'] = '(code = ' . (int)$cid . ' OR subcode = ' . (int)$cid . ')';
+            }
+        }
+        if ($lang > 0) {
+            $join['tAIL'] = 'join all_items_languages tAIL on (tAIL.item_id = t.id) and (language_id = ' . $lang . ')';
+        }
+        //	LEFT OUTER JOIN `vendors` `vendorData` ON (`t`.`vendor`=`vendorData`.`id`)
+        //LEFT OUTER JOIN `delivery_time_list` `deliveryTime` ON (`vendorData`.`dtid`=`deliveryTime`.`dtid`)
+
+        $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
+        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
+
+        $start = microtime_float();
+        $sql = ''.
+            'select t.id '.
+            'from ' . $dp->model->tableName() . ' t '.
+            implode(' ', $join) . ' '.
+            (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
+            'order by ' . SortOptions::GetSQL($sort, $lang, $entity) . ' '.
+            'limit ' . $paginator->getOffset() . ', ' . $paginator->getLimit() . ' '.
+            '';
+        $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        $end = microtime_float();
+//        Debug::staticRun(array($sql, $end-$start, $itemIds));
+
+        if (empty($itemIds)) return array();
+
         $criteria = $dp->getCriteria();
-		
+
 		//$lang = 'fi';
 		
 		$criteria->alias = 't';
-		
-        if (!empty($cid)) {
+        $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
+        $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
+
+/*        if (!empty($cid)) {
             $allChildren = array();
             $allChildren = $this->GetChildren($entity, $cid);
             if (count($allChildren) > 0) {
@@ -813,7 +853,7 @@ class Category {
             $criteria->addCondition('t.avail_for_order=1');
 		
 		$criteria->order = SortOptions::GetSQL($sort, $lang, $entity);
-        $paginator->applyLimit($criteria);
+        $paginator->applyLimit($criteria);*/
 		
 		//$criteria->join = ', `all_items_languages` `ail`';
 		

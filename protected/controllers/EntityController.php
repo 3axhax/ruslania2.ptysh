@@ -93,8 +93,8 @@ class EntityController extends MyController {
 
         }
         $this->_checkUrl($dataForPath, $langTitles);
-        $lang = '';
-        if (isset($_GET['sel']) && $_GET['lang'] != '') {
+        $lang = Yii::app()->getRequest()->getParam('lang');
+       /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
 				$lang = '';
@@ -108,7 +108,7 @@ class EntityController extends MyController {
 				$lang = '';
 			}
 			
-		}
+		}*/
 
 		$avail = $this->GetAvail($avail);
 
