@@ -37,7 +37,6 @@ function interactiveSearch(classInput, data, inp_name, result) {
         }
         else {
             $(classInput).prev().val(0);
-            select_item($(this), inp_name);
             $(result).fadeOut();
         }
     });
@@ -187,8 +186,7 @@ function show_result_count(url = '/ru/site/gtfilter/') {
             $('#loader-filter').html('&nbsp;('+data+')');
         },
         error: function (data) {
-            //console.log('Error response: ' + data.responseText);
-            console.log('Error response: ');
+            console.log('Error response');
         }
     });
 }
@@ -197,7 +195,7 @@ function show_result_count(url = '/ru/site/gtfilter/') {
 function show_items() {
 
     var create_url;
-    create_url = '/site/ggfilter' +
+    create_url = '/ru/site/ggfilter' +
         '/entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
         '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
@@ -221,7 +219,8 @@ function show_items() {
         url: create_url,
         type: "POST",
         data: { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
-            search_name : $('form.filter .search.inp').val(), sort : $('form.filter .sort').val(),
+            name_search : $('#name_search').val(),
+            sort : $('form.filter .sort').val(),
             formatVideo : $('#formatVideo').val(),
             langVideo : $('#langVideo').val(),
             subtitlesVideo : $('#subtitlesVideo').val(),

@@ -11,7 +11,11 @@
         <!--Поиск по категории/разделу-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?= $title_search?></label>
-            <input type="text" class="prod-filter__input search" placeholder="По названию,ISBN" name="name_search" />
+            <input type="text" placeholder="<?=$ui->item('A_NEW_NAME_ISBN');?>"
+                   onchange="if ($(this).val().length > 2 || $(this).val().length == 0) {
+                       show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>'); }"
+                   <?=($search = (isset($filter_data['name_search']) && $filter_data['name_search'] != '')) ? 'value='.$filter_data['name_search'] : ''?>
+                   name="name_search" id="name_search" class="prod-filter__input clearable <?= ($search) ? 'x' : ''?>"/>
         </div>
         <!--Фильтр по авторам-->
         <?php if (isset($filters['author']) && $filters['author'] == true):?>
