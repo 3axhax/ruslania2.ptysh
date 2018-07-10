@@ -260,7 +260,7 @@ class Product
     /* Получаем статус продука из таблицы "action_items" ("Новинка", "Акция") */
     private function GetStatusProductAction($entity, $id)
     {
-        if (isset(self::$_actionItems[$entity][$id])) {
+        if (!empty(self::$_actionItems[$entity])&&isset(self::$_actionItems[$entity][$id])) {
             $row = array(self::$_actionItems[$entity][$id]);
         }
         else {
@@ -275,7 +275,7 @@ class Product
     /* Получаем статус продука из таблицы "offer_items" ("В подборке") */
     private function GetStatusProductOffer($entity, $id)
     {
-        if (isset(self::$_offerItems[$entity][$id])) {
+        if (!empty(self::$_offerItems[$entity])&&isset(self::$_offerItems[$entity][$id])) {
             $row = array(self::$_offerItems[$entity][$id]);
         }
         else {
