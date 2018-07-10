@@ -803,7 +803,6 @@ class Category {
         $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
         $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
 
-        $start = microtime_float();
         $sql = ''.
             'select t.id '.
             'from ' . $dp->model->tableName() . ' t '.
@@ -813,11 +812,11 @@ class Category {
             'limit ' . $paginator->getOffset() . ', ' . $paginator->getLimit() . ' '.
             '';
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
-        $end = microtime_float();
-//        Debug::staticRun(array($sql, $end-$start, $itemIds));
 
         if (empty($itemIds)) return array();
 
+        Product::setActionItems($entity, $itemIds);
+        Product::setOfferItems($entity, $itemIds);
         $criteria = $dp->getCriteria();
 
 		//$lang = 'fi';

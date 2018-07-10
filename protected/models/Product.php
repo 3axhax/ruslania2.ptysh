@@ -2,6 +2,8 @@
 
 class Product
 {
+    private static $_actionItems = array(), $_offerItems = array();//чтоб много раз не выполнять запрос в списке товаров
+
     public function GetProductsForIndex($data)
     {
         $entity = new Entity();
@@ -236,12 +238,36 @@ class Product
         //$status = self::GetStatusProductOffer($entity, $id);
         return $status;
     }
+
+    static function setActionItems($entity, $ids) {
+        $sql = 'select * from action_items where (entity = ' . (int) $entity . ') and (item_id in (' . implode(',', $ids) . '))';
+        if (!isset(self::$_actionItems[$entity])) self::$_actionItems[$entity] = array();
+        foreach ($ids as $id) self::$_actionItems[$entity][$id] = array();
+        foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+            self::$_actionItems[$entity][$row['item_id']] = $row;
+        }
+    }
+
+    static function setOfferItems($entity, $ids) {
+        $sql = 'select * from offer_items where (entity_id = ' . (int) $entity . ') and (item_id in (' . implode(',', $ids) . '))';
+        if (!isset(self::$_offerItems[$entity])) self::$_offerItems[$entity] = array();
+        foreach ($ids as $id) self::$_offerItems[$entity][$id] = array();
+        foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+            self::$_offerItems[$entity][$row['item_id']] = $row;
+        }
+    }
+
     /* Получаем статус продука из таблицы "action_items" ("Новинка", "Акция") */
     private function GetStatusProductAction($entity, $id)
     {
+        if (isset(self::$_actionItems[$entity][$id])) {
+            $row = array(self::$_actionItems[$entity][$id]);
+        }
+        else {
+            $sql = 'SELECT * FROM `action_items` WHERE `item_id` = '.$id.' AND `entity` = '.$entity;
+            $row = Yii::app()->db->createCommand($sql)->queryAll();
+        }
         $status = false;
-        $sql = 'SELECT * FROM `action_items` WHERE `item_id` = '.$id.' AND `entity` = '.$entity;
-        $row = Yii::app()->db->createCommand($sql)->queryAll();
         if ($row && ($row[0]['type'] == 2)) $status = 'sale';
         if ($row && ($row[0]['type'] == 1)) $status = 'new';
         return $status;
@@ -249,9 +275,14 @@ class Product
     /* Получаем статус продука из таблицы "offer_items" ("В подборке") */
     private function GetStatusProductOffer($entity, $id)
     {
+        if (isset(self::$_offerItems[$entity][$id])) {
+            $row = array(self::$_offerItems[$entity][$id]);
+        }
+        else {
+            $sql = 'SELECT * FROM `offer_items` WHERE `item_id` = '.$id.' AND `entity_id` = '.$entity;
+            $row = Yii::app()->db->createCommand($sql)->queryAll();
+        }
         $status = false;
-        $sql = 'SELECT * FROM `offer_items` WHERE `item_id` = '.$id.' AND `entity_id` = '.$entity;
-        $row = Yii::app()->db->createCommand($sql)->queryAll();
         if ($row) $status = 'recommend';
         return $status;
     }
