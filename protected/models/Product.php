@@ -268,8 +268,14 @@ class Product
             $row = Yii::app()->db->createCommand($sql)->queryAll();
         }
         $status = false;
-        if ($row && ($row[0]['type'] == 2)) $status = 'sale';
-        if ($row && ($row[0]['type'] == 1)) $status = 'new';
+        if (!empty($row[0]['type'])) {
+            switch ((int)$row[0]['type']) {
+                case 2: $status = 'sale'; break;
+                case 1: $status = 'new'; break;
+            }
+        }
+//        if (!empty($row[0]['type']) && ($row[0]['type'] == 2)) $status = 'sale';
+//        if ($row && ($row[0]['type'] == 1)) $status = 'new';
         return $status;
     }
     /* Получаем статус продука из таблицы "offer_items" ("В подборке") */
@@ -283,7 +289,7 @@ class Product
             $row = Yii::app()->db->createCommand($sql)->queryAll();
         }
         $status = false;
-        if ($row) $status = 'recommend';
+        if (!empty($row[0])) $status = 'recommend';
         return $status;
     }
 
