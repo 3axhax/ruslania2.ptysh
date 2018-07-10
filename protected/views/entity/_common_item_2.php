@@ -196,12 +196,13 @@ $entityKey = Entity::GetUrlKey($entity);
 		
 		
 		<?php if (!empty($item['binding_id'])) : ?>
-                 <?
-					
-					$row = Binding::GetBinding($entity, $item['binding_id']);
-					echo 'Переплет: '.$row['title_' . Yii::app()->language];
-					
-				 ?>
+                 <?php
+					if (!empty($item['Binding']['title_' . Yii::app()->language])): ?>
+                        Переплет: <?= $item['Binding']['title_' . Yii::app()->language] ?>
+                       <?php else:
+//					$row = Binding::GetBinding($entity, $item['binding_id']);
+//					echo 'Переплет: '.$row['title_' . Yii::app()->language];
+					endif; ?>
 				<?php endif; ?>
 		
 </div>
