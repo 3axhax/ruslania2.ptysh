@@ -40,7 +40,11 @@ unset($r['defaultController']);
 //TODO::для формирования старых адресов
 unset($r['components']['urlManager']);
 
-$r['components']['request'] = array();
+$r['components']['request'] = array(
+    'hostInfo' => '',
+    'baseUrl' => '',
+    'scriptUrl' => ''
+);
 $r['components']['urlManager'] = array(
     'class' => 'MyUrlManager',
     'urlFormat' => 'path',

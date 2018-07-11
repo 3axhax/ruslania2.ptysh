@@ -8,10 +8,10 @@ define('OLD_PAGES', 1);
 
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class OldPagesCommand extends CConsoleCommand {
-	protected $_counts = 10; //кол-во записей за один проход
+	protected $_counts = 49500; //кол-во записей за один проход
 
 	public function actionIndex() {
-
+		echo 'start ' . date('d.m.Y H:i:s') . "\n";
 		$inswerSql = ''.
 			'insert ignore into seo_redirects set '.
 				'entity = :entity, '.
@@ -23,29 +23,78 @@ class OldPagesCommand extends CConsoleCommand {
 		$pdo = Yii::app()->db->createCommand($inswerSql);
 		$pdo->prepare();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			$step = 0;
-			while (($items = $this->_query($this->_sqlItems($params['site_table'], $step++)))&&($items->count() > 0)) {
-				foreach ($items as $item) {
-					$item['entity'] = $entity;
-					$params = array(
+			$this->_itemPages($entity, $params, $pdo);
+			$this->_categoryPages($entity, $params, $pdo);
+			$this->_tagPages($entity, $params, $pdo);
+		}
+		echo 'end ' . date('d.m.Y H:i:s') . "\n\n";
+
+	}
+
+	private function _categoryPages($entity, $params, CDbCommand $pdo) {
+//,
+		$langs = array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'es', 'se');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlCategorys($entity, $params['site_category_table'], $step++)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'cid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/list',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/list', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _itemPages($entity, $params, CDbCommand $pdo) {
+		$step = 0;
+		$langs = array('ru', 'rut', 'en', 'fi');
+		while (($items = $this->_query($this->_sqlItems($entity, $params['site_table'], $step++)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				$item['entity'] = $entity;
+				foreach ($langs as $lang) {
+					$insertParams = array(
 						':entity'=>$entity,
 						':route'=>'product/view',
 						':id'=>$item['id'],
-						':path'=>ProductHelper::CreateUrl($item, 'ru'),
-						':lang'=>'ru',
+						':path'=>ProductHelper::CreateUrl($item, $lang),
+						':lang'=>$lang,
 					);
-					$pdo->getPdoStatement()->execute($params);
-					$params[':path'] = ProductHelper::CreateUrl($item, 'rut');
-					$params[':lang'] = 'rut';
-					$pdo->getPdoStatement()->execute($params);
-					$params[':path'] = ProductHelper::CreateUrl($item, 'en');
-					$params[':lang'] = 'en';
-					$pdo->getPdoStatement()->execute($params);
-					$params[':path'] = ProductHelper::CreateUrl($item, 'fi');
-					$params[':lang'] = 'fi';
-					$pdo->getPdoStatement()->execute($params);
+					$pdo->getPdoStatement()->execute($insertParams);
 				}
-				return;
+			}
+			unset($items);
+			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
+		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
+		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovaniyami-na-russkom-yazyke
+		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovaniyami-na-russkom-yazyke
+		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovanijami-na-russkom-jazyke
+		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovanijami-na-russkom-jazyke
+	}
+
+	private function _tagPages($entity, $params, CDbCommand $pdo) {
+		$smapHtml = new Sitemap();
+		list($tags, $tagsAll, $tagsHand) = $smapHtml->getTags();
+		foreach ($tags as $tag=>$param) {
+			$funcName = '_' . $tag . 'Pages';
+			if ($smapHtml->checkTagByEntity($tag, $entity)&&method_exists($this, $funcName)) {
+				$this->$funcName($entity, $params, $pdo);
 			}
 		}
 
@@ -58,12 +107,460 @@ class OldPagesCommand extends CConsoleCommand {
 		return new IteratorsPDO($pdo->getPdoStatement());
 	}
 
-	private function _sqlItems($table, $step) {
+	private function _sqlItems($entity, $table, $step) {
 		return ''.
 		'select t.id, t.title_ru, title_rut, title_en, title_fi '.
 		'from `' . $table . '` t ' .
-			'join (select id from `' . $table . '` order by id limit ' . $this->_counts*$step . ', ' . $this->_counts . ') tId using (id) '.
+			'join ('.
+				'select tI.id '.
+				'from `' . $table . '` tI '.
+					'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "product/view") '.
+				'where (tSR.id is null) '.
+				'order by tI.id '.
+				'limit ' . $this->_counts*$step . ', ' . $this->_counts . ''.
+			') tId using (id) '.
 		'';
+	}
+
+	private function _sqlCategorys($entity, $table, $step) {
+		return ''.
+			'select t.id, t.title_ru, t.title_rut, t.title_en, t.title_fi, t.title_de, t.title_fr, t.title_es, t.title_se '.
+			'from `' . $table . '` t ' .
+				'join ('.
+					'select tI.id '.
+					'from `' . $table . '` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/list") '.
+					'where (tSR.id is null) '.
+					'order by tI.id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ''.
+				') tId using (id) '.
+		'';
+	}
+
+	private function _publisherPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'en');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlPublisher($entity, $step++)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'pid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/bypublisher',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/bypublisher', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo 'all_publishers ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _seriesPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlSeries($entity, $params['site_series_table'], $step++, $langs)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'sid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/byseries',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/byseries', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo $params['site_series_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _authorsPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlAuthors($entity, $params['author_table'], $step++, $langs)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'aid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/byauthor',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/byauthor', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo $params['author_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _actorsPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlActors($entity, $step++, $langs)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'aid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/byactor',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/byactor', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo 'video_actors ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _performersPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlPerformers($entity, $params['performer_table'], $step++, $langs)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'pid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/byperformer',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/byperformer', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo $params['performer_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _directorsPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		while (($items = $this->_query($this->_sqlDirectors($entity, $step++, $langs)))&&(($itemCounts = $items->count()) > 0)) {
+			foreach ($items as $item) {
+				foreach ($langs as $lang) {
+					$urlParams = array(
+						'entity' => Entity::GetUrlKey($entity),
+						'did' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/bydirector',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/bydirector', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+				}
+			}
+			unset($items);
+			echo 'video_directors ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			if ($itemCounts < $this->_counts) break;
+		}
+	}
+
+	private function _bindingPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$step = 0;
+		$items = $this->_query($this->_sqlBindings($entity, $params['binding_table'], $langs));
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'bid' => $item['id'],
+					'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+				);
+				$insertParams = array(
+					':entity'=>$entity,
+					':route'=>'entity/bybinding',
+					':id'=>$item['id'],
+					':path'=>Yii::app()->createUrl('entity/bybinding', $urlParams),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo $params['binding_table'] . "\n";
+	}
+
+	private function _audiostreamsPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se');
+		$items = $this->_query($this->_sqlAudiostreams($entity, $langs));
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'sid' => $item['id'],
+					'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+				);
+				$insertParams = array(
+					':entity'=>$entity,
+					':route'=>'entity/byaudiostream',
+					':id'=>$item['id'],
+					':path'=>Yii::app()->createUrl('entity/byaudiostream', $urlParams),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo "video_audiostreamlist\n";
+	}
+
+	private function _subtitlesPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se');
+		$items = $this->_query($this->_sqlSubtitles($entity, $langs));
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'sid' => $item['id'],
+					'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+				);
+				$insertParams = array(
+					':entity'=>$entity,
+					':route'=>'entity/bysubtitle',
+					':id'=>$item['id'],
+					':path'=>Yii::app()->createUrl('entity/bysubtitle', $urlParams),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo "video_creditslist\n";
+	}
+
+	private function _mediaPages($entity, $params, CDbCommand $pdo) {
+		$items = $this->_query($this->_sqlMedia($entity));
+		foreach ($items as $item) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+				'mid' => $item['id'],
+				'title'=>ProductHelper::ToAscii($item['title'])
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/bymedia',
+				':id'=>$item['id'],
+				':path'=>Yii::app()->createUrl('entity/bymedia', $urlParams),
+				':lang'=>'ru',
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+		unset($items);
+		echo "all_media\n";
+	}
+
+	private function _magazinetypePages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$items = $this->_query($this->_sqlMagazinetype($entity, $langs));
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'type' => $item['id'],
+					'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+				);
+				$insertParams = array(
+					':entity'=>$entity,
+					':route'=>'entity/bytype',
+					':id'=>$item['id'],
+					':path'=>Yii::app()->createUrl('entity/bytype', $urlParams),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo "pereodics_types\n";
+	}
+
+
+	private function _sqlPublisher($entity, $step) {
+		$sql = ''.
+			'select t.id, t.title_ru, t.title_en '.
+			'from `all_publishers` t '.
+				'join (select tI.id '.
+					'from `all_publishers` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bypublisher") '.
+					'where (tSR.id is null) '.
+					'order by tI.id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlSeries($entity, $tagTable, $step, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `' . $tagTable . '` t '.
+				'join (select tI.id '.
+					'from `' . $tagTable . '` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byseries") '.
+					'where (tSR.id is null) '.
+					'order by tI.id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+//		echo $sql . "\n";
+		return $sql;
+	}
+
+	private function _sqlAuthors($entity, $tagTable, $step, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `all_authorslist` t '.
+				'join (select tI.author_id id '.
+					'from `' . $tagTable . '` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.author_id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byauthor") '.
+					'where (tSR.id is null) '.
+					'group by tI.author_id '.
+					'order by tI.author_id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlActors($entity, $step, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `all_authorslist` t '.
+				'join (select tI.person_id id '.
+					'from `video_actors` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.person_id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byactor") '.
+					'where (tSR.id is null) '.
+					'group by tI.person_id '.
+					'order by tI.person_id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlPerformers($entity, $tagTable, $step, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `all_authorslist` t '.
+				'join (select tI.person_id id '.
+					'from `' . $tagTable . '` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.person_id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byperformer") '.
+						'where (tSR.id is null) '.
+					'group by tI.person_id '.
+					'order by tI.person_id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlDirectors($entity, $step, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `all_authorslist` t '.
+				'join (select tI.person_id id '.
+					'from `video_directors` tI '.
+						'left join seo_redirects tSR on (tSR.id = tI.person_id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bydirector") '.
+					'where (tSR.id is null) '.
+					'group by tI.person_id '.
+					'order by tI.person_id '.
+					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
+				') tId using (id) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlBindings($entity, $tableList, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `' . $tableList . '` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bybinding") '.
+			'where (tSR.id is null) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlAudiostreams($entity, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `video_audiostreamlist` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byaudiostream") '.
+			'where (tSR.id is null) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlSubtitles($entity, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `video_creditslist` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bysubtitle") '.
+			'where (tSR.id is null) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlMedia($entity) {
+		$sql = ''.
+			'select t.id, t.title '.
+			'from `all_media` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bymedia") '.
+			'where (tSR.id is null) '.
+		'';
+		return $sql;
+	}
+
+	private function _sqlMagazinetype($entity, $langs) {
+		$sql = ''.
+			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
+			'from `pereodics_types` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bytype") '.
+			'where (tSR.id is null) '.
+		'';
+		return $sql;
 	}
 
 }

@@ -236,7 +236,7 @@ class ProductHelper
             'id' => $item['id'],
             'title' => $title,
         );
-        if (!empty($lang)&&($lang !== Yii::app()->language)) $params['__langForUrl'] = $lang;
+        if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
         return Yii::app()->createUrl('product/view', $params);
     }
 

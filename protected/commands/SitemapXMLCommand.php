@@ -728,14 +728,14 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	private function _sqlActors($table, $step) {
 		$sql = ''.
 			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
-			'from `video_actorslist` t '.
-				'join (select actor_id id '.
+			'from `all_authorslist` t '.
+				'join (select person_id id '.
 					'from `video_actors` '.
-					'group by actor_id '.
-					'order by actor_id '.
+					'group by person_id '.
+					'order by person_id '.
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
-				'left join `video_actors` tIA on (tIA.actor_id = t.id) '.
+				'left join `video_actors` tIA on (tIA.person_id = t.id) '.
 				'left join `' . $table . '` tI on (tI.id = tIA.video_id) '.
 			'group by t.id	'.
 		'';
@@ -746,14 +746,14 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	private function _sqlPerformers($table, $tableList, $tableJoin, $tagField, $step) {
 		$sql = ''.
 			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
-			'from `' . $tableList . '` t '.
-				'join (select performer_id id '.
+			'from `all_authorslist` t '.
+				'join (select person_id id '.
 					'from `' . $tableJoin . '` '.
-					'group by performer_id '.
-					'order by performer_id '.
+					'group by person_id '.
+					'order by person_id '.
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
-				'left join `' . $tableJoin . '` tIA on (tIA.performer_id = t.id) '.
+				'left join `' . $tableJoin . '` tIA on (tIA.person_id = t.id) '.
 				'left join `' . $table . '` tI on (tI.id = tIA.' . $tagField . ') '.
 			'group by t.id	'.
 		'';
@@ -764,14 +764,14 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	private function _sqlDirectors($table, $step) {
 		$sql = ''.
 			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
-			'from `video_directorslist` t '.
-				'join (select director_id id '.
+			'from `all_authorslist` t '.
+				'join (select person_id id '.
 					'from `video_directors` '.
-					'group by director_id '.
-					'order by director_id '.
+					'group by person_id '.
+					'order by person_id '.
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
-				'left join `video_directors` tIA on (tIA.director_id = t.id) '.
+				'left join `video_directors` tIA on (tIA.person_id = t.id) '.
 				'left join `' . $table . '` tI on (tI.id = tIA.video_id) '.
 			'group by t.id	'.
 		'';
