@@ -70,6 +70,11 @@ return CMap::mergeArray(
                          'levels'=>'profile',
                          'enabled'=>true,
                      ),*/
+                    array( // -- CWebLogRoute --------------------------- медленные запросы в файл /test/slow_sql.log
+                        'class'=>'SlowSqlLogRoute',
+                        'levels'=>'profile',
+                        'enabled'=>true,
+                    ),
                  )),
          ),
 
