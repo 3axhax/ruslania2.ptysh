@@ -99,6 +99,10 @@ class MyUrlRule extends CUrlRule {
     function createUrl($manager,$route,$params,$ampersand) {
         if (defined('OLD_PAGES')) return parent::createUrl($manager,$route,$params,$ampersand);
 
+//        if (!empty($params['title'])&&!empty($params['entity'])) {
+//            $titles = HrefTitles::get()->getById(, $route, )
+//        }
+
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка

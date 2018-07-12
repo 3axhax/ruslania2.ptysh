@@ -19,12 +19,15 @@ class HrefTitles {
 	}
 
 	function getByIds($entity, $route, $ids) {
+		$idTitles = array();
+		foreach ($ids as $id) $idTitles[$id] = array();
+		$table = $this->getTable($entity, $route);
+		if (empty($table)) return $idTitles; //если не нашел таблицу с title то дальше не ищу
+
 		if (!isset($this->_titles[$route])) $this->_titles[$route] = array();
 		if (!isset($this->_titles[$route][$entity])) $this->_titles[$route][$entity] = array();
 
 		//это, чтоб выполнить запрос только для ид, которых еще нет
-		$idTitles = array();
-		foreach ($ids as $id) $idTitles[$id] = array();
 		foreach ($this->_titles[$route][$entity] as $id=>$titles) {
 			$idTitles[$id] = unserialize($titles);
 		}
