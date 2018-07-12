@@ -173,16 +173,43 @@
             <!--Фильтр по типу/переплету-->
         <div class="prod-filter__col--grow">
             <label class="prod-filter__label" for="">
-                <?php if ($entity == 10 OR $entity == 15) echo $ui->item('A_NEW_FILTER_TYPE1');
-                else echo $ui->item('A_NEW_FILTER_TYPE2'); ?>
-                :</label>
+                <?php if ($entity == 10 OR $entity == 15) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
+                else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
+                <?=$label_binding?>:</label>
 
-            <label class="prod-filter__checkbox">
+            <select id="binding_select" multiple="multiple" name="binding_id[]" onchange="show_result_count()">
+                <?php
+                foreach ($filters['binding'] as $bg => $binfo) {
+                if ($entity == 22 OR $entity == 24) {
+                    $row = Media::GetMedia($entity, $binfo['media_id']);
+                    $title = 'title';
+                }
+                else {
+                    $row = Binding::GetBinding($entity, $binfo['binding_id']);
+                    $title = 'title_' . Yii::app()->language;
+                }
+                if (!$row['id'])
+                    continue;
+                $sel = '';
+                if (isset($filter_data['binding_id']) && in_array($row['id'], $filter_data['binding_id'])) {
+                    $sel = 'selected="selected"';
+                }
+                ?>
+                <option value="<?=$row['id']?>" <?=$sel?>><?= str_replace('/', ' / ', $row[$title])?></option>
+                <?php } ?>
+            </select>
+            <script>
+                $('#binding_select').multipleSelect({
+                    selectAllText: '<?= $ui->item('A_NEW_FILTER_ALL')?>',
+                    placeholder: '<?= $label_binding ?>',
+                });
+            </script>
+            <!--<label class="prod-filter__checkbox">
                 <input type="checkbox" class="bindings" name="binding_id[]" value="0"
-                       onchange="change_all_binding(event, true);show_result_count($(this));" checked="">
-                <?= $ui->item('A_NEW_FILTER_ALL')?></label>
+                       onchange="change_all_binding(event, true);show_result_count();" checked="">
+                <?/*= $ui->item('A_NEW_FILTER_ALL')*/?></label>
             <?php
-            foreach ($filters['binding'] as $bg => $binfo) {
+/*            foreach ($filters['binding'] as $bg => $binfo) {
                 if ($entity == 22 OR $entity == 24) {
                     $row = Media::GetMedia($entity, $binfo['media_id']);
                     $title = 'title';
@@ -197,12 +224,13 @@
                 if (isset($filter_data['binding_id']) && in_array($row['id'], $filter_data['binding_id'])) {
                     $sel = 'checked="checked"';
                 }
-                echo    '<label  class="prod-filter__checkbox">
-                        <input '.$sel.' type="checkbox" class="bindings" name="binding_id[]" value="' . $row['id'] . '" 
-                        onchange="change_all_binding(event);show_result_count('.Yii::app()->createUrl('/site/gtfilter/').');"/> 
-                        ' . str_replace('/', ' / ', $row[$title]) . '</label>';
-            }
-            ?>
+                */?><label class="prod-filter__checkbox"><input <?/*=$sel*/?> type="checkbox" class="bindings"
+                         name="binding_id[]" value="<?/*=$row['id']*/?>"
+                         onchange="change_all_binding(event);show_result_count('<?/*=Yii::app()->createUrl('/site/gtfilter/')*/?>');"/>
+                        <?/*= str_replace('/', ' / ', $row[$title])*/?></label>;
+            --><?php
+/*            }
+            */?>
         </div>
         <?php endif;?>
     </div>
