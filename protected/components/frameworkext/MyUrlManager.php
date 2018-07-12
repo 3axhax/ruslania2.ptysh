@@ -32,22 +32,22 @@ class MyUrlManager extends CUrlManager
             if (!empty($query)
                 &&(Yii::app()->language !== 'rut')//это чтоб убрать lang и language из адреса
             ) $url .= '?' . $query;
-       }
+        }
         return $url;
     }
 
     public static function RewriteCurrency($controller, $currency) {
-/*        $query = (string)Yii::app()->getRequest()->getQueryString();
+        /*        $query = (string)Yii::app()->getRequest()->getQueryString();
 
-        $url = Yii::app()->getRequest()->getPathInfo() . '/';
-        if (Yii::app()->language !== 'rut') $url = '/' . Yii::app()->language . '/' . $url;
+				$url = Yii::app()->getRequest()->getPathInfo() . '/';
+				if (Yii::app()->language !== 'rut') $url = '/' . Yii::app()->language . '/' . $url;
 
-        $query = preg_replace("/\bcurrency=\d?\b/ui", '', $query);
-        $query = preg_replace(array("/[&]{2,}/ui"), array('&'), $query);
+				$query = preg_replace("/\bcurrency=\d?\b/ui", '', $query);
+				$query = preg_replace(array("/[&]{2,}/ui"), array('&'), $query);
 
-        if (!empty($query)) $query .= '&';
-        $query .= 'currency=' . $currency;
-        return $url . '?' . $query;*/
+				if (!empty($query)) $query .= '&';
+				$query .= 'currency=' . $currency;
+				return $url . '?' . $query;*/
 
 
         $params = $_GET;
@@ -71,7 +71,7 @@ class MyUrlManager extends CUrlManager
 //    }
 
     function init() {
-        $this->cacheID .= '_' . Yii::app()->language;
+        if (!defined('OLD_PAGES')) $this->cacheID .= '_' . Yii::app()->language;
         parent::init();
     }
     function parseUrl($request) {
@@ -85,6 +85,8 @@ class MyUrlManager extends CUrlManager
     }
 
     protected function createUrlDefault($route,$params,$ampersand) {
+        if (defined('OLD_PAGES')) return parent::createUrlDefault($route,$params,$ampersand);
+
         $language = Yii::app()->language;
         if (!empty($language)) $route = $language . '/' . $route;
         return parent::createUrlDefault($route,$params,$ampersand);
@@ -95,6 +97,8 @@ class MyUrlManager extends CUrlManager
 
 class MyUrlRule extends CUrlRule {
     function createUrl($manager,$route,$params,$ampersand) {
+        if (defined('OLD_PAGES')) return parent::createUrl($manager,$route,$params,$ampersand);
+
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка
@@ -133,6 +137,8 @@ class MyUrlRule extends CUrlRule {
 
     function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
+        if (defined('OLD_PAGES')) return $result;
+
         if (($result === 'entity/list')&&!empty($_GET['lang'])) {
             $langGoods = ProductLang::getShortLang();
             if (is_numeric($_GET['lang'])&&!empty($langGoods[$_GET['lang']])) $langId = $_GET['lang'];
