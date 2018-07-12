@@ -71,7 +71,7 @@ class MyUrlManager extends CUrlManager
 //    }
 
     function init() {
-        if (!defined('OLD_PAGES')) $this->cacheID .= '_' . Yii::app()->language;
+        $this->cacheID .= '_' . Yii::app()->language;
         parent::init();
     }
     function parseUrl($request) {
@@ -85,8 +85,6 @@ class MyUrlManager extends CUrlManager
     }
 
     protected function createUrlDefault($route,$params,$ampersand) {
-        if (defined('OLD_PAGES')) return parent::createUrlDefault($route,$params,$ampersand);
-
         $language = Yii::app()->language;
         if (!empty($language)) $route = $language . '/' . $route;
         return parent::createUrlDefault($route,$params,$ampersand);
@@ -97,8 +95,6 @@ class MyUrlManager extends CUrlManager
 
 class MyUrlRule extends CUrlRule {
     function createUrl($manager,$route,$params,$ampersand) {
-        if (defined('OLD_PAGES')) return parent::createUrl($manager,$route,$params,$ampersand);
-
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка
@@ -137,8 +133,6 @@ class MyUrlRule extends CUrlRule {
 
     function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
-        if (defined('OLD_PAGES')) return $result;
-
         if (($result === 'entity/list')&&!empty($_GET['lang'])) {
             $langGoods = ProductLang::getShortLang();
             if (is_numeric($_GET['lang'])&&!empty($langGoods[$_GET['lang']])) $langId = $_GET['lang'];

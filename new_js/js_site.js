@@ -7,6 +7,7 @@ $(document).ready(function(){
         prevArrow:"<div class=\"btn_left slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_left_news.png\"></div>",
         nextArrow:"<div class=\"btn_right slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_right_news.png\"></div>"
     });
+
 });
 
 function initMoreFilterButton () {
@@ -30,10 +31,11 @@ $(document).on('input', '.clearable', function(){
 
 //Функция живого поиска
 function interactiveSearch(classInput, data, inp_name, result) {
-    //console.log(data);
     $(classInput).bind("change keyup input click", function () {
         if (this.value.length >= 2) {
-            if ((val = findEqual(this.value, data)) != '') $(result).html(val).fadeIn();
+            if ((val = findEqual(this.value, data)) != '') {
+                $(result).html(val).fadeIn();
+            }
         }
         else {
             $(classInput).prev().val(0);
@@ -209,10 +211,12 @@ function show_items() {
         '/langsel/'+(( langsel = $('form.filter input.lang').val()) ? langsel : '');
     var bindings = [];
     var i = 0;
-    $('.bindings:checked').each(function() {
+
+    /*$('.bindings:checked').each(function() {
         bindings[i] = $(this).val();
         i++;
-    });
+    });*/
+    bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
     $.ajax({
