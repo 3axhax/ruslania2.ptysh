@@ -44,7 +44,7 @@ class Category {
         //2 запроса потому, что нет возможности подобрать индекс
         $sql = ''.
             'select max(year) as max_year, min(year) as min_year '.
-            'from ' . $tbl . ' use index (year_2) '.
+            'from ' . $tbl . ' '.
             'where ' . implode(' and ', $condition) . ' '.
             'limit 1 '.
         '';
@@ -54,7 +54,7 @@ class Category {
 
         $sql = ''.
             'select max(brutto) as cost_max, min(brutto) as cost_min '.
-            'from ' . $tbl . ' use index (avail_for_order_2) '.
+            'from ' . $tbl . ' '.
             'where ' . implode(' and ', $condition) . ' '.
             'limit 1 '.
             '';

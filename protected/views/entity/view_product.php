@@ -32,7 +32,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 <div class="row">
 	<div class="span1" style="position: relative">
         <?php $this->renderStatusLables($item['status']); ?>
-        <img alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
     </div>
 	<div class="span11 to_cart"><h1 class="title"><?= ProductHelper::GetTitle($item); ?></h1>
 	

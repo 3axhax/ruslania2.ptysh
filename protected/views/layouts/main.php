@@ -65,9 +65,11 @@ $ui = Yii::app()->ui;
         <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
         <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
-        <script src="/new_js/js_site.js" type="text/javascript"></script>
         <script src="/new_js/jquery.js" type="text/javascript"></script>
         <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
+        <script src="/new_js/js_site.js" type="text/javascript"></script>
+        <script src="/new_js/multiple-select.js" type="text/javascript"></script>
+
         <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
         <script src="/new_js/jScrollPane.js" type="text/javascript"></script>
         <script src="/new_js/slick.js" type="text/javascript" charset="utf-8"></script>
