@@ -77,7 +77,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo $params['site_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
@@ -159,7 +159,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo 'all_publishers ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo 'all_publishers ' . ' bypublisher ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -186,7 +186,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo $params['site_series_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo $params['site_series_table'] . ' byseries ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -213,7 +213,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo $params['author_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo $params['author_table'] . ' byauthor ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -240,7 +240,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo 'video_actors ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo 'video_actors ' . ' byactor ' . $entity . ' '  . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -267,7 +267,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo $params['performer_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo $params['performer_table'] . ' byperformer ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -294,7 +294,7 @@ class OldPagesCommand extends CConsoleCommand {
 				}
 			}
 			unset($items);
-			echo 'video_directors ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+			echo 'video_directors ' . ' bydirector ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
 	}
@@ -321,7 +321,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 		}
 		unset($items);
-		echo $params['binding_table'] . "\n";
+		echo $params['binding_table'] . ' bybinding ' . $entity . ' ' . "\n";
 	}
 
 	private function _audiostreamsPages($entity, $params, CDbCommand $pdo) {
