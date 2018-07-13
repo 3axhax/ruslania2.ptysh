@@ -295,7 +295,7 @@ class SearchController extends MyController {
 		$ids = array_unique($ids);
 		if (empty($ids)) return array();
 
-		$result = SearchHelper::ProcessPersons($roles, $ids);
+		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
 		return $result;
 	}
 
@@ -341,11 +341,13 @@ class SearchController extends MyController {
 			$itemTitle = ProductHelper::GetTitle($row);
 			$title = Entity::GetTitle($row['entity']) . '; ' . sprintf(Yii::app()->ui->item('PUBLISHED_BY'), '<b>' . $itemTitle . '</b>');
 
-			$item['url'] = Yii::app()->createUrl('entity/bypublisher',
-				array('entity' => Entity::GetUrlKey($row['entity']),
-					'title' => ProductHelper::ToAscii($itemTitle),
-					'pid' => $row['id']
-				));
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($row['entity']),
+				'title' => ProductHelper::ToAscii($itemTitle),
+				'pid' => $row['id']
+			);
+			if (!$this->GetAvail(1)) $urlParams['avail'] = 0;
+			$item['url'] = Yii::app()->createUrl('entity/bypublisher', $urlParams);
 			$item['title'] = $title;
 			$item['orig_data'] = $row;
 			$ret[] = $item;
@@ -373,9 +375,14 @@ class SearchController extends MyController {
 		foreach ($rows as $item) {
 			$itemTitle = ProductHelper::GetTitle($item);
 			$row = array();
-			$row['url'] = Yii::app()->createUrl('entity/list', array('cid' => $item['real_id'],
+
+			$urlParams = array(
+				'cid' => $item['real_id'],
 				'title' => ProductHelper::ToAscii($itemTitle),
-				'entity' => Entity::GetUrlKey($item['entity'])));
+				'entity' => Entity::GetUrlKey($item['entity'])
+			);
+			if (!$this->GetAvail(1)) $urlParams['avail'] = 0;
+			$row['url'] = Yii::app()->createUrl('entity/list', $urlParams);
 			$row['title'] = Entity::GetTitle($item['entity']) . ' - ' . Yii::app()->ui->item('Related categories') . ': <b>' . $itemTitle . '</b>';
 			$row['is_product'] = false;
 			$row['orig_data'] = $item;
