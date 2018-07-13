@@ -87,7 +87,7 @@ class HrefTitles {
 			case 'entity/bymedia': return 'all_media'; break;
 			case 'entity/byaudiostream': return 'video_audiostreamlist'; break;
 			case 'entity/bysubtitle': return 'video_creditslist'; break;
-			case 'entity/bytype': return 'pereodics_types'; break;
+//			case 'entity/bytype': return 'pereodics_types'; break;
 			case 'entity/byauthor':
 			case 'entity/byactor':
 			case 'entity/bydirector':
@@ -112,7 +112,7 @@ class HrefTitles {
 			case 'entity/bymedia': return array(); break;
 			case 'entity/byaudiostream': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
 			case 'entity/bysubtitle': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
-			case 'entity/bytype': return array('ru', 'rut', 'en', 'fi'); break;
+//			case 'entity/bytype': return array('ru', 'rut', 'en', 'fi'); break;
 			case 'entity/byauthor':
 			case 'entity/byactor':
 			case 'entity/bydirector':
@@ -154,6 +154,24 @@ class HrefTitles {
 
 	private function _checkEmpty($title) {
 		return empty($title);
+	}
+
+	function getIdName($entity, $route) {
+		switch ($route) {
+			case 'product/view': return 'id'; break;
+			case 'entity/list': return 'cid'; break;
+			case 'entity/bypublisher': return 'pid'; break;
+			case 'entity/bybinding': return 'bid'; break;
+			case 'entity/byseries': return 'sid'; break;
+			case 'entity/bymedia': return 'mid'; break;
+			case 'entity/byaudiostream': return 'sid'; break;
+			case 'entity/bysubtitle': return 'sid'; break;
+//			case 'entity/bytype': return 'tid'; break;
+			case 'entity/byauthor': case 'entity/byactor': return 'aid'; break;
+			case 'entity/bydirector': return 'did'; break;
+			case 'entity/byperformer': return 'pid'; break;
+		}
+		return '';
 	}
 
 }

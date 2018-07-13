@@ -99,16 +99,24 @@ class MyUrlRule extends CUrlRule {
     function createUrl($manager,$route,$params,$ampersand) {
         if (defined('OLD_PAGES')) return parent::createUrl($manager,$route,$params,$ampersand);
 
-//        if (!empty($params['title'])&&!empty($params['entity'])) {
-//            $titles = HrefTitles::get()->getById(, $route, )
-//        }
-
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка
             $language = $params['__langForUrl'];
         }
         unset($params['__langForUrl']);
+
+        if (isset($_GET['ha'])&&!empty($params['title'])&&!empty($params['entity'])) {
+            $entity = Entity::ParseFromString($params['entity']);
+            $idName = HrefTitles::get()->getIdName($entity, $route);
+            if (!empty($params[$idName])) {
+                $titles = HrefTitles::get()->getById($entity, $route, $params[$idName]);
+                if (!empty($titles)) {
+                    if (!empty($titles[$language])) $params['title'] = $titles[$language];
+                    elseif (!empty($titles['en'])) $params['title'] = $titles['en'];
+                }
+            }
+        }
 
         $langGood = '';
         $langGoodId = 0;
