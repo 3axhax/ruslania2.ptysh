@@ -216,7 +216,7 @@ class HrefTitlesCommand extends CConsoleCommand {
 	private function _magazinetypePages($entity, $params) {
 		$langs = array('ru', 'rut', 'en', 'fi');
 		$items = $this->_query($this->_sqlMagazinetype($entity, $langs));
-		$this->_save($entity, $items, $langs, 'entity/bytype');
+		$this->_save($entity, $items, $langs, 'entity/bymagazinetype');
 		unset($items);
 		echo "pereodics_types\n";
 	}

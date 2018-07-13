@@ -400,14 +400,14 @@ class OldPagesCommand extends CConsoleCommand {
 			foreach ($langs as $lang) {
 				$urlParams = array(
 					'entity' => Entity::GetUrlKey($entity),
-					'type' => $item['id'],
+					'tid' => $item['id'],
 					'title'=>ProductHelper::ToAscii($item['title_' . $lang])
 				);
 				$insertParams = array(
 					':entity'=>$entity,
-					':route'=>'entity/bytype',
+					':route'=>'entity/bymagazinetype',
 					':id'=>$item['id'],
-					':path'=>Yii::app()->createUrl('entity/bytype', $urlParams),
+					':path'=>Yii::app()->createUrl('entity/bymagazinetype', $urlParams),
 					':lang'=>$lang,
 				);
 				$pdo->getPdoStatement()->execute($insertParams);
@@ -557,7 +557,7 @@ class OldPagesCommand extends CConsoleCommand {
 		$sql = ''.
 			'select t.id, t.title_' . implode(', t.title_', $langs) . ' '.
 			'from `pereodics_types` t '.
-				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bytype") '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bymagazinetype") '.
 			'where (tSR.id is null) '.
 		'';
 		return $sql;
