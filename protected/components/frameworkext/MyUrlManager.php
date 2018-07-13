@@ -75,7 +75,12 @@ class MyUrlManager extends CUrlManager
         parent::init();
     }
     function parseUrl($request) {
+        $rawPathInfo=$request->getPathInfo();
+        $pathInfo=$this->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
         $result = parent::parseUrl($request);
+        if ($pathInfo === $result) {
+            HrefTitles::get()->redirectOldPage($pathInfo);
+        }
         return $result;
     }
 

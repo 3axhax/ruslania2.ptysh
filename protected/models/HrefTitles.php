@@ -88,6 +88,7 @@ class HrefTitles {
 			case 'entity/byaudiostream': return 'video_audiostreamlist'; break;
 			case 'entity/bysubtitle': return 'video_creditslist'; break;
 //			case 'entity/bytype': return 'pereodics_types'; break;
+			case 'entity/bymagazinetype': return 'pereodics_types'; break;
 			case 'entity/byauthor':
 			case 'entity/byactor':
 			case 'entity/bydirector':
@@ -113,6 +114,7 @@ class HrefTitles {
 			case 'entity/byaudiostream': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
 			case 'entity/bysubtitle': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
 //			case 'entity/bytype': return array('ru', 'rut', 'en', 'fi'); break;
+			case 'entity/bymagazinetype': return array('ru', 'rut', 'en', 'fi'); break;
 			case 'entity/byauthor':
 			case 'entity/byactor':
 			case 'entity/bydirector':
@@ -167,11 +169,37 @@ class HrefTitles {
 			case 'entity/byaudiostream': return 'sid'; break;
 			case 'entity/bysubtitle': return 'sid'; break;
 //			case 'entity/bytype': return 'tid'; break;
+			case 'entity/bymagazinetype': return 'tid'; break;
 			case 'entity/byauthor': case 'entity/byactor': return 'aid'; break;
 			case 'entity/bydirector': return 'did'; break;
 			case 'entity/byperformer': return 'pid'; break;
 		}
 		return '';
+	}
+
+	function redirectOldPage($url) {
+		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
+		$sql = ''.
+			'select entity, route, id, lang '.
+			'from seo_redirects '.
+			'where (path = :url) '.
+			'limit 1 '.
+		'';
+		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
+		if (!empty($row)) {
+			$titles = $this->getById($row['entity'], $row['route'], $row['id']);
+			if (!empty($titles)) {
+				$title = isset($titles[$row['lang']])?$titles[$row['lang']]:$titles['en'];
+				$urlParams = array(
+					'entity'=>Entity::GetUrlKey($row['entity']),
+					$this->getIdName($row['entity'], $row['route'])=>$row['id'],
+					'title'=>$title,
+					'__langForUrl'=>$row['lang'],
+				);
+				$url = Yii::app()->createUrl($row['route'], $urlParams);
+				if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+			}
+		}
 	}
 
 }
