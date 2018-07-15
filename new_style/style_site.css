@@ -2692,7 +2692,10 @@ li.category_all {
     width: 50px;
 }
 .prod-filter__input--m {
-    width: 110px;
+    width: 138px;
+}
+.prod-filter__input__select--m {
+    width: 161px;
 }
 input.prod-filter__input {
     margin-bottom: 0;
@@ -2797,6 +2800,7 @@ input.prod-filter__input:focus,
     -moz-border-radius: 4px;
     border-radius: 4px;
     background-color: #fff;
+    height: 30px;
 }
 
 .ms-choice.disabled {
