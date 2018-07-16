@@ -1329,7 +1329,7 @@ class EntityController extends MyController {
             return;
         }
 
-        $this->_redirectOldPages($path, $this->_canonicalPath, $query);
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query, $data);
         throw new CHttpException(404);
 
    	}

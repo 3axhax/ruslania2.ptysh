@@ -228,4 +228,20 @@ class HrefTitles {
 		}
 	}
 
+	function getOldNames($entity, $route, $id, $lang) {
+		$sql = ''.
+			'select titles '.
+			'from seo_old_href_titles '.
+			'where (entity = :entity) '.
+				'and (route = :route) '.
+				'and (id = :id) '.
+		'';
+		$titles = array();
+		foreach (Yii::app()->db->createCommand($sql)->queryColumn( array(':entity'=>$entity, ':route'=>$route, ':id'=>$id)) as $row) {
+			$row = @unserialize($row);
+			if (empty($row[$lang])) $titles[] = $row['en'];
+			else $titles[] = $row[$lang];
+		}
+		return $titles;
+	}
 }

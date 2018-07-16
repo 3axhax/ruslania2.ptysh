@@ -104,8 +104,6 @@ class MyController extends CController
         if(!in_array($lang, $validLangs)) $lang = Yii::app()->params['DefaultLanguage'];
 
         $this->SetNewLanguage($lang);
-
-//        $this->widget('Debug', array($params, MyUrlManager::rules));
     }
 
     public function filters()
@@ -337,16 +335,30 @@ class MyController extends CController
      * @param $realPage
      * @param $query
      */
-    protected function _redirectOldPages($oldPage, $realPage, $query) {
+    protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
 //        $this->redirect($realPage . $query, true, 301);
 //        return;
-//        Debug::staticRun(array($oldPage, $realPage, $query));
 
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
         elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, $oldPage, null, 'utf-8') !== false)) $oldPage = $realPage;
 
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
+
+        $route = $this->id . '/' . $this->action->id;
+        if (!empty($data['entity'])) {
+            $entity = $data['entity'];
+            $data['entity'] = Entity::GetUrlKey($entity);
+            $idName = HrefTitles::get()->getIdName($entity, $route);
+            if (!empty($idName)&&!empty($data[$idName])) {
+                $data['__useTitleParams'] = true;
+                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], Yii::app()->language) as $oldTitle) {
+                    $data['title'] = $oldTitle;
+                    $path = Yii::app()->createUrl($route, $data);
+                    if ($path === $oldPage) $this->redirect($realPage . $query, true, 301);
+                }
+            }
+        }
     }
 
 }

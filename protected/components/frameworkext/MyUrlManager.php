@@ -115,13 +115,16 @@ class MyUrlRule extends CUrlRule {
             $entity = Entity::ParseFromString($params['entity']);
             $idName = HrefTitles::get()->getIdName($entity, $route);
             if (!empty($params[$idName])) {
-                $titles = HrefTitles::get()->getById($entity, $route, $params[$idName]);
-                if (!empty($titles)) {
-                    if (!empty($titles[$language])) $params['title'] = $titles[$language];
-                    elseif (!empty($titles['en'])) $params['title'] = $titles['en'];
+                if (empty($params['__useTitleParams'])) {
+                    $titles = HrefTitles::get()->getById($entity, $route, $params[$idName]);
+                    if (!empty($titles)) {
+                        if (!empty($titles[$language])) $params['title'] = $titles[$language];
+                        elseif (!empty($titles['en'])) $params['title'] = $titles['en'];
+                    }
                 }
             }
         }
+        unset($params['__useTitleParams']);
 
         $langGood = '';
         $langGoodId = 0;
