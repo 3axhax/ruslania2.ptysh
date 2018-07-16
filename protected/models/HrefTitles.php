@@ -158,6 +158,11 @@ class HrefTitles {
 		return empty($title);
 	}
 
+	function isTitleRoute($route) {
+		$idName = $this->getIdName(10, $route);
+		return !empty($idName);
+	}
+
 	function getIdName($entity, $route) {
 		switch ($route) {
 			case 'product/view': return 'id'; break;
@@ -178,6 +183,8 @@ class HrefTitles {
 	}
 
 	function redirectOldPage($url) {
+		if (isset($_GET['ha'])) if (!$this->isTitleRoute(Yii::app()->getController()->id . '/' . Yii::app()->getController()->action->id)) return;
+
 		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
 		$sql = ''.
 			'select entity, route, id, lang '.

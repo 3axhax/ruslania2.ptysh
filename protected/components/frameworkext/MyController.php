@@ -327,18 +327,10 @@ class MyController extends CController
      * - адреса без наименования
      * реальные адреса заканчиваются на "/"
      *
-     * 27.06.18 какая-то неразбериха, решение Дениса:
-     *
-    https://ruslania.com/video/6279/gogol-nachalo
-    https://ruslania.com/video/6279/gogol-nachalo/qweqwewqe
-    https://ruslania.com/video/6279/gogol-nachalosdfsdfasdf
-    https://ruslania.com/video/6279
-    https://ruslania.com/video/6279/
-
-    должны редиректить 301 на https://ruslania.com/video/6279/gogol-nachalo/
-    а если учесть последнюю задачу по переделке структуры url на сайте, то должно редиректить уже на
-    https://ruslania.com/ru/video/6279-gogol-nachalo/
-     * делаю редирект на реальный адрес всегда
+     * 16.07.18
+     * есть таблица seo_href_titles там подготевленные title для разных языков для формирования путей.
+     * Для страницы предполагается однозначный путь, даже если поменяется наименование
+     * в таблице seo_old_href_titles старые названия, на случай если иземяется title из таблицы seo_href_titles
      *
      * функция делает редирект на реальный адрес, если старый адрес похож на реальный
      * @param $oldPage
@@ -346,8 +338,9 @@ class MyController extends CController
      * @param $query
      */
     protected function _redirectOldPages($oldPage, $realPage, $query) {
-        $this->redirect($realPage . $query, true, 301);
-        return;
+//        $this->redirect($realPage . $query, true, 301);
+//        return;
+//        Debug::staticRun(array());
 
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
