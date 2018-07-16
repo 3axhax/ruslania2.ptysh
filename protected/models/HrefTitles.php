@@ -158,9 +158,28 @@ class HrefTitles {
 		return empty($title);
 	}
 
-	function isTitleRoute($route) {
-		$idName = $this->getIdName(10, $route);
-		return !empty($idName);
+	function isTitleRoute($url) {
+		if (mb_strpos($url, '/', null, 'utf-8') === 0) $url = mb_substr($url, 1, null, 'utf-8');
+		$noTitleRoutes = array(
+			'site',
+			'cart',
+			'liveSeach',
+			'search',
+			'bookshelf',
+			'client',
+			'offers',
+			'order',
+			'payment',
+			'paytrail',
+			'request',
+			'special',
+		);
+		$url = mb_strtolower($url, 'utf-8');
+		foreach ($noTitleRoutes as $route) {
+			$route = mb_strtolower($route, 'utf-8');
+			if (mb_strpos($url, $route, null, 'utf-8') === 0) return false;
+		}
+		return true;
 	}
 
 	function getIdName($entity, $route) {
@@ -183,7 +202,7 @@ class HrefTitles {
 	}
 
 	function redirectOldPage($url) {
-		if (!$this->isTitleRoute(Yii::app()->getController()->id . '/' . Yii::app()->getController()->action->id)) return;
+		if (!$this->isTitleRoute()) return;
 
 		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
 		$sql = ''.
@@ -192,7 +211,7 @@ class HrefTitles {
 			'where (path = :url) '.
 			'limit 1 '.
 		'';
-		Debug::staticRun(array($sql));
+		Debug::staticRun(array($url, $sql, Yii::app()->getRequest()));
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
 		if (!empty($row)) {
 			$titles = $this->getById($row['entity'], $row['route'], $row['id']);

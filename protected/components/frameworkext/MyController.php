@@ -340,7 +340,7 @@ class MyController extends CController
     protected function _redirectOldPages($oldPage, $realPage, $query) {
 //        $this->redirect($realPage . $query, true, 301);
 //        return;
-//        Debug::staticRun(array());
+//        Debug::staticRun(array($oldPage, $realPage, $query));
 
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
