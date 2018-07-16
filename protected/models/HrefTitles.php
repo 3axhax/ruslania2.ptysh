@@ -202,7 +202,7 @@ class HrefTitles {
 	}
 
 	function redirectOldPage($url) {
-		if (!$this->isTitleRoute()) return;
+		if (!$this->isTitleRoute($url)) return;
 
 		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
 		$sql = ''.
@@ -211,7 +211,6 @@ class HrefTitles {
 			'where (path = :url) '.
 			'limit 1 '.
 		'';
-		Debug::staticRun(array($url, $sql, Yii::app()->getRequest()));
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
 		if (!empty($row)) {
 			$titles = $this->getById($row['entity'], $row['route'], $row['id']);
