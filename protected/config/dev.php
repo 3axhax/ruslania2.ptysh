@@ -64,17 +64,17 @@ return CMap::mergeArray(
                          'logFile' => 'warnings.log',
                          'categories' => 'mywarnings.*',
                      ),
-/*                     array( // -- CWebLogRoute --------------------------- внизу страницы показывает логи
-                         'class'=>'CWebLogRoute',
+                     array( // -- CWebLogRoute --------------------------- внизу страницы показывает логи
+                         'class'=>isset($_GET['ha'])?'CWebLogRoute':'SlowSqlLogRoute',
 //                         'levels'=>'error, warning, trace, profile, info',
                          'levels'=>'profile',
                          'enabled'=>true,
-                     ),*/
-                    array( // -- CWebLogRoute --------------------------- медленные запросы в файл /test/slow_sql.log
+                     ),
+                   /* array( // -- CWebLogRoute --------------------------- медленные запросы в файл /test/slow_sql.log
                         'class'=>'SlowSqlLogRoute',
                         'levels'=>'profile',
                         'enabled'=>true,
-                    ),
+                    ),*/
                  )),
          ),
 

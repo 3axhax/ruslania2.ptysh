@@ -111,7 +111,7 @@ class MyUrlRule extends CUrlRule {
         }
         unset($params['__langForUrl']);
 
-        if (isset($_GET['ha'])&&!empty($params['title'])&&!empty($params['entity'])) {
+        if (!empty($params['title'])&&!empty($params['entity'])) {
             $entity = Entity::ParseFromString($params['entity']);
             $idName = HrefTitles::get()->getIdName($entity, $route);
             if (!empty($params[$idName])) {
