@@ -72,11 +72,22 @@ class Product
                          'subcategory' => 'SubCategory',
                          'publisher' => 'Publisher',
         );
+
+        $forHref = array();
+
         foreach ($data as $d)
         {
             $item = $d->attributes;
 
-            if (isset($d->authors)) foreach ($d->authors as $a) $item['Authors'][] = $a->attributes;
+            if (isset($d->authors)) {
+                if (!isset($forHref[$item['entity']])) $forHref[$item['entity']] = array();
+                if (!isset($forHref[$item['entity']]['entity/byauthor'])) $forHref[$item['entity']]['entity/byauthor'] = array();
+                foreach ($d->authors as $a) {
+                    $attrs = $a->attributes;
+                    if (!empty($attrs['id'])) $forHref[$item['entity']]['entity/byauthor'][] = $attrs['id'];
+                    $item['Authors'][] = $attrs;
+                }
+            }
             if (isset($d->performers)) foreach ($d->performers as $a) $item['Performers'][] = $a->attributes;
             if (isset($d->actors)) foreach ($d->actors as $a) $item['Actors'][] = $a->attributes;
             if (isset($d->subtitles)) foreach ($d->subtitles as $a) $item['Subtitles'][] = $a->attributes;
@@ -112,6 +123,12 @@ class Product
             $item['real_price'] = $real_price;
 
             $ret[] = $item;
+        }
+
+        foreach ($forHref as $entity=>$routes) {
+            foreach ($routes as $route=>$ids) {
+//                if ($ids) HrefTitles::get()->getByIds($entity, $route, $ids);
+            }
         }
 
         if(!empty($cacheKey))
