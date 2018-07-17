@@ -12,6 +12,8 @@ class SheetMusic extends CMyActiveRecord
         return 'musicsheets_catalog';
     }
 
+    function getEntity() { return Entity::SHEETMUSIC; }
+
     public function relations()
     {
         return array(

@@ -12,6 +12,8 @@ class Periodic extends CMyActiveRecord
         return 'pereodics_catalog';
     }
 
+    function getEntity() { return Entity::PERIODIC; }
+
     public function relations()
     {
         return array(

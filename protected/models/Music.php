@@ -12,6 +12,8 @@ class Music extends CMyActiveRecord
         return 'music_catalog';
     }
 
+    function getEntity() { return Entity::MUSIC; }
+
     public function relations()
     {
         return array(

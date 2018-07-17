@@ -12,6 +12,8 @@ class Books extends CMyActiveRecord
         return 'books_catalog';
     }
 
+    function getEntity() { return Entity::BOOKS; }
+
     public function relations()
     {
         return array(

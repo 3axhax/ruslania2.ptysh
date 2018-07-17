@@ -74,29 +74,75 @@ class Product
         );
 
         $forHref = array();
-
+$i = 0;
         foreach ($data as $d)
         {
             $item = $d->attributes;
+            $entity = $d->getEntity();
+            if (!isset($forHref[$entity])) $forHref[$entity] = array();
 
             if (isset($d->authors)) {
-                if (!isset($forHref[$item['entity']])) $forHref[$item['entity']] = array();
-                if (!isset($forHref[$item['entity']]['entity/byauthor'])) $forHref[$item['entity']]['entity/byauthor'] = array();
+                if (!isset($forHref[$entity]['entity/byauthor'])) $forHref[$entity]['entity/byauthor'] = array();
                 foreach ($d->authors as $a) {
                     $attrs = $a->attributes;
-                    if (!empty($attrs['id'])) $forHref[$item['entity']]['entity/byauthor'][] = $attrs['id'];
+                    if (!empty($attrs['id'])) $forHref[$entity]['entity/byauthor'][] = $attrs['id'];
                     $item['Authors'][] = $attrs;
                 }
             }
-            if (isset($d->performers)) foreach ($d->performers as $a) $item['Performers'][] = $a->attributes;
-            if (isset($d->actors)) foreach ($d->actors as $a) $item['Actors'][] = $a->attributes;
-            if (isset($d->subtitles)) foreach ($d->subtitles as $a) $item['Subtitles'][] = $a->attributes;
-            if (isset($d->directors)) foreach ($d->directors as $a) $item['Directors'][] = $a->attributes;
-            if (isset($d->producers)) foreach ($d->producers as $a) $item['Producers'][] = $a->attributes;
+            if (isset($d->performers)) {
+                if (!isset($forHref[$entity]['entity/byperformer'])) $forHref[$entity]['entity/byperformer'] = array();
+                foreach ($d->performers as $a) {
+                    $attrs = $a->attributes;
+                    if (!empty($attrs['id'])) $forHref[$entity]['entity/byperformer'][] = $attrs['id'];
+                    $item['Performers'][] = $attrs;
+                }
+            }
+            if (isset($d->actors)) {
+                if (!isset($forHref[$entity]['entity/byactor'])) $forHref[$entity]['entity/byactor'] = array();
+                foreach ($d->actors as $a) {
+                    $attrs = $a->attributes;
+                    if (!empty($attrs['id'])) $forHref[$entity]['entity/byactor'][] = $attrs['id'];
+                    $item['Actors'][] = $attrs;
+                }
+            }
+            if (isset($d->subtitles)) {
+                if (!isset($forHref[$entity]['entity/bysubtitle'])) $forHref[$entity]['entity/bysubtitle'] = array();
+                foreach ($d->subtitles as $a) {
+                    $attrs = $a->attributes;
+                    if (!empty($attrs['id'])) $forHref[$entity]['entity/bysubtitle'][] = $attrs['id'];
+                    $item['Subtitles'][] = $attrs;
+                }
+            }
+            if (isset($d->directors)) {
+                if (!isset($forHref[$entity]['entity/bydirector'])) $forHref[$entity]['entity/bydirector'] = array();
+                foreach ($d->directors as $a) {
+                    $attrs = $a->attributes;
+                    if (!empty($attrs['id'])) $forHref[$entity]['entity/bydirector'][] = $attrs['id'];
+                    $item['Directors'][] = $attrs;
+                }
+            }
+            if (isset($d->producers)) {
+                foreach ($d->producers as $a) $item['Producers'][] = $a->attributes;
+            }
             if (isset($d->lookinside)) foreach ($d->lookinside as $a) $item['Lookinside'][] = $a->attributes;
-            if (isset($d->series)) $item['Series'] = $d->series->attributes;
-            if (isset($d->media)) $item['Media'] = $d->media->attributes;
-            if (isset($d->magazinetype)) $item['MagazineType'] = $d->magazinetype->attributes;
+            if (isset($d->series)) {
+                if (!isset($forHref[$entity]['entity/byseries'])) $forHref[$entity]['entity/byseries'] = array();
+                $attrs = $d->series->attributes;
+                if (!empty($attrs['id'])) $forHref[$entity]['entity/byseries'][] = $attrs['id'];
+                $item['Series'] = $attrs;
+            }
+            if (isset($d->media)) {
+                if (!isset($forHref[$entity]['entity/bymedia'])) $forHref[$entity]['entity/bymedia'] = array();
+                $attrs = $d->media->attributes;
+                if (!empty($attrs['id'])) $forHref[$entity]['entity/bymedia'][] = $attrs['id'];
+                $item['Media'] = $attrs;
+            }
+            if (isset($d->magazinetype)) {
+                if (!isset($forHref[$entity]['entity/bymagazinetype'])) $forHref[$entity]['entity/bymagazinetype'] = array();
+                $attrs = $d->magazinetype->attributes;
+                if (!empty($attrs['id'])) $forHref[$entity]['entity/bymagazinetype'][] = $attrs['id'];
+                $item['MagazineType'] = $attrs;
+            }
             if (isset($d->periodicCountry)) $item['Country'] = $d->periodicCountry->attributes;
             if(isset($d->zone2)) $item['Zone'] = $d->zone2->attributes;
             if(isset($d->languages)) foreach($d->languages as $a) $item['Languages'][] = $a->attributes;
@@ -106,11 +152,32 @@ class Product
             }
             if(isset($d->audiostreams)) foreach($d->audiostreams as $a) $item['AudioStreams'][] = $a->attributes;
 
-            foreach ($related as $key => $name)
-            {
+            foreach ($related as $key => $name) {
                 $t = array();
-                if (isset($d->$key) && $d->$key != null) $t = $d->$key->attributes;
+                if (isset($d->$key) && $d->$key != null) {
+                    $t = $d->$key->attributes;
+                    switch ($key) {
+                        case 'binding':
+                            if (!isset($forHref[$entity]['entity/bybinding'])) $forHref[$entity]['entity/bybinding'] = array();
+                            if (!empty($t['id'])) $forHref[$entity]['entity/bybinding'][] = $t['id'];
+                            break;
+                        case 'category':
+                        case 'subcategory':
+                            if (!isset($forHref[$entity]['entity/list'])) $forHref[$entity]['entity/list'] = array();
+                            if (!empty($t['id'])) $forHref[$entity]['entity/list'][] = $t['id'];
+                            break;
+                        case 'publisher':
+                            if (!isset($forHref[$entity]['entity/bypublisher'])) $forHref[$entity]['entity/bypublisher'] = array();
+                            if (!empty($t['id'])) $forHref[$entity]['entity/bypublisher'][] = $t['id'];
+                            break;
+                    }
+                }
                 $item[$name] = $t;
+//                $related = array('binding' => 'Binding',
+//                    'category' => 'Category',
+//                    'subcategory' => 'SubCategory',
+//                    'publisher' => 'Publisher',
+//                );
             }
             if(isset($d->vendorData) && !empty($d->vendorData) && isset($d->vendorData->deliveryTime) && !empty($d->vendorData->deliveryTime))
             {
@@ -127,7 +194,7 @@ class Product
 
         foreach ($forHref as $entity=>$routes) {
             foreach ($routes as $route=>$ids) {
-//                if ($ids) HrefTitles::get()->getByIds($entity, $route, $ids);
+                if ($ids) HrefTitles::get()->getByIds($entity, $route, $ids);
             }
         }
 
