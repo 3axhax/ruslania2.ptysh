@@ -947,9 +947,9 @@ class Category {
             Yii::app()->dbCache->set($key, $tree);
         }
 
-        $ids = array();
-        foreach ($tree as $row) $ids[] = $row['id'];
-        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+//        $ids = array();
+//        foreach ($tree as $row) $ids[] = $row['id'];
+//        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
         return $tree;
     }
