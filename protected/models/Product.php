@@ -74,7 +74,6 @@ class Product
         );
 
         $forHref = array();
-$i = 0;
         foreach ($data as $d)
         {
             $item = $d->attributes;
