@@ -13,6 +13,7 @@ class IteratorsCart extends ArrayIterator {
 		$this->_rate = (float) $item['Rate'];
 		$this->_usingVAT = $this->_usingVAT || $item['UseVAT'];
 		$item['LineTotalVAT'] = ProductHelper::FormatPrice($price, false);
+		Debug::staticRun(array($item));
 		return $item;
 	}
 

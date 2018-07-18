@@ -204,6 +204,12 @@ class Cart extends CActiveRecord
             $tmp['Rate'] = $values[DiscountManager::RATE];
             $tmp['VAT'] = $c['vat'];
             $tmp['InfoField'] = '';
+            $tmp['Authors'] = '';
+            if (!empty($c['Authors'])) {
+                $authots = array();
+                foreach ($c['Authors'] as $author) { $authots[] = ProductHelper::GetTitle($author); }
+                $tmp['Authors'] = implode(', ', $authots);
+            }
             $ret[] = $tmp;
         }
         if (!$isMiniCart)

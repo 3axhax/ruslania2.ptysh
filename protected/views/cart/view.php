@@ -41,6 +41,13 @@ $url = $ex;
                 <!-- content -->
                 <form action="/cart/doorder" method="get" onsubmit="return false;">
                 <div data-bind="visible:  CartItems().length > 0">
+                    
+                    
+                    <a href="/cart/variants" class="order_start" style="background-color: rgb(237, 32, 36); float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 &amp;&amp; !AjaxCall() &amp;&amp; TotalVAT() > 0">
+                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Оформить заказ</span>
+                                </a>
+                    
+                    
                     <table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1 items_tbl"
                            style="margin-bottom: 10px; margin-top: 15px;">
                         <thead>
@@ -72,10 +79,12 @@ $url = $ex;
                                      data-bind="attr: { alt: Title}"
                                      src="/pic1/cart_ibook.gif">
 								</td>
-								<td style="padding-left: 20px;"><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
-                                    data-bind="attr: { href: Url, title: Title},text: Title"
-                                    class="maintxt1"><?= htmlspecialchars($cart['Title']) ?>
-                                </a>
+								<td style="padding-left: 20px;">
+                                    <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
+                                        data-bind="attr: { href: Url, title: Title},text: Title"
+                                        class="maintxt1"><?= htmlspecialchars($cart['Title']) ?>
+                                    </a></div>
+                                    <div data-bind="text: Authors"><?= $cart['Authors'] ?></div>
                                 <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "><?= htmlspecialchars($cart['InfoField']) ?></p>
 								</td>
 								</tr>
@@ -96,7 +105,7 @@ $url = $ex;
 <!--                                <span data-bind="text: VAT"></span>%-->
 <!--                            </td>-->
                             <td valign="middle" align="center" class="cart1contents1" nowrap>
-                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" /></a>
+                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
                                 
                                 <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a>
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="entity[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Entity'] ?>">
@@ -220,7 +229,7 @@ $url = $ex;
         });
     </script>
 
-<div class="news_box" style="margin-top: 40px;">
+<div class="news_box" style="margin-top: 150px;">
 
 
 		<div class="">
@@ -604,7 +613,3 @@ $url = $ex;
 
 
 <div style="height: 20px;"></div>
-
-
-
-
