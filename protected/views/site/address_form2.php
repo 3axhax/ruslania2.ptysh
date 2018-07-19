@@ -41,22 +41,6 @@ function decline_goods($num) {
 
 <div class="span7">
 
-<table cellspacing="3" border="0" data-bind="visible: errors().length > 0">
-    <tbody>
-    <tr>
-        <td valign="top"><img width="18" height="18" src="/pic1/warning1.gif"></td>
-        <td width="100%" class="maintxt"><b><?=$ui->item('MSG_FORM_VALIDATE_ERROR'); ?>:</b></td>
-    </tr>
-    <tr>
-        <td colspan="2" class="maintxt">
-            <ul class="err1" data-bind="foreach: errorStr">
-                <li class="err1" data-bind="text: $data"></li>
-            </ul>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
 <style>
@@ -257,7 +241,7 @@ function decline_goods($num) {
 </div>
  <div class="clearfix"></div>
  
- <label for="confirm">
+ <label for="confirm" onclick=" checked_sogl();">
      <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="new">условиями пользования</a> виртуальным магазином Руслания и с <a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">заявлением о  конфиденциальности Руслании</a> (на английском языке, файл PDF на нашем сервере) </label>
 
 <div style="height: 20px;"></div>
@@ -351,7 +335,7 @@ function decline_goods($num) {
             
         <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')">
             
-            <img src="/images/pt2.png" style="margin-top: 15px;" />
+            <img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="font-size: 10px">Кредитные карты и Финские банки</span>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>

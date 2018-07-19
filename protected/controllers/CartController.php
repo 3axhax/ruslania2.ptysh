@@ -5,7 +5,7 @@ class CartController extends MyController
     public function accessRules()
     {
         return array(array('allow',
-                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp',
+                           'actions' => array('view','variants', 'doorder', 'doorderjson', 'dorequest','register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'orderPay',
                                               'changequantity', 'remove','getdeliveryinfo',),
                            'users' => array('*')),
 
@@ -164,7 +164,41 @@ class CartController extends MyController
         }
         
     }
-    
+
+    function actionOrderPay() {
+        $id = (int) Yii::app()->getRequest()->getParam('id');
+        $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
+        if ($ptype <= 0) $ptype = 3;
+
+        $o = new Order;
+        $order = $o->GetOrder($id);
+        $data = array();
+        $data['order'] = $order;
+
+        $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
+        $this->breadcrumbs[] = 'Оформление заказа';
+
+        $data['number_zakaz'] = $id;
+        $data['ptype'] = $ptype;
+
+        if ($ptype == '6') { $this->render('applepay', $data); }
+        elseif ($ptype == '5') { $this->render('alipay', $data); }
+        elseif ($ptype == '2') { $this->render('paypal', $data); }
+        elseif ($ptype == '3') { $this->render('paytrail', $data); }
+        else {
+
+            if ($ptype == '4') $namepay = 'Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС';
+            if ($ptype == '7') $namepay = 'Предоплата на банковский счет в Финляндии';
+            if ($ptype == '8') $namepay = 'Предоплата на банковский счет в России';
+            if ($ptype == '1') $namepay = 'Оплата в магазине';
+
+            $data['dop'] = '.<br />Вы выбрали способ оплаты: '.$namepay;
+
+            $this->render('result', $data);
+
+        }
+    }
+
     public function actionResult() {
         
         if (!Yii::app()->user->isGuest) {
@@ -292,6 +326,7 @@ class CartController extends MyController
         $this->breadcrumbs[] = 'Оформление заказа';
             
             $data['number_zakaz'] = $id;
+            $data['ptype'] = $post['ptype'];
             
             if ($post['ptype'] == '6') 
             { $this->render('applepay', $data); } elseif ($post['ptype'] == '5') { $this->render('alipay', $data); } elseif ($post['ptype'] == '2') { $this->render('paypal', $data); } elseif ($post['ptype'] == '3') { $this->render('paytrail', $data); } else {

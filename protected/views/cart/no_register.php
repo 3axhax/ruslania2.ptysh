@@ -218,6 +218,7 @@
                 $('.box_opacity .op').hide();
                 $('.order_start').removeClass('disabled');
                 sbros_delev();
+                checked_sogl();
             })
             
             
@@ -229,6 +230,8 @@
             $('.order_start').addClass('disabled');
             
         }
+        
+       
         
     }
     
@@ -281,14 +284,35 @@
         $('.selp').css('border', '1px solid #ccc');
         
         
-        $('.cartorder .row label.seld').slice(2,3).css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.cartorder .row label.seld').slice(2,3)).attr('checked', 'true');
-        $('.check', $('.cartorder .row label.seld').slice(2,3)).addClass('active');
+        $('.cartorder .row label.seld').slice(0,1).css('border', '1px solid #64717f');
+        $('input[type=radio]', $('.cartorder .row label.seld').slice(0,1)).attr('checked', 'true');
+        $('.check', $('.cartorder .row label.seld').slice(0,1)).addClass('active');
         
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
         $('.check', $('.selp #dtype2').parent()).addClass('active');
     })
+    
+    function checked_sogl() {
+     
+     
+     //alert($('#confirm').prop('checked'));
+     
+     
+        if ( !$('#Address_country').val() || !$('#confirm').prop('checked') ) {
+         
+         $('.order_start').addClass('disabled');
+         
+         
+        } else if ( $('#Address_country').val() && $('#confirm').prop('checked') ) {
+         
+         
+         $('.order_start').removeClass('disabled');
+            
+        }
+     
+     
+    }
     
     function check_cart_sel(cont,cont2,inputId) {
         
