@@ -8,7 +8,7 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch',
+                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
                     'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                     'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
                 'users' => array('*')),
@@ -240,6 +240,16 @@ class SiteController extends MyController {
         $this->breadcrumbs[] = Yii::app()->ui->item('YM_CONTEXT_PERSONAL_LOGIN');
 
         $this->render('login');
+    }
+
+    function actionCheckEmail() {
+        if (Yii::app()->request->isPostRequest) {
+            $record = User::model()->findByAttributes(array('login' => Yii::app()->request->getParam('email'), 'is_closed' => 0));
+            if ($record) {
+                $this->renderPartial('forgot_button', array('email' => Yii::app()->request->getPost('email')));
+            }
+            Yii::app()->end();
+        }
     }
     
     public function actionAllSearch() {

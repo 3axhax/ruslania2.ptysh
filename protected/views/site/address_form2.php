@@ -177,8 +177,8 @@ function decline_goods($num) {
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>
             <?=$ui->item("address_contact_email"); ?>
         </td>
-        <td class="maintxt-vat" colspan="2">
-            <?=$form->textField('contact_email'); ?>
+        <td class="maintxt-vat" colspan="2" style="position: relative;">
+            <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
         </td>
     </tr>
     <tr>

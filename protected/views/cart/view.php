@@ -84,7 +84,7 @@ $url = $ex;
                                         data-bind="attr: { href: Url, title: Title},text: Title"
                                         class="maintxt1"><?= htmlspecialchars($cart['Title']) ?>
                                     </a></div>
-                                    <div data-bind="text: Authors"><?= $cart['Authors'] ?></div>
+                                    <!--<div data-bind="text: Authors"><?= $cart['Authors'] ?></div>-->
                                 <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "><?= htmlspecialchars($cart['InfoField']) ?></p>
 								</td>
 								</tr>

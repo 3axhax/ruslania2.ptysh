@@ -135,8 +135,35 @@
 
 <script>
     
-     
-    
+    function checkEmail(t) {
+        var value = t.value;
+        if (value != '') {
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            $.ajax({
+                url: '<?= Yii::app()->createUrl('site/checkEmail') ?>',
+                data: 'ha&email=' + encodeURIComponent(t.value) + '&' + csrf[0] + '=' + csrf[1],
+                type: 'post',
+                success: function (r) {
+                    $('#js_forgot').remove();
+                    if (r) $(t).after(r);
+                }
+            });
+        }
+    }
+
+    function forgotPassword(email) {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пароль отправлен на email: ' + email + '</div><div style="font-weight: bold;">Товары в корзине сохранены</div>';
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        $.ajax({
+            url: '<?= Yii::app()->createUrl('site/forgot') ?>',
+            type: 'post',
+            data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
+            success: function () {
+                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+            }
+        });
+    }
+
     function change_city(cont) {
         
         var csrf = $('meta[name=csrf]').attr('content').split('=');
