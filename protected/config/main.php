@@ -47,7 +47,7 @@ return array(
  			'transportType' => 'php',
  			'viewPath' => 'application.views.mail',
  			'logging' => true,
- 			'dryRun' => true
+// 			'dryRun' => true
  		),
 		
         'sessionCache' => array(

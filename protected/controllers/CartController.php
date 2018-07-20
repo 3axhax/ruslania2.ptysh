@@ -246,19 +246,33 @@ class CartController extends MyController
         /*
          *  1. Для начала создаем покупателя и получаем его ID
          */
-        
-        $psw  = rand(1000000, 9999999) . 'sS';
+            $cart = new Cart();
+            $tmp = $cart->GetCart($this->uid, $this->sid);
+            $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
+            $m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
+            foreach ($beautyItems as $p) {
+                $mn = 'm' . $p['Entity'] . 'n';
+                $$mn = 1;
+            }
+            $psw  = rand(1000000, 9999999) . 'sS';
             
         $langID = Language::ConvertToInt(Yii::app()->language);
         $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
         . 'mail_maps_news, mail_music_news, mail_musicsheets_news, mail_soft_news, mail_video_news, currency) VALUES '
-        . '(:login, :pwd, :fName, :lName, :lang, 1, 1, 1, 1, 1, 1, 1, :currency)';
+        . '(:login, :pwd, :fName, :lName, :lang, :m20n, :m10n, :m60n, :m22n, :m15n, :m24n, :m40n, :currency)';
         $ret = Yii::app()->db->createCommand($sql)->execute(array(
             ':login' => $email,
             ':pwd' => $psw,
             ':fName' => $name,
             ':lName' => $fam,
             ':lang' => $langID,
+            ':m20n' => $m20n,
+            ':m10n' => $m10n,
+            ':m60n' => $m60n,
+            ':m22n' => $m22n,
+            ':m15n' => $m15n,
+            ':m24n' => $m24n,
+            ':m40n' => $m40n,
             ':currency' => Yii::app()->currency));
             
             $idUser = Yii::app()->db->getLastInsertID(); //получаем ID юзера
@@ -269,10 +283,16 @@ class CartController extends MyController
            if ($identity->authenticate()) {
            
              Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
-            $cart = new Cart();
-            $cart->UpdateCartToUid($this->sid, $identity->getId());        
+            $cart->UpdateCartToUid($this->sid, $identity->getId());
             //echo $this->sid;
-            
+
+               $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
+               $message->view = 'reg_' . Yii::app()->language;
+               $message->setBody(array(), 'text/html');
+               $message->addTo($email);
+               $message->from = 'noreply@ruslania.com';
+               Yii::app()->mail->send($message);
+
            }
             
            $userID = $identity->getId();
@@ -302,11 +322,9 @@ class CartController extends MyController
             $order->attributes = $s;
             
             //var_dump ($order);
-            
-            $c = new Cart;
-            $tmp = $c->GetCart($userID, $this->sid);
-            
-            $beautyItems = $c->BeautifyCart($tmp, $userID);
+
+//            $c = new Cart;
+
             $items = array();
             foreach($tmp as $item)
             {
@@ -531,8 +549,9 @@ class CartController extends MyController
             $isMiniCart = Yii::app()->request->getParam('is_MiniCart', 0);
             $isMiniCart = intVal($isMiniCart);
         }
-        $tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid, $isMiniCart), $this->uid, $isMiniCart);
-        
+        $cartGoods = $cart->GetCart($this->uid, $this->sid, $isMiniCart);
+        $tmp = $cart->BeautifyCart($cartGoods, $this->uid, $isMiniCart);
+
         $inCart = array();
         $endedItems = array();
 

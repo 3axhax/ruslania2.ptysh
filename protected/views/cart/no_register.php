@@ -131,6 +131,22 @@
         filter: none; /* IE 6-9 */
     }
     
+    
+    input.error {
+        border: 1px solid #ed1d24;
+        margin-bottom: 0;
+    }
+    
+    .texterror { color: #ed1d24; font-size: 11px; display: block; }
+    
+    td.maintxt-vat { padding: 5px 5px; }
+    
+    .redtext {
+    
+        color: #ed1d24;
+    
+    }
+    
 </style>
 
 <script>
@@ -315,7 +331,7 @@
     }
     
     function check_cart_sel(cont,cont2,inputId) {
-        
+        $('label.seld').removeClass('act');
         $('.'+cont2+' .check').removeClass('active');
         $('.'+cont2+' input[type=radio]').removeAttr('checked');
         $('.'+cont2+'').css('border', '1px solid #ccc');
@@ -405,22 +421,84 @@
         
         var frmall = frm1+'&'+frm2;
         
+        var error = false;
+        
+        $('.texterror', $('#Address_receiver_last_name').parent()).html('Заполните это поле');
+        
+        if (!$('#Address_receiver_last_name').val()) { $('#Address_receiver_last_name').addClass('error'); error = true; $('.texterror', $('#Address_receiver_last_name').parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name').removeClass('error'); error = false;$('.texterror', $('#Address_receiver_last_name').parent()).html(''); }
+        if (!$('#Address_receiver_first_name').val()) { $('#Address_receiver_first_name').addClass('error'); error = true; $('.texterror', $('#Address_receiver_first_name').parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name').removeClass('error'); error = false; $('.texterror', $('#Address_receiver_first_name').parent()).html('');}
+        if (!$('#Address_country').val()) { $('#Address_country').addClass('error'); error = true; $('.texterror', $('#Address_country').parent()).html('Заполните это поле');} else {  $('#Address_country').removeClass('error'); error = false; $('.texterror', $('#Address_country').parent()).html(''); }
+        if (!$('#Address_city').val()) { $('#Address_city').addClass('error'); error = true; $('.texterror', $('#Address_city').parent()).html('Заполните это поле');} else {  $('#Address_city').removeClass('error'); error = false; $('.texterror', $('#Address_city').parent()).html('');}
+        if (!$('#Address_postindex').val()) { $('#Address_postindex').addClass('error'); error = true; $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');} else {  $('#Address_postindex').removeClass('error'); error = false; $('.texterror', $('#Address_postindex').parent()).html('');}
+        if (!$('#Address_streetaddress').val()) { $('#Address_streetaddress').addClass('error'); error = true; $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');} else {  $('#Address_streetaddress').removeClass('error'); error = false; $('.texterror', $('#Address_streetaddress').parent()).html('');}
+        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = true; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else {  $('#Address_contact_email').removeClass('error'); error = false; $('.texterror', $('#Address_contact_email').parent()).html('');}
+        if (!$('#Address_contact_phone').val()) { $('#Address_contact_phone').addClass('error'); error = true; $('.texterror', $('#Address_contact_phone').parent()).html('Заполните это поле');} else {  $('#Address_contact_phone').removeClass('error'); error = false; $('.texterror', $('#Address_contact_phone').parent()).html('');}
+        
+        
+        if (error) {
+         
+            $('input.error').slice(0,1).focus();
+         
+        }
+        
+        if ($('#dtype3').parent().hasClass('act')) {
+            
+            
+            //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
+            
+            if ($('.delivery_box_sp .rows_checkbox_delivery input').is(':checked') == false) {
+                
+                
+             $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
+             error = true;
+            } else {
+                $('.delivery_box_sp .texterror').html('');
+                error = false;
+            }
+         
+        }
+        
+        
+        if ($('#dtype2').parent().hasClass('act')) {
+            
+            
+            //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
+            
+            if ($('.delivery_box .rows_checkbox_delivery input').is(':checked') == false) {
+                
+                
+             $('.delivery_box .texterror').html('Выберите тариф доставки');
+             error = true;
+            } else {
+                $('.delivery_box .texterror').html('');
+                error = false;
+            }
+         
+        }
+        
+        
+        
+        
+       
+        
+        if (!error) {
+        
         //alert(frmall);
         
-        $.post('<?=Yii::app()->createUrl('cart')?>valid/', frmall, function(data) {
-            
-            if (data == '1') {
-                
-                $('#add-address').submit();
-                
-            } else {
-                alert(data);
-            }
-            
-            
-        });
+            $.post('<?=Yii::app()->createUrl('cart')?>valid/', frmall, function(data) {
+
+                if (data == '1') {
+
+                    $('#add-address').submit();
+
+                } else {
+                    //alert(data);
+                }
+
+
+            });
         
-        
+        }
         
     }
     
@@ -442,6 +520,9 @@
       $('.itogo_cost').html(costall + $('.rows_checkbox_delivery label').attr('valute'));
      
      $('.delivery_cost').html('0'+$('.rows_checkbox_delivery label').attr('valute'));
+     
+     
+     
      
      
     }
