@@ -195,7 +195,7 @@ class ClientController extends MyController
 		
 		$user = User::model()->findByPk(Yii::app()->user->id);
 		
-		$sql = 'SELECT * FROM `subscriptions` WHERE customer_id='.$user->econet_user_id. ' ORDER BY `Order_No` DESC';
+		$sql = 'SELECT * FROM `subscriptions` WHERE customer_id='.(int)$user->econet_user_id. ' ORDER BY `Order_No` DESC';
 		
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 		

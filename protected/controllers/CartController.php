@@ -290,7 +290,7 @@ class CartController extends MyController
             
             $ret = Yii::app()->db->createCommand($sql)->execute();
             $idAddr = Yii::app()->db->getLastInsertID();
-                     
+                     if (!$post['dtid']) { $post['dtid'] = 0; }
             $s['DeliveryAddressID'] = $idAddr2;
             $s['DeliveryTypeID'] = $post['dtid'];
             $s['DeliveryMode'] = 0;
@@ -702,7 +702,7 @@ class CartController extends MyController
 
 
 			$quantity = $availCount;
-            $changedStr = sprintf(Yii::app()->ui->item('QUANTITY_CHANGED'), $quantity, $quantity);
+            $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
         }
 
         $cart = new Cart;

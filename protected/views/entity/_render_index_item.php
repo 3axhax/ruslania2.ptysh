@@ -5,7 +5,7 @@
     <a href="<?=$url; ?>"><img src="<?=Picture::Get($item, Picture::SMALL); ?>" alt="" /></a>
  </div>
  
-	<div class="title_book"><a href="<?=$url; ?>"><?=ProductHelper::GetTitle($item, 'title', 30); ?></a></div>
+	<div class="title_book"><a href="<?=$url; ?>"><?=ProductHelper::GetTitle($item, 'title'); ?></a></div>
 	
 	<?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors']) OR !empty($item['Subtitles']) OR !empty($item['AudioStreams'])) : ?>
         <div class="author">
@@ -16,7 +16,7 @@
                 $tmp[] = $authorTitle;
             } ?>
 			<?php endif; ?>
-			<?php if (!empty($item['Performers'])) : ?>
+			<?php if (empty($tmp)&&!empty($item['Performers'])) : ?>
 			<?php
             
             foreach ($item['Performers'] as $performer)
@@ -25,7 +25,7 @@
             }?>
 			<?php endif; ?>
 			
-			<?php if (!empty($item['Directors'])) : ?>
+			<?php if (empty($tmp)&&!empty($item['Directors'])) : ?>
 			
             
             <?php foreach ($item['Directors'] as $director) : ?>
@@ -34,14 +34,14 @@
        
 			<?php endif; ?>
 			
-			<?php if (!empty($item['Directors'])) : ?>
+			<?php if (empty($tmp)&&!empty($item['Directors'])) : ?>
 			<?php foreach ($item['Directors'] as $director) : ?>
                <? $tmp[] = ProductHelper::GetTitle($director); ?>
             <?php endforeach; ?>
 			<?php endif; ?>
 			
 			
-			<?php if (!empty($item['Subtitles'])) : ?>
+			<?php if (empty($tmp)&&!empty($item['Subtitles'])) : ?>
         
             <?
             foreach ($item['Subtitles'] as $subtitle)
@@ -55,7 +55,7 @@
 			  
 			
 			
-			<?php if (!empty($item['AudioStreams'])) : ?>
+			<?php if (empty($tmp)&&!empty($item['AudioStreams'])) : ?>
         
             <?php 
             foreach ($item['AudioStreams'] as $stream)
@@ -68,17 +68,18 @@
 
 			<?php endif; ?>
 			
-			<?
-			
-			if (count($tmp) > 1) {
-				
-				echo $tmp[0] . ',...';
-				
-			} else {
-			
-				echo implode(', ', $tmp);
-			
-			}
+			<? if (!empty($tmp)) {
+                if (count($tmp) > 1) {
+
+                    echo $tmp[0] . ',...';
+
+                } else {
+
+                    echo implode(', ', array_unique($tmp));
+
+                }
+            }
+
             ?>
         
 			
