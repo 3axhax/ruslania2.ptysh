@@ -2,7 +2,7 @@
 
 <div class="container cartorder">
     <h1><?= Yii::app()->ui->item('HEADER_PAYPAL') ?></h1>
-    <div><?= Yii::app()->ui->item('DESC_PAYPAL') ?></div>
+    <div><a href="<?= Yii::app()->createUrl('site/static', array('page'=>'paypal')) ?>">Что такое PayPal?</a></div>
 
     Ваш заказ № <?=$number_zakaz?>. Произведите оплату нажав на логотип PayPal внизу<br /><br />
     
