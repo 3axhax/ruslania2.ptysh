@@ -2,7 +2,7 @@
 
 class ProductHelper
 {
-    
+    private static $avail_lang = ['ru', 'rut', 'en', 'fi'];
     public static function CutTitle($string, $length){
         $string = mb_substr($string, 0, $length,'UTF-8'); // обрезаем и работаем со всеми кодировками и указываем исходную кодировку
         $position = mb_strrpos($string, ' ', 'UTF-8'); // определение позиции последнего пробела. Именно по нему и разделяем слова
@@ -16,6 +16,7 @@ class ProductHelper
     }
     
     public static function GetAuthorTitle($id ,$lang = 'ru') {
+        if (!in_array($lang, self::$avail_lang)) $lang = 'ru';
         $key = 'title_' . $lang;
         $sql = 'SELECT '.$key.' as title FROM all_authorslist WHERE id='.$id;
         $row = Yii::app()->db->createCommand($sql)->queryAll();
@@ -23,6 +24,7 @@ class ProductHelper
     }
 
     public static function GetPublisherTitle($id ,$lang = 'ru') {
+        if (!in_array($lang, ['ru', 'en'])) $lang = 'ru';
         $key = 'title_' . $lang;
         $sql = 'SELECT '.$key.' as title FROM all_publishers WHERE id='.$id;
         $row = Yii::app()->db->createCommand($sql)->queryAll();
@@ -30,6 +32,7 @@ class ProductHelper
     }
 
     public static function GetSeriesTitle($id , $entity,$lang = 'ru') {
+        if (!in_array($lang, self::$avail_lang)) $lang = 'ru';
         $key = 'title_' . $lang;
         $sql = 'SELECT '.$key.' as title FROM all_series WHERE id='.$id.' AND entity='.$entity;
         $row = Yii::app()->db->createCommand($sql)->queryAll();

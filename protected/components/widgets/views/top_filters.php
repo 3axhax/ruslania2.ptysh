@@ -25,11 +25,10 @@
                 <input type="hidden" name="author" value="<?=($author = (isset($filter_data['author']) && $filter_data['author'] != 0)) ? $filter_data['author'] : 0?>">
                 <input type="text" class="find_author prod-filter__input prod-filter__input--m clearable <?= ($author) ? 'x' : ''?>"
                        placeholder="По автору" autocomplete="off" name="new_author"
-                       <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author']).'"' : 'disabled value="Загрузка..."' ?>/>
+                       <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author'], Yii::app()->language).'"' : '' ?>/>
             </div>
-            <ul class="search_result search_result_author"></ul>
             <script>
-                liveFindAuthor(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
+                liveFindAuthorMP(<?=$entity?>, <?=$cid?>);
             </script>
         </div>
         <?php endif;?>
@@ -74,11 +73,6 @@
         <?php endif;?>
 
         <!--Кнопки управления-->
-        <?php if($entity != 30) : ?>
-        <!--<div class="prod-filter__col prod-filter__col--grow">
-            <span class="prod-filter__more" id="more-filter-toggle"><?/*= $ui->item('A_NEW_MORE'); */?></span>
-        </div>-->
-        <?php endif;?>
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items()">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
@@ -94,12 +88,12 @@
             <div class="text">
                 <input type="hidden" name="izda" value="<?=($izda = (isset($filter_data['izda']) && $filter_data['izda'] != 0)) ? $filter_data['izda'] : 0?>">
                 <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($izda) ? 'x' : ''?>"
-                       placeholder="Все" name="name_publish" autocomplete="off"
-                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['izda']).'"' : 'disabled value="Загрузка..."' ?>/>
+                       placeholder="Все" autocomplete="off"
+                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['izda'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <ul class="search_result search_result_izda"></ul>
             <script>
-                liveFindIzda(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
+                liveFindPublisherMP(<?=$entity?>, <?=$cid?>);
             </script>
         </div>
         <?php endif;?>
@@ -112,11 +106,11 @@
                 <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['seria']) && $filter_data['seria'] != 0)) ? $filter_data['seria'] : 0?>">
                 <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
                        autocomplete="off" placeholder="Все"
-                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['seria'], $entity).'"' : 'disabled value="Загрузка..."' ?> />
+                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['seria'], $entity, Yii::app()->language).'"' : '' ?> />
             </div>
             <ul class="search_result search_result_series"></ul>
             <script>
-                liveFindSeries(<?=$entity?>, '<?=$lang?>', <?=$cid?>);
+                liveFindSeriesMP(<?=$entity?>, <?=$cid?>);
             </script>
         </div>
         <?php endif;?>
@@ -210,6 +204,5 @@
     </div>
 </form>
 <script>
-    //initMoreFilterButton();
     show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>');
 </script>
