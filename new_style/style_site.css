@@ -2441,6 +2441,15 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
 .mp_list li .row_item .price {  font-size: 18px; color: rgb(48, 28, 83); }
 .mp_list li .row_item td.name { padding-left: 20px;}
 .mp_list li .row_item td.pic a { display: block; width: 86px; overflow: hidden; }
+.mp_list_item {
+    transition: color 0.2s ease;
+    display: inline-block;
+    margin: 1px 10px;
+    cursor: pointer;
+}
+.mp_list_item:hover {
+    color: #afafaf;
+}
 
 .search_box .loading, .search_aut .loading { display: none; font-size: 12px; color: #aaa; position: absolute; right: 100px; top: 17px; }
 

@@ -340,7 +340,6 @@ class Category {
 
         if ($series) HrefTitles::get()->getByIds($entity, 'entity/byseries', array_keys($series));
         return $series;
-        return $rows;
     }
 
     public function getFilterAuthor($entity, $cid, $page = 1,$lang='', $site_lang='') {
@@ -698,13 +697,15 @@ class Category {
         }
 
         if ($cid > 0) {
-            $sql = 'SELECT COUNT(bc.title_ru) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr;
+            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr .' LIMIT 0,1001) as c';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT COUNT(bc.title_ru) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' WHERE bc.id <> 0 ' . $qstr;
+            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE bc.id <> 0 ' . $qstr .' LIMIT 0,1001) as c';
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-        return $rows[0]['cnt'];
+        return ($rows[0]['cnt'] == 1001) ? '>1000' : $rows[0]['cnt'];
     }
 
     public function GetCategoryPath($entity, $cid) {
