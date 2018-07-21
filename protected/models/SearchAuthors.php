@@ -106,4 +106,60 @@ class SearchAuthors {
 		return $authors;
 	}
 
+	static function  getAuthorsForFilters($entity, $q, $cid = 0, $limit = 20) {
+        if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+        $tbl_author = $entities[$entity]['author_table'];
+        $field = $entities[$entity]['author_entity_field'];
+
+        $whereLike = 'LOWER(aa.title_ru) LIKE LOWER(\'%'.$q.'%\') OR LOWER(aa.title_rut) LIKE LOWER(\'%'.$q.'%\') OR 
+            LOWER(aa.title_en) LIKE LOWER(\'%'.$q.'%\') OR LOWER(aa.title_fi) LIKE LOWER(\'%'.$q.'%\')';
+
+        if ($cid > 0) {
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, '
+                . $tbl_author . ' as ba, all_authorslist as aa 
+            WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id
+            AND ba.author_id=aa.id AND ('.$whereLike.') GROUP BY ba.author_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+        } else {
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, '
+                . $tbl_author . ' as ba, all_authorslist as aa 
+            WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id
+            AND ba.author_id=aa.id AND ('.$whereLike.') GROUP BY ba.author_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        }
+        $authors = [];
+        $i = 0;
+        foreach ($rows as $row) {
+            if (mb_stripos($row['title_ru'], $q) !== false) {
+                $authors[$i]['id'] = $row['author_id'];
+                $authors[$i]['title'] = $row['title_ru'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_rut'], $q) !== false) {
+                $authors[$i]['id'] = $row['author_id'];
+                $authors[$i]['title'] = $row['title_rut'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_en'], $q) !== false) {
+                $authors[$i]['id'] = $row['author_id'];
+                $authors[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_fi'], $q) !== false) {
+                $authors[$i]['id'] = $row['author_id'];
+                $authors[$i]['title'] = $row['title_fi'];
+                $i++;
+                continue;
+            }
+
+        }
+        return $authors;
+    }
+
 }

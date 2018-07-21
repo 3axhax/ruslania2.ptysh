@@ -10,14 +10,6 @@ $(document).ready(function(){
 
 });
 
-function initMoreFilterButton () {
-    $('#more-filter-block').hide();
-    $('#more-filter-toggle').click(function() {
-        filterBlock = $('#more-filter-block');
-        filterBlock.fadeToggle('fast');
-    });
-}
-
 // "X" в input-ах фильтра
 function tog(v){return v?'addClass':'removeClass';}
 $(document).on('input', '.clearable', function(){
@@ -27,6 +19,8 @@ $(document).on('input', '.clearable', function(){
 }).on('touchstart click', '.onX', function( ev ){
     ev.preventDefault();
     $(this).removeClass('x onX').val('').change();
+    $(this).prev().val('');
+    show_result_count();
 });
 
 //Функция живого поиска
@@ -63,38 +57,6 @@ function interactiveSearch(classInput, data, inp_name, result) {
         });
         return result_value;
     }
-}
-
-// Живой поиск для Author
-function liveFindAuthor(entity, lang, cid) {
-    var author_search = [];
-    var find_author = $(".find_author");
-    $.ajax({
-        url: '/entity/getauthordata',
-        data: {entity: entity, lang: lang, cid: cid},
-        type: 'GET',
-        beforeSend: function () {
-            if (find_author.val() == '') {
-                find_author.attr('disabled', true);
-                find_author.val('Загрузка...');
-            }
-        },
-        success: function (data) {
-            author_search = JSON.parse(data);
-            var search_auth = [];
-            $.each(author_search, function(index, value) {
-                if ((value != '') && (value != null) ) search_auth[index] = value;
-            });
-            interactiveSearch('.find_author', search_auth, 'author', '.search_result_author');
-            if (find_author.attr('disabled') == 'disabled') {
-                find_author.attr('disabled', false);
-                find_author.val('');
-            }
-        },
-        error: function (data) {
-            console.log("Error response");
-        },
-    });
 }
 
 // Живой поиск для Izda
@@ -168,6 +130,13 @@ function select_item(item, inp_name) {
     $('.list_dd', item.parent().parent().parent().parent()).hide();
     $('input[name=' + inp_name + ']', item.parent().parent().parent().parent()).val(id);
 
+    show_result_count();
+}
+
+//Выбор элемента MP
+function select_item_mp(id, inp_name, title, show_inp_name) {
+    $('input[name=' + inp_name + ']').val(id);
+    $('input[name=' + show_inp_name + ']').val(title);
     show_result_count();
 }
 
@@ -258,3 +227,53 @@ function change_all_binding(event, binding_all = false)
     }
 }
 
+function liveFindAuthorMP(entity, cid) {
+    find_author = $('.find_author');
+    var dataPost = {entity: entity, cid: cid};
+    find_author.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url:'/liveSearch/filter_authors',
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'author\', \'' + data.title + '\', \'new_author\')">' + data.title + '</li>';
+        },
+    });
+}
+
+function liveFindPublisherMP(entity, cid) {
+    find_pub = $('.find_izda');
+    var dataPost = {entity: entity, cid: cid};
+    find_pub.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url:'/liveSearch/filter_publishers',
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'izda\', \'' + data.title + '\', \'new_izda\')">' + data.title + '</li>';
+        },
+    });
+}
+
+function liveFindSeriesMP(entity, cid) {
+    find_series = $('.find_series');
+    var dataPost = {entity: entity, cid: cid};
+    find_series.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url:'/liveSearch/filter_series',
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'seria\', \'' + data.title + '\', \'new_series\')">' + data.title + '</li>';
+        },
+    });
+}

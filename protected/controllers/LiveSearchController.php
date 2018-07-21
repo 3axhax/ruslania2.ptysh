@@ -193,4 +193,27 @@ class LiveSearchController extends MyController {
 		return true;
 	}
 
+	function actionFilter_Authors () {
+	    if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
+            !($q = Yii::app()->getRequest()->getParam('q'))) return;
+	    $cid = Yii::app()->getRequest()->getParam('cid');
+	    $items = SearchAuthors::getAuthorsForFilters($entity, $q, $cid);
+	    $this->ResponseJson($items);
+    }
+
+    function actionFilter_Publishers () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
+            !($q = Yii::app()->getRequest()->getParam('q'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchPublishers::getPublishersForFilters($entity, $q, $cid);
+        $this->ResponseJson($items);
+    }
+
+    function actionFilter_Series () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
+            !($q = Yii::app()->getRequest()->getParam('q'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchSeries::getSeriesForFilters($entity, $q, $cid);
+        $this->ResponseJson($items);
+    }
 }

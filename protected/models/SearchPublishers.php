@@ -120,4 +120,44 @@ class SearchPublishers {
 		return $items;
 	}
 
+    static function  getPublishersForFilters($entity, $q, $cid = 0, $limit = 20) {
+        if (!Entity::checkEntityParam($entity, 'publisher')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+
+        $whereLike = 'LOWER(ap.title_ru) LIKE LOWER(\'%'.$q.'%\') OR LOWER(ap.title_en) LIKE LOWER(\'%'.$q.'%\')';
+
+        if ($cid > 0) {
+            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
+                'WHERE (tc.`code`=:code OR tc.`subcode`=:code) AND tc.avail_for_order=1 '.
+                'AND ap.id = tc.publisher_id AND ('.$whereLike.')'.
+                'GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+        } else {
+            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
+                'WHERE tc.avail_for_order=1 '.
+                'AND ap.id = tc.publisher_id AND ('.$whereLike.') '.
+                'GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        }
+        $publishers = [];
+        $i = 0;
+        foreach ($rows as $row) {
+            if (mb_stripos($row['title_ru'], $q) !== false) {
+                $publishers[$i]['id'] = $row['publisher_id'];
+                $publishers[$i]['title'] = $row['title_ru'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_en'], $q) !== false) {
+                $publishers[$i]['id'] = $row['publisher_id'];
+                $publishers[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+        }
+        return $publishers;
+    }
+
 }
