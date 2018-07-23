@@ -28,6 +28,29 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			}
 		}
 
+		$sql = ''.
+			'update ' . $this->_table . ' set '	.
+				'first_ru = upper(left(title_ru, 1)), '.
+				'first_en = upper(left(title_en, 1)) '.
+			'where (first_ru is null) or (first_ru = "") '.
+		'';
+		$this->_query($sql);
+
+		$sql = ''.
+			'update all_publishers set '	.
+			'first_ru = upper(substring(title_ru, 1, 1)), '.
+			'first_en = upper(substring(title_en, 1, 1)) '.
+			'where (title_ru not regexp "^[[:alnum:]]+") and (title_ru regexp "[[:alnum:]]+") '.
+		'';
+		$this->_query($sql);
+
+		$sql = ''.
+			'update all_publishers set '	.
+			'first_ru = upper(left(title_ru, 1)), '.
+			'first_en = upper(left(title_en, 1)) '.
+			'where (first_ru is null) or (first_ru = "") '.
+		'';
+		$this->_query($sql);
 	}
 
 	/** проверяет похож автор на одного из авторов с апострофами

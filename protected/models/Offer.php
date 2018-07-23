@@ -63,23 +63,31 @@ class Offer extends CMyActiveRecord
 
         $fullInfo = Yii::app()->dbCache->get($key);
 
-        if($fullInfo === false)
-        {
-            //вместо * достаточно entity_id, item_id
+        if($fullInfo === false) {
+            $items = array();
             if (!$entity) {
-                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
+                $sql = ''.
+                    'select entity_id, substring_index(group_concat(item_id order by group_order, sort_order), ",", 30) ids ' .
+                    'from offer_items ' .
+                    'where (offer_id=:id) ' .
+                    'group by entity_id '.
+                    'order by group_order, sort_order '.
+                '';
+
+//                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
+                foreach ($rows as $row) $items[$row['entity_id']] = explode(',', $row['ids']);
             }
             else {
-                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
-                $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid, ':entity' => $entity));
+                $sql = 'SELECT item_id FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
+                $items[$entity] = Yii::app()->db->createCommand($sql)->queryColumn(array(':id' => $oid, ':entity' => $entity));
+//                $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid, ':entity' => $entity));
             }
 
-            $items = array();
-            foreach($rows as $row)
-            {
-                $items[$row['entity_id']][] = $row['item_id'];
-            }
+//            foreach($rows as $row)
+//            {
+//                $items[$row['entity_id']][] = $row['item_id'];
+//            }
 
             $p = new Product();
             $fullInfo = array();
