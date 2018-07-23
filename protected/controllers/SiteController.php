@@ -300,6 +300,21 @@ class SiteController extends MyController {
                     Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
                     $cart = new Cart();
                     $cart->UpdateCartToUid($this->sid, $identity->getId());
+
+                    $razds = array();
+                    foreach (Entity::GetEntitiesList() as $entity=>$param) {
+                        $razds[$entity] = Yii::app()->ui->item($param['uikey']);
+                    }
+                    $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
+                    $message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en'))?Yii::app()->language:'en');
+                    $message->setBody(array(
+                        'user'=>User::model()->findByPk(Yii::app()->user->id)->attributes,
+                        'razds'=>$razds,
+                    ), 'text/html');
+                    $message->addTo($user->login);
+                    $message->from = 'noreply@ruslania.com';
+                    Yii::app()->mail->send($message);
+
                 }
                 $ret = array('hasError' => !$ret);
             }

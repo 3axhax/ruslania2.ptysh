@@ -250,9 +250,11 @@ class CartController extends MyController
             $tmp = $cart->GetCart($this->uid, $this->sid);
             $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
             $m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
+            $razds = array();
             foreach ($beautyItems as $p) {
                 $mn = 'm' . $p['Entity'] . 'n';
                 $$mn = 1;
+                $razds[$p['Entity']] = Yii::app()->ui->item(Entity::GetEntitiesList()[$p['Entity']]['uikey']);
             }
             $psw  = rand(1000000, 9999999) . 'sS';
             
@@ -287,8 +289,11 @@ class CartController extends MyController
             //echo $this->sid;
 
                $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
-               $message->view = 'reg_' . Yii::app()->language;
-               $message->setBody(array(), 'text/html');
+               $message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en'))?Yii::app()->language:'en');
+               $message->setBody(array(
+                   'user'=>User::model()->findByPk(Yii::app()->user->id)->attributes,
+                   'razds'=>$razds,
+               ), 'text/html');
                $message->addTo($email);
                $message->from = 'noreply@ruslania.com';
                Yii::app()->mail->send($message);
