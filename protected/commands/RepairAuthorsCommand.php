@@ -28,6 +28,11 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			}
 		}
 
+		foreach ($this->_query($this->_sqlFirstNoAlpha()) as $author) {
+			$author = $this->_ltrim($author);
+			if (!empty($author['repair_title_ru'])) $this->_update($author);
+		}
+
 		$sql = ''.
 			'update ' . $this->_table . ' set '	.
 				'first_ru = upper(left(title_ru, 1)), '.
@@ -92,6 +97,27 @@ class RepairAuthorsCommand extends CConsoleCommand {
 		return $author;
 	}
 
+	/** очищаю слева не буквы
+	 * @param $author
+	 * @return mixed
+	 */
+	private function _ltrim($author) {
+		$title = $this->_strToUpperFirst(preg_replace("/^\W+/ui", '', $author['title_ru']));
+		$author['repair_title_ru'] = $title;
+		$author['first_ru'] = mb_substr($title, 0, 1, 'utf-8');
+
+		$title = $this->_strToUpperFirst(preg_replace("/^\W+/ui", '', $author['title_en']));
+		$author['repair_title_en'] = $title;
+		if (!empty($author['repair_title_en'])) $author['first_en'] = mb_substr($title, 0, 1, 'utf-8');
+
+		$title = $this->_strToUpperFirst(preg_replace("/^\W+/ui", '', $author['title_fi']));
+		$author['repair_title_fi'] = $title;
+
+		$title = $this->_strToUpperFirst(preg_replace("/^\W+/ui", '', $author['title_rut']));
+		$author['repair_title_rut'] = $title;
+		return $author;
+	}
+
 	/**
 	 * @param string $title автор
 	 * @param array $names ФИО
@@ -135,6 +161,16 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'WHERE (title_ru regexp "^[[:alpha:]]{1,2}[^[:alpha:]]+") '.
 				'and (repair_title_ru = "") '.
 		'';
+		return $sql;
+	}
+
+	private function _sqlFirstNoAlpha() {
+		$sql = ''.
+			'SELECT id, title_ru, title_rut, title_en, title_fi, first_ru, first_en '.
+			'FROM ' . $this->_table . ' '.
+			'WHERE (title_ru not regexp "^[[:alpha:]]") '.
+				'and (repair_title_ru = "") '.
+			'';
 		return $sql;
 	}
 

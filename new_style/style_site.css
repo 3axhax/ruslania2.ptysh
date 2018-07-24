@@ -1591,7 +1591,8 @@ a:focus {
 }
 
 .search_aut input[type=text] {
-	border-radius: 0px;
+    height: 30px;
+	border-radius: 0;
 	width: 760px;
 	border: 1px solid #dfdfdf;
 	margin: 0;
