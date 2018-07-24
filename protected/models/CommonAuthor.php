@@ -30,13 +30,15 @@ class CommonAuthor extends CMyActiveRecord {
         $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
         $abc = array();
         foreach ($allAlpha as $alpha) {
-            $sql = ''.
-                'select 1 '.
-                'from books_authors t '.
-                    'join all_authorslist tA on (tA.id = t.author_id) and (tA.first_'.$lang.' = :alpha) '.
-                'limit 1 '.
-            '';
-            if ((bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha'=>$alpha))) $abc[] = array('first_'.$lang => $alpha);
+            if (preg_match("/\w/ui", $alpha)) {
+                $sql = '' .
+                    'select 1 ' .
+                    'from ' . $data['author_table'] . ' t ' .
+                    'join all_authorslist tA on (tA.id = t.author_id) and (tA.first_' . $lang . ' = :alpha) ' .
+                    'limit 1 ' .
+                '';
+                if ((bool)Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha' => $alpha))) $abc[] = array('first_' . $lang => $alpha);
+            }
         }
         return $abc;
 

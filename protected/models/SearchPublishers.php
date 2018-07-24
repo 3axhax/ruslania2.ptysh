@@ -68,6 +68,11 @@ class SearchPublishers {
 			$sql = 'select found_rows();';
 			$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
+		$ids = array();
+		foreach ($publishers as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
+		}
 		return $publishers;
 	}
 
@@ -96,6 +101,11 @@ class SearchPublishers {
 			$sql = 'select found_rows();';
 			$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
+		$ids = array();
+		foreach ($publishers as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
+		}
 		return $publishers;
 	}
 
@@ -113,8 +123,13 @@ class SearchPublishers {
 			'group by t.id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
-			'';
+		'';
 		$items = Yii::app()->db->createCommand($sql)->queryAll();
+		$ids = array();
+		foreach ($items as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
+		}
 		$sql = 'select found_rows();';
 		$counts = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $items;

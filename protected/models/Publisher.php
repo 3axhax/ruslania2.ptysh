@@ -14,8 +14,36 @@ class Publisher extends CMyActiveRecord {
     }
 
     public function GetABC($lang, $entity) {
+        if (!Entity::checkEntityParam($entity, 'publisher')) return array();
+
         $entityParam = Entity::GetEntitiesList()[$entity];
         $tableItems = $entityParam['site_table'];
+
+        $start = microtime_float();
+        $sql = ''.
+            'select`first_'.$lang.'` '.
+            'from`all_publishers` '.
+            'where (first_'.$lang.' regexp "[[:alpha:]]") '.
+            'and (`first_'.$lang.'` != "") '.
+            'group by `first_'.$lang.'` '.
+            'order by `first_'.$lang.'` '.
+        '';
+        $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
+        $abc = array();
+        foreach ($allAlpha as $alpha) {
+            if (preg_match("/\w/ui", $alpha)) {
+                $sql = ''.
+                    'select 1 '.
+                    'from ' . $tableItems . ' t '.
+                    'join all_publishers tA on (tA.id = t.publisher_id) and (tA.first_'.$lang.' = :alpha) '.
+                    'limit 1 '.
+                '';
+                if ((bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha'=>$alpha))) $abc[] = array('first_'.$lang => $alpha);
+            }
+        }
+        Debug::staticRun(array(microtime_float() - $start));
+        return $abc;
+
         $sql = ''.
             'SELECT t.first_' . $lang . ' '.
             'FROM all_publishers AS t '.
