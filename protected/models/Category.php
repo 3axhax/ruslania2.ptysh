@@ -577,9 +577,9 @@ class Category {
 			if (!$sort) $sort = 12;
 		}
 
-        /*$criteria->addCondition('brutto >= :brutto1 AND brutto<=:brutto2');
+        $criteria->addCondition('brutto >= :brutto1 AND brutto<=:brutto2');
         $criteria->params[':brutto1'] = $cmin;
-        $criteria->params[':brutto2'] = $cmax;*/
+        $criteria->params[':brutto2'] = $cmax;
 
        if ($avail == 1) $criteria->addCondition('t.avail_for_order=1');
         $criteria->order = SortOptions::GetSQL($sort, $lang, $entity);
@@ -590,15 +590,15 @@ class Category {
 
         $ret = Product::FlatResult($datas);
 
-        $filter_ret = [];
+        //$filter_ret = [];
 
-        foreach ($ret as $r)
+        /*foreach ($ret as $r)
         {
             if (isset($r['real_price']) && $r['real_price'] >= $cmin && $r['real_price'] <= $cmax)
                 $filter_ret[] = $r;
-        }
+        }*/
 
-        return $filter_ret;
+        return $ret;
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
@@ -709,7 +709,7 @@ class Category {
             WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-
+        $count = $rows[0]['cnt'];
         return ($rows[0]['cnt'] == 1001 && $isFilter) ? '>1000' : $rows[0]['cnt'];
     }
 

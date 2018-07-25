@@ -1045,10 +1045,10 @@ class SiteController extends MyController {
     }
 
     function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
-                            $izda = '0', $seria = '0', $cmin = '0', $cmax = '0', $binding = '0', $langsel = '',
+                            $izda = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
                             $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
 
-        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/cmin/1000/cmax/9000/ */
+        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
         $_GET['name_search'] = $_POST['name_search'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
@@ -1059,10 +1059,10 @@ class SiteController extends MyController {
         $_GET['langsel'] = $_POST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
-        $cmin = str_replace(',','.',$cmin);
+        /*$cmin = str_replace(',','.',$cmin);
         $cmax = str_replace(',','.',$cmax);
         $data['cmin'] = (real)$cmin;
-        $data['cmax'] = (real)$cmax;
+        $data['cmax'] = (real)$cmax;*/
 
         FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);
@@ -1072,7 +1072,10 @@ class SiteController extends MyController {
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
+        $http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
+        $paginator->route = Yii::app()->createUrl($http);
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
+
 
         $path = $cat->GetCategoryPath($entity, $cid);
         $selectedCategory = array_pop($path);
