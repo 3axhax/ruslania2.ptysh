@@ -184,9 +184,9 @@ class Product
             }
             else $item['DeliveryTime'] = false;
 
-            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            /*$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
             $real_price = $price[DiscountManager::WITH_VAT_WORLD];
-            $item['real_price'] = $real_price;
+            $item['real_price'] = $real_price;*/
 
             $ret[] = $item;
         }
