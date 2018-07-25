@@ -709,7 +709,7 @@ class Category {
             WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-
+        $count = $rows[0]['cnt'];
         return ($rows[0]['cnt'] == 1001 && $isFilter) ? '>1000' : $rows[0]['cnt'];
     }
 

@@ -10,7 +10,8 @@
                                           'firstPageLabel' => '',
                                           'lastPageLabel' => '',
                                           'separator' => '',
-                                          'htmlOptions' => array('class' => 'pager')));
+                                          'htmlOptions' => array('class' => 'pager')
+        ));
         ?>
         
     </form>

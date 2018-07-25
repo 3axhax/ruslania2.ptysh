@@ -15,12 +15,12 @@ class TopFilters extends CWidget
         if($this->cid == 0) $title_search =  $ui->item('A_NEW_SEARCH_ENT').': "'.Entity::GetTitle($this->entity).'"';
 
         // Заполняем цену и год в первую очередь из фильтра, потом из максимальных и минимальных значений
-        if (isset($this->filter_data['cmin']) && $this->filter_data['cmin'] != '') $min_p = $this->filter_data['cmin'];
+        if (isset($this->filter_data['min_cost']) && $this->filter_data['min_cost'] != '') $min_p = $this->filter_data['min_cost'];
         elseif (isset($this->filters['max-min'][2]) && $this->filters['max-min'][2] != '') $min_p = $this->filters['max-min'][2];
         else $min_p = false;
         $this->filters['max-min'][2] = $min_p;
 
-        if (isset($this->filter_data['cmax']) && $this->filter_data['cmax'] != '') $max_p = $this->filter_data['cmax'];
+        if (isset($this->filter_data['max_cost']) && $this->filter_data['max_cost'] != '') $max_p = $this->filter_data['max_cost'];
         elseif (isset($this->filters['max-min'][3]) && $this->filters['max-min'][3] != '') $max_p = $this->filters['max-min'][3];
         else $max_p = false;
         $this->filters['max-min'][3] = $max_p;

@@ -25,24 +25,34 @@ class FilterHelper
     }
 
     static function setFiltersData ($entity, $cid = 0, $data) {
-        if (Yii::app()->session['filter_e' . $entity . '_c_' . $cid] != serialize($data)) {
-            Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = serialize($data);
+        $key = 'filter_e' . $entity . '_c_' . $cid;
+        if (Yii::app()->session[$key] != serialize($data)) {
+            Yii::app()->session[$key] = serialize($data);
         }
+        $filtersData = FiltersData::instance();
+        $filtersData->setFiltersData($key, $data);
     }
 
     static function getFiltersData ($entity, $cid = 0) {
-        $data = unserialize(Yii::app()->session['filter_e' . $entity . '_c_' . $cid]);
+        $key = 'filter_e' . $entity . '_c_' . $cid;
+        $filtersData = FiltersData::instance();
+        if ($filtersData->isSetKey($key)) {
+            $data = $filtersData->getFiltersData($key);
+        }
+        else $data = unserialize(Yii::app()->session[$key]);
         return $data;
     }
 
     static function setOneFiltersData ($entity, $cid = 0, $key, $value) {
-        $data = unserialize(Yii::app()->session['filter_e' . $entity . '_c_' . $cid]);
+        $data = self::getFiltersData($entity, $cid);
         if ($key == 'binding_id') $data[$key][0] = $value;
         else $data[$key] = $value;
-        Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = serialize($data);
+        self::setFiltersData($entity, $cid, $data);
     }
 
     static function deleteEntityFilter ($entity, $cid = 0) {
         Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = '';
+        $filtersData = FiltersData::instance();
+        $filtersData->deleteFiltersData();
     }
 }

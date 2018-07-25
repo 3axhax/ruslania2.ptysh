@@ -163,11 +163,11 @@ function show_result_count(url = '/ru/site/gtfilter/') {
 }
 
 //Вывод результата фильтра
-function show_items() {
+function show_items(url = '/ru/site/ggfilter/') {
 
     var create_url;
-    create_url = '/ru/site/ggfilter' +
-        '/entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
+    create_url = url +
+        'entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
         '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
         '/avail/'+(( avail = $('form.filter select[name=avail]').val()) ? avail : '1')+
@@ -175,16 +175,12 @@ function show_items() {
         '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '3000')+
         '/izda/'+(( izda = $('form.filter input[name=izda]').val()) ? izda : '0')+
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
-        '/cmin/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
-        '/cmax/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
+        '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
+        '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
         '/langsel/'+(( langsel = $('form.filter input.lang').val()) ? langsel : '');
     var bindings = [];
     var i = 0;
 
-    /*$('.bindings:checked').each(function() {
-        bindings[i] = $(this).val();
-        i++;
-    });*/
     bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
@@ -205,6 +201,9 @@ function show_items() {
             $('.span10.listgoods').html(data);
             $('.box_select_result_count').hide(1);
             $(window).scrollTop(0);
+        },
+        error: function (msg) {
+            console.log (msg);
         }
     });
 }

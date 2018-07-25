@@ -73,7 +73,7 @@
         <?php endif;?>
 
         <!--Кнопки управления-->
-        <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items()">
+        <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter')?>')">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
     </div>

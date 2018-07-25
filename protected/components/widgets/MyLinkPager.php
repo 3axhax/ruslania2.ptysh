@@ -31,9 +31,13 @@ class MyLinkPager extends CLinkPager
 			$urlParams = '?'.$urlParams;
 		
 		$arrUrl = explode('?', Yii::app()->request->url);
+
+		if (substr_count($arrUrl[0], 'ggfilter') > 0) $url = $this->getPages()->route.$urlParams;
+		else $url = $arrUrl[0].$urlParams;
 		
-		$url = $arrUrl[0].$urlParams;
+
 		if (!$label) return '';
+		$u = $this->getPages()->route;
 		return '<li class="'.$class.'">'.CHtml::link($label,$url).'</li>';
 	}	
 	
