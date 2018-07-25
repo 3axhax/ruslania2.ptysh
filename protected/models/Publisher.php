@@ -19,7 +19,6 @@ class Publisher extends CMyActiveRecord {
         $entityParam = Entity::GetEntitiesList()[$entity];
         $tableItems = $entityParam['site_table'];
 
-        $start = microtime_float();
         $sql = ''.
             'select`first_'.$lang.'` '.
             'from`all_publishers` '.
@@ -29,6 +28,8 @@ class Publisher extends CMyActiveRecord {
             'order by `first_'.$lang.'` '.
         '';
         $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
+        sort($allAlpha);
+
         $abc = array();
         foreach ($allAlpha as $alpha) {
             if (preg_match("/\w/ui", $alpha)) {
@@ -41,7 +42,6 @@ class Publisher extends CMyActiveRecord {
                 if ((bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha'=>$alpha))) $abc[] = array('first_'.$lang => $alpha);
             }
         }
-        Debug::staticRun(array(microtime_float() - $start));
         return $abc;
 
         $sql = ''.

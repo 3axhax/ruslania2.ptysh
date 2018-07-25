@@ -13,6 +13,22 @@ class HrefTitles {
 		return self::$_self;
 	}
 
+	private function __construct() {
+		//на всех страницах в меню есть ссылки на разделы. По этому всегда получаю все эти ссылки
+		$key = 'hreParentCategorys';
+		$this->_titles = Yii::app()->dbCache->get($key);
+		if ($this->_titles === false) {
+			foreach (Entity::GetEntitiesList() as $entity=>$param) {
+				if (!empty($param['site_category_table'])) {
+					$sql = 'select id from ' . $param['site_category_table'] . ' where (parent_id = 0)';
+					$ids = Yii::app()->db->createCommand($sql)->queryColumn();
+					if (!empty($ids)) $this->getByIds($entity, 'entity/list', $ids);
+				}
+			}
+			Yii::app()->dbCache->set($key, $this->_titles);
+		}
+	}
+
 	function getById($entity, $route, $id) {
 		$idTitles = $this->getByIds($entity, $route, array($id));
 		return $idTitles[$id];

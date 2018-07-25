@@ -28,6 +28,7 @@ class CommonAuthor extends CMyActiveRecord {
             'order by `first_'.$lang.'` '.
         '';
         $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
+        sort($allAlpha);
         $abc = array();
         foreach ($allAlpha as $alpha) {
             if (preg_match("/\w/ui", $alpha)) {

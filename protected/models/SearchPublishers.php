@@ -119,8 +119,9 @@ class SearchPublishers {
 		$sql = ''.
 			'select sql_calc_found_rows t.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePublishers . ' t '.
-			'join ' . $tableItems . ' tI on (tI.publisher_id = t.id) and (tI.avail_for_order = 1) '.
-			'group by t.id '.
+//			'join ' . $tableItems . ' tI on (tI.publisher_id = t.id) and (tI.avail_for_order = 1) '.
+//			'group by t.id '.
+				'join (select publisher_id from books_catalog where (avail_for_order = 1) group by publisher_id) tI on (tI.publisher_id = t.id) '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
