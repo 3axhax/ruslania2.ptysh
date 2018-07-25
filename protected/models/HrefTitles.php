@@ -30,6 +30,10 @@ class HrefTitles {
 	}
 
 	function getById($entity, $route, $id) {
+		if (!empty($this->_titles[$route][$entity][$id])) {
+			return $this->_titles[$route][$entity][$id];
+		}
+
 		$idTitles = $this->getByIds($entity, $route, array($id));
 		return $idTitles[$id];
 	}
@@ -45,7 +49,7 @@ class HrefTitles {
 
 		//это, чтоб выполнить запрос только для ид, которых еще нет
 		foreach ($this->_titles[$route][$entity] as $id=>$titles) {
-			$idTitles[$id] = unserialize($titles);
+			$idTitles[$id] = $titles;
 		}
 		//это, чтоб выполнить запрос только для ид, которых еще нет
 		$withoutTitles = array_filter($idTitles, [$this, '_checkEmpty']);
@@ -59,8 +63,8 @@ class HrefTitles {
 				'and (id in (' . implode(',', array_keys($withoutTitles)) . ')) '.
 		'';
 		foreach (Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity'=>$entity, ':route'=>$route)) as $row) {
-			$this->_titles[$route][$entity][$row['id']] = $row['titles'];
-			$idTitles[$row['id']] = unserialize($row['titles']);
+			$this->_titles[$route][$entity][$row['id']] = unserialize($row['titles']);
+			$idTitles[$row['id']] = $this->_titles[$route][$entity][$row['id']];
 		}
 		$withoutTitles = array_filter($idTitles, [$this, '_checkEmpty']);
 		if (empty($withoutTitles)) return $idTitles;
@@ -82,7 +86,7 @@ class HrefTitles {
 				$this->_save($entity, $route, $row);
 				$titles = $this->_getTitles($entity, $route, $row);
 				$idTitles[$row['id']] = $titles;
-				$this->_titles[$route][$entity][$row['id']] = serialize($titles);
+				$this->_titles[$route][$entity][$row['id']] = $titles;
 			}
 		}
 
