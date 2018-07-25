@@ -71,7 +71,7 @@ class SearchAuthors {
 		$ids = array();
 		foreach ($authors as $item) $ids[] = $item['id'];
 		if (!empty($ids)) {
-			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
+			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
 		}
 		if ($count !== false) {
 			$sql = 'select found_rows();';
@@ -107,7 +107,7 @@ class SearchAuthors {
 		$ids = array();
 		foreach ($authors as $item) $ids[] = $item['id'];
 		if (!empty($ids)) {
-			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
+			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
 		}
 		if ($count !== false) {
 			$sql = 'select found_rows();';
