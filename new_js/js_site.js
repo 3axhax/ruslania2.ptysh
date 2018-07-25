@@ -227,7 +227,7 @@ function change_all_binding(event, binding_all = false)
     }
 }
 
-function liveFindAuthorMP(entity, cid) {
+function liveFindAuthorMP(entity, url, cid) {
     find_author = $('.find_author');
     var dataPost = {entity: entity, cid: cid};
     find_author.marcoPolo({
@@ -235,7 +235,7 @@ function liveFindAuthorMP(entity, cid) {
         cache : false,
         hideOnSelect: true,
         delay: 50,
-        url:'/liveSearch/filter_authors',
+        url: url,
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {
@@ -244,7 +244,7 @@ function liveFindAuthorMP(entity, cid) {
     });
 }
 
-function liveFindPublisherMP(entity, cid) {
+function liveFindPublisherMP(entity, url, cid) {
     find_pub = $('.find_izda');
     var dataPost = {entity: entity, cid: cid};
     find_pub.marcoPolo({
@@ -252,7 +252,7 @@ function liveFindPublisherMP(entity, cid) {
         cache : false,
         hideOnSelect: true,
         delay: 50,
-        url:'/liveSearch/filter_publishers',
+        url: url,
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {
@@ -261,7 +261,7 @@ function liveFindPublisherMP(entity, cid) {
     });
 }
 
-function liveFindSeriesMP(entity, cid) {
+function liveFindSeriesMP(entity, url, cid) {
     find_series = $('.find_series');
     var dataPost = {entity: entity, cid: cid};
     find_series.marcoPolo({
@@ -269,7 +269,7 @@ function liveFindSeriesMP(entity, cid) {
         cache : false,
         hideOnSelect: true,
         delay: 50,
-        url:'/liveSearch/filter_series',
+        url: url,
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {

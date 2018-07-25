@@ -28,7 +28,7 @@
                        <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <script>
-                liveFindAuthorMP(<?=$entity?>, <?=$cid?>);
+                liveFindAuthorMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_authors')?>', <?=$cid?>);
             </script>
         </div>
         <?php endif;?>
@@ -93,7 +93,7 @@
             </div>
             <ul class="search_result search_result_izda"></ul>
             <script>
-                liveFindPublisherMP(<?=$entity?>, <?=$cid?>);
+                liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
             </script>
         </div>
         <?php endif;?>
@@ -110,7 +110,7 @@
             </div>
             <ul class="search_result search_result_series"></ul>
             <script>
-                liveFindSeriesMP(<?=$entity?>, <?=$cid?>);
+                liveFindSeriesMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_series')?>', <?=$cid?>);
             </script>
         </div>
         <?php endif;?>

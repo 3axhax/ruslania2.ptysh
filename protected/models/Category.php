@@ -601,7 +601,7 @@ class Category {
         return $filter_ret;
     }
 
-    public function count_filter($entity = 15, $cid, $post) {
+    public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
@@ -699,13 +699,18 @@ class Category {
         if ($cid > 0) {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr .' LIMIT 0,1001) as c';
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
             WHERE bc.id <> 0 ' . $qstr .' LIMIT 0,1001) as c';
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-        return ($rows[0]['cnt'] == 1001) ? '>1000' : $rows[0]['cnt'];
+
+        return ($rows[0]['cnt'] == 1001 && $isFilter) ? '>1000' : $rows[0]['cnt'];
     }
 
     public function GetCategoryPath($entity, $cid) {

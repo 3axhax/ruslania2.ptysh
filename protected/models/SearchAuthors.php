@@ -124,21 +124,24 @@ class SearchAuthors {
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
 
-        $whereLike = 'LOWER(aa.title_ru) LIKE LOWER(\'%'.$q.'%\') OR LOWER(aa.title_rut) LIKE LOWER(\'%'.$q.'%\') OR 
-            LOWER(aa.title_en) LIKE LOWER(\'%'.$q.'%\') OR LOWER(aa.title_fi) LIKE LOWER(\'%'.$q.'%\')';
+        $whereLike = 'LOWER(aa.title_ru) LIKE LOWER(:q) OR LOWER(aa.title_rut) LIKE LOWER(:q) OR 
+            LOWER(aa.title_en) LIKE LOWER(:q) OR LOWER(aa.title_fi) LIKE LOWER(:q)';
+
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
+            LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
 
         if ($cid > 0) {
-            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, '
-                . $tbl_author . ' as ba, all_authorslist as aa 
-            WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id
-            AND ba.author_id=aa.id AND ('.$whereLike.') GROUP BY ba.author_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_author . ' as ba, 
+            ' . $tbl . ' as bc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (ba.author_id = aa.id) and (bc.id = ba.' . $field . ') and (bc.`code`=:code OR bc.`subcode`=:code)
+				GROUP BY ba.author_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
-            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, '
-                . $tbl_author . ' as ba, all_authorslist as aa 
-            WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id
-            AND ba.author_id=aa.id AND ('.$whereLike.') GROUP BY ba.author_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_author . ' as ba, 
+            ' . $tbl . ' as bc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (ba.author_id = aa.id) and (bc.id = ba.' . $field . ') 
+				GROUP BY ba.author_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(екгу, array(':q' => '%'.$q.'%'));
         }
         $authors = [];
         $i = 0;

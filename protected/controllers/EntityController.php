@@ -110,7 +110,7 @@ class EntityController extends MyController {
 			
 		}*/
 
-		$avail = $this->GetAvail($avail);
+
 
         //получаем языки категории
         $langs = $category->getFilterLangs($entity, $cid);
@@ -140,23 +140,6 @@ class EntityController extends MyController {
             }
             $ids[] = $p['id'];
         }
-
-
-
-        $totalItems = $category->GetTotalItems($entity, $cid, $avail);
-
-        if ($cid > 0 && empty($path) && $totalItems == 0)
-            throw new CHttpException(404);
-
-        $paginatorInfo = new CPagination($totalItems);
-        $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
-        $sort = SortOptions::GetDefaultSort($sort);
-
-		$items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
-
-        // Добавляем к товарам инфу сколько уже содержится в корзине
-       $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
         // Получить статик-файл инфы категории
         $categoryInfo = null;
         if (!empty($selectedCategory) && !empty($selectedCategory['description_file_' . Yii::app()->language])) {
@@ -172,15 +155,30 @@ class EntityController extends MyController {
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if ($data != '') {
-
-			$cat = new Category();
+            $cat = new Category();
 			$items = $cat->result_filter($data, $lang);
 			$totalItems = Category::count_filter($entity, $cid, $data);
-			$paginatorInfo = new CPagination($totalItems);
-			$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-			$this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+            $paginatorInfo = new CPagination($totalItems);
+            $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+            $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
 			$filter_data = $data;
 		}
+		else {
+            $avail = $this->GetAvail($avail);
+            $totalItems = $category->GetTotalItems($entity, $cid, $avail);
+            if ($cid > 0 && empty($path) && $totalItems == 0)
+                throw new CHttpException(404);
+            $sort = SortOptions::GetDefaultSort($sort);
+            $paginatorInfo = new CPagination($totalItems);
+            $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+            $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+            $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
+        }
+
+        $paginatorInfo->itemCount = $totalItems;
+
+        // Добавляем к товарам инфу сколько уже содержится в корзине
+        $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
 
         if (isset(Yii::app()->session['last_e'])
             && (Yii::app()->session['last_e'] != '')

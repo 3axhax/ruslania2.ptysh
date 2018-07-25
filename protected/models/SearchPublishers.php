@@ -141,20 +141,23 @@ class SearchPublishers {
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
 
-        $whereLike = 'LOWER(ap.title_ru) LIKE LOWER(\'%'.$q.'%\') OR LOWER(ap.title_en) LIKE LOWER(\'%'.$q.'%\')';
-
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_en) LIKE LOWER(:q)';
         if ($cid > 0) {
-            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
-                'WHERE (tc.`code`=:code OR tc.`subcode`=:code) AND tc.avail_for_order=1 '.
-                'AND ap.id = tc.publisher_id AND ('.$whereLike.')'.
-                'GROUP BY tc.publisher_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en 
+                    FROM (SELECT id, title_ru, title_en FROM all_publishers 
+                    WHERE ('.$whereLike.')) as ap 
+                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
+                    WHERE tc.avail_for_order=1 AND (tc.`code`=:code OR tc.`subcode`=:code)
+                    GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
-            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en FROM ' . $tbl . ' as tc, all_publishers as ap '.
-                'WHERE tc.avail_for_order=1 '.
-                'AND ap.id = tc.publisher_id AND ('.$whereLike.') '.
-                'GROUP BY tc.publisher_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en 
+                    FROM (SELECT id, title_ru, title_en FROM all_publishers 
+                    WHERE ('.$whereLike.')) as ap 
+                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
+                    WHERE tc.avail_for_order=1
+                    GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
         }
         $publishers = [];
         $i = 0;
