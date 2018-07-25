@@ -35,24 +35,24 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 		$sql = ''.
 			'update ' . $this->_table . ' set '	.
-				'first_ru = upper(left(title_ru, 1)), '.
-				'first_en = upper(left(title_en, 1)) '.
+				'first_ru = upper(left(trim(title_ru), 1)), '.
+				'first_en = upper(left(trim(title_en), 1)) '.
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
 		$this->_query($sql);
 
 		$sql = ''.
 			'update all_publishers set '	.
-			'first_ru = upper(substring(title_ru, 1, 1)), '.
-			'first_en = upper(substring(title_en, 1, 1)) '.
-			'where (title_ru not regexp "^[[:alnum:]]+") and (title_ru regexp "[[:alnum:]]+") '.
+			'first_ru = upper(substring(trim(title_ru), 1, 1)), '.
+			'first_en = upper(substring(trim(title_en), 1, 1)) '.
+			'where (trim(title_ru) not regexp "^[[:alnum:]]+") and (trim(title_ru) regexp "[[:alnum:]]+") '.
 		'';
 		$this->_query($sql);
 
 		$sql = ''.
 			'update all_publishers set '	.
-			'first_ru = upper(left(title_ru, 1)), '.
-			'first_en = upper(left(title_en, 1)) '.
+			'first_ru = upper(left(trim(title_ru), 1)), '.
+			'first_en = upper(left(trim(title_en), 1)) '.
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
 		$this->_query($sql);
@@ -146,9 +146,9 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	private function _sqlApostrophe() {
 		$sql = ''.
-			'SELECT id, title_ru '.
+			'SELECT id, trim(title_ru) title_ru '.
 			'FROM ' . $this->_table . ' '.
-			'WHERE (title_ru regexp "^[[:alpha:]]{1,2}[\'|`]") '.
+			'WHERE (trim(title_ru) regexp "^[[:alpha:]]{1,2}[\'|`]") '.
 				'and (repair_title_ru = "") '.
 		'';
 		return $sql;
@@ -156,9 +156,9 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	private function _sqlInitials() {
 		$sql = ''.
-			'SELECT id, title_ru, title_rut, title_en, title_fi, first_ru, first_en '.
+			'SELECT id, trim(title_ru) title_ru, trim(title_rut) title_rut, trim(title_en) title_en, trim(title_fi) title_fi, first_ru, first_en '.
 			'FROM ' . $this->_table . ' '.
-			'WHERE (title_ru regexp "^[[:alpha:]]{1,2}[^[:alpha:]]+") '.
+			'WHERE (trim(title_ru) regexp "^[[:alpha:]]{1,2}[^[:alpha:]]+") '.
 				'and (repair_title_ru = "") '.
 		'';
 		return $sql;
@@ -166,9 +166,9 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	private function _sqlFirstNoAlpha() {
 		$sql = ''.
-			'SELECT id, title_ru, title_rut, title_en, title_fi, first_ru, first_en '.
+			'SELECT id, trim(title_ru) title_ru, trim(title_rut) title_rut, trim(title_en) title_en, trim(title_fi) title_fi, first_ru, first_en '.
 			'FROM ' . $this->_table . ' '.
-			'WHERE (title_ru not regexp "^[[:alpha:]]") '.
+			'WHERE (trim(title_ru) not regexp "^[[:alpha:]]") '.
 				'and (repair_title_ru = "") '.
 			'';
 		return $sql;
@@ -179,9 +179,9 @@ class RepairAuthorsCommand extends CConsoleCommand {
 	 */
 	private function _sql100() {
 		$sql = ''.
-			'select id, title_ru, title_rut, title_en, title_fi, first_ru, first_en '.
+			'select id, trim(title_ru) as title_ru, trim(title_rut) as title_rut, trim(title_en) as title_en, trim(title_fi) as title_fi, first_ru, first_en '.
 			'from ' . $this->_table . ' '.
-			'where (title_ru regexp "^[[:alpha:]]{1,2}[^[:alpha:]]+[[:alpha:]]{1,2}[^[:alpha:]]+") '.
+			'where (trim(title_ru) regexp "^[[:alpha:]]{1,2}[^[:alpha:]]+[[:alpha:]]{1,2}[^[:alpha:]]+") '.
 				'and (repair_title_ru = "") '.
 		'';
 		return $sql;

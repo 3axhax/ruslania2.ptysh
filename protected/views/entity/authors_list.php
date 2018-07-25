@@ -119,6 +119,7 @@
 
                 <?php if (empty($route)) $route = 'entity/authorlist';
                 $lineRu = $lineOther = false;
+                if (empty($chasdr)) $chasdr = '';
                 foreach($abc as $item) :
 				    if (trim($item['first_'.$lang]) == '') continue;
                     if (!$lineOther&&preg_match("/[^a-zа-я0-9]/ui", $item['first_'.$lang])): $lineOther = true; ?>
@@ -126,7 +127,7 @@
                     <?php elseif(!$lineRu&&preg_match("/[а-я]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
                         <br>
                     <?php endif; ?>
-                    <a class="<?=(($item['first_'.$lang] == $_GET['char']) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
+                    <a class="<?=(($item['first_'.$lang] == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
                         array('entity' => Entity::GetUrlKey($entity), 'char' => $item['first_'.$lang])); ?>"
                        ><?=$item['first_'.$lang]; ?></a>
                 <?php endforeach; ?>
