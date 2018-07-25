@@ -126,13 +126,13 @@ class SearchPublishers {
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
 		$items = Yii::app()->db->createCommand($sql)->queryAll();
+		$sql = 'select found_rows();';
+		$counts = Yii::app()->db->createCommand($sql)->queryScalar();
 		$ids = array();
 		foreach ($items as $item) $ids[] = $item['id'];
 		if (!empty($ids)) {
 			HrefTitles::get()->getByIds($entity, 'entity/bypublisher', $ids);
 		}
-		$sql = 'select found_rows();';
-		$counts = Yii::app()->db->createCommand($sql)->queryScalar();
 		return $items;
 	}
 

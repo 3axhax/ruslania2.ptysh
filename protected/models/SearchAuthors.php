@@ -68,14 +68,14 @@ class SearchAuthors {
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
 		$authors = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q));
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
 		$ids = array();
 		foreach ($authors as $item) $ids[] = $item['id'];
 		if (!empty($ids)) {
 			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
-		}
-		if ($count !== false) {
-			$sql = 'select found_rows();';
-			$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 		return $authors;
 	}
@@ -104,14 +104,14 @@ class SearchAuthors {
 		$qStr = $q . '%';
 		if (!$isBegin) $qStr = '%' . $qStr;
 		$authors = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $qStr));
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
 		$ids = array();
 		foreach ($authors as $item) $ids[] = $item['id'];
 		if (!empty($ids)) {
 			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
-		}
-		if ($count !== false) {
-			$sql = 'select found_rows();';
-			$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 		return $authors;
 	}
