@@ -8,6 +8,8 @@ class Category {
         $eTable = $entities[$entity]['entity'];
         if ($availCategory !== false)
         {
+            HrefTitles::get()->getByIds($entity, 'entity/list', $availCategory);
+
             $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE id IN ('.implode(',' ,$availCategory).') ORDER BY title_'.Yii::app()->language . ' ASC';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
             //print_r(implode(',' ,$availCategory)); die();
@@ -15,6 +17,9 @@ class Category {
         }
         $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE parent_id=:parent  AND items_count > 0 ORDER BY title_'.Yii::app()->language . ' ASC';
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':parent' => $parent));
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
         return $rows;
     }
 
@@ -26,6 +31,10 @@ class Category {
 
         $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE parent_id=:parent ORDER BY title_'.Yii::app()->language;
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':parent' => $cid));
+
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
         return $rows;
     }
@@ -142,6 +151,9 @@ class Category {
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/byaudiostream', $ids);
         return $rows;
     }
 
@@ -164,6 +176,10 @@ class Category {
         $sql .= ' GROUP BY vcl.title_'.$lang.' ORDER BY vcl.title_'.$lang.' ASC';
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/bysubtitle', $ids);
 
         return $rows;
     }
@@ -211,6 +227,11 @@ class Category {
                     'group by binding_id '.
                 '';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+            $ids = array();
+            foreach ($rows as $row) $ids[] = $row['binding_id'];
+            HrefTitles::get()->getByIds($entity, 'entity/bybinding', $ids);
+
                 return $rows;
                 break;
             case 22:case 24:
@@ -224,6 +245,10 @@ class Category {
                     $sql = 'SELECT media_id FROM ' . $tbl . ' WHERE avail_for_order=1 GROUP BY media_id';
                     $rows = Yii::app()->db->createCommand($sql)->queryAll();
                 }
+
+            $ids = array();
+            foreach ($rows as $row) $ids[] = $row['media_id'];
+            HrefTitles::get()->getByIds($entity, 'entity/bymedia', $ids);
 
             return $rows;
                 break;
@@ -266,6 +291,8 @@ class Category {
                 if ($row['title_en'] != $row['title_ru'])
                     $izd[(int)$row['publisher_id']]['en'] = $row['title_en'];
             }
+
+            if ($izd) HrefTitles::get()->getByIds($entity, 'entity/bypublisher', array_keys($izd));
             return $izd;
         }
     }
@@ -310,6 +337,8 @@ class Category {
             if ($row['title_fi'] != $row['title_ru'] && $row['title_fi'] != $row['title_rut'] && $row['title_fi'] != $row['title_en'])
                 $series[(int)$row['series_id']]['fi'] = $row['title_fi'];
         }
+
+        if ($series) HrefTitles::get()->getByIds($entity, 'entity/byseries', array_keys($series));
         return $series;
     }
 
@@ -356,6 +385,7 @@ class Category {
             if ($row['title_fi'] != $row['title_ru'] && $row['title_fi'] != $row['title_rut'] && $row['title_fi'] != $row['title_en'])
                 $authors[(int)$row['author_id']]['fi'] = $row['title_fi'];
         }
+        if ($authors) HrefTitles::get()->getByIds($entity, 'entity/byauthor', array_keys($authors));
         return $authors;
     }
 
@@ -382,6 +412,7 @@ class Category {
         foreach ($rows as $row) {
             $authors[(int)$row['id']] = $row['title'];
         }
+        if ($authors) HrefTitles::get()->getByIds($entity, 'entity/byauthor', array_keys($authors));
         return $authors;
     }
 
@@ -410,7 +441,12 @@ class Category {
 			$rows = array_merge($rows, self::getCatsBreadcrumbs2($entity, $rows[0]['parent_id']));
 			
 		}
-		
+
+
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+
 		return $rows;
 		
 	}
@@ -565,7 +601,7 @@ class Category {
         return $filter_ret;
     }
 
-    public function count_filter($entity = 15, $cid, $post) {
+    public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
@@ -663,13 +699,18 @@ class Category {
         if ($cid > 0) {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr .' LIMIT 0,1001) as c';
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
             WHERE bc.id <> 0 ' . $qstr .' LIMIT 0,1001) as c';
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-        return ($rows[0]['cnt'] == 1001) ? '>1000' : $rows[0]['cnt'];
+
+        return ($rows[0]['cnt'] == 1001 && $isFilter) ? '>1000' : $rows[0]['cnt'];
     }
 
     public function GetCategoryPath($entity, $cid) {
@@ -765,6 +806,7 @@ class Category {
             $ret[] = $id;
             $this->GetChildrenHelper($entity, $id, $ret);
         }
+
     }
 
     // list of ID's of ALL children of current category
@@ -776,6 +818,7 @@ class Category {
             $this->GetChildrenHelper($entity, $cid, $ret);
             Yii::app()->dbCache->set($key, $ret, Yii::app()->params['DbCacheTime']);
         }
+        if ($ret) HrefTitles::get()->getByIds($entity, 'entity/list', $ret);
         return $ret;
     }
 
@@ -815,6 +858,8 @@ class Category {
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
 
         if (empty($itemIds)) return array();
+
+        HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
 
         Product::setActionItems($entity, $itemIds);
         Product::setOfferItems($entity, $itemIds);
@@ -908,6 +953,10 @@ class Category {
             Yii::app()->dbCache->set($key, $tree);
         }
 
+//        $ids = array();
+//        foreach ($tree as $row) $ids[] = $row['id'];
+//        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+
         return $tree;
     }
 
@@ -923,6 +972,11 @@ class Category {
         if (empty($sql)) return array();
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+
         return $rows;
     }
 

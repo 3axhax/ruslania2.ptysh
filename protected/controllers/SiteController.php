@@ -8,7 +8,7 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch',
+                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
                     'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                     'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
                 'users' => array('*')),
@@ -241,6 +241,16 @@ class SiteController extends MyController {
 
         $this->render('login');
     }
+
+    function actionCheckEmail() {
+        if (Yii::app()->request->isPostRequest) {
+            $record = User::model()->findByAttributes(array('login' => Yii::app()->request->getParam('email'), 'is_closed' => 0));
+            if ($record) {
+                $this->renderPartial('forgot_button', array('email' => Yii::app()->request->getPost('email')));
+            }
+            Yii::app()->end();
+        }
+    }
     
     public function actionAllSearch() {
         
@@ -290,6 +300,21 @@ class SiteController extends MyController {
                     Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
                     $cart = new Cart();
                     $cart->UpdateCartToUid($this->sid, $identity->getId());
+
+                    $razds = array();
+                    foreach (Entity::GetEntitiesList() as $entity=>$param) {
+                        $razds[$entity] = Yii::app()->ui->item($param['uikey']);
+                    }
+                    $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
+                    $message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en'))?Yii::app()->language:'en');
+                    $message->setBody(array(
+                        'user'=>User::model()->findByPk(Yii::app()->user->id)->attributes,
+                        'razds'=>$razds,
+                    ), 'text/html');
+                    $message->addTo($user->login);
+                    $message->from = 'noreply@ruslania.com';
+                    Yii::app()->mail->send($message);
+
                 }
                 $ret = array('hasError' => !$ret);
             }
@@ -1008,7 +1033,7 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-			echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST);
+			echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST, true);
         }
     }
 
@@ -1027,31 +1052,23 @@ class SiteController extends MyController {
 
         $_GET['name_search'] = $_POST['name_search'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
-        $_GET['binding'] = $_POST['binding_id'];
+        $_GET['binding_id'] = $_POST['binding_id'];
         $_GET['langVideo'] = $_POST['langVideo'];
         $_GET['formatVideo'] = $_POST['formatVideo'];
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
         $_GET['langsel'] = $_POST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
+        $cmin = str_replace(',','.',$cmin);
+        $cmax = str_replace(',','.',$cmax);
+        $data['cmin'] = (real)$cmin;
+        $data['cmax'] = (real)$cmax;
 
-        //записываем фильтр в сессию каждой категории
-        if (Yii::app()->session['filter_e' . $entity . '_c_' . $cid] != serialize($_GET)) {
-            Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = serialize($_GET);
-        }
-
-        $data = unserialize(Yii::app()->session['filter_e' . $entity . '_c_' . $cid]); //получаем строку из сессии
+        FilterHelper::setFiltersData($entity, $cid, $_GET);
+        $data = FilterHelper::getFiltersData($entity, $cid);
 
         $cat = new Category();
         $items = $cat->result_filter($data);
-
-        $data['binding_id'] = $data['binding'];
-        $data['year_min'] = $ymin;
-        $data['year_max'] = $ymax;
-        $cmin = str_replace(',','.',$cmin);
-        $cmax = str_replace(',','.',$cmax);
-        $data['min_cost'] = (real)$cmin;
-        $data['max_cost'] = (real)$cmax;
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
@@ -1060,21 +1077,7 @@ class SiteController extends MyController {
         $path = $cat->GetCategoryPath($entity, $cid);
         $selectedCategory = array_pop($path);
 
-        $category = new Category();
-        $filters['max-min'] = $category->getFilterSlider($entity, $cid);
-
-        $filters['author'] = true;
-        if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
-        if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
-        if ($entity != 30) $filters['years'] = true;
-
-        if ($entity == 40) {
-            $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
-            $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
-            $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
-        }
-
-        $filters['binding'] = $category->getFilterBinding($entity, $cid);
+        $filters = FilterHelper::getEnableFilters($entity, $cid);
 
         $this->renderPartial('list_ajax', array(
             'entity' => $entity, 'items' => $items,
