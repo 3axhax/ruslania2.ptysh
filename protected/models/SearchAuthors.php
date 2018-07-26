@@ -154,7 +154,7 @@ class SearchAuthors {
             ' . $tbl . ' as bc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
             ('.$whereLike.')) as aa where (ba.author_id = aa.id) and (bc.id = ba.' . $field . ') 
 				GROUP BY ba.author_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(екгу, array(':q' => '%'.$q.'%'));
+            $rows = Yii::app()->db->createCommand($sql)->queryAll($sql, array(':q' => '%'.$q.'%'));
         }
         $authors = [];
         $i = 0;
