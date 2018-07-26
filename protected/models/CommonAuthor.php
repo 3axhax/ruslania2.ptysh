@@ -24,51 +24,15 @@ class CommonAuthor extends CMyActiveRecord {
             'from`all_authorslist` '.
             'where (first_'.$lang.' regexp "[[:alpha:]]") '.
                 'and (`first_'.$lang.'` != "") '.
-            'group by `first_'.$lang.'` '.
-            'order by `first_'.$lang.'` '.
+                'and (is_' . $entity . '_author > 0) '.
+            'group by ord(`first_'.$lang.'`) '.
+            'order by ord(`first_'.$lang.'`) '.
         '';
-        $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
-        sort($allAlpha);
         $abc = array();
-        foreach ($allAlpha as $alpha) {
-            if (preg_match("/\w/ui", $alpha)) {
-                $sql = '' .
-                    'select 1 ' .
-                    'from ' . $data['author_table'] . ' t ' .
-                    'join all_authorslist tA on (tA.id = t.author_id) and (tA.first_' . $lang . ' = :alpha) ' .
-                    'limit 1 ' .
-                '';
-                if ((bool)Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha' => $alpha))) $abc[] = array('first_' . $lang => $alpha);
-            }
+        foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $alpha) {
+            $abc[] = array('first_' . $lang => $alpha);
         }
         return $abc;
-
-
-        $sql = ''.
-            'SELECT al.first_'.$lang.' AS first_'.$lang.' '.
-            'FROM all_authorslist AS al '.
-                'JOIN '.$data['author_table'].' AS j ON (al.id=j.author_id) '.
-            'group by ord(al.first_'.$lang.') '.
-            'ORDER BY ord(al.title_'.$lang.') ASC '.
-        '';
-              //.'ORDER BY first_'.$lang;
-
-        $rows = Yii::app()->db->createCommand($sql)->queryAll();
-
-		// return $rows;
-		
-		$filterRows = [];
-		$i = 0;
-		foreach($rows as $key => $value)
-		{
-			if(preg_match('/^\p{L}+$/u', $value['first_'.$lang]))
-			{
-				$filterRows[$i]['first_'.$lang] = $value['first_'.$lang];
-				$i++;
-			}
-		}
-		
-        return $filterRows;
     }
 
     public function GetAuthorsByFirstChar($char, $lang, $entity)

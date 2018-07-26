@@ -11,7 +11,7 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 
-		foreach ($this->_query($this->_sql100()) as $author) {
+/*		foreach ($this->_query($this->_sql100()) as $author) {
 			$author = $this->_checkInitials($author);
 			if (!empty($author['repair_title_ru'])) $this->_update($author);
 		}
@@ -55,7 +55,9 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'first_en = upper(left(trim(title_en), 1)) '.
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
-		$this->_query($sql);
+		$this->_query($sql);*/
+
+		$this->_updateLables();
 	}
 
 	/** проверяет похож автор на одного из авторов с апострофами
@@ -198,6 +200,55 @@ class RepairAuthorsCommand extends CConsoleCommand {
 		if ($s) return mb_strtoupper(mb_substr($s, 0, 1,'utf-8'), 'utf-8') . mb_substr($s, 1, null, 'utf-8');
 		return $s;
 
+	}
+
+	private function _updateLables() {
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			switch ((int)$entity) {
+				case 10: case 15: case 24:
+					$sql = ''.
+						'update ' . $this->_table . ' t '.
+							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
+							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+						'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+					'';
+					$this->_query($sql);
+					break;
+				case 20:case 22:
+				$sql = ''.
+					'update ' . $this->_table . ' t '.
+						'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
+						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+					'set is_' . $entity . '_author = if(tI.id is null, 0, 1), '.
+						'is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
+				'';
+				$this->_query($sql);
+				$sql = ''.
+					'update ' . $this->_table . ' t '.
+						'left join ' . $params['performer_table'] . ' tIA on (tIA.person_id = t.id) '.
+						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+					'set is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
+				'';
+				$this->_query($sql);
+					break;
+				case 40:
+					$sql = ''.
+						'update ' . $this->_table . ' t '.
+							'left join video_directors tID on (tID.person_id = t.id) '.
+							'left join video_catalog tI on (tI.id = tID.video_id) AND (tI.avail_for_order = 1) '.
+						'set is_' . $entity . '_director = if(tI.id is null, 0, 1) '.
+					'';
+					$this->_query($sql);
+					$sql = ''.
+						'update ' . $this->_table . ' t '.
+							'left join video_actors tIA on (tIA.person_id = t.id) '.
+							'left join video_catalog tI on (tI.id = tIA.video_id) AND (tI.avail_for_order = 1) '.
+						'set is_' . $entity . '_actor = if(tIA.id is null, 0, 1) '.
+					'';
+					$this->_query($sql);
+					break;
+			}
+		}
 	}
 
 }

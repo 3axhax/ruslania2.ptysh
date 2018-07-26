@@ -59,14 +59,26 @@ class SearchAuthors {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuthors . ' t '.
-				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.' . $fieldFirst . ' = :q) '.
-			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+				'and (is_' . $entity . '_author > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
+
+//		$sql = ''.
+//			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+//			'from ' . $tableAuthors . ' t '.
+//			'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
+//			'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+//			'where (t.' . $fieldFirst . ' = :q) '.
+//			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+//			'group by t.id '.
+//			'order by title_' . $this->_siteLang . ' '.
+//			(empty($limit)?'':'limit ' . $limit . ' ').
+//		'';
+
 		$authors = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q));
 		if ($count !== false) {
 			$sql = 'select found_rows();';
@@ -93,10 +105,11 @@ class SearchAuthors {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuthors . ' t '.
-				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+//				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
+//				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
-			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+				'and (is_' . $entity . '_author > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
