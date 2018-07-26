@@ -477,10 +477,7 @@ class Category {
         $data['max_cost'] = $cmax;
 
         $tbl_author = $entities[$entity]['author_table'];
-        $totalItems = self::count_filter($entity, $cid, $data);
         $field = $entities[$entity]['author_entity_field'];
-        $paginator = new CPagination($totalItems);
-        $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
         $formatVideo = $data['formatVideo'];
         $langVideo = $data['langVideo'];
         $subtitlesVideo = $data['subtitlesVideo'];
@@ -583,7 +580,7 @@ class Category {
 
        if ($avail == 1) $criteria->addCondition('t.avail_for_order=1');
         $criteria->order = SortOptions::GetSQL($sort, $lang, $entity);
-        $paginator->applyLimit($criteria);
+        $criteria->limit = Yii::app()->params['ItemsPerPage'];
         $dp->setCriteria($criteria);
         $dp->pagination = false;
         $datas = $dp->getData();
@@ -616,8 +613,8 @@ class Category {
         $seria = $post['seria'];
 
         if ($entity != 30) {
-            $year_min = (isset($post['year_min']) && $post['year_min'] != '') ? $post['year_min'] : 1900;
-            $year_max = (isset($post['year_max']) && $post['year_max'] != '') ? $post['year_max'] : 2050;
+            $year_min = (isset($post['ymin']) && $post['ymin'] != '') ? $post['ymin'] : 1900;
+            $year_max = (isset($post['ymax']) && $post['ymax'] != '') ? $post['ymax'] : 2050;
         }
 
         $cost_min = (isset($post['min_cost']) && $post['min_cost'] != '') ? $post['min_cost'] : 0;

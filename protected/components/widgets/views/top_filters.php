@@ -62,11 +62,11 @@
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filters['max-min'][0]) && $filters['max-min'][0] != '')) ? $filters['max-min'][0] : '' ?>"
-                           name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
+                           name="ymin" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
                            placeholder="1900" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_y = (isset($filters['max-min'][1]) && $filters['max-min'][1] != '')) ? $filters['max-min'][1] : '' ?>"
-                           name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
+                           name="ymax" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
                            placeholder="2018" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
             </div>
