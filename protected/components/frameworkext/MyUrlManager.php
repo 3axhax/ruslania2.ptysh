@@ -4,7 +4,7 @@ class MyUrlManager extends CUrlManager
 {
     public $urlRuleClass = 'MyUrlRule';
 
-    public static function RewriteCurrent($controller, $lang) {
+    public static function RewriteCurrent($controller, $lang, $sel = false) {
         $query = (string)Yii::app()->getRequest()->getQueryString();
         if ($lang === 'rut') {
             $action = $controller->action->id;
@@ -14,6 +14,7 @@ class MyUrlManager extends CUrlManager
             }
             else {
                 $params = $_GET;
+                if ($sel) $params['sel'] = 1;
                 $params['__langForUrl'] = $lang;
                 if (!empty($params['avail'])) unset($params['avail']);
                 $ctrl = $controller->id;
@@ -27,6 +28,10 @@ class MyUrlManager extends CUrlManager
                 $pathInfo = Yii::app()->getRequest()->getPathInfo();
                 if (!empty($pathInfo)&&($pathInfo !== '/')) $url = '/' . $lang . '/' . $pathInfo . '/';
                 else $url = '/' . $lang . '/';
+            }
+            if ($sel) {
+                if (empty($query)) $query = 'sel=1';
+                else $query .= '&sel=1';
             }
 
             if (!empty($query)

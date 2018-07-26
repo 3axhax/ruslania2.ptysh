@@ -834,7 +834,7 @@ else $act = array('', '');
             <? endif; ?>
 
             <div class="box_btns">
-                <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language); ?>?sel=1" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
+                <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language, 1); ?>" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
                 <a href="javascript:;" onclick="$('.lang_yesno_box').hide();
                                         $('.lang_yesno_box.select_lang').show();" class="btn_no"><?= $ui->item('A_NEW_BTN_NO'); ?> <? if (Yii::app()->language != 'en') : ?>(No)<? endif; ?></a>
             </div>
@@ -851,13 +851,13 @@ else $act = array('', '');
             <? endif; ?>
             <div class="row">
                 <ul class="list_languages">
-                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru'); ?>?sel=1"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
-                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi'); ?>?sel=1"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
-                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en'); ?>?sel=1"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
-                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de'); ?>?sel=1"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
-                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr'); ?>?sel=1"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
-                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es'); ?>?sel=1"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
-                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se'); ?>?sel=1"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
+                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru', 1); ?>"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
+                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi', 1); ?>"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
+                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en', 1); ?>"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
+                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de', 1); ?>"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
+                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr', 1); ?>"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
+                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es', 1); ?>"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
+                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se', 1); ?>"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
 
                 </ul>
             </div>

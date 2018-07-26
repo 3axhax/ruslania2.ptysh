@@ -42,6 +42,10 @@ class DMultilangHelper
                 Yii::app()->language = $lang;
                 switch ($by) {
                     case 'byPath':
+                        $cookie = new CHttpCookie('showSelLang', '1');
+                        $cookie->expire = time() + (60*60*24*20000); // 20000 days
+                        Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
+                        $showSelLang = 1;
                         if ($paramLang !== '') {
                             //если адрес начинается с языка, то из параметров убираю language
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url);
