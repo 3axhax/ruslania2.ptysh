@@ -79,7 +79,6 @@ class LiveSearchController extends MyController {
 
 			if (!empty($list)) {
 				foreach ($list as $row) {
-					Debug::staticRun(array($row));
 					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
 				}
 			}

@@ -15,7 +15,6 @@ class SearchController extends MyController {
 			$this->_viewEmpty($q);
 			return;
 		}
-//		Debug::staticRun(array(Yii::app()->getComponent()));
 
 		$page = $this->_getNumPage();
 
@@ -40,7 +39,6 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
-//		Debug::staticRun(array($code));
 		return $code;
 	}
 
@@ -111,31 +109,41 @@ class SearchController extends MyController {
 
 		$q = '@* ' . $this->_search->EscapeString($query);
 
-		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
+//		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
 //		$this->_search->SetSortMode(SPH_SORT_RELEVANCE);
 //		$this->_search->SetSortMode(SPH_MATCH_EXTENDED2);
-		/*$this->_search->SetFieldWeights(array(
-			'title_ru'=>10000,
-			'title_rut'=>800,
-			'title_en'=>10000,
-			'title_fi'=>10000,
-			'title_eco'=>10000,
-			'description_ru'=>60,
-			'description_rut'=>40,
-			'description_en'=>60,
-			'description_fi'=>60,
-			'description_de'=>60,
-			'description_fr'=>60,
-			'description_es'=>60,
-			'description_se'=>60,
+		$this->_search->SetFieldWeights(array(
+			'title_ru'=>10000000,
+			'title_rut'=>10000000,
+			'title_en'=>10000000,
+			'title_fi'=>10000000,
+			'title_eco'=>10000000,
+			'description_ru'=>1000000,
+			'description_rut'=>1000000,
+			'description_en'=>1000000,
+			'description_fi'=>1000000,
+			'description_de'=>1000000,
+			'description_fr'=>1000000,
+			'description_es'=>1000000,
+			'description_se'=>1000000,
 		));
-		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");*/
+//		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
+
 
 		$find = $this->_search->query($q, 'products');
 		if (empty($find)) return array();
 
 		$product = SearchHelper::ProcessProducts($find);
-		return SearchHelper::ProcessProducts2($product, false);
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find['matches'] as $id => $data) {
+			$attr = $data['attrs'];
+			$key = $attr['entity'] . '-' . $attr['real_id'];
+			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+		}
+
+		return $result;
 	}
 
 	/** функция проверяет найденное в title_. Если не нашло, то в результирующий массив добавляет inDescription
@@ -358,7 +366,6 @@ class SearchController extends MyController {
 
 	protected function _getCategories($query) {
 		$result = $this->_queryIndex($query, 'categories', 0);
-//		$this->widget('Debug', array($result));
 		if (empty($result)) return array();
 
 		$where = array();
