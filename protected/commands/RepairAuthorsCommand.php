@@ -11,7 +11,7 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 
-/*		foreach ($this->_query($this->_sql100()) as $author) {
+		foreach ($this->_query($this->_sql100()) as $author) {
 			$author = $this->_checkInitials($author);
 			if (!empty($author['repair_title_ru'])) $this->_update($author);
 		}
@@ -55,9 +55,10 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'first_en = upper(left(trim(title_en), 1)) '.
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
-		$this->_query($sql);*/
+		$this->_query($sql);
 
 		$this->_updateLables();
+		$this->_updateLablesPublishers();
 	}
 
 	/** проверяет похож автор на одного из авторов с апострофами
@@ -250,5 +251,20 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			}
 		}
 	}
+
+	private function _updateLablesPublishers() {
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			if (in_array('publisher', $params['with'])) {
+
+				$sql = ''.
+					'update all_publishers t '.
+						'left join ' . $params['site_table'] . ' tI on (tI.publisher_id = t.id) AND (tI.avail_for_order = 1) '.
+					'set is_' . $entity . ' = if(tI.id is null, 0, 1) '.
+				'';
+				$this->_query($sql);
+			}
+		}
+	}
+
 
 }

@@ -23,54 +23,18 @@ class Publisher extends CMyActiveRecord {
             'select`first_'.$lang.'` '.
             'from`all_publishers` '.
             'where (first_'.$lang.' regexp "[[:alpha:]]") '.
-            'and (`first_'.$lang.'` != "") '.
+                'and (`first_'.$lang.'` != "") '.
+                'and (is_' . $entity . ' > 0) '.
             'group by `first_'.$lang.'` '.
             'order by `first_'.$lang.'` '.
-        '';
-        $allAlpha = Yii::app()->db->createCommand($sql)->queryColumn();
-        sort($allAlpha);
-
+            '';
         $abc = array();
-        foreach ($allAlpha as $alpha) {
+        foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $alpha) {
             if (preg_match("/\w/ui", $alpha)) {
-                $sql = ''.
-                    'select 1 '.
-                    'from ' . $tableItems . ' t '.
-                    'join all_publishers tA on (tA.id = t.publisher_id) and (tA.first_'.$lang.' = :alpha) '.
-                    'limit 1 '.
-                '';
-                if ((bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':alpha'=>$alpha))) $abc[] = array('first_'.$lang => $alpha);
+                $abc[] = array('first_'.$lang => $alpha);
             }
         }
         return $abc;
-
-        $sql = ''.
-            'SELECT t.first_' . $lang . ' '.
-            'FROM all_publishers AS t '.
-                'JOIN ' . $tableItems . ' AS tI ON (tI.publisher_id = t.id) '.
-            'group by ord(t.first_'.$lang.') '.
-            'ORDER BY ord(t.title_'.$lang.') ASC '.
-        '';
-/*        $sql = 'SELECT DISTINCT(first_'.$lang.') AS first_'.$lang.' '
-              .'FROM `all_publishers` AS al '
-              .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
-              .'WHERE e.entity=:entity '
-              .'ORDER BY first_'.$lang;*/
-
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity' => $entity));
-//        return $rows;
-        $filterRows = [];
-        $i = 0;
-        foreach($rows as $key => $value)
-        {
-            if(preg_match('/^\p{L}+$/u', $value['first_'.$lang]))
-            {
-                $filterRows[$i]['first_'.$lang] = $value['first_'.$lang];
-                $i++;
-            }
-        }
-
-        return $filterRows;
     }
 
     public function GetPublishersByFirstChar($char, $lang, $entity) {

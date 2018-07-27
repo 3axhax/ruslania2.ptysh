@@ -56,13 +56,24 @@ class SearchPublishers {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePublishers . ' t '.
+			'where (t.' . $fieldFirst . ' = :q) '.
+				'and (is_' . $entity . ' > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+			'group by t.id '.
+			'order by title_' . $this->_siteLang . ' '.
+			(empty($limit)?'':'limit ' . $limit . ' ').
+		'';
+/*
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ' '.
+			'from ' . $tablePublishers . ' t '.
 				'join ' . $tableItems . ' tI on (tI.publisher_id = t.id) and (tI.avail_for_order = 1) '.
 			'where (t.' . $fieldFirst . ' = :q) '.
 			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
-			'';
+			'';*/
 		$publishers = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q));
 		if ($count !== false) {
 			$sql = 'select found_rows();';
@@ -87,13 +98,24 @@ class SearchPublishers {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePublishers . ' t '.
+			'where (t.title_' . $this->_siteLang . ' like :q) '.
+				'and (is_' . $entity . ' > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+			'group by t.id '.
+			'order by title_' . $this->_siteLang . ' '.
+			(empty($limit)?'':'limit ' . $limit . ' ').
+		'';
+/*
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ' '.
+			'from ' . $tablePublishers . ' t '.
 				'join ' . $tableItems . ' tI on (tI.publisher_id = t.id) and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
 			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
-		'';
+		'';*/
 		$qStr = $q . '%';
 		if (!$isBegin) $qStr = '%' . $qStr;
 		$publishers = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $qStr));
@@ -119,9 +141,7 @@ class SearchPublishers {
 		$sql = ''.
 			'select sql_calc_found_rows t.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePublishers . ' t '.
-//			'join ' . $tableItems . ' tI on (tI.publisher_id = t.id) and (tI.avail_for_order = 1) '.
-//			'group by t.id '.
-				'join (select publisher_id from books_catalog where (avail_for_order = 1) group by publisher_id) tI on (tI.publisher_id = t.id) '.
+			'where (is_' . $entity . ' > 0) '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
