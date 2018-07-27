@@ -857,6 +857,7 @@ h1.titlename {
 }
 
 .pager { text-align: left; }
+.pager .hidden { display: none; }
 
 .content_books .pager li { border: 0; }
 
