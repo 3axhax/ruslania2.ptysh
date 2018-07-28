@@ -102,6 +102,9 @@ class MyUrlManager extends CUrlManager
         return parent::createUrlDefault($route,$params,$ampersand);
     }
 
+    function parseUrlByPath($path) {
+
+    }
 
 }
 
@@ -161,6 +164,8 @@ class MyUrlRule extends CUrlRule {
     }
 
     function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
+        if (get_class($request) === 'MyRefererRequest') return $this->_parseReferer($manager,$request,$pathInfo,$rawPathInfo);
+
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
         if (defined('OLD_PAGES')) return $result;
 
@@ -172,5 +177,62 @@ class MyUrlRule extends CUrlRule {
             $_GET['lang'] = $langId;
         }
         return $result;
+    }
+
+    /** эта заплатка нужна, чтоб не изменять $_GET, когда пытаемся распарсить произвольный адрес
+     * @param $manager
+     * @param MyRefererRequest $request
+     * @param $pathInfo
+     * @param $rawPathInfo
+     * @return bool|string
+     */
+    private function _parseReferer($manager,MyRefererRequest $request,$pathInfo,$rawPathInfo) {
+        if($this->verb!==null && !in_array($request->getRequestType(), $this->verb, true))
+            return false;
+
+        if($manager->caseSensitive && $this->caseSensitive===null || $this->caseSensitive)
+            $case='';
+        else
+            $case='i';
+
+        if($this->urlSuffix!==null)
+            $pathInfo=$manager->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
+
+        // URL suffix required, but not found in the requested URL
+        if($manager->useStrictParsing && $pathInfo===$rawPathInfo)
+        {
+            $urlSuffix=$this->urlSuffix===null ? $manager->urlSuffix : $this->urlSuffix;
+            if($urlSuffix!='' && $urlSuffix!=='/')
+                return false;
+        }
+
+        if($this->hasHostInfo)
+            $pathInfo=strtolower($request->getHostInfo()).rtrim('/'.$pathInfo,'/');
+
+        $pathInfo.='/';
+
+        if(preg_match($this->pattern.$case,$pathInfo,$matches))
+        {
+            foreach($this->defaultParams as $name=>$value)
+            {
+                $request->setParam($name, $value);
+            }
+            $tr=array();
+            foreach($matches as $key=>$value)
+            {
+                if(isset($this->references[$key]))
+                    $tr[$this->references[$key]]=$value;
+                else if(isset($this->params[$key]))
+                    $request->setParam($key, $value);
+            }
+            if($pathInfo!==$matches[0]) // there're additional GET params
+                $manager->parsePathInfo(ltrim(substr($pathInfo,strlen($matches[0])),'/'));
+            if($this->routePattern!==null)
+                return strtr($this->route,$tr);
+            else
+                return $this->route;
+        }
+        else
+            return false;
     }
 }

@@ -1090,7 +1090,23 @@ class EntityController extends MyController {
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPE_IZD')] = Yii::app()->createUrl('entity/typeslist', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = ProductHelper::GetTitle($entity, $type);
+        
+        $key = Entity::GetUrlKey($entity);
+        
+        $db = $key . '_bindings';
+        
+        if ($entity == Entity::PERIODIC) { $db = 'pereodics_types'; } 
+        
+        $sql = 'SELECT * FROM '.$db.' WHERE id='.$type;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        
+        
+        
+        $title = ProductHelper::GetTitle($row[0]);
+        
+        
+        
+       $this->breadcrumbs[] = $title;
 
         $yr = new TypeRetriever;
 

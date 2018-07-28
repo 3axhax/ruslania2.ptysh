@@ -44,12 +44,21 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	</div>
 	<? endif; ?>
 
-	<? if ($item['type']) : ?>
-	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?
+	<?php if ($item['type']) : ?>
+	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
 
+        if ($item['entity'] == Entity::PERIODIC) :
 
-
-	 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+	 
+        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
+        
+        
+        
+        else :
+        
+        $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+        
+         endif;
 
 	 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
@@ -700,7 +709,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			
 			<?php if ($isAvail AND $entity != Entity::PERIODIC) : ?>
 			
-			<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="6" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
+			<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
 				
 			
 			<? endif; ?>
@@ -947,135 +956,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 -->
 </div>
 
-<? 
-	
-	$authors = ' author_id IN (10) ';
-	
-	if (!empty($item['Authors'])) {
-		
-		foreach ($item['Authors'] as $author) {
-			
-			$arrAu[] = $author['id'];
-			
-		}
-		
-		$authors = ' author_id IN ('.implode(',', $arrAu).') ';
-		
-	}
-	
-	
-	
-	$ids = Product::related_goods($item['Category']['id'], $entity, $item['id'], ProductHelper::GetTitle($item), $item['series_id'], $authors);
-
-	if (count($ids)) {
-?>
-
-<script type="text/javascript">
-        $(document).ready(function () {
-            $('.more_goods ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
-            });
-        });
-    </script>
-
-<div class="news_box" style="margin-top: 40px;">
-
-
-		<div class="">
-			<div class="title">
-				<?=$ui->item('A_NEW_RELATION_ITEMS')?>        
-				<div class="pult">
-					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
-					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
-				</div>
-			</div>
-		</div>
-		
-		<div class="more_goods" style="overflow: hidden">
-<ul class="books">
-
-	<?
-
-	foreach ($ids as $k) : 
-	
-	if ($k['entity'] == '') { $k['entity'] = $entity; }
-	
-	?>
-	
-	<?
-	
-	$product = Product::GetProduct($k['entity'], $k['id']);
-	$url = ProductHelper::CreateUrl($product);
-	
-	
-	echo  '	<li>
-        
-    <div class="img" style="min-height: 130px; position: relative">';
-        $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
-    </div>
- 
-	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
-		
-		if ($product['isbn']) {
-			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';
-		}
-		
-		if ($product['year']) {
-			
-			echo '<div>'.$ui->item('A_NEW_YEAR') . ': ' . $product['year'].'</div>';
-			
-		}
-		
-		if ($product['binding_id']) {
-		
-		$row = Binding::GetBinding($entity, $product['binding_id']);
-		echo $row['title_' . Yii::app()->language];	
-		
-		}
-		
-		$price = DiscountManager::GetPrice(Yii::app()->user->id, $product);
-	
-		echo '
-        
-    	<div class="cost">';
-		if (!empty($price[DiscountManager::DISCOUNT])) :
-            echo '<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
-            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
-                '.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
-            </span>';
-
-        else :
-
-            echo '<span class="price">'.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
-        
-        </span>';
-
-        endif;
-	echo '</div>
-                    <div class="nds">'. ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . $ui->item('WITHOUT_VAT') .'</div>
-                    <div class="addcart">
-                        <a class="cart-action" data-action="add" data-entity="'. $k['entity'] .'"
-               data-id="'. $k['id'] .'" data-quantity="1"
-               href="javascript:;">'.$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART').'</a>
-                    </div>                   </li>'; ?>
-
-
-					
-					
-		<? endforeach; ?>			
-</ul>
-</div>
-
-
-</div>
-
-
-	<? } ?>
-
-<?php $this->widget('Banners', array()) ?>
+<?php $this->widget('Similar', array('entity'=>$entity, 'item'=>$item)); ?>
+<?php $this->widget('Banners', array()); ?>
 
 
 <script type="text/javascript">
