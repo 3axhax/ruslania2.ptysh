@@ -1056,7 +1056,7 @@ class SiteController extends MyController {
         $_GET['langVideo'] = $_POST['langVideo'];
         $_GET['formatVideo'] = $_POST['formatVideo'];
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
-        $_GET['langsel'] = $_POST['langsel'];
+        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
         /*$cmin = str_replace(',','.',$cmin);
@@ -1072,9 +1072,13 @@ class SiteController extends MyController {
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
-        $http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
+        /*$http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
+        $par = substr($http, stripos($http, '?'));
+        $http = str_replace($par, '', $http);
         $paginator->route = Yii::app()->createUrl($http);
+        if (substr_count($http, '?') > 0) $paginator->route = substr($paginator->route, 0, -1);*/
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $paginator->itemCount = $totalItems;
 
 
         $path = $cat->GetCategoryPath($entity, $cid);

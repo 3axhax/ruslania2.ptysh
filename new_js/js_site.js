@@ -177,17 +177,20 @@ function show_items(url = '/ru/site/ggfilter/') {
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
-        '/langsel/'+(( langsel = $('form.filter input.lang').val()) ? langsel : '');
+        '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '');
     var bindings = [];
     var i = 0;
 
     bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
+    console.log(url);
+
     $.ajax({
         url: create_url,
         type: "POST",
-        data: { YII_CSRF_TOKEN: csrf[1], 'binding_id[]' : bindings,
+        data: { YII_CSRF_TOKEN: csrf[1],
+            'binding_id[]' : bindings,
             name_search : $('#name_search').val(),
             sort : $('form.filter .sort').val(),
             formatVideo : $('#formatVideo').val(),
@@ -209,8 +212,7 @@ function show_items(url = '/ru/site/ggfilter/') {
 }
 
 // Управление фильтром по типу/переплету
-function change_all_binding(event, binding_all = false)
-{
+function change_all_binding(event, binding_all = false) {
     if (binding_all) {
         if (event.target.checked) {
             otherBinding = event.target.parentElement.nextElementSibling;

@@ -1,6 +1,6 @@
 <form class="prod-filter filter" method="get" action="">
 
-    <input type="hidden" name="lang" class="lang" value="<?= Yii::app()->getRequest()->getParam('lang'); ?>"/>
+    <input type="hidden" name="langsel" class="lang" value="<?= Yii::app()->getRequest()->getParam('lang'); ?>"/>
     <input type="hidden" name="entity_val" class="entity_val" value="<?= $entity ?>"/>
     <input type="hidden" name="cid_val" class="cid_val" value="<?= $cid ?>"/>
     <input type="hidden" name="sort" class="sort" value="<?= (Yii::app()->getRequest()->getParam('sort')) ? Yii::app()->getRequest()->getParam('sort') : 12 ?>"/>
