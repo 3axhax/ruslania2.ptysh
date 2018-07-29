@@ -184,8 +184,6 @@ function show_items(url = '/ru/site/ggfilter/') {
     bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-    console.log(url);
-
     $.ajax({
         url: create_url,
         type: "POST",
