@@ -17,12 +17,24 @@ $lang = Yii::app()->language;
     <?=$ui->item('A_NEW_FILTER_SORT_FOR')?>
     <?php
     $value = SortOptions::GetDefaultSort(Yii::app()->getRequest()->getParam('sort'));
-    $this->widget('SelectSimulator', array('items'=>SortOptions::GetSortData(), 'paramName'=>'sort', 'selected'=>$value, 'style'=>'float:right; margin-left:10px;'));
+    $dataParam = ['entity' => Entity::GetUrlKey($_GET['entity'])];
+    $this->widget('SelectSimulator', array(
+            'items'=>SortOptions::GetSortData(),
+            'paramName'=>'sort',
+            'selected'=>$value,
+            'dataParam'=>$dataParam,
+            'route'=>'entity/list',
+            'style'=>'float:right; margin-left:10px;'));
     ?>
             </div>
 			
 			<div class="sortbox langsel">
-                <?php $this->widget('SelectSimulator', array('items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id), 'paramName'=>'lang')); ?>
+                <?php $dataParam = ['entity' => Entity::GetUrlKey($_GET['entity'])];
+                $this->widget('SelectSimulator', array(
+                        'items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id),
+                        'paramName'=>'lang',
+                        'dataParam'=>$dataParam,
+                        'route'=>'entity/list'));?>
             </div>
 
 <ul class="items">
