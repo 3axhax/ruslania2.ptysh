@@ -462,7 +462,7 @@ class Category {
 		return array_reverse($arr);
 	}
 	
-    public function result_filter($data = array(), $lang_sel='') {
+    public function result_filter($data = array(), $lang_sel='', $page = 0) {
 
         if (!$data OR count($data) == 0) {
             return array();
@@ -581,6 +581,7 @@ class Category {
        if ($avail == 1) $criteria->addCondition('t.avail_for_order=1');
         $criteria->order = SortOptions::GetSQL($sort, $lang, $entity);
         $criteria->limit = Yii::app()->params['ItemsPerPage'];
+        $criteria->offset = $page * $criteria->limit;
         $dp->setCriteria($criteria);
         $dp->pagination = false;
         $datas = $dp->getData();
@@ -629,12 +630,6 @@ class Category {
         $formatVideo = $post ['formatVideo'];
         $langVideo = $post ['langVideo'];
         $subtitlesVideo = $post ['subtitlesVideo'];
-
-		if (!$langsel) {
-			if (Yii::app()->getRequest()->cookies['langsel']->value) {
-				$langsel = Yii::app()->getRequest()->cookies['langsel']->value;
-			}
-		}
 
         $query = array();
         $qstr = '';

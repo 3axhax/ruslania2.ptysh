@@ -67,7 +67,6 @@ class EntityController extends MyController {
 
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
-
         $filters = FilterHelper::getEnableFilters($entity, $cid);
 
         $category = new Category();
@@ -94,6 +93,10 @@ class EntityController extends MyController {
         }
         $this->_checkUrl($dataForPath, $langTitles);
         $lang = Yii::app()->getRequest()->getParam('lang');
+
+        if (isset($lang) && $lang != '') {
+            FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
+        }
        /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
@@ -154,13 +157,15 @@ class EntityController extends MyController {
 		}
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
-        if ($data != '') {
-            $cat = new Category();
-			$items = $cat->result_filter($data, $lang);
-			$totalItems = Category::count_filter($entity, $cid, $data);
+        if (isset($data) && $data != '') {
+            $totalItems = Category::count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+
+            $cat = new Category();
+			$items = $cat->result_filter($data, $lang, $paginatorInfo->currentPage);
+
 			$filter_data = $data;
 		}
 		else {
@@ -172,6 +177,7 @@ class EntityController extends MyController {
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+            $test = $paginatorInfo->currentPage;
             $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
         }
 
@@ -486,7 +492,11 @@ class EntityController extends MyController {
 			list($list, $list_count) = $a->GetAuthorsByFirstChar($char, $lang, $entity);
 //			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
 		}
-        else $list = array();
+        else {
+//            $list = array();
+            $char = 'А';
+            list($list, $list_count) = $a->GetAuthorsByFirstChar($char, $lang, $entity);
+        }
 		
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS');
@@ -1086,7 +1096,23 @@ class EntityController extends MyController {
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPE_IZD')] = Yii::app()->createUrl('entity/typeslist', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = ProductHelper::GetTitle($entity, $type);
+        
+        $key = Entity::GetUrlKey($entity);
+        
+        $db = $key . '_bindings';
+        
+        if ($entity == Entity::PERIODIC) { $db = 'pereodics_types'; } 
+        
+        $sql = 'SELECT * FROM '.$db.' WHERE id='.$type;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        
+        
+        
+        $title = ProductHelper::GetTitle($row[0]);
+        
+        
+        
+       $this->breadcrumbs[] = $title;
 
         $yr = new TypeRetriever;
 
