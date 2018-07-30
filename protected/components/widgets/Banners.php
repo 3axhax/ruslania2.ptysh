@@ -98,6 +98,7 @@ class Banners extends MyWidget {
             'year'=>'year',
         );
         foreach ($entityIds as $entity=>$ids) {
+            HrefTitles::get()->getByIds($entity, 'product/view', $ids);
             $fields['entity'] = $entity . ' entity';
             if ($entity == Entity::PERIODIC) {
                 if (isset($fields['sub_fin_year'])) $fields['sub_fin_year'] = 'sub_fin_year';
