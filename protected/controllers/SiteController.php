@@ -1033,7 +1033,13 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-			echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST, true);
+            $entity = $_POST['entity'] = $_POST['entity_val'];
+            $cid = $_POST['cid'] = $_POST['cid_val'];
+            $_POST['cmin'] = $_POST['min_cost'];
+            $_POST['cmax'] = $_POST['max_cost'];
+            $data = $_POST;
+            FilterHelper::setFiltersData($entity, $cid, $data);
+			echo $category->count_filter($entity, $cid, $data, true);
         }
     }
 
@@ -1056,7 +1062,7 @@ class SiteController extends MyController {
         $_GET['langVideo'] = $_POST['langVideo'];
         $_GET['formatVideo'] = $_POST['formatVideo'];
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
-        $_GET['langsel'] = $_POST['langsel'];
+        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
         /*$cmin = str_replace(',','.',$cmin);
@@ -1068,13 +1074,20 @@ class SiteController extends MyController {
         $data = FilterHelper::getFiltersData($entity, $cid);
 
         $cat = new Category();
+        $data['cmin'] = $data['min_cost'];
+        $data['cmax'] = $data['max_cost'];
+        $data['binding'] = $data['binding_id'];
         $items = $cat->result_filter($data);
 
         $totalItems = Category::count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
-        $http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
+        /*$http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
+        $par = substr($http, stripos($http, '?'));
+        $http = str_replace($par, '', $http);
         $paginator->route = Yii::app()->createUrl($http);
+        if (substr_count($http, '?') > 0) $paginator->route = substr($paginator->route, 0, -1);*/
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $paginator->itemCount = $totalItems;
 
 
         $path = $cat->GetCategoryPath($entity, $cid);
