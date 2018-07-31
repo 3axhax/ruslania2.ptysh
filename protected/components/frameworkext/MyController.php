@@ -66,7 +66,7 @@ class MyController extends CController
 
         $currency = Currency::EUR;
 
-        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
+//        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
 
         if (Yii::app()->getRequest()->cookies['showSelLang']->value) {
             if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
