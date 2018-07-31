@@ -37,8 +37,8 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
             <select class="prod-filter__input prod-filter__input__select--m" name="avail" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
-                <option value="0">Всё</option>
-                <option value="1" selected>В наличии</option>
+                <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>>Всё</option>
+                <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
             </select>
         </div>
 
