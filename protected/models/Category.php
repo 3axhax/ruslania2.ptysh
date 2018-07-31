@@ -638,7 +638,20 @@ class Category {
 
         $query = array();
         $qstr = '';
-		
+
+        if ($cid>0) {
+            $whereCid = '';
+            $allChildren = array();
+            $allChildren = $this->GetChildren($entity, $cid);
+            if (count($allChildren) > 0) {
+                array_push($allChildren, $cid);
+                $ids = '(' . implode(',', $allChildren) . ')';
+                $whereCid = '(bc.code IN ' . $ids . ' OR bc.subcode IN ' . $ids . ')';
+            } else {
+                $whereCid = 'bc.code=:code OR bc.subcode=:code';
+            }
+        }
+
 		if ($langsel) {
 			
 			$query[] = '(ail.item_id=bc.id AND ail.entity=' . $entity.' AND ail.language_id = '.$langsel.')';
@@ -695,9 +708,9 @@ class Category {
 
         if ($cid > 0) {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
-            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr .' LIMIT 0,1001) as c';
+            WHERE ('.$whereCid.') ' . $qstr .' LIMIT 0,1001) as c';
             if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
-            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr;
+            WHERE ('.$whereCid.') ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
