@@ -20,7 +20,10 @@ class Similar extends CWidget {
 	}
 
 	function run() {
-		$this->render('similar', array('items'=>$this->_getProducts()));
+		$products = $this->_getProducts();
+		if (empty($products)) return;
+
+		$this->render('similar', array('items'=>$products));
 	}
 
 	private function _getProducts() {
@@ -36,9 +39,11 @@ class Similar extends CWidget {
 		$products = array();
 		$p = new Product();
 		foreach($items as $entity=>$ids) {
-			foreach ($p->GetProductsV2($entity, $ids) as $item) {
-				$item['status'] = $p->GetStatusProduct($entity, $item['id']);
-				$products[] = $item;
+			if (!empty($ids)) {
+				foreach ($p->GetProductsV2($entity, $ids) as $item) {
+					$item['status'] = $p->GetStatusProduct($entity, $item['id']);
+					$products[] = $item;
+				}
 			}
 		}
 		return $products;
@@ -70,12 +75,15 @@ class Similar extends CWidget {
 		}
 		else {
 			$sql = $this->_sqlByAuthors(null, 10);
-			$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+			if (!empty($sql)) {
+				$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+			}
 		}
 		if (count($ids) < $limit) {
 			$sql = $this->_sqlByCategory(null, $limit-count($ids));
 			$ids = array_merge($ids, Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item']))));
 		}
+		if (empty($ids)) return array();
 		return array($this->_params['entity']=>$ids);
 	}
 
