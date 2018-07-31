@@ -1065,11 +1065,6 @@ class SiteController extends MyController {
         $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
-        /*$cmin = str_replace(',','.',$cmin);
-        $cmax = str_replace(',','.',$cmax);
-        $data['cmin'] = (real)$cmin;
-        $data['cmax'] = (real)$cmax;*/
-
         FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);
 
