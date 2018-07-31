@@ -507,5 +507,13 @@ class Cart extends CActiveRecord
         return ($priceSum == 0) ? '0 '.Currency::ToSign(Yii::app()->currency) : ProductHelper::FormatPrice($priceSum);
     }
     
+    public function cart_getpoints_smartpost($index = 0, $country = 'FI') {
+        $file = file_get_contents('https://locationservice.posti.com/location?types=SMARTPOST&types=PICKUPPOINT&countryCode='.$country.'&locationZipCode='.$index.'&top=10');
+    
+        $arr = json_decode($file, true);
+        
+        return $arr['locations'];
+    }
+    
     
 }

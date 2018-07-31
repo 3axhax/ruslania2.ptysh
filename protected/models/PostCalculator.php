@@ -82,6 +82,81 @@ class PostCalculator
 
         return $rates;
     }
+    
+    public function GetRates2($country, $uid, $sid)
+    {
+        
+        $country = Country::GetCountryById($country);
+        if (empty($country)) return array();
+        $isFinland = $country['code'] == 'FI';
+        $isEurope = $country['is_europe'];
+        $group = $country['post_group'];
+
+        $c = new Cart;
+        $cart = $c->GetCart($uid, $sid);
+
+        // посчитать сумму UnitWeight и "не влезает в конверт"
+        if (empty($cart)) return array();
+        $totalUW = 0;
+        $realTotalUW = 0;
+
+        $notInEnvelope = false;
+        $onlySubscription = true;
+
+        foreach ($cart as $c)
+        {
+            $realTotalUW += ($c['unitweight'] * $c['quantity']);
+            if ($c['entity'] != Entity::PERIODIC) $onlySubscription = false;
+            $price = DiscountManager::GetPrice($uid, $c);
+            if ($price[DiscountManager::TYPE_FREE_SHIPPING]) continue;
+            if ($c['unitweight_skip']) continue; // без почтовых - то ничего не считаем
+
+            $totalUW += ($c['unitweight'] * $c['quantity']);
+            if ($c['not_in_envelope']) $notInEnvelope = true;
+        }
+
+        $free = array('type' => Delivery::ToString(Delivery::TYPE_FREE) . ' (Economy)',
+            'id' => Delivery::TYPE_FREE,
+            'currency' => Currency::EUR,
+            'currencyName' => 'EUR',
+            'deliveryTime' => $this->GetDeliveryTime($isEurope, $isFinland, true, Delivery::TYPE_ECONOMY),
+            'value' => 0);
+
+        if ($onlySubscription)
+        {
+            return array($free);
+        }
+
+//        $class = 'Group' . $group . 'PostCalc';
+//        $obj = new $class($group, $totalUW, $realTotalUW, $notInEnvelope, $address, Yii::app()->currency);
+//        $rates = $obj->GetRates();
+
+        $obj = new PostCostCalculator($group, $totalUW, $realTotalUW, $notInEnvelope, $address, Yii::app()->currency);
+        $rates = $obj->GetRates();
+
+        if (empty($totalUW))
+        {
+            $found = false;
+            foreach ($rates as $idx => $rate)
+            {
+                if ($rate['id'] == Delivery::TYPE_ECONOMY)
+                {
+                    $rates[$idx] = $free;
+                    $found = true;
+                }
+            }
+            if (!$found && !$obj->IsOrc())
+            {
+                array_push($rates, $free);
+            }
+        }
+        foreach ($rates as $idx => $rate)
+        {
+            $rates[$idx]['deliveryTime'] = $this->GetDeliveryTime($isEurope, $isFinland, $rate['id'] == Delivery::TYPE_FREE, $rate['id']);
+        }
+
+        return $rates;
+    }
 
     private function GetDeliveryTime($isEurope, $isFinland, $isFree, $type)
     {

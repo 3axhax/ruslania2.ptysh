@@ -157,9 +157,10 @@ class EntityController extends MyController {
 		}
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
-        if (isset($data) && $data != '') {
+         if (isset($data) && $data != '') {
             $cat = new Category();
-            $totalItems = $cat->count_filter($entity, $cid, $data);
+            $totalItems = $cat->getFilterCounts($entity, $cid, $data);
+//            $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
@@ -189,13 +190,14 @@ class EntityController extends MyController {
 
         if (isset(Yii::app()->session['last_e'])
             && (Yii::app()->session['last_e'] != '')
-            && (Yii::app()->session['last_e'] != $entity))
-            Yii::app()->session['filter_e' . Yii::app()->session['last_e'] . '_c_' . $cid] = '';
+            && (Yii::app()->session['last_e'] != 'filter_e' . $entity . '_c_' . $cid)) {
+            Yii::app()->session[Yii::app()->session['last_e']] = '';
+            $fd = FiltersData::instance();
+            $fd->deleteFiltersData();
+        }
 
-        Yii::app()->session['last_e'] = $entity;
+        Yii::app()->session['last_e'] = 'filter_e' . $entity . '_c_' . $cid;
 
-        $filter_data['avail'] = 1;
-        
         if ($entity == 10) {
             switch (Yii::app()->language) {
                 case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';

@@ -9,6 +9,7 @@ class OrderForm extends CFormModel
     public $DeliveryMode;
     public $CurrencyID;
     public $Mandate;
+    public $payment;
     private $sid;
 
     public function __construct($sid)
