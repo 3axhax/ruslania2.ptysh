@@ -158,12 +158,13 @@ class EntityController extends MyController {
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && $data != '') {
-            $totalItems = Category::count_filter($entity, $cid, $data);
+            $cat = new Category();
+            $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
 
-            $cat = new Category();
+
 			$items = $cat->result_filter($data, $lang, $paginatorInfo->currentPage);
 
 			$filter_data = $data;

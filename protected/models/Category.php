@@ -482,7 +482,7 @@ class Category {
         $ymax = $data['ymax'];
         $izda = $data['izda'];
         $seria = $data['seria'];
-//        $lang_sel = $data['langsel'];
+        $lang_sel = $data['langsel'];
         $search = $data['search'];
         $sort = $data['sort'];
         $formatVideo = $data['formatVideo'];
@@ -565,11 +565,13 @@ class Category {
         }
 
         if ($binding && $binding != 0 && $binding[0] != 0) {
-            
-            $str = ' binding_id=' . implode(' OR binding_id=', $binding);
-            
+            if ($entity == 22 OR $entity == 24) {
+                $str = ' media_id=' . implode(' OR media_id=', $binding);
+            }
+            else {
+                $str = ' binding_id=' . implode(' OR binding_id=', $binding);
+            }
             $criteria->addCondition($str);
-            
         }
         
         if (mb_strlen($search) > 2) {
@@ -638,10 +640,22 @@ class Category {
 
         $query = array();
         $qstr = '';
-		
+
+        if ($cid>0) {
+            $whereCid = '';
+            $allChildren = array();
+            $allChildren = $this->GetChildren($entity, $cid);
+            if (count($allChildren) > 0) {
+                array_push($allChildren, $cid);
+                $ids = '(' . implode(',', $allChildren) . ')';
+                $whereCid = '(bc.code IN ' . $ids . ' OR bc.subcode IN ' . $ids . ')';
+            } else {
+                $whereCid = 'bc.code=:code OR bc.subcode=:code';
+            }
+        }
+
 		if ($langsel) {
-			
-			$query[] = '(ail.item_id=bc.id AND ail.entity=' . $entity.' AND ail.language_id = '.$langsel.')';
+		    $query[] = '(ail.item_id=bc.id AND ail.entity=' . $entity.' AND ail.language_id = '.$langsel.')';
 			$addtbl = ', `all_items_languages` as ail';
 		}
 		
@@ -685,8 +699,12 @@ class Category {
         }
 
         if (count($binding_id) > 0 AND $binding_id[0] != false) {
-
-            $query[] = '( bc.binding_id=' . implode(' OR bc.binding_id=', $binding_id) . ' )';
+                if ($entity == 22 OR $entity == 24) {
+                    $query[] = '( bc.media_id=' . implode(' OR bc.media_id=', $binding_id) . ' )';
+                }
+                else {
+                    $query[] = '( bc.binding_id=' . implode(' OR bc.binding_id=', $binding_id) . ' )';
+                }
         }
 
         if (count($query) > 0) {
@@ -695,9 +713,9 @@ class Category {
 
         if ($cid > 0) {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
-            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr .' LIMIT 0,1001) as c';
+            WHERE ('.$whereCid.') ' . $qstr .' LIMIT 0,1001) as c';
             if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
-            WHERE (bc.`code`=:code OR bc.`subcode`=:code) ' . $qstr;
+            WHERE ('.$whereCid.') ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
             $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 

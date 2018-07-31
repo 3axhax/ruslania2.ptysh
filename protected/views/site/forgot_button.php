@@ -3,5 +3,5 @@
 	<div><?= Yii::app()->ui->item('REGISTER_ERROR_LOGIN_IS_EXISTS') ?></div>
 	<div style="font-size: 17px; font-weight: bold;">Получить напоминание о пароле?</div>
 	<input style="width: 50px; background-color: #0088cc; color: #fff" type="button" value="Да" onclick="forgotPassword('<?= $email ?>')">
-	<input style="width: 50px; background-color: #0088cc; color: #fff" type="button" value="Нет" onclick="$(this).closest('div').remove();">
+	<input style="width: 50px; background-color: #0088cc; color: #fff" type="button" value="Нет" onclick="$(this).closest('div').remove(); $('.order_start').removeClass('disabled');">
 </div>
