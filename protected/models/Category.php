@@ -482,7 +482,7 @@ class Category {
         $ymax = $data['ymax'];
         $izda = $data['izda'];
         $seria = $data['seria'];
-//        $lang_sel = $data['langsel'];
+        $lang_sel = $data['langsel'];
         $search = $data['search'];
         $sort = $data['sort'];
         $formatVideo = $data['formatVideo'];
