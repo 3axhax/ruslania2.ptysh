@@ -1079,7 +1079,7 @@ class SiteController extends MyController {
         $data['binding'] = $data['binding_id'];
         $items = $cat->result_filter($data);
 
-        $totalItems = Category::count_filter($entity, $cid, $data);
+        $totalItems = $cat->count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
         /*$http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
         $par = substr($http, stripos($http, '?'));
