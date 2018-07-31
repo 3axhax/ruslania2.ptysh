@@ -5,7 +5,7 @@ $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 ?>
 <div class="row">
-    <div class="span1" style="position: relative">
+    <div class="span1 image_item" style="position: relative">
         <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
         <?php if (isset($isList) && $isList) : ?>
             <a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
@@ -172,7 +172,22 @@ $entityKey = Entity::GetUrlKey($entity);
 			
 			if (isset($item['type'])) {
 			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>: </span><?
-			 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+                            
+                            
+                            
+                            
+			 if ($item['entity'] == Entity::PERIODIC) :
+
+	 
+        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
+        
+        
+        
+        else :
+        
+        $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+        
+         endif;
 			 
 			 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(

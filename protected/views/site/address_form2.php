@@ -94,6 +94,7 @@ function decline_goods($num) {
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('receiver_last_name'); ?>
+            <span class="texterror"></span>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -101,6 +102,7 @@ function decline_goods($num) {
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_firstname"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('receiver_first_name'); ?>
+            <span class="texterror"></span>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -121,6 +123,7 @@ function decline_goods($num) {
                 'data-bind' => array('optionsCaption' => "'---'"),
                 'onchange' => 'change_city($(this))'
                 )); ?>
+            <span class="texterror"></span>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -140,6 +143,7 @@ function decline_goods($num) {
         </td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('city'); ?>
+            <span class="texterror"></span>
         </td>
     </tr>
     <tr>
@@ -147,6 +151,7 @@ function decline_goods($num) {
                                             class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('postindex'); ?>
+            <span class="texterror"></span>
         </td>
     </tr>
     <tr>
@@ -154,6 +159,7 @@ function decline_goods($num) {
                                             class="redtext">*</span><?=$ui->item("address_streetaddress"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('streetaddress',array('placeholder'=>$ui->item("MSG_PERSONAL_ADDRESS_COMMENT_2"))); ?>
+            <span class="texterror"></span>
         </td>
         
     </tr>
@@ -163,6 +169,7 @@ function decline_goods($num) {
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
             <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
+            <span class="texterror"></span>
         </td>
     </tr>
     <tr>
@@ -170,6 +177,7 @@ function decline_goods($num) {
                                             class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('contact_phone'); ?>
+            <span class="texterror"></span>
         </td>
         <td class="smalltxt1">
             
@@ -242,7 +250,7 @@ function decline_goods($num) {
  <div class="clearfix"></div>
  
  <label for="confirm" onclick=" checked_sogl();">
-     <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="new">условиями пользования</a> виртуальным магазином Руслания и с <a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">заявлением о  конфиденциальности Руслании</a> (на английском языке, файл PDF на нашем сервере) </label>
+     <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
 
 <div style="height: 20px;"></div>
  
@@ -273,7 +281,7 @@ function decline_goods($num) {
             <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
         </label>
         
-        <label class="seld span3" onclick="showALL(); hide_oplata(1); hide_oplata(8); check_cart_sel($(this),'seld', 'dtype3'); $('.select_dd_box, .delivery_box_sp').show(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').hide(); $('.delivery_name').html('SmartPost'); sbros_delev()">
+        <label class="seld span3" onclick="showALL(); hide_oplata(1); hide_oplata(8); check_cart_sel($(this),'seld', 'dtype3'); $('.delivery_box_sp').show(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box, .select_dd_box').hide(); $('.delivery_name').html('SmartPost'); sbros_delev()">
             SmartPost
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
@@ -292,21 +300,9 @@ function decline_goods($num) {
 </div>        
         <div class="clearfix"></div>
         
-        <div class="select_dd_box" style="margin: 20px 0; display: none; ">
+        
             
-            <div class="select_dd">
-                <div class="select_dd_input"><input type="text" placeholder="Введите индекс где хотие забрать отправление" onkeyup="postindex_input($(this))"></div>
-                
-                <div class="select_dd_popup">
-                    
-                     
-                    
-                </div>
-                
-                
-            </div>
-            
-        </div>
+   
         
         <div class="delivery_box_sp" style="display: none; margin: 15px 0;"></div>
         
@@ -325,6 +321,15 @@ function decline_goods($num) {
             <input type="radio" id="dtype0" value="1" name="ptype" style="display: none;" />
         </label>    
             
+        <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 484px;">
+            
+            <img src="/images/pt2.png" style="margin-top: -3px;" />
+             <div class="red_checkbox" style="float: right;">
+            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
+            </div>
+            <input type="radio" id="dtype2" value="3" name="ptype" style="display: none;" />
+        </label>    
+            
         <label class="selp span3 oplata2" onclick="check_cart_sel($(this),'selp', 'dtype1')">
             <img src="/images/pp.jpg" width="150" />
              <div class="red_checkbox" style="float: right;">
@@ -333,17 +338,10 @@ function decline_goods($num) {
             <input type="radio" id="dtype1" value="2" name="ptype" style="display: none;" />
         </label>
             
-        <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')">
-            
-            <img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="font-size: 10px">Кредитные карты и Финские банки</span>
-             <div class="red_checkbox" style="float: right;">
-            <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
-            </div>
-            <input type="radio" id="dtype2" value="3" name="ptype" style="display: none;" />
-        </label>
+        
             
         <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'dtype3')">
-            Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС 
+            <div style="margin-top: -8px;"><b>Cчет-фактура</b><br /> Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС </div>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -385,6 +383,6 @@ function decline_goods($num) {
         </div>    
         
          <div class="clearfix"></div>
-        </div>
         
+        </div> 
 <?php $this->endWidget(); ?>
