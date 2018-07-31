@@ -565,11 +565,13 @@ class Category {
         }
 
         if ($binding && $binding != 0 && $binding[0] != 0) {
-            
-            $str = ' binding_id=' . implode(' OR binding_id=', $binding);
-            
+            if ($entity == 22 OR $entity == 24) {
+                $str = ' media_id=' . implode(' OR media_id=', $binding);
+            }
+            else {
+                $str = ' binding_id=' . implode(' OR binding_id=', $binding);
+            }
             $criteria->addCondition($str);
-            
         }
         
         if (mb_strlen($search) > 2) {
@@ -653,8 +655,7 @@ class Category {
         }
 
 		if ($langsel) {
-			
-			$query[] = '(ail.item_id=bc.id AND ail.entity=' . $entity.' AND ail.language_id = '.$langsel.')';
+		    $query[] = '(ail.item_id=bc.id AND ail.entity=' . $entity.' AND ail.language_id = '.$langsel.')';
 			$addtbl = ', `all_items_languages` as ail';
 		}
 		
@@ -698,8 +699,12 @@ class Category {
         }
 
         if (count($binding_id) > 0 AND $binding_id[0] != false) {
-
-            $query[] = '( bc.binding_id=' . implode(' OR bc.binding_id=', $binding_id) . ' )';
+                if ($entity == 22 OR $entity == 24) {
+                    $query[] = '( bc.media_id=' . implode(' OR bc.media_id=', $binding_id) . ' )';
+                }
+                else {
+                    $query[] = '( bc.binding_id=' . implode(' OR bc.binding_id=', $binding_id) . ' )';
+                }
         }
 
         if (count($query) > 0) {
