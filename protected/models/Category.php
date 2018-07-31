@@ -468,13 +468,26 @@ class Category {
             return array();
         }
 
-        list($entity,$cid,$author,$avail,$ymin,$ymax,$izda,$seria,$cmin,$cmax,$lang_sel,$search,$sort,$binding,$formatVideo,$langVideo) = array_values($data);
         $entities = Entity::GetEntitiesList();
-        $data['binding_id'] = $binding;
-        $data['year_min'] = (int) $ymin;
-        $data['year_max'] = (int) $ymax;
-        $data['min_cost'] = $cmin;
-        $data['max_cost'] = $cmax;
+        $binding = $data['binding_id'];
+        $data['year_min'] = (int) $data['ymin'];
+        $data['year_max'] = (int) $data['ymax'];
+        $data['min_cost'] = $cmin = $data['cmin'];
+        $data['max_cost'] = $cmax = $data['cmax'];
+        $entity = $data['entity'];
+        $cid = $data['cid'];
+        $author = $data['author'];
+        $avail = $data['avail'];
+        $ymin = $data['ymin'];
+        $ymax = $data['ymax'];
+        $izda = $data['izda'];
+        $seria = $data['seria'];
+        $lang_sel = $data['langsel'];
+        $search = $data['search'];
+        $sort = $data['sort'];
+        $formatVideo = $data['formatVideo'];
+        $langVideo = $data['langVideo'];
+
 
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
@@ -587,14 +600,6 @@ class Category {
         $datas = $dp->getData();
 
         $ret = Product::FlatResult($datas);
-
-        //$filter_ret = [];
-
-        /*foreach ($ret as $r)
-        {
-            if (isset($r['real_price']) && $r['real_price'] >= $cmin && $r['real_price'] <= $cmax)
-                $filter_ret[] = $r;
-        }*/
 
         return $ret;
     }
