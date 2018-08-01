@@ -8,10 +8,10 @@ class FilterHelper
 
         $category = new Category();
         $filters['max-min'] = $category->getFilterSlider($entity, $cid);
-        $filters['author'] = true;
-        if ($entity != 30 && $entity != 40) $filters['publisher'] = true;
-        if ($entity != 60 && $entity != 50 && $entity != 30 && $entity != 40 && $entity != 20) $filters['series'] = true;
-        if ($entity != 30) $filters['years'] = true;
+        if (Entity::checkEntityParam($entity, 'authors')) $filters['author'] = true;
+        if (Entity::checkEntityParam($entity, 'publisher')) $filters['publisher'] = true;
+        if (Entity::checkEntityParam($entity, 'series')) $filters['series'] = true;
+        if (Entity::checkEntityParam($entity, 'years')) $filters['years'] = true;
 
         if ($entity == 40) {
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
