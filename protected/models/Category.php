@@ -607,93 +607,37 @@ class Category {
     }
 
     function getFilterCounts($entity, $cid, $post, $isFilter = false) {
-        if ($entity == 30) return $this->count_filter($entity, $cid, $post, $isFilter);
-        if (empty($post['langsel'])) return $this->count_filter($entity, $cid, $post, $isFilter);
-        $langsel = (int) $post['langsel'];
-        if ($langsel <= 0) return $this->count_filter($entity, $cid, $post, $isFilter);
-        if (empty($post['avail'])) return $this->count_filter($entity, $cid, $post, $isFilter);
+        $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition();
+        $condition = Condition::get($entity, $cid)->getCondition();
+        $join = Condition::get($entity, $cid)->getJoin();
 
-
-        $entities = Entity::GetEntitiesList();
-        $entityParams = $entities[$entity];
-        unset($entities);
-        $supportCondition = array('lang'=>'(tL.language_id = ' . $langsel . ')');
         $distinct = '*';
-
-        $yMin = $yMax = 0;
-        $bMin = $bMax = 0;
-        if (!empty($post['ymin'])) $yMin = abs((int) $post['ymin']);
-        if (!empty($post['ymax'])) $yMax = abs((int) $post['ymax']);
-        if (($yMax > 0)&&($yMax < $yMin)) {
-            $buf = $yMin;
-            $yMin = $yMax;
-            $yMax = $buf;
-        }
-        if (!empty($yMin)||!empty($yMax)) {
-            if (empty($yMin)) $supportCondition['year'] = '(tL.year <= ' . $yMax . ')';
-            elseif (empty($yMax)) $supportCondition['year'] = '(tL.year >= ' . $yMin . ')';
-            else $supportCondition['year'] = '(tL.year between ' . $yMin . ' and ' . $yMax . ')';
-        }
-
-        if (!empty($post['min_cost'])) $bMin = abs((int) $post['min_cost']);
-        if (!empty($post['max_cost'])) $bMax = abs((int) $post['max_cost']);
-        if (($bMax > 0)&&($bMax < $bMin)) {
-            $buf = $bMin;
-            $bMin = $bMax;
-            $bMax = $buf;
-        }
-        //TODO:: добавить конвертацию валюты
-        if (!empty($bMin)||!empty($bMax)) {
-            if (empty($bMin)) $supportCondition['brutto'] = '(tL.brutto <= ' . $bMax . ')';
-            elseif (empty($bMax)) $supportCondition['brutto'] = '(tL.brutto >= ' . $bMin . ')';
-            else $supportCondition['brutto'] = '(tL.brutto between ' . $bMin . ' and ' . $bMax . ')';
-        }
-        if (empty($cid)) $supportCondition['cid'] = '(tL.isSubcode = 0)';
-        else {
-            $allChildren = $this->GetChildren($entity, $cid);
-            $supportCondition['cid'] = '(tL.category_id in (' . implode(',',$allChildren) . '))';
-            $distinct = 'distinct tL.id';
-        }
-
-        $condition = $join = array();
-        if (!empty($post['author'])&&(($aid = (int)$post['author']) > 0)&&Entity::checkEntityParam($entity, 'authors')) {
-            $join['tA'] = 'join ' . $entityParams['author_table'] . ' tA on (tA.' . $entityParams['author_entity_field'] . ' = t.id) and (tA.author_id = ' . $aid . ')';
-        }
-        if (!empty($post['seria'])&&(($sid = (int)$post['seria']) > 0)&&Entity::checkEntityParam($entity, 'series')) {
-            $condition['seria_id'] = '(t.series_id = ' . $sid . ')';
-        }
-        if (!empty($post['izda'])&&(($pid = (int)$post['izda']) > 0)&&Entity::checkEntityParam($entity, 'publisher')) {
-            $condition['publisher_id'] = '(t.publisher_id = ' . $pid . ')';
-        }
-        if (!empty($post['binding_id'])&&(is_array($bindings = $post['binding_id']))&&Entity::checkEntityParam($entity, 'binding')) {
-            foreach ($bindings as $i=>$binding) {
-                $binding = (int) $binding;
-                if ($binding <= 0) unset($bindings[$i]);
-                else $bindings[$i] = $binding;
-            }
-            if (!empty($bindings)) {
-                if (in_array($entity, array(22, 24)))  $condition['binding_id'] = '(t.media_id in (' . implode(',', $bindings) . '))';
-                else $condition['binding_id'] = '(t.binding_id in (' . implode(',', $bindings) . '))';
-            }
-        }
-        if (empty($condition)&&empty($join)) {
+        if (!empty($onlySupportLanguageCondition) //все данные есть в таблице _support_languages_
+            ||(empty($condition)&&!empty($join['tL_support']))//все можно достать без таблицы _catalog
+        ) {
+            if (empty($onlySupportLanguageCondition)) $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition(false);
+            if (!empty($onlySupportLanguageCondition['cid'])) $distinct = 'distinct t.id';
+            unset($join['tL_support']);
             $sql = ''.
                 'select count(' . $distinct . ') '.
-                'from _support_languages_' . Entity::GetUrlKey($entity) . ' tL '.
-                'where ' . implode(' and ', $supportCondition) . ' '.
+                'from _support_languages_' . Entity::GetUrlKey($entity) . ' t '.
+                implode(' ', $join) . ' '.
+                'where ' . implode(' and ', $onlySupportLanguageCondition) . ' '.
             '';
-            return (int) Yii::app()->db->createCommand($sql)->queryColumn();
+            Debug::staticRun(array($sql));
+            return (int) Yii::app()->db->createCommand($sql)->queryScalar();
         }
 
-        if ($distinct != '*') $distinct = 'distinct t.id';
+        if (!empty($join['tL_support'])&&!empty($condition['cid'])) $distinct = 'distinct t.id';
+        $entityParams = Entity::GetEntitiesList()[$entity];
+
         $sql = ''.
             'select count(' . $distinct . ') '.
             'from ' . $entityParams['site_table'] . ' t '.
-                'join _support_languages_' . Entity::GetUrlKey($entity) . ' tL on (tL.id = t.id) and ' . implode(' and ', $supportCondition) . ' ' .
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
         '';
-        return (int) Yii::app()->db->createCommand($sql)->queryColumn();
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar();
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {

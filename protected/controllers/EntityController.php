@@ -94,9 +94,6 @@ class EntityController extends MyController {
         $this->_checkUrl($dataForPath, $langTitles);
         $lang = Yii::app()->getRequest()->getParam('lang');
 
-        if (isset($lang) && $lang != '') {
-            FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
-        }
        /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
@@ -157,7 +154,10 @@ class EntityController extends MyController {
 		}
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
-         if (isset($data) && $data != '') {
+        if (isset($data) && $data != '') {
+            if (isset($lang) && $lang != '') {
+                FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
+            }
             $cat = new Category();
             $totalItems = $cat->getFilterCounts($entity, $cid, $data);
 //            $totalItems = $cat->count_filter($entity, $cid, $data);

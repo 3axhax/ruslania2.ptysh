@@ -9,7 +9,7 @@ class ProductLang {
 			if (!empty($cat)) {
 				$entities = Entity::GetEntitiesList();
 				$tbl = $entities[$entity]['site_table'];
-				$join['tI'] = 'join ' . $tbl . ' tI on (tI.id = tAIL.item_id) and ((tI.code = ' . $cat['id'] . ') or (tI.subcode = ' . $cat['id'] . '))';
+				$join['tI'] = 'join ' . $tbl . ' tI on (tI.id = t.item_id) and ((tI.code = ' . $cat['id'] . ') or (tI.subcode = ' . $cat['id'] . '))';
 			}
 			$sql = ''.
 				'select t.language_id '.
