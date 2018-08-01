@@ -104,4 +104,16 @@ class User extends CActiveRecord
         }
         return $ret;
     }
+    
+    public function checkLogin($email) {
+        
+        $sql = ' SELECT * FROM `users` WHERE login="'.$email.'" ';
+        
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        
+        if (count($rows)) return true;
+        
+        return false;
+    }
+    
 }

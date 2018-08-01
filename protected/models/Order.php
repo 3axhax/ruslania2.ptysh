@@ -147,13 +147,17 @@ class Order extends CMyActiveRecord
         return false;
     }
 
-    public function CreateNewOrder($uid, $sid, OrderForm $order, $items)
+    public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
     {
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
         $withVAT = Address::UseVAT($da);
-
+            
+        
+        //var_dump($order);
+        
+        
         $itemsPrice = 0;
         $pricesValues = array();
         foreach ($items as $idx=>$item)
@@ -184,6 +188,9 @@ class Order extends CMyActiveRecord
         {
             $p = new PostCalculator();
             $list = $p->GetRates($order->DeliveryAddressID, $uid, $sid);
+            
+            //var_dump($list);
+            
             $deliveryPrice = false;
             foreach ($list as $l)
                 if ($l['id'] == $order->DeliveryTypeID) $deliveryPrice = $l['value'];
@@ -211,7 +218,7 @@ class Order extends CMyActiveRecord
                       ':daid' => $order->DeliveryAddressID,
                       ':baid' => $order->BillingAddressID,
                       ':dtid' => $order->DeliveryTypeID,
-                      ':ptid' => 0, // payment in next step
+                      ':ptid' => $ptype, // payment in next step
                       ':cur' => $order->CurrencyID,
                       ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
                       ':full' => $fullPrice,
@@ -281,7 +288,7 @@ class Order extends CMyActiveRecord
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
             
-            var_dump($ex);
+          // var_dump($ex);
             
             return 0;
         }
