@@ -92,7 +92,7 @@ class FilterHelper
         }
         self::$data['cid'] = $data['cid'] ?: $data['cid_val'] ?: 0;
         self::$data['avail'] = $data['avail'] ?: false;
-        self::$data['lang_sel'] = /*$data['lang_sel'] ?: $data['langsel'] ?: */Yii::app()->getRequest()->getParam('lang', false);
+        self::$data['lang_sel'] = $data['lang_sel'] ?: $data['langsel'] ?: Yii::app()->getRequest()->getParam('lang', false);
         self::$data['sort'] = $data['sort'] ?: false;
         self::$data['year_min'] = $data['year_min'] ?: $data['ymin'] ?: false;
         self::$data['year_max'] = $data['year_max'] ?: $data['ymax'] ?: false;
