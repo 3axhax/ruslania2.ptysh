@@ -626,7 +626,6 @@ class Category {
             'limit ' . $page * $criteria->limit . ', ' . $criteria->limit . ' '.
         '';
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
-        Debug::staticRun(array($sql, $itemIds));
         if (empty($itemIds)) return array();
 
         HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
@@ -662,7 +661,6 @@ class Category {
                 implode(' ', $join) . ' '.
                 'where ' . implode(' and ', $onlySupportLanguageCondition) . ' '.
             '';
-            Debug::staticRun(array($sql));
             return (int) Yii::app()->db->createCommand($sql)->queryScalar();
         }
 

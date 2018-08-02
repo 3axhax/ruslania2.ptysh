@@ -14,7 +14,6 @@ class Condition {
 		$this->_entity = (int) $entity;
 		$this->_cid = (int) $cid;
 		$this->_data = FilterHelper::getFiltersData($this->_entity, $this->_cid);
-		Debug::staticRun(array($this->_data));
 		$this->_fillConditionJoin();
 	}
 
