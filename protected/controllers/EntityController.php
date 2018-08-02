@@ -94,9 +94,6 @@ class EntityController extends MyController {
         $this->_checkUrl($dataForPath, $langTitles);
         $lang = Yii::app()->getRequest()->getParam('lang');
 
-        if (isset($lang) && $lang != '') {
-            FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
-        }
        /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
 			$lang = $_GET['lang'];
 			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
@@ -157,7 +154,10 @@ class EntityController extends MyController {
 		}
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
-        if (isset($data) && $data != '') {
+        if (isset($data) && !empty($data)) {
+            if (isset($lang) && $lang != '') {
+                FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
+            }
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -178,7 +178,6 @@ class EntityController extends MyController {
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
-            $test = $paginatorInfo->currentPage;
             $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
         }
 
@@ -456,7 +455,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'izda', $pid);
+        FilterHelper::setOneFiltersData($entity, 0, 'publisher', $pid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,

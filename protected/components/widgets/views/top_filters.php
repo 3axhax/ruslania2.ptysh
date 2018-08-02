@@ -8,15 +8,6 @@
     <!--Основной блок фильтров-->
     <div class="prod-filter__row">
 
-        <!--Поиск по категории/разделу-->
-        <!--<div class="prod-filter__col">
-            <label class="prod-filter__label" for=""><?/*= $title_search*/?></label>
-            <input type="text" placeholder="<?/*=$ui->item('A_NEW_NAME_ISBN');*/?>"
-                   onchange="if ($(this).val().length > 2 || $(this).val().length == 0) {
-                       show_result_count('<?/*=Yii::app()->createUrl('/site/gtfilter/')*/?>'); }"
-                   <?/*=($search = (isset($filter_data['name_search']) && $filter_data['name_search'] != '')) ? 'value='.$filter_data['name_search'] : ''*/?>
-                   name="name_search" id="name_search" class="prod-filter__input clearable <?/*= ($search) ? 'x' : ''*/?>"/>
-        </div>-->
         <!--Фильтр по авторам-->
         <?php if (isset($filters['author']) && $filters['author'] == true):?>
         <div class="prod-filter__col">
@@ -37,8 +28,8 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
             <select class="prod-filter__input prod-filter__input__select--m" name="avail" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
-                <option value="0">Всё</option>
-                <option value="1" selected>В наличии</option>
+                <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>>Всё</option>
+                <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
             </select>
         </div>
 
@@ -86,10 +77,10 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <div class="text">
-                <input type="hidden" name="izda" value="<?=($izda = (isset($filter_data['izda']) && $filter_data['izda'] != 0)) ? $filter_data['izda'] : 0?>">
+                <input type="hidden" name="izda" value="<?=($izda = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['izda'] : 0?>">
                 <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($izda) ? 'x' : ''?>"
                        placeholder="Все" autocomplete="off"
-                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['izda'], Yii::app()->language).'"' : '' ?>/>
+                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <ul class="search_result search_result_izda"></ul>
             <script>
@@ -103,10 +94,10 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
             <div class="text">
-                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['seria']) && $filter_data['seria'] != 0)) ? $filter_data['seria'] : 0?>">
+                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['seria'] : 0?>">
                 <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
                        autocomplete="off" placeholder="Все"
-                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['seria'], $entity, Yii::app()->language).'"' : '' ?> />
+                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language).'"' : '' ?> />
             </div>
             <ul class="search_result search_result_series"></ul>
             <script>
@@ -123,7 +114,7 @@
                     name="langVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="langVideo">
                 <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <?php foreach ($filters['langVideo'] as $k => $lang) :?>
-                    <option value="<?=$lang['id']?>" <?= ((isset($filter_data['langVideo'])) && ($lang['id'] == (int)$filter_data['langVideo'])) ? 'selected' : ''?>>
+                    <option value="<?=$lang['id']?>" <?= ((isset($filter_data['lang_video'])) && ($lang['id'] == (int)$filter_data['lang_video'])) ? 'selected' : ''?>>
                         <?=ProductHelper::GetTitle($lang);?>
                     </option>
                 <?php endforeach;?>
@@ -139,7 +130,7 @@
                         name="subtitlesVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="subtitlesVideo">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['langSubtitles'] as $k => $lang) :?>
-                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['langSubtitles'])) && ($lang['id'] == (int)$filter_data['langSubtitles'])) ? 'selected' : ''?>>
+                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['subtitles_video'])) && ($lang['id'] == (int)$filter_data['subtitles_video'])) ? 'selected' : ''?>>
                             <?=ProductHelper::GetTitle($lang);?>
                         </option>
                     <?php endforeach;?>
@@ -155,7 +146,7 @@
                         name="formatVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="formatVideo">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['formatVideo'] as $k => $lang) :?>
-                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['formatVideo'])) && ($lang['id'] == (int)$filter_data['formatVideo'])) ? 'selected' : ''?>>
+                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['format_video'])) && ($lang['id'] == (int)$filter_data['format_video'])) ? 'selected' : ''?>>
                             <?=$lang['title'];?>
                         </option>
                     <?php endforeach;?>
@@ -185,7 +176,7 @@
                 if (!$row['id'])
                     continue;
                 $sel = '';
-                if (isset($filter_data['binding_id']) && in_array($row['id'], $filter_data['binding_id'])) {
+                if (isset($filter_data['binding']) && in_array($row['id'], $filter_data['binding'])) {
                     $sel = 'selected="selected"';
                 }
                 ?>
