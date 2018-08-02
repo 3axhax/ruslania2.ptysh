@@ -80,8 +80,8 @@ class Condition {
 	private function _years() {
 		if (!Entity::checkEntityParam($this->_entity, 'years')) return;
 
-		$yMin = abs((int) $this->g('ymin'));
-		$yMax = abs((int) $this->g('ymax'));
+		$yMin = abs((int) $this->g('year_min'));
+		$yMax = abs((int) $this->g('year_max'));
 		if (($yMax > 0)&&($yMax < $yMin)) {
 			$buf = $yMin;
 			$yMin = $yMax;
@@ -96,8 +96,8 @@ class Condition {
 	}
 
 	private function _price() {
-		$bMin = abs((float) $this->g('min_cost', $this->g('cmin')));
-		$bMax = abs((float) $this->g('max_cost', $this->g('cmax')));
+		$bMin = abs((float) $this->g('cost_min'));
+		$bMax = abs((float) $this->g('cost_max'));
 		if (($bMax > 0)&&($bMax < $bMin)) {
 			$buf = $bMin;
 			$bMin = $bMax;
@@ -124,21 +124,21 @@ class Condition {
 
 	private function _seria() {
 		if (Entity::checkEntityParam($this->_entity, 'series')) {
-			$sid = (int) $this->g('seria');
+			$sid = (int) $this->g('series');
 			if ($sid > 0) $this->_condition['seria_id'] = '(t.series_id = ' . $sid . ')';
 		}
 	}
 
 	private function _publisher() {
 		if (Entity::checkEntityParam($this->_entity, 'publisher')) {
-			$pid = (int) $this->g('izda');
+			$pid = (int) $this->g('publisher');
 			if ($pid > 0) $this->_condition['publisher_id'] = '(t.publisher_id = ' . $pid . ')';
 		}
 	}
 
 	private function _binding() {
 		if (Entity::checkEntityParam($this->_entity, 'binding')||Entity::checkEntityParam($this->_entity, 'media')) {
-			$bindings = $this->g('binding_id');
+			$bindings = $this->g('binding');
 			if (is_array($bindings)) {
 				foreach ($bindings as $i=>$binding) {
 					$binding = (int) $binding;
@@ -155,21 +155,21 @@ class Condition {
 
 	private function _media() {
 		if (Entity::checkEntityParam($this->_entity, 'media')) {
-			$pid = (int) $this->g('formatVideo');
+			$pid = (int) $this->g('format_video');
 			if ($pid > 0) $this->_condition['media_id'] = '(t.media_id = ' . $pid . ')';
 		}
 	}
 
 	private function _stream() {
 		if (Entity::checkEntityParam($this->_entity, 'audiostreams')) {
-			$pid = (int) $this->g('langVideo');
+			$pid = (int) $this->g('lang_video');
 			if ($pid > 0) $this->_join['tVAS'] = 'join video_audiostreams tVAS on (tVAS.video_id = t.id) and (tVAS.stream_id = ' . $pid . ')';
 		}
 	}
 
 	private function _subtitle() {
 		if (Entity::checkEntityParam($this->_entity, 'subtitles')) {
-			$pid = (int) $this->g('subtitlesVideo');
+			$pid = (int) $this->g('subtitles_video');
 			if ($pid > 0) $this->_join['tVC'] = 'join video_credits tVC on (tVAS.video_id = t.id) and (tVC.credits_id = ' . $pid . ')';
 		}
 	}
@@ -177,7 +177,7 @@ class Condition {
 	private function _lang() {
 		if (!Entity::checkEntityParam($this->_entity, 'languages')) return;
 
-		$langsel = (int) $this->g('langsel');
+		$langsel = (int) $this->g('lang_sel');
 		if ($langsel > 0) {
 			if (empty($this->_condition['avail'])) {
 				$this->_join['tL_all'] = 'join all_items_languages tL on (tL.item_id = t.id) and (tL.language_id = ' . $langsel . ')';
