@@ -1054,7 +1054,6 @@ class SiteController extends MyController {
 
         /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
-        $_GET['name_search'] = $_POST['name_search'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
         $_GET['binding_id'] = $_POST['binding_id'];
         $_GET['langVideo'] = $_POST['langVideo'];
