@@ -83,7 +83,7 @@ class FilterHelper
         $filtersData->deleteFiltersData();
     }
 
-    static function normalizeData ($data) {
+    static private function normalizeData ($data) {
         self::$data = [];
         self::$data['entity'] = $data['entity'] ?: $data['entity_val'] ?: false;
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
