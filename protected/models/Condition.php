@@ -4,11 +4,11 @@
 class Condition {
 
 	private $_data = array(), $_entity = null, $_cid = null;
-	private $_condition, $_join;
+	private $_condition = array(), $_join = array();
 	private $_onlySupportLanguage = false;
 	private $_languageCondition = array();
 
-	static private $_self = null;
+	static private $_self = array();
 
 	final private function __construct($entity, $cid) {
 		$this->_entity = (int) $entity;
@@ -40,8 +40,9 @@ class Condition {
 	 * @return Condition
 	 */
 	static function get($entity, $cid) {
-		if (self::$_self === null) self::$_self = new self($entity, $cid);
-		return self::$_self;
+		$key = 'e' . (int)$entity . 'c' . (int) $cid;
+		if (!isset(self::$_self[$key])) self::$_self[$key] = new self($entity, $cid);
+		return self::$_self[$key];
 	}
 
 	private function _fillConditionJoin() {

@@ -593,10 +593,11 @@ class Category {
         return $ret;
     }
 
-    function getFilterCounts($entity, $cid, $post, $isFilter = false) {
+    function getFilterCounts($entity, $cid) {
         $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition();
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
+
 
         $distinct = '*';
         if (!empty($onlySupportLanguageCondition) //все данные есть в таблице _support_languages_
@@ -618,6 +619,7 @@ class Category {
         if (!empty($join['tL_support'])&&!empty($condition['cid'])) $distinct = 'distinct t.id';
         $entityParams = Entity::GetEntitiesList()[$entity];
 
+        Debug::staticRun(array($condition, $join));
         $sql = ''.
             'select count(' . $distinct . ') '.
             'from ' . $entityParams['site_table'] . ' t '.
@@ -628,6 +630,10 @@ class Category {
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
+        if (isset($_GET['ha'])) {
+            $counts = $this->getFilterCounts($entity, $cid);
+            return (($counts > 1000) && $isFilter) ? '>1000' : $counts;
+        }
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
