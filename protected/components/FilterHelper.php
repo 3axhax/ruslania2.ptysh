@@ -83,7 +83,7 @@ class FilterHelper
         $filtersData->deleteFiltersData();
     }
 
-    static function normalizeData ($data) {
+    static private function normalizeData ($data) {
         self::$data = [];
         self::$data['entity'] = $data['entity'] ?: $data['entity_val'] ?: false;
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
@@ -93,6 +93,7 @@ class FilterHelper
         self::$data['cid'] = $data['cid'] ?: $data['cid_val'] ?: 0;
         self::$data['avail'] = $data['avail'] ?: false;
         self::$data['lang_sel'] = $data['langsel'] ?: Yii::app()->getRequest()->getParam('lang', false);
+        self::$data['lang_sel'] = $data['lang_sel'] ?: $data['langsel'] ?: false;
         self::$data['sort'] = $data['sort'] ?: false;
         self::$data['year_min'] = $data['year_min'] ?: $data['ymin'] ?: false;
         self::$data['year_max'] = $data['year_max'] ?: $data['ymax'] ?: false;

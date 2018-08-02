@@ -153,11 +153,12 @@ class EntityController extends MyController {
 			$title_cat = ProductHelper::GetTitle($selectedCategory);
 		}
 
+        if (isset($lang) && $lang != '') {
+            FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
+        }
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            if (isset($lang) && $lang != '') {
-                FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
-            }
+
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);

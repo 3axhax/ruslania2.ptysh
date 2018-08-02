@@ -114,7 +114,7 @@
                     name="langVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="langVideo">
                 <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <?php foreach ($filters['langVideo'] as $k => $lang) :?>
-                    <option value="<?=$lang['id']?>" <?= ((isset($filter_data['lang_video'])) && ($lang['id'] == (int)$filter_data['lang_video'])) ? 'selected' : ''?>>
+                    <option value="<?=$lang['id']?>" <?= (isset($filter_data['lang_video']) && ($lang['id'] == (int)$filter_data['lang_video'])) ? 'selected' : ''?>>
                         <?=ProductHelper::GetTitle($lang);?>
                     </option>
                 <?php endforeach;?>
@@ -176,7 +176,7 @@
                 if (!$row['id'])
                     continue;
                 $sel = '';
-                if (isset($filter_data['binding']) && in_array($row['id'], $filter_data['binding'])) {
+                if (isset($filter_data['binding']) && !empty($filter_data['binding']) && in_array($row['id'], $filter_data['binding'])) {
                     $sel = 'selected="selected"';
                 }
                 ?>
