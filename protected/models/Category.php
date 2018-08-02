@@ -468,13 +468,22 @@ class Category {
             return array();
         }
 
-        $entities = Entity::GetEntitiesList();
 
         $entity = $data['entity'];
         $cid = $data['cid'];
+
+        if ($_GET['sort']) $sort = $_GET['sort'];
+        else {
+            $sort = $data['sort'];
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);
+        return $this->getFilterResult($entity, $cid, $sort, $page);
+
+
+
         $avail = $data['avail'];
         $lang_sel = $data['lang_sel'];
-        $sort = $data['sort'];
         $ymin = $data['year_min'];
         $ymax = $data['year_max'];
         $author = $data['author'];
@@ -488,6 +497,7 @@ class Category {
         $subtitlesVideo = $data['subtitles_video'];
 
 
+        $entities = Entity::GetEntitiesList();
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
 
@@ -570,11 +580,6 @@ class Category {
             }
             $criteria->addCondition($str);
         }
-		if ($_GET['sort']) {
-			$sort = $_GET['sort'];
-		} else {
-			if (!$sort) $sort = 12;
-		}
 
         $criteria->addCondition('brutto >= :brutto1 AND brutto<=:brutto2');
         $criteria->params[':brutto1'] = $cmin;
@@ -590,6 +595,51 @@ class Category {
 
         $ret = Product::FlatResult($datas);
 
+        return $ret;
+    }
+
+    function getFilterResult($entity, $cid, $sort, $page) {
+        $dp = Entity::CreateDataProvider($entity);
+        $criteria = $dp->getCriteria();
+        $criteria->order = SortOptions::GetSQL($sort, '', $entity);
+        $criteria->limit = Yii::app()->params['ItemsPerPage'];
+        $criteria->offset = $page * $criteria->limit;
+
+       /* if ($_GET['sort']) {
+            $sort = $_GET['sort'];
+        } else {
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);*/
+
+        $condition = Condition::get($entity, $cid)->getCondition();
+        $join = Condition::get($entity, $cid)->getJoin();
+        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
+        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
+
+        $sql = ''.
+            'select t.id '.
+            'from ' . $dp->model->tableName() . ' t '.
+                implode(' ', $join) . ' '.
+                (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
+            'order by ' . $criteria->order . ' '.
+            'limit ' . $page * $criteria->limit . ', ' . $criteria->limit . ' '.
+        '';
+        $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        Debug::staticRun(array($sql, $itemIds));
+        if (empty($itemIds)) return array();
+
+        HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
+
+        Product::setActionItems($entity, $itemIds);
+        Product::setOfferItems($entity, $itemIds);
+        $criteria->alias = 't';
+        $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
+        $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
+        $dp->setCriteria($criteria);
+        $dp->pagination = false;
+        $data = $dp->getData();
+        $ret = Product::FlatResult($data);
         return $ret;
     }
 
@@ -619,7 +669,6 @@ class Category {
         if (!empty($join['tL_support'])&&!empty($condition['cid'])) $distinct = 'distinct t.id';
         $entityParams = Entity::GetEntitiesList()[$entity];
 
-        Debug::staticRun(array($condition, $join));
         $sql = ''.
             'select count(' . $distinct . ') '.
             'from ' . $entityParams['site_table'] . ' t '.
@@ -630,10 +679,8 @@ class Category {
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
-        if (isset($_GET['ha'])) {
-            $counts = $this->getFilterCounts($entity, $cid);
-            return (($counts > 1000) && $isFilter) ? '>1000' : $counts;
-        }
+        $counts = $this->getFilterCounts($entity, $cid);
+        return (($counts > 1000) && $isFilter) ? '>1000' : $counts;
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
