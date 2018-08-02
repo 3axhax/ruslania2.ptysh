@@ -23,7 +23,7 @@ $lang = Yii::app()->language;
             'paramName'=>'sort',
             'selected'=>$value,
             'dataParam'=>$dataParam,
-            'route'=>'entity/list',
+            'route'=>'refererPage',
             'style'=>'float:right; margin-left:10px;'));
     ?>
             </div>
@@ -34,7 +34,7 @@ $lang = Yii::app()->language;
                         'items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id),
                         'paramName'=>'lang',
                         'dataParam'=>$dataParam,
-                        'route'=>'entity/list'));?>
+                        'route'=>'refererPage'));?>
             </div>
 
 <ul class="items">

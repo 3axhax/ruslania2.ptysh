@@ -32,7 +32,27 @@ class SelectSimulator extends CWidget {
 			    break;
 	    }
 	    if (empty($data['items'][$data['selected']])) $data['items'][$data['selected']] = 0;
-	    $this->render('select_simulator', $data);
+	    $this->render('select_simulator', $this->_prepareData($data));
     }
+
+	private function _prepareData($data) {
+		if (!empty($data['route']))
+			switch ($data['route']) {
+				case 'curPage':
+					$data['route'] = Yii::app()->getController()->id . '/' . Yii::app()->getController()->action->id;
+					break;
+				case 'refererPage':
+					$referer = Yii::app()->getRequest()->getUrlReferrer();
+					if (empty($referer)) $data['route'] = 'entity/list';
+					else {
+						$request = new MyRefererRequest();
+						$request->setFreePath($referer);
+						$data['route'] = Yii::app()->getUrlManager()->parseUrl($request);
+						$data['dataParam'] = $request->getParams();
+					}
+					break;
+			}
+		return $data;
+	}
 
 }
