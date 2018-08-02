@@ -469,31 +469,28 @@ class Category {
         }
 
         $entities = Entity::GetEntitiesList();
-        $binding = $data['binding_id'];
-        $data['year_min'] = (int) $data['ymin'];
-        $data['year_max'] = (int) $data['ymax'];
-        $data['min_cost'] = $cmin = $data['cmin'];
-        $data['max_cost'] = $cmax = $data['cmax'];
+
         $entity = $data['entity'];
         $cid = $data['cid'];
-        $author = $data['author'];
         $avail = $data['avail'];
-        $ymin = $data['ymin'];
-        $ymax = $data['ymax'];
-        $izda = $data['izda'];
-        $seria = $data['seria'];
-        $lang_sel = $data['langsel'];
-        $search = $data['search'];
+        $lang_sel = $data['lang_sel'];
         $sort = $data['sort'];
-        $formatVideo = $data['formatVideo'];
-        $langVideo = $data['langVideo'];
+        $ymin = $data['year_min'];
+        $ymax = $data['year_max'];
+        $author = $data['author'];
+        $izda = $data['publisher'];
+        $seria = $data['series'];
+        $binding = $data['binding'];
+        $cmin = $data['cost_min'];
+        $cmax = $data['cost_max'];
+        $formatVideo = $data['format_video'];
+        $langVideo = $data['lang_video'];
+        $subtitlesVideo = $data['subtitles_video'];
 
 
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
-        $formatVideo = $data['formatVideo'];
-        $langVideo = $data['langVideo'];
-        $subtitlesVideo = $data['subtitlesVideo'];
+
 
         $dp = Entity::CreateDataProvider($entity);
         $criteria = $dp->getCriteria();
@@ -573,16 +570,6 @@ class Category {
             }
             $criteria->addCondition($str);
         }
-
-        if (mb_strlen($search) > 2) {
-
-            //$criteria->addCondition('t.title_'.Yii::app()->language.' LIKE "%'.$search.'%" OR isbn LIKE "%'.$search.'%"');
-            $criteria->addCondition('t.title_ru LIKE "%'.$search.'%" OR t.title_rut LIKE "%'.$search.'%" 
-            OR t.title_en LIKE "%'.$search.'%" OR t.title_fi LIKE "%'.$search.'%" 
-            OR isbn LIKE "%'.$search.'%"');
-
-        }
-
 		if ($_GET['sort']) {
 			$sort = $_GET['sort'];
 		} else {
@@ -651,26 +638,25 @@ class Category {
 
         $aid = $post['author'];
         $avail = $post['avail'];
-        $izda = $post['izda'];
-        $seria = $post['seria'];
+        $izda = $post['publisher'];
+        $seria = $post['series'];
 
         if ($entity != 30) {
-            $year_min = (isset($post['ymin']) && $post['ymin'] != '') ? $post['ymin'] : 1900;
-            $year_max = (isset($post['ymax']) && $post['ymax'] != '') ? $post['ymax'] : 2050;
+            $year_min = (isset($post['year_min']) && $post['year_min'] != '') ? $post['year_min'] : 1900;
+            $year_max = (isset($post['year_max']) && $post['year_max'] != '') ? $post['year_max'] : 2050;
         }
 
-        $cost_min = (isset($post['min_cost']) && $post['min_cost'] != '') ? $post['min_cost'] : 0;
+        $cost_min = (isset($post['cost_min']) && $post['cost_min'] != '') ? $post['cost_min'] : 0;
         $cost_min = (float)str_replace(',','.', $cost_min);
-        $cost_max = (isset($post['max_cost']) && $post['max_cost'] != '') ? $post['max_cost'] : 10000;
+        $cost_max = (isset($post['cost_max']) && $post['cost_max'] != '') ? $post['cost_max'] : 10000;
         $cost_max = (float)str_replace(',','.', $cost_max);
 
-        $binding_id = $post['binding_id'];
-        $search = $post['name_search'];
-        $langsel = (int) $post['langsel'];
+        $binding_id = $post['binding'];
+        $langsel = (int) $post['lang_sel'];
 
-        $formatVideo = $post ['formatVideo'];
-        $langVideo = $post ['langVideo'];
-        $subtitlesVideo = $post ['subtitlesVideo'];
+        $formatVideo = $post ['format_video'];
+        $langVideo = $post ['lang_video'];
+        $subtitlesVideo = $post ['subtitles_video'];
 
         $query = array();
         $qstr = '';
@@ -705,11 +691,6 @@ class Category {
         }
         if ($seria AND $entity !=40) {
             $query[] = 'bc.series_id = ' . $seria;
-        }
-        if (mb_strlen($search) > 2) {
-            $query[] = '(bc.title_ru LIKE "%'.$search.'%" OR bc.title_rut LIKE "%'.$search.'%"
-            OR bc.title_en LIKE "%'.$search.'%" OR bc.title_fi LIKE "%'.$search.'%" 
-            OR bc.isbn LIKE "%'.$search.'%")';
         }
         if ($entity != 30 && $year_min != '' && $year_max != '') {
             $query[] = '(bc.year >= ' . $year_min . ' AND bc.year <= ' . $year_max . ')';
@@ -758,7 +739,6 @@ class Category {
             WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
-        $count = $rows[0]['cnt'];
         return ($rows[0]['cnt'] == 1001 && $isFilter) ? '>1000' : $rows[0]['cnt'];
     }
 

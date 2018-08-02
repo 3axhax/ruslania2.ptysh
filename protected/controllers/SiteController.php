@@ -1033,13 +1033,11 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-            $entity = $_POST['entity'] = $_POST['entity_val'];
-            $cid = $_POST['cid'] = $_POST['cid_val'];
-            $_POST['cmin'] = $_POST['min_cost'];
-            $_POST['cmax'] = $_POST['max_cost'];
+            $entity = $_POST['entity_val'];
+            $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
-			echo $category->count_filter($entity, $cid, $data, true);
+			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }
 
@@ -1069,9 +1067,6 @@ class SiteController extends MyController {
         $data = FilterHelper::getFiltersData($entity, $cid);
 
         $cat = new Category();
-        $data['cmin'] = $data['min_cost'];
-        $data['cmax'] = $data['max_cost'];
-        $data['binding'] = $data['binding_id'];
         $items = $cat->result_filter($data);
 
         $totalItems = $cat->count_filter($entity, $cid, $data);
