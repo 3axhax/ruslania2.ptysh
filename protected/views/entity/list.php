@@ -108,3 +108,8 @@ $lang = Yii::app()->language;
     });
 
 </script>
+<?php if ($entity == 30):?>
+    <script>
+        initPeriodicPriceSelect();
+    </script>
+<?php endif;?>

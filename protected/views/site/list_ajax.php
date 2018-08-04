@@ -51,5 +51,10 @@ $lang = Yii::app()->language;
 
 
 <?php if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
+<?php if ($entity == 30):?>
+<script>
+    initPeriodicPriceSelect();
+</script>
+<?php endif;?>
 <!--</div>-->
 <!--</div>-->
