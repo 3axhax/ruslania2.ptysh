@@ -24,6 +24,7 @@
         </div>
         <?php endif;?>
 
+        <?php if (isset($filters['avail']) && $filters['avail'] == true):?>
         <!--Фильтр по наличию-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
@@ -32,6 +33,7 @@
                 <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
             </select>
         </div>
+        <?php endif;?>
 
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
@@ -156,7 +158,7 @@
 
         <?php if (isset($filters['binding']) && !empty($filters['binding'])):?>
             <!--Фильтр по типу/переплету-->
-        <div class="prod-filter__col--grow">
+        <div class="prod-filter__col--grow" id="binding_div">
             <label class="prod-filter__label" for="">
                 <?php if ($entity == 10 OR $entity == 15) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
                 else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
@@ -168,6 +170,10 @@
                 if ($entity == 22 OR $entity == 24) {
                     $row = Media::GetMedia($entity, $binfo['media_id']);
                     $title = 'title';
+                }
+                elseif ($entity == 30) {
+                    $row = TypeRetriever::GetType($entity, $binfo['type']);
+                    $title = 'title_' . Yii::app()->language;
                 }
                 else {
                     $row = Binding::GetBinding($entity, $binfo['binding_id']);
@@ -190,6 +196,12 @@
                     width: '161px',
                 });
             </script>
+            <?php if ($entity == 30):?>
+                <script>
+                    typeDiv = $('#binding_div').detach();
+                    typeDiv.insertBefore($('#filter_apply'));
+                </script>
+            <?php endif;?>
         </div>
         <?php endif;?>
     </div>

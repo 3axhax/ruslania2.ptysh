@@ -246,11 +246,26 @@ class Category {
                     $rows = Yii::app()->db->createCommand($sql)->queryAll();
                 }
 
-            $ids = array();
-            foreach ($rows as $row) $ids[] = $row['media_id'];
-            HrefTitles::get()->getByIds($entity, 'entity/bymedia', $ids);
+                $ids = array();
+                foreach ($rows as $row) $ids[] = $row['media_id'];
+                HrefTitles::get()->getByIds($entity, 'entity/bymedia', $ids);
 
-            return $rows;
+                return $rows;
+                break;
+            case 30:
+                $entities = Entity::GetEntitiesList();
+                $tbl = $entities[$entity]['site_table'];
+                $tbl_type = $entities[$entity]['type_table'];
+                if ($cid > 0) {
+                    $sql = 'SELECT type FROM ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) GROUP BY type';
+                    $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+                }
+                else {
+                    $sql = 'SELECT type FROM ' . $tbl . ' GROUP BY type';
+                    $rows = Yii::app()->db->createCommand($sql)->queryAll();
+                }
+
+                return $rows;
                 break;
         }
         return array();

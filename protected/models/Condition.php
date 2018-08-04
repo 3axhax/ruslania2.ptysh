@@ -64,6 +64,7 @@ class Condition {
 		$this->_publisher();
 		$this->_binding();
 		$this->_media();
+		$this->_type();
 		$this->_stream();
 		$this->_subtitle();
 
@@ -218,10 +219,26 @@ class Condition {
 
 	private function _media() {
 		if (Entity::checkEntityParam($this->_entity, 'media')) {
-			$pid = (int) $this->g('format_video');
+			$pid = (int) $this->g('binding');
 			if ($pid > 0) $this->_condition['media_id'] = '(t.media_id = ' . $pid . ')';
 		}
 	}
+
+    private function _type() {
+        if (Entity::checkEntityParam($this->_entity, 'magazinetype')) {
+            $types = $this->g('binding');
+            if (is_array($types)) {
+                foreach ($types as $i=>$type) {
+                    $type = (int) $type;
+                    if ($type <= 0) unset($types[$i]);
+                    else $types[$i] = $type;
+                }
+                if (!empty($types)) {
+                    $this->_condition['binding_id'] = '(t.type in (' . implode(',', $types) . '))';
+                }
+            }
+        }
+    }
 
 	private function _stream() {
 		if (Entity::checkEntityParam($this->_entity, 'audiostreams')) {

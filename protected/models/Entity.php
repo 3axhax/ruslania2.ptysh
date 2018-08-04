@@ -65,6 +65,7 @@ class Entity {
             30 => array('title' => 'Периодика', 'site_id' => 4, 'table' => 'tblPereodics', 'site_table' => 'pereodics_catalog',
                 'entity' => 'pereodics', 'model' => 'Periodic',
                 'site_category_table' => 'pereodics_categories',
+                'type_table' => 'pereodics_types',
                 'uikey' => 'A_GOTOPEREODICALS',
                 'with' => array('category', 'subcategory', 'lookinside', 'magazinetype', 'periodicCountry', 'vendorData', 'vendorData.deliveryTime'),
             ),

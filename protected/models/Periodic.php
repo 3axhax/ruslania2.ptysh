@@ -17,6 +17,7 @@ class Periodic extends CMyActiveRecord
     public function relations()
     {
         return array(
+            'type' => array(self::BELONGS_TO, 'PeriodicCategory', 'type'),
             'category' => array(self::BELONGS_TO, 'PeriodicCategory', 'code'),
             'subcategory' => array(self::BELONGS_TO, 'PeriodicCategory', 'subcode'),
             'lookinside' => array(self::HAS_MANY, 'Lookinside', 'item_id', 'on' => 'lookinside.entity='.Entity::PERIODIC ),

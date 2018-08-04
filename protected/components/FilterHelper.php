@@ -42,6 +42,10 @@ class FilterHelper
             $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
         }
 
+        if ($entity != 30) {
+            $filters['avail'] = true;
+        }
+
         $filters['binding'] = $category->getFilterBinding($entity, $cid);
 
         return $filters;
