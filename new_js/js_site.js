@@ -19,6 +19,7 @@ $(document).ready(function(){
 
 // "X" в input-ах фильтра
 function tog(v){return v?'addClass':'removeClass';}
+
 $(document).on('input', '.clearable', function(){
     $(this)[tog(this.value)]('x');
 }).on('mousemove', '.x', function( e ){
@@ -169,32 +170,5 @@ function liveFindSeriesMP(entity, url, cid) {
         formatItem:function (data, $item, q) {
             return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'seria\', \'' + data.title + '\', \'new_series\')">' + data.title + '</li>';
         },
-    });
-}
-
-function initPeriodicPriceSelect() {
-    $('select.periodic').change(function ()
-    {
-        var $el = $(this);
-        var cart = $el.closest('.span11, .span1.cart');
-
-        var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
-        var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
-        var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
-        var finpmonthVat = cart.find('input.finmonthpricevat').val();
-
-        var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
-        var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
-
-        var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
-        var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
-
-        cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
-        cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
-
-        cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
-        cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
-
-        cart.find('a.add').attr('data-quantity', $el.val());
     });
 }

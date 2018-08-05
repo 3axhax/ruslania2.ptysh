@@ -106,7 +106,7 @@ $lang = Yii::app()->language;
         //это для случая, когда нет js
         $('.js_without').toggle();
     });
-
+    initAAddCart();
 </script>
 <?php if ($entity == 30):?>
     <script>

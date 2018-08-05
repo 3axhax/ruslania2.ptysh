@@ -301,6 +301,7 @@ else $act = array('', '');
                 });
             })
             initPeriodicPriceSelect();
+            initAAddCart();
 
             $(document).ready(function () {
 
@@ -576,91 +577,6 @@ else $act = array('', '');
                     event.stopPropagation();
                 });
 
-                var elems = $('a.cart-action');
-                var $finSubButton = $('#finSubscription');
-                var $worldSubButton = $('#worldSubscription');
-                var $formDiv = $('#periodic-price-form');
-                var $formEid = $formDiv.find('input[name="eid"]');
-                var $formIid = $formDiv.find('input[name="iid"]');
-                var $formQty = $formDiv.find('input[name="qty"]');
-
-
-                $finSubButton.click(function ()
-                {
-                    $.magnificPopup.close();
-                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
-                });
-
-                $worldSubButton.click(function ()
-                {
-                    $.magnificPopup.close();
-                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
-                });
-
-                $(elems).click(function ()
-                {
-                    //alert(1);
-
-                    var $el = $(this);
-                    var $parent = $el.closest('.to_cart');
-
-                    var entity = $el.attr('data-entity');
-
-                    if (entity == <?= Entity::PERIODIC; ?>)
-                    {
-                        var $finPrice = $('#finPrice');
-                        var $worldPrice = $('#worldPrice');
-
-                        var $itemFinBlock = $parent.find('.periodic_fin');
-                        var $itemWorldBlock = $parent.find('.periodic_world');
-
-                        if ($itemWorldBlock.length && $itemFinBlock.length)
-                        {
-                            $formEid.val($el.attr('data-entity'));
-                            $formIid.val($el.attr('data-id'));
-                            $formQty.val($el.attr('data-quantity'));
-                            $finSubButton.data($el);
-                            $worldSubButton.data($el);
-
-                            // show dialog only if we have different prices
-                            var $formTitle = $('#formTitle');
-                            var $formMonths = $('#formMonths');
-                            var $title = $parent.closest('.to_cart').find('h1.title');
-                            $formTitle.html($title.html());
-
-                            var $select = $parent.find('select.periodic');
-                            $formMonths.html($(':selected', $select).text());
-
-                            var finHtml = $itemFinBlock.html();
-                            $finPrice.html(finHtml);
-                            var worldHtml = $itemWorldBlock.html();
-                            $worldPrice.html(worldHtml);
-                            $.magnificPopup.open({
-                                items: {
-                                    src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
-                                    type: 'inline'
-                                }
-                            });
-                            return false;
-                        }
-                    }
-
-                    add2Cart($el.attr('data-action'),
-                            $el.attr('data-entity'),
-                            $el.attr('data-id'),
-                            $el.attr('data-quantity'),
-                            null,
-                            $el
-                            );
-                    
-                    <?php if (in_array('cart', $url)) : ?>
-                        
-                       location.href=location.href;
-                        
-                    <?php endif; ?>
-                    
-                    return false;
-                });
 
             })
 
@@ -776,6 +692,120 @@ else $act = array('', '');
                 mylist.append(sale_item);
                 mylist.append('<div class="clearfix"></div>');
                 mylist.append(category_item);
+            }
+
+            function initPeriodicPriceSelect() {
+                $('select.periodic').change(function ()
+                {
+                    var $el = $(this);
+                    var cart = $el.closest('.span11, .span1.cart');
+
+                    var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
+                    var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
+                    var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
+                    var finpmonthVat = cart.find('input.finmonthpricevat').val();
+
+                    var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
+                    var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
+
+                    var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
+                    var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
+
+                    cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
+                    cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
+
+                    cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
+                    cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
+
+                    cart.find('a.add').attr('data-quantity', $el.val());
+                });
+            }
+
+            function initAAddCart() {
+
+                var elems = $('a.cart-action');
+                var $finSubButton = $('#finSubscription');
+                var $worldSubButton = $('#worldSubscription');
+                var $formDiv = $('#periodic-price-form');
+                var $formEid = $formDiv.find('input[name="eid"]');
+                var $formIid = $formDiv.find('input[name="iid"]');
+                var $formQty = $formDiv.find('input[name="qty"]');
+
+
+                $finSubButton.click(function ()
+                {
+                    $.magnificPopup.close();
+                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
+                });
+
+                $worldSubButton.click(function ()
+                {
+                    $.magnificPopup.close();
+                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
+                });
+
+                $(elems).click(function () {
+                    //alert(1);
+
+
+                    var $el = $(this);
+                    var $parent = $el.closest('.to_cart');
+
+                    var entity = $el.attr('data-entity');
+
+                    if (entity == <?= Entity::PERIODIC; ?>) {
+                        var $finPrice = $('#finPrice');
+                        var $worldPrice = $('#worldPrice');
+
+                        var $itemFinBlock = $parent.find('.periodic_fin');
+                        var $itemWorldBlock = $parent.find('.periodic_world');
+
+                        if ($itemWorldBlock.length && $itemFinBlock.length) {
+                            $formEid.val($el.attr('data-entity'));
+                            $formIid.val($el.attr('data-id'));
+                            $formQty.val($el.attr('data-quantity'));
+                            $finSubButton.data($el);
+                            $worldSubButton.data($el);
+
+                            // show dialog only if we have different prices
+                            var $formTitle = $('#formTitle');
+                            var $formMonths = $('#formMonths');
+                            var $title = $parent.closest('.to_cart').find('h1.title');
+                            $formTitle.html($title.html());
+
+                            var $select = $parent.find('select.periodic');
+                            $formMonths.html($(':selected', $select).text());
+
+                            var finHtml = $itemFinBlock.html();
+                            $finPrice.html(finHtml);
+                            var worldHtml = $itemWorldBlock.html();
+                            $worldPrice.html(worldHtml);
+                            $.magnificPopup.open({
+                                items: {
+                                    src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
+                                    type: 'inline'
+                                }
+                            });
+                            return false;
+                        }
+                    }
+
+                    add2Cart($el.attr('data-action'),
+                        $el.attr('data-entity'),
+                        $el.attr('data-id'),
+                        $el.attr('data-quantity'),
+                        null,
+                        $el
+                    );
+
+                    <?php if (in_array('cart', $url)) : ?>
+
+                    location.href = location.href;
+
+                    <?php endif; ?>
+
+                    return false;
+                });
             }
 
 
