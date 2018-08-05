@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    $(document).click(function (event) {
+        if ($(event.target).closest('.subcat').length) return;
+        if ($(event.target).closest('.open_subcat').length) return;
+        $('.subcat').hide();
+        $('.open_subcat').removeClass('open');
+        event.stopPropagation();
+    });
     $('.slider_recomend').slick({
         infinite: true,
         slidesToShow: 5,
