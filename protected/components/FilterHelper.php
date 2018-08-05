@@ -53,7 +53,7 @@ class FilterHelper
 
     static function setFiltersData ($entity, $cid = 0, $data) {
         self::normalizeData($data);
-        $key = 'filter_e' . $entity . '_c_' . $cid;
+        $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
         if (Yii::app()->session[$key] != serialize(self::$data)) {
             Yii::app()->session[$key] = serialize(self::$data);
         }
@@ -62,7 +62,7 @@ class FilterHelper
     }
 
     static function getFiltersData ($entity, $cid = 0) {
-        $key = 'filter_e' . $entity . '_c_' . $cid;
+        $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
         $filtersData = FiltersData::instance();
         if ($filtersData->isSetKey($key)) {
             $data = $filtersData->getFiltersData($key);
