@@ -300,6 +300,7 @@ else $act = array('', '');
                     }
                 });
             })
+            initPeriodicPriceSelect();
 
             $(document).ready(function () {
 
@@ -434,7 +435,7 @@ else $act = array('', '');
                 cont.css('z-index', '999999');
                 cont.css('background', '#fff');
                 cont.css('width', '249px');
-                cont.css('box-shadow', '0px 3px 10px 0px rgba(0, 0, 0, 0.15)');
+                cont.css('box-shadow', '0px 3px 10px 3px rgba(0, 0, 0, 0.15)');
                 cont.css('padding', '0px 10px');
 
 
@@ -1543,20 +1544,20 @@ else $act = array('', '');
 
         <link rel="stylesheet" href="/css/magnific-popup.css" >
         <div id="periodic-price-form" class="white-popup-block mfp-hide white-popup">
-            <h2><?= $ui->item('PERIODIC_POPUP_HEADER'); ?></h2>
-            <h4 id="formTitle"></h4>
-            <h5 id="formMonths"></h5>
+            <div class="box_title box_title_ru"><?= $ui->item('PERIODIC_POPUP_HEADER'); ?></div>
+            <div class="box_title box_title_en" id="formTitle"></div>
+            <div class="box_title box_title_en" id="formMonths"></div>
             <input type="hidden" name="eid" value=""/>
             <input type="hidden" name="iid" value=""/>
             <input type="hidden" name="qty" value=""/>
 
-            <div class="periodic_choice">
+            <div class="periodic_choice box_btns">
                 <div id="finPrice"></div>
-                <button id="finSubscription"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
+                <button class="btn_yes" id="finSubscription"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
             </div>
-            <div class="periodic_choice">
+            <div class="periodic_choice box_btns">
                 <div id="worldPrice"></div>
-                <button id="worldSubscription"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
+                <button class="btn_yes" id="worldSubscription"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
             </div>
             <div class="clearfix"></div>
         </div>
