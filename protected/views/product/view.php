@@ -87,4 +87,7 @@
 	<?php endif; ?>
 
 </div>
+    <script>
+        initAAddCart();
+    </script>
 <?php $this->widget('Banners', array('type'=>'slider')) ?>

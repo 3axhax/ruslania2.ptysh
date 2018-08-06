@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    initAAddCart();
     $(document).click(function (event) {
         if ($(event.target).closest('.subcat').length) return;
         if ($(event.target).closest('.open_subcat').length) return;
