@@ -169,7 +169,7 @@ class MyUrlRule extends CUrlRule {
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
         if (defined('OLD_PAGES')) return $result;
 
-        if (($result === 'entity/list')&&!empty($_GET['lang'])) {
+        if ((mb_strpos($result, 'entity/', null, 'utf-8') === 0)&&!empty($_GET['lang'])) {
             $langGoods = ProductLang::getShortLang();
             if (is_numeric($_GET['lang'])&&!empty($langGoods[$_GET['lang']])) $langId = $_GET['lang'];
             else $langId = array_search($_GET['lang'], $langGoods);

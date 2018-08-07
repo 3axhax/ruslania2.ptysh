@@ -348,7 +348,8 @@ class MyController extends CController
         $route = $this->id . '/' . $this->action->id;
         if (!empty($data['entity'])) {
             $entity = $data['entity'];
-            $data['entity'] = Entity::GetUrlKey($entity);
+            if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
+            else $entity = Entity::ParseFromString($entity);
             $idName = HrefTitles::get()->getIdName($entity, $route);
             if (!empty($idName)&&!empty($data[$idName])) {
                 $data['__useTitleParams'] = true;
