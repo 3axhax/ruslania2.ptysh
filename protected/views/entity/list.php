@@ -72,26 +72,26 @@ $lang = Yii::app()->language;
                 ?>
 
             <ul class="items">
-                <?php /*$i=0; foreach ($items as $item) : $i++;*/?><!--
+                <?php $i=0; foreach ($items as $item) : $i++;?>
                     <?php
-/*
+
                     $item['entity'] = $entity;
                     $key = 'itemlist_' . $entity . '_' . $item['id'];
-                    */?>
+                    ?>
                     <li>
-                        <?php /*$this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); */?>
+                        <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
-                    <?php /*if ($i == 2): */?>
-                        <li class="list-banner-content"><?php /*$this->widget('Banners', array('location'=>'topInList')) */?></li>
-                    <?php /*elseif ($i == 20): */?>
-                        <li class="list-banner-content"><?php /*$this->widget('Banners', array('location'=>'centerInList')) */?></li>
-                    <?php /*endif; */?>
-                --><?php /*endforeach; */?>
-            </ul>
+                    <?php if ($i == 2): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'topInList')) ?></li>
+                    <?php elseif ($i == 20): ?>
+                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'centerInList')) ?></li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+
 		
 
-            <?php /*if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); */?>
-			
+            <?php if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
+            </ul>
 			<? endif; ?>
 			
 		</div>

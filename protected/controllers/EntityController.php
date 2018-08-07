@@ -154,11 +154,11 @@ class EntityController extends MyController {
 		}
 
         $lang = Yii::app()->getRequest()->getParam('lang');
-        $data = FilterHelper::getFiltersData($entity, $cid);
+        /*$data = FilterHelper::getFiltersData($entity, $cid);
         $data['lang_sel'] = $lang;
-        $filter_data = $data;
+        $filter_data = $data;*/
 
-		/*$data = FilterHelper::getFiltersData($entity, $cid);
+		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
             FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
             $data['lang_sel'] = $lang;
@@ -183,12 +183,12 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
             $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail, $lang);
-        }*/
+        }
 
-        /*$paginatorInfo->itemCount = $totalItems;
+        $paginatorInfo->itemCount = $totalItems;
 
         // Добавляем к товарам инфу сколько уже содержится в корзине
-        $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);*/
+        $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
 
         if (isset(Yii::app()->session['last_e'])
             && (Yii::app()->session['last_e'] != '')
