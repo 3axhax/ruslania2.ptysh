@@ -75,9 +75,12 @@ function show_result_count(url) {
 }
 
 //Вывод результата фильтра
-function show_items(url) {
+function show_items(url, page) {
     if (url === undefined) {
         url = '/ru/site/ggfilter/';
+    }
+    if (page === undefined) {
+        page = 0;
     }
     var create_url;
     create_url = url +
@@ -91,12 +94,16 @@ function show_items(url) {
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
-        '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '');
+        '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '') +
+        '/page/' + page;
     var bindings = [];
     var i = 0;
 
     bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+    items_content = $('.span10 .items');
+    //items_content = $('.span10.listgoods');
 
     $.ajax({
         url: create_url,
@@ -110,12 +117,14 @@ function show_items(url) {
             subtitlesVideo : $('#subtitlesVideo').val(),
         },
         beforeSend: function(){
-            $('.span10.listgoods').html('Загрузка...');
+            console.log('beforeSend');
+            items_content.html('Загрузка...');
         },
         success: function (data) {
-            $('.span10.listgoods').html(data);
+            console.log('success');
+            items_content.html(data);
             $('.box_select_result_count').hide(1);
-            $(window).scrollTop(0);
+            //$(window).scrollTop(0);
         },
         error: function (msg) {
             console.log (msg);

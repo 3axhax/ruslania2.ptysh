@@ -70,7 +70,7 @@
         <?php endif;?>
 
         <!--Кнопки управления-->
-        <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter')?>')">
+        <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
     </div>
@@ -83,10 +83,10 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <div class="text">
-                <input type="hidden" name="izda" value="<?=($izda = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['izda'] : 0?>">
-                <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($izda) ? 'x' : ''?>"
+                <input type="hidden" name="izda" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
+                <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
                        placeholder="Все" autocomplete="off"
-                       <?= ($izda) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
+                       <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <ul class="search_result search_result_izda"></ul>
             <script>
@@ -212,4 +212,8 @@
 </form>
 <script>
     show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>');
+    $(document).ready(function () {
+        show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>);
+    });
+
 </script>

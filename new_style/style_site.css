@@ -807,6 +807,13 @@ h1.titlename {
 
 }
 
+.listgoods ul.pager li {
+
+    border: none;
+    margin-top: 10px;
+
+}
+
 .listgoods ul.items li .span1 {
     width: 160px;
     text-align: center;

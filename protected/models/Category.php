@@ -618,7 +618,7 @@ class Category {
         $criteria = $dp->getCriteria();
         $criteria->order = SortOptions::GetSQL($sort, '', $entity);
         $criteria->limit = Yii::app()->params['ItemsPerPage'];
-        $criteria->offset = $page * $criteria->limit;
+        $criteria->offset = 0;
 
        /* if ($_GET['sort']) {
             $sort = $_GET['sort'];

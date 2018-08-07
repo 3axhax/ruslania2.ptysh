@@ -1066,18 +1066,22 @@ class SiteController extends MyController {
         $data = FilterHelper::getFiltersData($entity, $cid);
 
         $cat = new Category();
-        $items = $cat->result_filter($data);
 
         $totalItems = $cat->count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
-        /*$http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
-        $par = substr($http, stripos($http, '?'));
-        $http = str_replace($par, '', $http);
-        $paginator->route = Yii::app()->createUrl($http);
-        if (substr_count($http, '?') > 0) $paginator->route = substr($paginator->route, 0, -1);*/
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
         $paginator->itemCount = $totalItems;
 
+        $entity = $data['entity'];
+        $cid = $data['cid'];
+
+        if ($_GET['sort']) $sort = $_GET['sort'];
+        else {
+            $sort = $data['sort'];
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);
+        $items = $cat->getFilterResult($entity, $cid, $sort, $paginator->currentPage);
 
         $path = $cat->GetCategoryPath($entity, $cid);
         $selectedCategory = array_pop($path);
