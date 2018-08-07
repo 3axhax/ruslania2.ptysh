@@ -86,11 +86,11 @@ function show_items(url) {
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
         '/avail/'+(( avail = $('form.filter select[name=avail]').val()) ? avail : '1')+
         '/ymin/'+(( ymin = $('form.filter input.year_inp_mini').val()) ? ymin : '0')+
-        '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '3000')+
+        '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '0')+
         '/izda/'+(( izda = $('form.filter input[name=izda]').val()) ? izda : '0')+
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
-        '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
+        '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
         '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '');
     var bindings = [];
     var i = 0;

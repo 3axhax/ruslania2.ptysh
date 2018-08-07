@@ -39,13 +39,15 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
             <div class="prod-filter__row">
-                <input type="text" value="<?= ($min_p = (isset($filters['max-min'][2]) && $filters['max-min'][2] != '')) ? $filters['max-min'][2] : '' ?>"
+                <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
-                       placeholder="5.0" name="min_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? $filters['max-min'][2] : ''?>"
+                       name="min_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
-                <input type="text" value="<?= ($max_p = (isset($filters['max-min'][3]) && $filters['max-min'][3] != '')) ? $filters['max-min'][3] : '' ?>"
+                <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
-                       placeholder="500.0" name="max_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? $filters['max-min'][3] : ''?>"
+                       name="max_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
             </div>
         </div>
 
@@ -54,13 +56,15 @@
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
                 <div class="prod-filter__row">
-                    <input type="text" value="<?= ($min_y = (isset($filters['max-min'][0]) && $filters['max-min'][0] != '')) ? $filters['max-min'][0] : '' ?>"
+                    <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
                            name="ymin" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
-                           placeholder="1900" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min'][0]) && $filters['max-min'][0] != '') ? $filters['max-min'][0] : ''?>"
+                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
-                    <input type="text" value="<?= ($max_y = (isset($filters['max-min'][1]) && $filters['max-min'][1] != '')) ? $filters['max-min'][1] : '' ?>"
+                    <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
                            name="ymax" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
-                           placeholder="2018" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min'][1]) && $filters['max-min'][1] != '') ? $filters['max-min'][1] : ''?>"
+                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
             </div>
         <?php endif;?>
