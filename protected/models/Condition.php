@@ -8,7 +8,7 @@ class Condition {
 	private $_onlySupportLanguage = false;
 	private $_languageCondition = array();
 
-	private $_isDiscount = array(
+	protected $_isDiscount = array(
 		'category'=>array(),
 		'series'=>array(),
 		'publisher'=>array(),
@@ -106,7 +106,7 @@ class Condition {
 		}
 	}
 
-	private function _price() {
+	protected function _price() {
 		//TODO:: цена для PERIODIC как то хитро сделална. Буду делать позжее.
 		if ($this->_entity == Entity::PERIODIC) return;
 
@@ -122,52 +122,7 @@ class Condition {
 			$rates = Currency::GetRates();
 			$rate = $rates[Yii::app()->currency];
 
-			$this->_fillDiscounts();
-			$allPercent = $this->_isDiscount['user'];
-			if (!empty($this->_isDiscount['entity'])) $allPercent = max($this->_isDiscount['user'], $this->_isDiscount['entity'], $this->_isDiscount['ruslania']);
-			$categoryPercent = $this->_getSqlBruttoCategory();
-			$seriesPercent = $this->_getSqlBrutto('series', 'series_id');
-			$publisherPercent = $this->_getSqlBrutto('publisher', 'publisher_id');
-			$yearPercent = $this->_getSqlBrutto('year', 'year');
-
-			$percents = array();
-			if (!empty($allPercent)) $percents[] = $allPercent;
-			if (!empty($categoryPercent)) $percents[] = $categoryPercent;
-			if (!empty($seriesPercent)) $percents[] = $seriesPercent;
-			if (!empty($publisherPercent)) $percents[] = $publisherPercent;
-			if (!empty($yearPercent)) $percents[] = $yearPercent;
-
-			$sqlPercent = '';
-			//что то ломает придумывать алгоритм
-			switch (count($percents)) {
-				case 1: $sqlPercent = $percents[0]; break;
-				case 2: $sqlPercent = 'if(' . $percents[0] . ' > ' . $percents[1] . ', ' . $percents[0] . ', ' . $percents[1] . ')'; break;
-				case 3: $sqlPercent = 'if(' . $percents[0] . ' > ' . $percents[1] . ', if(' . $percents[0] . ' > ' . $percents[2] . ', ' . $percents[0] . ', ' . $percents[2] . '), if(' . $percents[1]  . ' > ' . $percents[2] . ', ' . $percents[1] . ', ' . $percents[2] . '))'; break;
-				case 4: $sqlPercent = ''.
-					'case '.
-						'when (' . $percents[0] . ' >= ' . $percents[1] . ') and (' . $percents[0] . ' >= ' . $percents[2] . ') and (' . $percents[0] . ' >= ' . $percents[3] . ') then ' . $percents[0] . ' '.
-						'when (' . $percents[1] . ' >= ' . $percents[0] . ') and (' . $percents[1] . ' >= ' . $percents[2] . ') and (' . $percents[1] . ' >= ' . $percents[3] . ') then ' . $percents[1] . ' '.
-						'when (' . $percents[2] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') then ' . $percents[2] . ' '.
-					'else ' . $percents[3] . ' end '.
-				'';
-					break;
-				case 5: $sqlPercent = ''.
-					'case '.
-						'when (' . $percents[0] . ' >= ' . $percents[1] . ') and (' . $percents[0] . ' >= ' . $percents[2] . ') and (' . $percents[0] . ' >= ' . $percents[3] . ') and (' . $percents[0] . ' >= ' . $percents[4] . ') then ' . $percents[0] . ' '.
-						'when (' . $percents[1] . ' >= ' . $percents[0] . ') and (' . $percents[1] . ' >= ' . $percents[2] . ') and (' . $percents[1] . ' >= ' . $percents[3] . ') and (' . $percents[1] . ' >= ' . $percents[4] . ') then ' . $percents[1] . ' '.
-						'when (' . $percents[2] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') and (' . $percents[2] . ' >= ' . $percents[4] . ') then ' . $percents[2] . ' '.
-						'when (' . $percents[3] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') and (' . $percents[3] . ' >= ' . $percents[4] . ') then ' . $percents[2] . ' '.
-					'else ' . $percents[4] . ' end '.
-				'';
-					break;
-			}
-
-			if (empty($sqlPercent)) $brutto = 'if((ifnull(t.discount, 0) > 0) and (t.brutto > ifnull(t.discount, 0)), t.discount, t.brutto)';
-			else {
-				$brutto = '(t.brutto - (' . $sqlPercent . ')*t.brutto/100)';
-				$brutto = 'if((ifnull(t.discount, 0) > 0) and (' . $brutto . ' > t.discount), t.discount, ' . $brutto . ')';
-			}
-
+			$brutto = $this->getBruttoWithDiscount();
 
 			if (empty($bMin)) $this->_condition['brutto'] = '(' . $brutto . ' <= ' . $bMax / $rate . ')';
 			elseif (empty($bMax)) $this->_condition['brutto'] = '(' . $brutto . ' >= ' . $bMin / $rate . ')';
@@ -303,8 +258,11 @@ class Condition {
 		}
 	}
 
-	private function _fillDiscounts() {
-		$this->_isDiscount['user'] = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
+	private function _fillDiscounts($usePersonDiscount) {
+		if ($usePersonDiscount) {
+			$this->_isDiscount['user'] = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
+		}
+		else $this->_isDiscount['user'] = 0;
 		$maxDiscount = $this->_isDiscount['user'];
 		$dateStart = $dateEnd = date('Y-m-d');
 //		$dateEnd = '2017-06-01';
@@ -431,6 +389,55 @@ class Condition {
 		}
 		else $result = '';
 		return $result;
+	}
+
+	function getBruttoWithDiscount($usePersonDiscount = true) {
+		$this->_fillDiscounts($usePersonDiscount);
+		$allPercent = $this->_isDiscount['user'];
+		if (!empty($this->_isDiscount['entity'])) $allPercent = max($this->_isDiscount['user'], $this->_isDiscount['entity'], $this->_isDiscount['ruslania']);
+		$categoryPercent = $this->_getSqlBruttoCategory();
+		$seriesPercent = $this->_getSqlBrutto('series', 'series_id');
+		$publisherPercent = $this->_getSqlBrutto('publisher', 'publisher_id');
+		$yearPercent = $this->_getSqlBrutto('year', 'year');
+
+		$percents = array();
+		if (!empty($allPercent)) $percents[] = $allPercent;
+		if (!empty($categoryPercent)) $percents[] = $categoryPercent;
+		if (!empty($seriesPercent)) $percents[] = $seriesPercent;
+		if (!empty($publisherPercent)) $percents[] = $publisherPercent;
+		if (!empty($yearPercent)) $percents[] = $yearPercent;
+
+		$sqlPercent = '';
+		//что то ломает придумывать алгоритм
+		switch (count($percents)) {
+			case 1: $sqlPercent = $percents[0]; break;
+			case 2: $sqlPercent = 'if(' . $percents[0] . ' > ' . $percents[1] . ', ' . $percents[0] . ', ' . $percents[1] . ')'; break;
+			case 3: $sqlPercent = 'if(' . $percents[0] . ' > ' . $percents[1] . ', if(' . $percents[0] . ' > ' . $percents[2] . ', ' . $percents[0] . ', ' . $percents[2] . '), if(' . $percents[1]  . ' > ' . $percents[2] . ', ' . $percents[1] . ', ' . $percents[2] . '))'; break;
+			case 4: $sqlPercent = ''.
+				'case '.
+				'when (' . $percents[0] . ' >= ' . $percents[1] . ') and (' . $percents[0] . ' >= ' . $percents[2] . ') and (' . $percents[0] . ' >= ' . $percents[3] . ') then ' . $percents[0] . ' '.
+				'when (' . $percents[1] . ' >= ' . $percents[0] . ') and (' . $percents[1] . ' >= ' . $percents[2] . ') and (' . $percents[1] . ' >= ' . $percents[3] . ') then ' . $percents[1] . ' '.
+				'when (' . $percents[2] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') then ' . $percents[2] . ' '.
+				'else ' . $percents[3] . ' end '.
+				'';
+				break;
+			case 5: $sqlPercent = ''.
+				'case '.
+				'when (' . $percents[0] . ' >= ' . $percents[1] . ') and (' . $percents[0] . ' >= ' . $percents[2] . ') and (' . $percents[0] . ' >= ' . $percents[3] . ') and (' . $percents[0] . ' >= ' . $percents[4] . ') then ' . $percents[0] . ' '.
+				'when (' . $percents[1] . ' >= ' . $percents[0] . ') and (' . $percents[1] . ' >= ' . $percents[2] . ') and (' . $percents[1] . ' >= ' . $percents[3] . ') and (' . $percents[1] . ' >= ' . $percents[4] . ') then ' . $percents[1] . ' '.
+				'when (' . $percents[2] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') and (' . $percents[2] . ' >= ' . $percents[4] . ') then ' . $percents[2] . ' '.
+				'when (' . $percents[3] . ' >= ' . $percents[1] . ') and (' . $percents[2] . ' >= ' . $percents[0] . ') and (' . $percents[2] . ' >= ' . $percents[3] . ') and (' . $percents[3] . ' >= ' . $percents[4] . ') then ' . $percents[2] . ' '.
+				'else ' . $percents[4] . ' end '.
+				'';
+				break;
+		}
+
+		if (empty($sqlPercent)) $brutto = 'if((ifnull(t.discount, 0) > 0) and (t.brutto > ifnull(t.discount, 0)), t.discount, t.brutto)';
+		else {
+			$brutto = '(t.brutto - (' . $sqlPercent . ')*t.brutto/100)';
+			$brutto = 'if((ifnull(t.discount, 0) > 0) and (' . $brutto . ' > t.discount), t.discount, ' . $brutto . ')';
+		}
+		return $brutto;
 	}
 
 }

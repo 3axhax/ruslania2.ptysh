@@ -40,6 +40,36 @@ class Category {
     }
 
     function getFilterSlider($entity, $cid) {
+        $sql = 'select settings from _support_category_data where (entity = :entity) and (category_id = :cid) limit 1';
+        $settings = Yii::app()->db->createCommand($sql)->queryScalar(array(':entity'=>$entity, ':cid'=>$cid));
+        if (empty($settings)) return null;
+
+        $settings = unserialize($settings);
+        $result = array();
+        $result[] = empty($settings['year_min'])?0:$settings['year_min'];
+        $result[] = empty($settings['year_max'])?0:$settings['year_max'];
+        $personDiscount = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
+        if ($personDiscount > 0) {
+            $min = empty($settings['cost_min'])?0:$settings['cost_min'];
+            $max = empty($settings['cost_max'])?0:$settings['cost_max'];
+            $min = $min - $personDiscount*$min/100;
+            $max = $max - $personDiscount*$max/100;
+            $min = min($min, empty($settings['cost_min_discount'])?0:$settings['cost_min_discount']);
+            $max = max($max, empty($settings['cost_max_discount'])?0:$settings['cost_max_discount']);
+        }
+        else {
+            $min = empty($settings['cost_min_discount'])?0:$settings['cost_min_discount'];
+            $max = empty($settings['cost_max_discount'])?0:$settings['cost_max_discount'];
+        }
+        $rates = Currency::GetRates();
+        $rate = $rates[Yii::app()->currency];
+
+        $result[] = $min*$rate;
+        $result[] = $max*$rate;
+        return $result;
+
+
+
         if (!Entity::checkEntityParam($entity, 'years')) return null;
 
         $cid = (int) $cid;
