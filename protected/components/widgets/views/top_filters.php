@@ -41,12 +41,12 @@
             <div class="prod-filter__row">
                 <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
-                       placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? $filters['max-min'][2] : ''?>"
+                       placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? round($filters['max-min'][2], 2) : ''?>"
                        name="min_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
                 <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
-                       placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? $filters['max-min'][3] : ''?>"
+                       placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? round($filters['max-min'][3], 2) : ''?>"
                        name="max_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
             </div>
         </div>
