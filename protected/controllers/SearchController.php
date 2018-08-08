@@ -266,7 +266,6 @@ class SearchController extends MyController {
 		}
 
 		$pre = SearchHelper::BuildKeywords($query, $index);
-		Debug::staticRun(array($pre));
 		$result = array();
 		foreach ($pre['Queries'] as $query) {
 			if (empty($query)) continue;
@@ -304,7 +303,6 @@ class SearchController extends MyController {
 			$oneWordQuery = preg_replace("/\d/", '', $oneWordQuery);
 			if (!empty($oneWordQuery)) {
 				$oneWordQuery = '^' . $oneWordQuery . '*';
-				Debug::staticRun(array($oneWordQuery));
 				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
 			}
 
@@ -330,7 +328,6 @@ class SearchController extends MyController {
 						'order by field(author_id, ' . implode(',',array_keys($ids)) . ') '.
 						'limit ' . ($limit - count($authorsWithItems)) .
 					';';
-					Debug::staticRun(array($sql));
 					foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $author) {
 						$authorsWithItems[$ids[$author]] = $result[$ids[$author]];
 					}
