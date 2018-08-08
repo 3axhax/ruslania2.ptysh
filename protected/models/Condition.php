@@ -7,6 +7,7 @@ class Condition {
 	private $_condition = array(), $_join = array();
 	private $_onlySupportLanguage = false;
 	private $_languageCondition = array();
+	private $_categoryData = null;
 
 	protected $_isDiscount = array(
 		'category'=>array(),
@@ -117,7 +118,13 @@ class Condition {
 			$bMin = $bMax;
 			$bMax = $buf;
 		}
-		//TODO:: добавить конвертацию валюты
+
+		$priceInterval = $this->getPriceInterval();
+		//если минимальное в разделе больше написанного пользователем, то условие не делаю
+		if (!empty($priceInterval['min'])&&($priceInterval['min'] >= $bMin)) $bMin = 0;
+		//если максимальное в разделе меньше написанного пользователем, то условие не делаю
+		if (!empty($priceInterval['max'])&&($priceInterval['max'] <= $bMax)) $bMax = 0;
+
 		if (!empty($bMin)||!empty($bMax)) {
 			$rates = Currency::GetRates();
 			$rate = $rates[Yii::app()->currency];
@@ -125,9 +132,12 @@ class Condition {
 			$brutto = $this->getBruttoWithDiscount();
 
 			if (empty($bMin)) $this->_condition['brutto'] = '(' . $brutto . ' <= ' . $bMax / $rate . ')';
-			elseif (empty($bMax)) $this->_condition['brutto'] = '(' . $brutto . ' >= ' . $bMin / $rate . ')';
-			elseif ($bMin == $bMax) $this->_condition['brutto'] = '(' . $brutto . ' = ' . $bMin / $rate . ')';
-			else $this->_condition['brutto'] = '(' . $brutto . ' between ' . $bMin / $rate . ' and ' . $bMax / $rate . ')';
+			//elseif (empty($bMax)) $this->_condition['brutto'] = '(' . $brutto . ' >= ' . $bMin / $rate . ')';
+			//если пользователь задал нижнюю границу в $4, товар стоил $5, после скидки стал $3, то ему будет интересно увидеть, что возможно, он сможет купить что-то дешевле чем оно стоило.
+			elseif (empty($bMax)) $this->_condition['brutto'] = '(t.brutto >= ' . $bMin / $rate . ')';
+			elseif ($bMin == $bMax) $this->_condition['brutto'] = '((' . $brutto . ' = ' . $bMin / $rate . ') or (t.brutto = ' . $bMin / $rate . '))';
+			//else $this->_condition['brutto'] = '(' . $brutto . ' between ' . $bMin / $rate . ' and ' . $bMax / $rate . ')';
+			else $this->_condition['brutto'] = '(t.brutto >= ' . $bMin / $rate . ') and (' . $brutto . ' <= ' . $bMax / $rate . ')';
 		}
 	}
 
@@ -440,4 +450,61 @@ class Condition {
 		return $brutto;
 	}
 
+	function getPriceInterval($useRate = true) {
+		$settings = $this->_getCategoryData();
+
+		$result = array();
+		$personDiscount = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
+		if ($personDiscount > 0) {
+			$min = empty($settings['cost_min'])?0:$settings['cost_min'];
+			$max = empty($settings['cost_max'])?0:$settings['cost_max'];
+			$min = $min - $personDiscount*$min/100;
+			$max = $max - $personDiscount*$max/100;
+			$min = min($min, empty($settings['cost_min_discount'])?0:$settings['cost_min_discount']);
+			$max = max($max, empty($settings['cost_max_discount'])?0:$settings['cost_max_discount']);
+		}
+		else {
+			$min = empty($settings['cost_min_discount'])?0:$settings['cost_min_discount'];
+			$max = empty($settings['cost_max_discount'])?0:$settings['cost_max_discount'];
+		}
+		if ($useRate) {
+			$rates = Currency::GetRates();
+			$rate = $rates[Yii::app()->currency];
+			$min = $min*$rate;
+			$max = $max*$rate;
+		}
+		$result['min'] = $min;
+		$result['max'] = $max;
+		return $result;
+	}
+
+	function getYearInterval() {
+		$settings = $this->_getCategoryData();
+		$result = array();
+		if (!empty($settings['year_min'])) $result['min'] = $settings['year_min'];
+		if (!empty($settings['year_max'])) $result['max'] = $settings['year_max'];
+		return $result;
+	}
+
+	/**
+	 * на данный момент имеются следующие данные раздела
+	 * array(
+	year_min минимальный год раздела,
+	year_max максимальный год раздела,
+	cost_min мининальная цена раздела,
+	cost_max максимальная цена раздела,
+	cost_min_discount мининальная цена раздела с учетом всех скидок
+	cost_max_discount максимальная цена раздела с учетом всех скидок
+	 * )
+	 * @return array
+	 */
+	private function _getCategoryData() {
+		if ($this->_categoryData === null) {
+			$sql = 'select settings from _support_category_data where (entity = :entity) and (category_id = :cid) limit 1';
+			$settings = Yii::app()->db->createCommand($sql)->queryScalar(array(':entity'=>$this->_entity, ':cid'=>$this->_cid));
+			if (empty($settings)) $this->_categoryData = array();
+			else $this->_categoryData = unserialize($settings);
+		}
+		return $this->_categoryData;
+	}
 }
