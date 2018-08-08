@@ -1,4 +1,4 @@
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
 <div class="container content_books">
 <div class="row">
@@ -33,14 +33,14 @@
 				
             </div>
             <ul class="items">
-                <?php /*foreach ($products as $i) : ?>
+                <?php foreach ($products as $i) : ?>
                     <li>
 						<?php //$i['status'] = Product::GetStatusProduct($i['entity'], $i['id'])?>
                         <?php $this->renderPartial('/entity/_common_item_2', array('item' => $i,
                                                                                  'isList' => true,
                                                                                  'entity' => $i['entity'])); ?>
                     </li>
-                <?php endforeach;*/ ?>
+                <?php endforeach; ?>
             </ul>
 
             <?php if (count($products) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>

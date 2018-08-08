@@ -16,20 +16,32 @@ class SearchController extends MyController {
 			return;
 		}
 
+		$list = array();
+		$isCode = false;
+		if ($code = $this->isCode($q)) {
+			$list = $this->getByCode($code, $q);
+			if (!empty($list)) $isCode = true;
+		}
+
 		$page = $this->_getNumPage();
+		$abstractInfo = array();
+		$didYouMean = array();
+		if (!$isCode) {
+			$abstractInfo = $this->getEntitys($q);
+			$didYouMean = $this->getDidYouMean($q);
+			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+			$list = $this->inDescription($list, $q);
+		}
 
-//		$this->getEntitys($q);
-//		$this->getDidYouMean($q);
-//		$this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
-
-		$abstractInfo = $this->getEntitys($q);
-
-		$paginatorInfo = new CPagination(array_sum($abstractInfo));
+		if (empty($abstractInfo)) $paginatorInfo = new CPagination(count($list));
+		else $paginatorInfo = new CPagination(array_sum($abstractInfo));
 		$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
 
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
-		$this->render('list', array('q' => $q, 'items' => $this->getDidYouMean($q),
-			'products' => $this->getList($q, $page, Yii::app()->params['ItemsPerPage']),
+		$this->render('list', array(
+			'q' => $q,
+			'items' => $didYouMean,
+			'products' => $list,
 			'abstractInfo'=>$abstractInfo,
 			'paginatorInfo' => $paginatorInfo));
 	}
@@ -39,10 +51,24 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
+		if (empty($code)&&!(preg_match("/[^a-z0-9-]/i", $q))) {
+			$code = 'catalogue';
+		}
 		return $code;
 	}
 
 	function getByCode($code, $q) {
+		if ($code == 'catalogue') {
+			$sql = 'select * from music_catalog where (catalogue = :q) limit 1';
+			$item = Yii::app()->db->createCommand($sql)->queryRow(true, array(':q'=>$q));
+			if (!empty($item)) {
+				$item['is_product'] = true;
+				$item['entity'] = 22;
+				return array('22-' . $item['id']=>$item);
+			}
+			return array();
+		}
+
 		$q = preg_replace("/\D/iu", '', $q);
 		$this->_search->SetFilter($code, array($q));
 		$find = $this->_search->query('', 'products');
@@ -234,37 +260,57 @@ class SearchController extends MyController {
 	}
 
 	private function _queryIndex($query, $index, $limit) {
+		if (!preg_match("/[^\w ,.]/ui", $query)) {
+			$result = $this->_querySimple($query, $index, $limit);
+			if (!empty($result)) return $result;
+		}
+
 		$pre = SearchHelper::BuildKeywords($query, $index);
+		Debug::staticRun(array($pre));
 		$result = array();
 		foreach ($pre['Queries'] as $query) {
 			if (empty($query)) continue;
 
-			$this->_search->resetCriteria();
-			if ($limit > 0) $this->_search->SetLimits(0, $limit);
-			if (!empty($filters)) {
-				foreach ($filters as $name => $value) {
-					$this->_search->SetFilter($name, array($value));
-				}
-			}
-			$res = $this->_search->query($query, $index);
+			$result = $this->_querySimple($query, $index, $limit);
+			if (!empty($result)) break;
+		}
+		return $result;
+	}
 
-			if ($res['total_found'] > 0) {
-				foreach ($res['matches'] as $key => $match) {
-					$d = array('key' => $key);
-					$attrs = $match['attrs'];
-					foreach ($attrs as $name => $value) {
-						$d[$name] = $value;
-					}
-					$result[$key] = $d;
+	private function _querySimple($query, $index, $limit) {
+		$this->_search->resetCriteria();
+		if ($limit > 0) $this->_search->SetLimits(0, $limit);
+		$res = $this->_search->query($query, $index);
+
+		$result = array();
+		if ($res['total_found'] > 0) {
+			foreach ($res['matches'] as $key => $match) {
+				$d = array('key' => $key);
+				$attrs = $match['attrs'];
+				foreach ($attrs as $name => $value) {
+					$d[$name] = $value;
 				}
-				break; // если нашли по какому-то запросу, то ниже уже не идем
+				$result[$key] = $d;
 			}
 		}
 		return $result;
 	}
 
 	protected function _getAuthors($query) {
-		$result = $this->_queryIndex($query, 'authors', 0);
+		$result = array();
+		$query = trim($query);
+		if (!mb_strpos($query, ' ', null, 'utf-8')) {
+			$oneWordQuery = preg_replace("/\W/", '', $query);
+			$oneWordQuery = preg_replace("/\d/", '', $oneWordQuery);
+			if (!empty($oneWordQuery)) {
+				$oneWordQuery = '^' . $oneWordQuery . '*';
+				Debug::staticRun(array($oneWordQuery));
+				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
+			}
+
+		}
+		$result = array_merge($result, $this->_queryIndex($query, 'authors', 0));
+
 		if (empty($result)) return array();
 
 		$limit = 3;
@@ -284,6 +330,7 @@ class SearchController extends MyController {
 						'order by field(author_id, ' . implode(',',array_keys($ids)) . ') '.
 						'limit ' . ($limit - count($authorsWithItems)) .
 					';';
+					Debug::staticRun(array($sql));
 					foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $author) {
 						$authorsWithItems[$ids[$author]] = $result[$ids[$author]];
 					}

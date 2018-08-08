@@ -931,7 +931,7 @@ else $act = array('', '');
                     <? if (!in_array('cart',$url)) : ?>
 
                     <div class="span10">
-                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
+                        <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch">
                             <div class="search_box">
                                 <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
