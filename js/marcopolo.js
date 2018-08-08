@@ -484,7 +484,8 @@
 
             // Focus on the input to start the request and enable keyboard
             // navigation (only available when the input has focus).
-            $input.focus();
+            //$input.focus();
+            this._request($input.val());
         },
 
         // Select an item from the results list.
