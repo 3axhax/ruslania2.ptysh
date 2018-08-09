@@ -47,35 +47,42 @@ class SearchController extends MyController {
 	}
 
 	function isCode($q) {
-		$code = '';
-		if (ProductHelper::IsShelfId($q)) $code = 'stock_id';
-		if (ProductHelper::IsEan($q)) $code = 'eancode';
-		if (ProductHelper::IsIsbn($q)) $code = 'isbnnum';
-		if (empty($code)&&!(preg_match("/[^a-z0-9-]/i", $q))) {
-			$code = 'catalogue';
+		$code = array();
+		if (ProductHelper::IsShelfId($q)) $code[] = 'stock_id';
+		if (ProductHelper::IsEan($q)) $code[] = 'eancode';
+		if (ProductHelper::IsIsbn($q)) $code[] = 'isbnnum';
+		if (!preg_match("/[^a-z0-9-]/i", $q)) {
+			$code[] = 'catalogue';
 		}
 		return $code;
 	}
 
 	function getByCode($code, $q) {
-		if ($code == 'catalogue') {
-			$sql = 'select * from music_catalog where (catalogue = :q) limit 1';
-			$item = Yii::app()->db->createCommand($sql)->queryRow(true, array(':q'=>$q));
-			if (!empty($item)) {
-				$item['is_product'] = true;
-				$item['entity'] = 22;
-				return array('22-' . $item['id']=>$item);
+		foreach ($code as $codeName) {
+			switch ($codeName) {
+				case 'catalogue':
+					$sql = 'select * from music_catalog where (catalogue = :q) limit 1';
+					$item = Yii::app()->db->createCommand($sql)->queryRow(true, array(':q'=>$q));
+					if (!empty($item)) {
+						$item['is_product'] = true;
+						$item['entity'] = 22;
+						return array('22-' . $item['id']=>$item);
+					}
+					break;
+				default:
+					$q = preg_replace("/\D/iu", '', $q);
+					$this->_search->resetCriteria();
+					$this->_search->SetFilter($codeName, array($q));
+					$find = $this->_search->query('', 'products');
+					if (!empty($find)) {
+						$product = SearchHelper::ProcessProducts($find);
+						return SearchHelper::ProcessProducts2($product, false);
+					}
+					break;
 			}
-			return array();
 		}
+		return array();
 
-		$q = preg_replace("/\D/iu", '', $q);
-		$this->_search->SetFilter($code, array($q));
-		$find = $this->_search->query('', 'products');
-		if (empty($find)) return array();
-
-		$product = SearchHelper::ProcessProducts($find);
-		return SearchHelper::ProcessProducts2($product, false);
 	}
 
 	function getEntitys($query) {
