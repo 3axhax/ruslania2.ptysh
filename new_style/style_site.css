@@ -2632,7 +2632,7 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
     border-right: 2px inset;
 }
 .select_simulator .ss_selected {
-    width: 250px;
+    width: 280px;
     background-color: #ffffff;
     border: 1px solid #cccccc;
     height: 30px;
@@ -3047,4 +3047,13 @@ div.cabinet div.row div.span10 {
 
 div.more_goods {
     margin-bottom: 50px;
+}
+
+div.sortbox {
+    display: flex;
+}
+
+div.sort_lable {
+    float: left;
+    margin: auto;
 }
