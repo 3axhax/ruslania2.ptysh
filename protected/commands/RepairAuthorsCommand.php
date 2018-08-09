@@ -244,7 +244,7 @@ class RepairAuthorsCommand extends CConsoleCommand {
 						'update ' . $this->_table . ' t '.
 							'left join video_actors tIA on (tIA.person_id = t.id) '.
 							'left join video_catalog tI on (tI.id = tIA.video_id) AND (tI.avail_for_order = 1) '.
-						'set is_' . $entity . '_actor = if(tIA.id is null, 0, 1) '.
+						'set is_' . $entity . '_actor = if(tI.id is null, 0, 1) '.
 					'';
 					$this->_query($sql);
 					break;
