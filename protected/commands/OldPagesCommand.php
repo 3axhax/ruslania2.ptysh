@@ -2,6 +2,14 @@
 /*Created by Кирилл (11.07.2018 19:20)*/
 ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php oldpages
+ *
+ *
+ *
+ * НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ ROUTE ДЛЯ СТАРЫХ АДРЕСОВ \ruslania2.ptysh\protected\config\command-local.php
+ *
+ *
+ *
+ *
  * Class RepairAuthorsCommand
  */
 define('OLD_PAGES', 1);
@@ -57,6 +65,20 @@ class OldPagesCommand extends CConsoleCommand {
 			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
+		$urlParams = array(
+			'entity' => Entity::GetUrlKey($entity),
+		);
+		foreach ($langs as $lang) {
+			$insertParams = array(
+				':entity' => $entity,
+				':route' => 'entity/list',
+				':id' => 0,
+				':path' => Yii::app()->createUrl('entity/list', $urlParams),
+				':lang' => $lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+
 	}
 
 	private function _itemPages($entity, $params, CDbCommand $pdo) {
@@ -124,7 +146,7 @@ class OldPagesCommand extends CConsoleCommand {
 
 	private function _sqlCategorys($entity, $table, $step) {
 		return ''.
-			'select t.id, t.title_ru, t.title_rut, t.title_en, t.title_fi, t.title_de, t.title_fr, t.title_es, t.title_se '.
+			'select t.id, t.title_en title_ru, t.title_en title_rut, t.title_en, t.title_en title_fi, t.title_en title_de, t.title_en title_fr, t.title_en title_es, t.title_en title_se '.
 			'from `' . $table . '` t ' .
 				'join ('.
 					'select tI.id '.
@@ -162,6 +184,20 @@ class OldPagesCommand extends CConsoleCommand {
 			echo 'all_publishers ' . ' bypublisher ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/publisherlist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/publisherlist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+
 	}
 
 	private function _seriesPages($entity, $params, CDbCommand $pdo) {
@@ -188,6 +224,19 @@ class OldPagesCommand extends CConsoleCommand {
 			unset($items);
 			echo $params['site_series_table'] . ' byseries ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
+		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/serieslist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/serieslist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
 		}
 	}
 
@@ -216,6 +265,19 @@ class OldPagesCommand extends CConsoleCommand {
 			echo $params['author_table'] . ' byauthor ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/authorlist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/authorlist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _actorsPages($entity, $params, CDbCommand $pdo) {
@@ -242,6 +304,19 @@ class OldPagesCommand extends CConsoleCommand {
 			unset($items);
 			echo 'video_actors ' . ' byactor ' . $entity . ' '  . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
+		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/actorlist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/actorlist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
 		}
 	}
 
@@ -270,6 +345,19 @@ class OldPagesCommand extends CConsoleCommand {
 			echo $params['performer_table'] . ' byperformer ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/performerlist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/performerlist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _directorsPages($entity, $params, CDbCommand $pdo) {
@@ -297,6 +385,19 @@ class OldPagesCommand extends CConsoleCommand {
 			echo 'video_directors ' . ' bydirector ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 			if ($itemCounts < $this->_counts) break;
 		}
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/directorlist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/directorlist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _bindingPages($entity, $params, CDbCommand $pdo) {
@@ -322,6 +423,19 @@ class OldPagesCommand extends CConsoleCommand {
 		}
 		unset($items);
 		echo $params['binding_table'] . ' bybinding ' . $entity . ' ' . "\n";
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/bindingslist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/bindingslist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _audiostreamsPages($entity, $params, CDbCommand $pdo) {
@@ -346,6 +460,19 @@ class OldPagesCommand extends CConsoleCommand {
 		}
 		unset($items);
 		echo "video_audiostreamlist\n";
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/audiostreamslist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/audiostreamslist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _subtitlesPages($entity, $params, CDbCommand $pdo) {
@@ -370,6 +497,19 @@ class OldPagesCommand extends CConsoleCommand {
 		}
 		unset($items);
 		echo "video_creditslist\n";
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/subtitleslist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/subtitleslist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 	private function _mediaPages($entity, $params, CDbCommand $pdo) {
@@ -391,6 +531,17 @@ class OldPagesCommand extends CConsoleCommand {
 		}
 		unset($items);
 		echo "all_media\n";
+		$urlParams = array(
+			'entity' => Entity::GetUrlKey($entity),
+		);
+		$insertParams = array(
+			':entity'=>$entity,
+			':route'=>'entity/medialist',
+			':id'=>0,
+			':path'=>Yii::app()->createUrl('entity/medialist', $urlParams),
+			':lang'=>'ru',
+		);
+		$pdo->getPdoStatement()->execute($insertParams);
 	}
 
 	private function _magazinetypePages($entity, $params, CDbCommand $pdo) {
@@ -415,6 +566,19 @@ class OldPagesCommand extends CConsoleCommand {
 		}
 		unset($items);
 		echo "pereodics_types\n";
+		foreach ($langs as $lang) {
+			$urlParams = array(
+				'entity' => Entity::GetUrlKey($entity),
+			);
+			$insertParams = array(
+				':entity'=>$entity,
+				':route'=>'entity/typeslist',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('entity/typeslist', $urlParams),
+				':lang'=>$lang,
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
 	}
 
 

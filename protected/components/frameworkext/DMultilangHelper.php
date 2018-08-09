@@ -30,7 +30,13 @@ class DMultilangHelper
         );
 
         $showSelLang = (int) Yii::app()->getRequest()->cookies['showSelLang']->value;
-        if (!empty($_GET['sel'])) {
+        /*if (isset($_GET['sel'])&&($_GET['sel'] == 0)) {
+            $showSelLang = 0;
+            $cookie = new CHttpCookie('showSelLang', 0);
+            $cookie->expire = time() - 1;
+            Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
+        }
+        else*/if (!empty($_GET['sel'])) {
             $cookie = new CHttpCookie('showSelLang', '1');
             $cookie->expire = time() + (60*60*24*20000); // 20000 days
             Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
@@ -42,10 +48,12 @@ class DMultilangHelper
                 Yii::app()->language = $lang;
                 switch ($by) {
                     case 'byPath':
-                        $cookie = new CHttpCookie('showSelLang', '1');
-                        $cookie->expire = time() + (60*60*24*20000); // 20000 days
-                        Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
-                        $showSelLang = 1;
+                        if ((count($domains) > 1)&&!empty($domains[1])) {
+                            $cookie = new CHttpCookie('showSelLang', '1');
+                            $cookie->expire = time() + (60*60*24*20000); // 20000 days
+                            Yii::app()->getRequest()->cookies['showSelLang'] = $cookie;
+                            $showSelLang = 1;
+                        }
                         if ($paramLang !== '') {
                             //если адрес начинается с языка, то из параметров убираю language
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url);
@@ -66,14 +74,15 @@ class DMultilangHelper
                         break;
                     default:
                         if (($paramLang !== '')&&(Yii::app()->language !== $paramLang)) throw new CHttpException(404);
+                        if (empty($domains[0])) Yii::app()->getRequest()->redirect('/' . Yii::app()->language . '/',true,301);
 
-                        if ($paramLang !== '') {
+                       /* if ($paramLang !== '') {
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
                             $url = preg_replace("/\?+$/ui", '', $url);
                         }
                         $url = '/' . implode('/', array(Yii::app()->language, ltrim($url, '/')));
-                        if(!empty($showSelLang)) Yii::app()->getRequest()->redirect($url,true,301);
+                        if (!empty($showSelLang)) Yii::app()->getRequest()->redirect($url,true,301);*/
                         break;
                 }
                 return;
