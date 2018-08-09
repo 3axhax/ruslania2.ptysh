@@ -67,7 +67,6 @@ class EntityController extends MyController {
 
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
-        $filters = FilterHelper::getEnableFilters($entity, $cid);
 
         $category = new Category();
 
@@ -168,7 +167,6 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
 
-
 			$items = $cat->result_filter($data, $lang, $paginatorInfo->currentPage);
 
 			$filter_data = $data;
@@ -209,6 +207,9 @@ class EntityController extends MyController {
                 break;
             }
         }
+
+        $filters = FilterHelper::getEnableFilters($entity, $cid);
+
         $this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
