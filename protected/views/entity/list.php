@@ -24,7 +24,7 @@ $lang = Yii::app()->language;
 
             <div class="sortbox" style="float: right;">
                 <?php //if (isset($_GET['ha'])): ?>
-                    <?=$ui->item('A_NEW_FILTER_SORT_FOR')?>
+                <div class="sort_lable"><?=$ui->item('A_NEW_FILTER_SORT_FOR')?></div>
                     <?php
                     $value = SortOptions::GetDefaultSort(Yii::app()->getRequest()->getParam('sort'));
                     $this->widget('SelectSimulator', array(
