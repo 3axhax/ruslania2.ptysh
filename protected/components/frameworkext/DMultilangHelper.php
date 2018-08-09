@@ -29,7 +29,7 @@ class DMultilangHelper
             'default'=>Yii::app()->params['DefaultLanguage'],
         );
 
-        $showSelLang = Yii::app()->getRequest()->cookies['showSelLang']->value;
+        $showSelLang = (int) Yii::app()->getRequest()->cookies['showSelLang']->value;
         if (!empty($_GET['sel'])) {
             $cookie = new CHttpCookie('showSelLang', '1');
             $cookie->expire = time() + (60*60*24*20000); // 20000 days

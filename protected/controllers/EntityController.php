@@ -215,6 +215,7 @@ class EntityController extends MyController {
             'cid'=>$cid, 'filter_data' => $filter_data,
             'info' => $categoryInfo, 'filters' => $filters, 'langs'=>$langs,
             'title_cat'=>$title_cat, 'cat_id'=>$selectedCategory, 'total'=>$totalItems));
+
     }
 
     public function actionCategoryList($entity) {
@@ -1389,7 +1390,11 @@ class EntityController extends MyController {
             $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
         }
 
-        if ($canonicalPath === $path) {
+        $pathForCheck = $path;
+        if (!(int) Yii::app()->getRequest()->cookies['showSelLang']->value) {
+            $pathForCheck = '/' . Yii::app()->language . $pathForCheck;
+        }
+        if ($canonicalPath === $pathForCheck) {
             //редирект с page=1
             $countPage1 = 0;
             $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);
