@@ -67,7 +67,6 @@ class EntityController extends MyController {
 
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
-        $filters = FilterHelper::getEnableFilters($entity, $cid);
 
         $category = new Category();
 
@@ -153,17 +152,20 @@ class EntityController extends MyController {
 			$title_cat = ProductHelper::GetTitle($selectedCategory);
 		}
 
+        $lang = Yii::app()->getRequest()->getParam('lang');
+        /*$data = FilterHelper::getFiltersData($entity, $cid);
+        $data['lang_sel'] = $lang;
+        $filter_data = $data;*/
+
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            if (isset($lang) && $lang != '') {
-                FilterHelper::setOneFiltersData($entity, $cid,'langsel', $lang);
-            }
+            FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
+            $data['lang_sel'] = $lang;
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
             $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
-
 
 			$items = $cat->result_filter($data, $lang, $paginatorInfo->currentPage);
 
@@ -205,6 +207,9 @@ class EntityController extends MyController {
                 break;
             }
         }
+
+        $filters = FilterHelper::getEnableFilters($entity, $cid);
+
         $this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
@@ -236,6 +241,9 @@ class EntityController extends MyController {
         $a = new Publisher();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         if ($char !== null) $dataForPath['char'] = $char;
         $this->_checkUrl($dataForPath);
 
@@ -331,6 +339,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($list[0]));
 
@@ -381,6 +392,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['mid'] = $mid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($media));
 
@@ -429,6 +443,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($publisher));
 
@@ -523,6 +540,9 @@ class EntityController extends MyController {
         $author = $a->GetById($aid);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($author));
 
@@ -807,6 +827,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['pid'] = $pid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($performer));
 
@@ -861,6 +884,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['did'] = $did;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($director->attributes));
 
@@ -904,11 +930,13 @@ class EntityController extends MyController {
         $va = new VideoActor();
         //$actor = $va->GetById($aid);
         $actor = CommonAuthor::model()->findByPk($aid);
-//        $this->widget('Debug', array($actor, CommonAuthor::model()->findByPk($aid)));
 
         if (empty($actor)) throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['aid'] = $aid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($actor->attributes));
 
@@ -956,6 +984,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle->attributes));
 
@@ -1006,6 +1037,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['bid'] = $bid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($bData));
 
@@ -1052,6 +1086,9 @@ class EntityController extends MyController {
             $entity = Entity::BOOKS;
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         if ((int) $year > 0) $dataForPath['year'] = $year;
         $this->_checkUrl($dataForPath);
 
@@ -1091,6 +1128,9 @@ class EntityController extends MyController {
             $entity = Entity::BOOKS;
 		
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['type'] = $type;
         $this->_checkUrl($dataForPath);
 
@@ -1141,6 +1181,9 @@ class EntityController extends MyController {
             $entity = Entity::BOOKS;
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         if ((int) $year > 0) $dataForPath['year'] = $year;
         $this->_checkUrl($dataForPath);
 
@@ -1179,6 +1222,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['sid'] = $sid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($stream->attributes));
 
@@ -1229,6 +1275,9 @@ class EntityController extends MyController {
             throw new CHttpException(404);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
         $dataForPath['tid'] = $tid;
         $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($type->attributes));
 
