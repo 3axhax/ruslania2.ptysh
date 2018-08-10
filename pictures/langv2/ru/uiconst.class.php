@@ -1,6 +1,7 @@
 <?php
 // FILE: language constants, generated from D:\DATA\Internet\Constants\Constants_Unicode.xls at 31.5.2016 13:24:22
 return array(
+	'MONTH_SMALL' => 'мес.',
 '1_MONTH_FOR_FINLAND' => '1 месяц, Финляндия', 
 '1_MONTH_FOR_WORLD' => '1 месяц, другие страны', 
 '1_YEAR_FOR_FINLAND' => '1 год', 
@@ -126,7 +127,7 @@ return array(
 'address_business_title' => 'Название организации', 
 'address_city' => 'Город', 
 'address_contact_email' => 'Контактный e-mail', 
-'address_contact_notes' => 'Примечания', 
+'address_contact_notes' => 'Примечания и <br />пожелания к заказу', 
 'address_contact_phone' => 'Контактный телефон', 
 'address_country' => 'Страна получателя', 
 'ADDRESS_DELETE' => 'Удалить', 
@@ -389,6 +390,7 @@ return array(
 'MSG_PAYMENT_TYPE_10' => 'Pay by check ( only in USD )', 
 'MSG_PAYMENT_TYPE_11' => 'Pay by check ( only in USD )', 
 'MSG_PAYMENT_TYPE_12' => 'PayPal', 
+'MSG_PAYMENT_TYPE_25' => 'PayTrail', 
 'MSG_PAYMENT_TYPE_13' => 'Предоплата на банковский счет Руслании в Финляндии', 
 'MSG_PAYMENT_TYPE_15' => 'Предоплата на банковский счет Руслании в Финляндии', 
 'MSG_PAYMENT_TYPE_2' => 'Оплата через финский интернет-банк Danske Bank', 
