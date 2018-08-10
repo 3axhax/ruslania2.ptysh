@@ -6,6 +6,7 @@ ini_set('max_execution_time', 3600);
  *
  *
  * НЕ ЗАБЫТЬ РАСКОММЕНТИРОВАТЬ ROUTE ДЛЯ СТАРЫХ АДРЕСОВ \ruslania2.ptysh\protected\config\command-local.php
+ * На всякий случай запускать 2 или даже 3 раза
  *
  *
  *
@@ -63,7 +64,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		$urlParams = array(
 			'entity' => Entity::GetUrlKey($entity),
@@ -100,7 +101,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo $params['site_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
 		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
@@ -182,7 +183,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo 'all_publishers ' . ' bypublisher ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -223,7 +224,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo $params['site_series_table'] . ' byseries ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -263,7 +264,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo $params['author_table'] . ' byauthor ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -303,7 +304,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo 'video_actors ' . ' byactor ' . $entity . ' '  . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -343,7 +344,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo $params['performer_table'] . ' byperformer ' . $entity . ' ' . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -383,7 +384,7 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 			unset($items);
 			echo 'video_directors ' . ' bydirector ' . $entity . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
-			if ($itemCounts < $this->_counts) break;
+//			if ($itemCounts < $this->_counts) break;
 		}
 		foreach ($langs as $lang) {
 			$urlParams = array(
@@ -609,7 +610,6 @@ class OldPagesCommand extends CConsoleCommand {
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
 		'';
-//		echo $sql . "\n";
 		return $sql;
 	}
 
@@ -626,6 +626,7 @@ class OldPagesCommand extends CConsoleCommand {
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
 		'';
+//		echo $sql . "\n";
 		return $sql;
 	}
 

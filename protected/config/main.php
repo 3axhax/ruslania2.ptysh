@@ -115,13 +115,13 @@ return array(
                 'me' => 'client/me',
 
                 '<entity:(' . $entities . ')>/filter' => 'entity/filter',
-                '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
+                '<entity:(' . $entities . ')>/categories/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
 //                '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>/<title:(.+)>' => 'entity/list',
-                '<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>' => 'entity/list',
+                '<entity:(' . $entities . ')>/categories/<cid:(\d+)>' => 'entity/list',
                 '<entity:(' . $entities . ')>' => 'entity/list',
-                '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
+                '<lang:(\w+)>/<entity:(' . $entities . ')>/categories/<cid:(\d+)>-<title:(.+)>' => 'entity/list',
 //                '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>/<title:(.+)>' => 'entity/list',
-                '<lang:(\w+)>/<entity:(' . $entities . ')>/bycategory/<cid:(\d+)>' => 'entity/list',
+                '<lang:(\w+)>/<entity:(' . $entities . ')>/categories/<cid:(\d+)>' => 'entity/list',
                 '<lang:(\w+)>/<entity:(' . $entities . ')>' => 'entity/list',
 
                 '<entity:(' . $entities . ')>/series/<sid:(\d+)>-<title:(.+)>' => 'entity/byseries',

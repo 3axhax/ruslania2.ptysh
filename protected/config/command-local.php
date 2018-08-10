@@ -131,8 +131,8 @@ $r['components']['urlManager'] = array(
 
         '/<page:([\w_]+)>' => 'site/static',
     ),
-);
-*/
+);*/
+
 
 return $r;
 
