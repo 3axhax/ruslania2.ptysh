@@ -2,6 +2,7 @@
 
 class Series extends CMyActiveRecord
 {
+    private $_perToPage = 150;
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -12,8 +13,10 @@ class Series extends CMyActiveRecord
         return 'all_series';
     }
 
-    public function GetList($entity, $lang)
-    {
+    public function GetList($entity, $lang) {
+        $page = max((int) Yii::app()->getRequest()->getParam('page'), 1);
+        $page = min($page, 100000);
+
         $availSortLangs = array('ru', 'rut', 'en', 'fi');
         if(!in_array($lang, $availSortLangs)) $lang = 'en';
         $entities = Entity::GetEntitiesList();
@@ -22,7 +25,11 @@ class Series extends CMyActiveRecord
         if(!array_key_exists('site_series_table', $data)) return array();
         $table = $data['site_series_table'];
 
-        $sql = 'SELECT * FROM '.$table.' ORDER BY title_'.$lang;
+        $sql = 'SELECT * FROM '.
+            $table.' '.
+            'ORDER BY title_'.$lang . ' '.
+            'limit ' . ($page-1)*$this->_perToPage . ', ' . $this->_perToPage . ' '.
+        '';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
         return $rows;
