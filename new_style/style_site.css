@@ -2024,6 +2024,7 @@ span.date_recomend {
 
 .periodic_world {
 	float: left;
+    width: 220px;
 }
 
 .clearBoth { clear: both; }

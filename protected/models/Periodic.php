@@ -147,6 +147,23 @@ class Periodic extends CMyActiveRecord
             $issues, $label_for_issues
         );
 
+        if ($issues_year < 12) {
+            $inOneMonth = $issues_year / 12;
+            $show3Months = false;
+            $show6Months = false;
+
+            $tmp1 = $inOneMonth * 3;
+            if (ctype_digit("$tmp1")) $show3Months = true;
+
+            $tmp2 = $inOneMonth * 6;
+            if (ctype_digit("$tmp2")) $show6Months = true;
+        }
+        else {
+            $show3Months = true;
+            $show6Months = true;
+        }
+
+
         $result['description'] .= $msg;
         $result['show3Months'] = $show3Months;
         $result['show6Months'] = $show6Months;

@@ -43,7 +43,7 @@ $url = $ex;
                 <div data-bind="visible:  CartItems().length > 0">
                     
                     
-                    <a href="/cart/variants" class="order_start" style="background-color: rgb(237, 32, 36); float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 &amp;&amp; !AjaxCall() &amp;&amp; TotalVAT() > 0">
+                    <a href="/cart/variants" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 &amp;&amp; !AjaxCall() &amp;&amp; TotalVAT() > 0">
                                     <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Оформить заказ</span>
                                 </a>
                     
@@ -151,7 +151,7 @@ $url = $ex;
                             
                             <?php if (Yii::app()->user->isGuest) { ?>
                            
-                                <a href="/cart/variants" class="order_start" style="background-color: #ed2024" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                <a href="/cart/variants" class="order_start" style="background-color: #5bb75b" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                     <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
                                 </a>
                                  
@@ -159,7 +159,7 @@ $url = $ex;
                                 
                                 } else {
                                    ?>
-                                   <a href="/cart/doorder" class="order_start" style="background-color: #ed2024" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                   <a href="/cart/doorder" class="order_start" style="background-color: #5bb75b" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                     <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
                                 </a>
                                    <? 
@@ -437,7 +437,7 @@ $url = $ex;
                         {
                             if(type == <?=Cart::TYPE_ORDER; ?>)  self.CartItems.remove(item);
                             else self.RequestItems.remove(item);
-                            update_header_cart();
+                           // update_header_cart();
                         }
                     });
             }
@@ -493,7 +493,7 @@ $url = $ex;
                     data.InfoField('');
 //                console.log(json);
                 data.Quantity(json.quantity);
-				update_header_cart();
+				//update_header_cart();
             }, 'json');
 			
 			}
@@ -523,7 +523,7 @@ $url = $ex;
                     data.InfoField('');
 //                console.log(json);
                 data.Quantity(json.quantity);
-				update_header_cart();
+				//update_header_cart();
             }, 'json');
         };
 		
@@ -546,7 +546,7 @@ $url = $ex;
                     data.InfoField('');
 //                console.log(json);
                 data.Quantity(json.quantity);
-		update_header_cart();
+		//update_header_cart();
             }, 'json');
         };
 
@@ -564,7 +564,7 @@ $url = $ex;
             {
 //                console.log(json);
                 data.Quantity(json.quantity);
-				update_header_cart();
+				
             }, 'json');
         };
 		

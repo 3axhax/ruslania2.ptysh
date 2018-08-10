@@ -33,6 +33,70 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	<div class="span1" style="position: relative">
         <?php $this->renderStatusLables($item['status']); ?>
         <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <?php if (!empty($item['Lookinside'])&&($item['entity'] == Entity::PERIODIC)) : ?>
+        <div style="text-align: left;background-color: #fff;">
+            <?php
+            $images = array();
+            $audio = array();
+            $pdf = array();
+            $first = array('img'=>'', 'audio'=>'', 'pdf'=>'');
+            foreach ($item['Lookinside'] as $li) {
+                $ext = strtolower(pathinfo($li['resource_filename'], PATHINFO_EXTENSION));
+                if ($ext == 'jpg' || $ext == 'gif') {
+                    if (empty($first['img'])) $first['img'] = '/pictures/lookinside/' . $li['resource_filename'];
+                    $images[] = '/pictures/lookinside/' . $li['resource_filename'];
+                }
+                elseif ($ext == 'mp3') {
+                    if (empty($first['audio'])) $first['audio'] = $li['resource_filename'];
+                    $audio[] = $li['resource_filename'];
+                }
+                else {
+                    if (empty($first['pdf'])) $first['pdf'] = $li['resource_filename'];
+                    $pdf[] = $li['resource_filename'];
+                }
+            }
+            $images = implode('|', $images);
+            ?>
+
+            <?php if ($item['entity'] == Entity::AUDIO) : ?>
+                <a href="javascript:;" style="width: 131px; margin-right: 30px;"  data-iid="<?= $item['id']; ?>" data-audio="<?= implode('|', $audio); ?>" class="read_book">Смотреть</a>
+
+                <div id="audioprog<?= $item['id']; ?>" class="audioprogress">
+                    <img src="/pic1/isplaying.gif" class="lookinside audiostop"/><br/>
+                    <span id="audionow<?= $item['id']; ?>"></span> / <span id="audiototal<?= $item['id']; ?>"></span>
+
+                </div>
+                <div class="clearBoth"></div>
+
+
+            <?php else : ?>
+                <a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
+                   data-images="<?= CHtml::encode($images); ?>" style="width: 131px; margin-right: 30px;" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>
+
+
+                <?php if (!empty($pdf)) : ?>
+                    <div id="staticfiles<?= $item['id']; ?>">
+                        <span class="title__bold"><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></span>
+                        <ul class="staticfile">
+                            <?php $pdfCounter = 1; ?>
+                            <?php foreach ($pdf as $file) : ?>
+                                <?php $file2 = '/pictures/lookinside/' . $file; ?>
+                                <li>
+                                    <a target="_blank" href="<?= $file2; ?>"><img
+                                            src="/css/pdf.png"/><?= $pdfCounter . '.pdf'; ?></a>
+                                </li>
+                                <?php $pdfCounter++; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+            <div class="clearBoth"></div>
+            <div style="height: 20px;"></div>
+        </div>
+        <?php endif; ?>
     </div>
 	<div class="span11 to_cart"><h1 class="title"><?= ProductHelper::GetTitle($item); ?></h1>
 	
@@ -507,7 +571,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				<div class="clearfix"></div>
 				<div style="margin-top: 10px;"></div>
 				<?}?>
-				<?php if (!empty($item['Lookinside'])) : ?>
+				<?php if (!empty($item['Lookinside'])&&($item['entity'] != Entity::PERIODIC)) : ?>
 
                 <?php
                 $images = array();
@@ -568,6 +632,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <?php endif; ?>
                 <?php endif; ?>
                     <div class="clearBoth"></div>
+                    <div style="height: 20px;"></div>
             <?php endif; ?>
 				
 				<? $count_add = 1;
@@ -795,7 +860,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <br><span class="nameprop">DVDs:</span> <?=$item['dvds']; ?>
             <?php endif; ?>
 
-            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'])) ?>
+            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
 
            
 
@@ -857,9 +922,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 ) : ?>
                 <?php else:
                     $name = 'ISBN';
-                    if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
-                    ?>
-                    <?php if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::PERIODIC)))): ?>
+                    if ($entity == Entity::SHEETMUSIC) $name = 'ISMN/ISBN';
+                    if (!empty($item['eancode']) ): ?>
                     <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn2'])) : ?>
@@ -890,6 +954,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn10']; ?>
                 <?php endif; ?>
             <?php endif; ?>
+            <?php elseif (!empty($item['eancode'])):
+                //не поймешь, то надо то не надо https://dfaktor.bitrix24.ru/company/personal/user/836/tasks/task/view/6810/
+                ?>
+            <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
 		<?php endif; ?>
 	</div>
 	

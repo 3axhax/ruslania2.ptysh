@@ -40,13 +40,13 @@
 				<?php $price = DiscountManager::GetPrice(Yii::app()->user->id, $product); ?>
 				<div class="cost">
 					<?php if (!empty($price[DiscountManager::DISCOUNT])): ?>
-			<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
+			<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?>
             </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
                 <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
             </span>
 					<?php else: ?>
 			<span class="price"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
-					<?php endif ?>;
+					<?php endif ?>
 				</div>
 				<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div>
 				<div class="addcart">

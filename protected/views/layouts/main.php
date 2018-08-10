@@ -212,75 +212,8 @@ else $act = array('', '');
                         formatItem: function (data, $item, q)
                         {
                             var ret = '';
-<?php if (!isset($_GET['old'])): ?>
                             ret += data;
-<?php else: ?>
-                            if (data.Counts != undefined) {
-
-                                for (var i = 1; i < 10; i++) {
-
-                                    if (data.Counts.enityes[i] != undefined) {
-
-                                        ret += '<div class="row_category">' + data.Counts.enityes[i][0] + ' <span>' + data.Counts.enityes[i][2] + '</span> <a href="' + data.Counts.enityes[i][3] + '" class="result_search_count">' + decline_days(data.Counts.enityes[i][1]) + ' </a></div>';
-
-                                    }
-
-                                }
-
-                            } else {
-
-                                //alert(data.length);
-
-                                if (data.length > 0) {
-                                    ret += '<div class="title_goods">' +
-                                            '<div class="red_checkbox" onclick="check_search($(this), \'js_avail\')" style="float: right;">';
-                                    ret += '' +
-                                            '<span class="checkbox" style="height: 10px; padding-top: 2px;">' +
-                                            '<span class="check<?= $act[1] ?>"></span>' +
-                                            '</span> ' +
-                                            //'<input type="hidden" name="avail" value="<?= $act[0] ?>" class="avail">'+
-                                            '<?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>' +
-                                            '</div>' +
-                                            '<div><?= $ui->item('A_NEW_SEARCH_GOODS_TITLE'); ?></div></div>' +
-                                            '';
-
-
-                                    for (var i = 0; i < data.length; i++) {
-                                        if (!data[i].is_product) {
-                                            ret += '<div class="row_item"><?= $ui->item('DID_YOU_MEAN') ?></div>';
-                                            break;
-                                        }
-                                    }
-
-                                    for (var i = 0; i < data.length; i++)
-                                    {
-
-                                        if (data[i].is_product) {
-
-                                            var img = '';
-                                            if (data[i].picture_url != 'http://ruslania.com/pictures/small/' && data[i].picture_url != '') {
-
-                                                var img = '<img style="max-width: 100%;" height="86" src="' + data[i].picture_url + '" />';
-
-                                            }
-
-                                            ret += '<div class="row_item"><table><tr><td class="pic"><a href="' + data[i].url + '">' + img + '</a></td><td class="name"><a href="' + data[i].url + '">' + data[i].title + '</a><div style="height: 18px;"></div><span class="price">' + data[i].price + '</span></td></tr></table></div>';
-                                            //<a class="cart-action add_cart<?if (Yii::app()->language == 'es') echo ' no_img';?>" data-action="add" style="width: 162px;font-size: 13px; margin-left: 18px; color: #fff;" data-entity="'+data[i].entity+'" data-id="'+data[i].id+'" data-quantity="1" href="javascript:;" onclick="add2Cart($(this).attr(\'data-action\'),     $(this).attr(\'data-entity\'),$(this).attr(\'data-id\'),$(this).attr(\'data-quantity\'),null,$(this));"><?= $ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART'); ?></a>
-
-                                        } else {
-                                            ret += '<div class="row_item"><a href="' + data[i].url + '">' + data[i].title + '</a></div>';
-                                        }
-                                    }
-
-
-                                }
-
-                            }
-<?php endif; ?>
-//					console.log(ret);
-
                             return ret;
-
                         }
 
                     });
@@ -299,8 +232,9 @@ else $act = array('', '');
                         $('div.span1.cart .cost').html(d.totalPrice)
                     }
                 });
-            })
-            initPeriodicPriceSelect();
+                initPeriodicPriceSelect();
+
+            });
             initAAddCart();
 
             $(document).ready(function () {
@@ -697,6 +631,7 @@ else $act = array('', '');
             function initPeriodicPriceSelect() {
                 $('select.periodic').change(function ()
                 {
+
                     var $el = $(this);
                     var cart = $el.closest('.span11, .span1.cart');
 
