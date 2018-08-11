@@ -233,9 +233,8 @@ else $act = array('', '');
                     }
                 });
                 initPeriodicPriceSelect();
-
+                initAAddCart();
             });
-            initAAddCart();
 
             $(document).ready(function () {
 

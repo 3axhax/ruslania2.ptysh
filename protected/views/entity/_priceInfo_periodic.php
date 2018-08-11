@@ -22,7 +22,7 @@ if (!empty($item['issues_year'])&&is_array($item['issues_year'])) {
         $price[$realVatPrice] = $price[$realVatPrice]/4;
         $price[$realWOVatPrice] = $price[$realWOVatPrice]/4;
     }
-    elseif (!empty($item['issues_year']['show3Months'])) {
+    elseif (!empty($item['issues_year']['show6Months'])) {
         $price[$realKeyBrutto] = $price[$realKeyBrutto]/2;
         $price[$realVatPrice] = $price[$realVatPrice]/2;
         $price[$realWOVatPrice] = $price[$realWOVatPrice]/2;
