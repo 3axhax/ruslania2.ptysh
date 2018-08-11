@@ -347,7 +347,7 @@ class SearchController extends MyController {
 		$roles = array();
 		$ids = array();
 		foreach($authorsWithItems as $r) {
-			$roles[$r['aentity']][$r['real_id']] = $r;
+			$roles[$r['role_id']][$r['real_id']] = $r;
 			$ids[] = $r['real_id'];
 		}
 
