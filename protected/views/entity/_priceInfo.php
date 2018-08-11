@@ -15,6 +15,18 @@ else if($key == 'PERIODIC_FIN')
     $realVatPrice = DiscountManager::WITH_VAT_FIN;
     $realWOVatPrice = DiscountManager::WITHOUT_VAT_FIN;
 }
+if (in_array($key, array('PERIODIC_FIN', 'PERIODIC_WORLD'))&&!empty($item['issues_year'])&&is_array($item['issues_year'])) {
+    if (!empty($item['issues_year']['show3Months'])) {
+        $price[$realKeyBrutto] = $price[$realKeyBrutto]/4;
+        $price[$realVatPrice] = $price[$realVatPrice]/4;
+        $price[$realWOVatPrice] = $price[$realWOVatPrice]/4;
+    }
+    elseif (!empty($item['issues_year']['show3Months'])) {
+        $price[$realKeyBrutto] = $price[$realKeyBrutto]/2;
+        $price[$realVatPrice] = $price[$realVatPrice]/2;
+        $price[$realWOVatPrice] = $price[$realWOVatPrice]/2;
+    }
+}
 
 if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
     && $key == 'PERIODIC_WORLD' && isset($price[DiscountManager::DISCOUNT])
