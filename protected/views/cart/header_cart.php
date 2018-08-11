@@ -61,7 +61,7 @@
 					
 					<div class="b-basket-list__bottom">
                                 <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+(CartItems().length-3)+' <?=$ui->item('A_NEW_CART_MORE_ORDER2')?> ', visible: CartItems().length > 3"></a></div>
-                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="/cart/"><?=$ui->item('CONFIRM_ORDER');?></a></div>
+                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
                             </div>
 
@@ -150,7 +150,7 @@
                     (
                         $.ajax({
                             type: "POST",
-                            url: '/cart/remove',
+                            url: '<?=Yii::app()->createUrl('cart/remove')?>',
                             data: obj,
                             dataType: 'json',
 							success: function() {
@@ -218,11 +218,12 @@
                 entity: data.Entity(),
                 id: data.ID(),
                 quantity: parseInt(data.Quantity()) - 1,
+                decrement: 1,
                 type : data.Price2Use()
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -252,7 +253,7 @@
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -275,7 +276,7 @@
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
             {
                 if(json.changed)
                     data.InfoField(json.changedStr);
@@ -297,7 +298,7 @@
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('/cart/changequantity', post, function (json)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
             {
 //                console.log(json);
                 data.Quantity(json.quantity);
@@ -319,7 +320,7 @@
     {
         
         var data = { language: '<?=Yii::app()->language; ?>', is_MiniCart: 1};
-        $.getJSON('/cart/getall', data, function (json)
+        $.getJSON('<?=Yii::app()->createUrl('cart/getall')?>', data, function (json)
         {
             ko.mapping.fromJS(json, {}, cvm_1);
            

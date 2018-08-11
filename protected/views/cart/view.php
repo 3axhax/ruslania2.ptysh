@@ -481,6 +481,7 @@ $url = $ex;
                 entity: data.Entity(),
                 id: data.ID(),
                 quantity: parseInt(data.Quantity()) - 1,
+                decrement: 1,
                 type : data.Price2Use()
             };
             post[csrf[0]] = csrf[1];
