@@ -105,9 +105,10 @@ $url = $ex;
 <!--                                <span data-bind="text: VAT"></span>%-->
 <!--                            </td>-->
                             <td valign="middle" align="center" class="cart1contents1" nowrap>
-                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
-                                
-                                <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a>
+                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
+                                <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
+                                <div style="display:none;width:12px;float:left;" data-bind="visible: noUseChangeQuantity() > 0">&nbsp;</div>
+                                <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"/></a>
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="entity[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Entity'] ?>">
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="type[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Price2Use'] ?>">
                             </td>

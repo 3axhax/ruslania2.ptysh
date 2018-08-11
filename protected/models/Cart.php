@@ -159,6 +159,10 @@ class Cart extends CActiveRecord
             $priceVATWorld = $values[DiscountManager::WITH_VAT_WORLD];
             $priceVAT0World = $values[DiscountManager::WITHOUT_VAT_WORLD];
 
+            $tmp = array();
+            $tmp['noUseChangeQuantity'] = 0;
+            $tmp['Entity'] = Entity::ConvertToHuman($c['entity']);
+            $tmp['ID'] = $c['id'];
             if($tmp['Entity'] == Entity::PERIODIC)
             {
                 $priceVAT = $priceVAT / 12;
@@ -167,11 +171,12 @@ class Cart extends CActiveRecord
                 $priceVAT0Fin /= 12;
                 $priceVATWorld /= 12;
                 $priceVAT0World /= 12;
+                if (!empty($c['issues_year'])) {
+                    $issues = Periodic::getCountIssues($c['issues_year']);
+                    $tmp['noUseChangeQuantity'] = (int) (empty($issues['show3Months'])&&empty($issues['show6Months']));
+                }
             }
 
-            $tmp = array();
-            $tmp['Entity'] = Entity::ConvertToHuman($c['entity']);
-            $tmp['ID'] = $c['id'];
 			$tmp['Title'] = ProductHelper::GetTitle($c);
             if ($isMiniCart == 1) { $tmp['Title'] = ProductHelper::GetTitle($c, 'title', 38); }
 			$tmp['PriceVAT'] = $priceVAT;

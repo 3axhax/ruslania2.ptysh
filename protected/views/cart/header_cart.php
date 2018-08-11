@@ -44,8 +44,10 @@
                                 </p></div>
                                     </div>
                                     <div class="b-basket-list__calc" style="    max-width: 125px;">
-                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }"><img src="/new_img/cart_minus.png" class="grayscale" /></a> <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 50px;" 
-                                       data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'"> <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }"/></a>  
+                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
+                                        <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 50px;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
+                                        <div style="display:none;width:25px;float:left;" data-bind="visible: noUseChangeQuantity() > 0">&nbsp;</div>
+                                        <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"/></a>
                                     </div>
                                     <div class="b-basket-list__cross js-close-item" data-bind="click: function(data, event) { cvm_1.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"></div>
 									
