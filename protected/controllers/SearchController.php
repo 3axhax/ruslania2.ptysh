@@ -314,6 +314,8 @@ class SearchController extends MyController {
 			}
 
 		}
+//		Debug::staticRun(array($query, $result));
+//		if (isset($_GET['ha'])) exit;
 		$result = array_merge($result, $this->_queryIndex($query, 'authors', 0));
 
 		if (empty($result)) return array();
@@ -347,7 +349,8 @@ class SearchController extends MyController {
 		$roles = array();
 		$ids = array();
 		foreach($authorsWithItems as $r) {
-			$roles[$r['role_id']][$r['real_id']] = $r;
+//			$roles[$r['role_id']][$r['real_id']] = $r;
+			$roles[$r['aentity']][$r['real_id']] = $r;
 			$ids[] = $r['real_id'];
 		}
 
