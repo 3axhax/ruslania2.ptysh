@@ -899,6 +899,8 @@ class SiteController extends MyController {
     }
 
     public function actionAdvSearch($e = 0, $cid = 0, $title = '', $author = '', $perf = '', $publisher = '', $l = '', $only = false, $year = '', $page = 0) {
+        $this->_checkUrl(array());
+
         $page = intVal($page);
         if ($page < 1)
             $page = 1;

@@ -70,6 +70,12 @@ class DMultilangHelper
                         if (($paramLang !== '')&&(Yii::app()->language !== $paramLang)) throw new CHttpException(404);
 //                        if (empty($domains[0])) Yii::app()->getRequest()->redirect('/' . Yii::app()->language . '/',true,301);
 
+                        $oldUrl = $url;
+                        if ($ind !== false) {
+                            $oldUrl = mb_substr($url, 0, $ind, 'utf-8');
+                        }
+                        HrefTitles::get()->redirectOldPage($oldUrl);
+
                         if ($paramLang !== '') {
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);

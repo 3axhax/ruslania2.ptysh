@@ -98,6 +98,12 @@ class MyUrlManager extends CUrlManager
         if (defined('OLD_PAGES')) return parent::createUrlDefault($route,$params,$ampersand);
 
         $language = Yii::app()->language;
+        if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
+            //что бы получить путь для другого языка
+            $language = $params['__langForUrl'];
+        }
+        unset($params['__langForUrl']);
+
         if (!empty($language)) $route = $language . '/' . $route;
         return parent::createUrlDefault($route,$params,$ampersand);
     }
