@@ -306,57 +306,37 @@ class SearchController extends MyController {
 		$result = array();
 		$query = trim($query);
 		if (!mb_strpos($query, ' ', null, 'utf-8')) {
-			$oneWordQuery = preg_replace("/\W/", '', $query);
-			$oneWordQuery = preg_replace("/\d/", '', $oneWordQuery);
+			$oneWordQuery = preg_replace("/\W/ui", '', $query);
+			$oneWordQuery = preg_replace("/\d/ui", '', $oneWordQuery);
 			if (!empty($oneWordQuery)) {
 				$oneWordQuery = '^' . $oneWordQuery . '*';
 				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
 			}
 
 		}
-//		Debug::staticRun(array($query, $result));
-//		if (isset($_GET['ha'])) exit;
-		$result = array_merge($result, $this->_queryIndex($query, 'authors', 0));
+		$result = $result + $this->_queryIndex($query, 'authors', 0);
 
 		if (empty($result)) return array();
 
 		$limit = 3;
-		$authorsWithItems = array();
-		foreach (Entity::GetEntitiesList() as $entity=>$set) {
-			if (Entity::checkEntityParam($entity, 'authors')) {
-				$ids = array();
-				foreach ($result as $id=>$item) {
-					if ($entity == $item['entity']) $ids[$item['real_id']] = $id;
-				}
-				if (!empty($ids)) {
-					$sql = ''.
-						'select author_id '.
-						'from ' . $set['author_table'] . ' '.
-						'where (author_id in (' . implode(',',array_keys($ids)) . ')) '.
-						'group by author_id '.
-						'order by field(author_id, ' . implode(',',array_keys($ids)) . ') '.
-						'limit ' . ($limit - count($authorsWithItems)) .
-					';';
-					foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $author) {
-						$authorsWithItems[$ids[$author]] = $result[$ids[$author]];
-					}
-				}
-			}
-			if (count($authorsWithItems) >= $limit) break;
-		}
-		if (empty($authorsWithItems)) return array();
-
-		$roles = array();
 		$ids = array();
-		foreach($authorsWithItems as $r) {
-//			$roles[$r['role_id']][$r['real_id']] = $r;
-			$roles[$r['aentity']][$r['real_id']] = $r;
-			$ids[] = $r['real_id'];
+		foreach ($result as $id=>$item) {
+			if ($item['is_10_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
+			elseif ($item['is_22_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
+			elseif ($item['is_24_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
+			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
+			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
+			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
+			if (count($ids) >= $limit) break;
 		}
-
-		$ids = array_unique($ids);
+//		Debug::staticRun(array($ids,$result));
 		if (empty($ids)) return array();
 
+		$roles = array();
+		foreach($ids as $id=>$r) {
+			$roles[$r['role_id']][$id] = array('real_id'=>$id, 'entity'=>$r['entity']);
+		}
+		$ids = array_keys($ids);
 		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
 		return $result;
 	}

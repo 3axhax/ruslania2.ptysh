@@ -95,7 +95,7 @@ class Sitemap {
 		if (!empty($cats)) {//
 			$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 			foreach ($cats as $cat) {
-				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'])) . '">' . ProductHelper::GetTitle($cat) . '</a>');
+				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))) . '">' . ProductHelper::GetTitle($cat) . '</a>');
 				$this->_categories($entity, $cat['id'], $i+1);
 				$this->_putFile('</li>');
 			}

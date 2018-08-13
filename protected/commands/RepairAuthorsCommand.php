@@ -278,38 +278,38 @@ class RepairAuthorsCommand extends CConsoleCommand {
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 100000000+t.book_id item_id, 10 entity, 1 role_id, tA.id person_id, t.book_id real_id from books_authors t join all_authorslist tA on (tA.id = t.author_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 100000000+t.book_id item_id, 10 entity, 1 role_id, tA.id person_id, t.book_id real_item_id from books_authors t join all_authorslist tA on (tA.id = t.author_id) '.
 		'';
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 220000000+t.music_id item_id, 22 entity, 1 role_id, tA.id person_id, t.music_id real_id from music_authors t join all_authorslist tA on (tA.id = t.author_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 220000000+t.music_id item_id, 22 entity, 1 role_id, tA.id person_id, t.music_id real_item_id from music_authors t join all_authorslist tA on (tA.id = t.author_id) '.
 			'';
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 240000000+t.soft_id item_id, 24 entity, 1 role_id, tA.id person_id, t.soft_id real_id from soft_authors t join all_authorslist tA on (tA.id = t.author_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 240000000+t.soft_id item_id, 24 entity, 1 role_id, tA.id person_id, t.soft_id real_item_id from soft_authors t join all_authorslist tA on (tA.id = t.author_id) '.
 			'';
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 400000000+t.video_id item_id, 40 entity, 3 role_id, tA.id person_id, t.video_id real_id from video_actors t join all_authorslist tA on (tA.id = t.person_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 400000000+t.video_id item_id, 40 entity, 3 role_id, tA.id person_id, t.video_id real_item_id from video_actors t join all_authorslist tA on (tA.id = t.person_id) '.
 			'';
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 400000000+t.video_id item_id, 40 entity, 4 role_id, tA.id person_id, t.video_id real_id from video_directors t join all_authorslist tA on (tA.id = t.person_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 400000000+t.video_id item_id, 40 entity, 4 role_id, tA.id person_id, t.video_id real_item_id from video_directors t join all_authorslist tA on (tA.id = t.person_id) '.
 			'';
 		$this->_query($sql);
 
 		$sql = ''.
-			'insert into all_roles (item_id, entity, role_id, person_id, real_id) '.
-			'select 220000000+t.music_id item_id, 22 entity, 2 role_id, tA.id person_id, t.music_id real_id from music_performers t join all_authorslist tA on (tA.id = t.person_id) '.
+			'insert into all_roles (item_id, entity, role_id, person_id, real_item_id) '.
+			'select 220000000+t.music_id item_id, 22 entity, 2 role_id, tA.id person_id, t.music_id real_item_id from music_performers t join all_authorslist tA on (tA.id = t.person_id) '.
 			'';
 		$this->_query($sql);
 	}
