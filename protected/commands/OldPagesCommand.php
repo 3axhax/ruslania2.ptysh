@@ -44,7 +44,8 @@ class OldPagesCommand extends CConsoleCommand {
 //,
 		$langs = array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'es', 'se');
 		$step = 0;
-		while (($items = $this->_query($this->_sqlCategorys($entity, $params['site_category_table'], $step++)))&&(($itemCounts = $items->count()) > 0)) {
+		$items = $this->_query($this->_sqlCategorys($entity, $params['site_category_table'], $step++));
+//		while (($items = $this->_query($this->_sqlCategorys($entity, $params['site_category_table'], $step++)))&&(($itemCounts = $items->count()) > 0)) {
 			foreach ($items as $item) {
 				foreach ($langs as $lang) {
 					$urlParams = array(
@@ -62,10 +63,10 @@ class OldPagesCommand extends CConsoleCommand {
 					$pdo->getPdoStatement()->execute($insertParams);
 				}
 			}
-			unset($items);
-			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
+//			unset($items);
+			echo $params['site_category_table'] . ' ' . (($step-1)*$this->_counts + count($items)) . "\n";
 //			if ($itemCounts < $this->_counts) break;
-		}
+//		}
 		$urlParams = array(
 			'entity' => Entity::GetUrlKey($entity),
 		);
@@ -147,16 +148,19 @@ class OldPagesCommand extends CConsoleCommand {
 
 	private function _sqlCategorys($entity, $table, $step) {
 		return ''.
+			'select t.id, t.title_ru, t.title_rut, t.title_en, t.title_fi, t.title_de, t.title_fr, t.title_es, t.title_se '.
+			'from `' . $table . '` t ' .
+//				'join ('.
+//					'select tI.id '.
+//					'from `' . $table . '` tI '.
+						//'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/list") '.
+//					'where (tSR.id is null) '.
+//					'order by tI.id '.
+//					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ''.
+//				') tId using (id) '.
+		'union all '.
 			'select t.id, t.title_en title_ru, t.title_en title_rut, t.title_en, t.title_en title_fi, t.title_en title_de, t.title_en title_fr, t.title_en title_es, t.title_en title_se '.
 			'from `' . $table . '` t ' .
-				'join ('.
-					'select tI.id '.
-					'from `' . $table . '` tI '.
-						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/list") '.
-					'where (tSR.id is null) '.
-					'order by tI.id '.
-					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ''.
-				') tId using (id) '.
 		'';
 	}
 
