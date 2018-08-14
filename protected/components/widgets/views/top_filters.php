@@ -1,6 +1,6 @@
 <form class="prod-filter filter" method="get" action="">
 
-    <input type="hidden" name="langsel" class="lang" value="<?= Yii::app()->getRequest()->getParam('lang'); ?>"/>
+    <input type="hidden" name="lang" class="lang" value="<?= Yii::app()->getRequest()->getParam('lang'); ?>"/>
     <input type="hidden" name="entity_val" class="entity_val" value="<?= $entity ?>"/>
     <input type="hidden" name="cid_val" class="cid_val" value="<?= $cid ?>"/>
     <input type="hidden" name="sort" class="sort" value="<?= (Yii::app()->getRequest()->getParam('sort')) ? Yii::app()->getRequest()->getParam('sort') : 12 ?>"/>
@@ -42,12 +42,12 @@
                 <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
                        placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? round($filters['max-min'][2], 2) : ''?>"
-                       name="min_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
                 <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
                        placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? round($filters['max-min'][3], 2) : ''?>"
-                       name="max_cost" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
             </div>
         </div>
 
@@ -57,12 +57,12 @@
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
-                           name="ymin" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
+                           name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
                            placeholder="<?= (isset($filters['max-min'][0]) && $filters['max-min'][0] != '') ? $filters['max-min'][0] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
-                           name="ymax" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
+                           name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
                            placeholder="<?= (isset($filters['max-min'][1]) && $filters['max-min'][1] != '') ? $filters['max-min'][1] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
@@ -83,12 +83,12 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <div class="text">
-                <input type="hidden" name="izda" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
-                <input type="text" name="new_izda" class="find_izda prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
+                <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
+                <input type="text" name="new_publisher" class="find_publisher prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
                        placeholder="Все" autocomplete="off"
                        <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
             </div>
-            <ul class="search_result search_result_izda"></ul>
+            <ul class="search_result search_result_publisher"></ul>
             <script>
                 liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
             </script>
@@ -103,7 +103,7 @@
                 <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['seria'] : 0?>">
                 <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
                        autocomplete="off" placeholder="Все"
-                    <?= ($seria) ? 'value="'.ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language).'"' : '' ?> />
+                    <?= ($seria) ? 'value="'.htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)).'"' : '' ?> />
             </div>
             <ul class="search_result search_result_series"></ul>
             <script>
@@ -117,7 +117,7 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_VIDEO')?>:</label>
             <select class="prod-filter__input prod-filter__input__select--m"
-                    name="langVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="langVideo">
+                    name="lang_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="lang_video">
                 <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <?php foreach ($filters['langVideo'] as $k => $lang) :?>
                     <option value="<?=$lang['id']?>" <?= (isset($filter_data['lang_video']) && ($lang['id'] == (int)$filter_data['lang_video'])) ? 'selected' : ''?>>
@@ -133,7 +133,7 @@
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_SUBTITLES')?>:</label>
                 <select class="prod-filter__input prod-filter__input__select--m"
-                        name="subtitlesVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="subtitlesVideo">
+                        name="subtitles_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="subtitles_video">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['langSubtitles'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['subtitles_video'])) && ($lang['id'] == (int)$filter_data['subtitles_video'])) ? 'selected' : ''?>>
@@ -149,7 +149,7 @@
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_FORMAT_VIDEO')?>:</label>
                 <select class="prod-filter__input prod-filter__input__select--m"
-                        name="formatVideo" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="formatVideo">
+                        name="format_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="format_video">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['formatVideo'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['format_video'])) && ($lang['id'] == (int)$filter_data['format_video'])) ? 'selected' : ''?>>
@@ -168,7 +168,7 @@
                 else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
                 <?=$label_binding?>:</label>
 
-            <select id="binding_select" multiple="multiple" name="binding_id[]" onchange="show_result_count()">
+            <select id="binding_select" multiple="multiple" name="binding[]" onchange="show_result_count()">
                 <?php
                 foreach ($filters['binding'] as $bg => $binfo) {
                 if ($entity == 22 OR $entity == 24) {
