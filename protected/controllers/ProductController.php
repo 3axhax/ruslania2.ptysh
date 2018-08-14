@@ -305,7 +305,7 @@ class ProductController extends MyController
 		}
 		if ($canonicalPath === $path) return;
 
-		$this->_redirectOldPages($path, $this->_canonicalPath, $query);
+		$this->_redirectOldPages($path, $this->_canonicalPath, $query, array('entity'=>$item['entity'], 'id'=>$item['id']));
 		throw new CHttpException(404);
 	}
 }

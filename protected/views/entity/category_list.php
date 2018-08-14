@@ -68,80 +68,8 @@ function printTree($tree, $entity, $parent = false, $lvl = 1)
 		<?php printTree($tree, $entity, false); ?>
 	</div>
 		<div class="b-user-seen">
-        <div class="b-user-seen__topic"><?=$ui->item('A_NEW_VIEWD_ITEMS')?>:</div>
-		
-		<?
-		$serGoods = unserialize(Yii::app()->getRequest()->cookies['yourView']->value);
-		
-		if ($serGoods) {
-			
-			shuffle($serGoods);
-			
-		?>
-		
-       
-				
-					<?
-						$i = 1;
-						foreach ($serGoods as $goods) {
-							
-							if ($i > 5) break;
-							
-							$ex = explode('_', $goods);
-							
-							$good_id = $ex[0];
-							$good_entity = $ex[1];
-							
-							if ($good_id == $item['id']) continue;
-							
-							$igoods = Product::GetBaseProductInfo($good_entity, $good_id);
-							
-							$price = DiscountManager::GetPrice(Yii::app()->user->id, $igoods);
-							
-							//var_dump($igoods);
-							$i++;
-							?>
-							
-							<div class="b-user-seen__book">
-          <div class="b-user-seen__img"><?php $url = ProductHelper::CreateUrl($igoods); ?>
-
-    <a href="<?=$url; ?>" title="<?=ProductHelper::GetTitle($igoods, 'title', 30); ?>"><img src="<?=Picture::Get($igoods, Picture::SMALL); ?>" alt="<?=ProductHelper::GetTitle($igoods, 'title', 30); ?>" /></a></div>
-          <div class="b-user-seen__info">
-            <div class="b-user-seen__name"><a title="<?=ProductHelper::GetTitle($igoods, 'title', 30); ?>" href="<?=$url; ?>"><?=ProductHelper::GetTitle($igoods, 'title', 30); ?></a></div>
-            <div class="b-user-seen__price"><?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
-            <span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
-                <?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]); ?>
-            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
-                <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]); ?>
-                
-            </span>
-
-        <?php else : ?>
-
-            <span class="price">
-       <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]); ?>
-        
-        </span>
-
-        <?php endif; ?></div>
-		<div class="nds" style="font-size: 11px; color: rgb(116, 116, 116);"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]); ?> <?=$ui->item('WITHOUT_VAT'); ?></div> 
-          </div>
+				<?php $this->widget('YouView', array('tpl'=>'you_view_categories')); ?>
         </div>
-							
-								
-							
-							<?
-							
-						}
-					?>
-				
-                   
-				
-        <? } ?>
-		
-		
-        
-      </div>
 		
 
 </section>

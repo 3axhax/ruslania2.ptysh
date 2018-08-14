@@ -12,6 +12,8 @@ class Audio extends CMyActiveRecord
         return 'audio_catalog';
     }
 
+    function getEntity() { return Entity::AUDIO; }
+
     public function relations()
     {
         return array(

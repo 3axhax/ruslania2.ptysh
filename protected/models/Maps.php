@@ -12,6 +12,8 @@ class Maps extends CMyActiveRecord
         return 'maps_catalog';
     }
 
+    function getEntity() { return Entity::MAPS; }
+
     public function relations()
     {
         return array(

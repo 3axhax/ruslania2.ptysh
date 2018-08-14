@@ -33,6 +33,70 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	<div class="span1" style="position: relative">
         <?php $this->renderStatusLables($item['status']); ?>
         <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <?php if (!empty($item['Lookinside'])&&($item['entity'] == Entity::PERIODIC)) : ?>
+        <div style="text-align: left;background-color: #fff;">
+            <?php
+            $images = array();
+            $audio = array();
+            $pdf = array();
+            $first = array('img'=>'', 'audio'=>'', 'pdf'=>'');
+            foreach ($item['Lookinside'] as $li) {
+                $ext = strtolower(pathinfo($li['resource_filename'], PATHINFO_EXTENSION));
+                if ($ext == 'jpg' || $ext == 'gif') {
+                    if (empty($first['img'])) $first['img'] = '/pictures/lookinside/' . $li['resource_filename'];
+                    $images[] = '/pictures/lookinside/' . $li['resource_filename'];
+                }
+                elseif ($ext == 'mp3') {
+                    if (empty($first['audio'])) $first['audio'] = $li['resource_filename'];
+                    $audio[] = $li['resource_filename'];
+                }
+                else {
+                    if (empty($first['pdf'])) $first['pdf'] = $li['resource_filename'];
+                    $pdf[] = $li['resource_filename'];
+                }
+            }
+            $images = implode('|', $images);
+            ?>
+
+            <?php if ($item['entity'] == Entity::AUDIO) : ?>
+                <a href="javascript:;" style="width: 131px; margin-right: 30px;"  data-iid="<?= $item['id']; ?>" data-audio="<?= implode('|', $audio); ?>" class="read_book">Смотреть</a>
+
+                <div id="audioprog<?= $item['id']; ?>" class="audioprogress">
+                    <img src="/pic1/isplaying.gif" class="lookinside audiostop"/><br/>
+                    <span id="audionow<?= $item['id']; ?>"></span> / <span id="audiototal<?= $item['id']; ?>"></span>
+
+                </div>
+                <div class="clearBoth"></div>
+
+
+            <?php else : ?>
+                <a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
+                   data-images="<?= CHtml::encode($images); ?>" style="width: 131px; margin-right: 30px;" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>
+
+
+                <?php if (!empty($pdf)) : ?>
+                    <div id="staticfiles<?= $item['id']; ?>">
+                        <span class="title__bold"><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></span>
+                        <ul class="staticfile">
+                            <?php $pdfCounter = 1; ?>
+                            <?php foreach ($pdf as $file) : ?>
+                                <?php $file2 = '/pictures/lookinside/' . $file; ?>
+                                <li>
+                                    <a target="_blank" href="<?= $file2; ?>"><img
+                                            src="/css/pdf.png"/><?= $pdfCounter . '.pdf'; ?></a>
+                                </li>
+                                <?php $pdfCounter++; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
+            <div class="clearBoth"></div>
+            <div style="height: 20px;"></div>
+        </div>
+        <?php endif; ?>
     </div>
 	<div class="span11 to_cart"><h1 class="title"><?= ProductHelper::GetTitle($item); ?></h1>
 	
@@ -44,12 +108,21 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	</div>
 	<? endif; ?>
 
-	<? if ($item['type']) : ?>
-	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?
+	<?php if ($item['type']) : ?>
+	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
 
+        if ($item['entity'] == Entity::PERIODIC) :
 
-
-	 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+	 
+        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
+        
+        
+        
+        else :
+        
+        $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+        
+         endif;
 
 	 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
@@ -498,9 +571,12 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				<div class="clearfix"></div>
 				<div style="margin-top: 10px;"></div>
 				<?}?>
-				<?php if (!empty($item['Lookinside'])) : ?>
+				<?php if (!empty($item['Lookinside'])&&($item['entity'] != Entity::PERIODIC)) : ?>
 
                 <?php
+                
+                
+                
                 $images = array();
                 $audio = array();
                 $pdf = array();
@@ -534,7 +610,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <div class="clearBoth"></div>
 
 
-                <?php else : ?>
+                <?php else :  ?>
 					<a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
                          data-iid="<?= $item['id']; ?>"
                          data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
@@ -559,6 +635,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <?php endif; ?>
                 <?php endif; ?>
                     <div class="clearBoth"></div>
+                    <div style="height: 20px;"></div>
             <?php endif; ?>
 				
 				<? $count_add = 1;
@@ -661,22 +738,24 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				
 			--><?/* } */?>
 			
-			<?php if ($item['entity'] == Entity::PERIODIC) : ?>
+			<?php if ($item['entity'] == Entity::PERIODIC) :
+
+                ?>
 
 				<div class="mb5 link__deliver" style="color:#0A6C9D; float: left;">
                     <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
                 </div>
 				<div style="height: 23px; clear: both"></div>
                 <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;">
-                    <?php if ($item['issues_year']['show3Months']) : ?>
-                        <option value="3">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
+                    <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
+                        <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
 
                     <?php if ($item['issues_year']['show6Months']) : ?>
-                        <option value="6">6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
+                        <option value="6"<?php if(empty($item['issues_year']['show3Months'])): $count_add = 6; ?> selected="selected"<?php endif; ?>>6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
 
-                    <option value="12" selected="selected">
+                    <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
                         12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $ui->item('A_NEW_NUMS'); ?></option>
                 </select>
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
@@ -694,13 +773,13 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                        class="finmonthpricevat0"/>
 				
 				
-				<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="6" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
+				<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?= $count_add ?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
 				
             <?php endif;?>
 			
 			<?php if ($isAvail AND $entity != Entity::PERIODIC) : ?>
 			
-			<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="6" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
+			<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
 				
 			
 			<? endif; ?>
@@ -766,8 +845,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 $cat[] = $item['SubCategory'];
             ?>
             <?php if (!empty($cat)) : ?>
-                <div class="blue_arrow text" style="margin-top: 25px;">
-                    <span class="nameprop"><?= $ui->item('Related categories'); ?>:</span>
+                <div class="blue_arrow text" style="margin: 20px 0;">
+                    <div class="detail-prop">
+                        <div class="prop-name"><?= $ui->item('Related categories'); ?>:</div>
+                        <div class="prop-value">
                     <?php foreach ($cat as $c) : ?>
                         <?php $catTitle = ProductHelper::GetTitle($c); ?>
                         <a href="<?=
@@ -776,36 +857,52 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                             'title' => ProductHelper::ToAscii($catTitle)
                         ));
                         ?>" class="catlist"><?= $catTitle; ?></a>;
-                       <?php endforeach; ?>
+                       <?php endforeach; ?></div>
+                        <div class="clearBoth"></div>
+                    </div>
                 </div>
             <?php endif; ?>
 			
 			<?php if ($item['entity'] != Entity::PERIODIC) : ?>
 			
 			<?php if (!empty($items['dvds'])) : ?>
-                <br><span class="nameprop">DVDs:</span> <?=$item['dvds']; ?>
+                    <div class="detail-prop">
+                        <div class="prop-name">DVDs:</div>
+                        <div class="prop-value"><?=$item['dvds']; ?></div>
+                        <div class="clearBoth"></div>
+                    </div>
             <?php endif; ?>
 
-            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'])) ?>
+            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
 
            
 
 
             <?php if (!empty($item['size'])) : ?>
-                <br /><span class="nameprop"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></span><? echo $item['size']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></div>
+            <div class="prop-value"><? echo $item['size']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif; ?>
 
             <?php if (!empty($item['playtime'])) : ?>
 
-                <br /><span class="nameprop"><?= sprintf($ui->item('MSG_AUDIO_PLAYING_TIME'),'');?></span><? echo $item['playtime']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= sprintf($ui->item('MSG_AUDIO_PLAYING_TIME'),'');?></div>
+            <div class="prop-value"><? echo $item['playtime']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
 
             <?php endif; ?>
 
 
             <?php if (!empty($item['Series'])) : ?>
-                <br /><span class="nameprop"><?= sprintf($ui->item("SERIES_IS"), ''); ?></span>
-                <a class="cprop"
-                   href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a>
+        <div class="detail-prop">
+            <div class="prop-name"><?= sprintf($ui->item("SERIES_IS"), ''); ?></div>
+            <div class="prop-value"><a class="cprop" href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a></div>
+            <div class="clearBoth"></div>
+        </div>
                
             <?php endif; ?>
 
@@ -813,33 +910,48 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
 
             <?php if (!empty($item['catalogue'])) : ?>
-                <br /><span class="nameprop">Catalogue N:</span> <?= $item['catalogue']; ?><br/>
+        <div class="detail-prop">
+            <div class="prop-name">Catalogue N:</div>
+            <div class="prop-value"><?= $item['catalogue']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif; ?>
 
 
 
             
 
-            <?php if (!empty($item['issues_year'])) $this->renderPartial('/entity/_issues_year', array('item' => $item)) ?>
-
             <?php if (!empty($item['requirements'])) : ?>
-                <br /><span class="nameprop"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</span> <?= $item['requirements']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</div>
+            <div class="prop-value"><?= $item['requirements']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif; ?>
 
 
             <?php if (!empty($item['index'])) : ?>
-                <br /><span class="nameprop"><?= sprintf($ui->item("PERIOD_INDEX"), '');?></span>
-                <?=$item['index']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= sprintf($ui->item("PERIOD_INDEX"), '');?></div>
+            <div class="prop-value"><?=$item['index']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif ?>
 
             <?php if (!empty($item['issn'])) : ?>
-                <br /><span class="nameprop">
-                ISSN:</span> <?= $item['issn']; ?>
+        <div class="detail-prop">
+            <div class="prop-name">ISSN:</div>
+            <div class="prop-value"><?= $item['issn']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif; ?>
 
             <?php if (!empty($item['stock_id'])) : ?>
-                <br /><span class="nameprop">
-                <?= $ui->item('Stock_id'); ?>:</span> <?= $item['stock_id']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $ui->item('Stock_id'); ?>:</div>
+            <div class="prop-value"><?= $item['stock_id']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
             <?php endif; ?>
 
                 <?php if (
@@ -848,40 +960,92 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 ) : ?>
                 <?php else:
                     $name = 'ISBN';
-                    if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
-                    ?>
-                    <?php if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::PERIODIC)))): ?>
-                    <br /><span class="nameprop">EAN:</span> <?= $item['eancode']; ?>
+                    if ($entity == Entity::SHEETMUSIC) $name = 'ISMN/ISBN';
+                    if (!empty($item['eancode']) ): ?>
+        <div class="detail-prop">
+            <div class="prop-name">EAN:</div>
+            <div class="prop-value"><?= $item['eancode']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn2'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn2']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn2']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn3'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn3']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn3']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn4'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn4']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn4']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn5'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn5']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn5']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn6'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn6']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn6']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn7'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn7']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn7']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn8'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn8']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn8']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn9'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn9']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn9']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
                     <?php if (!empty($item['isbn10'])) : ?>
-                    <br /><span class="nameprop"><?= $name ?>:</span> <?= $item['isbn10']; ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn10']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
                 <?php endif; ?>
             <?php endif; ?>
-		<?php endif; ?>
+            <?php else: ?>
+                <?php if (!empty($item['eancode'])):
+                //не поймешь, то надо то не надо https://dfaktor.bitrix24.ru/company/personal/user/836/tasks/task/view/6810/
+                ?>
+        <div class="detail-prop">
+            <div class="prop-name">EAN:</div>
+            <div class="prop-value"><?= $item['eancode']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
+		    <?php endif; ?>
+                <?php if (!empty($item['issues_year'])):
+                    $this->renderPartial('/entity/_issues_year', array('item' => $item)) ?>
+                <?php endif; ?>
+            <?php endif; ?>
 	</div>
 	
 	
@@ -947,135 +1111,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 -->
 </div>
 
-<? 
-	
-	$authors = ' author_id IN (10) ';
-	
-	if (!empty($item['Authors'])) {
-		
-		foreach ($item['Authors'] as $author) {
-			
-			$arrAu[] = $author['id'];
-			
-		}
-		
-		$authors = ' author_id IN ('.implode(',', $arrAu).') ';
-		
-	}
-	
-	
-	
-	$ids = Product::related_goods($item['Category']['id'], $entity, $item['id'], ProductHelper::GetTitle($item), $item['series_id'], $authors);
-
-	if (count($ids)) {
-?>
-
-<script type="text/javascript">
-        $(document).ready(function () {
-            $('.more_goods ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
-            });
-        });
-    </script>
-
-<div class="news_box" style="margin-top: 40px;">
-
-
-		<div class="">
-			<div class="title">
-				<?=$ui->item('A_NEW_RELATION_ITEMS')?>        
-				<div class="pult">
-					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
-					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
-				</div>
-			</div>
-		</div>
-		
-		<div class="more_goods" style="overflow: hidden">
-<ul class="books">
-
-	<?
-
-	foreach ($ids as $k) : 
-	
-	if ($k['entity'] == '') { $k['entity'] = $entity; }
-	
-	?>
-	
-	<?
-	
-	$product = Product::GetProduct($k['entity'], $k['id']);
-	$url = ProductHelper::CreateUrl($product);
-	
-	
-	echo  '	<li>
-        
-    <div class="img" style="min-height: 130px; position: relative">';
-        $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
-    </div>
- 
-	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
-		
-		if ($product['isbn']) {
-			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';
-		}
-		
-		if ($product['year']) {
-			
-			echo '<div>'.$ui->item('A_NEW_YEAR') . ': ' . $product['year'].'</div>';
-			
-		}
-		
-		if ($product['binding_id']) {
-		
-		$row = Binding::GetBinding($entity, $product['binding_id']);
-		echo $row['title_' . Yii::app()->language];	
-		
-		}
-		
-		$price = DiscountManager::GetPrice(Yii::app()->user->id, $product);
-	
-		echo '
-        
-    	<div class="cost">';
-		if (!empty($price[DiscountManager::DISCOUNT])) :
-            echo '<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
-            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
-                '.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
-            </span>';
-
-        else :
-
-            echo '<span class="price">'.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
-        
-        </span>';
-
-        endif;
-	echo '</div>
-                    <div class="nds">'. ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . $ui->item('WITHOUT_VAT') .'</div>
-                    <div class="addcart">
-                        <a class="cart-action" data-action="add" data-entity="'. $k['entity'] .'"
-               data-id="'. $k['id'] .'" data-quantity="1"
-               href="javascript:;">'.$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART').'</a>
-                    </div>                   </li>'; ?>
-
-
-					
-					
-		<? endforeach; ?>			
-</ul>
-</div>
-
-
-</div>
-
-
-	<? } ?>
-
-<?php $this->widget('Banners', array()) ?>
+<?php $this->widget('Similar', array('entity'=>$entity, 'item'=>$item)); ?>
+<?php $this->widget('Banners', array()); ?>
 
 
 <script type="text/javascript">

@@ -79,6 +79,8 @@ class Product
             $item = $d->attributes;
             $entity = $d->getEntity();
             if (!isset($forHref[$entity])) $forHref[$entity] = array();
+            if (!isset($forHref[$entity]['product/view'])) $forHref[$entity]['product/view'] = array();
+            if (!empty($item['id'])) $forHref[$entity]['product/view'][] = $item['id'];
 
             if (isset($d->authors)) {
                 if (!isset($forHref[$entity]['entity/byauthor'])) $forHref[$entity]['entity/byauthor'] = array();
@@ -193,7 +195,14 @@ class Product
 
         foreach ($forHref as $entity=>$routes) {
             foreach ($routes as $route=>$ids) {
-                if ($ids) HrefTitles::get()->getByIds($entity, $route, $ids);
+                if ($ids) {
+                    $ids = array_unique($ids);
+                    if ($route == 'product/view') {
+                        Product::setActionItems($entity, $ids);
+                        Product::setOfferItems($entity, $ids);
+                    }
+                    HrefTitles::get()->getByIds($entity, $route, $ids);
+                }
             }
         }
 

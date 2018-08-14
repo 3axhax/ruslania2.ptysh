@@ -12,6 +12,8 @@ class Printed extends CMyActiveRecord
         return 'printed_catalog';
     }
 
+    function getEntity() { return Entity::PRINTED; }
+
     public function relations()
     {
         return array(

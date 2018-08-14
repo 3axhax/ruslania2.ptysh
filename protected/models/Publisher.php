@@ -14,35 +14,27 @@ class Publisher extends CMyActiveRecord {
     }
 
     public function GetABC($lang, $entity) {
+        if (!Entity::checkEntityParam($entity, 'publisher')) return array();
+
         $entityParam = Entity::GetEntitiesList()[$entity];
         $tableItems = $entityParam['site_table'];
-        $sql = ''.
-            'SELECT t.first_' . $lang . ' '.
-            'FROM all_publishers AS t '.
-                'JOIN ' . $tableItems . ' AS tI ON (tI.publisher_id = t.id) '.
-            'group by ord(t.first_'.$lang.') '.
-            'ORDER BY ord(t.title_'.$lang.') ASC '.
-        '';
-/*        $sql = 'SELECT DISTINCT(first_'.$lang.') AS first_'.$lang.' '
-              .'FROM `all_publishers` AS al '
-              .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
-              .'WHERE e.entity=:entity '
-              .'ORDER BY first_'.$lang;*/
 
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity' => $entity));
-//        return $rows;
-        $filterRows = [];
-        $i = 0;
-        foreach($rows as $key => $value)
-        {
-            if(preg_match('/^\p{L}+$/u', $value['first_'.$lang]))
-            {
-                $filterRows[$i]['first_'.$lang] = $value['first_'.$lang];
-                $i++;
+        $sql = ''.
+            'select`first_'.$lang.'` '.
+            'from`all_publishers` '.
+            'where (first_'.$lang.' regexp "[[:alpha:]]") '.
+                'and (`first_'.$lang.'` != "") '.
+                'and (is_' . $entity . ' > 0) '.
+            'group by `first_'.$lang.'` '.
+            'order by `first_'.$lang.'` '.
+            '';
+        $abc = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryColumn() as $alpha) {
+            if (preg_match("/\w/ui", $alpha)) {
+                $abc[] = array('first_'.$lang => $alpha);
             }
         }
-
-        return $filterRows;
+        return $abc;
     }
 
     public function GetPublishersByFirstChar($char, $lang, $entity) {

@@ -29,7 +29,10 @@ class SearchAuthors {
 		$authors = array();
 		//сначала ищу если начанается
 		if (mb_strlen($q, 'utf-8') == 1) $authors = $this->getBegin($entity, $q, array(), $limit);
-		else $authors = $this->getLike($entity, $q, array(), $limit, true);
+		else {
+			$authors = $this->getLike($entity, $q, array(), $limit, true);
+			if (empty($authors))$authors = $this->getFromCompliances($entity, $q, array(), $limit);
+		}
 		//сначала ищу если начанается
 
 		//потом добавляю тем, что содержит
@@ -59,18 +62,35 @@ class SearchAuthors {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuthors . ' t '.
-				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.' . $fieldFirst . ' = :q) '.
-			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+				'and (is_' . $entity . '_author > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
+
+//		$sql = ''.
+//			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+//			'from ' . $tableAuthors . ' t '.
+//			'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
+//			'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+//			'where (t.' . $fieldFirst . ' = :q) '.
+//			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+//			'group by t.id '.
+//			'order by title_' . $this->_siteLang . ' '.
+//			(empty($limit)?'':'limit ' . $limit . ' ').
+//		'';
+
 		$authors = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q));
 		if ($count !== false) {
 			$sql = 'select found_rows();';
 			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
 		}
 		return $authors;
 	}
@@ -88,11 +108,12 @@ class SearchAuthors {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuthors . ' t '.
-				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+//				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
+//				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
-			(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
-			'group by t.id '.
+				'and (is_' . $entity . '_author > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+//			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
@@ -103,6 +124,39 @@ class SearchAuthors {
 			$sql = 'select found_rows();';
 			$count = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
+		}
+		return $authors;
+	}
+
+	function getFromCompliances($entity, $q, $excludes = array(), $limit = '', &$count = false) {
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+			'from all_authorslist t '.
+				'join ('.
+					'select db_id id '.
+					'from compliances '.
+					'where (xml_value like :q) '.
+						'and (type_id = 4) '.
+					'group by db_id '.
+				') tCompl using (id) '.
+			'where (is_' . $entity . '_author > 0) '.
+				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
+			'order by title_' . $this->_siteLang . ' '.
+			(empty($limit)?'':'limit ' . $limit . ' ').
+		'';
+		$qStr = $q . '%';
+		$authors = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $qStr));
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
 		return $authors;
 	}
 
@@ -131,7 +185,7 @@ class SearchAuthors {
             ' . $tbl . ' as bc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
             ('.$whereLike.')) as aa where (ba.author_id = aa.id) and (bc.id = ba.' . $field . ') 
 				GROUP BY ba.author_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(екгу, array(':q' => '%'.$q.'%'));
+            $rows = Yii::app()->db->createCommand($sql)->queryAll($sql, array(':q' => '%'.$q.'%'));
         }
         $authors = [];
         $i = 0;

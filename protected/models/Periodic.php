@@ -12,9 +12,12 @@ class Periodic extends CMyActiveRecord
         return 'pereodics_catalog';
     }
 
+    function getEntity() { return Entity::PERIODIC; }
+
     public function relations()
     {
         return array(
+            'type' => array(self::BELONGS_TO, 'PeriodicCategory', 'type'),
             'category' => array(self::BELONGS_TO, 'PeriodicCategory', 'code'),
             'subcategory' => array(self::BELONGS_TO, 'PeriodicCategory', 'subcode'),
             'lookinside' => array(self::HAS_MANY, 'Lookinside', 'item_id', 'on' => 'lookinside.entity='.Entity::PERIODIC ),
@@ -143,6 +146,23 @@ class Periodic extends CMyActiveRecord
             $month, $label_for_month,
             $issues, $label_for_issues
         );
+
+        if ($issues_year < 12) {
+            $inOneMonth = $issues_year / 12;
+            $show3Months = false;
+            $show6Months = false;
+
+            $tmp1 = $inOneMonth * 3;
+            if (ctype_digit("$tmp1")) $show3Months = true;
+
+            $tmp2 = $inOneMonth * 6;
+            if (ctype_digit("$tmp2")) $show6Months = true;
+        }
+        else {
+            $show3Months = true;
+            $show6Months = true;
+        }
+
 
         $result['description'] .= $msg;
         $result['show3Months'] = $show3Months;

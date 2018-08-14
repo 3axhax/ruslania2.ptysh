@@ -23,7 +23,7 @@
 <div class="container cabinet">
 
 <div class="row">
-        <div class="span10">
+        <div class="">
 
 <?php if(empty($cartItems)) : ?>
 
@@ -673,11 +673,7 @@
 <!-- /content -->
 </div>
 </div>
-    <div class="span2">
-
-                <?php $this->renderPartial('/site/_me_left'); ?>
-
-            </div>
+   
 </div>
 </div>
 

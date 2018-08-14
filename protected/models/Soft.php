@@ -12,6 +12,8 @@ class Soft extends CMyActiveRecord
         return 'soft_catalog';
     }
 
+    function getEntity() { return Entity::SOFT; }
+
     public function relations()
     {
         return array(

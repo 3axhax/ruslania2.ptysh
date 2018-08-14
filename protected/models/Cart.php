@@ -159,6 +159,10 @@ class Cart extends CActiveRecord
             $priceVATWorld = $values[DiscountManager::WITH_VAT_WORLD];
             $priceVAT0World = $values[DiscountManager::WITHOUT_VAT_WORLD];
 
+            $tmp = array();
+            $tmp['noUseChangeQuantity'] = 0;
+            $tmp['Entity'] = Entity::ConvertToHuman($c['entity']);
+            $tmp['ID'] = $c['id'];
             if($tmp['Entity'] == Entity::PERIODIC)
             {
                 $priceVAT = $priceVAT / 12;
@@ -167,11 +171,12 @@ class Cart extends CActiveRecord
                 $priceVAT0Fin /= 12;
                 $priceVATWorld /= 12;
                 $priceVAT0World /= 12;
+                if (!empty($c['issues_year'])) {
+                    $issues = Periodic::getCountIssues($c['issues_year']);
+                    $tmp['noUseChangeQuantity'] = (int) (empty($issues['show3Months'])&&empty($issues['show6Months']));
+                }
             }
 
-            $tmp = array();
-            $tmp['Entity'] = Entity::ConvertToHuman($c['entity']);
-            $tmp['ID'] = $c['id'];
 			$tmp['Title'] = ProductHelper::GetTitle($c);
             if ($isMiniCart == 1) { $tmp['Title'] = ProductHelper::GetTitle($c, 'title', 38); }
 			$tmp['PriceVAT'] = $priceVAT;
@@ -204,6 +209,12 @@ class Cart extends CActiveRecord
             $tmp['Rate'] = $values[DiscountManager::RATE];
             $tmp['VAT'] = $c['vat'];
             $tmp['InfoField'] = '';
+            $tmp['Authors'] = '';
+            if (!empty($c['Authors'])) {
+                $authots = array();
+                foreach ($c['Authors'] as $author) { $authots[] = ProductHelper::GetTitle($author); }
+                $tmp['Authors'] = implode(', ', $authots);
+            }
             $ret[] = $tmp;
         }
         if (!$isMiniCart)
@@ -499,6 +510,14 @@ class Cart extends CActiveRecord
         }
 		
         return ($priceSum == 0) ? '0 '.Currency::ToSign(Yii::app()->currency) : ProductHelper::FormatPrice($priceSum);
+    }
+    
+    public function cart_getpoints_smartpost($index = 0, $country = 'FI') {
+        $file = file_get_contents('https://locationservice.posti.com/location?types=SMARTPOST&types=PICKUPPOINT&countryCode='.$country.'&locationZipCode='.$index.'&top=10');
+    
+        $arr = json_decode($file, true);
+        
+        return $arr['locations'];
     }
     
     

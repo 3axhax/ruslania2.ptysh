@@ -5,7 +5,7 @@ $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 ?>
 <div class="row">
-    <div class="span1" style="position: relative">
+    <div class="span1 image_item" style="position: relative">
         <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
         <?php if (isset($isList) && $isList) : ?>
             <a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
@@ -172,7 +172,22 @@ $entityKey = Entity::GetUrlKey($entity);
 			
 			if (isset($item['type'])) {
 			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>: </span><?
-			 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+                            
+                            
+                            
+                            
+			 if ($item['entity'] == Entity::PERIODIC) :
+
+	 
+        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
+        
+        
+        
+        else :
+        
+        $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+        
+         endif;
 			 
 			 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
@@ -220,7 +235,9 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (Availability::GetStatus($item) != Availability::NOT_AVAIL_AT_ALL) : ?>
 
-                <?php if ($item['entity'] == Entity::PERIODIC) : ?>
+                <?php if ($item['entity'] == Entity::PERIODIC) :
+                    $item['issues_year'] = Periodic::getCountIssues($item['issues_year']);
+                    ?>
 					<div style="height: 23px; clear: both"></div>
                     <?=
                     $this->renderPartial('/entity/_priceInfo', array('key' => 'PERIODIC_FIN',
@@ -274,7 +291,7 @@ $entityKey = Entity::GetUrlKey($entity);
             <?php if ($item['entity'] == Entity::PERIODIC) : ?>
 
                 <?php
-                $ie = $item['issues_year'];
+                /*$ie = $item['issues_year'];
 
                 if ($ie < 12) {
                     $inOneMonth = $ie / 12;
@@ -291,22 +308,22 @@ $entityKey = Entity::GetUrlKey($entity);
                 else {
                     $show3Months = true;
                     $show6Months = true;
-                }
+                }*/
                 ?>
 				<div class="mb5" style="color:#0A6C9D; float: left;">
                     <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
                 </div>
 				<div style="height: 23px; clear: both"></div>
                 <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;">
-                    <?php if ($show3Months) : ?>
-                        <option value="3">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - 3 <?= $ui->item('A_NEW_NUM'); ?></option>
+                    <?php if (!empty($item['issues_year']['show3Months'])) : $count_add = 3; ?>
+                        <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - 3 <?= $ui->item('A_NEW_NUM'); ?></option>
                     <?php endif; ?>
 
-                    <?php if ($show6Months) : ?>
-                        <option value="6">6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - 6 <?= $ui->item('A_NEW_NUMS'); ?></option>
+                    <?php if (!empty($item['issues_year']['show6Months'])) : ?>
+                        <option value="6"<?php if(empty($item['issues_year']['show3Months'])): $count_add = 6; ?> selected="selected"<?php endif; ?>>6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - 6 <?= $ui->item('A_NEW_NUMS'); ?></option>
                     <?php endif; ?>
 
-                    <option value="12" selected="selected">
+                    <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
                         12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - 12 <?= $ui->item('A_NEW_NUMS'); ?></option>
                 </select>
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
@@ -349,12 +366,10 @@ $entityKey = Entity::GetUrlKey($entity);
 				
 				
 				
-				<? $count_add = 1;
-					if ($item['entity'] == Entity::PERIODIC) {
-						
-						$count_add = 12;
-						
-					}
+				<?php if (empty($count_add)) {
+                    $count_add = 1;
+					if ($item['entity'] == Entity::PERIODIC) $count_add = 12;
+                }
 				?>
         <input type="hidden" name="entity[<?= (int) $item['id'] ?>]" value="<?= (int) $item['entity'] ?>">
 

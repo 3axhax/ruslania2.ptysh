@@ -113,4 +113,12 @@ class TypeRetriever
         '';
         return Yii::app()->db->createCommand($sql)->queryAll();
     }
+
+    public function GetType ($entity, $tid) {
+        $entitys = Entity::GetEntitiesList();
+        $type_table = $entitys[$entity]['type_table'];
+        $sql = 'SELECT * FROM '. $type_table .' WHERE id=:id LIMIT 1';
+        $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id' => $tid));
+        return $row;
+    }
 }

@@ -10,7 +10,7 @@
 
     <?php $form = $this->beginWidget('KnockoutForm', array(
                                                           'model' => $model,
-'class' =>'registr',                                                          'action' => '/site/register',
+'class' =>'registr',                                                          'action' => Yii::app()->createUrl('site').'register',
                                                           'id' => 'user-register',
                                                           'viewModel' => 'registerVM',
                                                           'beforeAjaxSubmit' => 'beforeRegister',
@@ -44,7 +44,7 @@
             <?php if($refresh) : ?>
             window.location.reload();
             <?php else : ?>
-            window.location.href = '/cart/doorder/';
+            window.location.href = Yii::app()->createUrl('cart').'doorder/';
             <?php endif; ?>
         }
     </script>

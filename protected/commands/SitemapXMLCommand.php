@@ -15,7 +15,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 	public function actionIndex() {
 		$this->_dir = Yii::getPathOfAlias('webroot') . '/pictures/sitemap/';
 		if (!file_exists($this->_dir)) mkdir($this->_dir, 0755, true);
-//		echo (new Sitemap())->builder(true);
+		echo (new Sitemap())->builder(true);
 		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?><sitemapindex></sitemapindex>');
 		$xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 		$xml->addAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');

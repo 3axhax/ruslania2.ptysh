@@ -28,6 +28,14 @@ class Sitemap {
 		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear', array('pereodics_catalog')),
 	);
 
+	private $_tagsHand = array(//в итоге получились не теги, но менять название не стал
+		'sale'=>array('', 'MENU_SALE', 'site/sale', ''),
+		'register'=>array('', 'A_REGISTER', 'site/register', ''),
+		'login'=>array('', 'A_SIGNIN', 'site/login', ''),
+		'cartView'=>array('', 'A_SHOPCART', 'cart/view', ''),
+		'me'=>array('', 'YM_CONTEXT_PERSONAL_MAIN', 'client/me', ''),
+	);
+
 	private $_staticPages = array(
 		'aboutus'=>'A_ABOUTUS',
 		'csr'=>'A_CSR',
@@ -38,6 +46,7 @@ class Sitemap {
 		'legal_notice'=>'YM_CONTEXT_LEGAL_NOTICE',
 		'faq'=>'A_FAQ',
 		'sitemap'=>'A_SITEMAP',
+		'offers_partners'=>'A_OFFERS',
 	);
 
 	/**
@@ -48,7 +57,7 @@ class Sitemap {
 	/**
 	 * @return array 0=>список тегов по разделам, 1=>список тегов для всех разделов
 	 */
-	function getTags() { return array($this->_tags, $this->_tagsAll); }
+	function getTags() { return array($this->_tags, $this->_tagsAll, $this->_tagsHand); }
 
 
 	function builder($rewrite = false) {
@@ -86,7 +95,7 @@ class Sitemap {
 		if (!empty($cats)) {//
 			$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 			foreach ($cats as $cat) {
-				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'])) . '">' . ProductHelper::GetTitle($cat) . '</a>');
+				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))) . '">' . ProductHelper::GetTitle($cat) . '</a>');
 				$this->_categories($entity, $cat['id'], $i+1);
 				$this->_putFile('</li>');
 			}

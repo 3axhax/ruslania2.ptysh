@@ -212,75 +212,8 @@ else $act = array('', '');
                         formatItem: function (data, $item, q)
                         {
                             var ret = '';
-<?php if (!isset($_GET['old'])): ?>
                             ret += data;
-<?php else: ?>
-                            if (data.Counts != undefined) {
-
-                                for (var i = 1; i < 10; i++) {
-
-                                    if (data.Counts.enityes[i] != undefined) {
-
-                                        ret += '<div class="row_category">' + data.Counts.enityes[i][0] + ' <span>' + data.Counts.enityes[i][2] + '</span> <a href="' + data.Counts.enityes[i][3] + '" class="result_search_count">' + decline_days(data.Counts.enityes[i][1]) + ' </a></div>';
-
-                                    }
-
-                                }
-
-                            } else {
-
-                                //alert(data.length);
-
-                                if (data.length > 0) {
-                                    ret += '<div class="title_goods">' +
-                                            '<div class="red_checkbox" onclick="check_search($(this), \'js_avail\')" style="float: right;">';
-                                    ret += '' +
-                                            '<span class="checkbox" style="height: 10px; padding-top: 2px;">' +
-                                            '<span class="check<?= $act[1] ?>"></span>' +
-                                            '</span> ' +
-                                            //'<input type="hidden" name="avail" value="<?= $act[0] ?>" class="avail">'+
-                                            '<?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>' +
-                                            '</div>' +
-                                            '<div><?= $ui->item('A_NEW_SEARCH_GOODS_TITLE'); ?></div></div>' +
-                                            '';
-
-
-                                    for (var i = 0; i < data.length; i++) {
-                                        if (!data[i].is_product) {
-                                            ret += '<div class="row_item"><?= $ui->item('DID_YOU_MEAN') ?></div>';
-                                            break;
-                                        }
-                                    }
-
-                                    for (var i = 0; i < data.length; i++)
-                                    {
-
-                                        if (data[i].is_product) {
-
-                                            var img = '';
-                                            if (data[i].picture_url != 'http://ruslania.com/pictures/small/' && data[i].picture_url != '') {
-
-                                                var img = '<img style="max-width: 100%;" height="86" src="' + data[i].picture_url + '" />';
-
-                                            }
-
-                                            ret += '<div class="row_item"><table><tr><td class="pic"><a href="' + data[i].url + '">' + img + '</a></td><td class="name"><a href="' + data[i].url + '">' + data[i].title + '</a><div style="height: 18px;"></div><span class="price">' + data[i].price + '</span></td></tr></table></div>';
-                                            //<a class="cart-action add_cart<?if (Yii::app()->language == 'es') echo ' no_img';?>" data-action="add" style="width: 162px;font-size: 13px; margin-left: 18px; color: #fff;" data-entity="'+data[i].entity+'" data-id="'+data[i].id+'" data-quantity="1" href="javascript:;" onclick="add2Cart($(this).attr(\'data-action\'),     $(this).attr(\'data-entity\'),$(this).attr(\'data-id\'),$(this).attr(\'data-quantity\'),null,$(this));"><?= $ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART'); ?></a>
-
-                                        } else {
-                                            ret += '<div class="row_item"><a href="' + data[i].url + '">' + data[i].title + '</a></div>';
-                                        }
-                                    }
-
-
-                                }
-
-                            }
-<?php endif; ?>
-//					console.log(ret);
-
                             return ret;
-
                         }
 
                     });
@@ -299,39 +232,9 @@ else $act = array('', '');
                         $('div.span1.cart .cost').html(d.totalPrice)
                     }
                 });
-
-                $('select.periodic').change(function ()
-                {
-
-                    //alert(1);
-
-                    var $el = $(this);
-                    var cart = $el.closest('.span11, .span1.cart');
-
-                    var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
-                    var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
-                    var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
-                    var finpmonthVat = cart.find('input.finmonthpricevat').val();
-
-                    var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
-                    var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
-
-                    var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
-                    var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
-
-                    cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
-                    cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
-
-                    cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
-                    cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
-
-                    cart.find('a.add').attr('data-quantity', $el.val());
-                });
-
-
-
-
-            })
+                initPeriodicPriceSelect();
+                initAAddCart();
+            });
 
             $(document).ready(function () {
 
@@ -466,7 +369,7 @@ else $act = array('', '');
                 cont.css('z-index', '999999');
                 cont.css('background', '#fff');
                 cont.css('width', '249px');
-                cont.css('box-shadow', '0px 3px 10px 0px rgba(0, 0, 0, 0.15)');
+                cont.css('box-shadow', '0px 3px 10px 3px rgba(0, 0, 0, 0.15)');
                 cont.css('padding', '0px 10px');
 
 
@@ -607,91 +510,6 @@ else $act = array('', '');
                     event.stopPropagation();
                 });
 
-                var elems = $('a.cart-action');
-                var $finSubButton = $('#finSubscription');
-                var $worldSubButton = $('#worldSubscription');
-                var $formDiv = $('#periodic-price-form');
-                var $formEid = $formDiv.find('input[name="eid"]');
-                var $formIid = $formDiv.find('input[name="iid"]');
-                var $formQty = $formDiv.find('input[name="qty"]');
-
-
-                $finSubButton.click(function ()
-                {
-                    $.magnificPopup.close();
-                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
-                });
-
-                $worldSubButton.click(function ()
-                {
-                    $.magnificPopup.close();
-                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
-                });
-
-                $(elems).click(function ()
-                {
-                    //alert(1);
-
-                    var $el = $(this);
-                    var $parent = $el.closest('.to_cart');
-
-                    var entity = $el.attr('data-entity');
-
-                    if (entity == <?= Entity::PERIODIC; ?>)
-                    {
-                        var $finPrice = $('#finPrice');
-                        var $worldPrice = $('#worldPrice');
-
-                        var $itemFinBlock = $parent.find('.periodic_fin');
-                        var $itemWorldBlock = $parent.find('.periodic_world');
-
-                        if ($itemWorldBlock.length && $itemFinBlock.length)
-                        {
-                            $formEid.val($el.attr('data-entity'));
-                            $formIid.val($el.attr('data-id'));
-                            $formQty.val($el.attr('data-quantity'));
-                            $finSubButton.data($el);
-                            $worldSubButton.data($el);
-
-                            // show dialog only if we have different prices
-                            var $formTitle = $('#formTitle');
-                            var $formMonths = $('#formMonths');
-                            var $title = $parent.closest('.to_cart').find('h1.title');
-                            $formTitle.html($title.html());
-
-                            var $select = $parent.find('select.periodic');
-                            $formMonths.html($(':selected', $select).text());
-
-                            var finHtml = $itemFinBlock.html();
-                            $finPrice.html(finHtml);
-                            var worldHtml = $itemWorldBlock.html();
-                            $worldPrice.html(worldHtml);
-                            $.magnificPopup.open({
-                                items: {
-                                    src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
-                                    type: 'inline'
-                                }
-                            });
-                            return false;
-                        }
-                    }
-
-                    add2Cart($el.attr('data-action'),
-                            $el.attr('data-entity'),
-                            $el.attr('data-id'),
-                            $el.attr('data-quantity'),
-                            null,
-                            $el
-                            );
-                    
-                    <?php if (in_array('cart', $url)) : ?>
-                        
-                       location.href=location.href;
-                        
-                    <?php endif; ?>
-                    
-                    return false;
-                });
 
             })
 
@@ -809,6 +627,121 @@ else $act = array('', '');
                 mylist.append(category_item);
             }
 
+            function initPeriodicPriceSelect() {
+                $('select.periodic').change(function ()
+                {
+
+                    var $el = $(this);
+                    var cart = $el.closest('.span11, .span1.cart');
+
+                    var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
+                    var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
+                    var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
+                    var finpmonthVat = cart.find('input.finmonthpricevat').val();
+
+                    var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
+                    var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
+
+                    var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
+                    var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
+
+                    cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
+                    cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
+
+                    cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
+                    cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
+
+                    cart.find('a.add').attr('data-quantity', $el.val());
+                });
+            }
+
+            function initAAddCart() {
+
+                var elems = $('a.cart-action');
+                var $finSubButton = $('#finSubscription');
+                var $worldSubButton = $('#worldSubscription');
+                var $formDiv = $('#periodic-price-form');
+                var $formEid = $formDiv.find('input[name="eid"]');
+                var $formIid = $formDiv.find('input[name="iid"]');
+                var $formQty = $formDiv.find('input[name="qty"]');
+
+
+                $finSubButton.click(function ()
+                {
+                    $.magnificPopup.close();
+                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
+                });
+
+                $worldSubButton.click(function ()
+                {
+                    $.magnificPopup.close();
+                    add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
+                });
+
+                $(elems).click(function () {
+                    //alert(1);
+
+
+                    var $el = $(this);
+                    var $parent = $el.closest('.to_cart');
+
+                    var entity = $el.attr('data-entity');
+
+                    if (entity == <?= Entity::PERIODIC; ?>) {
+                        var $finPrice = $('#finPrice');
+                        var $worldPrice = $('#worldPrice');
+
+                        var $itemFinBlock = $parent.find('.periodic_fin');
+                        var $itemWorldBlock = $parent.find('.periodic_world');
+
+                        if ($itemWorldBlock.length && $itemFinBlock.length) {
+                            $formEid.val($el.attr('data-entity'));
+                            $formIid.val($el.attr('data-id'));
+                            $formQty.val($el.attr('data-quantity'));
+                            $finSubButton.data($el);
+                            $worldSubButton.data($el);
+
+                            // show dialog only if we have different prices
+                            var $formTitle = $('#formTitle');
+                            var $formMonths = $('#formMonths');
+                            var $title = $parent.closest('.to_cart').find('h1.title');
+                            $formTitle.html($title.html());
+
+                            var $select = $parent.find('select.periodic');
+                            $formMonths.html($(':selected', $select).text());
+
+                            var finHtml = $itemFinBlock.html();
+                            $finPrice.html(finHtml);
+                            var worldHtml = $itemWorldBlock.html();
+                            $worldPrice.html(worldHtml);
+                            $.magnificPopup.open({
+                                items: {
+                                    src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
+                                    type: 'inline'
+                                }
+                            });
+                            return false;
+                        }
+                    }
+
+                    add2Cart($el.attr('data-action'),
+                        $el.attr('data-entity'),
+                        $el.attr('data-id'),
+                        $el.attr('data-quantity'),
+                        null,
+                        $el
+                    );
+
+                    <?php if (in_array('cart', $url)) : ?>
+
+                    location.href = location.href;
+
+                    <?php endif; ?>
+
+                    return false;
+                });
+            }
+
 
         </script>
 
@@ -834,7 +767,7 @@ else $act = array('', '');
             <? endif; ?>
 
             <div class="box_btns">
-                <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language); ?>?sel=1" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
+                <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language, 1); ?>" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
                 <a href="javascript:;" onclick="$('.lang_yesno_box').hide();
                                         $('.lang_yesno_box.select_lang').show();" class="btn_no"><?= $ui->item('A_NEW_BTN_NO'); ?> <? if (Yii::app()->language != 'en') : ?>(No)<? endif; ?></a>
             </div>
@@ -851,13 +784,13 @@ else $act = array('', '');
             <? endif; ?>
             <div class="row">
                 <ul class="list_languages">
-                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru'); ?>?sel=1"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
-                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi'); ?>?sel=1"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
-                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en'); ?>?sel=1"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
-                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de'); ?>?sel=1"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
-                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr'); ?>?sel=1"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
-                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es'); ?>?sel=1"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
-                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se'); ?>?sel=1"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
+                    <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru', 1); ?>"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>
+                    <li class="fi span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fi', 1); ?>"><?= $ui->item('A_LANG_FINNISH') ?></a></li>
+                    <li class="en span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'en', 1); ?>"><?= $ui->item('A_LANG_ENGLISH') ?></a></li>
+                    <li class="de span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'de', 1); ?>"><?= $ui->item('A_LANG_GERMAN') ?></a></li>
+                    <li class="fr span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'fr', 1); ?>"><?= $ui->item('A_LANG_FRENCH') ?></a></li>
+                    <li class="es span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'es', 1); ?>"><?= $ui->item('A_LANG_ESPANIOL') ?></a></li>
+                    <li class="se span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'se', 1); ?>"><?= $ui->item('A_LANG_SWEDISH') ?></a></li>
 
                 </ul>
             </div>
@@ -932,7 +865,7 @@ else $act = array('', '');
                     <? if (!in_array('cart',$url)) : ?>
 
                     <div class="span10">
-                        <form method="get" action="<?= isset($_GET['ha'])?'/search/general':'/site/search' ?>" id="srch">
+                        <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch">
                             <div class="search_box">
                                 <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
@@ -1575,20 +1508,20 @@ else $act = array('', '');
 
         <link rel="stylesheet" href="/css/magnific-popup.css" >
         <div id="periodic-price-form" class="white-popup-block mfp-hide white-popup">
-            <h2><?= $ui->item('PERIODIC_POPUP_HEADER'); ?></h2>
-            <h4 id="formTitle"></h4>
-            <h5 id="formMonths"></h5>
+            <div class="box_title box_title_ru"><?= $ui->item('PERIODIC_POPUP_HEADER'); ?></div>
+            <div class="box_title box_title_en" id="formTitle"></div>
+            <div class="box_title box_title_en" id="formMonths"></div>
             <input type="hidden" name="eid" value=""/>
             <input type="hidden" name="iid" value=""/>
             <input type="hidden" name="qty" value=""/>
 
-            <div class="periodic_choice">
+            <div class="periodic_choice box_btns">
                 <div id="finPrice"></div>
-                <button id="finSubscription"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
+                <button class="btn_yes" id="finSubscription"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
             </div>
-            <div class="periodic_choice">
+            <div class="periodic_choice box_btns">
                 <div id="worldPrice"></div>
-                <button id="worldSubscription"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
+                <button class="btn_yes" id="worldSubscription"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
             </div>
             <div class="clearfix"></div>
         </div>

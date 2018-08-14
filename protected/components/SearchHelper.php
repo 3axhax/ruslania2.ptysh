@@ -621,7 +621,7 @@ class SearchHelper
     }
 
 
-    static function ProcessPersons($roles, $ids, $filters=array())
+    static function ProcessPersons($roles, $ids, $filters=array(), $avail = 1)
     {
         if (!is_array($ids) || count($ids) == 0) return array();
 
@@ -690,10 +690,13 @@ class SearchHelper
 
                 $title = ProductHelper::GetTitle($row);
                 $entity = $roleData['entity'];
-                $data['url'] = Yii::app()->createUrl($routes[$role],
-                    array('entity' => Entity::GetUrlKey($entity),
-                          'title' => ProductHelper::ToAscii($title),
-                          $key => $personID));
+                $urlParams = array(
+                    'entity' => Entity::GetUrlKey($entity),
+                    'title' => ProductHelper::ToAscii($title),
+                    $key => $personID
+                );
+                if (empty($avail)) $urlParams['avail'] = 0;
+                $data['url'] = Yii::app()->createUrl($routes[$role], $urlParams);
                 $data['title'] = Entity::GetTitle($entity) . ': <b>' .
                     sprintf(Yii::app()->ui->item($titles[$role]), $title) . '</b>';
                 $data['is_product'] = false;

@@ -43,6 +43,11 @@ class SearchPerformers {
 		$items = Yii::app()->db->createCommand($sql)->queryAll();
 		$sql = 'select found_rows();';
 		$counts = Yii::app()->db->createCommand($sql)->queryScalar();
+		$ids = array();
+		foreach ($items as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byperformer', $ids);
+		}
 		return $items;
 	}
 
@@ -98,6 +103,11 @@ class SearchPerformers {
 		if ($count !== false) {
 			$sql = 'select found_rows();';
 			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($items as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byperformer', $ids);
 		}
 		return $items;
 	}

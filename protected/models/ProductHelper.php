@@ -476,6 +476,16 @@ class ProductHelper
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id' => $bid));
         return $row;
     }
+    
+    public function GetTypesPeriodic($entity, $bid)
+    {
+        
+        $table = '`pereodics_types`';
+
+        $sql = 'SELECT * FROM '.$table.' WHERE id=:id';
+        $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id' => $bid));
+        return $row;
+    }
 
 
     public static function __ToAscii__old($str, $options = array())

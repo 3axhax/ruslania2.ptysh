@@ -12,6 +12,7 @@ class Video extends CMyActiveRecord
         return 'video_catalog';
     }
 
+    function getEntity() { return Entity::VIDEO; }
 
     //'with' => array('directors', 'roles', 'subtitles', 'media', 'zone', 'category', 'subcategory'),
 

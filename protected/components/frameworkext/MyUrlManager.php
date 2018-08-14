@@ -4,7 +4,7 @@ class MyUrlManager extends CUrlManager
 {
     public $urlRuleClass = 'MyUrlRule';
 
-    public static function RewriteCurrent($controller, $lang) {
+    public static function RewriteCurrent($controller, $lang, $sel = false) {
         $query = (string)Yii::app()->getRequest()->getQueryString();
         if ($lang === 'rut') {
             $action = $controller->action->id;
@@ -14,6 +14,7 @@ class MyUrlManager extends CUrlManager
             }
             else {
                 $params = $_GET;
+                if ($sel) $params['sel'] = 1;
                 $params['__langForUrl'] = $lang;
                 if (!empty($params['avail'])) unset($params['avail']);
                 $ctrl = $controller->id;
@@ -28,26 +29,30 @@ class MyUrlManager extends CUrlManager
                 if (!empty($pathInfo)&&($pathInfo !== '/')) $url = '/' . $lang . '/' . $pathInfo . '/';
                 else $url = '/' . $lang . '/';
             }
+            if ($sel) {
+                if (empty($query)) $query = 'sel=1';
+                else $query .= '&sel=1';
+            }
 
             if (!empty($query)
                 &&(Yii::app()->language !== 'rut')//это чтоб убрать lang и language из адреса
             ) $url .= '?' . $query;
-       }
+        }
         return $url;
     }
 
     public static function RewriteCurrency($controller, $currency) {
-/*        $query = (string)Yii::app()->getRequest()->getQueryString();
+        /*        $query = (string)Yii::app()->getRequest()->getQueryString();
 
-        $url = Yii::app()->getRequest()->getPathInfo() . '/';
-        if (Yii::app()->language !== 'rut') $url = '/' . Yii::app()->language . '/' . $url;
+				$url = Yii::app()->getRequest()->getPathInfo() . '/';
+				if (Yii::app()->language !== 'rut') $url = '/' . Yii::app()->language . '/' . $url;
 
-        $query = preg_replace("/\bcurrency=\d?\b/ui", '', $query);
-        $query = preg_replace(array("/[&]{2,}/ui"), array('&'), $query);
+				$query = preg_replace("/\bcurrency=\d?\b/ui", '', $query);
+				$query = preg_replace(array("/[&]{2,}/ui"), array('&'), $query);
 
-        if (!empty($query)) $query .= '&';
-        $query .= 'currency=' . $currency;
-        return $url . '?' . $query;*/
+				if (!empty($query)) $query .= '&';
+				$query .= 'currency=' . $currency;
+				return $url . '?' . $query;*/
 
 
         $params = $_GET;
@@ -71,11 +76,16 @@ class MyUrlManager extends CUrlManager
 //    }
 
     function init() {
-        $this->cacheID .= '_' . Yii::app()->language;
+        if (!defined('OLD_PAGES')) $this->cacheID .= '_' . Yii::app()->language;
         parent::init();
     }
     function parseUrl($request) {
+        $rawPathInfo=$request->getPathInfo();
+        $pathInfo=$this->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
         $result = parent::parseUrl($request);
+        if ($pathInfo === $result) {
+            HrefTitles::get()->redirectOldPage($pathInfo);
+        }
         return $result;
     }
 
@@ -85,22 +95,50 @@ class MyUrlManager extends CUrlManager
     }
 
     protected function createUrlDefault($route,$params,$ampersand) {
-        $language = Yii::app()->language;
-        if (!empty($language)) $route = $language . '/' . $route;
-        return parent::createUrlDefault($route,$params,$ampersand);
-    }
+        if (defined('OLD_PAGES')) return parent::createUrlDefault($route,$params,$ampersand);
 
-
-}
-
-class MyUrlRule extends CUrlRule {
-    function createUrl($manager,$route,$params,$ampersand) {
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка
             $language = $params['__langForUrl'];
         }
         unset($params['__langForUrl']);
+
+        if (!empty($language)) $route = $language . '/' . $route;
+        return parent::createUrlDefault($route,$params,$ampersand);
+    }
+
+    function parseUrlByPath($path) {
+
+    }
+
+}
+
+class MyUrlRule extends CUrlRule {
+    function createUrl($manager,$route,$params,$ampersand) {
+        if (defined('OLD_PAGES')) return parent::createUrl($manager,$route,$params,$ampersand);
+
+        $language = Yii::app()->language;
+        if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
+            //что бы получить путь для другого языка
+            $language = $params['__langForUrl'];
+        }
+        unset($params['__langForUrl']);
+
+        if (!empty($params['title'])&&!empty($params['entity'])) {
+            $entity = Entity::ParseFromString($params['entity']);
+            $idName = HrefTitles::get()->getIdName($entity, $route);
+            if (!empty($params[$idName])) {
+                if (empty($params['__useTitleParams'])) {
+                    $titles = HrefTitles::get()->getById($entity, $route, $params[$idName]);
+                    if (!empty($titles)) {
+                        if (!empty($titles[$language])) $params['title'] = $titles[$language];
+                        elseif (!empty($titles['en'])) $params['title'] = $titles['en'];
+                    }
+                }
+            }
+        }
+        unset($params['__useTitleParams']);
 
         $langGood = '';
         $langGoodId = 0;
@@ -132,8 +170,12 @@ class MyUrlRule extends CUrlRule {
     }
 
     function parseUrl($manager,$request,$pathInfo,$rawPathInfo) {
+        if (get_class($request) === 'MyRefererRequest') return $this->_parseReferer($manager,$request,$pathInfo,$rawPathInfo);
+
         $result = parent::parseUrl($manager,$request,$pathInfo,$rawPathInfo);
-        if (($result === 'entity/list')&&!empty($_GET['lang'])) {
+        if (defined('OLD_PAGES')) return $result;
+
+        if ((mb_strpos($result, 'entity/', null, 'utf-8') === 0)&&!empty($_GET['lang'])) {
             $langGoods = ProductLang::getShortLang();
             if (is_numeric($_GET['lang'])&&!empty($langGoods[$_GET['lang']])) $langId = $_GET['lang'];
             else $langId = array_search($_GET['lang'], $langGoods);
@@ -141,5 +183,62 @@ class MyUrlRule extends CUrlRule {
             $_GET['lang'] = $langId;
         }
         return $result;
+    }
+
+    /** эта заплатка нужна, чтоб не изменять $_GET, когда пытаемся распарсить произвольный адрес
+     * @param $manager
+     * @param MyRefererRequest $request
+     * @param $pathInfo
+     * @param $rawPathInfo
+     * @return bool|string
+     */
+    private function _parseReferer($manager,MyRefererRequest $request,$pathInfo,$rawPathInfo) {
+        if($this->verb!==null && !in_array($request->getRequestType(), $this->verb, true))
+            return false;
+
+        if($manager->caseSensitive && $this->caseSensitive===null || $this->caseSensitive)
+            $case='';
+        else
+            $case='i';
+
+        if($this->urlSuffix!==null)
+            $pathInfo=$manager->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
+
+        // URL suffix required, but not found in the requested URL
+        if($manager->useStrictParsing && $pathInfo===$rawPathInfo)
+        {
+            $urlSuffix=$this->urlSuffix===null ? $manager->urlSuffix : $this->urlSuffix;
+            if($urlSuffix!='' && $urlSuffix!=='/')
+                return false;
+        }
+
+        if($this->hasHostInfo)
+            $pathInfo=strtolower($request->getHostInfo()).rtrim('/'.$pathInfo,'/');
+
+        $pathInfo.='/';
+
+        if(preg_match($this->pattern.$case,$pathInfo,$matches))
+        {
+            foreach($this->defaultParams as $name=>$value)
+            {
+                $request->setParam($name, $value);
+            }
+            $tr=array();
+            foreach($matches as $key=>$value)
+            {
+                if(isset($this->references[$key]))
+                    $tr[$this->references[$key]]=$value;
+                else if(isset($this->params[$key]))
+                    $request->setParam($key, $value);
+            }
+            if($pathInfo!==$matches[0]) // there're additional GET params
+                $manager->parsePathInfo(ltrim(substr($pathInfo,strlen($matches[0])),'/'));
+            if($this->routePattern!==null)
+                return strtr($this->route,$tr);
+            else
+                return $this->route;
+        }
+        else
+            return false;
     }
 }

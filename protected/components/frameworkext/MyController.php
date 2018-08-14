@@ -66,7 +66,7 @@ class MyController extends CController
 
         $currency = Currency::EUR;
 
-        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
+//        if (in_array(Yii::app()->language, array('ru', 'rut', 'en'))) $currency = Currency::USD; //валюта по умолчанию для России и Англии
 
         if (Yii::app()->getRequest()->cookies['showSelLang']->value) {
             if(isset($_GET['currency'])) $currency = intVal($_GET['currency']);
@@ -104,8 +104,6 @@ class MyController extends CController
         if(!in_array($lang, $validLangs)) $lang = Yii::app()->params['DefaultLanguage'];
 
         $this->SetNewLanguage($lang);
-
-//        $this->widget('Debug', array($params, MyUrlManager::rules));
     }
 
     public function filters()
@@ -327,33 +325,41 @@ class MyController extends CController
      * - адреса без наименования
      * реальные адреса заканчиваются на "/"
      *
-     * 27.06.18 какая-то неразбериха, решение Дениса:
-     *
-    https://ruslania.com/video/6279/gogol-nachalo
-    https://ruslania.com/video/6279/gogol-nachalo/qweqwewqe
-    https://ruslania.com/video/6279/gogol-nachalosdfsdfasdf
-    https://ruslania.com/video/6279
-    https://ruslania.com/video/6279/
-
-    должны редиректить 301 на https://ruslania.com/video/6279/gogol-nachalo/
-    а если учесть последнюю задачу по переделке структуры url на сайте, то должно редиректить уже на
-    https://ruslania.com/ru/video/6279-gogol-nachalo/
-     * делаю редирект на реальный адрес всегда
+     * 16.07.18
+     * есть таблица seo_href_titles там подготевленные title для разных языков для формирования путей.
+     * Для страницы предполагается однозначный путь, даже если поменяется наименование
+     * в таблице seo_old_href_titles старые названия, на случай если иземяется title из таблицы seo_href_titles
      *
      * функция делает редирект на реальный адрес, если старый адрес похож на реальный
      * @param $oldPage
      * @param $realPage
      * @param $query
      */
-    protected function _redirectOldPages($oldPage, $realPage, $query) {
-        $this->redirect($realPage . $query, true, 301);
-        return;
+    protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
+//        $this->redirect($realPage . $query, true, 301);
+//        return;
 
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
-        elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, $oldPage, null, 'utf-8') !== false)) $oldPage = $realPage;
+        elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
 
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
+
+        $route = $this->id . '/' . $this->action->id;
+        if (!empty($data['entity'])) {
+            $entity = $data['entity'];
+            if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
+            else $entity = Entity::ParseFromString($entity);
+            $idName = HrefTitles::get()->getIdName($entity, $route);
+            if (!empty($idName)&&!empty($data[$idName])) {
+                $data['__useTitleParams'] = true;
+                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], Yii::app()->language) as $oldTitle) {
+                    $data['title'] = $oldTitle;
+                    $path = Yii::app()->createUrl($route, $data);
+                    if ($path === $oldPage) $this->redirect($realPage . $query, true, 301);
+                }
+            }
+        }
     }
 
 }
