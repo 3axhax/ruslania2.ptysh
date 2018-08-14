@@ -37,16 +37,33 @@ class Sitemap {
 	);
 
 	private $_staticPages = array(
-		'aboutus'=>'A_ABOUTUS',
-		'csr'=>'A_CSR',
-		'conditions'=>'MSG_CONDITIONS_OF_USE',
-		'conditions_order'=>'YM_CONTEXT_CONDITIONS_ORDER_ALL',
-		'conditions_subscription'=>'YM_CONTEXT_CONDITIONS_ORDER_PRD',
-		'contact'=>'YM_CONTEXT_CONTACTUS',
-		'legal_notice'=>'YM_CONTEXT_LEGAL_NOTICE',
-		'faq'=>'A_FAQ',
-		'sitemap'=>'A_SITEMAP',
-		'offers_partners'=>'A_OFFERS',
+		'conditions' => 'MSG_CONDITIONS_OF_USE',
+		'conditions_order' => 'YM_CONTEXT_CONDITIONS_ORDER_ALL',
+		'conditions_subscription' => 'YM_CONTEXT_CONDITIONS_ORDER_PRD',
+		'contact' => 'YM_CONTEXT_CONTACTUS',
+		'legal_notice' => 'YM_CONTEXT_LEGAL_NOTICE',
+		'faq' => 'A_FAQ',
+		'aboutus' => 'A_ABOUTUS',
+		'partners' => 'A_PARTNERS',
+		'links' => 'A_LINKS',
+		'ourstore' => 'A_STORE',
+		'csr' => 'A_CSR',
+		'offers_partners' => 'YM_CONTEXT_OFFERS_PARTNERS',
+		'thawte' => 'MSG_YAHLIST_INFO_THAWTE',
+		'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
+		'zone_info' => 'Zone',
+		'paypal' => 'MSG_WHAT_IS_PAYPAL',
+		'sitemap' => 'A_SITEMAP',
+//		'aboutus'=>'A_ABOUTUS',
+//		'csr'=>'A_CSR',
+//		'conditions'=>'MSG_CONDITIONS_OF_USE',
+//		'conditions_order'=>'YM_CONTEXT_CONDITIONS_ORDER_ALL',
+//		'conditions_subscription'=>'YM_CONTEXT_CONDITIONS_ORDER_PRD',
+//		'contact'=>'YM_CONTEXT_CONTACTUS',
+//		'legal_notice'=>'YM_CONTEXT_LEGAL_NOTICE',
+//		'faq'=>'A_FAQ',
+//		'sitemap'=>'A_SITEMAP',
+//		'offers_partners'=>'A_OFFERS',
 	);
 
 	/**
@@ -71,10 +88,24 @@ class Sitemap {
 		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 		foreach (Entity::GetEntitiesList() as $id=>$entity) {
 			$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($id))) . '">' . Entity::GetTitle($id) . '</a>');
+			$this->_log('Раздел и категории "' . Yii::app()->ui->item($entity['uikey']) . '"');
 			$this->_categories($id, 0, $i+1);
 			$this->_tags($id, $i+1);
 			$this->_putFile('</li>');
+			$this->_log('');
 		}
+
+		foreach ($this->_tagsHand as $tag=>$param) {
+			$this->_log(Yii::app()->ui->item($param[1]));
+			$this->_putFile('<li><a href="' . Yii::app()->createUrl($param[2]) . '">' . Yii::app()->ui->item($param[1]) . '</a></li>');
+		}
+
+
+		foreach ($this->_staticPages as $pageName=>$name) {
+			$this->_log(Yii::app()->ui->item($name));
+			$this->_putFile('<li><a href="' . Yii::app()->createUrl('site/static', array('page'=>$pageName)) . '">' . Yii::app()->ui->item($name) . '</a></li>');
+		}
+
 		$this->_putFile('</ul>');
 		$this->_putFile('</li>');
 		$this->_putFile('</ul>');
@@ -108,12 +139,15 @@ class Sitemap {
 		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 		foreach ($tags as $tag=>$param) {
 			if (!empty($param[2])&&$this->_checkTagByEntity($tag, $entity)) {
+				$this->_log(Yii::app()->ui->item(Entity::GetEntitiesList()[$entity]['uikey']) . ' ' . Yii::app()->ui->item($param[1]));
+
 				$this->_putFile('<li><a href="' . Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity))) . '">' . Yii::app()->ui->item($param[1]) . '</a>');
 				$this->_putFile('</li>');
 			}
 		}
 		foreach ($this->_tagsAll as $tag=>$param) {
-			if (!empty($param[2])) {
+			if (!empty($param[2])&&$this->_checkTagByEntity($tag, $entity)) {
+				$this->_log(Yii::app()->ui->item(Entity::GetEntitiesList()[$entity]['uikey']) . ' ' . Yii::app()->ui->item($param[1]));
 				$href = Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity)));
 				$this->_putFile('<li><a href="' . $href . '">' . Yii::app()->ui->item($param[1]) . '</a>');
 				$this->_putFile('</li>');
@@ -129,5 +163,9 @@ class Sitemap {
 	}
 
 	function checkTagByEntity($tag, $entity) { return $this->_checkTagByEntity($tag, $entity); }
+
+	private function _log($s) {
+//		echo $s . '<br>';
+	}
 
 }
