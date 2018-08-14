@@ -1,8 +1,8 @@
 <?php /*Created by Кирилл (04.07.2018 19:00) */ ?>
 <?php //$this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>)); ?>
-<div style="margin-bottom:5px;">
-	<div style="float: left;" class="nameprop"><?= Yii::app()->ui->item("IN_OFFERS"); ?>:</div>
-	<div style="padding-left: 220px;"><ul>
+<div class="detail-prop">
+	<div class="prop-name"><?= Yii::app()->ui->item("IN_OFFERS"); ?>:</div>
+	<div class="prop-value"><ul>
 <?php $i = 0; foreach ($offers as $offer):
 	if (empty($offer['is_special'])):
 		$href = Yii::app()->createUrl('offers/view', array('title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($offer)), 'oid'=>$offer['id']));

@@ -3058,3 +3058,8 @@ div.sort_lable {
     float: left;
     margin: auto;
 }
+
+div.detail-prop { margin-bottom: 5px; }
+div.detail-prop .prop-name { float: left; width: 200px; }
+div.detail-prop .prop-value { padding-left: 210px; }
+div.detail-prop .prop-value li { list-style-type: none; }
