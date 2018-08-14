@@ -60,6 +60,7 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) $list = $sController->getList($q, 1, 10);
+
 			if (!empty($list)) $list = $sController->inDescription($list, $q);
 
 			if (!$isCode) {
@@ -82,6 +83,7 @@ class LiveSearchController extends MyController {
 					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
 				}
 			}
+
 		}
 	}
 

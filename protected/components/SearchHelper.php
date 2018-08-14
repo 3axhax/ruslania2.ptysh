@@ -60,37 +60,32 @@ class SearchHelper
         $search = self::Create();
         $queryWords = array();
         $tokens = array();
-        $query = strtolower(trim($query));
-        $words = explode(" ", $query);
+        $query = mb_strtolower(trim($query), 'utf-8');
+        $words = preg_split("/\W+/ui", $query);
+
         $realWords = array();
 
         $stopwords = array('для', 'for', 'dlja', 'и');
 
-        foreach ($words as $word)
-        {
-            $word = str_replace(',', '', $word);
-            $word = str_replace('.', '', $word);
-            $word = trim($word);
+        foreach ($words as $word) {
             if (in_array($word, $stopwords)) continue;
-            if(strlen($word) <= 2) continue;
+            if(mb_strlen($word, 'utf-8') <= 2) continue;
             $realWords[] = $word;
         }
 
-        $query = trim(implode($realWords, ' '));
+        $prepareQuery = trim(implode($realWords, ' '));
 
         $queries = array();
-        if (!empty($query))
-            $queries[] = '("' . $search->EscapeString($query) . '"/' . (count($realWords)) . ')';
+        if (!empty($prepareQuery))
+            $queries[] = '("' . $search->EscapeString($prepareQuery) . '"/' . (count($realWords)) . ')';
 
-        $kw = $search->BuildKeywords($query, $index, false);
+        $kw = $search->BuildKeywords($prepareQuery, $index, false);
 
 
-        if (!empty($kw))
-        {
-            foreach ($kw as $keyWord)
-            {
+        if (!empty($kw)) {
+            foreach ($kw as $keyWord) {
                 if (in_array($keyWord['normalized'], $stopwords)) continue;
-                if (strlen($keyWord['normalized']) < 3) continue;
+                if (mb_strlen($keyWord['normalized'], 'utf-8') < 3) continue;
                 $tokens[] = $keyWord['normalized'];
             }
         }
