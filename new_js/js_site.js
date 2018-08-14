@@ -1,4 +1,12 @@
 $(document).ready(function(){
+    initAAddCart();
+    $(document).click(function (event) {
+        if ($(event.target).closest('.subcat').length) return;
+        if ($(event.target).closest('.open_subcat').length) return;
+        $('.subcat').hide();
+        $('.open_subcat').removeClass('open');
+        event.stopPropagation();
+    });
     $('.slider_recomend').slick({
         infinite: true,
         slidesToShow: 5,
@@ -12,6 +20,7 @@ $(document).ready(function(){
 
 // "X" в input-ах фильтра
 function tog(v){return v?'addClass':'removeClass';}
+
 $(document).on('input', '.clearable', function(){
     $(this)[tog(this.value)]('x');
 }).on('mousemove', '.x', function( e ){
@@ -66,47 +75,54 @@ function show_result_count(url) {
 }
 
 //Вывод результата фильтра
-function show_items(url) {
+function show_items(url, page) {
     if (url === undefined) {
         url = '/ru/site/ggfilter/';
     }
+    if (page === undefined) {
+        page = 0;
+    }
     var create_url;
     create_url = url +
-        'entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
-        '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
+        'entity_val/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
+        '/cid_val/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
         '/avail/'+(( avail = $('form.filter select[name=avail]').val()) ? avail : '1')+
         '/ymin/'+(( ymin = $('form.filter input.year_inp_mini').val()) ? ymin : '0')+
-        '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '3000')+
-        '/izda/'+(( izda = $('form.filter input[name=izda]').val()) ? izda : '0')+
+        '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '0')+
+        '/publisher/'+(( publisher = $('form.filter input[name=publisher]').val()) ? publisher : '0')+
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
-        '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '10000')+
-        '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '');
+        '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
+        '/lang/'+(( lang = $('form.filter input[name=lang]').val()) ? lang : '') +
+        '/page/' + page;
     var bindings = [];
     var i = 0;
 
     bindings = $('#binding_select').val();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
+    items_content = $('.span10 .items');
+    //items_content = $('.span10.listgoods');
+
     $.ajax({
         url: create_url,
         type: "POST",
         data: { YII_CSRF_TOKEN: csrf[1],
-            'binding_id[]' : bindings,
+            'binding[]' : bindings,
             name_search : $('#name_search').val(),
             sort : $('form.filter .sort').val(),
-            formatVideo : $('#formatVideo').val(),
-            langVideo : $('#langVideo').val(),
-            subtitlesVideo : $('#subtitlesVideo').val(),
+            format_video : $('#format_video').val(),
+            lang_video : $('#lang_video').val(),
+            subtitles_video : $('#subtitles_video').val(),
         },
         beforeSend: function(){
-            $('.span10.listgoods').html('Загрузка...');
+            items_content.html('Загрузка...');
         },
         success: function (data) {
-            $('.span10.listgoods').html(data);
+            items_content.html(data);
             $('.box_select_result_count').hide(1);
-            $(window).scrollTop(0);
+            //$(window).scrollTop(0);
         },
         error: function (msg) {
             console.log (msg);
@@ -132,7 +148,7 @@ function liveFindAuthorMP(entity, url, cid) {
 }
 
 function liveFindPublisherMP(entity, url, cid) {
-    find_pub = $('.find_izda');
+    find_pub = $('.find_publisher');
     var dataPost = {entity: entity, cid: cid};
     find_pub.marcoPolo({
         minChars:3,
@@ -143,7 +159,7 @@ function liveFindPublisherMP(entity, url, cid) {
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {
-            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'izda\', \'' + data.title + '\', \'new_izda\')">' + data.title + '</li>';
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'publisher\', \'' + data.title + '\', \'new_publisher\')">' + data.title + '</li>';
         },
     });
 }

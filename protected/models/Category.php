@@ -40,6 +40,17 @@ class Category {
     }
 
     function getFilterSlider($entity, $cid) {
+        $yearInterval = Condition::get($entity, $cid)->getYearInterval();
+        $priceInterval = Condition::get($entity, $cid)->getPriceInterval();
+        $result = array();
+        $result[] = empty($yearInterval['min'])?0:$yearInterval['min'];
+        $result[] = empty($yearInterval['max'])?0:$yearInterval['max'];
+        $result[] = empty($priceInterval['min'])?0:$priceInterval['min'];
+        $result[] = empty($priceInterval['max'])?0:$priceInterval['max'];
+        return $result;
+
+
+
         if (!Entity::checkEntityParam($entity, 'years')) return null;
 
         $cid = (int) $cid;
@@ -246,11 +257,26 @@ class Category {
                     $rows = Yii::app()->db->createCommand($sql)->queryAll();
                 }
 
-            $ids = array();
-            foreach ($rows as $row) $ids[] = $row['media_id'];
-            HrefTitles::get()->getByIds($entity, 'entity/bymedia', $ids);
+                $ids = array();
+                foreach ($rows as $row) $ids[] = $row['media_id'];
+                HrefTitles::get()->getByIds($entity, 'entity/bymedia', $ids);
 
-            return $rows;
+                return $rows;
+                break;
+            case 30:
+                $entities = Entity::GetEntitiesList();
+                $tbl = $entities[$entity]['site_table'];
+                $tbl_type = $entities[$entity]['type_table'];
+                if ($cid > 0) {
+                    $sql = 'SELECT type FROM ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) GROUP BY type';
+                    $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+                }
+                else {
+                    $sql = 'SELECT type FROM ' . $tbl . ' GROUP BY type';
+                    $rows = Yii::app()->db->createCommand($sql)->queryAll();
+                }
+
+                return $rows;
                 break;
         }
         return array();
@@ -468,17 +494,26 @@ class Category {
             return array();
         }
 
-        $entities = Entity::GetEntitiesList();
 
         $entity = $data['entity'];
         $cid = $data['cid'];
+
+        if ($_GET['sort']) $sort = $_GET['sort'];
+        else {
+            $sort = $data['sort'];
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);
+        return $this->getFilterResult($entity, $cid, $sort, $page);
+
+
+
         $avail = $data['avail'];
         $lang_sel = $data['lang_sel'];
-        $sort = $data['sort'];
         $ymin = $data['year_min'];
         $ymax = $data['year_max'];
         $author = $data['author'];
-        $izda = $data['publisher'];
+        $publisher = $data['publisher'];
         $seria = $data['series'];
         $binding = $data['binding'];
         $cmin = $data['cost_min'];
@@ -488,6 +523,7 @@ class Category {
         $subtitlesVideo = $data['subtitles_video'];
 
 
+        $entities = Entity::GetEntitiesList();
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
 
@@ -523,9 +559,9 @@ class Category {
            $criteria->params[':aid'] = $author; 
         }
         
-        if ($izda AND $entity !=40) {
+        if ($publisher AND $entity !=40) {
             $criteria->addCondition('publisher_id=:pid');
-            $criteria->params[':pid'] = $izda;
+            $criteria->params[':pid'] = $publisher;
         }
         
         if ($seria AND $entity !=40) {
@@ -570,11 +606,6 @@ class Category {
             }
             $criteria->addCondition($str);
         }
-		if ($_GET['sort']) {
-			$sort = $_GET['sort'];
-		} else {
-			if (!$sort) $sort = 12;
-		}
 
         $criteria->addCondition('brutto >= :brutto1 AND brutto<=:brutto2');
         $criteria->params[':brutto1'] = $cmin;
@@ -593,7 +624,51 @@ class Category {
         return $ret;
     }
 
-    function getFilterCounts($entity, $cid, $post, $isFilter = false) {
+    function getFilterResult($entity, $cid, $sort, $page) {
+        $dp = Entity::CreateDataProvider($entity);
+        $criteria = $dp->getCriteria();
+        $criteria->order = SortOptions::GetSQL($sort, '', $entity);
+        $criteria->limit = Yii::app()->params['ItemsPerPage'];
+        $criteria->offset = 0;
+
+       /* if ($_GET['sort']) {
+            $sort = $_GET['sort'];
+        } else {
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);*/
+
+        $condition = Condition::get($entity, $cid)->getCondition();
+        $join = Condition::get($entity, $cid)->getJoin();
+        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
+        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
+
+        $sql = ''.
+            'select t.id '.
+            'from ' . $dp->model->tableName() . ' t '.
+                implode(' ', $join) . ' '.
+                (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
+            'order by ' . $criteria->order . ' '.
+            'limit ' . $page * $criteria->limit . ', ' . $criteria->limit . ' '.
+        '';
+        $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        if (empty($itemIds)) return array();
+
+        HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
+
+        Product::setActionItems($entity, $itemIds);
+        Product::setOfferItems($entity, $itemIds);
+        $criteria->alias = 't';
+        $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
+        $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
+        $dp->setCriteria($criteria);
+        $dp->pagination = false;
+        $data = $dp->getData();
+        $ret = Product::FlatResult($data);
+        return $ret;
+    }
+
+    function getFilterCounts($entity, $cid) {
         $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition();
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
@@ -611,7 +686,6 @@ class Category {
                 implode(' ', $join) . ' '.
                 'where ' . implode(' and ', $onlySupportLanguageCondition) . ' '.
             '';
-            Debug::staticRun(array($sql));
             return (int) Yii::app()->db->createCommand($sql)->queryScalar();
         }
 
@@ -628,6 +702,8 @@ class Category {
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
+        $counts = $this->getFilterCounts($entity, $cid);
+        return (($counts > 1000) && $isFilter) ? '>1000' : $counts;
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
@@ -638,7 +714,7 @@ class Category {
 
         $aid = $post['author'];
         $avail = $post['avail'];
-        $izda = $post['publisher'];
+        $publisher = $post['publisher'];
         $seria = $post['series'];
 
         if ($entity != 30) {
@@ -686,8 +762,8 @@ class Category {
         if ($avail != '0') {
             $query[] = 'bc.avail_for_order=1';
         }
-        if ($izda AND $entity !=40) {
-            $query[] = 'bc.publisher_id = ' . $izda;
+        if ($publisher AND $entity !=40) {
+            $query[] = 'bc.publisher_id = ' . $publisher;
         }
         if ($seria AND $entity !=40) {
             $query[] = 'bc.series_id = ' . $seria;

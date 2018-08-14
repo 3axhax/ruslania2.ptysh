@@ -904,7 +904,7 @@ class SiteController extends MyController {
             $page = 1;
         $e = abs(intVal($e));
 
-        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
+        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding'.$e]);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
     }
@@ -1008,7 +1008,7 @@ class SiteController extends MyController {
             if (!trim($name_publ))
                 continue;
 
-            echo '<div class="item" rel="' . $row['id'] . '" onclick="select_item($(this), \'izda\')">' . $name_publ . '</div>';
+            echo '<div class="item" rel="' . $row['id'] . '" onclick="select_item($(this), \'publisher\')">' . $name_publ . '</div>';
         }
     }
 
@@ -1037,6 +1037,7 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
+            //$test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }
@@ -1049,17 +1050,16 @@ class SiteController extends MyController {
     }
 
     function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
-                            $izda = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
+                            $publisher = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
                             $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
 
-        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
+        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/publisher/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
-        $_GET['name_search'] = $_POST['name_search'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
-        $_GET['binding_id'] = $_POST['binding_id'];
-        $_GET['langVideo'] = $_POST['langVideo'];
-        $_GET['formatVideo'] = $_POST['formatVideo'];
-        $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
+        $_GET['binding'] = $_POST['binding'];
+        $_GET['lang_video'] = $_POST['lang_video'];
+        $_GET['format_video'] = $_POST['format_video'];
+        $_GET['subtitles_video'] = $_POST['subtitles_video'];
         $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
@@ -1067,18 +1067,22 @@ class SiteController extends MyController {
         $data = FilterHelper::getFiltersData($entity, $cid);
 
         $cat = new Category();
-        $items = $cat->result_filter($data);
 
         $totalItems = $cat->count_filter($entity, $cid, $data);
         $paginator = new CPagination($totalItems);
-        /*$http = str_replace(Yii::app()->getBaseUrl(true).'/'.Yii::app()->language, '', $_SERVER['HTTP_REFERER']);
-        $par = substr($http, stripos($http, '?'));
-        $http = str_replace($par, '', $http);
-        $paginator->route = Yii::app()->createUrl($http);
-        if (substr_count($http, '?') > 0) $paginator->route = substr($paginator->route, 0, -1);*/
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
         $paginator->itemCount = $totalItems;
 
+        $entity = $data['entity'];
+        $cid = $data['cid'];
+
+        if ($_GET['sort']) $sort = $_GET['sort'];
+        else {
+            $sort = $data['sort'];
+            if (!$sort) $sort = 12;
+        }
+        $sort = SortOptions::GetDefaultSort($sort);
+        $items = $cat->getFilterResult($entity, $cid, $sort, $paginator->currentPage);
 
         $path = $cat->GetCategoryPath($entity, $cid);
         $selectedCategory = array_pop($path);
