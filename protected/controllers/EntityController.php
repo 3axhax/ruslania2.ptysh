@@ -68,6 +68,8 @@ class EntityController extends MyController {
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
 
+        $test = FilterHelper::getFiltersData($entity, $cid);
+
         $category = new Category();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
@@ -159,8 +161,8 @@ class EntityController extends MyController {
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
-            $data['lang_sel'] = $lang;
+            /*FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
+            $data['lang_sel'] = $lang;*/
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -370,7 +372,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'seria', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -473,7 +474,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'publisher', $pid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -580,7 +580,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'author', $aid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
 		$this->render('list', array('entity' => $entity,
@@ -1068,7 +1067,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'binding_id', $bid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array(

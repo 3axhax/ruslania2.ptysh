@@ -513,7 +513,7 @@ class Category {
         $ymin = $data['year_min'];
         $ymax = $data['year_max'];
         $author = $data['author'];
-        $izda = $data['publisher'];
+        $publisher = $data['publisher'];
         $seria = $data['series'];
         $binding = $data['binding'];
         $cmin = $data['cost_min'];
@@ -559,9 +559,9 @@ class Category {
            $criteria->params[':aid'] = $author; 
         }
         
-        if ($izda AND $entity !=40) {
+        if ($publisher AND $entity !=40) {
             $criteria->addCondition('publisher_id=:pid');
-            $criteria->params[':pid'] = $izda;
+            $criteria->params[':pid'] = $publisher;
         }
         
         if ($seria AND $entity !=40) {
@@ -715,7 +715,7 @@ class Category {
 
         $aid = $post['author'];
         $avail = $post['avail'];
-        $izda = $post['publisher'];
+        $publisher = $post['publisher'];
         $seria = $post['series'];
 
         if ($entity != 30) {
@@ -763,8 +763,8 @@ class Category {
         if ($avail != '0') {
             $query[] = 'bc.avail_for_order=1';
         }
-        if ($izda AND $entity !=40) {
-            $query[] = 'bc.publisher_id = ' . $izda;
+        if ($publisher AND $entity !=40) {
+            $query[] = 'bc.publisher_id = ' . $publisher;
         }
         if ($seria AND $entity !=40) {
             $query[] = 'bc.series_id = ' . $seria;
