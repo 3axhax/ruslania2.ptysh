@@ -673,6 +673,7 @@ class Category {
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
 
+
         $distinct = '*';
         if (!empty($onlySupportLanguageCondition) //все данные есть в таблице _support_languages_
             ||(empty($condition)&&!empty($join['tL_support']))//все можно достать без таблицы _catalog
@@ -698,6 +699,7 @@ class Category {
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
         '';
+        $test = FilterHelper::getFiltersData($entity, $cid);
         return (int) Yii::app()->db->createCommand($sql)->queryScalar();
     }
 
