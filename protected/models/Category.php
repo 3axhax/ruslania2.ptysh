@@ -699,6 +699,7 @@ class Category {
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
         '';
+        $test = FilterHelper::getFiltersData($entity, $cid);
         return (int) Yii::app()->db->createCommand($sql)->queryScalar();
     }
 

@@ -443,8 +443,9 @@ class ProductHelper
 		
 		if ($eTable) {
 		
-			$sql = 'SELECT * FROM `'.$eTable.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%"';
-			
+			//$sql = 'SELECT * FROM `'.$eTable.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%"';
+			$sql = 'SELECT * FROM `'.$eTable.'`';
+
 			$res = Yii::app()->db->createCommand($sql)->queryAll();
 			
 			foreach ($res as $row) {
