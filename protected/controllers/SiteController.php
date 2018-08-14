@@ -1063,7 +1063,8 @@ class SiteController extends MyController {
         $_GET['format_video'] = $_POST['format_video'];
         $_GET['subtitles_video'] = $_POST['subtitles_video'];
         $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
-        if (isset($_GET['entity'])) $entity = $_GET['entity'];
+        if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
+        if (isset($_GET['cid_val'])) $cid = $_GET['cid_val'];
 
         FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);
