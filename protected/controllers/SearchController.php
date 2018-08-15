@@ -412,12 +412,28 @@ class SearchController extends MyController {
 
 		$where = array();
 		foreach($result as $cat) {
-			$where[] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
-		}
+			if (empty($cat['entity'])||empty($cat['real_id'])) continue;
 
+			if (empty($where[$cat['entity']])) $where[$cat['entity']] = array();
+			$where[$cat['entity']][] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
+		}
 		if(empty($where)) return array();
 
-		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $where);
+		$i = 0;
+		$condition = array();
+		do {
+			foreach ($where as $e=>$cond) {
+				$condition[] = array_shift($cond);
+				if (empty($cond)) unset($where[$e]);
+				$i++;
+			}
+		} while (($i < 3)&&!empty($where));
+
+		if(empty($condition)) return array();
+
+
+
+		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $condition);
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$ret = array();
@@ -471,30 +487,6 @@ class SearchController extends MyController {
 				'paginatorInfo' => new CPagination(0),
 			)
 		);
-	}
-
-	private function _filterManyInShop($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop > 5) && ($avail > 0);
-	}
-
-	private function _filterFewInShop($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop <= 5) && ($avail > 0);
-	}
-
-	private function _filterUnderOrder($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop === 0) && ($avail > 0);
-	}
-
-	private function _filterNotAvailable($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop === 0) && ($avail === 0);
 	}
 
 }

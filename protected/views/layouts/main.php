@@ -203,8 +203,15 @@ else $act = array('', '');
 }
 ?>
                     $('#Search').marcoPolo({
-                        url: '<?= !isset($_GET['old'])?Yii::app()->createUrl('liveSearch/general'):'/site/search' ?>',
+                        url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
                         cache: false,
+                        minChars: 3,
+                        formatMinChars: function (minChars, $item) {
+                            return '<em><?= $ui->item('SEARCH_TIP2') ?></em>';
+                        },
+                        formatNoResults: function (q, $item) {
+                            return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
+                        },
                         hideOnSelect: false,
                         dynamicData: {avail: function () {
                                 return $('#js_avail').val();
@@ -865,7 +872,7 @@ else $act = array('', '');
                     <? if (!in_array('cart',$url)) : ?>
 
                     <div class="span10">
-                        <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch">
+                        <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
                             <div class="search_box">
                                 <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                                 <input type="text" name="q" class="search_text" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
