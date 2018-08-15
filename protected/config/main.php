@@ -234,7 +234,13 @@ return array(
                 'offer/<oid:(\d+)>/<title:(.+)>' => 'offers/view',
                 'offer/<oid:(\d+)>' => 'offers/view',
 
+//                array(
+//                    'class' => 'EntityUrlRule',
+//                    'connectionID' => 'db',
+//                ),
                 '/<page:([\w_]+)>' => 'site/static',
+
+//                'entityDependentLanguage'=>'entity/list',
             ),
         ),
 
