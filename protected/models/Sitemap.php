@@ -109,6 +109,8 @@ class Sitemap {
 
 		$this->_offers();
 
+		$this->_putFile('<li><a href="' . Yii::app()->createUrl('bookshelf/list') . '">' . Yii::app()->ui->item('BOOKSHELF_LIST') . '</a></li>');
+
 		$this->_putFile('</ul>');
 		$this->_putFile('</li>');
 		$this->_putFile('</ul>');
