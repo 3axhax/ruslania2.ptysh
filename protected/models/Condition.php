@@ -454,7 +454,8 @@ class Condition {
 		$settings = $this->_getCategoryData();
 
 		$result = array();
-		$personDiscount = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
+		$personDiscount = 0;
+		if (!defined('cronAction')) $personDiscount = Yii::app()->user->id?Yii::app()->user->GetPersonalDiscount():0;
 		if ($personDiscount > 0) {
 			$min = empty($settings['cost_min'])?0:$settings['cost_min'];
 			$max = empty($settings['cost_max'])?0:$settings['cost_max'];
@@ -469,7 +470,7 @@ class Condition {
 		}
 		if ($useRate) {
 			$rates = Currency::GetRates();
-			$rate = $rates[Yii::app()->currency];
+			$rate = $rates[defined('cronAction')?1:Yii::app()->currency];
 			$min = $min*$rate;
 			$max = $max*$rate;
 		}

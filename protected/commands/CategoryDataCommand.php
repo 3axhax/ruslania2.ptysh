@@ -6,7 +6,7 @@ ini_set('max_execution_time', 3600);
  * минимальная и максимальная цена и год
  * Class CategoryDataCommand
  */
-
+define('cronAction', 1);
 class CategoryDataCommand extends CConsoleCommand {
 
 	public function actionIndex() {
