@@ -54,6 +54,7 @@ class Sitemap {
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
 		'sitemap' => 'A_SITEMAP',
+		'advsearch' => 'A_ADVANCED_SEARCH',
 //		'aboutus'=>'A_ABOUTUS',
 //		'csr'=>'A_CSR',
 //		'conditions'=>'MSG_CONDITIONS_OF_USE',
@@ -106,10 +107,32 @@ class Sitemap {
 			$this->_putFile('<li><a href="' . Yii::app()->createUrl('site/static', array('page'=>$pageName)) . '">' . Yii::app()->ui->item($name) . '</a></li>');
 		}
 
+		$this->_offers();
+
 		$this->_putFile('</ul>');
 		$this->_putFile('</li>');
 		$this->_putFile('</ul>');
 		return $this->_file;
+	}
+
+	private function _offers() {
+		//не знаю как получить список констант из класса Offer и связь с тегом
+		$const = array(
+//			Offer::INDEX_PAGE => 'index',
+			Offer::FIRMS => 'firms',
+			Offer::LIBRARY => 'lib',
+			Offer::UNI => 'uni',
+			Offer::FREE_SHIPPING => 'fs',
+			Offer::ALLE_2_EURO => 'alle2',
+		);
+		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
+		$this->_putFile('<li><a href="' . Yii::app()->createUrl('offers/list') . '">' . Yii::app()->ui->item('A_OFFERS') . '</a></li>');
+
+		foreach ($const as $id=>$name) {
+			$url = Yii::app()->createUrl('offers/special', array('mode' => $const[$id]));
+			$this->_putFile('<li><a href="' . $url . '">' . $name. '</a></li>');
+		}
+
 	}
 
 	private function _setFile($rewrite) {
