@@ -6,7 +6,7 @@
 
 Спасибо за заказ! Номер заказа <?= $number_zakaz . $dop ?>
 
-
+<div class="clearBoth"></div>
 	<div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype<?= ($ptype-1) ?>'); return false;">другой способ оплаты</a></div>
 	<div id="pay_systems" class="row spay" style="display: none;">
 		<?php $this->renderPartial('/site/pay_systems', array()); ?>

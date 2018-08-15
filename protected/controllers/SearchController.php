@@ -34,7 +34,14 @@ class SearchController extends MyController {
 		}
 
 		if (empty($abstractInfo)) $paginatorInfo = new CPagination(count($list));
-		else $paginatorInfo = new CPagination(array_sum($abstractInfo));
+		else {
+			$e = (int) Yii::app()->getRequest()->getParam('e');
+			if (Entity::IsValid($e)) {
+				if (empty($abstractInfo[$e])) $paginatorInfo = new CPagination(count($list));
+				else $paginatorInfo = new CPagination($abstractInfo[$e]);
+			}
+			else $paginatorInfo = new CPagination(array_sum($abstractInfo));
+		}
 		$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
 
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
@@ -142,26 +149,24 @@ class SearchController extends MyController {
 
 		$q = '@* ' . $this->_search->EscapeString($query);
 
-//		$this->_search->SetSortMode(SPH_SORT_ATTR_DESC, "in_shop");
-//		$this->_search->SetSortMode(SPH_SORT_RELEVANCE);
-//		$this->_search->SetSortMode(SPH_MATCH_EXTENDED2);
 		$this->_search->SetFieldWeights(array(
-			'title_ru'=>10000000,
-			'title_rut'=>10000000,
-			'title_en'=>10000000,
-			'title_fi'=>10000000,
-			'title_eco'=>10000000,
-			'description_ru'=>1000000,
-			'description_rut'=>1000000,
-			'description_en'=>1000000,
-			'description_fi'=>1000000,
-			'description_de'=>1000000,
-			'description_fr'=>1000000,
-			'description_es'=>1000000,
-			'description_se'=>1000000,
+			'title_ru'=>1000,
+			'title_rut'=>1000,
+			'title_en'=>1000,
+			'title_fi'=>1000,
+			'title_eco'=>1000,
+			'description_ru'=>100,
+			'description_rut'=>100,
+			'description_en'=>100,
+			'description_fi'=>100,
+			'description_de'=>100,
+			'description_fr'=>100,
+			'description_es'=>100,
+			'description_se'=>100,
 		));
-//		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
 		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
+		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
+//		$this->_search->SetRankingMode(SPH_RANK_EXPR,'sum(lcs*user_weight+exact_hit)*1000+bm25');
 
 
 		$find = $this->_search->query($q, 'products');
@@ -267,20 +272,35 @@ class SearchController extends MyController {
 	}
 
 	private function _queryIndex($query, $index, $limit) {
-		if (!preg_match("/[^\w ,.]/ui", $query)) {
-			$result = $this->_querySimple($query, $index, $limit);
-			if (!empty($result)) return $result;
+		$result = array();
+		$query = trim($query);
+		$queryWords = preg_split("/\W+/ui", $query);
+		$queryWords = array_filter($queryWords);
+		if (count($queryWords) == 1) {
+			//если одно слово, то ищем то что начинается
+			$oneWordQuery = $queryWords[0];
+			$oneWordQuery = preg_replace("/\d/ui", '', $oneWordQuery);
+			if (!empty($oneWordQuery)) {
+				$oneWordQuery = '^' . $oneWordQuery . '*';
+				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
+			}
 		}
 
+		//ищем по всей фразе
+		$resultAllWords = $this->_querySimple(implode(' ', $queryWords), $index, $limit);
+		if (!empty($resultAllWords)) return $result + $resultAllWords;
+
+		//по отдельным словам
 		$pre = SearchHelper::BuildKeywords($query, $index);
-		$result = array();
+//		var_dump($pre);
+		$resultWord = array();
 		foreach ($pre['Queries'] as $query) {
 			if (empty($query)) continue;
 
-			$result = $this->_querySimple($query, $index, $limit);
-			if (!empty($result)) break;
+			$resultWord = $this->_querySimple($query, $index, $limit);
+			if (!empty($resultWord)) break;
 		}
-		return $result;
+		return $result + $resultWord;
 	}
 
 	private function _querySimple($query, $index, $limit) {
@@ -303,18 +323,7 @@ class SearchController extends MyController {
 	}
 
 	protected function _getAuthors($query) {
-		$result = array();
-		$query = trim($query);
-		if (!mb_strpos($query, ' ', null, 'utf-8')) {
-			$oneWordQuery = preg_replace("/\W/ui", '', $query);
-			$oneWordQuery = preg_replace("/\d/ui", '', $oneWordQuery);
-			if (!empty($oneWordQuery)) {
-				$oneWordQuery = '^' . $oneWordQuery . '*';
-				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
-			}
-
-		}
-		$result = $result + $this->_queryIndex($query, 'authors', 0);
+		$result = $this->_queryIndex($query, 'authors', 0);
 
 		if (empty($result)) return array();
 
@@ -329,7 +338,6 @@ class SearchController extends MyController {
 			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
 			if (count($ids) >= $limit) break;
 		}
-//		Debug::staticRun(array($ids,$result));
 		if (empty($ids)) return array();
 
 		$roles = array();
@@ -404,12 +412,28 @@ class SearchController extends MyController {
 
 		$where = array();
 		foreach($result as $cat) {
-			$where[] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
+			if (empty($cat['entity'])||empty($cat['real_id'])) continue;
+			
+			if (empty($where[$cat['entity']])) $where[$cat['entity']] = array();
+			$where[$cat['entity']][] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
 		}
-
 		if(empty($where)) return array();
 
-		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $where);
+		$i = 0;
+		$condition = array();
+		do {
+			foreach ($where as $e=>$cond) {
+				$condition[] = array_shift($cond);
+				if (empty($cond)) unset($where[$e]);
+				$i++;
+			}
+		} while (($i < 3)&&!empty($where));
+
+		if(empty($condition)) return array();
+
+
+
+		$sql = 'SELECT * FROM all_categories WHERE '.implode(' OR ', $condition);
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
 
 		$ret = array();
@@ -455,7 +479,7 @@ class SearchController extends MyController {
 	private function _viewEmpty($q) {
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
 		$this->render(
-			'search',
+			'not_found',
 			array(
 				'result' => array(),
 				'q' => $q,
@@ -463,30 +487,6 @@ class SearchController extends MyController {
 				'paginatorInfo' => new CPagination(0),
 			)
 		);
-	}
-
-	private function _filterManyInShop($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop > 5) && ($avail > 0);
-	}
-
-	private function _filterFewInShop($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop <= 5) && ($avail > 0);
-	}
-
-	private function _filterUnderOrder($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop === 0) && ($avail > 0);
-	}
-
-	private function _filterNotAvailable($arr) {
-		$isShop = (int)$arr['in_shop'];
-		$avail = (int)$arr['avail_for_order'];
-		return ($isShop === 0) && ($avail === 0);
 	}
 
 }

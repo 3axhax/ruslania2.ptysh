@@ -7,6 +7,7 @@
                                                       'htmlOptions' => array('class' => 'address text'),
                                                  )); ?>
 
+<input type="hidden" value="" name="country_id" class="country_id" />
 
 <?php
 $PH = new ProductHelper();
@@ -37,7 +38,7 @@ function decline_goods($num) {
 
 ?>
 
-<div class="p3">1. Укажите ваши личные данные</div>
+<div class="p3">1. Укажите адрес доставки и плательщика</div>
 
 <div class="span7">
 
@@ -53,11 +54,72 @@ function decline_goods($num) {
     }
     
     .address select {
-        width: 360px;
+        width: 99%;
     }
 </style>
 
-<table class="address">
+<?php 
+
+$addr = new Address();
+
+$addr_list = array();
+
+$addr_list = $addr->GetAddresses($this->uid);
+
+//var_dump($addr_list);
+echo '<div class="addr_delivery">';
+if (count($addr_list)) {
+    
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Выберите адрес доставки</option>';
+
+    $ch = new CommonHelper();
+    
+    
+    
+    
+    foreach ($addr_list as $addr) {
+        
+        $adr_str = $ch->FormatAddress($addr);
+        
+        echo '<option value="'.$addr['address_id'].'">'.$adr_str.'</option>';
+
+    }
+
+    echo '</select>';
+    
+}
+
+?>
+
+<?php
+echo '<div class="addr_buyer" style="margin-top: 10px">';
+if (count($addr_list)) {
+    
+    echo '<select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Выберите адрес плательщика</option>';
+
+    $ch = new CommonHelper();
+    
+      
+    
+    foreach ($addr_list as $addr) {
+        
+        $adr_str = $ch->FormatAddress($addr);
+        
+        echo '<option value="'.$addr['address_id'].'">'.$adr_str.'</option>';
+
+    }
+
+    echo '</select>';
+    
+}
+
+echo '</div>';
+
+?>
+
+<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1').toggle('fade');" class="btn btn-success" style="margin-top: 10px;">Добавить адрес</a></div>
+
+<table class="address addr1" style="display: none; margin-top: 10px;">
     <tbody>
         
     <tr>
@@ -74,14 +136,14 @@ function decline_goods($num) {
         <td class="maintxt-vat" data-bind="visible: type()==1">
             <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'))); ?>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'))); ?>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr>
         <td class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
@@ -96,7 +158,7 @@ function decline_goods($num) {
             <?=$form->textField('receiver_last_name'); ?>
             <span class="texterror"></span>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_firstname"); ?></td>
@@ -104,14 +166,14 @@ function decline_goods($num) {
             <?=$form->textField('receiver_first_name'); ?>
             <span class="texterror"></span>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr>
         <td class="maintxt"><?=$ui->item("regform_middlename"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('receiver_middle_name'); ?>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr>
         <td nowrap="" class="maintxt">
@@ -125,7 +187,7 @@ function decline_goods($num) {
                 )); ?>
             <span class="texterror"></span>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
@@ -168,7 +230,7 @@ function decline_goods($num) {
             <?=$ui->item("address_contact_email"); ?>
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
-            <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
+            <?= $form->textField('contact_email', array('onblur' => '')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -189,32 +251,18 @@ function decline_goods($num) {
         <td class="maintxt-vat">
             <?=$form->textArea('notes'); ?>
         </td>
-        <td class="smalltxt1"></td>
+        
     </tr>
-    
-    <tr>
-        <td nowrap="" class="maintxt">&nbsp;</td>
-        <td class="maintxt-vat">
-            
-            <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
-        </td>
-        <td class="smalltxt1"></td>
-    </tr>
-   
-    
-    <tr>
-   
-    </tr>
-    
+        
     </tbody>
 </table>
 
+<a href="javascript:;" class="btn btn-success addr1" style="float: right; display: none; margin-right: 5px;" onclick="add_address(1)">Добавить</a>
+
+<div class="clearfix" style="margin: 5px 0;"></div>
 
 
-</div>
-
-
- 
+ </div>
 
 <div class="span7" style="float: right; width: 575px;">
 
@@ -235,7 +283,7 @@ function decline_goods($num) {
                 <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>
                 <td>
                     <span class="a"><?=$item['title']?></span>
-                    <div class="minitext"><?=$item['quantity']?> шт. x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight']/1000)?> кг</div>
+                    <div class="minitext"><?=$item['quantity']?> шт. x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight'])?> кг</div>
                 </td>
                 
             </tr>
@@ -249,8 +297,10 @@ function decline_goods($num) {
 </div>
  <div class="clearfix"></div>
  
- <label for="confirm" onclick=" checked_sogl();">
-     <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
+ <label for="confirm" onclick=" checked_sogl();" style="margin-top: 12px;">
+     
+     <input type="checkbox" value="1" name="confirm" id="confirm" required="required">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
+     <span style="color: #ff0000; font-size: 12px;" class="err_confirm"></span>
 
 <div style="height: 20px;"></div>
  
@@ -280,6 +330,7 @@ function decline_goods($num) {
             
             <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
         </label>
+        
          <?//php  } ?>
         <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();">
             Доставка почтой
@@ -291,7 +342,8 @@ function decline_goods($num) {
 </div>        
         <div class="clearfix"></div>
         
-               
+       
+        
         <div class="delivery_box" style="display: none; margin: 15px 0;"></div>
         
         

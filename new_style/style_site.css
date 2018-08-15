@@ -786,22 +786,6 @@ h1.titlename {
 .listgoods .sortbox {
     padding: 13px 20px;
     background: #f8f8f8;
-    min-height: 32px;
-}
-
-.sortbox.langsel {
-    border-top: 1px solid #cccccc;
-    border-left: 1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-}
-.sortbox.sortfield {
-    border-top: 1px solid #cccccc;
-    border-right: 1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
 }
 
 .listgoods .sortbox form { margin: 0; }
@@ -948,7 +932,7 @@ ul.items select.periodic {
 
 form.filter {
 
-    border: 1px solid #cccccc;
+    border: 1px solid #ececec;
     border-radius: 4px;
     margin-top: 14px;
 }

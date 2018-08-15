@@ -68,8 +68,6 @@ class EntityController extends MyController {
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
 
-        $test = FilterHelper::getFiltersData($entity, $cid);
-
         $category = new Category();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
@@ -161,8 +159,8 @@ class EntityController extends MyController {
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            /*FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
-            $data['lang_sel'] = $lang;*/
+            FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
+            $data['lang_sel'] = $lang;
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -372,6 +370,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
+        FilterHelper::setOneFiltersData($entity, 0, 'seria', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -474,6 +473,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
+        FilterHelper::setOneFiltersData($entity, 0, 'publisher', $pid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -580,6 +580,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
+        FilterHelper::setOneFiltersData($entity, 0, 'author', $aid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
 		$this->render('list', array('entity' => $entity,
@@ -680,7 +681,7 @@ class EntityController extends MyController {
         $list = (new Binding())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
+        $this->breadcrumbs[] = Yii::app()->ui->item('Binding');
 
         $this->render('bindings_list', array('list' => $list, 'entity' => $entity));
     }
@@ -1054,8 +1055,8 @@ class EntityController extends MyController {
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPOGRAPHY')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY') . ': ' . ProductHelper::GetTitle($bData);
+        $this->breadcrumbs[Yii::app()->ui->item('Binding')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('Binding') . ': ' . ProductHelper::GetTitle($bData);
 
         $totalItems = $binding->GetTotalItems($entity, $bid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -1067,6 +1068,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
+        FilterHelper::setOneFiltersData($entity, 0, 'binding_id', $bid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array(

@@ -906,7 +906,7 @@ class SiteController extends MyController {
             $page = 1;
         $e = abs(intVal($e));
 
-        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding'.$e]);
+        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
     }
@@ -1010,7 +1010,7 @@ class SiteController extends MyController {
             if (!trim($name_publ))
                 continue;
 
-            echo '<div class="item" rel="' . $row['id'] . '" onclick="select_item($(this), \'publisher\')">' . $name_publ . '</div>';
+            echo '<div class="item" rel="' . $row['id'] . '" onclick="select_item($(this), \'izda\')">' . $name_publ . '</div>';
         }
     }
 
@@ -1039,7 +1039,6 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
-            //$test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }
@@ -1052,23 +1051,21 @@ class SiteController extends MyController {
     }
 
     function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
-                            $publisher = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
+                            $izda = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
                             $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
 
-        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/publisher/18956/seria/1290/min_cost/1000/max_cost/9000/ */
+        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
-        /*$_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
-        $_GET['binding'] = $_POST['binding'];
-        $_GET['lang_video'] = $_POST['lang_video'];
-        $_GET['format_video'] = $_POST['format_video'];
-        $_GET['subtitles_video'] = $_POST['subtitles_video'];
-        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['lang'];*/
-        if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
-        if (isset($_GET['cid_val'])) $cid = $_GET['cid_val'];
+        $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
+        $_GET['binding_id'] = $_POST['binding_id'];
+        $_GET['langVideo'] = $_POST['langVideo'];
+        $_GET['formatVideo'] = $_POST['formatVideo'];
+        $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
+        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
+        if (isset($_GET['entity'])) $entity = $_GET['entity'];
 
-
+        FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);
-        FilterHelper::setFiltersData($entity, $cid, $data);
 
         $cat = new Category();
 

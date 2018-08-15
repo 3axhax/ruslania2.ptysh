@@ -39,7 +39,7 @@
                     
                 <?php endif; ?>
                 
-                <table cellspacing="1" cellpadding="5" border="0" width="100%" id="cart1" class="cart1 items_orders" id="cnt<?=$order['id']; ?>" style="display: <?=$enableSlide ? 'none' : 'table'; ?>">
+                <table cellspacing="1" cellpadding="5" border="0" width="100%" class="cart1 items_orders" id="cnt<?=$order['id']; ?>" style="display: <?=$enableSlide ? 'none' : 'table'; ?>">
                     <tbody>
                     <tr>
                         <th width="70%" class="cart1header1"><?=$ui->item("CART_COL_TITLE"); ?></th>

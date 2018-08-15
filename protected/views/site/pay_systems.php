@@ -64,16 +64,16 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype1" value="2" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype1" value="8" name="ptype" style="display: none;" />
 </label>
 
-<label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')">
+<label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 484px;">
 
 	<img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="font-size: 10px">Кредитные карты и Финские банки</span>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype2" value="3" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype2" value="25" name="ptype" style="display: none;" />
 </label>
 
 <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'dtype3')">
@@ -81,7 +81,7 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype3" value="4" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype3" value="7" name="ptype" style="display: none;" />
 </label>
 
 <label class="selp span3 oplata5" onclick="check_cart_sel($(this),'selp', 'dtype4')">
@@ -89,7 +89,7 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype4" value="5" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype4" value="26" name="ptype" style="display: none;" />
 </label>
 
 <label class="selp span3 oplata6" onclick="check_cart_sel($(this),'selp', 'dtype5')">
@@ -97,7 +97,7 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype5" value="6" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype5" value="27" name="ptype" style="display: none;" />
 </label>
 
 <label class="selp span3 oplata7" onclick="check_cart_sel($(this),'selp', 'dtype6')">
@@ -105,7 +105,7 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype6" value="7" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype6" value="13" name="ptype" style="display: none;" />
 </label>
 
 <label class="selp span3 oplata8" onclick="check_cart_sel($(this),'selp', 'dtype7')">
@@ -113,7 +113,7 @@
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
-	<input type="radio" id="dtype7" value="8" name="ptype" style="display: none;" />
+	<input type="radio" id="dtype7" value="14" name="ptype" style="display: none;" />
 </label>
 
 

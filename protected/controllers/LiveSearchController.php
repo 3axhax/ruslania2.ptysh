@@ -60,6 +60,7 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) $list = $sController->getList($q, 1, 10);
+
 			if (!empty($list)) $list = $sController->inDescription($list, $q);
 
 			if (!$isCode) {
@@ -82,6 +83,7 @@ class LiveSearchController extends MyController {
 					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
 				}
 			}
+
 		}
 	}
 
@@ -196,7 +198,7 @@ class LiveSearchController extends MyController {
 	    if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
             !($q = Yii::app()->getRequest()->getParam('q'))) return;
 	    $cid = Yii::app()->getRequest()->getParam('cid');
-	    $items = SearchAuthors::get()->getAuthorsForFilters($entity, $q, $cid);
+	    $items = SearchAuthors::getAuthorsForFilters($entity, $q, $cid);
 	    $this->ResponseJson($items);
     }
 
@@ -204,7 +206,7 @@ class LiveSearchController extends MyController {
         if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
             !($q = Yii::app()->getRequest()->getParam('q'))) return;
         $cid = Yii::app()->getRequest()->getParam('cid');
-        $items = SearchPublishers::get()->getPublishersForFilters($entity, $q, $cid);
+        $items = SearchPublishers::getPublishersForFilters($entity, $q, $cid);
         $this->ResponseJson($items);
     }
 
@@ -212,15 +214,7 @@ class LiveSearchController extends MyController {
         if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
             !($q = Yii::app()->getRequest()->getParam('q'))) return;
         $cid = Yii::app()->getRequest()->getParam('cid');
-        $items = SearchSeries::get()->getSeriesForFilters($entity, $q, $cid);
-        $this->ResponseJson($items);
-    }
-
-    function actionFilter_Performers () {
-        if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
-            !($q = Yii::app()->getRequest()->getParam('q'))) return;
-        $cid = Yii::app()->getRequest()->getParam('cid');
-        $items = SearchPerformers::get()->getPerformersForFilters($entity, $q, $cid);
+        $items = SearchSeries::getSeriesForFilters($entity, $q, $cid);
         $this->ResponseJson($items);
     }
 }

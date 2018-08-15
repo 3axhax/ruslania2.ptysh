@@ -22,7 +22,7 @@ class Similar extends CWidget {
 	function run() {
 		$products = $this->_getProducts();
 		if (empty($products)) return;
-
+		
 		$this->render('similar', array('items'=>$products));
 	}
 

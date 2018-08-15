@@ -2,14 +2,7 @@
 
 class SearchSeries
 {
-    static private $_self = null;
-
-    static function get() {
-        if (self::$_self === null) self::$_self = new self;
-        return self::$_self;
-    }
-
-    function  getSeriesForFilters($entity, $q, $cid = 0, $limit = 20) {
+    static function  getSeriesForFilters($entity, $q, $cid = 0, $limit = 20) {
         if (!Entity::checkEntityParam($entity, 'series')) return array();
 
         $entities = Entity::GetEntitiesList();

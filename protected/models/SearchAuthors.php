@@ -160,7 +160,7 @@ class SearchAuthors {
 		return $authors;
 	}
 
-	function  getAuthorsForFilters($entity, $q, $cid = 0, $limit = 20) {
+	static function  getAuthorsForFilters($entity, $q, $cid = 0, $limit = 20) {
         if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
         $entities = Entity::GetEntitiesList();

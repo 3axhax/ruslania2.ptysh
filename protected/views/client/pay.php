@@ -1,13 +1,12 @@
-<table width="100%" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top">
-    <tr>
-        <td class="leftmnu" width="20%" valign="top">
+ <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>       
+        
+        <div class="container cabinet">
 
-            <?php $this->renderPartial('/site/_me_left'); ?>
-
-        </td>
-        <td valign="top" style="padding: 5px;" class="text">
+<div class="row">
+        
+        <div class="span10" style="float: right">
             <!-- content -->
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+           
 
             <?php if(Yii::app()->user->hasFlash('order')) : ?>
                 <div class="info-box information">
@@ -26,11 +25,16 @@
                                                                        'enableSlide' => false)); ?>
             <?php endif; ?>
             <!-- /content -->
-        </td>
-        <td width="220" valign="top" style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
-            <?php $this->widget('Banners', array('entity' => 'index')); ?>
-        </td>
-    </tr>
+        
+        </div>
+            
+        <div class="span2">
 
-</table>
+            <?php $this->renderPartial('/site/_me_left'); ?>
+
+        </div>
+
+
+        </div>
+        </div>
 

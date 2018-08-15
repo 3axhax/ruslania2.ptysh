@@ -7,11 +7,11 @@ class Group1PostCalc extends BasePostCalc
         $this->calcVAT = false;
         $ret = array();
         
-        var_dump($this->unitWeight);
+        ///var_dump($this->unitWeight);
         
         $economyPrice = 3.9;
         if($this->unitWeight <=4 && !$this->notInEnvelope) $economyPrice = 3.9;
-        else if(($this->unitWeight <=4 && $this->notInEnvelope) || ($this->unitWeight > 4 && $this->unitWeight  <= 8)) $economyPrice = 7;
+        else if(($this->unitWeight <=4 && $this->notInEnvelope) || ($this->unitWeight > 4 && $this->unitWeight  <= 500)) $economyPrice = 7;
         else $economyPrice = 7;
 
         $ret[Delivery::TYPE_ECONOMY] = array('Price' => $economyPrice, 'CalcVAT' => false);

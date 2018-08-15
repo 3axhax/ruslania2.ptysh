@@ -22,7 +22,7 @@ $lang = Yii::app()->language;
                         'cid' => $cid)); ?>
             </div>
 
-            <div class="sortbox sortfield" style="float: right;">
+            <div class="sortbox" style="float: right;">
                 <?php //if (isset($_GET['ha'])): ?>
                 <div class="sort_lable"><?=$ui->item('A_NEW_FILTER_SORT_FOR')?></div>
                     <?php
@@ -49,18 +49,14 @@ $lang = Yii::app()->language;
                 </form>
                 <?php endif; */?>
             </div>
-
 			<div class="sortbox langsel">
-                <?php if ($entity != 15 && $entity != 30):?>
                 <?php $this->widget('SelectSimulator', array(
                     'items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id),
                     'paramName'=>'lang',
                     'dataParam'=>$_GET,
                     'route'=>'curPage')
                 ); ?>
-                <?php endif;?>
             </div>
-
 			<div style="margin: 5px 0 ;">
 			<?//=sprintf($ui->item('X items here'), $total)?>
 			</div>

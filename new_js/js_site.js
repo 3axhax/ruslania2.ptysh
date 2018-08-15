@@ -84,17 +84,17 @@ function show_items(url, page) {
     }
     var create_url;
     create_url = url +
-        'entity_val/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
-        '/cid_val/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
+        'entity/'+(( entity = $('form.filter input.entity_val').val()) ? entity : '100')+
+        '/cid/'+(( cid = $('form.filter input.cid_val').val()) ? cid : '0')+
         '/author/'+(( author = $('form.filter input[name=author]').val()) ? author : '')+
         '/avail/'+(( avail = $('form.filter select[name=avail]').val()) ? avail : '1')+
         '/ymin/'+(( ymin = $('form.filter input.year_inp_mini').val()) ? ymin : '0')+
         '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '0')+
-        '/publisher/'+(( publisher = $('form.filter input[name=publisher]').val()) ? publisher : '0')+
+        '/izda/'+(( izda = $('form.filter input[name=izda]').val()) ? izda : '0')+
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
-        '/lang/'+(( lang = $('form.filter input[name=lang]').val()) ? lang : '') +
+        '/langsel/'+(( langsel = $('form.filter input[name=langsel]').val()) ? langsel : '') +
         '/page/' + page;
     var bindings = [];
     var i = 0;
@@ -109,17 +109,19 @@ function show_items(url, page) {
         url: create_url,
         type: "POST",
         data: { YII_CSRF_TOKEN: csrf[1],
-            'binding[]' : bindings,
+            'binding_id[]' : bindings,
             name_search : $('#name_search').val(),
             sort : $('form.filter .sort').val(),
-            format_video : $('#format_video').val(),
-            lang_video : $('#lang_video').val(),
-            subtitles_video : $('#subtitles_video').val(),
+            formatVideo : $('#formatVideo').val(),
+            langVideo : $('#langVideo').val(),
+            subtitlesVideo : $('#subtitlesVideo').val(),
         },
         beforeSend: function(){
+            console.log('beforeSend');
             items_content.html('Загрузка...');
         },
         success: function (data) {
+            console.log('success');
             items_content.html(data);
             $('.box_select_result_count').hide(1);
             //$(window).scrollTop(0);
@@ -148,7 +150,7 @@ function liveFindAuthorMP(entity, url, cid) {
 }
 
 function liveFindPublisherMP(entity, url, cid) {
-    find_pub = $('.find_publisher');
+    find_pub = $('.find_izda');
     var dataPost = {entity: entity, cid: cid};
     find_pub.marcoPolo({
         minChars:3,
@@ -159,24 +161,7 @@ function liveFindPublisherMP(entity, url, cid) {
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {
-            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'publisher\', \'' + data.title + '\', \'new_publisher\')">' + data.title + '</li>';
-        },
-    });
-}
-
-function liveFindPerformerMP(entity, url, cid) {
-    find_pub = $('.find_performer');
-    var dataPost = {entity: entity, cid: cid};
-    find_pub.marcoPolo({
-        minChars:3,
-        cache : false,
-        hideOnSelect: true,
-        delay: 50,
-        url: url,
-        data:dataPost,
-        formatMinChars: false,
-        formatItem:function (data, $item, q) {
-            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'performer\', \'' + data.title + '\', \'new_performer\')">' + data.title + '</li>';
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'izda\', \'' + data.title + '\', \'new_izda\')">' + data.title + '</li>';
         },
     });
 }
