@@ -463,7 +463,7 @@ class SearchController extends MyController {
 	private function _viewEmpty($q) {
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
 		$this->render(
-			'search',
+			'not_found',
 			array(
 				'result' => array(),
 				'q' => $q,
