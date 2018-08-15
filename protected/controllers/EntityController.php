@@ -680,7 +680,7 @@ class EntityController extends MyController {
         $list = (new Binding())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Binding');
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
 
         $this->render('bindings_list', array('list' => $list, 'entity' => $entity));
     }
@@ -1054,8 +1054,8 @@ class EntityController extends MyController {
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[Yii::app()->ui->item('Binding')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Binding') . ': ' . ProductHelper::GetTitle($bData);
+        $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPOGRAPHY')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY') . ': ' . ProductHelper::GetTitle($bData);
 
         $totalItems = $binding->GetTotalItems($entity, $bid, $avail);
         $paginatorInfo = new CPagination($totalItems);

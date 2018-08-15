@@ -144,8 +144,8 @@ return array(
 'Audio catalog' => 'Аудиокниги', 
 'Author' => 'Автор', 
 'BASIC_SEARCH_TIP_1' => 'Введенное выражение ищется сразу в нескольких полях: названии, описании, авторе, издательстве, и т.д. Если Вы хотите найти что-то конкретное, пожалуйста, воспользуйтесь <a href="#1" class="maintxt">расширенным поиском.</a>', 
-'Binding' => 'Тип обложки', 
-'BINDING_TYPE_OF' => '%s', 
+'Binding' => 'Тип обложки',
+'BINDING_TYPE_OF' => '%s',
 'Books catalog' => 'Книги', 
 'BTN_CATALOG_GOSORT' => 'ОК', 
 'BTN_CATALOG_SEARCH_RESET' => 'Очистить', 
@@ -1058,6 +1058,7 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_FILTER_LANG_VIDEO' => 'Язык звуковой дорожки',
 'A_NEW_FILTER_LANG_SUBTITLES' => 'Язык субтитров',
 'A_NEW_FILTER_FORMAT_VIDEO' => 'Формат Видео',
+'A_NEW_FILTER_PERFORMER' => 'Испольнитель',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',
@@ -1148,7 +1149,7 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_SUBS_TD2_1' => 'Адрес отправки',
 'A_NEW_SUBS_TD3_1' => 'Номер журнала',
 'A_NEW_YEAR'=>'Год выхода',
-'A_NEW_FILTER_TYPE1'=>'Формат',
+'A_NEW_FILTER_TYPE1'=>'Оформление',
 'A_NEW_FILTER_TYPE2'=>'Тип',
 'A_NEW_FILTER_SORT_FOR'=>'Сортировать по:',
 'A_NEW_PLACEHOLDER_SEARCH'=>'Поиск по Названию / Автору / ISBN',
@@ -1196,5 +1197,7 @@ IBAN DE79514303006474790001 <br>
 	'DESC_PAYTYPE8' => 'Банковские реквизиты высылаются по запросу',
 	'DESC_PAYTYPE1' => '',
 
+    'A_NEW_TYPOGRAPHY' => 'Оформление',
+    'A_NEW_LABEL' => 'Лэйбл',
 
 );

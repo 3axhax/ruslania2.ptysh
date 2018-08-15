@@ -37,6 +37,7 @@ class FilterHelper
         if (Entity::checkEntityParam($entity, 'series')) $filters['series'] = true;
         if (Entity::checkEntityParam($entity, 'years')) $filters['years'] = true;
 
+        if (Entity::checkEntityParam($entity, 'performers')) $filters['performers'] = true;
         if ($entity == 40) {
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
             $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
