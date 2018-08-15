@@ -5,7 +5,7 @@ class EntityUrlRule extends CBaseUrlRule {
 	public $connectionID = 'db';
 
 	public function createUrl($manager,$route,$params,$ampersand) {
-		return 'ru/knigi';
+//		return 'ru/knigi';
 		/*if ($route==='car/index')
 		{
 			if (isset($params['manufacturer'], $params['model']))

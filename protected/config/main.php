@@ -239,8 +239,6 @@ return array(
 //                    'connectionID' => 'db',
 //                ),
                 '/<page:([\w_]+)>' => 'site/static',
-
-//                'entityDependentLanguage'=>'entity/list',
             ),
         ),
 
