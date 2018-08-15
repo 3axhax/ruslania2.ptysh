@@ -78,10 +78,31 @@
     <!--"Второй" блок фильтров-->
     <div class="prod-filter__row" id="more-filter-block">
 
+        <?php if (isset($filters['performers']) && $filters['performers'] == true):?>
+            <!--Фильтр по исполнителю-->
+            <div class="prod-filter__col">
+                    <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PERFORMER')?>:</label>
+                <div class="text">
+                    <input type="hidden" name="performer" value="<?=($performer = (isset($filter_data['performer']) && $filter_data['performer'] != 0)) ? $filter_data['performer'] : 0?>">
+                    <input type="text" name="new_performer" class="find_performer prod-filter__input prod-filter__input--m clearable <?= ($performer) ? 'x' : ''?>"
+                           placeholder="Все" autocomplete="off"
+                        <?= ($performer) ? 'value="'.ProductHelper::GetPerformerTitle($filter_data['performer'], Yii::app()->language).'"' : '' ?>/>
+                </div>
+                <ul class="search_result search_result_performer"></ul>
+                <script>
+                    liveFindPerformerMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_performers')?>', <?=$cid?>);
+                </script>
+            </div>
+        <?php endif;?>
+
         <?php if (isset($filters['publisher']) && $filters['publisher'] == true):?>
             <!--Фильтр по издательству-->
         <div class="prod-filter__col">
-            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
+            <?php if ($entity == 22):?>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_LABEL')?>:</label>
+            <?php else:?>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
+            <?php endif;?>
             <div class="text">
                 <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
                 <input type="text" name="new_publisher" class="find_publisher prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"

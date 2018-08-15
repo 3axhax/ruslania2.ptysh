@@ -156,7 +156,7 @@ class SearchPublishers {
 		return $items;
 	}
 
-    static function  getPublishersForFilters($entity, $q, $cid = 0, $limit = 20) {
+    function  getPublishersForFilters($entity, $q, $cid = 0, $limit = 20) {
         if (!Entity::checkEntityParam($entity, 'publisher')) return array();
 
         $entities = Entity::GetEntitiesList();

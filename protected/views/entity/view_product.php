@@ -303,7 +303,12 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			 <?php if (!empty($item['Publisher'])) :
              $pubTitle = ProductHelper::GetTitle($item['Publisher']);?>
         <div class="authors" style="margin-bottom:5px;">
-            <div style="float: left;" class="nameprop"><?= sprintf($ui->item("PUBLISHED_BY"), '') ?></div>
+            <div style="float: left;" class="nameprop">
+                <?php
+                if ($entity == 22) echo $ui->item('A_NEW_LABEL');
+                else echo sprintf($ui->item("Published by"), '');
+                ?>
+            </div>
             <div style="padding-left: 253px;">
                 <a class="cprop" href="<?= Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
                     'pid' => $item['Publisher']['id'],
@@ -344,7 +349,11 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     $row = (new Binding)->GetBinding($entity, $item['binding_id']);
                     ?>
                     <div class="authors" style="margin-bottom:5px;">
-                        <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_PEREP"); ?></div>
+                        <?php if($entity == 10 || $entity == 15): ?>
+                            <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_TYPOGRAPHY"); ?></div>
+                        <?php else: ?>
+                            <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_PEREP"); ?></div>
+                        <?php endif;?>
                         <div style="padding-left: 253px;"><?= $row['title_' . Yii::app()->language] ?></div>
                         <div class="clearBoth"></div>
                     </div>
