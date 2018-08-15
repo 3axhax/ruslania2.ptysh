@@ -2,7 +2,7 @@
 /*Created by Кирилл (12.07.2018 19:45)*/
 ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php hreftitles
- * Class RepairAuthorsCommand
+ * Class HrefTitlesCommand
  */
 
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';

@@ -3,6 +3,7 @@
 
 ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php categorydata
+ * минимальная и максимальная цена и год
  * Class CategoryDataCommand
  */
 

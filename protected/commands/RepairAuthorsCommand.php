@@ -2,6 +2,9 @@
 /*Created by Кирилл (07.06.2018 20:24)*/
 ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php repairauthors
+ * первая буква автора и издателя
+ * товары автора по разделам
+ * таблица all_roles
  * Class RepairAuthorsCommand
  */
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
