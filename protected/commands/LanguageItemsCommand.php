@@ -31,7 +31,7 @@ class LanguageItemsCommand extends CConsoleCommand {
 					'join all_items_languages tL on (tL.item_id = t.id) and (tL.entity = ' . $entity . ') and (tL.language_id > 0) '.
 				'where (t.avail_for_order = 1) '.
 			'';
-			echo $sql . "\n";
+//			echo $sql . "\n";
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = ''.
@@ -41,7 +41,7 @@ class LanguageItemsCommand extends CConsoleCommand {
 					'join all_items_languages tL on (tL.item_id = t.id) and (tL.entity = ' . $entity . ') and (tL.language_id > 0) '.
 				'where (t.avail_for_order = 1) and (t.subcode not in (ifnull(subcode, 0), t.code)) '.
 			'';
-			echo $sql . "\n";
+//			echo $sql . "\n";
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$entityStr = Entity::GetUrlKey($entity);

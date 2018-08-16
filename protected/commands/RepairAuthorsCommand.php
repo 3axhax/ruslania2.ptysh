@@ -44,7 +44,7 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
 		$this->_query($sql);
-		echo 'start ' . date('d.m.Y H:i:s') . " first letter authors complete\n";
+//		echo 'start ' . date('d.m.Y H:i:s') . " first letter authors complete\n";
 
 		$sql = ''.
 			'update all_publishers set '	.
@@ -61,14 +61,15 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'where (first_ru is null) or (first_ru = "") '.
 		'';
 		$this->_query($sql);
-		echo 'start ' . date('d.m.Y H:i:s') . " first letter publishers complete\n";
+//		echo 'start ' . date('d.m.Y H:i:s') . " first letter publishers complete\n";
 
 		$this->_updateLables();
 		$this->_updateLablesPublishers();
-		echo 'start ' . date('d.m.Y H:i:s') . " is product complete\n";
+//		echo 'start ' . date('d.m.Y H:i:s') . " is product complete\n";
 
 		$this->_allRoles();
-		echo 'start ' . date('d.m.Y H:i:s') . " all_roles complete\n";
+//		echo 'start ' . date('d.m.Y H:i:s') . " all_roles complete\n";
+		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
 	/** проверяет похож автор на одного из авторов с апострофами

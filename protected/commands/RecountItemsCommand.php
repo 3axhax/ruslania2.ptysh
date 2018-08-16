@@ -46,7 +46,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			'set tCat.items_count = tCount.itemCounts, tCat.avail_items_count = itemCountsAvail '.
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		echo $sql . "\n";
+//		echo $sql . "\n";
 		$sql = ''.
 			'update ' . $catTable . ' tCat '.
 				'join ('.
@@ -57,7 +57,7 @@ class RecountItemsCommand extends CConsoleCommand {
 				') tCount using (id) '.
 			'set tCat.items_count = tCat.items_count + tCount.itemCounts, tCat.avail_items_count = tCat.avail_items_count + itemCountsAvail '.
 		'';
-		echo $sql . "\n";
+//		echo $sql . "\n";
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
 		$i=0;//на случай, если какой то категории нет товаров
@@ -71,7 +71,7 @@ class RecountItemsCommand extends CConsoleCommand {
 				'group by t.id '.
 			'';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
-			echo $sql . "\n";
+//			echo $sql . "\n";
 
 			$sql = ''.
 				'update ' . $catTable . ' t '.
