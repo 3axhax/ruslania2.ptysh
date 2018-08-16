@@ -164,6 +164,23 @@ function liveFindPublisherMP(entity, url, cid) {
     });
 }
 
+function liveFindPerformerMP(entity, url, cid) {
+    find_pub = $('.find_performer');
+    var dataPost = {entity: entity, cid: cid};
+    find_pub.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url: url,
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'performer\', \'' + data.title + '\', \'new_performer\')">' + data.title + '</li>';
+        },
+    });
+}
+
 function liveFindSeriesMP(entity, url, cid) {
     find_series = $('.find_series');
     var dataPost = {entity: entity, cid: cid};

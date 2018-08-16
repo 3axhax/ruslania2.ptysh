@@ -109,7 +109,7 @@ class LinksToList extends CWidget {
 		if (!$this->_checkByEntity('binding')) return array();
 
 		return array(
-			'name'=>Yii::app()->ui->item('Binding'),
+			'name'=>Yii::app()->ui->item('A_NEW_TYPOGRAPHY'),
 			'href'=>Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
 		);
 	}

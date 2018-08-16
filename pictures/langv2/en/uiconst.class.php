@@ -1045,6 +1045,10 @@ By clicking on a category you are interested in, you can see all the products wi
 'A_NEW_FILTER_YEAR' => 'Год',
 'A_NEW_FILTER_PUBLISHER' => 'Издательство',
 'A_NEW_FILTER_SERIES' => 'Серия',
+'A_NEW_FILTER_LANG_VIDEO' => 'Язык звуковой дорожки',
+'A_NEW_FILTER_LANG_SUBTITLES' => 'Язык субтитров',
+'A_NEW_FILTER_FORMAT_VIDEO' => 'Формат Видео',
+'A_NEW_FILTER_PERFORMER' => 'Испольнитель',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',
@@ -1149,4 +1153,6 @@ By clicking on a category you are interested in, you can see all the products wi
 'A_NEW_PRINTED_BY_CATEGORY' => 'Смотреть Печатную продукцию и сувениры по категориям',
 'A_NEW_VIDEO_BY_CATEGORY' => 'Смотреть Видеопродукцию по категориям',
 'A_NEW_MAPS_BY_CATEGORY' => 'Смотреть Карты по категориям',
+
+    'A_NEW_TYPOGRAPHY' => 'Оформление',
 );

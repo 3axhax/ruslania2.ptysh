@@ -1039,6 +1039,10 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
 'A_NEW_FILTER_YEAR' => 'Год',
 'A_NEW_FILTER_PUBLISHER' => 'Издательство',
 'A_NEW_FILTER_SERIES' => 'Серия',
+'A_NEW_FILTER_LANG_VIDEO' => 'Язык звуковой дорожки',
+'A_NEW_FILTER_LANG_SUBTITLES' => 'Язык субтитров',
+'A_NEW_FILTER_FORMAT_VIDEO' => 'Формат Видео',
+'A_NEW_FILTER_PERFORMER' => 'Испольнитель',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',
@@ -1133,5 +1137,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
 'A_NEW_PLACEHOLDER_SEARCH'=>'Поиск по Названию / Автору / ISBN',
 'A_NEW_YEAR_REAL'=>'Год издания',
 'A_NEW_MENU_REK'=>'Рекомендации',
-'A_NEW_FILTER_TITLE_LANG'=>'Язык товара - '
+'A_NEW_FILTER_TITLE_LANG'=>'Язык товара - ',
+
+    'A_NEW_TYPOGRAPHY' => 'Оформление',
 ); 
