@@ -1,0 +1,53 @@
+<?php
+/*Created by Кирилл (16.08.2018 19:44)*/
+
+return array(
+	'books'=>array(
+		'level_1'=>'knigi',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'sheetmusic'=>array(
+		'level_1'=>'noty',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'music'=>array(
+		'level_1'=>'muzyka',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'soft'=>array(
+		'level_1'=>'multimedia',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'periodics'=>array(
+		'level_1'=>'podpiska',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'video'=>array(
+		'level_1'=>'filmy-na-dvd',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'printed'=>array(
+		'level_1'=>'suveniry',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+	'maps'=>array(
+		'level_1'=>'karty',
+		'level_2'=>array(
+			'categories'=>'kategorii',
+		),
+	),
+);
