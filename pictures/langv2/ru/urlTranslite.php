@@ -6,24 +6,31 @@ return array(
 		'level_1'=>'knigi',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'izdatelstva',
+			'series'=>'serii',
 		),
 	),
 	'sheetmusic'=>array(
 		'level_1'=>'noty',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'izdatelstva',
+			'series'=>'serii',
 		),
 	),
 	'music'=>array(
 		'level_1'=>'muzyka',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'leibl',
+			'series'=>'serii',
 		),
 	),
 	'soft'=>array(
 		'level_1'=>'multimedia',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'izdatelstva',
 		),
 	),
 	'periodics'=>array(
@@ -42,12 +49,14 @@ return array(
 		'level_1'=>'suveniry',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'proizvoditeli',
 		),
 	),
 	'maps'=>array(
 		'level_1'=>'karty',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'publishers'=>'izdatelstva',
 		),
 	),
 );
