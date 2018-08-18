@@ -8,6 +8,9 @@ return array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
 			'series'=>'serii',
+			'authors'=>'avtory',
+			'bindings'=>'oformlenie',
+			'years'=>'goda',
 		),
 	),
 	'sheetmusic'=>array(
@@ -16,6 +19,9 @@ return array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
 			'series'=>'serii',
+			'authors'=>'avtory',
+			'bindings'=>'ispolnenie',
+			'years'=>'goda',
 		),
 	),
 	'music'=>array(
@@ -24,6 +30,10 @@ return array(
 			'categories'=>'kategorii',
 			'publishers'=>'leibl',
 			'series'=>'serii',
+			'authors'=>'avtory',
+			'years'=>'goda',
+			'performers'=>'ispolniteli',
+			'media'=>'tip-nositelja',
 		),
 	),
 	'soft'=>array(
@@ -31,18 +41,28 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
+			'authors'=>'avtory',
+			'years'=>'goda',
+			'media'=>'tip-nositelja',
 		),
 	),
 	'periodics'=>array(
 		'level_1'=>'podpiska',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'types'=>'tip-izdanija',
 		),
 	),
 	'video'=>array(
 		'level_1'=>'filmy-na-dvd',
 		'level_2'=>array(
 			'categories'=>'kategorii',
+			'years'=>'goda',
+			'actors'=>'aktery',
+			'directors'=>'rejissery',
+			'audiostreams'=>'zvukovye-dorojki',
+			'subtitles'=>'jazyki-titrov',
+			'media'=>'tip-nositelja',
 		),
 	),
 	'printed'=>array(
@@ -50,6 +70,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'publishers'=>'proizvoditeli',
+			'years'=>'goda',
 		),
 	),
 	'maps'=>array(
@@ -57,6 +78,31 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
+			'bindings'=>'ispolnenie',
+			'years'=>'goda',
 		),
 	),
+
+
+	'sale'=>'rasprodazha',
+	'register'=>'registracija',
+	'login'=>'vhod',
+	'cart'=>'korzina',
+	'conditions'=>'uslovija-ispolzovanija',
+	'conditions_order'=>'kak-sdelat-zakaz',
+	'conditions_subscription'=>'uslovija-zakaza-periodiki',
+	'contact'=>'kontakty',
+	'legal_notice'=>'pravovoe-uvedomlenie',
+	'faq'=>'est-vopros',
+	'aboutus'=>'o-nas',
+	'csr'=>'otvetstvennost',
+	'offers_partners'=>'specialnye-predlojenija-dlja-dillerov',
+	'sitemap'=>'karta-sajta',
+	'thawte'=>'informacija-o-thawte',
+	'safety'=>'informacija-o-bezopasnosti-platezhej',
+	'paypal'=>'chto-takoe-paypal',
+	'ourstore'=>'nash-magazin',
+
+//	''=>'akkaunt',
+//	''=>'zona-5',
 );

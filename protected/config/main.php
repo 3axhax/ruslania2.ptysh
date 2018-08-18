@@ -102,9 +102,8 @@ return array(
             'urlSuffix'=>'/',
             'rules' => array(
                 '/' => 'site/index',
-                array(
-                    'class' => 'EntityUrlRule',
-                ),
+                '__entityUrlRule' => array('class' => 'EntityUrlRule'),
+                '__staticUrlRule' => array('class' => 'StaticUrlRule'),
 //                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>-<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
                 /*'<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),*/

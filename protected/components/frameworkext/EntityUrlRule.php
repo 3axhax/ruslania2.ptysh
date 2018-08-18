@@ -4,24 +4,37 @@
 class EntityUrlRule extends CBaseUrlRule {
 	private $_entitys = array(), $_level2 = array();
 	static private $_routes = array(
-		'product/view' => array('idName' => 'id','nameLevel2' => '',),
-		'entity/categorylist' => array('idName' => '','nameLevel2' => 'categories',),
-		'entity/list' => array('idName' => 'cid','nameLevel2' => 'categories',),
-		'entity/publisherlist' => array('idName' => '','nameLevel2' => 'publishers',),
-		'entity/bypublisher' => array('idName' => 'pid','nameLevel2' => 'publishers',),
-		'entity/serieslist' => array('idName' => '','nameLevel2' => 'series',),
-		'entity/byseries' => array('idName' => 'sid','nameLevel2' => 'series',),
+		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',),
+		'entity/categorylist' =>    array('idName' => '',       'nameLevel2' => 'categories',),
+		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',),
+		'entity/publisherlist' =>   array('idName' => '',       'nameLevel2' => 'publishers',),
+		'entity/serieslist' =>      array('idName' => '',       'nameLevel2' => 'series',),
+		'entity/authorlist' =>      array('idName' => '',       'nameLevel2' => 'authors',),
+		'entity/bindingslist' =>    array('idName' => '',       'nameLevel2' => 'bindings',),
+		'entity/yearslist' =>       array('idName' => '',       'nameLevel2' => 'years',),
+		'entity/performerlist' =>   array('idName' => '',       'nameLevel2' => 'performers',),
+		'entity/medialist' =>       array('idName' => '',       'nameLevel2' => 'media',),
+		'entity/typeslist' =>       array('idName' => '',       'nameLevel2' => 'types',),
+		'entity/actorlist' =>       array('idName' => '',       'nameLevel2' => 'actors',),
+		'entity/directorlist' =>    array('idName' => '',       'nameLevel2' => 'directors',),
+		'entity/audiostreamslist' => array('idName' => '',      'nameLevel2' => 'audiostreams',),
+		'entity/subtitleslist' =>   array('idName' => '',       'nameLevel2' => 'subtitles',),
+
+		'entity/bypublisher' =>     array('idName' => 'pid',    'nameLevel2' => 'publishers',   'useTitle'=>true,),
+		'entity/byseries' =>        array('idName' => 'sid',    'nameLevel2' => 'series',       'useTitle'=>true,),
+		'entity/byauthor' =>        array('idName' => 'aid',    'nameLevel2' => 'authors',      'useTitle'=>true,),
+		'entity/bybinding' =>       array('idName' => 'bid',    'nameLevel2' => 'bindings',     'useTitle'=>true,),
+		'entity/byyear' =>          array('idName' => 'year',   'nameLevel2' => 'years',        'useTitle'=>false,),
+		'entity/byperformer' =>     array('idName' => 'pid',    'nameLevel2' => 'performers',   'useTitle'=>true,),
+		'entity/bymedia' =>         array('idName' => 'mid',    'nameLevel2' => 'media',        'useTitle'=>true,),
+		'entity/bytype' =>          array('idName' => 'type',   'nameLevel2' => 'types',        'useTitle'=>true,),
+		'entity/byactor' =>         array('idName' => 'aid',    'nameLevel2' => 'actors',       'useTitle'=>true,),
+		'entity/bydirector' =>      array('idName' => 'did',    'nameLevel2' => 'directors',    'useTitle'=>true,),
+		'entity/byaudiostream' =>   array('idName' => 'sid',    'nameLevel2' => 'audiostreams', 'useTitle'=>true,),
+		'entity/bysubtitle' =>      array('idName' => 'sid',    'nameLevel2' => 'subtitles',    'useTitle'=>true,),
 	);
-//case 'entity/bybinding': return 'bid'; break;
-//case 'entity/byseries': return 'sid'; break;
-//case 'entity/bymedia': return 'mid'; break;
-//case 'entity/byaudiostream': return 'sid'; break;
-//case 'entity/bysubtitle': return 'sid'; break;
-////			case 'entity/bytype': return 'tid'; break;
-//case 'entity/bymagazinetype': return 'tid'; break;
-//case 'entity/byauthor': case 'entity/byactor': return 'aid'; break;
-//case 'entity/bydirector': return 'did'; break;
-//case 'entity/byperformer': return 'pid'; break;
+
+	static function getRoutes() { return self::$_routes; }
 
 	private $_routesLevel2 = array(), $_routesLevel3 = array();
 
@@ -186,15 +199,18 @@ class EntityUrlRule extends CBaseUrlRule {
 		$url = $this->_createLevel2($entityStr, $nameLevel2);
 		if (empty($url)) return '';
 
-		if (empty($title)) {
-			$titles = HrefTitles::get()->getById($entityId, $route, $id);
-			if (!empty($titles)) {
-				if (!empty($titles[$language])) $title = $titles[$language];
-				elseif (!empty($titles['en'])) $title = $titles['en'];
+		if (empty(self::$_routes[$route]['useTitle'])) $url .= $id . '/';
+		else {
+			if (empty($title)) {
+				$titles = HrefTitles::get()->getById($entityId, $route, $id);
+				if (!empty($titles)) {
+					if (!empty($titles[$language])) $title = $titles[$language];
+					elseif (!empty($titles['en'])) $title = $titles['en'];
+				}
 			}
+			if (empty($title)) $url .= $id . '/';
+			else $url .= $id . '-' . $title . '/';
 		}
-		if (empty($title)) $url .= $id . '/';
-		else $url .= $id . '-' . $title . '/';
 
 		return $url;
 	}

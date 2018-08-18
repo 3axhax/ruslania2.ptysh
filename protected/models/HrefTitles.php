@@ -80,7 +80,9 @@ class HrefTitles {
 			}
 			else $sql = 'select id, title_' . implode(', title_', $langs) . ' ';
 			$sql .= 'from ' . $table . ' '.
-				'where (id in (' . implode(',', array_keys($withoutTitles)) . ')) ';
+				'where (id in (' . implode(',', array_keys($withoutTitles)) . ')) '.
+				(($table == 'all_media')?' and (entity = ' . (int) $entity . ')':'')
+			;
 
 			foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
 				$this->_save($entity, $route, $row);
@@ -203,22 +205,10 @@ class HrefTitles {
 	}
 
 	function getIdName($entity, $route) {
-		switch ($route) {
-			case 'product/view': return 'id'; break;
-			case 'entity/list': return 'cid'; break;
-			case 'entity/bypublisher': return 'pid'; break;
-			case 'entity/bybinding': return 'bid'; break;
-			case 'entity/byseries': return 'sid'; break;
-			case 'entity/bymedia': return 'mid'; break;
-			case 'entity/byaudiostream': return 'sid'; break;
-			case 'entity/bysubtitle': return 'sid'; break;
-//			case 'entity/bytype': return 'tid'; break;
-			case 'entity/bymagazinetype': return 'tid'; break;
-			case 'entity/byauthor': case 'entity/byactor': return 'aid'; break;
-			case 'entity/bydirector': return 'did'; break;
-			case 'entity/byperformer': return 'pid'; break;
-		}
-		return '';
+		$routes = EntityUrlRule::getRoutes();
+		if (empty($routes[$route]['idName'])) return '';
+
+		return $routes[$route]['idName'];
 	}
 
 	function redirectOldPage($url) {
