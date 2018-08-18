@@ -31,9 +31,9 @@ return array(
 			'publishers'=>'leibl',
 			'series'=>'serii',
 			'authors'=>'avtory',
-			'years'=>'goda',
 			'performers'=>'ispolniteli',
 			'media'=>'tip-nositelja',
+			'years'=>'goda',
 		),
 	),
 	'soft'=>array(
@@ -42,8 +42,8 @@ return array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
 			'authors'=>'avtory',
-			'years'=>'goda',
 			'media'=>'tip-nositelja',
+			'years'=>'goda',
 		),
 	),
 	'periodics'=>array(
@@ -57,12 +57,12 @@ return array(
 		'level_1'=>'filmy-na-dvd',
 		'level_2'=>array(
 			'categories'=>'kategorii',
-			'years'=>'goda',
 			'actors'=>'aktery',
-			'directors'=>'rejissery',
+			'directors'=>'rezhissery',
 			'audiostreams'=>'zvukovye-dorojki',
 			'subtitles'=>'jazyki-titrov',
 			'media'=>'tip-nositelja',
+			'years'=>'goda',
 		),
 	),
 	'printed'=>array(
@@ -95,14 +95,13 @@ return array(
 	'legal_notice'=>'pravovoe-uvedomlenie',
 	'faq'=>'est-vopros',
 	'aboutus'=>'o-nas',
+	'ourstore'=>'nash-magazin',
 	'csr'=>'otvetstvennost',
 	'offers_partners'=>'specialnye-predlojenija-dlja-dillerov',
-	'sitemap'=>'karta-sajta',
 	'thawte'=>'informacija-o-thawte',
 	'safety'=>'informacija-o-bezopasnosti-platezhej',
+	'zone_info'=>'zona-5',
 	'paypal'=>'chto-takoe-paypal',
-	'ourstore'=>'nash-magazin',
-
+	'sitemap'=>'karta-sajta',
 //	''=>'akkaunt',
-//	''=>'zona-5',
 );
