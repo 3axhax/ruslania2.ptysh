@@ -95,6 +95,7 @@ function show_items(url, page) {
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
         '/lang/'+(( lang = $('form.filter input[name=lang]').val()) ? lang : '') +
+        '/pre_sale/'+(( pre_sale = $('form.filter select[name=pre_sale]').val()) ? pre_sale : '') +
         '/page/' + page;
     var bindings = [];
     var i = 0;

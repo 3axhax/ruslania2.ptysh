@@ -1021,6 +1021,7 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
+            $test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }

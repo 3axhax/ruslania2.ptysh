@@ -78,6 +78,21 @@
     <!--"Второй" блок фильтров-->
     <div class="prod-filter__row" id="more-filter-block">
 
+        <?php if (isset($filters['pre_sale']) && $filters['pre_sale'] == true):?>
+            <!--Фильтр по предпродажам-->
+            <?php
+                $pre_sale = $filter_data['pre_sale'] ?: false;
+            ?>
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PRE_SALE_LABLE')?>:</label>
+                <select class="prod-filter__input prod-filter__input__select--m" name="pre_sale" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                    <option value="0" ><?=$ui->item('A_NEW_FILTER_PRE_SALE_1')?></option>
+                    <option value="1" <?= ($pre_sale == 1) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_PRE_SALE_2')?></option>
+                    <option value="2" <?= ($pre_sale == 2) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_PRE_SALE_3')?></option>
+                </select>
+            </div>
+        <?php endif;?>
+
         <?php if (isset($filters['performers']) && $filters['performers'] == true):?>
             <!--Фильтр по исполнителю-->
             <div class="prod-filter__col">
@@ -229,6 +244,7 @@
             <?php endif;?>
         </div>
         <?php endif;?>
+
     </div>
 </form>
 <script>
