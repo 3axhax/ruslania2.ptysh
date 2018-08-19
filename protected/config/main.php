@@ -102,6 +102,8 @@ return array(
             'urlSuffix'=>'/',
             'rules' => array(
                 '/' => 'site/index',
+                '__entityUrlRule' => array('class' => 'EntityUrlRule'),
+                '__staticUrlRule' => array('class' => 'StaticUrlRule'),
 //                '<entity:(' . $entities . ')>/<id:(\d+)>/<title:(.+)>' => array('product/view', 'urlSuffix'=>'/'),
                 '<entity:(' . $entities . ')>/<id:(\d+)>-<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),
                 /*'<entity:(' . $entities . ')>/<id:(\d+)>/<title:([0-9a-z-.]+)\/?>' => array('product/view', 'urlSuffix'=>'/'),*/
@@ -234,10 +236,6 @@ return array(
                 'offer/<oid:(\d+)>/<title:(.+)>' => 'offers/view',
                 'offer/<oid:(\d+)>' => 'offers/view',
 
-//                array(
-//                    'class' => 'EntityUrlRule',
-//                    'connectionID' => 'db',
-//                ),
                 '/<page:([\w_]+)>' => 'site/static',
             ),
         ),
