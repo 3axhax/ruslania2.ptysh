@@ -112,4 +112,65 @@ class SearchPerformers {
 		return $items;
 	}
 
+    function  getPerformersForFilters($entity, $q, $cid = 0, $limit = 20) {
+        if (!Entity::checkEntityParam($entity, 'performers')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+        $tbl_performers = $entities[$entity]['performer_table'];
+        $tbl_performers_list = $entities[$entity]['performer_table_list'];
+        $tbl_person = 'all_authorslist';
+
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
+            LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
+        if ($cid > 0) {
+            $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
+                    FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
+                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
+                    LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
+                    WHERE t.avail_for_order=1 AND (t.`code`=:code OR t.`subcode`=:code)
+                    GROUP BY ta.id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
+        } else {
+            $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
+                    FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
+                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
+                    LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
+                    WHERE t.avail_for_order=1
+                    GROUP BY ta.id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
+        }
+        $performers = [];
+        $i = 0;
+        foreach ($rows as $row) {
+            if (mb_stripos($row['title_ru'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_ru'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_rut'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_rut'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_en'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_fi'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_fi'];
+                $i++;
+                continue;
+            }
+        }
+        return $performers;
+    }
+
 }
