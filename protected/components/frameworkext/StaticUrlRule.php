@@ -4,6 +4,8 @@
 class StaticUrlRule extends CBaseUrlRule {
 	public $urlSuffix = '/';
 	private $_pages = array();
+	private $_offers = array();
+
 	static private $_files = array(
 		'conditions' => 'MSG_CONDITIONS_OF_USE',
 		'conditions_order' => 'YM_CONTEXT_CONDITIONS_ORDER_ALL',
@@ -30,6 +32,7 @@ class StaticUrlRule extends CBaseUrlRule {
 	function __construct($language = null) {
 		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
 		$this->_language = $language;
+
 		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].Yii::app()->language.'/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {
@@ -44,7 +47,11 @@ class StaticUrlRule extends CBaseUrlRule {
 	function createUrl($manager, $route, $params, $ampersand) {
 		if (!isset($_GET['ha'])) return false;
 		if (defined('OLD_PAGES')) return false;
-		if (mb_strpos($route, 'site/', null, 'utf-8') === false) return false;
+		if (
+			(mb_strpos($route, 'site/', null, 'utf-8') === false)
+			&& (mb_strpos($route, 'bookshelf/', null, 'utf-8') === false)
+			&& (mb_strpos($route, 'offers/', null, 'utf-8') === false)
+		) return false;
 
 		$prefix = array();
 		if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
@@ -60,6 +67,20 @@ class StaticUrlRule extends CBaseUrlRule {
 		$url = '';
 
 		switch ($route) {
+			case 'bookshelf/list':
+				if (!empty($this->_pages['bookshelf']))
+					$url = $this->_pages['bookshelf'] . '/';
+				break;
+			case 'bookshelf/view':
+				if (!empty($this->_pages['bookshelf'])&&!empty($params['id']))
+					$url = $this->_pages['bookshelf'] . '/' . $params['id'] . '/';
+				unset($params['id']);
+				break;
+			case 'offers/special':
+				if (!empty($params['mode'])&&!empty($this->_pages['for-' . $params['mode']]))
+					$url = $this->_pages['for-' . $params['mode']] . '/';
+				unset($params['mode']);
+				break;
 			case 'site/static':
 				if (!empty($params['page'])
 					&&isset(self::$_files[$params['page']])
@@ -102,7 +123,37 @@ class StaticUrlRule extends CBaseUrlRule {
 				$_REQUEST['page'] = $_GET['page'] = $page;
 				return 'site/static';
 			}
+			elseif ($page == 'bookshelf') return 'bookshelf/list';
+			//
+			else {
+				switch ($page) {
+					case 'for-firms':
+						$_REQUEST['mode'] = $_GET['mode'] = 'firms';
+						return 'offers/special';
+						break;
+					case 'for-uni':
+						$_REQUEST['mode'] = $_GET['mode'] = 'uni';
+						return 'offers/special';
+						break;
+					case 'for-lib':
+						$_REQUEST['mode'] = $_GET['mode'] = 'lib';
+						return 'offers/special';
+						break;
+					case 'for-fs':
+						$_REQUEST['mode'] = $_GET['mode'] = 'fs';
+						return 'offers/special';
+						break;
+					case 'for-alle2':
+						$_REQUEST['mode'] = $_GET['mode'] = 'alle2';
+						return 'offers/special';
+						break;
+				}
+			}
 			return 'site/' . $page;
+		}
+		elseif (preg_match("/^" . $this->_pages['bookshelf'] . "\/(\d+)/ui", $pathInfo, $m)) {
+			$_REQUEST['id'] = $_GET['id'] = $m[1];
+			return 'bookshelf/view';
 		}
 		return false;
 	}

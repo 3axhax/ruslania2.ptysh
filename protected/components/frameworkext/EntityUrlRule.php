@@ -2,9 +2,9 @@
 /*Created by Кирилл (15.08.2018 22:32)*/
 
 class EntityUrlRule extends CBaseUrlRule {
-	private $_entitys = array(), $_level2 = array();
+	private $_entitys = array(), $_other = array(), $_level2 = array();
 	static private $_routes = array(
-		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',),
+		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',             'useTitle'=>true),
 		'entity/categorylist' =>    array('idName' => '',       'nameLevel2' => 'categories',),
 		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',),
 		'entity/publisherlist' =>   array('idName' => '',       'nameLevel2' => 'publishers',),
@@ -32,6 +32,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/bydirector' =>      array('idName' => 'did',    'nameLevel2' => 'directors',    'useTitle'=>true,),
 		'entity/byaudiostream' =>   array('idName' => 'sid',    'nameLevel2' => 'audiostreams', 'useTitle'=>true,),
 		'entity/bysubtitle' =>      array('idName' => 'sid',    'nameLevel2' => 'subtitles',    'useTitle'=>true,),
+
 	);
 
 	static function getRoutes() { return self::$_routes; }
@@ -53,13 +54,13 @@ class EntityUrlRule extends CBaseUrlRule {
 				}
 			}
 			foreach (self::$_routes as $route=>$rParam) {
-				if ($route != 'product/view') {
+				if (!empty($rParam['nameLevel2'])) {
 					if (empty($rParam['idName'])) $this->_routesLevel2[$rParam['nameLevel2']] = $route;
 					else $this->_routesLevel3[$rParam['nameLevel2']] = $route;
 				}
 			}
 		}
-//		Debug::staticRun(array($this->_routesLevel2, $this->_routesLevel3));
+//		Debug::staticRun(array($this->_other, $this->_routesLevel3));
 	}
 
 	function createUrl($manager, $route, $params, $ampersand) {
