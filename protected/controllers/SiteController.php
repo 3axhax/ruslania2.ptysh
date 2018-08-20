@@ -1046,6 +1046,7 @@ class SiteController extends MyController {
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
         $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
+        if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
 
         FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);

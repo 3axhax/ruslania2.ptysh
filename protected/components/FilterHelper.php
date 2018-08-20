@@ -93,6 +93,7 @@ class FilterHelper
         self::getLangVideo();
         self::getSubtitlesVideo();
         self::getPreSale();
+        self::getPerformer();
 
         /*$filtersData = FiltersData::instance();
         if ($filtersData->isSetKey($key)) {
@@ -141,6 +142,7 @@ class FilterHelper
         self::$data['lang_video'] = $data ['lang_video'] ?: $data ['langVideo'] ?: false;
         self::$data['subtitles_video'] = $data ['subtitles_video'] ?: $data ['subtitlesVideo'] ?: false;
         self::$data['pre_sale'] = $data ['pre_sale'] ?: false;
+        self::$data['performer'] = $data ['performer'] ?: false;
 
     }
 
@@ -398,6 +400,20 @@ class FilterHelper
             return true;
         }
         self::$data['pre_sale'] = false;
+        return false;
+    }
+    
+    static private function getPerformer() {
+        $performer = Yii::app()->getRequest()->getParam('performer', false);
+        if ($performer !== false) {
+            self::$data['performer'] = (int) $performer;
+            return true;
+        }
+        if (isset(self::$sessionData['performer']) && self::$sessionData['performer'] != '') {
+            self::$data['performer'] = (int) self::$sessionData['performer'];
+            return true;
+        }
+        self::$data['performer'] = false;
         return false;
     }
 }

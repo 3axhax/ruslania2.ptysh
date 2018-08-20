@@ -168,9 +168,6 @@ class SearchAuthors {
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
 
-        $whereLike = 'LOWER(aa.title_ru) LIKE LOWER(:q) OR LOWER(aa.title_rut) LIKE LOWER(:q) OR 
-            LOWER(aa.title_en) LIKE LOWER(:q) OR LOWER(aa.title_fi) LIKE LOWER(:q)';
-
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
             LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
 

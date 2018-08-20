@@ -249,8 +249,4 @@
 </form>
 <script>
     show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>');
-    $(document).ready(function () {
-        //show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>);
-    });
-
 </script>

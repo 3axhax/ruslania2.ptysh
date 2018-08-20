@@ -119,38 +119,27 @@ class SearchPerformers {
         $tbl = $entities[$entity]['site_table'];
         $tbl_performers = $entities[$entity]['performer_table'];
         $tbl_performers_list = $entities[$entity]['performer_table_list'];
+        $tbl_person = 'all_authorslist';
 
-        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_en) LIKE LOWER(:q)';
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
+            LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
         if ($cid > 0) {
-            $sql = 'SELECT tc.performer_id, ap.title_ru, ap.title_en 
-                    FROM (SELECT id, title_ru, title_en FROM all_performers 
-                    WHERE ('.$whereLike.')) as ap 
-                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.performer_id)
-                    WHERE tc.avail_for_order=1 AND (tc.`code`=:code OR tc.`subcode`=:code)
-                    GROUP BY tc.performer_id LIMIT 0,'.$limit;
-
-            $sql = 'SELECT tpl.id, tpl.title_ru, tpl.title_en
-                    FROM (SELECT id, title_ru, title_en FROM '.$tbl_performers_list.' 
-                    WHERE ('.$whereLike.')) as tpl
-                    LEFT JOIN '.$tbl_performers.' as tp ON (tpl.id = tp.performer_id) 
-                    LEFT JOIN '.$tbl.' as t ON (tp.'.$entities[$entity]['entity'].'_id = t.id)
+            $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
+                    FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
+                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
+                    LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
                     WHERE t.avail_for_order=1 AND (t.`code`=:code OR t.`subcode`=:code)
-                    GROUP BY tp.performer_id LIMIT 0,'.$limit;
+                    GROUP BY ta.id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
-            $sql = 'SELECT tc.performer_id, ap.title_ru, ap.title_en 
-                    FROM (SELECT id, title_ru, title_en FROM all_performers 
-                    WHERE ('.$whereLike.')) as ap 
-                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.performer_id)
-                    WHERE tc.avail_for_order=1
-                    GROUP BY tc.performer_id LIMIT 0,'.$limit;
-            $sql = 'SELECT tpl.id, tpl.title_ru, tpl.title_en
-                    FROM (SELECT id, title_ru, title_en FROM '.$tbl_performers_list.' 
-                    WHERE ('.$whereLike.')) as tpl
-                    LEFT JOIN '.$tbl_performers.' as tp ON (tpl.id = tp.performer_id) 
-                    LEFT JOIN '.$tbl.' as t ON (tp.'.$entities[$entity]['entity'].'_id = t.id)
+            $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
+                    FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
+                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
+                    LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
                     WHERE t.avail_for_order=1
-                    GROUP BY tp.performer_id LIMIT 0,'.$limit;
+                    GROUP BY ta.id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
         }
         $performers = [];
@@ -162,9 +151,21 @@ class SearchPerformers {
                 $i++;
                 continue;
             }
+            if (mb_stripos($row['title_rut'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_rut'];
+                $i++;
+                continue;
+            }
             if (mb_stripos($row['title_en'], $q) !== false) {
                 $performers[$i]['id'] = $row['id'];
                 $performers[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_fi'], $q) !== false) {
+                $performers[$i]['id'] = $row['id'];
+                $performers[$i]['title'] = $row['title_fi'];
                 $i++;
                 continue;
             }
