@@ -223,9 +223,9 @@ class Similar extends CWidget {
 		$sql = ''.
 			'select t.id, t.avail_for_order, t.image ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-				'join ' . $entityParam['performer_table'] . ' tA on (tA.' . $entityParam['performer_entity_field'] . ' = t.id) '.
+				'join ' . $entityParam['performer_table'] . ' tA on (tA.' . $entityParam['performer_field'] . ' = t.id) '.
 					'and (tA.person_id in (' . implode(',', $performerIds) . ')) '.
-					'and (tA.' . $entityParam['performer_entity_field'] . ' <> ' . (int) $this->_params['item']['id'] . ') '.
+					'and (tA.' . $entityParam['performer_field'] . ' <> ' . (int) $this->_params['item']['id'] . ') '.
 			'having (avail_for_order = 1) and (image <> "") ' .
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.

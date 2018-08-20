@@ -39,9 +39,12 @@ class EntityUrlRule extends CBaseUrlRule {
 	private $_routesLevel2 = array(), $_routesLevel3 = array();
 
 	public $urlSuffix = '/';
+	private $_language = null;
 
-	function __construct() {
-		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].Yii::app()->language.'/urlTranslite.php';
+	function __construct($language = null) {
+		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
+		$this->_language = $language;
+		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'] . $this->_language . '/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {
 				if ($entityId = Entity::ParseFromString($entityStr)) {
@@ -76,20 +79,20 @@ class EntityUrlRule extends CBaseUrlRule {
 		if (empty($entityId)||empty($entityStr)) return false;
 
 		$prefix = array();
-		$language = Yii::app()->language;
-		if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
-			//что бы получить путь для другого языка
-			$language = $params['__langForUrl'];
+		if (!empty($params['__langForUrl'])&&($params['__langForUrl'] != $this->_language)&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
+			$handler = new EntityUrlRule($params['__langForUrl']);
+			unset($params['__langForUrl']);
+			return $handler->createUrl($manager, $route, $params, $ampersand);
 		}
 		unset($params['__langForUrl']);
 
-		if ($language === 'rut') $params['language'] = $language;
-		else $prefix[] = $language;
+		if ($this->_language === 'rut') $params['language'] = $this->_language;
+		else $prefix[] = $this->_language;
 
 		if (!empty($params['lang'])) {
 			$langGoods = ProductLang::getShortLang();
 			if (isset($langGoods[$params['lang']])) {
-				if ($language !== 'rut') {
+				if ($this->_language !== 'rut') {
 					$prefix[] = $langGoods[$params['lang']];
 					unset($params['lang']);
 				}
@@ -102,18 +105,18 @@ class EntityUrlRule extends CBaseUrlRule {
 		switch ($route) {
 			case 'product/view':
 				if (!empty($params[self::$_routes[$route]['idName']]))
-					$url = $this->_createProduct($route, $entityStr, $entityId, $params[self::$_routes[$route]['idName']], $title, $language);
+					$url = $this->_createProduct($route, $entityStr, $entityId, $params[self::$_routes[$route]['idName']], $title);
 				break;
 			case 'entity/list':
 				if (!empty($params['entity'])) {
 					if (empty($params['cid'])) $url = $this->_createRazd($entityStr);
-					else $url = $this->_createLevel3($route, $entityStr, $entityId, 'categories', $params['cid'], $title, $language);
+					else $url = $this->_createLevel3($route, $entityStr, $entityId, 'categories', $params['cid'], $title);
 				}
 				break;
 			default:
 				if (empty(self::$_routes[$route]['idName'])||empty($params[self::$_routes[$route]['idName']]))
 					$url = $this->_createLevel2($entityStr, self::$_routes[$route]['nameLevel2']);
-				else $url = $this->_createLevel3($route, $entityStr, $entityId, self::$_routes[$route]['nameLevel2'], $params[self::$_routes[$route]['idName']], $title, $language);
+				else $url = $this->_createLevel3($route, $entityStr, $entityId, self::$_routes[$route]['nameLevel2'], $params[self::$_routes[$route]['idName']], $title);
 				break;
 		}
 		unset($params[self::$_routes[$route]['idName']], $params['entity'], $params['title'], $params['__useTitleParams']);
@@ -172,14 +175,14 @@ class EntityUrlRule extends CBaseUrlRule {
 		return implode('/', $route);
 	}
 
-	private function _createProduct($route, $entityStr, $entityId, $id, $title, $language) {
+	private function _createProduct($route, $entityStr, $entityId, $id, $title) {
 		$url = $this->_createRazd($entityStr);
 		if (empty($url)) return '';
 
 		if (empty($title)) {
 			$titles = HrefTitles::get()->getById($entityId, $route, $id);
 			if (!empty($titles)) {
-				if (!empty($titles[$language])) $title = $titles[$language];
+				if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 				elseif (!empty($titles['en'])) $title = $titles['en'];
 			}
 		}
@@ -195,7 +198,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		return $this->_entitys[$entityStr] . '/';
 	}
 
-	private function _createLevel3($route, $entityStr, $entityId, $nameLevel2, $id, $title, $language) {
+	private function _createLevel3($route, $entityStr, $entityId, $nameLevel2, $id, $title) {
 		$url = $this->_createLevel2($entityStr, $nameLevel2);
 		if (empty($url)) return '';
 
@@ -204,7 +207,7 @@ class EntityUrlRule extends CBaseUrlRule {
 			if (empty($title)) {
 				$titles = HrefTitles::get()->getById($entityId, $route, $id);
 				if (!empty($titles)) {
-					if (!empty($titles[$language])) $title = $titles[$language];
+					if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 					elseif (!empty($titles['en'])) $title = $titles['en'];
 				}
 			}

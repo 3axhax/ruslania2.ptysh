@@ -36,7 +36,10 @@ class MyUrlManager extends CUrlManager
 
             if (!empty($query)
                 &&(Yii::app()->language !== 'rut')//это чтоб убрать lang и language из адреса
-            ) $url .= '?' . $query;
+            ) {
+                if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?' . $query;
+                else $url .= '&' . $query;
+            }
         }
         return $url;
     }

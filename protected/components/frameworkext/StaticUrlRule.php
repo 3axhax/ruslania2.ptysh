@@ -21,12 +21,15 @@ class StaticUrlRule extends CBaseUrlRule {
 		'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
-		'sitemap' => 'A_SITEMAP',
+		'advsearch' => 'Advanced search',
 	);
 
 	static function getTitles() { return self::$_files; }
+	private $_language = null;
 
-	function __construct() {
+	function __construct($language = null) {
+		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
+		$this->_language = $language;
 		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].Yii::app()->language.'/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {
@@ -44,15 +47,15 @@ class StaticUrlRule extends CBaseUrlRule {
 		if (mb_strpos($route, 'site/', null, 'utf-8') === false) return false;
 
 		$prefix = array();
-		$language = Yii::app()->language;
 		if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
-			//что бы получить путь для другого языка
-			$language = $params['__langForUrl'];
+			$handler = new StaticUrlRule($params['__langForUrl']);
+			unset($params['__langForUrl']);
+			return $handler->createUrl($manager, $route, $params, $ampersand);
 		}
 		unset($params['__langForUrl']);
 
-		if ($language === 'rut') $params['language'] = $language;
-		else $prefix[] = $language;
+		if ($this->_language === 'rut') $params['language'] = $this->_language;
+		else $prefix[] = $this->_language;
 
 		$url = '';
 

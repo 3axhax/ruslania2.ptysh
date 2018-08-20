@@ -52,7 +52,7 @@ class Performer
 //        if(!in_array($entity, $havePersormers)) return false;
         $entityParam = Entity::GetEntitiesList()[$entity];
 
-        $sql = 'SELECT * FROM ' . $entityParam['performer_table_list'] . ' WHERE id=:pid limit 1';
+        $sql = 'SELECT * FROM all_authorslist WHERE id=:pid limit 1';
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':pid' => $pid));
         return $row;
     }
