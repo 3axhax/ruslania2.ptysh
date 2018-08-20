@@ -4,7 +4,6 @@
 class StaticUrlRule extends CBaseUrlRule {
 	public $urlSuffix = '/';
 	private $_pages = array();
-	private $_offers = array();
 
 	static private $_files = array(
 		'conditions' => 'MSG_CONDITIONS_OF_USE',
@@ -45,7 +44,6 @@ class StaticUrlRule extends CBaseUrlRule {
 	}
 
 	function createUrl($manager, $route, $params, $ampersand) {
-		if (!isset($_GET['ha'])) return false;
 		if (defined('OLD_PAGES')) return false;
 		if (
 			(mb_strpos($route, 'site/', null, 'utf-8') === false)
@@ -97,7 +95,6 @@ class StaticUrlRule extends CBaseUrlRule {
 				break;
 		}
 		if (!empty($url)) {
-			$params['ha'] = 1;//TODO:: убрать, когда будет все проверено
 			if (!empty($prefix)) $url = implode('/', $prefix) . '/' . $url;
 			if (!empty($params)) $url .= '?' . http_build_query($params);
 			return $url;
@@ -106,7 +103,6 @@ class StaticUrlRule extends CBaseUrlRule {
 	}
 
 	function parseUrl($manager, $request, $pathInfo, $rawPathInfo) {
-		if (!isset($_GET['ha'])) return false;
 		if (defined('OLD_PAGES')) return false;
 
 		if ($this->urlSuffix !== null) $pathInfo = $manager->removeUrlSuffix($rawPathInfo, $this->urlSuffix);

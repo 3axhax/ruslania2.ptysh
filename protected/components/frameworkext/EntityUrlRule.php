@@ -64,7 +64,6 @@ class EntityUrlRule extends CBaseUrlRule {
 	}
 
 	function createUrl($manager, $route, $params, $ampersand) {
-		if (!isset($_GET['ha'])) return false;
 		if (defined('OLD_PAGES')) return false;
 		if (empty(self::$_routes[$route])) return false;
 		if (empty($params['entity'])) return false;
@@ -122,7 +121,6 @@ class EntityUrlRule extends CBaseUrlRule {
 		}
 		unset($params[self::$_routes[$route]['idName']], $params['entity'], $params['title'], $params['__useTitleParams']);
 		if (!empty($url)) {
-			$params['ha'] = 1;//TODO:: убрать, когда будет все проверено
 			if (!empty($prefix)) $url = implode('/', $prefix) . '/' . $url;
 			if (!empty($params)) $url .= '?' . http_build_query($params);
 			return $url;
@@ -131,7 +129,6 @@ class EntityUrlRule extends CBaseUrlRule {
 	}
 
 	function parseUrl($manager, $request, $pathInfo, $rawPathInfo) {
-		if (!isset($_GET['ha'])) return false;
 		if (defined('OLD_PAGES')) return false;
 
 		if ($this->urlSuffix !== null) $pathInfo = $manager->removeUrlSuffix($rawPathInfo, $this->urlSuffix);
