@@ -69,6 +69,7 @@ class Condition {
 		$this->_stream();
 		$this->_subtitle();
 		$this->_pre_sale();
+		$this->_performer();
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
@@ -227,6 +228,17 @@ class Condition {
 
             if ($pre_sale == 1) $this->_condition['pre_sale'] = '(t.presale = 1)';
             if ($pre_sale == 2) $this->_condition['pre_sale'] = '(t.presale != 1)';
+        }
+    }
+
+    private function _performer() {
+        if (Entity::checkEntityParam($this->_entity, 'performers')) {
+            $perid = (int) $this->g('performer');
+            if ($perid > 0) {
+                $entityParams = Entity::GetEntitiesList()[$this->_entity];
+                $this->_join['tPER'] = 'join ' . $entityParams['performer_table'] . ' tPER 
+                on (tPER.music_id = t.id) and (tPER.person_id = ' . $perid . ')';
+            }
         }
     }
 
