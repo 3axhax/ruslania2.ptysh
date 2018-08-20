@@ -84,14 +84,14 @@ class StaticUrlRule extends CBaseUrlRule {
 					&&isset(self::$_files[$params['page']])
 					&&isset($this->_pages[$params['page']])
 				) {
-					$url = $this->_pages[$params['page']];
+					$url = $this->_pages[$params['page']] . '/';
 					unset($params['page']);
 				}
 				break;
 			default:
 				$actions = explode('/', $route);
 				$actionId = array_pop($actions);
-				if (isset($this->_pages[$actionId])) $url = $this->_pages[$actionId];
+				if (isset($this->_pages[$actionId])) $url = $this->_pages[$actionId] . '/';
 				break;
 		}
 		if (!empty($url)) {
