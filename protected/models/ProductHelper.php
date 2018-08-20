@@ -23,6 +23,14 @@ class ProductHelper
         return $row[0]['title'];
     }
 
+    public static function GetPerformerTitle($id ,$lang = 'ru') {
+        if (!in_array($lang, self::$avail_lang)) $lang = 'ru';
+        $key = 'title_' . $lang;
+        $sql = 'SELECT '.$key.' as title FROM all_authorslist WHERE id='.$id;
+        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        return $row[0]['title'];
+    }
+
     public static function GetPublisherTitle($id ,$lang = 'ru') {
         if (!in_array($lang, ['ru', 'en'])) $lang = 'ru';
         $key = 'title_' . $lang;
@@ -443,8 +451,9 @@ class ProductHelper
 		
 		if ($eTable) {
 		
-			$sql = 'SELECT * FROM `'.$eTable.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%"';
-			
+			//$sql = 'SELECT * FROM `'.$eTable.'` WHERE title_ru LIKE "%обложка%" OR title_ru LIKE "%переплет%"';
+			$sql = 'SELECT * FROM `'.$eTable.'`';
+
 			$res = Yii::app()->db->createCommand($sql)->queryAll();
 			
 			foreach ($res as $row) {
