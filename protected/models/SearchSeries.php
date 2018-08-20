@@ -2,12 +2,21 @@
 
 class SearchSeries
 {
-    static function  getSeriesForFilters($entity, $q, $cid = 0, $limit = 20) {
+    static private $_self = null;
+
+    static function get() {
+        if (self::$_self === null) self::$_self = new self;
+        return self::$_self;
+    }
+
+    function  getSeriesForFilters($entity, $q, $cid = 0, $limit = 20) {
         if (!Entity::checkEntityParam($entity, 'series')) return array();
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
         $series_tbl = $entities[$entity]['site_series_table'];
+
+        $filter_data = FilterHelper::getFiltersData($entity, $cid);
 
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
             LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
@@ -18,7 +27,7 @@ class SearchSeries
             WHERE ('.$whereLike.')) as st 
             LEFT JOIN ' . $tbl . ' as tc   
             ON (tc.series_id=st.id)
-            WHERE tc.avail_for_order=1 AND (tc.`code`=:code OR tc.`subcode`=:code) 
+            WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code) 
             GROUP BY tc.series_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
@@ -27,7 +36,7 @@ class SearchSeries
             WHERE ('.$whereLike.')) as st 
             LEFT JOIN ' . $tbl . ' as tc   
             ON (tc.series_id=st.id)
-            WHERE tc.avail_for_order=1
+            WHERE tc.avail_for_order='.$filter_data['avail'].'
             GROUP BY tc.series_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
         }
