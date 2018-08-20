@@ -162,13 +162,15 @@ class SearchPublishers {
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
 
+        $filter_data = FilterHelper::getFiltersData($entity, $cid);
+
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_en) LIKE LOWER(:q)';
         if ($cid > 0) {
             $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en 
                     FROM (SELECT id, title_ru, title_en FROM all_publishers 
                     WHERE ('.$whereLike.')) as ap 
                     LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
-                    WHERE tc.avail_for_order=1 AND (tc.`code`=:code OR tc.`subcode`=:code)
+                    WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code)
                     GROUP BY tc.publisher_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
@@ -176,7 +178,7 @@ class SearchPublishers {
                     FROM (SELECT id, title_ru, title_en FROM all_publishers 
                     WHERE ('.$whereLike.')) as ap 
                     LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
-                    WHERE tc.avail_for_order=1
+                    WHERE tc.avail_for_order='.$filter_data['avail'].'
                     GROUP BY tc.publisher_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
         }
