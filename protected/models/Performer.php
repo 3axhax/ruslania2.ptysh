@@ -74,7 +74,7 @@ class Performer
                 'SELECT COUNT(*) '.
                 'FROM ' . $data['performer_table'] . ' AS a '.
                 'JOIN '.$data['site_table'].' AS b ON (a.'.$data['performer_field'].'=b.id) '.
-                'WHERE a.performer_id=:id AND b.avail_for_order=1'.
+                'WHERE a.person_id=:id AND b.avail_for_order=1'.
             '';
 
         }
@@ -94,7 +94,7 @@ class Performer
         $dp = Entity::CreateDataProvider($entity);
         $criteria = $dp->getCriteria();
         $criteria->join = 'JOIN ' . $data['performer_table'] . ' AS j ON j.' . $data['performer_field'] . '=t.id ';
-        $criteria->addCondition('j.performer_id=:pid');
+        $criteria->addCondition('j.person_id=:pid');
         if(!empty($avail))
             $criteria->addCondition('t.avail_for_order=1');
 
