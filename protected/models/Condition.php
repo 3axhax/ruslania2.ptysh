@@ -68,7 +68,6 @@ class Condition {
 		$this->_type();
 		$this->_stream();
 		$this->_subtitle();
-		$this->_pre_sale();
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
@@ -220,25 +219,13 @@ class Condition {
 		}
 	}
 
-	private function _pre_sale() {
-	    if ($this->_entity == 10) {
-            $pre_sale = $this->g('pre_sale');
-            if (($pre_sale === 0) || ($pre_sale === '0')) return;
-
-            if ($pre_sale == 1) $this->_condition['pre_sale'] = '(t.presale = 1)';
-            if ($pre_sale == 2) $this->_condition['pre_sale'] = '(t.presale != 1)';
-        }
-    }
-
 	private function _lang() {
 		if (!Entity::checkEntityParam($this->_entity, 'languages')) return;
 
 		$langsel = (int) $this->g('lang_sel');
 		if ($langsel > 0) {
 			if (empty($this->_condition['avail'])) {
-				$this->_join['tL_all'] = 'join all_items_languages tL on (tL.item_id = t.id) 
-				and (tL.language_id = ' . $langsel . ') 
-				and (tL.entity = '.$this->_entity.')';
+				$this->_join['tL_all'] = 'join all_items_languages tL on (tL.item_id = t.id) and (tL.language_id = ' . $langsel . ')';
 			}
 			else {
 				unset($this->_condition['avail']);
@@ -251,9 +238,7 @@ class Condition {
 					if ($countCond === 0) $this->_onlySupportLanguage = true;
 				}
 				$this->_languageCondition = array('language_id'=>'(t.language_id = ' . $langsel . ')');
-				$condition = array('id'=>'(tL.id = t.id)',
-                    'language_id'=>'(tL.language_id = ' . $langsel . ')',
-                    'entity'=>'(tL.entity = ' . $this->_entity . ')');
+				$condition = array('id'=>'(tL.id = t.id)', 'language_id'=>'(tL.language_id = ' . $langsel . ')');
 				if (!empty($this->_condition['cid'])) {
 					$condCid = explode(' or ', $this->_condition['cid']);
 					$condCid = array_shift($condCid);
