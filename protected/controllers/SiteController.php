@@ -124,25 +124,7 @@ class SiteController extends MyController {
         }
         $data = file_get_contents($file);
 
-        $titles = array(
-            'conditions' => 'MSG_CONDITIONS_OF_USE',
-            'conditions_order' => 'YM_CONTEXT_CONDITIONS_ORDER_ALL',
-            'conditions_subscription' => 'YM_CONTEXT_CONDITIONS_ORDER_PRD',
-            'contact' => 'YM_CONTEXT_CONTACTUS',
-            'legal_notice' => 'YM_CONTEXT_LEGAL_NOTICE',
-            'faq' => 'A_FAQ',
-            'aboutus' => 'A_ABOUTUS',
-            'partners' => 'A_PARTNERS',
-            'links' => 'A_LINKS',
-			'ourstore' => 'A_STORE',
-            'csr' => 'A_CSR',
-            'offers_partners' => 'YM_CONTEXT_OFFERS_PARTNERS',
-            'thawte' => 'MSG_YAHLIST_INFO_THAWTE',
-            'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
-            'zone_info' => 'Zone',
-            'paypal' => 'MSG_WHAT_IS_PAYPAL',
-            'sitemap' => 'A_SITEMAP',
-        );
+        $titles = StaticUrlRule::getTitles();
 
         $this->breadcrumbs[] = Yii::app()->ui->item($titles[$page]);
         $this->render('static', array('data' => $data, 'entity' => 'static'));
@@ -1039,6 +1021,7 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
+            $test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }

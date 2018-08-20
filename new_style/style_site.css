@@ -786,6 +786,22 @@ h1.titlename {
 .listgoods .sortbox {
     padding: 13px 20px;
     background: #f8f8f8;
+    min-height: 32px;
+}
+
+.sortbox.langsel {
+    border-top: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.sortbox.sortfield {
+    border-top: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
 
 .listgoods .sortbox form { margin: 0; }
@@ -932,7 +948,7 @@ ul.items select.periodic {
 
 form.filter {
 
-    border: 1px solid #ececec;
+    border: 1px solid #cccccc;
     border-radius: 4px;
     margin-top: 14px;
 }
@@ -2726,6 +2742,10 @@ li.category_all {
 .prod-filter__input__select--m {
     width: 161px;
 }
+.prod-filter__input__select--m option{
+    /*background: #CCCCCC;*/
+    border-color: #edb421;
+}
 input.prod-filter__input {
     margin-bottom: 0;
 }
@@ -2815,7 +2835,6 @@ input.prod-filter__input:focus,
 .ms-choice {
     display: block;
     width: 100%;
-    height: 26px;
     padding: 0;
     overflow: hidden;
     cursor: pointer;
