@@ -236,9 +236,9 @@ class Condition {
 		$langsel = (int) $this->g('lang_sel');
 		if ($langsel > 0) {
 			if (empty($this->_condition['avail'])) {
-				$this->_join['tL_all'] = 'join all_items_languages tL on (tL.item_id = t.id) 
-				and (tL.language_id = ' . $langsel . ') 
-				and (tL.entity = '.$this->_entity.')';
+				$this->_join['tL_all'] = 'join all_items_languages tL on (tL.item_id = t.id) '.
+				'and (tL.language_id = ' . $langsel . ') '.
+				'and (tL.entity = '.$this->_entity.')';
 			}
 			else {
 				unset($this->_condition['avail']);

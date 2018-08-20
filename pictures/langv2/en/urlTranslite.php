@@ -20,7 +20,7 @@ return array(
 			'publishers'=>'publishers',
 			'series'=>'series',
 			'authors'=>'authors',
-			'bindings'=>'performance',
+			'bindings'=>'format',
 			'years'=>'years',
 		),
 	),
@@ -66,7 +66,7 @@ return array(
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'souvenirs',
+		'level_1'=>'other',
 		'level_2'=>array(
 			'categories'=>'categories',
 			'publishers'=>'manufacturers',
@@ -78,7 +78,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'categories',
 			'publishers'=>'publishers',
-			'bindings'=>'performance',
+			'bindings'=>'binding',
 			'years'=>'years',
 		),
 	),
@@ -103,5 +103,16 @@ return array(
 	'zone_info'=>'zona-5',
 	'paypal'=>'what-is-paypal',
 	'sitemap'=>'sitemap',
-//	''=>'account',
+	'my'=>'account',
+	'advsearch'=>'search',
+
+
+	'offers'=>'recommendations',
+	'for-firms'=>'special-offers-for-companies',
+	'for-lib'=>'special-offers-for-libraries',
+	'for-uni'=>'special-offers-for-teachers',
+	'for-fs'=>'special-offers-without-postage',
+	'for-alle2'=>'special-offers-for-2-€',
+
+	'bookshelf'=>'bookshelf',
 );

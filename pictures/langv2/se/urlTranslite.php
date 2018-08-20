@@ -20,7 +20,7 @@ return array(
 			'publishers'=>'forlag',
 			'series'=>'serier',
 			'authors'=>'forfattarna',
-			'bindings'=>'utforande',
+			'bindings'=>'format',
 			'years'=>'ar',
 		),
 	),
@@ -78,7 +78,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'publishers'=>'forlag',
-			'bindings'=>'utforande',
+			'bindings'=>'omslag',
 			'years'=>'ar',
 		),
 	),
@@ -103,5 +103,16 @@ return array(
 	'zone_info'=>'zona-5',
 	'paypal'=>'vad-ar-paypal',
 	'sitemap'=>'sidokarta',
-//	''=>'konto',
+	'my'=>'konto',
+	'advsearch'=>'sok',
+
+
+	'offers'=>'rekommendationer',
+	'for-firms'=>'specialerbjudanden-for-foretag',
+	'for-lib'=>'specialerbjudanden-for-bibliotek',
+	'for-uni'=>'specialerbjudanden-for-larare',
+	'for-fs'=>'specialerbjudanden-utan-porto',
+	'for-alle2'=>'specialerbjudanden-for-2-€',
+
+	'bookshelf'=>'bokhylla',
 );

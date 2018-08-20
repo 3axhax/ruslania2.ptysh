@@ -20,7 +20,7 @@ return array(
 			'publishers'=>'kustantajat',
 			'series'=>'sarjat',
 			'authors'=>'tekijat',
-			'bindings'=>'suoritus',
+			'bindings'=>'tuotteen-muoto',
 			'years'=>'vuodet',
 		),
 	),
@@ -32,7 +32,7 @@ return array(
 			'series'=>'sarjat',
 			'authors'=>'tekijat',
 			'years'=>'vuodet',
-			'performers'=>'esiintyjät',
+			'performers'=>'esiintyjat',
 			'media'=>'tuotteen-muoto',
 		),
 	),
@@ -66,7 +66,7 @@ return array(
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'matkamuistoja',
+		'level_1'=>'muut',
 		'level_2'=>array(
 			'categories'=>'kategoriat',
 			'publishers'=>'valmistajat',
@@ -78,7 +78,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategoriat',
 			'publishers'=>'kustantajat',
-			'bindings'=>'suoritus',
+			'bindings'=>'ulkoasu',
 			'years'=>'vuodet',
 		),
 	),
@@ -98,10 +98,21 @@ return array(
 	'ourstore'=>'myymalamme',
 	'csr'=>'vastuu',
 	'offers_partners'=>'tarjoukset-jalleenmyyjille',
-	'thawte'=>'tietoa-thawtesta',
+//	'thawte'=>'tietoa-thawtesta',
 	'safety'=>'tietoa-maksujen-turvallisuudesta',
 	'zone_info'=>'aluekoodi-5',
 	'paypal'=>'mika-on-paypal',
 	'sitemap'=>'sivustokartta',
-//	''=>'tili',
+	'my'=>'tili',
+	'advsearch'=>'haku',
+
+
+	'offers'=>'suosituksia',
+	'for-firms'=>'erikoistarjouksia-yrityksille',
+	'for-lib'=>'erikoistarjouksia-kirjastoille',
+	'for-uni'=>'erikoistarjouksia-opettajille',
+	'for-fs'=>'erikoistarjoukset-ilman-postikuluja',
+	'for-alle2'=>'erikoistarjoukset-2-€',
+
+	'bookshelf'=>'kirjahylly',
 );

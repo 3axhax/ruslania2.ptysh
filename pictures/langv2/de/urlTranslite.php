@@ -20,7 +20,7 @@ return array(
 			'publishers'=>'verleger',
 			'series'=>'serie',
 			'authors'=>'schriftsteller',
-			'bindings'=>'einband',
+			'bindings'=>'format',
 			'years'=>'jahr',
 		),
 	),
@@ -31,7 +31,7 @@ return array(
 			'publishers'=>'verleger',
 			'series'=>'serie',
 			'authors'=>'schriftsteller',
-			'bindings'=>'einband',
+			'performers'=>'darsteller',
 			'media'=>'tragertyp',
 			'years'=>'jahr',
 		),
@@ -66,7 +66,7 @@ return array(
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'souvenirs',
+		'level_1'=>'andere',
 		'level_2'=>array(
 			'categories'=>'kategorien',
 			'publishers'=>'hersteller',
@@ -78,7 +78,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorien',
 			'publishers'=>'verleger',
-			'bindings'=>'leistung',
+			'bindings'=>'einband',
 			'years'=>'jahr',
 		),
 	),
@@ -103,5 +103,16 @@ return array(
 	'zone_info'=>'zona-5',
 	'paypal'=>'was-ist-paypal',
 	'sitemap'=>'sitemap',
-//	''=>'konto',
+	'my'=>'konto',
+	'advsearch'=>'suche',
+
+
+	'offers'=>'empfehlungen',
+	'for-firms'=>'spezielle-angebote-fur-unternehmen',
+	'for-lib'=>'spezielle-angebote-fur-bibliotheken',
+	'for-uni'=>'spezielle-angebote-fur-lehrer',
+	'for-fs'=>'sonderangebote-ohne-porto',
+	'for-alle2'=>'spezielle-angebote-fur-2-€',
+
+	'bookshelf'=>'bucherregal',
 );
