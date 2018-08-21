@@ -149,7 +149,9 @@ class FilterHelper
     static private function getEntity(){
         $entity = Yii::app()->getRequest()->getParam('entity', false);
         if ($entity !== false) {
-            $entity = Entity::ParseFromString($entity);
+            if (!ctype_digit($entity)) {
+                $entity = Entity::ParseFromString($entity);
+            }
             self::$data['entity'] = (int) $entity;
             return true;
         }
