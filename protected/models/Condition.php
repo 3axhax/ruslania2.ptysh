@@ -264,8 +264,7 @@ class Condition {
 				}
 				$this->_languageCondition = array('language_id'=>'(t.language_id = ' . $langsel . ')');
 				$condition = array('id'=>'(tL.id = t.id)',
-                    'language_id'=>'(tL.language_id = ' . $langsel . ')',
-                    'entity'=>'(tL.entity = ' . $this->_entity . ')');
+                    'language_id'=>'(tL.language_id = ' . $langsel . ')');
 				if (!empty($this->_condition['cid'])) {
 					$condCid = explode(' or ', $this->_condition['cid']);
 					$condCid = array_shift($condCid);
