@@ -8,14 +8,14 @@
     <!--Основной блок фильтров-->
     <div class="prod-filter__row">
 
-        <!--Фильтр по авторам-->
         <?php if (isset($filters['author']) && $filters['author'] == true):?>
+            <!--Фильтр по авторам-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_AUTHOR'); ?>:</label>
             <div class="text">
                 <input type="hidden" name="author" value="<?=($author = (isset($filter_data['author']) && $filter_data['author'] != 0)) ? $filter_data['author'] : 0?>">
                 <input type="text" class="find_author prod-filter__input prod-filter__input--m clearable <?= ($author) ? 'x' : ''?>"
-                       placeholder="По автору" autocomplete="off" name="new_author"
+                       placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_author"
                        <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <script>
@@ -24,17 +24,50 @@
         </div>
         <?php endif;?>
 
+        <?php if (isset($filters['directors']) && $filters['directors'] == true):?>
+            <!--Фильтр по режисерам-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_DIRECTORS'); ?>:</label>
+                <div class="text">
+                    <input type="hidden" name="directors" value="<?=($directors = (isset($filter_data['directors']) && $filter_data['directors'] != 0)) ? $filter_data['directors'] : 0?>">
+                    <input type="text" class="find_directors prod-filter__input prod-filter__input--m clearable <?= ($directors) ? 'x' : ''?>"
+                           placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_directors"
+                        <?= ($directors) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['directors'], Yii::app()->language).'"' : '' ?>/>
+                </div>
+                <script>
+                    liveFindDirectorsMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_directors')?>', <?=$cid?>);
+                </script>
+            </div>
+        <?php endif;?>
+
+        <?php if (isset($filters['actors']) && $filters['actors'] == true):?>
+            <!--Фильтр по авторам-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_ACTORS'); ?>:</label>
+                <div class="text">
+                    <input type="hidden" name="actors" value="<?=($actors = (isset($filter_data['actors']) && $filter_data['actors'] != 0)) ? $filter_data['actors'] : 0?>">
+                    <input type="text" class="find_actors prod-filter__input prod-filter__input--m clearable <?= ($actors) ? 'x' : ''?>"
+                           placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_actors"
+                        <?= ($actors) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['actors'], Yii::app()->language).'"' : '' ?>/>
+                </div>
+                <script>
+                    liveFindActorsMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_actors')?>', <?=$cid?>);
+                </script>
+            </div>
+        <?php endif;?>
+
         <?php if (isset($filters['avail']) && $filters['avail'] == true):?>
         <!--Фильтр по наличию-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
             <select class="prod-filter__input prod-filter__input__select--m" name="avail" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
-                <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>>Всё</option>
+                <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
             </select>
         </div>
         <?php endif;?>
 
+        <?php if ($entity != 40):?>
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
@@ -50,6 +83,25 @@
                        name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
             </div>
         </div>
+        <?php endif;?>
+
+        <?php if (isset($filters['years']) && $filters['years'] == true):?>
+            <!--Фильтр по году-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
+                <div class="prod-filter__row">
+                    <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
+                           name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
+                           placeholder="<?= (isset($filters['max-min'][0]) && $filters['max-min'][0] != '') ? $filters['max-min'][0] : ''?>"
+                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                    <span class="prod-filter__inp-separator">&ndash;</span>
+                    <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
+                           name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
+                           placeholder="<?= (isset($filters['max-min'][1]) && $filters['max-min'][1] != '') ? $filters['max-min'][1] : ''?>"
+                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                </div>
+            </div>
+        <?php endif;?>
 
         <?php if (isset($filters['years']) && $filters['years'] == true):?>
             <!--Фильтр по году-->
@@ -85,14 +137,34 @@
             </div>
         <?php endif; ?>
 
+        <?php if ($entity != 40):?>
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
+        <?php endif;?>
     </div>
 
     <!--"Второй" блок фильтров-->
     <div class="prod-filter__row" id="more-filter-block">
+
+        <?php if ($entity == 40):?>
+            <!--Фильтр по цене-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
+                <div class="prod-filter__row">
+                    <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
+                           class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
+                           placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? round($filters['max-min'][2], 2) : ''?>"
+                           name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                    <span class="prod-filter__inp-separator">&ndash;</span>
+                    <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
+                           class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
+                           placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? round($filters['max-min'][3], 2) : ''?>"
+                           name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                </div>
+            </div>
+        <?php endif;?>
 
         <?php if (isset($filters['pre_sale']) && $filters['pre_sale'] == true):?>
             <!--Фильтр по предпродажам-->
@@ -116,7 +188,7 @@
                 <div class="text">
                     <input type="hidden" name="performer" value="<?=($performer = (isset($filter_data['performer']) && $filter_data['performer'] != 0)) ? $filter_data['performer'] : 0?>">
                     <input type="text" name="new_performer" class="find_performer prod-filter__input prod-filter__input--m clearable <?= ($performer) ? 'x' : ''?>"
-                           placeholder="Все" autocomplete="off"
+                           placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off"
                         <?= ($performer) ? 'value="'.ProductHelper::GetPerformerTitle($filter_data['performer'], Yii::app()->language).'"' : '' ?>/>
                 </div>
                 <ul class="search_result search_result_performer"></ul>
@@ -137,7 +209,7 @@
             <div class="text">
                 <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
                 <input type="text" name="new_publisher" class="find_publisher prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
-                       placeholder="Все" autocomplete="off"
+                       placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off"
                        <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
             </div>
             <ul class="search_result search_result_publisher"></ul>
@@ -152,9 +224,9 @@
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
             <div class="text">
-                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['seria'] : 0?>">
+                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
                 <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
-                       autocomplete="off" placeholder="Все"
+                       autocomplete="off" placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>"
                     <?= ($seria) ? 'value="'.htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)).'"' : '' ?> />
             </div>
             <ul class="search_result search_result_series"></ul>
@@ -259,6 +331,13 @@
                 </script>
             <?php endif;?>
         </div>
+        <?php endif;?>
+
+        <?php if ($entity == 40):?>
+            <!--Кнопки управления-->
+            <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
+                <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
+            </button>
         <?php endif;?>
 
     </div>

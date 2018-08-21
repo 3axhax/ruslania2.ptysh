@@ -200,3 +200,37 @@ function liveFindSeriesMP(entity, url, cid) {
         },
     });
 }
+
+function liveFindDirectorsMP(entity, url, cid) {
+    find_series = $('.find_directors');
+    var dataPost = {entity: entity, cid: cid};
+    find_series.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url: url,
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'directors\', \'' + data.title + '\', \'new_directors\')">' + data.title + '</li>';
+        },
+    });
+}
+
+function liveFindActorsMP(entity, url, cid) {
+    find_series = $('.find_actors');
+    var dataPost = {entity: entity, cid: cid};
+    find_series.marcoPolo({
+        minChars:3,
+        cache : false,
+        hideOnSelect: true,
+        delay: 50,
+        url: url,
+        data:dataPost,
+        formatMinChars: false,
+        formatItem:function (data, $item, q) {
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'actors\', \'' + data.title + '\', \'new_actors\')">' + data.title + '</li>';
+        },
+    });
+}

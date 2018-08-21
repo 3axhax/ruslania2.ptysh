@@ -1040,6 +1040,8 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
 'A_NEW_FILTER_PRE_SALE_2' => 'В предварительной продаже',
 'A_NEW_FILTER_PRE_SALE_3' => 'Кроме предварительной продажи',
 'A_NEW_FILTER_PERIODIC_COUNTRY' => 'Страна происхождения',
+'A_NEW_FILTER_DIRECTORS' => 'Режисер',
+'A_NEW_FILTER_ACTORS' => 'Актер',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',

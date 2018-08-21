@@ -890,11 +890,14 @@ class EntityController extends MyController {
         $items = $totalItems > 0 ? $this->AppendCartInfo($vd->GetItems($entity, $did, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -940,11 +943,14 @@ class EntityController extends MyController {
         $items = $totalItems > 0 ? $this->AppendCartInfo($va->GetItems($entity, $aid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -1084,8 +1090,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'ymin', $year);
-        FilterHelper::setOneFiltersData($entity, 0, 'ymax', $year);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,

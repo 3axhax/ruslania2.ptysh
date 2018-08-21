@@ -225,4 +225,20 @@ class LiveSearchController extends MyController {
         $items = SearchPerformers::get()->getPerformersForFilters($entity, $q, $cid);
         $this->ResponseJson($items);
     }
+
+    function actionFilter_Directors () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
+            !($q = Yii::app()->getRequest()->getParam('q'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchDirectors::get()->getDirectorsForFilters($entity, $q, $cid);
+        $this->ResponseJson($items);
+    }
+
+    function actionFilter_Actors () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
+            !($q = Yii::app()->getRequest()->getParam('q'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchActors::get()->getActorsForFilters($entity, $q, $cid);
+        $this->ResponseJson($items);
+    }
 }

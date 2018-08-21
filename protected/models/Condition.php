@@ -71,6 +71,8 @@ class Condition {
 		$this->_pre_sale();
 		$this->_performer();
 		$this->_country();
+		$this->_director();
+		$this->_actor();
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
@@ -249,6 +251,26 @@ class Condition {
             if (($country === 0) || ($country === '0')) return;
 
             $this->_condition['country'] = sprintf('(t.country = %d)', $country);
+        }
+    }
+
+    private function _director() {
+        if (Entity::checkEntityParam($this->_entity, 'directors')) {
+            $did = (int) $this->g('directors');
+            if ($did > 0) {
+                $entityParams = Entity::GetEntitiesList()[$this->_entity];
+                $this->_join['tDir'] = 'join ' . $entityParams['directors_table'] . ' tDir on (tDir.video_id = t.id) and (tDir.person_id = ' . $did . ')';
+            }
+        }
+    }
+
+    private function _actor() {
+        if (Entity::checkEntityParam($this->_entity, 'actors')) {
+            $aid = (int) $this->g('actors');
+            if ($aid > 0) {
+                $entityParams = Entity::GetEntitiesList()[$this->_entity];
+                $this->_join['tAct'] = 'join ' . $entityParams['actors_table'] . ' tAct on (tAct.video_id = t.id) and (tAct.person_id = ' . $aid . ')';
+            }
         }
     }
 
