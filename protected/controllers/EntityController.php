@@ -155,14 +155,9 @@ class EntityController extends MyController {
 		}
 
         $lang = Yii::app()->getRequest()->getParam('lang');
-        /*$data = FilterHelper::getFiltersData($entity, $cid);
-        $data['lang_sel'] = $lang;
-        $filter_data = $data;*/
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            /*FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
-            $data['lang_sel'] = $lang;*/
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -864,10 +859,13 @@ class EntityController extends MyController {
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('READ_BY'), ProductHelper::GetTitle($performer));
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
             'items' => $items, 'authorInfo' => $performerInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 

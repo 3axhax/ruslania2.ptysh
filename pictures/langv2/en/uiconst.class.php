@@ -1053,6 +1053,7 @@ By clicking on a category you are interested in, you can see all the products wi
 'A_NEW_FILTER_PRE_SALE_1' => 'Все',
 'A_NEW_FILTER_PRE_SALE_2' => 'В предварительной продаже',
 'A_NEW_FILTER_PRE_SALE_3' => 'Кроме предварительной продажи',
+'A_NEW_FILTER_PERIODIC_COUNTRY' => 'Country of origin',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',

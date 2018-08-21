@@ -70,6 +70,7 @@ class Condition {
 		$this->_subtitle();
 		$this->_pre_sale();
 		$this->_performer();
+		$this->_country();
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
@@ -239,6 +240,15 @@ class Condition {
                 $this->_join['tPER'] = 'join ' . $entityParams['performer_table'] . ' tPER 
                 on (tPER.music_id = t.id) and (tPER.person_id = ' . $perid . ')';
             }
+        }
+    }
+
+    private function _country() {
+        if ($this->_entity == 30) {
+            $country = $this->g('country');
+            if (($country === 0) || ($country === '0')) return;
+
+            $this->_condition['country'] = sprintf('(t.country = %d)', $country);
         }
     }
 
