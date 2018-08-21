@@ -13,12 +13,12 @@ class StaticUrlRule extends CBaseUrlRule {
 		'legal_notice' => 'YM_CONTEXT_LEGAL_NOTICE',
 		'faq' => 'A_FAQ',
 		'aboutus' => 'A_ABOUTUS',
-		'partners' => 'A_PARTNERS',
-		'links' => 'A_LINKS',
+//		'partners' => 'A_PARTNERS',
+//		'links' => 'A_LINKS',
 		'ourstore' => 'A_STORE',
 		'csr' => 'A_CSR',
 		'offers_partners' => 'YM_CONTEXT_OFFERS_PARTNERS',
-		'thawte' => 'MSG_YAHLIST_INFO_THAWTE',
+//		'thawte' => 'MSG_YAHLIST_INFO_THAWTE',
 		'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
@@ -49,6 +49,7 @@ class StaticUrlRule extends CBaseUrlRule {
 			(mb_strpos($route, 'site/', null, 'utf-8') === false)
 			&& (mb_strpos($route, 'bookshelf/', null, 'utf-8') === false)
 			&& (mb_strpos($route, 'offers/', null, 'utf-8') === false)
+			&& (mb_strpos($route, 'client/', null, 'utf-8') === false)
 		) return false;
 
 		$prefix = array();
@@ -88,6 +89,10 @@ class StaticUrlRule extends CBaseUrlRule {
 					unset($params['page']);
 				}
 				break;
+			case 'client/me':
+				if (isset($this->_pages['me']))
+					$url = $this->_pages['me'] . '/';
+				break;
 			default:
 				$actions = explode('/', $route);
 				$actionId = array_pop($actions);
@@ -120,6 +125,7 @@ class StaticUrlRule extends CBaseUrlRule {
 				return 'site/static';
 			}
 			elseif ($page == 'bookshelf') return 'bookshelf/list';
+			elseif ($page == 'me') return 'client/me';
 			//
 			else {
 				switch ($page) {

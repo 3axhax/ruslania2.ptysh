@@ -223,17 +223,28 @@ class HrefTitles {
 		'';
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
 		if (!empty($row)) {
-			$titles = $this->getById($row['entity'], $row['route'], $row['id']);
-			if (!empty($titles)) {
-				$title = isset($titles[$row['lang']])?$titles[$row['lang']]:$titles['en'];
+			if (empty($row['id'])&&!empty($row['entity'])) {
 				$urlParams = array(
 					'entity'=>Entity::GetUrlKey($row['entity']),
-					$this->getIdName($row['entity'], $row['route'])=>$row['id'],
-					'title'=>$title,
 					'__langForUrl'=>$row['lang'],
 				);
 				$url = Yii::app()->createUrl($row['route'], $urlParams);
 				if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+			}
+			else {
+				$titles = $this->getById($row['entity'], $row['route'], $row['id']);
+
+				if (!empty($titles)) {
+					$title = isset($titles[$row['lang']])?$titles[$row['lang']]:$titles['en'];
+					$urlParams = array(
+						'entity'=>Entity::GetUrlKey($row['entity']),
+						$this->getIdName($row['entity'], $row['route'])=>$row['id'],
+						'title'=>$title,
+						'__langForUrl'=>$row['lang'],
+					);
+					$url = Yii::app()->createUrl($row['route'], $urlParams);
+					if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+				}
 			}
 		}
 	}

@@ -98,12 +98,12 @@ return array(
 	'ourstore'=>'unser-geschaft',
 	'csr'=>'haftung',
 	'offers_partners'=>'spezielle-angebote-fur-handler',
-	'thawte'=>'informationen-uber-thawte',
+//	'thawte'=>'informationen-uber-thawte',
 	'safety'=>'informationen-uber-sicherheitszahlungen',
 	'zone_info'=>'zona-5',
 	'paypal'=>'was-ist-paypal',
 	'sitemap'=>'sitemap',
-	'my'=>'konto',
+	'me'=>'konto',
 	'advsearch'=>'suche',
 
 

@@ -103,7 +103,7 @@ return array(
 	'zone_info'=>'aluekoodi-5',
 	'paypal'=>'mika-on-paypal',
 	'sitemap'=>'sivustokartta',
-	'my'=>'tili',
+	'me'=>'tili',
 	'advsearch'=>'haku',
 
 

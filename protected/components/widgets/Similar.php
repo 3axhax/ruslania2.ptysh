@@ -94,7 +94,8 @@ class Similar extends CWidget {
 			$request = new MyRefererRequest();
 			$request->setFreePath($referer);
 			//$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
-			switch (Yii::app()->getUrlManager()->parseUrl($request)) {
+			$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+			switch ($refererRoute) {
 				case 'entity/categorylist':case 'entity/list': $sql = $this->_sqlByCategory($request, $limit); break;
 				case 'entity/serieslist':case 'entity/byseries': $sql = $this->_sqlBySeries($request, $limit); break;
 				case 'entity/publisherlist':case 'entity/bypublisher': $sql = $this->_sqlByPublisher($request, $limit); break;

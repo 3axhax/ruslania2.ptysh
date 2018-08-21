@@ -98,12 +98,12 @@ return array(
 	'ourstore'=>'notre-boutique',
 	'csr'=>'responsabilite',
 	'offers_partners'=>'offres-speciales-pour-les-concessionnaires',
-	'thawte'=>'informations-sur-thawte',
+//	'thawte'=>'informations-sur-thawte',
 	'safety'=>'informations-sur-paiements-de-securite',
 	'zone_info'=>'zona-5',
 	'paypal'=>'quest-ce-que-paypal',
 	'sitemap'=>'plan-du-site',
-	'my'=>'compte',
+	'me'=>'compte',
 	'advsearch'=>'chercher',
 
 

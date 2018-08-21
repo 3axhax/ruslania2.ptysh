@@ -98,12 +98,12 @@ return array(
 	'ourstore'=>'nash-magazin',
 	'csr'=>'otvetstvennost',
 	'offers_partners'=>'specialnye-predlojenija-dlja-dillerov',
-	'thawte'=>'informacija-o-thawte',
+//	'thawte'=>'informacija-o-thawte',
 	'safety'=>'informacija-o-bezopasnosti-platezhej',
 	'zone_info'=>'zona-5',
 	'paypal'=>'chto-takoe-paypal',
 	'sitemap'=>'karta-sajta',
-	'my'=>'akkaunt',
+	'me'=>'akkaunt',
 	'advsearch'=>'poisk',
 
 

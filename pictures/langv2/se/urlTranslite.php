@@ -98,12 +98,12 @@ return array(
 	'ourstore'=>'var-butik',
 	'csr'=>'ansvar',
 	'offers_partners'=>'specialerbjudanden-till-aterforsaljare',
-	'thawte'=>'information-om-thawte',
+//	'thawte'=>'information-om-thawte',
 	'safety'=>'information-om-sakerhetsbetalningar',
 	'zone_info'=>'zona-5',
 	'paypal'=>'vad-ar-paypal',
 	'sitemap'=>'sidokarta',
-	'my'=>'konto',
+	'me'=>'konto',
 	'advsearch'=>'sok',
 
 
