@@ -93,24 +93,6 @@ class EntityController extends MyController {
         $this->_checkUrl($dataForPath, $langTitles);
         $lang = Yii::app()->getRequest()->getParam('lang');
 
-       /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
-			$lang = $_GET['lang'];
-			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
-				$lang = '';
-			}
-
-		} elseif (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
-			
-			$lang = Yii::app()->getRequest()->cookies['langsel']->value;
-			
-			if (!Product::is_lang(Yii::app()->getRequest()->cookies['langsel']->value, $cid,$entity)) {
-				$lang = '';
-			}
-			
-		}*/
-
-
-
         //получаем языки категории
         $langs = $category->getFilterLangs($entity, $cid);
 
@@ -416,7 +398,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'binding_id', $mid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
@@ -909,11 +890,14 @@ class EntityController extends MyController {
         $items = $totalItems > 0 ? $this->AppendCartInfo($vd->GetItems($entity, $did, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -959,11 +943,14 @@ class EntityController extends MyController {
         $items = $totalItems > 0 ? $this->AppendCartInfo($va->GetItems($entity, $aid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -1010,7 +997,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'subtitlesVideo', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
@@ -1104,8 +1090,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'ymin', $year);
-        FilterHelper::setOneFiltersData($entity, 0, 'ymax', $year);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -1247,7 +1231,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'langVideo', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,

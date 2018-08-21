@@ -107,4 +107,59 @@ class SearchActors {
 		return $items;
 	}
 
+    function  getActorsForFilters($entity, $q, $cid = 0, $limit = 20) {
+        if (!Entity::checkEntityParam($entity, 'actors')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+        $tbl_actors = $entities[$entity]['actors_table'];
+
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
+            LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
+
+        if ($cid > 0) {
+            $sql = 'SELECT va.person_id as id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_actors . ' as va, 
+            ' . $tbl . ' as vc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (va.person_id = aa.id) and (vc.id = va.video_id) and (vc.`code`=:code OR vc.`subcode`=:code) 
+				GROUP BY va.person_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
+        } else {
+            $sql = 'SELECT va.person_id as id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_actors . ' as va, 
+            ' . $tbl . ' as vc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (va.person_id = aa.id) and (vc.id = va.video_id) 
+				GROUP BY va.person_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll($sql, array(':q' => '%'.$q.'%'));
+        }
+        $actors = [];
+        $i = 0;
+        foreach ($rows as $row) {
+            if (mb_stripos($row['title_ru'], $q) !== false) {
+                $actors[$i]['id'] = $row['id'];
+                $actors[$i]['title'] = $row['title_ru'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_rut'], $q) !== false) {
+                $actors[$i]['id'] = $row['id'];
+                $actors[$i]['title'] = $row['title_rut'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_en'], $q) !== false) {
+                $actors[$i]['id'] = $row['id'];
+                $actors[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_fi'], $q) !== false) {
+                $actors[$i]['id'] = $row['id'];
+                $actors[$i]['title'] = $row['title_fi'];
+                $i++;
+                continue;
+            }
+
+        }
+        return $actors;
+    }
+
 }

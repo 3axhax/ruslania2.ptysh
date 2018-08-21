@@ -71,6 +71,8 @@ class Entity {
             ),
             40 => array('title' => 'Видео', 'site_id' => 3, 'table' => 'tblVideo', 'site_table' => 'video_catalog',
                 'entity' => 'video', 'model' => 'Video',
+                'directors_table' => 'video_directors',
+                'actors_table' => 'video_actors',
                 'site_category_table' => 'video_categories',
                 'uikey' => 'A_GOTOVIDEO',
                 'with' => array('directors', 'actors', 'producers', 'subtitles', 'media',

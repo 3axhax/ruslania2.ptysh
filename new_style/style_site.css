@@ -2760,17 +2760,14 @@ input.prod-filter__input:focus,
     border-color: #edb421;
 }
 .prod-filter__button {
+    width: 161px;
     border: none;
     color: #fff;
     font-size: 14px;
     background: #ed1d24;
     border-radius: 4px;
     height: 30px;
-    padding: 4px 16px;
     line-height: 24px;
-}
-.prod-filter__button {
-    display: inline-flex;
 }
 .prod-filter__button-icon {
     display: inline-flex;

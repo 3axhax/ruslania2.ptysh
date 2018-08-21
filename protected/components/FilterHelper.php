@@ -23,6 +23,8 @@ class FilterHelper
      * 'subtitles_video'
      * 'pre_sale'
      * 'performer'
+     * 'directors'
+     * 'actors'
      *
      */
 
@@ -41,6 +43,8 @@ class FilterHelper
 
         if (Entity::checkEntityParam($entity, 'performers')) $filters['performers'] = true;
         if ($entity == 40) {
+            $filters['directors'] = true;
+            $filters['actors'] = true;
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
             $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
             $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
@@ -101,6 +105,8 @@ class FilterHelper
         self::getPreSale();
         self::getPerformer();
         self::getCountry();
+        self::getDirector();
+        self::getActor();
 
         return self::$data;
     }
@@ -144,6 +150,8 @@ class FilterHelper
         self::$data['pre_sale'] = $data ['pre_sale'] ?: false;
         self::$data['performer'] = $data ['performer'] ?: false;
         self::$data['country'] = $data ['country'] ?: 0;
+        self::$data['directors'] = $data['directors'] ?: false;
+        self::$data['actors'] = $data['actors'] ?: false;
 
     }
 
@@ -235,6 +243,12 @@ class FilterHelper
     }
 
     static private function getYears() {
+        $year = Yii::app()->getRequest()->getParam('year', false);
+        if ($year !== false) {
+            self::$data['year_min'] = (int) $year;
+            self::$data['year_max'] = (int) $year;
+            return true;
+        }
         $year_min = Yii::app()->getRequest()->getParam('year_min', false);
         $year_max = Yii::app()->getRequest()->getParam('year_max', false);
         if ($year_min !== false) {
@@ -436,6 +450,44 @@ class FilterHelper
             return true;
         }
         self::$data['country'] = 0;
+        return false;
+    }
+
+    static private function getDirector() {
+        $directors = Yii::app()->getRequest()->getParam('did', false);
+        if ($directors !== false) {
+            self::$data['directors'] = (int) $directors;
+            return true;
+        }
+        $directors = Yii::app()->getRequest()->getParam('directors', false);
+        if ($directors !== false) {
+            self::$data['directors'] = (int) $directors;
+            return true;
+        }
+        if (isset(self::$sessionData['directors']) && self::$sessionData['directors'] != '') {
+            self::$data['directors'] = (int) self::$sessionData['directors'];
+            return true;
+        }
+        self::$data['directors'] = false;
+        return false;
+    }
+
+    static private function getActor() {
+        $actors = Yii::app()->getRequest()->getParam('aid', false);
+        if ($actors !== false) {
+            self::$data['actors'] = (int) $actors;
+            return true;
+        }
+        $actors = Yii::app()->getRequest()->getParam('actors', false);
+        if ($actors !== false) {
+            self::$data['actors'] = (int) $actors;
+            return true;
+        }
+        if (isset(self::$sessionData['actors']) && self::$sessionData['actors'] != '') {
+            self::$data['actors'] = (int) self::$sessionData['actors'];
+            return true;
+        }
+        self::$data['actors'] = false;
         return false;
     }
 }

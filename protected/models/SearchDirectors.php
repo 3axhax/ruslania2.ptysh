@@ -107,4 +107,59 @@ class SearchDirectors {
 		return $items;
 	}
 
+    function  getDirectorsForFilters($entity, $q, $cid = 0, $limit = 20) {
+        if (!Entity::checkEntityParam($entity, 'directors')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+        $tbl_director = $entities[$entity]['directors_table'];
+
+        $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
+            LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
+
+        if ($cid > 0) {
+            $sql = 'SELECT vd.person_id as id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_director . ' as vd, 
+            ' . $tbl . ' as vc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (vd.person_id = aa.id) and (vc.id = vd.video_id) and (vc.`code`=:code OR vc.`subcode`=:code) 
+				GROUP BY vd.person_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
+        } else {
+            $sql = 'SELECT vd.person_id as id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl_director . ' as vd, 
+            ' . $tbl . ' as vc,  (SELECT id, title_ru, title_rut, title_en, title_fi FROM all_authorslist WHERE
+            ('.$whereLike.')) as aa where (vd.person_id = aa.id) and (vc.id = vd.video_id) 
+				GROUP BY vd.person_id LIMIT 0,'.$limit;
+            $rows = Yii::app()->db->createCommand($sql)->queryAll($sql, array(':q' => '%'.$q.'%'));
+        }
+        $directors = [];
+        $i = 0;
+        foreach ($rows as $row) {
+            if (mb_stripos($row['title_ru'], $q) !== false) {
+                $directors[$i]['id'] = $row['id'];
+                $directors[$i]['title'] = $row['title_ru'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_rut'], $q) !== false) {
+                $directors[$i]['id'] = $row['id'];
+                $directors[$i]['title'] = $row['title_rut'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_en'], $q) !== false) {
+                $directors[$i]['id'] = $row['id'];
+                $directors[$i]['title'] = $row['title_en'];
+                $i++;
+                continue;
+            }
+            if (mb_stripos($row['title_fi'], $q) !== false) {
+                $directors[$i]['id'] = $row['id'];
+                $directors[$i]['title'] = $row['title_fi'];
+                $i++;
+                continue;
+            }
+
+        }
+        return $directors;
+    }
+
 }

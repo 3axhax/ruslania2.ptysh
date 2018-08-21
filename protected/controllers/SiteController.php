@@ -119,7 +119,7 @@ class SiteController extends MyController {
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
-        if (!file_exists($file)) {
+        if (!file_exists($file)||in_array($page, array('safety', 'partners', 'links'))) {
             throw new CHttpException(404);
         }
         $data = file_get_contents($file);
@@ -1040,16 +1040,16 @@ class SiteController extends MyController {
         /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
-        $_GET['binding_id'] = $_POST['binding_id'];
+        /*$_GET['binding_id'] = $_POST['binding_id'];
         $_GET['langVideo'] = $_POST['langVideo'];
         $_GET['formatVideo'] = $_POST['formatVideo'];
         $_GET['subtitlesVideo'] = $_POST['subtitlesVideo'];
-        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];
+        $_GET['langsel'] = $_GET['lang'] = $_REQUEST['langsel'];*/
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
         if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
 
-        FilterHelper::setFiltersData($entity, $cid, $_GET);
         $data = FilterHelper::getFiltersData($entity, $cid);
+        FilterHelper::setFiltersData($entity, $cid, $data);
 
         $cat = new Category();
 
@@ -1073,6 +1073,8 @@ class SiteController extends MyController {
         $selectedCategory = array_pop($path);
 
         $filters = FilterHelper::getEnableFilters($entity, $cid);
+
+        $test = FilterHelper::getFiltersData($entity, $cid);
 
         $this->renderPartial('list_ajax', array(
             'entity' => $entity, 'items' => $items,
