@@ -1,6 +1,6 @@
 <?php $form = $this->beginWidget('KnockoutForm', array(
                                                       'model' => $model,
-                                                      'action' => $mode == 'new' ? '/site/addaddress' : '/site/editaddress',
+                                                      'action' => $mode == 'new' ? '/ru/site/addaddress' : '/ru/site/editaddress',
                                                       'id' => 'add-address',
                                                       'viewModel' => 'addressVM',
                                                       'afterAjaxSubmit' => $afterAjax,

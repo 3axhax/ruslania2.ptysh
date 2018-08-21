@@ -3,7 +3,7 @@
 <?php
 
 $x_issues_in_year = NULL;
-$issues_year = $item['issues_year'];
+$issues_year = $item['issues_year']['issues_year'];
 
 if (substr($issues_year, -1, 1) == "1" &&
     substr($issues_year, -2) != "11")
@@ -44,9 +44,9 @@ else
 $month  = $ret[0];
 
 $issues =
-    ($item['issues_year'] < 12) ?
-        $month / round(12 / $item['issues_year']) :
-        round($item['issues_year'] / 12) * $month;
+    ($item['issues_year']['issues_year'] < 12) ?
+        $month / round(12 / $item['issues_year']['issues_year']) :
+        round($item['issues_year']['issues_year'] / 12) * $month;
 
 if($issues_year < 12)
 {
@@ -120,4 +120,3 @@ $msg    = sprintf
 );
 
 echo $msg;
-

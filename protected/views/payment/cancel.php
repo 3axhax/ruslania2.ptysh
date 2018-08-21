@@ -1,16 +1,15 @@
-<table width="100%" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top" class="text">
-    <tr>
-        <td class="leftmnu" width="300" valign="top" align="center">
-            <div style="padding: 0 5px 0 5px;" >
-                <?php $this->renderPartial('/site/login_form', array('model' => new User, 'class' => 'login2')); ?>
-                <?php $this->renderPartial('/entity/_left_text'); ?>
-        </td>
-        <td valign="top" style="padding: 5px;">
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+
+
+
+<div class="container cabinet">
+
+<div class="row">
+        <div class="span10" style="float: right">
 
             <?php if(empty($newOid)) : ?>
 
-            <div class="info-box warning">
+            <div class="info-box warning" style="border: none;     background-color: #edb421;     color: #333333;">
                 <h2><?=$ui->item('A_SAMPO_PAYMENT_DECLINED'); ?></h2>
                 <p><?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_2'); ?><br/>
                    <?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_3'); ?>
@@ -39,10 +38,15 @@
 
             <!-- /content -->
             <div class="clearBoth"></div>
-        </td>
-        <td width="220" valign="top" style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
-&nbsp;
-        </td>
-    </tr>
+        
+            </div>
+            
+    <div class="span2">
 
-</table>
+                <?php $this->renderPartial('/site/_me_left'); ?>
+
+            </div>
+    
+    
+            </div>
+            </div>

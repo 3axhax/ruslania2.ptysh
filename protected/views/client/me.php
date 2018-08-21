@@ -1,9 +1,17 @@
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
+<style>
+    
+    .orders-list li:first-child { margin-top: 0; }
+    
+    .orders-list li { margin: 20px 0; }
+    
+</style>
+
 <div class="container cabinet">
 
 <div class="row">
-        <div class="span10">
+        <div class="span10" style="float: right">
             <!-- content -->
 
             <?php if(Yii::app()->user->isGuest) { $this->renderPartial('/site/login_form2', array('model' => new User, 'refresh' => true)); } else { ?>
@@ -55,11 +63,18 @@
                             <li class="<?=$class; ?>">
                                 <a href="<?=Yii::app()->createUrl('order/view', array('oid' => $id)); ?>"><?=sprintf($ui->item('ORDER_MSG_NUMBER'), $id); ?></a>, <?=$first['date_string']; ?>, <?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?> <?=ProductHelper::FormatPrice($order['full_price'], $order['currency_id']); ?>
 
+                                 <?php if(!$isClosed) : ?>
+                                        <?php if(array_key_exists($id, $notPay)) : ?>
+                                <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>" class="order_start" style="float: right; background-color: #5bb75b;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
+                                
+                                <?php endif; ?>
+                                <?php endif; ?>
+                                
                                 <div class="r">
                                     <?php if(!$isClosed) : ?>
                                         <?php if(array_key_exists($id, $notPay)) : ?>
                                             <span class="warning"><?=$ui->item('ORDER_NOT_PAID'); ?></span>
-                                            <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>"><button class="sort"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></button></a>
+                                         
                                         <?php else : ?>
                                             <span class="success"><?=$ui->item('ORDER_PAID'); ?></span>
                                         <?php endif ; ?>
