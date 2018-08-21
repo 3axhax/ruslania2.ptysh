@@ -21,6 +21,8 @@ class FilterHelper
      * 'format_video'
      * 'lang_video'
      * 'subtitles_video'
+     * 'pre_sale'
+     * 'performer'
      *
      */
 
@@ -49,6 +51,10 @@ class FilterHelper
 
         if ($entity != 30) {
             $filters['avail'] = true;
+        }
+
+        if ($entity == 30) {
+            $filters['country'] = $category->getPeriodicCountry($entity, $cid);
         }
 
         $filters['binding'] = $category->getFilterBinding($entity, $cid);
@@ -94,13 +100,7 @@ class FilterHelper
         self::getSubtitlesVideo();
         self::getPreSale();
         self::getPerformer();
-
-        /*$filtersData = FiltersData::instance();
-        if ($filtersData->isSetKey($key)) {
-            $data = $filtersData->getFiltersData($key);
-        }
-        else $data = unserialize(Yii::app()->session[$key]);
-        self::normalizeData($data);*/
+        self::getCountry();
 
         return self::$data;
     }
@@ -143,6 +143,7 @@ class FilterHelper
         self::$data['subtitles_video'] = $data ['subtitles_video'] ?: $data ['subtitlesVideo'] ?: false;
         self::$data['pre_sale'] = $data ['pre_sale'] ?: false;
         self::$data['performer'] = $data ['performer'] ?: false;
+        self::$data['country'] = $data ['country'] ?: 0;
 
     }
 
@@ -406,6 +407,11 @@ class FilterHelper
     }
     
     static private function getPerformer() {
+        $performer = Yii::app()->getRequest()->getParam('pid', false);
+        if ($performer !== false) {
+            self::$data['performer'] = (int) $performer;
+            return true;
+        }
         $performer = Yii::app()->getRequest()->getParam('performer', false);
         if ($performer !== false) {
             self::$data['performer'] = (int) $performer;
@@ -416,6 +422,20 @@ class FilterHelper
             return true;
         }
         self::$data['performer'] = false;
+        return false;
+    }
+
+    static private function getCountry() {
+        $country = Yii::app()->getRequest()->getParam('country', false);
+        if ($country !== false) {
+            self::$data['country'] = (int) $country;
+            return true;
+        }
+        if (isset(self::$sessionData['country']) && self::$sessionData['country'] != '') {
+            self::$data['country'] = (int) self::$sessionData['country'];
+            return true;
+        }
+        self::$data['country'] = 0;
         return false;
     }
 }

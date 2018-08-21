@@ -1,9 +1,699 @@
-<?php KnockoutForm::RegisterScripts(); ?>
-<script src="/js/jquery.leanModal.min.js"></script>
+<hr />
 
-<div id="newAddress">
-    <?php
+<style>
+    label.seld {
+        padding: 1.8rem 2rem 2.2rem;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        border-radius: 2px;
+        position: relative;
+        width: 212px;
+    }
+    
+    label.seld .red_checkbox {
+        position: absolute;
+        right: 5px;
+        top: 20px;
+        
+    }
+    
+    label.selp {
+        padding: 1.8rem 2rem 2.2rem;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        height: 70px;
+        position: relative;
+        padding-right: 55px;
+        width: 188px;
+        border-radius: 2px;
+    }
+    
+    label.selp .red_checkbox {
+        position: absolute;
+        right: 5px;
+        top: 20px;
+    }
+    
+    .cartorder .p2, .cartorder .p1, .cartorder .p3 { font-size: 22px; }
+    
+    .cartorder .p1 { margin:0 0 15px 0;}
+    .cartorder .p2 { margin: 15px 0;}
+    .cartorder .p3 { margin: 15px 0;}
+    
+    
+    .select_dd { position: relative; }
+    .select_dd_popup { position: absolute; top: 29px; background: #fff; max-height: 400px; width: 340px; border: 1px solid #ccc; z-index: 9999; display: none; overflow-y: auto; }
+        
+    .select_dd_popup .item {
+        padding: 5px 10px;
+    }
+    
+    .select_dd_popup .item:hover {
+        background-color: #ccc;
+        cursor: pointer;
+    }
+    
+    .cart_header {
+        
+        background: #f8f8f8;
+        padding: 8px 10px;
+        font-weight: bold;
+        border-left: 1px solid #ececec;
+        border-top: 1px solid #ececec;
+        border-right: 1px solid #ececec;
+        
+        
+    }
+    
+    table.cart {
+       border: 1px solid #ececec; 
+    }
+    
+    .cart tbody tr td {
+        
+        padding: 10px;
+        border-bottom: 1px solid #ececec;
+        
+    }
+    
+    .cart tbody tr td .minitext { color: #81807C; }
+    .cart tbody tr td span.a { color: #005580; }
+    
+    .cart_box {
+        overflow: auto;
+        max-height: 565px;
+    }
+    
+    .cart_footer { float: right; }
+    
+     .footer3 { margin-bottom: 25px; border-bottom: 1px solid #ececec; }
+    
+    .footer1, .footer3 {
+        background: #f8f8f8;
+        padding: 8px 10px;
+        font-weight: bold;
+        border-left: 1px solid #ececec;
+        border-top: 1px solid #ececec;
+        border-right: 1px solid #ececec;
+    }
+    
+    .footer2 {
+        
+        padding: 8px 10px;
+        color: #81807C;
+        border-left: 1px solid #ececec;
+        border-right: 1px solid #ececec;
+    
+    }
+    
+    a.order_start { background-color: #5bb75b; }
+    
+    .order_start.disabled {
+        
+        opacity: 0.5;
+        cursor: default;
+    
+    }
+    
+    label.selp img {
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        filter: grayscale(100%);
+        filter: gray; /* IE 6-9 */
+    }
+    
+    label.selp.act img {
+        -webkit-filter: grayscale(0%);
+        -moz-filter: grayscale(0%);
+        -ms-filter: grayscale(0%);
+        -o-filter: grayscale(0%);
+        filter: grayscale(0%);
+        filter: none; /* IE 6-9 */
+    }
+    
+    
+    input.error {
+        border: 1px solid #ed1d24;
+        margin-bottom: 0;
+    }
+    
+    .texterror { color: #ed1d24; font-size: 11px; display: block; }
+    
+    td.maintxt-vat { padding: 5px 5px; }
+    
+    .redtext {
+    
+        color: #ed1d24;
+    
+    }
+    
+    .box_smartpost {
+        display: none;
+        width: 760px;
+        margin-top: 20px;
+    }
+    
+    .row_smartpost {
+      padding: 15px 5px;  
+      border: 1px solid #ccc;
+      margin: 5px 0;
+    }
+    
+    .row_smartpost.act {
+        background-color: #eaeaea;
+    }
+    
+    
+</style>
 
+<script>
+    
+    function add_address(num_cont) {
+        
+        var cont = $('table.addr'+num_cont);
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        
+        var query = '';
+        
+        query = 'YII_CSRF_TOKEN='+csrf[1]+'&'+$('table.addr1 input, table.addr1 select, table.addr1 textarea').serialize();
+        //query = query + '&t=1';
+        
+        var error = 0;
+        
+        $('.texterror', $('#Address_receiver_last_name', cont).parent()).html('Заполните это поле');
+        
+        if (!$('#Address_receiver_last_name',cont).val()) { $('#Address_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_last_name',cont).parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name',cont).removeClass('error'); $('.texterror', $('#Address_receiver_last_name',cont).parent()).html(''); }
+        
+        if (error < 0) { error = 0; }
+        
+        
+        if (!$('#Address_receiver_first_name',cont).val()) { $('#Address_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('');}
+        
+        if (!$('#Address_country',cont).val()) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('Выберите страну');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
+        
+        if (!$('#Address_city',cont).val()) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('Заполните это поле');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
+        if (!$('#Address_postindex',cont).val()) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('Заполните это поле');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
+        if (!$('#Address_streetaddress',cont).val()) { $('#Address_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_streetaddress',cont).parent()).html('Заполните это поле');} else {  $('#Address_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address_streetaddress',cont).parent()).html('');}
+         var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+        
+        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else if(pattern.test($('#Address_contact_email').val())){  $('#Address_contact_email').removeClass('error');  $('.texterror', $('#Address_contact_email').parent()).html('');} else {
+         
+         $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Неверно введен E-mail адрес');
+            
+        }
+        if (!$('#Address_contact_phone',cont).val()) { $('#Address_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone',cont).parent()).html('Заполните это поле');} else {  $('#Address_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address_contact_phone',cont).parent()).html('');}
+        
+        
+        if (error > 0) {
+         
+            $('input.error').slice(0,1).focus();
+         
+        }
+        
+        
+        if (error == 0) {
+        
+        
+        
+        $.post('<?= Yii::app()->createUrl('cart/addaddress') ?>', query, function(data) {
+            
+            $('select[name=id_address]').html(data);
+            $('select[name=id_address_b]').html(data);
+            
+            $('table.addr1, .btn.btn-success.addr1').hide('fade');
+            
+        });
+        
+        }
+        
+        
+    }
+    
+    
+    function select_smartpost_row(cont) {
+    
+        $('.row_smartpost').removeClass('act');
+        $(cont).parent().addClass('act');
+        
+        $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
+        
+    }
+    
+    
+    function checkEmail(t) {
+        var value = t.value;
+        if (value != '') {
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            $.ajax({
+                url: '<?= Yii::app()->createUrl('site/checkEmail') ?>',
+                data: 'ha&email=' + encodeURIComponent(t.value) + '&' + csrf[0] + '=' + csrf[1],
+                type: 'post',
+                success: function (r) {
+                    $('#js_forgot').remove();
+                    if (r) { $(t).after(r); $('.order_start').addClass('disabled'); } 
+                }
+            });
+        }
+    }
+
+    function forgotPassword(email) {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пароль отправлен на email: ' + email + '</div><div style="font-weight: bold;">Товары в корзине сохранены</div>';
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        $.ajax({
+            url: '<?= Yii::app()->createUrl('site/forgot') ?>',
+            type: 'post',
+            data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
+            success: function () {
+                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+            }
+        });
+    }
+
+    function change_city(cont) {
+        
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        
+        $('.check',$('.seld:visible')).removeClass('active');
+        $('input[type=radio]', $('.seld:visible')).attr('checked','true');
+        $('.seld').css('border','1px solid rgb(204, 204, 204)');
+        $('.seld').removeClass('act');
+        $('.select_dd_box, .delivery_box_sp, .delivery_box').hide();
+        
+        $('.seld #dtype1').parent().css('border','1px solid rgb(100, 113, 127)');
+        $('.check',$('.seld:visible').slice(0,1)).addClass('active');
+        $('.selp #dtype2').parent().addClass('act');
+        
+        
+        $('input[type=radio]', $('.seld:visible').slice(0,1)).attr('checked','true');
+        
+       
+            
+            show_all();
+            
+       
+        
+        
+        if (cont.val() != '') {
+            
+            $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+                
+                $('.delivery_box, .delivery_box_sp').html(data);
+                $('.box_opacity .op').hide();
+                $('.order_start').removeClass('disabled');
+                sbros_delev();
+                checked_sogl();
+            })
+            
+            //if ($('#Address_contact_phone').val() == '') {
+            
+                $.post('<?=Yii::app()->createUrl('cart')?>getcodecity', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+                    if (data != '') {        
+                        $('#Address_contact_phone').val('+'+data);
+                    } else {
+                    
+                        $('#Address_contact_phone').val('');
+                    
+                    }
+                });
+    
+           // }
+            
+            
+            
+            
+        } else {
+            $('.delivery_box').html('');
+            $('.box_opacity .op').show();
+            $('.order_start').addClass('disabled');
+            
+        }
+        
+       
+        
+    }
+    
+    function select_row(cont) {
+        
+        $('.select_dd_box input').val(cont.html());
+        $('.select_dd_popup').html('');
+        $('.select_dd_popup').hide();
+    }
+
+    
+    $(document).ready(function() {
+        
+        $(document).click(function (event) {
+				if ($(event.target).closest(".qbtn, .info_box_smart").length)
+				return;
+				$('.info_box_smart').hide();
+				event.stopPropagation();
+			});
+       
+        $('.check',$('.selp')).removeClass('active');
+        $('.selp').css('border', '1px solid #ccc');
+        
+        
+        $('.cartorder .row label.seld').slice(0,1).css('border', '1px solid #64717f');
+        $('input[type=radio]', $('.cartorder .row label.seld').slice(0,1)).attr('checked', 'true');
+        $('.check', $('.cartorder .row label.seld').slice(0,1)).addClass('active');
+        
+        $('.selp #dtype2').parent().css('border', '1px solid #64717f');
+        $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
+        $('.check', $('.selp #dtype2').parent()).addClass('active');
+    })
+    
+    function checked_sogl() {
+     
+     var csrf = $('meta[name=csrf]').attr('content').split('=');
+     
+     //alert($('select[name=id_address]').val());
+        
+        if ( $('select[name=id_address]').val() ) {
+        
+            var id_addr = $('select[name=id_address]').val();
+         
+            $.post('<?=Yii::app()->createUrl('cart/getaddress')?>', {id_address: id_addr, YII_CSRF_TOKEN: csrf[1]}, function(data) {
+                
+                $('input.country_id').val(data);
+                
+                
+                    
+                    $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: $('input.country_id').val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+                
+                        $('.delivery_box').html(data);
+                        //$('.box_opacity .op').hide();
+                        //$('.order_start').removeClass('disabled');
+                        sbros_delev();
+                        //checked_sogl();
+
+                    });
+                    
+                    //$('#dtype3').parent().show();
+                 
+            
+            
+            
+            });
+        
+        }
+        if ( !$('select[name=id_address]').val() || !$('select[name=id_address_b]').val() || !$('#confirm').prop('checked') ) {
+         
+            $('.order_start').addClass('disabled');
+            $('.box_opacity .op').show();
+         
+        } else if ( $('select[name=id_address]').val() && $('select[name=id_address_b]').val() && $('#confirm').prop('checked') ) {
+            $('.box_opacity .op').hide();
+            $('.order_start').removeClass('disabled');
+         
+        }
+    }
+    
+    function check_cart_sel(cont,cont2,inputId) {
+        $('label.seld').removeClass('act');
+        $('.'+cont2+' .check').removeClass('active');
+        $('.'+cont2+' input[type=radio]').removeAttr('checked');
+        $('.'+cont2+'').css('border', '1px solid #ccc');
+        $('label.selp').removeClass('act');
+        
+        if ($('.check', cont).hasClass('active')) {
+            $('.check', cont).removeClass('active');
+            $(cont).removeClass('act');
+            $(cont).css('border', '1px solid #ccc');
+            $('#'+inputId, cont).removeAttr('checked');
+        } else {
+            $('.check', cont).addClass('active');
+            $(cont).addClass('act');
+            $(cont).css('border', '1px solid #64717f');
+            $('#'+inputId, cont).attr('checked', 'true');
+        }
+        
+        
+        //$('.seld input#dtype3').parent().hide();
+        //$('.oplata4, .oplata7').hide();
+        
+        if ($('input.coutry_id').val() == 68) {
+            
+            $('.seld #dtype3').parent().show();
+            $('.oplata4, .oplata7').show();
+            
+        } else if ($('input.coutry_id').val() == 62) {
+            
+            $('.oplata7').hide();
+            $('.seld input#dtype3').parent().show();
+            $('.oplata4').show();
+            
+        } else if ($('input.coutry_id').val() == 62 && $('input.coutry_id').val() == 68) {
+            
+            $('.seld input#dtype3').parent().hide();
+            $('.oplata4, .oplata7').hide();
+            
+        }
+        
+        
+        $('.selp span.check.active').parent().parent().parent().addClass('act');
+        
+       
+        
+    }
+    
+    function search_smartpost() {
+     
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+           
+           $('.start-search-smartpost').html('Поиск...');
+           
+           var country = 'FI';
+           
+           if ($('#Address_country').val() == 62) {
+               
+               country = 'EE';
+               
+            }
+           
+           $('.box_smartpost').html('');
+           $('.sel_smartpost').html('');
+           $('.box_smartpost').hide(); 
+            
+            $.post('<?=Yii::app()->createUrl('cart')?>loadsp2/', { ind : $('.smartpost_index').val(), YII_CSRF_TOKEN: csrf[1], country : country }, function(data) {
+                
+                if (data) {
+                
+                $('.box_smartpost').show();
+                
+                $('.box_smartpost').html(data);
+            } else {
+                $('.box_smartpost').html('');
+               $('.box_smartpost').hide(); 
+        }
+        
+        $('.start-search-smartpost').html('Найти');
+    });
+     
+    }
+    
+    
+    function  show_all() {
+        
+        $('.oplata1,.oplata2,.oplata3,.oplata4,.oplata5,.oplata6,.oplata7,.oplata8').show();
+        
+        $('.check',$('.selp')).removeClass('active');
+        $('input[type=radio]', $('.selp')).removeAttr('checked');
+        $('.selp').css('border', '1px solid #ccc');
+        
+        
+        
+        
+        
+        $('.check',$('.selp #dtype2').parent()).addClass('active');
+        $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked','true');
+        $('.selp #dtype2').parent().css('border', '1px solid #64717f');
+        $('.selp #dtype2').parent().addClass('act');
+    }
+    
+    function showALL() {
+        $('.spay .selp').show();
+    }
+    
+    function hide_oplata(oplata) {
+        
+        
+        
+        $('.oplata'+oplata).hide();
+        
+        $('.check',$('.selp')).removeClass('active');
+        $('input[type=radio]', $('.selp')).removeAttr('checked');
+        $('.selp').css('border', '1px solid #ccc');
+        
+        //$('.selp:visible').slice(0,1).hide();
+        $('.selp #dtype2').parent().addClass('act');
+        $('.check',$('.selp #dtype2').parent()).addClass('active');
+        $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked','true');
+        $('.selp #dtype2').parent().css('border', '1px solid #64717f');
+        
+    }
+    
+    function sendforma() {
+        
+        var frm1 = $('form.no_register1').serialize();
+        var frm2 = $('form.address.text').serialize();
+         var csrf = $('meta[name=csrf]').attr('content').split('=');
+        var frmall = frm1+'&'+frm2+'&YII_CSRF_TOKEN='+csrf[1];
+       
+        var error = 0;
+        
+        if ($('#dtype3').parent().hasClass('act')) {
+            
+            
+            //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
+            
+            if ($('.delivery_box_sp .rows_checkbox_delivery input').is(':checked') == false) {
+                $('.delivery_box_sp .texterror').css('display', 'inline-block');
+                $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
+                error = error + 1;
+            } else {
+                $('.delivery_box_sp .texterror').html('');
+                $('.delivery_box_sp .texterror').css('display', 'none');
+            }
+         
+        }
+        
+        
+        if ($('#dtype2').parent().hasClass('act')) {
+            
+            //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
+            
+            if ($('.delivery_box .rows_checkbox_delivery input').is(':checked') == false) {
+                
+            $('.delivery_box .texterror').css('display', 'inline-block');    
+                
+             $('.delivery_box .texterror').html('Выберите тариф доставки');
+             error = error + 1;
+            } else {
+                $('.delivery_box .texterror').html('');
+                $('.delivery_box .texterror').css('display', 'none');
+            }
+         
+        }
+        
+        if ($('#confirm').is(':checked') == false) {
+            
+            $('.err_confirm').html('Согласитесь с условием');
+            error = error + 1;
+            
+        } else {
+         
+            $('.err_confirm').html('');
+         
+        }
+        
+        
+        if (error == 0) {
+        
+        //alert(frmall);
+        
+            $.post('<?=Yii::app()->createUrl('cart')?>valid/', frmall, function(data) {
+
+                if (data == '1') {
+
+                    $('#add-address').submit();
+
+                } else {
+                    alert(data);
+                }
+
+
+            });
+        
+        }
+        
+    }
+    
+    function check_delivery(cont) {
+     
+     var costall = $('input.costall').val();
+     
+     $('span.delivery_cost').html(cont.attr('rel') + '' + cont.attr('valute'));
+     
+     $('.itogo_cost').html((parseFloat($('input.costall').val()) + parseFloat(cont.attr('rel'))).toFixed(2) + '' + cont.attr('valute'));
+     
+     
+    }
+    
+    function sbros_delev() {
+     
+     var costall = $('input.costall').val();
+     
+      $('.itogo_cost').html(costall + $('.rows_checkbox_delivery label').attr('valute'));
+     
+     $('.delivery_cost').html('0'+$('.rows_checkbox_delivery label').attr('valute'));
+     
+     
+      $('.delivery_box .texterror, .delivery_box_sp .texterror').css('display', 'none');
+     
+     
+    }
+    
+    
+</script>
+
+<div class="container cartorder" style="margin-bottom: 20px;">
+    
+    
+        
+        <?php
+        
+        $delivery = new PostCalculator();
+        
+        $r = $delivery->GetRates2(10,$this->uid, $this->sid);
+        
+        //var_dump($r);
+        
+        $cart = new Cart();
+        
+        $PH = new ProductHelper();
+        
+        $cart_get = $cart->GetCart($this->uid, $this->sid);
+        
+        $cart2 = $cart->BeautifyCart($cart_get, $this->uid);
+        
+       // var_dump($cart2);
+        
+       //var_dump($cart);
+       
+        $cartInfo = '';
+        $fullprice = 0;
+        $fullweight = 0;
+        $price = 0;
+        $full_count = 0;
+        $cartInfo['items'] = array();
+        
+        $cart = $cart2;
+        
+        foreach ($cart as $item) {
+            
+            $cartInfo['items'][$item['ID']]['title'] = $item['Title'];
+            $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
+            
+            
+            $price = $item['PriceVAT0'];
+            
+            $fullweight += $item['UnitWeight'];
+            $fullprice += $price * $item['Quantity'];
+            $full_count += $item['Quantity'];
+            $cartInfo['items'][$item['ID']]['price'] = $price;
+            $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
+            
+        }
+        
+        $cartInfo['fullInfo']['count'] = $full_count;
+        $cartInfo['fullInfo']['cost'] = $fullprice;
+        $cartInfo['fullInfo']['weight'] = $fullweight;
+        
+        
+        echo '<input type="hidden" value="'.$cartInfo['fullInfo']['cost'].'" name="costall" class="costall">';
+        
     $user = Yii::app()->user->GetModel();
     $address = new Address;
     $address->receiver_title_name = $user['title_name'];
@@ -12,670 +702,33 @@
     $address->receiver_middle_name = $user['middle_name'];
     $address->contact_email = $user['login'];
     $address->type = 2;
-    $this->renderPartial('/site/address_form', array('model' => $address,
+    $this->renderPartial('/site/address_form3', array('model' => $address,
                                                            'mode' => 'new',
-                                                           'afterAjax' => 'addrInserted')); ?>
-</div>
-
-
-<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
-
-<div class="container cabinet">
-
-<div class="row">
-        <div class="">
-
-<?php if(empty($cartItems)) : ?>
-
-    <?=$ui->item('MSG_CART_ERROR_EMPTY'); ?>
-
-<?php else : ?>
-
-<!-- cart -->
-<div id="cart">
-<table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1  items_tbl">
-    <thead>
-    <tr>
-        <th width="100%" valign="middle" class="cart1header1"><?=$ui->item('CART_COL_TITLE');?></th>
-        <th valign="middle" align="center" class="cart1header1"><?=$ui->item('SHIPPING'); ?></th>
-        <th valign="middle" align="center" class="cart1header1" style="min-width: 70px;"><?=$ui->item('CART_COL_PRICE');?></th>
-        <th valign="middle" align="center" class="cart1header1"><?=$ui->item('CART_COL_QUANTITY');?></th>
-        <th valign="middle" align="center" class="cart1header1" style="min-width: 70px;"><?=$ui->item('CART_COL_SUBTOTAL_PRICE');?></th>
-        <th valign="middle" align="center" class="cart1header1"><?=$ui->item('CART_COL_SUBTOTAL_WEIGHT');?></th>
-    </tr>
-    </thead>
-    <?php $totalVAT = 0;
-          $totalVAT0 = 0;
-          $totalVATFin = 0;
-          $totalVAT0Fin = 0;
-          $totalVATWorld = 0;
-          $totalVAT0World = 0;
-    ?>
-
-    <tbody class="items" data-bind="foreach: Items">
-        <tr>
-            <td width="100%" valign="middle" class="cart1contents1">
-					
-					<table>
-								<tr>
-								<td>
-								<img width="31" height="31" align="middle"
-                                     alt="" style="vertical-align: middle"
-                                     src="/pic1/cart_ibook.gif">
-								</td><td style="padding-left: 20px;"><a
-                    title="<?=$ui->item('ITEM_MORE_INFO'); ?>"
-                    data-bind="attr: { href: Url}, text: Title"
-                    class="maintxt1"></a>
-                                
-								</td>
-								</tr>
-								</table>
-					
-					
-            </td>
-            <td valign="middle" align="center" class="cart1contents1">
-                <span data-bind="text: AvailablityText"></span>
-            </td>
-            <td valign="middle" nowrap="" align="center" class="cart1contents1">
-                <span data-bind="text: $root.ReadyPriceStr($data)"></span>
-            </td>
-            <td valign="middle" align="center"
-                class="cart1contents1"><span data-bind="text: Quantity"></span></td>
-            <td valign="middle" nowrap="" align="center"
-                class="cart1contents1">
-                <span data-bind="text: $root.LineTotalVAT($data)"></span>
-                <?=Currency::ToSign(Yii::app()->currency); ?>
-            </td>
-            <td valign="middle" align="center" class="cart1contents1">
-                <span data-bind="text: UnitWeight"></span>
-            </td>
-        </tr>
-    </tbody>
-
-
-
-        <tr data-bind="visible: UsingMinPrice">
-            <td class="cart1header2">&nbsp;</td>
-            <td align="left" class="cart1header2" colspan="5">
-                <?=sprintf($ui->item('MSG_ORDER_MIN_SUMM'), ProductHelper::FormatPrice(Yii::app()->params['OrderMinPrice'])); ?>
-                <?php if(Yii::app()->currency != Currency::EUR) : ?>
-                    (<?=ProductHelper::FormatPrice(Yii::app()->params['OrderMinPrice'], false); ?> EUR)
-                <?php endif; ?>
-            </td>
-        </tr>
-
-
-    <tr>
-        <td align="right" class="cart1header2"><?=$ui->item('CART_COL_TOTAL_PRICE'); ?>:</td>
-        <td style="font-weight: bold;" colspan="5"
-            class="cart1header2">
-            <span data-bind="text: ItemsPrice"></span>
-        </td>
-    </tr>
-
-    <tr data-bind="visible: DeliveryAddressID() > 0 && DeliveryMode() == 0">
-        <td align="right" class="cart1header3"><?=sprintf($ui->item('CART_COL_TOTAL_DELIVERY_PRICE'), ''); ?>
-            <span data-bind="text: DeliveryAddressText"></span>
-        </td>
-        <td style="font-weight: bold;" colspan="6" class="cart1header3">
-            <span data-bind="visible: DeliveryTypeID() > 0">
-                <span data-bind="text: DeliveryPrice"></span> <?= ProductHelper::FormatCurrency(); ?>
-             </span>
-            <span data-bind="visible: !(DeliveryTypeID() > 0)">
-                <?=$ui->item('NO_DELIVERY_TYPE_CHOOSEN'); ?>
-             </span>
-        </td>
-    </tr>
-    <tr>
-        <td align="right" class="cart1header3"><?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?>:</td>
-        <td style="font-weight: bold;" colspan="6" class="cart1header3"><span
-                data-bind="text: TotalPrice"></span> <?= ProductHelper::FormatCurrency(); ?>
-
-            <span data-bind="visible: WithVAT">(<?=$ui->item('WITH_VAT'); ?>)</span>
-            <span data-bind="visible: !WithVAT()">(<?=$ui->item('WITHOUT_VAT'); ?>)</span>
-
-        </td>
-    </tr>
-
-</table>
-<!-- /cart -->
-
-<br/>
-
-<div class="accordion" data-bind="slideVisible: DeliveryMode() == null || DeliveryMode() == 1">
-    <h3 data-bind="css : { ready : DeliveryMode()==1 }">
-        <span data-bind="visible: DeliveryMode() == null"><?=$ui->item('CHOOSE_DELIVERY_TYPE'); ?> </span>
-        <span data-bind="visible: DeliveryMode() != null, html: DeliveryModeText"></span>
-        <a href="#" class="small-link"
-           data-bind="visible: DeliveryMode() != null, click: ChangeDeliveryMode"><?=$ui->item('CHANGE'); ?></a>
-    </h3>
-
-    <div class="inner" data-bind="slideVisible: DeliveryMode() == null">
-        <p class="next"><?=$ui->item('CLICK_TO_NEXT'); ?></p>
-        <label for="isReserved1"><input type="radio" id="isReserved1" name="dtype" value="1" data-bind="checked: DeliveryMode">
-        <?=$ui->item('I_WANT_TO_BUY_IN_SHOP'); ?></label>
-        <br/>
-        <label for="isReserved2"><input type="radio" id="isReserved2" name="dtype" value="0" data-bind="checked: DeliveryMode">
-        <?=$ui->item('I_WANT_GOODS_TO_ADDRESS'); ?></label>
-    </div>
-</div>
-
-
-<div class="accordion" data-bind="visible: DeliveryMode() == 0">
-    <h3 data-bind="css : { ready : DeliveryAddressID() > 0 }">
-                    <span data-bind="visible: DeliveryAddressID() == 0"><?= $ui->item('MSG_ORDER_STEP_2_TITLE'); ?>
-                        <a href="#" class="small-link"
-                           data-bind="visible: DeliveryMode() != null, click: ChangeDeliveryMode"><?=$ui->item('CHANGE_DELIVERY_TYPE'); ?></a>
-                    </span>
-
-                    <span data-bind="visible: DeliveryAddressID() > 0 && DeliveryMode() == 0">
-                        <?=$ui->item('DELIVERY_TO_ADDRESS'); ?>: <span data-bind="text: DeliveryAddressText" class="nobold"></span>
-                        <a href="#" class="small-link" data-bind="click: ChangeDeliveryAddress"><?=$ui->item('CHANGE_DELIVERY_ADDRESS'); ?></a>
-                    </span>
-    </h3>
-
-    <div class="inner" data-bind="slideVisible: DeliveryMode()==0 && DeliveryAddressID() == 0">
-
-        <div class="info-box information" data-bind="visible: Addresses().length == 0">
-            <?=$ui->item("MSG_ADDRESS_ERROR_EMPTY"); ?>
-            <p><a id="nda" name="test" href="#newAddress"><?=$ui->item('YM_CONTEXT_PERSONAL_ADD_ADDRESS'); ?></a>
-            </p>
+                                                           'afterAjax' => 'addrInserted', 'cart'=>$cartInfo)); ?>
+   
+        <div class="cart_footer  footer1" style="width: 553px;">
+            Стоимость доставки <span class="delivery_cost">0&euro;</span>
         </div>
-
-        <div data-bind="visible: Addresses().length > 0">
-        <p class="next"><?=$ui->item('CLICK_ADDRESS_TO_NEXT'); ?></p>
-        <ul data-bind="foreach: Addresses" style="list-style-type: none;">
-            <li>
-                <label><input name="did" type="radio" data-bind="click: $root.SetDeliveryAddress, checked: $root.DeliveryAddressID, attr : { value: id }" /> <span
-                        data-bind="text: AddressFormatted"></span></label>
-            </li>
-        </ul>
-        <a id="nda" name="test" href="#newAddress"><?=$ui->item('ADD_ADDRESS_ALT'); ?></a>
+    <div class="clearfix"></div>
+        <div class="cart_footer footer2" style="width: 553px;">
+            Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: <?=$cartInfo['fullInfo']['weight']?> кг
         </div>
-    </div>
-</div>
-
-    <div class="accordion" data-bind="visible: DeliveryMode() == 0 && DeliveryAddressID() > 0">
-        <h3 data-bind="css : { ready : BillingAddressID() > 0 }">
-            <span data-bind="visible: BillingAddressID() == 0"><?=$ui->item('CHOOSE_BILLING_ADDRESS2'); ?></span>
-            <span data-bind="visible: BillingAddressID() > 0"><?=$ui->item('BILL_RECEIPT_TO_ADDRESS'); ?>:
-                    <span data-bind="text: BillingAddressText" class="nobold"></span>
-                        <a href="#" class="small-link" data-bind="click: ChangeBillingAddress"><?=$ui->item('CHOOSE_ANOTHER_BILLING_ADDRESS'); ?></a>
-                    </span>
-
-        </h3>
-
-        <div class="inner"
-             data-bind="slideVisible: (DeliveryAddressID() != 0) && (DeliveryMode()==0) && (BillingAddressID() == 0)">
-            <p class="next"><?=$ui->item('CLICK_ADDRESS_TO_NEXT'); ?></p>
-
-            <ul data-bind="foreach: Addresses"
-                style="list-style-type: none;">
-                <li>
-                    <label><input name="bid" type="radio" data-bind="click: $root.SetBillingAddress, attr : { value: id }, checked: $root.BillingAddressID "/> <span
-                            data-bind="text: AddressFormatted"></span></label>
-                </li>
-            </ul>
-
-            <a id="nba" name="test" href="#newAddress"><?=$ui->item('NEW_BILLING_ADDRESS'); ?></a>
+        <div class="clearfix"></div>
+        <div class="cart_footer footer3" style="width: 553px;">
+            Итоговая стоимость: <span class="itogo_cost"><?=$PH->FormatPrice($fullprice);?></span>
         </div>
+    <div class="clearfix"></div>
+    
+    <div style="float: right; width: 575px; margin-bottom: 10px;">
+        При нажатие кнопки "Оформить" Вам будет отправлено письмо с учётными данными для входа в личный кабинет Руслании и Вы будете зарегистрированы в нашей системе.
     </div>
-
-
-<div class="accordion" data-bind="visible: DeliveryMode() == 0  && DeliveryAddressID() > 0 && BillingAddressID() > 0">
-    <h3 data-bind="css : { ready : DeliveryTypeID() > 0 }">
-        <span data-bind="visible: DeliveryTypeID() == 0"><?=$ui->item('CHOOSE_DELIVERY_TYPE'); ?></span>
-                    <span data-bind="visible: DeliveryTypeID() != 0"><?=$ui->item('DELIVERY_TYPE'); ?>:
-                        <span data-bind="text: DeliveryTypeText" class="nobold"></span>
-                        <a href="#" class="small-link" data-bind="click: ChangeDeliveryType"><?=$ui->item('CHANGE_DELIVERY_TYPE'); ?></a>
-                    </span>
-    </h3>
-
-    <div class="inner"
-         data-bind="slideVisible: DeliveryAddressID()>0 && DeliveryMode()==0 && DeliveryTypeID()==0">
-        <p class="next"><?=$ui->item('CLICK_TO_NEXT'); ?></p>
-        <ul data-bind="foreach: DeliveryTypes" style="list-style-type: none;">
-            <li><label><input type="radio" name="dtid"
-                              data-bind="checked: $root.DeliveryTypeID, value: id"/> <span
-                        data-bind="text: type"></span> +<span data-bind="text: value().toFixed(2)"></span> <span data-bind="text: currencyName"></span></label>
-                (<?=$ui->item('ORDER_DELIVERY_CLASS_TIME'); ?> <span data-bind="text: deliveryTime"></span> <?=sprintf($ui->item('X_DAYS_3'), ''); ?>)
-            </li>
-        </ul>
-    </div>
-</div>
-
-
-
-<div class="accordion">
-    <h3 data-bind="css : { ready : Notes() != null && Notes().length > 0 }"><?=$ui->item('NOTES_AND_CONFIRMATION'); ?></h3>
-
-    <div class="inner"
-         data-bind="slideVisible: (DeliveryAddressID() != 0 && DeliveryMode()==0 && DeliveryTypeID() > 0 && BillingAddressID() != 0) || DeliveryMode()==1 ">
-        <p><?=$ui->item('ORDER_MSG_USER_COMMENTS'); ?>:</p>
-        <textarea data-bind="value: Notes" class="notesta"></textarea>
-
-        <p><?=$ui->item('ITOGO'); ?>:</p>
-        <dl>
-            <dt><?=$ui->item('PRICE_WITHOUT_DELIVERY'); ?>:</dt>
-            <dd>
-                <span data-bind="text: ItemsPrice"></span>
-            </dd>
-
-            <dt data-bind="visible: DeliveryMode() == 0"><?=$ui->item('ITOGO_DELIVERY_PRICE'); ?>:</dt>
-            <dd data-bind="visible: DeliveryMode() == 0"><span
-                    data-bind="text: DeliveryPrice"></span> <?= ProductHelper::FormatCurrency(); ?></dd>
-
-            <dt data-bind="visible: DeliveryMode() == 1"><?=$ui->item('CART_COL_SUBTOTAL_DELIVERY'); ?>:</dt>
-            <dd data-bind="visible: DeliveryMode() == 1"><?=$ui->item('I_WANT_TO_BUY_IN_SHOP'); ?></dd>
-
-            <dt><?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?>:</dt>
-            <dd><span data-bind="text: TotalPrice"></span> <?= ProductHelper::FormatCurrency(); ?></dd>
-        </dl>
-        <br/>
-        <input type="checkbox" id="confirm" data-bind="checked: Confirm"> <label for="confirm">
-            <?=$ui->item('MSG_CONDITIONS_PHASE1'); ?>
-        </label><br/>
-        <br/>
-        <div class="errorOrder" data-bind="slideVisible: Errors().length > 0">
-            <h4><?=$ui->item('ERRORS_IN_ORDER_PROCESSINIG'); ?></h4>
-            <ul data-bind="foreach: Errors">
-                <li data-bind="text: $data"></li>
-            </ul>
-        </div>
-        <br/>
-        <button data-bind="enable: Confirm, click: DoOrder, visible: !Processing()"><?=$ui->item('CONFIRM_ORDER'); ?></button>
-        <button disabled="disabled" data-bind="visible: Processing"><?=$ui->item('ORDER_PROCESSING'); ?></button>
-
-    </div>
-</div>
-
-
-    <script type="text/javascript">
-
-    ko.bindingHandlers.slideVisible = {
-        update: function (element, valueAccessor, allBindingsAccessor)
-        {
-            // First get the latest data that we're bound to
-            var value = valueAccessor(), allBindings = allBindingsAccessor();
-
-            // Next, whether or not the supplied model property is observable, get its current value
-            var valueUnwrapped = ko.utils.unwrapObservable(value);
-
-            // Grab some more data from another binding property
-            var duration = allBindings.slideDuration || 400; // 400ms is default duration unless otherwise specified
-
-            // Now manipulate the DOM element
-            if (valueUnwrapped == true)
-                $(element).slideDown(duration); // Make the element visible
-            else
-                $(element).slideUp(duration);   // Make the element invisible
-        }
-    };
-
-    var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-    var orderVM = function () {
-        var self = this;
-        self.Items = ko.observableArray([]);
-        self.ReadyPrice = function (item) {
-            if (item.Entity() != <?=Entity::PERIODIC; ?>)
-                return self.WithVAT() ? item.PriceVAT().toFixed(2) : item.PriceVAT0().toFixed(2);
-            else {
-                var price2use = item.Price2Use();
-                var da = self.DeliveryAddress();
-
-                if (da != undefined && da != null)
-                {
-                    var code = ($.isFunction(da.code)) ? da.code() : da.code;
-                    price2use = code == 'FI' ? <?=Cart::FIN_PRICE; ?> : <?=Cart::WORLD_PRICE; ?>;
-                }
-
-                if (price2use == <?=Cart::FIN_PRICE; ?>) {
-                    return self.WithVAT() ? item.PriceVATFin() : item.PriceVAT0Fin();
-                }
-                else {
-                    return self.WithVAT() ? item.PriceVATWorld() : item.PriceVAT0World();
-                }
-            }
-        };
-
-        self.ReadyPriceStr = function (item)
-        {
-            if (item.Entity() != <?=Entity::PERIODIC; ?>)
-                return self.WithVAT() ? item.PriceVATStr() : item.PriceVAT0Str();
-            else {
-                var price2use = item.Price2Use();
-                var da = self.DeliveryAddress();
-
-                if (da != undefined && da != null) {
-                    var code = ($.isFunction(da.code)) ? da.code() : da.code;
-                    price2use = code == 'FI' ? <?=Cart::FIN_PRICE; ?> : <?=Cart::WORLD_PRICE; ?>;
-                }
-
-                if (price2use == <?=Cart::FIN_PRICE; ?>) {
-                    return self.WithVAT() ? item.PriceVATFinStr() : item.PriceVAT0FinStr();
-                }
-                else {
-                    return self.WithVAT() ? item.PriceVATWorldStr() : item.PriceVAT0WorldStr();
-                }
-            }
-        };
-
-        self.LineTotalVAT = function (item)
-        {
-            return Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2);
-        };
-
-        self.WithVAT = ko.observable(true);
-        self.DeliveryMode = ko.observable(null);
-        self.DeliveryModeText = ko.computed(function ()
-        {
-            var mode = self.DeliveryMode();
-            if (mode == 1) return '<?=CHtml::encode($ui->item('I_WANT_TO_BUY_IN_SHOP')); ?>';
-            else return  '<?=CHtml::encode($ui->item('I_WANT_GOODS_TO_ADDRESS')); ?>';//'Заказ будет доставлен на выбранный ниже адрес';
-        });
-        self.ChangeDeliveryMode = function ()
-        {
-            self.DeliveryMode(null);
-            self.WithVAT(true);
-            self.DeliveryAddressID(0);
-            self.DeliveryAddress(null);
-            self.BillingAddressID(0);
-        };
-
-        self.Addresses = ko.observableArray([]);
-        self.DeliveryAddress = ko.observable();
-        self.DeliveryAddressID = ko.observable(0);
-        self.BillingAddressID = ko.observable(0);
-        self.DeliveryAddressText = ko.computed(function ()
-        {
-            var did = self.DeliveryAddressID();
-            if (did > 0)
-            {
-                var add = ko.utils.arrayFirst(self.Addresses(), function (item)
-                {
-                    return item.address_id() == did;
-                });
-
-                return add.AddressFormatted();
-            }
-            return '';
-        });
-        self.BillingAddressText = ko.computed(function ()
-        {
-            var did = self.BillingAddressID();
-            if (did > 0)
-            {
-                var add = ko.utils.arrayFirst(self.Addresses(), function (item)
-                {
-                    return item.address_id() == did;
-                });
-
-                return add.AddressFormatted();
-            }
-            return '';
-        });
-
-        self.ChangeDeliveryAddress = function ()
-        {
-            self.DeliveryAddressID(0);
-        };
-        self.ChangeBillingAddress = function ()
-        {
-            self.DifferentBillingAddress(null);
-            self.BillingAddressID(0);
-        };
-
-        self.DifferentBillingAddress = ko.observable(null);
-
-
-        self.DeliveryTypes = ko.observableArray([]);
-        self.DeliveryTypeID = ko.observable(0);
-        self.DeliveryTypeText = ko.computed(function ()
-        {
-            var t = self.DeliveryTypeID();
-            if (t > 0)
-            {
-                var add = ko.utils.arrayFirst(self.DeliveryTypes(), function (item)
-                {
-                    return item.id() == t;
-                });
-
-                return add.type();
-            }
-            return '';
-        });
-
-        self.ChangeDeliveryType = function ()
-        {
-            self.DeliveryTypeID(0);
-        };
-
-        self.UsingMinPrice = ko.observable(false);
-        self.Notes = ko.observable();
-        self.Confirm = ko.observable(false);
-
-        self.SetDeliveryAddress = function (data)
-        {
-            self.DeliveryAddressID(data.address_id());
-            self.WithVAT(data.WithVAT());
-            self.DeliveryTypeID(0);
-            self.DeliveryAddress(data);
-        };
-
-        self.SetBillingAddress = function (data)
-        {
-            self.BillingAddressID(data.address_id());
-        };
-
-        self.DeliveryPrice = ko.computed(function ()
-        {
-            var ret = 0;
-            var t = self.DeliveryTypeID();
-            if (t > 0)
-            {
-                var add = ko.utils.arrayFirst(self.DeliveryTypes(), function (item)
-                {
-                    return item.id() == t;
-                });
-                ret = add.value();
-            }
-
-            return ret.toFixed(2);
-        });
-
-        self.ItemsPrice = ko.computed(function()
-        {
-            var ret = 0;
-            var items = self.Items();
-
-            var sumEur = 0;
-            var rate = 1;
-            $.each(items, function (idx, item)
-            {
-                sumEur += Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item));
-                ret +=  Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item));
-                rate = parseFloat(item.Rate());
-            });
-
-            if(sumEur < <?=Yii::app()->params['OrderMinPrice']; ?>)
-            {
-                ret = <?=Yii::app()->params['OrderMinPrice']; ?> * rate;
-                self.UsingMinPrice(true);
-            }
-            else self.UsingMinPrice(false);
-
-            return ret.toFixed(2);
-        });
-
-        self.TotalPrice = ko.computed(function ()
-        {
-            var ret = self.ItemsPrice();
-            return (parseFloat(ret) + parseFloat(self.DeliveryPrice())).toFixed(2);
-        });
-
-        ko.computed(function ()
-        {
-            var dm = self.DeliveryMode();
-            if (dm == 1) return; // isReserved
-
-            $.getJSON('/site/myaddresses', function (json)
-            {
-                ko.mapping.fromJS(json, {}, ovm);
-                if(json.Addresses.length == 1)
-                {
-                    if(self.DeliveryAddressID() == 0)
-                    {
-                        var withVAT = json.Addresses[0].WithVAT;
-                        self.DeliveryAddressID(json.Addresses[0].id);
-                        self.WithVAT(withVAT);
-                        self.DeliveryAddress(json.Addresses[0]);
-                    }
-                }
-            });
-        });
-
-        ko.computed(function ()
-        {
-            var d = self.DeliveryAddressID();
-            if (d > 0)
-            {
-                var address = ko.utils.arrayFirst(self.Addresses(), function (item)
-                {
-                    return item.id() == d;
-                });
-
-                if(address != null)
-                    self.WithVAT(address.WithVAT());
-
-                $.getJSON('/site/getdeliverytypes', { aid: d }, function (json)
-                {
-                    ko.mapping.fromJS(json, {}, ovm);
-                    if(self.Addresses().length == 1)
-                    {
-                        var aid = self.Addresses()[0].id();
-                        self.DifferentBillingAddress(0);
-                        self.BillingAddressID(aid);
-                    }
-                    if(self.DeliveryTypes().length == 1)
-                    {
-                        self.DeliveryTypeID(self.DeliveryTypes()[0].id());
-                    }
-                });
-            }
-        });
-
-        ko.computed(function ()
-        {
-            var t = self.DifferentBillingAddress();
-            if (t == 0) self.BillingAddressID(self.DeliveryAddressID());
-            else self.BillingAddressID(0);
-        });
-
-        self.Processing = ko.observable(false);
-        self.Errors = ko.observableArray([]);
-
-        self.DoOrder = function ()
-        {
-            var data = {
-                DeliveryMode: parseInt(self.DeliveryMode()),
-                DeliveryAddressID: parseInt(self.DeliveryAddressID()),
-                BillingAddressID: parseInt(self.BillingAddressID()),
-                DeliveryTypeID: parseInt(self.DeliveryTypeID()),
-                Notes: $.trim(self.Notes()),
-                CurrencyID : <?=Yii::app()->currency; ?>,
-                Mandate : '<?=OrderForm::GenMandate(); ?>'
-            };
-            data[csrf[0]] = csrf[1];
-
-            self.Errors.removeAll();
-            self.Processing(true);
-            $.when($.ajax({
-                    url: '/order/create',
-                    type: 'POST',
-                    data: data,
-                    dataType: 'json'
-                })).then(function (json)
-                {
-                    self.Processing(false);
-                    if (json.hasError)
-                    {
-                        $.each(json.Errors, function (idx, value)
-                        {
-                            self.Errors.push(value);
-                        });
-                    }
-                    else
-                    {
-                        window.location.href = json.url;
-                    }
-                }, function (json)
-                {
-//                    console.log('fail', json);
-                    self.Processing(false);
-                })
-
-        };
-    };
-
-    var ovm = new orderVM();
-    ko.applyBindings(ovm, $('#cart')[0]);
-
-    $.getJSON('/cart/doorderjson', function(json)
-    {
-        ko.mapping.fromJS(json, {}, ovm);
-    });
-
-
-    function addrInserted(addrData)
-    {
-        $.getJSON('/site/myaddresses', function (json)
-        {
-//            console.log(json);
-            ko.mapping.fromJS(json, {}, ovm);
-            $('#lean_overlay').trigger('click');
-
-            if(json.Addresses.length > 0)
-            {
-                $.each(json.Addresses, function(idx, addr)
-                {
-                    if(addr.id == addrData.id)
-                    {
-                        ovm.DeliveryAddressID(addr.id);
-                        return;
-                    }
-                });
-            }
-
-        });
-    }
-
-    $(document).ready(function ()
-    {
-        $('#nda, #nba').leanModal();
-    });
-
-    //    $(document).ajaxStart(function()
-    //    {
-    //        cvm.AjaxCall(true)
-    //    }).ajaxComplete(function()
-    //        {
-    //            cvm.AjaxCall(false);
-    //        });
-
-
-    </script>
-
-
-
-<?php endif; ?>
-
-<!-- /content -->
-</div>
-</div>
+    
+    
+    
+    <div class="clearfix"></div>
+        <a href="javascript:;" class="order_start disabled" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
+    
+   
    
 </div>
-</div>
-
-
 

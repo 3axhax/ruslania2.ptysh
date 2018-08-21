@@ -69,6 +69,22 @@
             </div>
         <?php endif;?>
 
+        <?php if (isset($filters['country']) && $filters['country'] == true):?>
+            <!--Фильтр по стране-->
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PERIODIC_COUNTRY')?>:</label>
+                <select class="prod-filter__input prod-filter__input__select--m"
+                        name="country" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="country">
+                    <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                    <?php foreach ($filters['country'] as $k => $lang) :?>
+                        <option value="<?=$lang['id']?>" <?= ((isset($filter_data['country'])) && ($lang['id'] == (int)$filter_data['country'])) ? 'selected' : ''?>>
+                            <?=ProductHelper::GetTitle($lang);?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        <?php endif; ?>
+
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>

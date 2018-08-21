@@ -117,6 +117,7 @@ function show_items(url, page) {
             format_video : $('#format_video').val(),
             lang_video : $('#lang_video').val(),
             subtitles_video : $('#subtitles_video').val(),
+            country : $('#country').val(),
         },
         beforeSend: function(){
             items_content.html('Загрузка...');

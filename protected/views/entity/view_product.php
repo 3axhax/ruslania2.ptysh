@@ -33,8 +33,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	<div class="span1" style="position: relative">
         <?php $this->renderStatusLables($item['status']); ?>
         <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
-        <?php if (!empty($item['Lookinside'])&&($item['entity'] == Entity::PERIODIC)) : ?>
-        <div style="text-align: left;background-color: #fff;">
+        <?php if (!empty($item['Lookinside'])) : ?>
+        <div style="text-align: left;background-color: #fff;     margin-top: -47px;">
             <?php
             $images = array();
             $audio = array();
@@ -59,7 +59,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             ?>
 
             <?php if ($item['entity'] == Entity::AUDIO) : ?>
-                <a href="javascript:;" style="width: 131px; margin-right: 30px;"  data-iid="<?= $item['id']; ?>" data-audio="<?= implode('|', $audio); ?>" class="read_book">Смотреть</a>
+                <a href="javascript:;" style="width: 261px; margin-right: 30px;"  data-iid="<?= $item['id']; ?>" data-audio="<?= implode('|', $audio); ?>" class="read_book">Смотреть</a>
 
                 <div id="audioprog<?= $item['id']; ?>" class="audioprogress">
                     <img src="/pic1/isplaying.gif" class="lookinside audiostop"/><br/>
@@ -70,28 +70,156 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
 
             <?php else : ?>
-                <a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
+                
+                <?php
+                
+               // var_dump($images);
+                
+                if ($images AND count($pdf)) {
+                    
+                    
+                    ?>
+                
+                <link rel="stylesheet" href="/css/magnific-popup.css" >
+                <script>
+                
+                    function show_popup() {
+                        $.magnificPopup.open({
+                                items: {
+                                    src: '#periodic-price-form2', // can be a HTML string, jQuery object, or CSS selector
+                                    type: 'inline'
+                                }
+                            });
+                    }
+                
+                
+                </script>
+        <div id="periodic-price-form2" class="white-popup-block mfp-hide white-popup">
+            <div class="box_title box_title_ru">Галерея страниц:</div>
+            
+            
+            
+            <a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
                    data-iid="<?= $item['id']; ?>"
                    data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
-                   data-images="<?= CHtml::encode($images); ?>" style="width: 131px; margin-right: 30px;" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>
-
-
-                <?php if (!empty($pdf)) : ?>
+                   data-images="<?= CHtml::encode($images); ?>" style="width: 261px; margin: 20px auto; display: block; background: #edb421 none; padding-right: 0" class="read_book link__read">Смотреть галерею</a>
+            
+                   <div class="box_title box_title_ru">Файлы:</div>
+                   
+                   <?php if (!empty($pdf)) : ?>
                     <div id="staticfiles<?= $item['id']; ?>">
-                        <span class="title__bold"><?= $ui->item('MSG_BTN_LOOK_INSIDE'); ?></span>
                         <ul class="staticfile">
                             <?php $pdfCounter = 1; ?>
                             <?php foreach ($pdf as $file) : ?>
                                 <?php $file2 = '/pictures/lookinside/' . $file; ?>
-                                <li>
+                                <li style="text-align: center; padding: 5px 0;">
                                     <a target="_blank" href="<?= $file2; ?>"><img
-                                            src="/css/pdf.png"/><?= $pdfCounter . '.pdf'; ?></a>
+                                            src="/css/pdf.png"/> <?= $file; ?></a>
                                 </li>
                                 <?php $pdfCounter++; ?>
                             <?php endforeach; ?>
                         </ul>
                     </div>
                 <?php endif; ?>
+                   
+        </div>
+
+                
+                <a href="javascript:;" onclick="show_popup();"  
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf=""
+                   data-images="" style="width: 261px; margin-right: 30px;" target="_blank" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>    
+                
+                <?php
+                    
+                    
+                } else {
+                
+                
+                if ( !$images AND !count($audio) AND count($pdf) == 1 ) :
+                    
+                    ?>
+                <?php $file2 = '/pictures/lookinside/' . $pdf[0]; ?>
+                
+                
+                     <a href="<?=$file2?>" 
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf=""
+                   data-images="" style="width: 261px; margin-right: 30px;" target="_blank" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>    
+                    <?php
+                
+                elseif (!$images AND !count($audio) AND count($pdf) > 1) :
+                    ?>
+                    
+                
+                
+                <link rel="stylesheet" href="/css/magnific-popup.css" >
+                <script>
+                
+                    function show_popup2() {
+                        $.magnificPopup.open({
+                                items: {
+                                    src: '#periodic-price-form3', // can be a HTML string, jQuery object, or CSS selector
+                                    type: 'inline'
+                                }
+                            });
+                    }
+                
+                
+                </script>
+        <div id="periodic-price-form3" class="white-popup-block mfp-hide white-popup">
+            
+            
+                   <div class="box_title box_title_ru">Файлы:</div>
+                   
+                   <?php if (!empty($pdf)) : ?>
+                    <div id="staticfiles<?= $item['id']; ?>">
+                        <ul class="staticfile">
+                            <?php $pdfCounter = 1; ?>
+                            <?php foreach ($pdf as $file) : ?>
+                                <?php $file2 = '/pictures/lookinside/' . $file; ?>
+                                <li style="text-align: center; padding: 5px 0;">
+                                    <a target="_blank" href="<?= $file2; ?>"><img
+                                            src="/css/pdf.png"/> <?= $file; ?></a>
+                                </li>
+                                <?php $pdfCounter++; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+                   
+        </div>
+
+                
+                <a href="javascript:;" onclick="show_popup2();"  
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf=""
+                   data-images="" style="width: 261px; margin-right: 30px;" target="_blank" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a> 
+                        
+                    <?php
+                    
+                    elseif ($images AND !count($audio) AND !count($pdf)): 
+                        
+                       ?>
+                    
+                <a href="<?= CHtml::encode($first['img']); ?>" onclick="return false;"
+                   data-iid="<?= $item['id']; ?>"
+                   data-pdf="<?= CHtml::encode(implode('|', array())); ?>"
+                   data-images="<?= CHtml::encode($images); ?>" style="width: 261px; margin-right: 30px;" class="read_book link__read"><?=$ui->item('A_NEW_VIEW')?></a>
+                        
+                    <?php 
+                        
+                    endif;
+                    
+                
+                
+                
+                }
+                ?>
+                
+                
+               
+
             <?php endif; ?>
             <div class="clearBoth"></div>
             <div style="height: 20px;"></div>
@@ -580,7 +708,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				<div class="clearfix"></div>
 				<div style="margin-top: 10px;"></div>
 				<?}?>
-				<?php if (!empty($item['Lookinside'])&&($item['entity'] != Entity::PERIODIC)) : ?>
+				
+                                    
+                                <!--    <?php if (!empty($item['Lookinside'])&&($item['entity'] != Entity::PERIODIC)) : ?>
 
                 <?php
                 
@@ -673,7 +803,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 
                 <?php endif; ?>
 				
-            <?php endif; ?>
+            <?php endif; ?>-->
 			
 			<?/* if ($item['entity'] == Entity::PERIODIC) { */?><!--
 				<div style="height: 18px;"></div>
@@ -755,7 +885,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
                 </div>
 				<div style="height: 23px; clear: both"></div>
-                <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;">
+                <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;">
                     <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
                         <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
@@ -770,7 +900,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
                 
 				
-				<div style="height: 1px; clear: both"></div>
+				<!--<div style="height: 1px; clear: both"></div>-->
 				<?php endif; ?>
                 <input type="hidden" value="<?= round($price[DiscountManager::WITH_VAT_WORLD] / 12, 2); ?>"
                        class="worldmonthpricevat"/>
@@ -782,7 +912,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                        class="finmonthpricevat0"/>
 				
 				
-				<a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?= $count_add ?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
+				<a class="cart-action add_cart" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?= $count_add ?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
 				
             <?php endif;?>
 			

@@ -68,8 +68,6 @@ class EntityController extends MyController {
 		$entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
 
-        $test = FilterHelper::getFiltersData($entity, $cid);
-
         $category = new Category();
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
@@ -94,24 +92,6 @@ class EntityController extends MyController {
         }
         $this->_checkUrl($dataForPath, $langTitles);
         $lang = Yii::app()->getRequest()->getParam('lang');
-
-       /* if (isset($_GET['sel']) && $_GET['lang'] != '') {
-			$lang = $_GET['lang'];
-			if (!Product::is_lang($_GET['lang'], $cid,$entity)) {
-				$lang = '';
-			}
-
-		} elseif (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
-			
-			$lang = Yii::app()->getRequest()->cookies['langsel']->value;
-			
-			if (!Product::is_lang(Yii::app()->getRequest()->cookies['langsel']->value, $cid,$entity)) {
-				$lang = '';
-			}
-			
-		}*/
-
-
 
         //получаем языки категории
         $langs = $category->getFilterLangs($entity, $cid);
@@ -155,14 +135,9 @@ class EntityController extends MyController {
 		}
 
         $lang = Yii::app()->getRequest()->getParam('lang');
-        /*$data = FilterHelper::getFiltersData($entity, $cid);
-        $data['lang_sel'] = $lang;
-        $filter_data = $data;*/
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            /*FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
-            $data['lang_sel'] = $lang;*/
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -423,7 +398,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'binding_id', $mid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
@@ -864,10 +838,13 @@ class EntityController extends MyController {
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('READ_BY'), ProductHelper::GetTitle($performer));
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
             'items' => $items, 'authorInfo' => $performerInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -1014,7 +991,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'subtitlesVideo', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,
@@ -1251,7 +1227,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'langVideo', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => Entity::VIDEO,

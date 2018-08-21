@@ -4,10 +4,12 @@
 <div class="container cartorder">
     <h1><?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?></h1>
     <div><?= Yii::app()->ui->item('DESC_PAYTRAIL') ?></div>
-    Ваш заказ № <?=$number_zakaz?>. Произведите оплату, нажав на кнопку PAYYY внизу<br /><br />
+    Ваш заказ № <?=$number_zakaz?>. Произведите оплату, выбрав чем хотите оплатить<br /><br />
     
     <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
 
+    <div class="clearBoth"></div>
+    
     <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype2'); return false;">другой способ оплаты</a></div>
     <div id="pay_systems" class="row spay" style="display: none;">
         <?php $this->renderPartial('/site/pay_systems', array()); ?>

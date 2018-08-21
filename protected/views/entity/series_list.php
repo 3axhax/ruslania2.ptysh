@@ -1,16 +1,11 @@
-<?php Yii::app()->clientScript->registerScriptFile('/js/jquery.autocolumnlist.js'); ?>
-<table width="100%" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top">
-    <tr>
-        <td class="leftmnu" width="20%" valign="top">
-            <div style="padding: 0 5px 0 5px;">
 
-                <?php $this->renderPartial('/entity/_left_menu', array('entity' => $entity)); ?>
-                <?php $this->renderPartial('/site/login_form', array('model' => new User)); ?>
 
-            </div>
-        </td>
-        <td valign="top" style="padding: 5px;">
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+  <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+
+<script src="/js/jquery.autocolumnlist.js"></script>
+
+<div class="container cabinet">
+          
 
             <div class="text">
                 <ul class="list" id="al50">
@@ -27,19 +22,13 @@
             </div>
 
             <!-- /content -->
-        </td>
-        <td width="220" valign="top" style="padding-left: 10px; padding-right: 10px; padding-top: 10px;">
-            <?php $this->widget('Banners', array('entity' => $entity)); ?>
-        </td>
-    </tr>
-
-</table>
+        </div>
 
 <script type="text/javascript">
 
     $(document).ready(function()
     {
-        $('#al50').autocolumnlist({ columns: 2});
+        $('#al50').autocolumnlist({ columns: 3});
     });
 
 </script>

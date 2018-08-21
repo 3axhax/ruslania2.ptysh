@@ -106,6 +106,8 @@
     
     }
     
+    a.order_start { background-color: #5bb75b; }
+    
     .order_start.disabled {
         
         opacity: 0.5;
@@ -147,9 +149,43 @@
     
     }
     
+    .box_smartpost {
+        display: none;
+        width: 760px;
+        margin-top: 20px;
+    }
+    
+    .row_smartpost {
+      padding: 15px 5px;  
+      border: 1px solid #ccc;
+      margin: 5px 0;
+    }
+    
+    .row_smartpost.act {
+        background-color: #eaeaea;
+    }
+    
+    
 </style>
 
 <script>
+    
+    function checkForm() {
+        
+        
+        
+    }
+    
+    
+    function select_smartpost_row(cont) {
+    
+        $('.row_smartpost').removeClass('act');
+        $(cont).parent().addClass('act');
+        
+        $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
+        
+    }
+    
     
     function checkEmail(t) {
         var value = t.value;
@@ -161,7 +197,7 @@
                 type: 'post',
                 success: function (r) {
                     $('#js_forgot').remove();
-                    if (r) $(t).after(r);
+                    if (r) { $(t).after(r); $('.order_start').addClass('disabled'); } 
                 }
             });
         }
@@ -188,7 +224,7 @@
         $('input[type=radio]', $('.seld:visible')).attr('checked','true');
         $('.seld').css('border','1px solid rgb(204, 204, 204)');
         $('.seld').removeClass('act');
-        $('.select_dd_box, .delivery_box_sp, .delivery_box').hide();
+        $('.delivery_box_sp, .delivery_box').hide();
         
         $('.seld #dtype1').parent().css('border','1px solid rgb(100, 113, 127)');
         $('.check',$('.seld:visible').slice(0,1)).addClass('active');
@@ -197,45 +233,44 @@
         
         $('input[type=radio]', $('.seld:visible').slice(0,1)).attr('checked','true');
         
-        if (cont.val() == 68) {
-            
-            
-            
-            $('.seld #dtype3').parent().hide();
-            //$('.oplata4, .oplata7').hide();
-            
-            $('.seld #dtype3').parent().show();
-            
-            //$('.oplata4, .oplata7').show();
-            
-        } else if (cont.val() == 62) {
-            
-            $('.seld #dtype3').parent().hide();
-            //$('.oplata4, .oplata7').hide();
-            
-            $('.seld #dtype3').parent().show();
-            //$('.oplata4').show();
-            
-        } else {
-            
-            $('.seld #dtype3').parent().hide();
-            $('.select_dd_box, .delivery_box_sp, .delivery_box').hide();
-            
-            show_all();
-            
-        }
+        show_all();
         
         
         if (cont.val() != '') {
             
-            $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+            
+            
+           
+                    
+                    $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
                 
-                $('.delivery_box, .delivery_box_sp').html(data);
-                $('.box_opacity .op').hide();
-                $('.order_start').removeClass('disabled');
-                sbros_delev();
-                checked_sogl();
-            })
+                        $('.delivery_box').html(data);
+                        $('.box_opacity .op').hide();
+                        $('.order_start').removeClass('disabled');
+                        sbros_delev();
+                        //checked_sogl();
+
+                    });
+                    
+                  
+                
+                
+            
+            
+            
+            //if ($('#Address_contact_phone').val() == '') {
+            
+                $.post('<?=Yii::app()->createUrl('cart')?>getcodecity', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+                    if (data != '') {        
+                        $('#Address_contact_phone').val('+'+data);
+                    } else {
+                    
+                        $('#Address_contact_phone').val('');
+                    
+                    }
+                });
+    
+           // }
             
             
             
@@ -257,45 +292,19 @@
         $('.select_dd_popup').html('');
         $('.select_dd_popup').hide();
     }
-    
-    function postindex_input(cont) {
-        
-        //alert(cont.val());
-        
-        if (cont.val().length >= 3) {
-            
-            var csrf = $('meta[name=csrf]').attr('content').split('=');
-           
-            
-            $.post('<?=Yii::app()->createUrl('cart')?>loadsp/', { s : cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
-                
-                if (data == '') {
-                    $('.select_dd_popup', cont.parent().parent()).html('');
-        $('.select_dd_popup', cont.parent().parent()).hide();
-        
-                } else {
-                
-                $('.select_dd_popup', cont.parent().parent()).html(data);
-                $('.select_dd_popup', cont.parent().parent()).show();
-                
-        }
-                
-             });
 
-        } else {
-            $('.select_dd_popup', cont.parent().parent()).hide();
-        }
-    
-    }
     
     $(document).ready(function() {
         
+
         $(document).click(function (event) {
-				if ($(event.target).closest(".select_dd_box").length)
+				if ($(event.target).closest(".qbtn, .info_box_smart").length)
 				return;
-				$('.select_dd_popup').hide();
+				$('.info_box_smart').hide();
 				event.stopPropagation();
 			});
+
+       
         $('.check',$('.selp')).removeClass('active');
         $('.selp').css('border', '1px solid #ccc');
         
@@ -372,7 +381,47 @@
         }
         
         
+        $('.selp span.check.active').parent().parent().parent().addClass('act');
+        
+       
+        
     }
+    
+    function search_smartpost() {
+     
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+           
+           $('.start-search-smartpost').html('Поиск...');
+           
+           var country = 'FI';
+           
+           if ($('#Address_country').val() == 62) {
+               
+               country = 'EE';
+               
+            }
+           
+           $('.box_smartpost').html('');
+           $('.sel_smartpost').html('');
+           $('.box_smartpost').hide(); 
+            
+            $.post('<?=Yii::app()->createUrl('cart')?>loadsp2/', { ind : $('.smartpost_index').val(), YII_CSRF_TOKEN: csrf[1], country : country }, function(data) {
+                
+                if (data) {
+                
+                $('.box_smartpost').show();
+                
+                $('.box_smartpost').html(data);
+            } else {
+                $('.box_smartpost').html('');
+               $('.box_smartpost').hide(); 
+        }
+        
+        $('.start-search-smartpost').html('Найти');
+    });
+     
+    }
+    
     
     function  show_all() {
         
@@ -421,21 +470,37 @@
         
         var frmall = frm1+'&'+frm2;
         
-        var error = false;
+        var error = 0;
         
         $('.texterror', $('#Address_receiver_last_name').parent()).html('Заполните это поле');
         
-        if (!$('#Address_receiver_last_name').val()) { $('#Address_receiver_last_name').addClass('error'); error = true; $('.texterror', $('#Address_receiver_last_name').parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name').removeClass('error'); error = false;$('.texterror', $('#Address_receiver_last_name').parent()).html(''); }
-        if (!$('#Address_receiver_first_name').val()) { $('#Address_receiver_first_name').addClass('error'); error = true; $('.texterror', $('#Address_receiver_first_name').parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name').removeClass('error'); error = false; $('.texterror', $('#Address_receiver_first_name').parent()).html('');}
-        if (!$('#Address_country').val()) { $('#Address_country').addClass('error'); error = true; $('.texterror', $('#Address_country').parent()).html('Заполните это поле');} else {  $('#Address_country').removeClass('error'); error = false; $('.texterror', $('#Address_country').parent()).html(''); }
-        if (!$('#Address_city').val()) { $('#Address_city').addClass('error'); error = true; $('.texterror', $('#Address_city').parent()).html('Заполните это поле');} else {  $('#Address_city').removeClass('error'); error = false; $('.texterror', $('#Address_city').parent()).html('');}
-        if (!$('#Address_postindex').val()) { $('#Address_postindex').addClass('error'); error = true; $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');} else {  $('#Address_postindex').removeClass('error'); error = false; $('.texterror', $('#Address_postindex').parent()).html('');}
-        if (!$('#Address_streetaddress').val()) { $('#Address_streetaddress').addClass('error'); error = true; $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');} else {  $('#Address_streetaddress').removeClass('error'); error = false; $('.texterror', $('#Address_streetaddress').parent()).html('');}
-        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = true; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else {  $('#Address_contact_email').removeClass('error'); error = false; $('.texterror', $('#Address_contact_email').parent()).html('');}
-        if (!$('#Address_contact_phone').val()) { $('#Address_contact_phone').addClass('error'); error = true; $('.texterror', $('#Address_contact_phone').parent()).html('Заполните это поле');} else {  $('#Address_contact_phone').removeClass('error'); error = false; $('.texterror', $('#Address_contact_phone').parent()).html('');}
+        if (!$('#Address_receiver_last_name').val()) { $('#Address_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_last_name').parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name').removeClass('error'); $('.texterror', $('#Address_receiver_last_name').parent()).html(''); }
+        
+        if (error < 0) { error = 0; }
         
         
-        if (error) {
+        if (!$('#Address_receiver_first_name').val()) { $('#Address_receiver_first_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name').parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name').removeClass('error');  $('.texterror', $('#Address_receiver_first_name').parent()).html('');}
+        
+        if (!$('#Address_country').val()) { $('#Address_country').addClass('error'); error = error + 1; $('.texterror', $('#Address_country').parent()).html('Заполните это поле');} else {  $('#Address_country').removeClass('error');  $('.texterror', $('#Address_country').parent()).html(''); }
+        
+        if (!$('#Address_city').val()) { $('#Address_city').addClass('error'); error = error + 1; $('.texterror', $('#Address_city').parent()).html('Заполните это поле');} else {  $('#Address_city').removeClass('error');  $('.texterror', $('#Address_city').parent()).html('');}
+        if (!$('#Address_postindex').val()) { $('#Address_postindex').addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');} else {  $('#Address_postindex').removeClass('error');  $('.texterror', $('#Address_postindex').parent()).html('');}
+        if (!$('#Address_streetaddress').val()) { $('#Address_streetaddress').addClass('error'); error = error + 1; $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');} else {  $('#Address_streetaddress').removeClass('error');  $('.texterror', $('#Address_streetaddress').parent()).html('');}
+        
+        var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+        
+        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else if(pattern.test($('#Address_contact_email').val())){  $('#Address_contact_email').removeClass('error');  $('.texterror', $('#Address_contact_email').parent()).html('');} else {
+         
+         $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Неверно введен E-mail адрес');
+            
+        }
+        
+        
+        
+        if (!$('#Address_contact_phone').val()) { $('#Address_contact_phone').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone').parent()).html('Заполните это поле');} else {  $('#Address_contact_phone').removeClass('error');  $('.texterror', $('#Address_contact_phone').parent()).html('');}
+        
+        
+        if (error > 0) {
          
             $('input.error').slice(0,1).focus();
          
@@ -447,13 +512,12 @@
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
             
             if ($('.delivery_box_sp .rows_checkbox_delivery input').is(':checked') == false) {
-                
-                
-             $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
-             error = true;
+                $('.delivery_box_sp .texterror').css('display', 'inline-block');
+                $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
+                error = error + 1;
             } else {
                 $('.delivery_box_sp .texterror').html('');
-                error = false;
+                $('.delivery_box_sp .texterror').css('display', 'none');
             }
          
         }
@@ -461,27 +525,22 @@
         
         if ($('#dtype2').parent().hasClass('act')) {
             
-            
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
             
             if ($('.delivery_box .rows_checkbox_delivery input').is(':checked') == false) {
                 
+            $('.delivery_box .texterror').css('display', 'inline-block');    
                 
              $('.delivery_box .texterror').html('Выберите тариф доставки');
-             error = true;
+             error = error + 1;
             } else {
                 $('.delivery_box .texterror').html('');
-                error = false;
+                $('.delivery_box .texterror').css('display', 'none');
             }
          
         }
         
-        
-        
-        
-       
-        
-        if (!error) {
+        if (error == 0) {
         
         //alert(frmall);
         
@@ -548,8 +607,9 @@
         
         $cart = $cart->GetCart($this->uid, $this->sid);
         
-       //var_dump($cart);
-       
+        echo '<pre>';
+            var_dump($cart);
+        echo '</pre>';
         $cartInfo = '';
         $fullprice = 0;
         $fullweight = 0;
@@ -557,11 +617,27 @@
         $full_count = 0;
         $cartInfo['items'] = array();
         
+        //var_dump($cart);
+        
         foreach ($cart as $item) {
             
             $cartInfo['items'][$item['id']]['title'] = $PH->GetTitle($item);
             $cartInfo['items'][$item['id']]['weight'] = $item['InCartUnitWeight'];
             
+            
+            if ($item['entity'] == 30) {
+                
+                if ($item['type'] == '1') { //фины
+                    
+                    $price = $item['quantity'] * $item['sub_fin_month'];
+                    
+                } else {
+                    
+                    $price = $item['quantity'] * $item['sub_world_month'];
+                    
+                }
+            
+            } else {
             
             if ($item['discount'] == '' OR $item['discount'] == '0.00')            {
             
@@ -573,11 +649,26 @@
                 
             }
             
+            }
+            
             $fullweight += $item['InCartUnitWeight'];
-            $fullprice += $price * $item['quantity'];
-            $full_count += $item['quantity'];
+            
+            
             $cartInfo['items'][$item['id']]['price'] = $price;
-            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
+            if ($item['entity'] == 30) {
+                
+                 $item['quantity'] = 1;
+                 $fullprice += $price;
+                 $cartInfo['items'][$item['id']]['quantity'] = 1;
+            
+            } else {
+                $fullprice += $price * $item['quantity'];
+                $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
+                
+            }
+            
+            $full_count += $item['quantity'];
+            
             
         }
         
@@ -611,6 +702,14 @@
         <div class="cart_footer footer3" style="width: 553px;">
             Итоговая стоимость: <span class="itogo_cost"><?=$PH->FormatPrice($fullprice);?></span>
         </div>
+    <div class="clearfix"></div>
+    
+    <div style="float: right; width: 575px; margin-bottom: 10px;">
+        При нажатие кнопки "Оформить" Вам будет отправлено письмо с учётными данными для входа в личный кабинет Руслании и Вы будете зарегистрированы в нашей системе.
+    </div>
+    
+    
+    
     <div class="clearfix"></div>
         <a href="javascript:;" class="order_start disabled" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
     
