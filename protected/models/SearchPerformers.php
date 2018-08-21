@@ -28,15 +28,16 @@ class SearchPerformers {
 		$entityParam = Entity::GetEntitiesList()[$entity];
 		$tableItems = $entityParam['site_table'];
 		$tableItemsPerformers = $entityParam['performer_table'];
-		$tablePerformers = $entityParam['performer_table_list'];
+		$tablePerformers = 'all_authorslist';
 		$fieldIdItem = $entityParam['performer_field'];
 
 		$sql = ''.
 			'select sql_calc_found_rows t.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePerformers . ' t '.
-				'join ' . $tableItemsPerformers . ' tIA on (tIA.performer_id = t.id) '.
-				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
-			'group by t.id '.
+//				'join ' . $tableItemsPerformers . ' tIA on (tIA.performer_id = t.id) '.
+//				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
+			'where (t.is_' . $entity . '_performer = 1) '.
+//			'group by t.id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 			'';
@@ -118,8 +119,9 @@ class SearchPerformers {
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
         $tbl_performers = $entities[$entity]['performer_table'];
-        $tbl_performers_list = $entities[$entity]['performer_table_list'];
         $tbl_person = 'all_authorslist';
+
+        $filter_data = FilterHelper::getFiltersData($entity, $cid);
 
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
             LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
@@ -129,7 +131,7 @@ class SearchPerformers {
                     WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
                     LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
                     LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
-                    WHERE t.avail_for_order=1 AND (t.`code`=:code OR t.`subcode`=:code)
+                    WHERE t.avail_for_order='.$filter_data['avail'].' AND (t.`code`=:code OR t.`subcode`=:code)
                     GROUP BY ta.id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
         } else {
@@ -138,7 +140,7 @@ class SearchPerformers {
                     WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
                     LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
                     LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
-                    WHERE t.avail_for_order=1
+                    WHERE t.avail_for_order='.$filter_data['avail'].'
                     GROUP BY ta.id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
         }

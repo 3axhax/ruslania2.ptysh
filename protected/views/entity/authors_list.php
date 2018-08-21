@@ -127,9 +127,10 @@
                     <?php elseif(!$lineRu&&preg_match("/[а-я]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
                         <br>
                     <?php endif; ?>
-                    <a class="<?=(($item['first_'.$lang] == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
-                        array('entity' => Entity::GetUrlKey($entity), 'char' => $item['first_'.$lang])); ?>"
-                       ><?=$item['first_'.$lang]; ?></a>
+                    <a class="<?=(($item['first_'.$lang] == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl(
+                        $route,
+                        array('entity' => Entity::GetUrlKey($entity), 'char' => $item['first_'.$lang])
+                    ); ?>"><?=$item['first_'.$lang]; ?></a>
                 <?php endforeach; ?>
             </div>
 			<?php if ($_GET['char'] != ''):?>
