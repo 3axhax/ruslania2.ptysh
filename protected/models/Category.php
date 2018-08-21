@@ -215,6 +215,33 @@ class Category {
         return $rows;
     }
 
+    public function getPeriodicCountry($entity, $cid)
+    {
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+
+        $sql = 'SELECT pc.* FROM `pereodics_countries` AS pc, `' . $tbl . '` AS t WHERE t.country = pc.id';
+
+        if ($cid) {
+
+            $sql .= ' AND (t.code = ' . $cid . ' OR t.subcode = ' . $cid . ')';
+
+        }
+
+        $lang = 'ru';
+        if (isset(Yii::app()->language)) $lang=Yii::app()->language;
+        $sql .= ' GROUP BY pc.title_'.$lang.' ORDER BY pc.id ASC';
+
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+        $ids = array();
+        foreach ($rows as $row) $ids[] = $row['id'];
+        HrefTitles::get()->getByIds($entity, 'entity/bysubtitle', $ids);
+
+        return $rows;
+    }
+
     public function getFilterBinding($entity, $cid) {
         $cid = (int) $cid;
 //        if (!Entity::checkEntityParam($entity, 'binding')) return array();
@@ -699,6 +726,7 @@ class Category {
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
         '';
+        $test = FilterHelper::getFiltersData($entity, $cid);
         return (int) Yii::app()->db->createCommand($sql)->queryScalar();
     }
 

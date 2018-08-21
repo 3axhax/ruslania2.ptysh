@@ -153,14 +153,9 @@ class EntityController extends MyController {
 		}
 
         $lang = Yii::app()->getRequest()->getParam('lang');
-        /*$data = FilterHelper::getFiltersData($entity, $cid);
-        $data['lang_sel'] = $lang;
-        $filter_data = $data;*/
 
 		$data = FilterHelper::getFiltersData($entity, $cid);
         if (isset($data) && !empty($data)) {
-            FilterHelper::setOneFiltersData($entity, $cid,'lang_sel', $lang);
-            $data['lang_sel'] = $lang;
             $cat = new Category();
             $totalItems = $cat->count_filter($entity, $cid, $data);
             $paginatorInfo = new CPagination($totalItems);
@@ -370,7 +365,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'seria', $sid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -473,7 +467,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'publisher', $pid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
@@ -580,7 +573,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'author', $aid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
 		$this->render('list', array('entity' => $entity,
@@ -681,7 +673,7 @@ class EntityController extends MyController {
         $list = (new Binding())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Binding');
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
 
         $this->render('bindings_list', array('list' => $list, 'entity' => $entity));
     }
@@ -865,10 +857,13 @@ class EntityController extends MyController {
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('READ_BY'), ProductHelper::GetTitle($performer));
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
             'items' => $items, 'authorInfo' => $performerInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 
@@ -1055,8 +1050,8 @@ class EntityController extends MyController {
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[Yii::app()->ui->item('Binding')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Binding') . ': ' . ProductHelper::GetTitle($bData);
+        $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPOGRAPHY')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY') . ': ' . ProductHelper::GetTitle($bData);
 
         $totalItems = $binding->GetTotalItems($entity, $bid, $avail);
         $paginatorInfo = new CPagination($totalItems);
@@ -1068,7 +1063,6 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity);
         FilterHelper::deleteEntityFilter($entity);
-        FilterHelper::setOneFiltersData($entity, 0, 'binding_id', $bid);
         $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array(

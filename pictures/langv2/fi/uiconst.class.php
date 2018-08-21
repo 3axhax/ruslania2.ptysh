@@ -1,6 +1,7 @@
 <?php
 // FILE: language constants, generated from D:\DATA\Internet\Constants\Constants_Unicode.xls at 31.5.2016 13:24:22
 return array(
+    'RUSLANIA'=>'Ruslania',
 '1_MONTH_FOR_FINLAND' => 'Kuukauden tilaus Suomeen', 
 '1_MONTH_FOR_WORLD' => 'Kuukauden tilaus muihin maihin', 
 '1_YEAR_FOR_FINLAND' => 'Vuoden tilaus', 
@@ -316,8 +317,8 @@ return array(
 'MSG_CART_ERROR_EMPTY' => '<b>Ostoskorisi on tyhjä. </b><br>Saadaksesi valitun tuotteen ostoskoriisi paina "Lisää ostoskoriin" -nappia tuotteen kuvauksen oikealta puolelta luettelosta.', 
 'MSG_CART_LATER_ERROR_EMPTY' => '<b>Ei merkittyjä kiinnostavia tuotteita.</b><br>Jos haluat siirtää tuotteen korista kiinnostaviin tuotteisiin, laita merkki tuotteen kohdalle "Lisää kiinnostaviin" ruutuun ja paina "Päivitä kori". Voit myös jättää seurantapyynnön tuotteesta, jota tällä hetkellä ei ole varastossa, painamalla "Ilmoita kun saatavana" (tuotteen kuvauksen oikealla puolella) ja me ilmoitamme, kun tuote on taas saatavana.', 
 'MSG_CART_ORDER_ERROR_EMPTY' => '<b>Ei saatavuuden seurantapyyntöjä.</b><br>Jos haluat, jotta ilmoittaisimme, kun tuote on taas saatavana, paina "Ilmoita kun saatavana" (tuotteen kuvauksen oikealla puolella). <br><br>Kun olet lisännyt luetteloon kaikki Sinua kiinnostavat tuotteet, joilla sillä hetkellä ei ole varastossa, paina "Seuraa saatavuutta" (yllä). Ruslania lähettää sinulle sähköposti-ilmoituksen tuotteen saapumisesta. Ota huomioon, että tuotteen hinta ja ulkonäkö voivat muuttua.   ', 
-'MSG_CATALOG_NOTHING_WAS_FOUND1' => 'Hakemaasi tietoa ei enää ole sivustossamme <br>', 
-'MSG_CATALOG_NOTHING_WAS_FOUND2' => 'Ole hyvä ja avaa <a href="%s" class=cprop>pääsivumme</a> ja aloita haku sieltä.', 
+'MSG_CATALOG_NOTHING_WAS_FOUND1' => 'Se voi johtua siitä, että sivu on siirretty tai sitä ei enää ole olemassa. Käytä hakua tai selaa kirjoja aihealueittain löytääksesi etsimäsi.<br /><br /><a href="/">Siirry Ruslania-verkkokirjakaupan aloitussivulle</a><br /><br />Etkö löytänyt etsimääsi? Vastaamme mielellämme kysymyksiisi! Ota yhteyttä <a href="tel:09 2727070">09 2727070</a> tai <a href="mailto:asiakaspalvelu@ruslania.com">asiakaspalvelu@ruslania.com</a>', 
+'MSG_CATALOG_NOTHING_WAS_FOUND2' => '', 
 'MSG_CHOOSE_DELIVERY_TYPE' => 'Valitse toimitustapa:', 
 'MSG_CHOOSE_DELIVERY_TYPE_COMMENT' => '(Tilauksesi kokonaissumma lasketaan automaattisesti)', 
 'MSG_CHOOSE_PAYMENT_TYPE' => 'Valitse maksutapa:', 
@@ -341,7 +342,7 @@ return array(
 'MSG_MUSIC_NOTE' => 'Hyvä asiakas! Kaikki hinnat www-sivuillamme sisältävät arvonlisäveron (Alv.), joka on voimassa EU:n alueella. <br>Jos olette EU:n ulkopuolelta, rekisteröidyttyänne näette hinnat ilman arvonlisäveroa.', 
 'MSG_NO' => 'Ei', 
 'MSG_NO_DATA' => 'Ei tietoja', 
-'MSG_NO_ITEMS' => 'Tässä luokassa ei tuotteita', 
+'MSG_NO_ITEMS' => 'Sivun lataamisessa tapahtui virhe', 
 'MSG_NON_ASCII_DETECTED_ERROR' => 'Ainoastaan latinalaisia kirjaimia tekstikenttiin', 
 'MSG_ORDER_MIN_SUMM' => 'Minimitilaus %s.', 
 'MSG_ORDER_PRINT_COL_ITEM_DATE' => 'PVM', 
@@ -1038,6 +1039,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
 'A_NEW_FILTER_PRE_SALE_1' => 'Все',
 'A_NEW_FILTER_PRE_SALE_2' => 'В предварительной продаже',
 'A_NEW_FILTER_PRE_SALE_3' => 'Кроме предварительной продажи',
+'A_NEW_FILTER_PERIODIC_COUNTRY' => 'Страна происхождения',
 'A_NEW_PAGE_NEXT' => 'Далее',
 'A_NEW_PAGE_PREV' => 'Назад',
 'A_NEW_TYPE_IZD' => 'Тип издания',

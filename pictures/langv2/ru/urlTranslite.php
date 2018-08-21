@@ -20,7 +20,7 @@ return array(
 			'publishers'=>'izdatelstva',
 			'series'=>'serii',
 			'authors'=>'avtory',
-			'bindings'=>'ispolnenie',
+			'bindings'=>'oformlenie',
 			'years'=>'goda',
 		),
 	),
@@ -59,14 +59,14 @@ return array(
 			'categories'=>'kategorii',
 			'actors'=>'aktery',
 			'directors'=>'rezhissery',
-			'audiostreams'=>'zvukovye-dorojki',
+			'audiostreams'=>'zvukovye-dorozhki',
 			'subtitles'=>'jazyki-titrov',
 			'media'=>'tip-nositelja',
 			'years'=>'goda',
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'suveniry',
+		'level_1'=>'prochee',
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'publishers'=>'proizvoditeli',
@@ -78,7 +78,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'publishers'=>'izdatelstva',
-			'bindings'=>'ispolnenie',
+			'bindings'=>'oformlenie',
 			'years'=>'goda',
 		),
 	),
@@ -98,10 +98,22 @@ return array(
 	'ourstore'=>'nash-magazin',
 	'csr'=>'otvetstvennost',
 	'offers_partners'=>'specialnye-predlojenija-dlja-dillerov',
-	'thawte'=>'informacija-o-thawte',
+//	'thawte'=>'informacija-o-thawte',
 	'safety'=>'informacija-o-bezopasnosti-platezhej',
 	'zone_info'=>'zona-5',
 	'paypal'=>'chto-takoe-paypal',
 	'sitemap'=>'karta-sajta',
-//	''=>'akkaunt',
+	'me'=>'akkaunt',
+	'advsearch'=>'poisk',
+
+
+	'offers'=>'rekomendatsii',
+	'for-firms'=>'specialnye-predlozhenija-dlja-firm',
+	'for-lib'=>'specialnye-predlozhenija-dlja-bibliotek',
+	'for-uni'=>'specialnye-predlozhenija-dlja-prepodavatelej',
+	'for-fs'=>'specialnye-predlozhenija-bez-pochtovyh-rashodov',
+	'for-alle2'=>'specialnye-predlozhenija-za-dva-evro',
+
+	'bookshelf'=>'knizhnaja-polka',
+
 );
