@@ -11,7 +11,7 @@ ini_set('max_execution_time', 3600);
  *
  *
  *
- * Class RepairAuthorsCommand
+ * Class OldPagesCommand
  */
 define('OLD_PAGES', 1);
 
@@ -36,6 +36,9 @@ class OldPagesCommand extends CConsoleCommand {
 			$this->_categoryPages($entity, $params, $pdo);
 			$this->_tagPages($entity, $params, $pdo);
 		}
+		$this->_staticPages($pdo);
+		$this->_offerPages($pdo);
+		$this->_bookshelfPages($pdo);
 		echo 'end ' . date('d.m.Y H:i:s') . "\n\n";
 
 	}
@@ -104,12 +107,6 @@ class OldPagesCommand extends CConsoleCommand {
 			echo $params['site_table'] . ' ' . (($step-1)*$this->_counts + $itemCounts) . "\n";
 //			if ($itemCounts < $this->_counts) break;
 		}
-		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
-		//books/1/russian-english-microbiological-dictionary-explanations-in-russian
-		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovaniyami-na-russkom-yazyke
-		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovaniyami-na-russkom-yazyke
-		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovanijami-na-russkom-jazyke
-		//books/1/russko-anglijskij-slovar-terminov-po-mikrobiologii-s-tolkovanijami-na-russkom-jazyke
 	}
 
 	private function _tagPages($entity, $params, CDbCommand $pdo) {
@@ -122,6 +119,101 @@ class OldPagesCommand extends CConsoleCommand {
 			}
 		}
 
+	}
+
+	private function _bookshelfPages(CDbCommand $pdo) {
+		$insertParams = array(
+			':entity'=>0,
+			':route'=>'bookshelf/list',
+			':id'=>0,
+			':path'=>Yii::app()->createUrl('bookshelf/list'),
+			':lang'=>'ru',
+		);
+		$pdo->getPdoStatement()->execute($insertParams);
+		$items = $this->_query($this->_sqlBookshelf());
+		foreach ($items as $item) {
+			$insertParams = array(
+				':entity'=>0,
+				':route'=>'bookshelf/view',
+				':id'=>$item['id'],
+				':path'=>Yii::app()->createUrl('bookshelf/view', array('id'=>$item['id'])),
+				':lang'=>'ru',
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+		echo "bookshelf\n";
+	}
+
+	private function _offerPages(CDbCommand $pdo) {
+		$insertParams = array(
+			':entity'=>0,
+			':route'=>'offers/list',
+			':id'=>0,
+			':path'=>Yii::app()->createUrl('offers/list'),
+			':lang'=>'ru',
+		);
+		$pdo->getPdoStatement()->execute($insertParams);
+
+		$const = array(
+			Offer::FIRMS => 'firms',
+			Offer::LIBRARY => 'lib',
+			Offer::UNI => 'uni',
+			Offer::FREE_SHIPPING => 'fs',
+			Offer::ALLE_2_EURO => 'alle2',
+		);
+
+		foreach ($const as $id=>$name) {
+			$insertParams = array(
+				':entity'=>0,
+				':route'=>'offers/special',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('offers/special', array('mode' => $const[$id])),
+				':lang'=>'ru',
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+
+		$langs = array('ru', 'en', 'fi');
+		$items = $this->_query($this->_sqlOffers());
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$insertParams = array(
+					':entity'=>0,
+					':route'=>'offers/view',
+					':id'=>$item['id'],
+					':path'=>Yii::app()->createUrl('offers/view', array('oid'=>$item['id'], 'title'=>ProductHelper::ToAscii($item['title_' . $lang]))),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo "offers\n";
+	}
+
+	private function _staticPages(CDbCommand $pdo) {
+		foreach (StaticUrlRule::getTitles() as $pageName=>$name) {
+			$insertParams = array(
+				':entity'=>0,
+				':route'=>'site/static',
+				':id'=>0,
+				':path'=>Yii::app()->createUrl('site/static', array('page'=>$pageName)),
+				':lang'=>'ru',
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+		$smapHtml = new Sitemap();
+		foreach ($smapHtml->getStaticPages() as $pageName=>$param) {
+			$insertParams = array(
+				':entity'=>0,
+				':route'=>$param['route'],
+				':id'=>0,
+				':path'=>Yii::app()->createUrl($param['route']),
+				':lang'=>'ru',
+			);
+			$pdo->getPdoStatement()->execute($insertParams);
+		}
+		echo "static\n";
 	}
 
 	private function _query($sql, $params = null) {
@@ -143,6 +235,23 @@ class OldPagesCommand extends CConsoleCommand {
 				'order by tI.id '.
 				'limit ' . $this->_counts*$step . ', ' . $this->_counts . ''.
 			') tId using (id) '.
+		'';
+	}
+
+	private function _sqlBookshelf() {
+		return ''.
+			'select t.bookshelf_id id, t.title '.
+			'from `bookshelf` t ' .
+			'where (t.is_visible = 1) '.
+		'';
+	}
+
+	private function _sqlOffers() {
+		return ''.
+			'select t.id, t.title_ru, title_en, title_fi '.
+			'from `offers` t ' .
+			'where (t.is_active = 1) '.
+				'and (t.is_special = 0) '.
 		'';
 	}
 

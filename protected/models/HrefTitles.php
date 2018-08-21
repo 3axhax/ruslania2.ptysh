@@ -101,6 +101,7 @@ class HrefTitles {
 	 */
 	function getTable($entity, $route) {
 		switch ($route) {
+			case 'offers/view': return 'offers'; break;
 			case 'product/view': return Entity::GetEntitiesList()[$entity]['site_table']; break;
 			case 'entity/list': return Entity::GetEntitiesList()[$entity]['site_category_table']; break;
 			case 'entity/bypublisher': return 'all_publishers'; break;
@@ -127,6 +128,7 @@ class HrefTitles {
 	 */
 	function getLangs($entity, $route) {
 		switch ($route) {
+			case 'offers/view': return array('ru', 'en', 'fi',); break;
 			case 'product/view': return array('ru', 'rut', 'en', 'fi'); break;
 			case 'entity/list': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'es', 'se'); break;
 			case 'entity/bypublisher': return array('ru', 'en'); break;
@@ -212,7 +214,7 @@ class HrefTitles {
 	}
 
 	function redirectOldPage($url) {
-		if (!$this->isTitleRoute($url)) return;
+//		if (!$this->isTitleRoute($url)) return;
 
 		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
 		$sql = ''.
@@ -223,7 +225,59 @@ class HrefTitles {
 		'';
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
 		if (!empty($row)) {
-			if (empty($row['id'])&&!empty($row['entity'])) {
+			if (empty($row['id'])&&empty($row['entity'])) {
+				switch ($row['route']) {
+					case 'site/static':
+						$urlParams = array(
+							'page'=>mb_substr($url, 1, null, 'utf-8'),
+							'__langForUrl'=>$row['lang'],
+						);
+						$url = Yii::app()->createUrl($row['route'], $urlParams);
+						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+						break;
+					case 'offers/special':
+						$urlParams = array(
+							'mode'=>mb_substr($url, 5, null, 'utf-8'),
+							'__langForUrl'=>$row['lang'],
+						);
+						$url = Yii::app()->createUrl($row['route'], $urlParams);
+						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+						break;
+					default:
+						$urlParams = array(
+							'__langForUrl'=>$row['lang'],
+						);
+						$url = Yii::app()->createUrl($row['route'], $urlParams);
+						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+						break;
+				}
+			}
+			elseif (empty($row['entity'])&&!empty($row['id'])) {
+				switch ($row['route']) {
+					case 'offers/view':
+						$titles = $this->getById(0, $row['route'], $row['id']);
+						if (!empty($titles)) {
+							$title = isset($titles[$row['lang']])?$titles[$row['lang']]:$titles['en'];
+							$urlParams = array(
+								'oid'=>$row['id'],
+								'title'=>$title,
+								'__langForUrl'=>$row['lang'],
+							);
+							$url = Yii::app()->createUrl($row['route'], $urlParams);
+							if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+						}
+						break;
+					default:
+						$urlParams = array(
+							'id'=>$row['id'],
+							'__langForUrl'=>$row['lang'],
+						);
+						$url = Yii::app()->createUrl($row['route'], $urlParams);
+						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
+						break;
+				}
+			}
+			elseif (empty($row['id'])&&!empty($row['entity'])) {
 				$urlParams = array(
 					'entity'=>Entity::GetUrlKey($row['entity']),
 					'__langForUrl'=>$row['lang'],

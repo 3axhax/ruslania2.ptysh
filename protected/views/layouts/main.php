@@ -882,7 +882,7 @@ else $act = array('', '');
                             <div class="pult">
 
                                 <ul>
-                                    <li class="sm"><a href="/advsearch<? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+                                    <li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
                                     <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
                                     <?php /*
                                       <li class="chb">
@@ -1392,10 +1392,10 @@ else $act = array('', '');
                             </div>
                         </li>
 
-                        <li class="yellow_item"><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'for-alle2')); ?>"><?= $ui->item('A_NEW_GOODS_2'); ?></a></li>
+                        <li class="yellow_item"><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'alle2')); ?>"><?= $ui->item('A_NEW_GOODS_2'); ?></a></li>
                         <li class="red_item"><a href="<?= Yii::app()->createUrl('offers/list'); ?>"><?= $ui->item('A_NEW_MENU_REK'); ?></a></li>
                         <li class="red_item"><a href="<?= Yii::app()->createUrl('site/sale'); ?>"><?= $ui->item('A_NEW_DISCONT'); ?></a></li>
-                        <li><a href="<?= Yii::app()->createUrl('ourstore'); ?>" class="home"><?= $ui->item('A_NEW_OURSTORE'); ?></a></li>
+                        <li><a href="<?= Yii::app()->createUrl('site/static', array('page'=>'ourstore')); ?>" class="home"><?= $ui->item('A_NEW_OURSTORE'); ?></a></li>
                     </ul>
                 </div>
 

@@ -22,7 +22,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
-		'advsearch' => 'Advanced search',
+		'sitemap' => 'A_SITEMAP',
 	);
 
 	static function getTitles() { return self::$_files; }
@@ -32,7 +32,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
 		$this->_language = $language;
 
-		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].Yii::app()->language.'/urlTranslite.php';
+		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$language.'/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {
 				if ($entityId = Entity::ParseFromString($entityStr)) {}
@@ -50,6 +50,7 @@ class StaticUrlRule extends CBaseUrlRule {
 			&& (mb_strpos($route, 'bookshelf/', null, 'utf-8') === false)
 			&& (mb_strpos($route, 'offers/', null, 'utf-8') === false)
 			&& (mb_strpos($route, 'client/', null, 'utf-8') === false)
+			&& (mb_strpos($route, 'cart/', null, 'utf-8') === false)//
 		) return false;
 
 		$prefix = array();
@@ -80,18 +81,25 @@ class StaticUrlRule extends CBaseUrlRule {
 					$url = $this->_pages['for-' . $params['mode']] . '/';
 				unset($params['mode']);
 				break;
+			case 'offers/list':
+				if (isset($this->_pages['offers']))
+					$url = $this->_pages['offers'] . '/';
+				break;
 			case 'site/static':
 				if (!empty($params['page'])
 					&&isset(self::$_files[$params['page']])
 					&&isset($this->_pages[$params['page']])
-				) {
+				)
 					$url = $this->_pages[$params['page']] . '/';
-					unset($params['page']);
-				}
+				unset($params['page']);
 				break;
 			case 'client/me':
 				if (isset($this->_pages['me']))
 					$url = $this->_pages['me'] . '/';
+				break;
+			case 'cart/view':
+				if (isset($this->_pages['cart']))
+					$url = $this->_pages['cart'] . '/';
 				break;
 			default:
 				$actions = explode('/', $route);
@@ -126,6 +134,8 @@ class StaticUrlRule extends CBaseUrlRule {
 			}
 			elseif ($page == 'bookshelf') return 'bookshelf/list';
 			elseif ($page == 'me') return 'client/me';
+			elseif ($page == 'cart') return 'cart/view';
+			elseif ($page == 'offers') return 'offers/list';
 			//
 			else {
 				switch ($page) {

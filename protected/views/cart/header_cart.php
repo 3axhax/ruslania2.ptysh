@@ -63,7 +63,7 @@
 					
 					<div class="b-basket-list__bottom">
                                 <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+(CartItems().length-3)+' <?=$ui->item('A_NEW_CART_MORE_ORDER2')?> ', visible: CartItems().length > 3"></a></div>
-                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
+                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
                             </div>
 

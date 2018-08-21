@@ -37,7 +37,7 @@ class Sitemap {
 	);
 
 	private $_staticPages = array(
-		'conditions' => 'MSG_CONDITIONS_OF_USE',
+/*		'conditions' => 'MSG_CONDITIONS_OF_USE',
 		'conditions_order' => 'YM_CONTEXT_CONDITIONS_ORDER_ALL',
 		'conditions_subscription' => 'YM_CONTEXT_CONDITIONS_ORDER_PRD',
 		'contact' => 'YM_CONTEXT_CONTACTUS',
@@ -54,7 +54,6 @@ class Sitemap {
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
 		'sitemap' => 'A_SITEMAP',
-		'advsearch' => 'A_ADVANCED_SEARCH',
 //		'aboutus'=>'A_ABOUTUS',
 //		'csr'=>'A_CSR',
 //		'conditions'=>'MSG_CONDITIONS_OF_USE',
@@ -64,8 +63,18 @@ class Sitemap {
 //		'legal_notice'=>'YM_CONTEXT_LEGAL_NOTICE',
 //		'faq'=>'A_FAQ',
 //		'sitemap'=>'A_SITEMAP',
-//		'offers_partners'=>'A_OFFERS',
+//		'offers_partners'=>'A_OFFERS',*/
+		'sale'=>array('route'=>'site/sale', 'name'=>'MENU_SALE'),
+		'register'=>array('route'=>'site/register', 'name'=>'A_LEFT_PERSONAL_REGISTRATION'),
+		'login'=>array('route'=>'site/login', 'name'=>'YM_CONTEXT_PERSONAL_LOGIN'),
+		'cart'=>array('route'=>'cart/view', 'name'=>'A_NEW_CART'),
+		'advsearch' => array('route'=>'site/advsearch', 'name'=>'A_ADVANCED_SEARCH'),
+		'me'=>array('route'=>'client/me', 'name'=>'YM_CONTEXT_PERSONAL_MAIN'),
 	);
+
+	function __construct() {
+
+	}
 
 	/**
 	 * @return array список основных страниц
@@ -101,10 +110,13 @@ class Sitemap {
 			$this->_putFile('<li><a href="' . Yii::app()->createUrl($param[2]) . '">' . Yii::app()->ui->item($param[1]) . '</a></li>');
 		}
 
-
-		foreach ($this->_staticPages as $pageName=>$name) {
+		foreach (StaticUrlRule::getTitles() as $pageName=>$name) {
 			$this->_log(Yii::app()->ui->item($name));
 			$this->_putFile('<li><a href="' . Yii::app()->createUrl('site/static', array('page'=>$pageName)) . '">' . Yii::app()->ui->item($name) . '</a></li>');
+		}
+		foreach ($this->_staticPages as $pageName=>$param) {
+			$this->_log(Yii::app()->ui->item($param['name']));
+			$this->_putFile('<li><a href="' . Yii::app()->createUrl($param['route']) . '">' . Yii::app()->ui->item($param['name']) . '</a></li>');
 		}
 
 		$this->_offers();

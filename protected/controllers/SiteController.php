@@ -115,7 +115,7 @@ class SiteController extends MyController {
         $this->_checkUrl(array('page' => $page));
 
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
-        if ($page == 'sitemap') $file = (new Sitemap)->builder();
+        if ($page == 'sitemap') $file = (new Sitemap)->builder(true);
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
@@ -1204,6 +1204,7 @@ class SiteController extends MyController {
                         }
                     }
                 }
+                Debug::staticRun(array($this->_otherLangPaths));
                 break;
             default:
                 $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage);
