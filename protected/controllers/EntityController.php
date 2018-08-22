@@ -209,7 +209,6 @@ class EntityController extends MyController {
                 'order by field(id, 2, 1, 3, 4) '.
             '';
             $types = Yii::app()->db->createCommand($sql)->queryAll();
-//            Debug::staticRun(array($types));
             foreach ($types as $i=>$type) {
                 $types[$i]['categories'] = $c->getPeriodicsCategoriesTree($type['id']);
                 if (empty($types[$i]['categories'])) unset($types[$i]);

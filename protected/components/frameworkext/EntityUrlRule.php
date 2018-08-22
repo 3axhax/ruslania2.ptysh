@@ -6,7 +6,7 @@ class EntityUrlRule extends CBaseUrlRule {
 	static private $_routes = array(
 		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',             'useTitle'=>true),
 		'entity/categorylist' =>    array('idName' => '',       'nameLevel2' => 'categories',),
-		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',),
+		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',   'useTitle'=>true),
 		'entity/publisherlist' =>   array('idName' => '',       'nameLevel2' => 'publishers',),
 		'entity/serieslist' =>      array('idName' => '',       'nameLevel2' => 'series',),
 		'entity/authorlist' =>      array('idName' => '',       'nameLevel2' => 'authors',),
@@ -45,6 +45,7 @@ class EntityUrlRule extends CBaseUrlRule {
 	function __construct($language = null) {
 		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
 		$this->_language = $language;
+
 		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'] . $this->_language . '/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {

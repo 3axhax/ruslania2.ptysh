@@ -11,7 +11,10 @@ class Debug extends CWidget {
 	}
 
 	function run() {
-		if (isset($_GET['ha'])) $this->render('debug', array('args'=>$this->_params, 'trace'=> debug_backtrace()));
+		if (isset($_GET['ha'])) {
+			$this->render('debug', array('args'=>$this->_params, 'trace'=> debug_backtrace()));
+			if (in_array('exit', $this->_params)) exit;
+		}
 	}
 
 	static function staticRun($properties=array()) {
