@@ -110,7 +110,7 @@ class HrefTitles {
 			case 'entity/bymedia': return 'all_media'; break;
 			case 'entity/byaudiostream': return 'video_audiostreamlist'; break;
 			case 'entity/bysubtitle': return 'video_creditslist'; break;
-//			case 'entity/bytype': return 'pereodics_types'; break;
+			case 'entity/bytype': return 'pereodics_types'; break;
 			case 'entity/bymagazinetype': return 'pereodics_types'; break;
 			case 'entity/byauthor':
 			case 'entity/byactor':
@@ -137,7 +137,7 @@ class HrefTitles {
 			case 'entity/bymedia': return array(); break;
 			case 'entity/byaudiostream': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
 			case 'entity/bysubtitle': return array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se'); break;
-//			case 'entity/bytype': return array('ru', 'rut', 'en', 'fi'); break;
+			case 'entity/bytype': return array('ru', 'rut', 'en', 'fi'); break;
 			case 'entity/bymagazinetype': return array('ru', 'rut', 'en', 'fi'); break;
 			case 'entity/byauthor':
 			case 'entity/byactor':

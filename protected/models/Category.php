@@ -96,7 +96,7 @@ class Category {
 
         return array($rows[0]['min_year'], $rows[0]['max_year'], $rows[0]['cost_min'], $rows[0]['cost_max']);*/
     }
-	
+
     function getYearExists($entity, $cid) {
 
 		if ((int)$entity === 30) return array();
@@ -116,20 +116,20 @@ class Category {
     }
 
 	public function getFilterLangs($entity, $cid) {
-		
+
 		/*$entities = Entity::GetEntitiesList();
 		$tbl = $entities[$entity]['site_table'];
-					
+
 		$sql = 'SELECT ln.id as lnid, ln.title_'.Yii::app()->language.' AS lntitle FROM `all_items_languages` AS ail, `languages` AS ln, `'.$tbl.'` AS t WHERE ln.id = ail.language_id AND ail.entity = '.$entity.' AND ail.item_id = t.id';
-					
+
 		if ($cid) {
-					
+
 			$sql .= ' AND (t.code = '.$cid.' OR t.subcode = '.$cid.')';
-					
+
 		}
-					
+
 		$sql .= ' GROUP BY ln.id ORDER BY ln.id ASC';
-					
+
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();	*/
 
         $cat = $this->GetByIds($entity, $cid);
@@ -137,11 +137,11 @@ class Category {
 		$langs = ProductLang::getLangItems($entity, $cat);
         $rows = array();
         foreach ($langs as $id=>$lang) $rows[] = array('lnid'=>$lang['id'], 'lntitle'=>$lang['title']);
-		
+
 		return $rows;
 
 	}
-	
+
 	public function getFilterLangsVideo($entity, $cid)
     {
 
@@ -353,12 +353,12 @@ class Category {
     public function getFilterSeries($entity, $cid, $page = 1, $lang='', $site_lang = '') {
         if ($entity == 60 OR $entity == 50 OR $entity == 30 OR $entity == 40 OR $entity == 20)
             return array();
-		
+
 		$sql = '';
 		if ($lang != '') {
-			
+
 			$sql = ' AND tc.id IN (SELECT item_id FROM `all_items_languages` WHERE language_id = '.$lang.' AND entity = '.$entity.')';
-			
+
 		}
 
         if ($page != 0) $limit = (($page - 1) * 50) . ',50';
@@ -368,13 +368,13 @@ class Category {
         //$tbl_binding = $entities[$entity]['binding_table'];
         if ($site_lang == '') $site_lang = 'ru';
         if ($cid > 0) {
-            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
-            WHERE (tc.`code`=:code OR tc.`subcode`=:code) 
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st
+            WHERE (tc.`code`=:code OR tc.`subcode`=:code)
             AND tc.avail_for_order=1 AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.
             (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st 
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi FROM ' . $tbl . ' as tc, '.$series_tbl.' as st
             WHERE tc.avail_for_order=1  AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.
                 (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
@@ -403,11 +403,11 @@ class Category {
         if ($page != 0) $limit = (($page - 1) * 50) . ',50';
 		$sql = '';
 		if ($lang!='') {
-			
+
 			$sql = ' AND bc.id IN (SELECT item_id FROM `all_items_languages` WHERE language_id = '.$lang.' AND entity = '.$entity.')';
-			
+
 		}
-		
+
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
         $tbl_author = $entities[$entity]['author_table'];
@@ -416,15 +416,15 @@ class Category {
         if (isset(Yii::app()->language)) $site_lang = Yii::app()->language;
 
         if ($cid > 0) {
-            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa
             WHERE (bc.`code`=:code OR bc.`subcode`=:code) AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
-            AND ba.author_id=aa.id 
+            AND ba.author_id=aa.id
             GROUP BY ba.author_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
+            $sql = 'SELECT ba.author_id, aa.title_ru, aa.title_rut, aa.title_en, aa.title_fi FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa
             WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$sql.'
-            AND ba.author_id=aa.id 
+            AND ba.author_id=aa.id
             GROUP BY ba.author_id '. (($page != 0) ? (' LIMIT ' . $limit) : '');
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
@@ -456,9 +456,9 @@ class Category {
         $field = $entities[$entity]['author_entity_field'];
 
         if ($lang == '') $lang = 'ru';
-        $sql = 'SELECT ba.author_id as id, aa.title_' . $lang . ' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa 
+        $sql = 'SELECT ba.author_id as id, aa.title_' . $lang . ' as title FROM ' . $tbl . ' as bc, ' . $tbl_author . ' as ba, all_authorslist as aa
             WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id' . $sql . '
-            AND ba.author_id=aa.id 
+            AND ba.author_id=aa.id
             GROUP BY ba.author_id ORDER BY aa.title_' . $lang;
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         $authors = [];
@@ -472,27 +472,27 @@ class Category {
 	public function get_count_categories_bread($id, $entity) {
 		$entities = Entity::GetEntitiesList();
 		$tbl = $entities[$entity]['site_table'];
-		
+
 		$sql = 'SELECT * FROM ' . $tbl . ' WHERE code<>"" AND subcode<>"" AND id='.$id;
-        
+
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		return $rows;
 	}
-	
+
 	public function getCatsBreadcrumbs2($entity, $code) {
-		
+
 		$entities = Entity::GetEntitiesList();
 		$tbl = $entities[$entity]['site_category_table'];
-		
+
 		$sql = 'SELECT * FROM ' . $tbl . ' WHERE id = '.$code;
-        
+
 		$rows = Yii::app()->db->createCommand($sql)->queryAll();
-		
+
 		if ($rows[0]['parent_id'] != '0') {
-			
+
 			$rows = array_merge($rows, self::getCatsBreadcrumbs2($entity, $rows[0]['parent_id']));
-			
+
 		}
 
 
@@ -501,20 +501,20 @@ class Category {
         HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
 		return $rows;
-		
+
 	}
-	
+
 	public function getCatsBreadcrumbs($entity, $code) {
         $arr = array();
 		if ($code) {
-			
+
 			$arr = self::getCatsBreadcrumbs2($entity, $code);
-			
+
 		}
-		
+
 		return array_reverse($arr);
 	}
-	
+
     public function result_filter($data = array(), $lang_sel='', $page = 0) {
 
         if (!$data OR count($data) == 0) {
@@ -573,24 +573,24 @@ class Category {
         }
 
 		if ($lang_sel != '') {
-			
+
 			$criteria->addCondition('t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$lang_sel.')');
-			
+
 		}
-		
+
         if ($author AND $author!='undefined' AND $tbl_author) {
-            
+
             $criteria->join .= ' LEFT JOIN '.$tbl_author.' as ba ON ba.'.$field.' = t.id';
-            
+
            $criteria->addCondition('ba.author_id=:aid');
-           $criteria->params[':aid'] = $author; 
+           $criteria->params[':aid'] = $author;
         }
-        
+
         if ($publisher AND $entity !=40) {
             $criteria->addCondition('publisher_id=:pid');
             $criteria->params[':pid'] = $publisher;
         }
-        
+
         if ($seria AND $entity !=40) {
             $criteria->addCondition('series_id=:sid');
             $criteria->params[':sid'] = $seria;
@@ -832,15 +832,15 @@ class Category {
         }
 
         if ($cid > 0) {
-            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . '
             WHERE ('.$whereCid.') ' . $qstr .' LIMIT 0,1001) as c';
-            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . '
             WHERE ('.$whereCid.') ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            $sql = 'SELECT COUNT(*) as cnt FROM (SELECT 1 FROM ' . $tbl . ' as bc ' . $addtbl . '
             WHERE bc.id <> 0 ' . $qstr .' LIMIT 0,1001) as c';
-            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . ' 
+            if (!$isFilter) $sql = 'SELECT COUNT(*) as cnt FROM ' . $tbl . ' as bc ' . $addtbl . '
             WHERE bc.id <> 0 ' . $qstr;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
         }
@@ -893,34 +893,34 @@ class Category {
 
         $key = 'CategoryTotalItems_' . $entity . '_' . $category_id . '_' . $field;
         $cnt = Yii::app()->dbCache->get($key);
-	
+
 		if (!isset($_GET['lang'])) {
 			if (isset(Yii::app()->getRequest()->cookies['langsel']->value)) {
 				$_GET['lang'] = Yii::app()->getRequest()->cookies['langsel']->value;
 			}
 		}
-	
+
         if ($cnt === false) {
             if ($category_id == 0) {
-				
+
 				if (isset($_GET['lang'])) {
-					
+
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].')';
-					
+
 				} else {
 					$sql = 'SELECT SUM(' . $field . ') AS cnt FROM ' . $eTable . ' WHERE parent_id=0';
 				}
-				
+
 			} else {
-				
+
 				if (isset($_GET['lang'])) {
-					
+
 					$sql = 'SELECT COUNT(id) as cnt FROM `'.$eTable2.'` as t WHERE t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$_GET['lang'].') AND (t.code = '.$category_id.' OR t.subcode = '.$category_id.')';
-					
+
 				} else {
 					$sql = 'SELECT ' . $field . ' AS cnt FROM ' . $eTable . ' WHERE id=' . intVal($category_id);
 				}
-				
+
 			}
 
 
@@ -1000,7 +1000,7 @@ class Category {
         $criteria = $dp->getCriteria();
 
 		//$lang = 'fi';
-		
+
 		$criteria->alias = 't';
         $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
         $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
@@ -1018,39 +1018,39 @@ class Category {
                 $criteria->params[':cid2'] = $cid;
             }
         }
-		
-		
+
+
 		if ($lang!='') {
-			
+
 			$criteria->addCondition('t.id IN (SELECT item_id FROM `all_items_languages` WHERE entity = '.$entity.' AND language_id = '.$lang.')');
-			
+
 		}
-		
+
 		//$criteria->addCondition('ruslania.`all_items_languages`.entity = '.$entity.' AND ruslania.`all_items_languages`.item_id = t.id AND ruslania.`all_items_languages`.language_id = 7');
 
         if (!empty($avail))
             $criteria->addCondition('t.avail_for_order=1');
-		
+
 		$criteria->order = SortOptions::GetSQL($sort, $lang, $entity);
         $paginator->applyLimit($criteria);*/
-		
+
 		//$criteria->join = ', `all_items_languages` `ail`';
-		
+
         $dp->setCriteria($criteria);
         $dp->pagination = false;
 
         $data = $dp->getData();
-		
+
 		//file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/test/items.txt', print_r($criteria,1));
-		
+
         $ret = Product::FlatResult($data);
-		
+
 		//echo count($ret);
-		
+
         return $ret;
     }
 
-    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array()) {
+    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array(), $checkCountAvail = false) {
         $return = array();
         # Traverse the tree and search for direct children of the root
         foreach ($tree as $idx => $node) {
@@ -1060,21 +1060,23 @@ class Category {
                 # Remove item from tree (we don't need to traverse this again)
                 unset($tree[$idx]);
                 # Append the child into result array and parse it's children
-                $p = array('payload' => $node,
-                    'parent' => $parent,
-                    'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams));
+                if (!$checkCountAvail || ($node['avail_items_count'] > 0)) {
+                    $p = array('payload' => $node,
+                        'parent' => $parent,
+                        'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams, $checkCountAvail));
 
-                foreach ($additionalParams as $key => $val)
-                    $p[$key] = $val;
+                    foreach ($additionalParams as $key => $val)
+                        $p[$key] = $val;
 
-                $return[] = $p;
+                    $return[] = $p;
+                }
             }
         }
         return empty($return) ? array() : $return;
     }
 
-    public function GetCategoriesTree($entity) {
-        $key = 'CategoryTree' . $entity;
+    public function GetCategoriesTree($entity, $checkCountAvail = false) {
+        $key = 'CategoryTree' . $entity . '_count' . (int) $checkCountAvail;
 
         $tree = Yii::app()->dbCache->get($key);
         if ($tree === false) {
@@ -1083,7 +1085,7 @@ class Category {
             $sql = 'SELECT * FROM ' . $eTable . ' ORDER BY title_'.Yii::app()->language.', sort_order';
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-            $tree = $this->parseTree(0, $rows, 'id', 'parent_id');
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), $checkCountAvail);
             Yii::app()->dbCache->set($key, $tree);
         }
 
@@ -1091,6 +1093,20 @@ class Category {
 //        foreach ($tree as $row) $ids[] = $row['id'];
 //        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
+        return $tree;
+    }
+
+    public function getPeriodicsCategoriesTree($type) {
+        $key = 'CategoryTree' . Entity::PERIODIC . '_type' . (int) $type;
+
+        $tree = Yii::app()->dbCache->get($key);
+        if ($tree === false) {
+            $sql = 'SELECT * FROM pereodics_categories where (avail_items_type_' . $type . ' > 0) ORDER BY title_'.Yii::app()->language.', sort_order';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), false);
+            Yii::app()->dbCache->set($key, $tree);
+        }
         return $tree;
     }
 

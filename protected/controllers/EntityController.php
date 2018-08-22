@@ -198,18 +198,31 @@ class EntityController extends MyController {
 
     public function actionCategoryList($entity) {
         $entity = Entity::ParseFromString($entity);
-        if ($entity === false)
-            $entity = Entity::BOOKS;
-
-        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
-
-        $c = new Category();
-        $tree = $c->GetCategoriesTree($entity);
-
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('LIST_SOFT_CATTREE');
 
-        $this->render('category_list', array('tree' => $tree, 'entity' => $entity));
+        $c = new Category();
+        if ($entity == Entity::PERIODIC) {
+            $sql = ''.
+                'select t.id, t.title_' . Yii::app()->language . ' title '.
+                'from `pereodics_types` t '.
+                'order by field(id, 2, 1, 3, 4) '.
+            '';
+            $types = Yii::app()->db->createCommand($sql)->queryAll();
+//            Debug::staticRun(array($types));
+            foreach ($types as $i=>$type) {
+                $types[$i]['categories'] = $c->getPeriodicsCategoriesTree($type['id']);
+                if (empty($types[$i]['categories'])) unset($types[$i]);
+            }
+            $this->render('category_list_periodics', array('types' => $types, 'entity' => $entity));
+        }
+        else {
+            if ($entity === false) $entity = Entity::BOOKS;
+
+            $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+            $tree = $c->GetCategoriesTree($entity, true);
+                $this->render('category_list', array('tree' => $tree, 'entity' => $entity));
+        }
     }
 
     public function actionPublisherList($entity, $char = null) {
