@@ -42,11 +42,14 @@ class Category {
     function getFilterSlider($entity, $cid) {
         $yearInterval = Condition::get($entity, $cid)->getYearInterval();
         $priceInterval = Condition::get($entity, $cid)->getPriceInterval();
+        $releaseYearInterval = Condition::get($entity, $cid)->getReleaseYearInterval();
         $result = array();
-        $result[] = empty($yearInterval['min'])?0:$yearInterval['min'];
-        $result[] = empty($yearInterval['max'])?0:$yearInterval['max'];
-        $result[] = empty($priceInterval['min'])?0:$priceInterval['min'];
-        $result[] = empty($priceInterval['max'])?0:$priceInterval['max'];
+        $result['year_min'] = empty($yearInterval['min'])?0:$yearInterval['min'];
+        $result['year_max'] = empty($yearInterval['max'])?0:$yearInterval['max'];
+        $result['cost_min'] = empty($priceInterval['min'])?0:$priceInterval['min'];
+        $result['cost_max'] = empty($priceInterval['max'])?0:$priceInterval['max'];
+        $result['rel_year_max'] = empty($releaseYearInterval['max_y'])?0:$releaseYearInterval['max_y'];
+        $result['rel_year_min'] = empty($releaseYearInterval['min_y'])?0:$releaseYearInterval['min_y'];
         return $result;
 
 
@@ -726,7 +729,6 @@ class Category {
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
         '';
-        $test = FilterHelper::getFiltersData($entity, $cid);
         return (int) Yii::app()->db->createCommand($sql)->queryScalar();
     }
 

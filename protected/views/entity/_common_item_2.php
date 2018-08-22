@@ -161,8 +161,13 @@ $entityKey = Entity::GetUrlKey($entity);
 		<? endif; ?>
 		
 		<?php if (!empty($item['Publisher'])) : ?>
-                <br /><?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?><span class="nameprop">
-                <?= sprintf($ui->item("Published by"), ''); ?>:</span> <a class="cprop" href="<?=
+                <br /><?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?>
+            <span class="nameprop">
+                <?php
+                if ($entity == Entity::MUSIC) echo $ui->item('A_NEW_LABEL');
+                else echo sprintf($ui->item("Published by"), '');
+                ?>
+                :</span> <a class="cprop" href="<?=
                 Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
                     'pid' => $item['Publisher']['id'],
                     'title' => ProductHelper::ToAscii($pubTitle)));
@@ -213,7 +218,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		<?php if (!empty($item['binding_id'])) : ?>
                  <?php
 					if (!empty($item['Binding']['title_' . Yii::app()->language])): ?>
-                        Переплет: <?= $item['Binding']['title_' . Yii::app()->language] ?>
+                        <?=$ui->item('A_NEW_TYPOGRAPHY')?>: <?= $item['Binding']['title_' . Yii::app()->language] ?>
                        <?php else:
 //					$row = Binding::GetBinding($entity, $item['binding_id']);
 //					echo 'Переплет: '.$row['title_' . Yii::app()->language];
