@@ -73,6 +73,7 @@ class Condition {
 		$this->_country();
 		$this->_director();
 		$this->_actor();
+		$this->_release_years();
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
@@ -271,6 +272,24 @@ class Condition {
                 $entityParams = Entity::GetEntitiesList()[$this->_entity];
                 $this->_join['tAct'] = 'join ' . $entityParams['actors_table'] . ' tAct on (tAct.video_id = t.id) and (tAct.person_id = ' . $aid . ')';
             }
+        }
+    }
+
+    private function _release_years() {
+        if ($this->_entity != 40) return;
+
+        $yMin = abs((int) $this->g('release_year_min'));
+        $yMax = abs((int) $this->g('release_year_max'));
+        if (($yMax > 0)&&($yMax < $yMin)) {
+            $buf = $yMin;
+            $yMin = $yMax;
+            $yMax = $buf;
+        }
+        if (!empty($yMin)||!empty($yMax)) {
+            if (empty($yMin)) $this->_condition['release_year'] = '(t.release_year <= ' . $yMax . ')';
+            elseif (empty($yMax)) $this->_condition['release_year'] = '(t.release_year >= ' . $yMin . ')';
+            elseif ($yMin == $yMax) $this->_condition['release_year'] = '(t.release_year = ' . $yMin . ')';
+            else $this->_condition['release_year'] = '(t.release_year between ' . $yMin . ' and ' . $yMax . ')';
         }
     }
 
@@ -544,6 +563,20 @@ class Condition {
 		if (!empty($settings['year_max'])) $result['max'] = $settings['year_max'];
 		return $result;
 	}
+
+	function getReleaseYearInterval() {
+        $key = 'year_r_' . (int) $this->_entity . '_' . (int) $this->_cid;
+        $settings = unserialize(Yii::app()->session[$key]);
+        if (!(isset($settings) && !empty($settings))) {
+            $whereCid = '';
+            if ($this->_cid > 0) $whereCid = sprintf("AND (code = %1\$d OR subcode = %1\$d)", $this->_cid);
+            $sql = sprintf("SELECT MAX(CONVERT(release_year, SIGNED)) max_y, MIN(CONVERT(release_year, SIGNED)) min_y 
+                            FROM video_catalog WHERE 1 %s", $whereCid);
+            $settings = Yii::app()->db->createCommand($sql)->queryRow();
+            Yii::app()->session[$key] = serialize($settings);
+        }
+        return $settings;
+    }
 
 	/**
 	 * на данный момент имеются следующие данные раздела
