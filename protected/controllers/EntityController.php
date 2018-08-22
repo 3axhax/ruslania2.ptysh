@@ -1181,11 +1181,14 @@ class EntityController extends MyController {
         $items = $totalItems > 0 ? $this->AppendCartInfo($yr->GetItems2($entity, $year, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
 
         $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
 
         $this->render('list', array('entity' => $entity,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
+            'filter_data' => $filter_data,
             ));
     }
 

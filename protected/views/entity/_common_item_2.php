@@ -164,7 +164,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 <br /><?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?>
             <span class="nameprop">
                 <?php
-                if ($entity == 22) echo $ui->item('A_NEW_LABEL');
+                if ($entity == Entity::MUSIC) echo $ui->item('A_NEW_LABEL');
                 else echo sprintf($ui->item("Published by"), '');
                 ?>
                 :</span> <a class="cprop" href="<?=

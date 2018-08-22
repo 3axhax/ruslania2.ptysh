@@ -25,6 +25,8 @@ class FilterHelper
      * 'performer'
      * 'directors'
      * 'actors'
+     * 'release_year_min'
+     * 'release_year_max'
      *
      */
 
@@ -40,14 +42,15 @@ class FilterHelper
         if (Entity::checkEntityParam($entity, 'publisher')) $filters['publisher'] = true;
         if (Entity::checkEntityParam($entity, 'series')) $filters['series'] = true;
         if (Entity::checkEntityParam($entity, 'years')) $filters['years'] = true;
-
         if (Entity::checkEntityParam($entity, 'performers')) $filters['performers'] = true;
+
         if ($entity == 40) {
             $filters['directors'] = true;
             $filters['actors'] = true;
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
             $filters['langSubtitles'] = $category->getSubtitlesVideo($entity, $cid);
             $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
+            $filters['release_years'] = true;
         }
         if ($entity == 10) {
             $filters['pre_sale'] = true;
@@ -107,6 +110,7 @@ class FilterHelper
         self::getCountry();
         self::getDirector();
         self::getActor();
+        self::getReleaseYears();
 
         return self::$data;
     }
@@ -152,7 +156,8 @@ class FilterHelper
         self::$data['country'] = $data ['country'] ?: 0;
         self::$data['directors'] = $data['directors'] ?: false;
         self::$data['actors'] = $data['actors'] ?: false;
-
+        self::$data['release_year_min'] = $data['release_year_min'] ?: false;
+        self::$data['release_year_max'] = $data['release_year_max'] ?: false;
     }
 
     static private function getEntity(){
@@ -251,10 +256,10 @@ class FilterHelper
         }
         $year_min = Yii::app()->getRequest()->getParam('year_min', false);
         $year_max = Yii::app()->getRequest()->getParam('year_max', false);
-        if ($year_min !== false) {
+        if ($year_min !== false && $year_min !== '') {
             self::$data['year_min'] = (int) $year_min;
         }
-        if ($year_max !== false) {
+        if ($year_max !== false && $year_max !== '') {
             self::$data['year_max'] = (int) $year_max;
         }
         if (isset(self::$sessionData['year_min']) && self::$sessionData['year_min'] != '') {
@@ -271,13 +276,13 @@ class FilterHelper
     static private function getCost() {
         $cost_min = Yii::app()->getRequest()->getParam('cost_min', false);
         $cost_max = Yii::app()->getRequest()->getParam('cost_max', false);
-        if ($cost_min !== false) {
+        if ($cost_min !== false && $cost_min !== '') {
             self::$data['cost_min'] = (float) str_replace(',','.', $cost_min);
         }
         elseif (isset(self::$sessionData['cost_min']) && self::$sessionData['cost_min'] != '') {
             self::$data['cost_min'] = (float) str_replace(',','.', self::$sessionData['cost_min']);
         }
-        if ($cost_max !== false) {
+        if ($cost_max !== false && $cost_max !== '') {
             self::$data['cost_max'] = (float) str_replace(',','.', $cost_max);
         }
         elseif (isset(self::$sessionData['cost_max']) && self::$sessionData['cost_max'] != '') {
@@ -488,6 +493,32 @@ class FilterHelper
             return true;
         }
         self::$data['actors'] = false;
+        return false;
+    }
+
+    static private function getReleaseYears () {
+        $release_year = Yii::app()->getRequest()->getParam('release_year', false);
+        if ($release_year !== false) {
+            self::$data['release_year_min'] = (int) $release_year;
+            self::$data['release_year_max'] = (int) $release_year;
+            return true;
+        }
+        $release_year_min = Yii::app()->getRequest()->getParam('release_year_min', false);
+        $release_year_max = Yii::app()->getRequest()->getParam('release_year_max', false);
+        if ($release_year_min !== false && $release_year_min !== '') {
+            self::$data['release_year_min'] = (int) $release_year_min;
+        }
+        if ($release_year_max !== false && $release_year_max !== '') {
+            self::$data['release_year_max'] = (int) $release_year_max;
+        }
+        if (isset(self::$sessionData['release_year_min']) && self::$sessionData['release_year_min'] != '') {
+            self::$data['release_year_min'] = (int) self::$sessionData['release_year_min'];
+        }
+        if (isset(self::$sessionData['release_year_max']) && self::$sessionData['release_year_max'] != '') {
+            self::$data['release_year_max'] = (int) self::$sessionData['release_year_max'];
+        }
+        if (!isset(self::$data['release_year_min'])) self::$data['release_year_min'] = false;
+        if (!isset(self::$data['release_year_max'])) self::$data['release_year_max'] = false;
         return false;
     }
 }

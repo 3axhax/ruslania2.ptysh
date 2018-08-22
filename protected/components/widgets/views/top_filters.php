@@ -67,55 +67,55 @@
         </div>
         <?php endif;?>
 
-        <?php if ($entity != 40):?>
+        <?php if ($entity != Entity::VIDEO):?>
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
             <div class="prod-filter__row">
                 <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
-                       placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? round($filters['max-min'][2], 2) : ''?>"
+                       placeholder="<?= (isset($filters['max-min']['cost_min']) && $filters['max-min']['cost_min'] != '') ? round($filters['max-min']['cost_min'], 2) : ''?>"
                        name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
                 <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
-                       placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? round($filters['max-min'][3], 2) : ''?>"
+                       placeholder="<?= (isset($filters['max-min']['cost_max']) && $filters['max-min']['cost_max'] != '') ? round($filters['max-min']['cost_max'], 2) : ''?>"
                        name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
             </div>
         </div>
         <?php endif;?>
 
         <?php if (isset($filters['years']) && $filters['years'] == true):?>
-            <!--Фильтр по году-->
+            <!--Фильтр по году/году выхода-->
             <div class="prod-filter__col">
-                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
+                <label class="prod-filter__label" for=""><?=($entity != Entity::VIDEO) ? $ui->item('A_NEW_FILTER_YEAR') : $ui->item('A_NEW_YEAR')?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
                            name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min'][0]) && $filters['max-min'][0] != '') ? $filters['max-min'][0] : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['year_min']) && $filters['max-min']['year_min'] != '') ? $filters['max-min']['year_min'] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
                            name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min'][1]) && $filters['max-min'][1] != '') ? $filters['max-min'][1] : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['year_max']) && $filters['max-min']['year_max'] != '') ? $filters['max-min']['year_max'] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
             </div>
         <?php endif;?>
 
-        <?php if (isset($filters['years']) && $filters['years'] == true):?>
-            <!--Фильтр по году-->
+        <?php if (isset($filters['release_years']) && $filters['release_years'] == true):?>
+            <!--Фильтр по году издания-->
             <div class="prod-filter__col">
-                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_YEAR')?>:</label>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_YEAR_REAL')?>:</label>
                 <div class="prod-filter__row">
-                    <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
-                           name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min'][0]) && $filters['max-min'][0] != '') ? $filters['max-min'][0] : ''?>"
+                    <input type="text" value="<?= ($min_y = (isset($filter_data['release_year_min']) && $filter_data['release_year_min'] != '')) ? $filter_data['release_year_min'] : '' ?>"
+                           name="release_year_min" class="prod-filter__input prod-filter__input--s release_year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['rel_year_min']) && $filters['max-min']['rel_year_min'] != '') ? $filters['max-min']['rel_year_min'] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
-                    <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
-                           name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min'][1]) && $filters['max-min'][1] != '') ? $filters['max-min'][1] : ''?>"
+                    <input type="text" value="<?= ($max_y = (isset($filter_data['release_year_max']) && $filter_data['release_year_max'] != '')) ? $filter_data['release_year_max'] : '' ?>"
+                           name="release_year_max" class="prod-filter__input prod-filter__input--s release_year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['rel_year_max']) && $filters['max-min']['rel_year_max'] != '') ? $filters['max-min']['rel_year_max'] : ''?>"
                            onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
             </div>
@@ -137,7 +137,7 @@
             </div>
         <?php endif; ?>
 
-        <?php if ($entity != 40):?>
+        <?php if ($entity != Entity::VIDEO):?>
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
@@ -148,19 +148,19 @@
     <!--"Второй" блок фильтров-->
     <div class="prod-filter__row" id="more-filter-block">
 
-        <?php if ($entity == 40):?>
+        <?php if ($entity == Entity::VIDEO):?>
             <!--Фильтр по цене-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                            class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
-                           placeholder="<?= (isset($filters['max-min'][2]) && $filters['max-min'][2] != '') ? round($filters['max-min'][2], 2) : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['cost_min']) && $filters['max-min']['cost_min'] != '') ? round($filters['max-min']['cost_min'], 2) : ''?>"
                            name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                            class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
-                           placeholder="<?= (isset($filters['max-min'][3]) && $filters['max-min'][3] != '') ? round($filters['max-min'][3], 2) : ''?>"
+                           placeholder="<?= (isset($filters['max-min']['cost_max']) && $filters['max-min']['cost_max'] != '') ? round($filters['max-min']['cost_max'], 2) : ''?>"
                            name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
                 </div>
             </div>
@@ -201,7 +201,7 @@
         <?php if (isset($filters['publisher']) && $filters['publisher'] == true):?>
             <!--Фильтр по издательству-->
         <div class="prod-filter__col">
-            <?php if ($entity == 22):?>
+            <?php if ($entity == Entity::MUSIC):?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_LABEL')?>:</label>
             <?php else:?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
@@ -288,18 +288,18 @@
             <!--Фильтр по типу/переплету-->
         <div class="prod-filter__col--grow" id="binding_div">
             <label class="prod-filter__label" for="">
-                <?php if ($entity == 10 OR $entity == 15) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
+                <?php if ($entity == Entity::BOOKS OR $entity == Entity::SHEETMUSIC) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
                 else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
                 <?=$label_binding?>:</label>
 
             <select id="binding_select" multiple="multiple" name="binding[]" onchange="show_result_count()">
                 <?php
                 foreach ($filters['binding'] as $bg => $binfo) {
-                if ($entity == 22 OR $entity == 24) {
+                if ($entity == Entity::MUSIC OR $entity == Entity::SOFT) {
                     $row = Media::GetMedia($entity, $binfo['media_id']);
                     $title = 'title';
                 }
-                elseif ($entity == 30) {
+                elseif ($entity == Entity::PERIODIC) {
                     $row = TypeRetriever::GetType($entity, $binfo['type']);
                     $title = 'title_' . Yii::app()->language;
                 }
@@ -324,7 +324,7 @@
                     width: '161px',
                 });
             </script>
-            <?php if ($entity == 30):?>
+            <?php if ($entity == Entity::PERIODIC):?>
                 <script>
                     typeDiv = $('#binding_div').detach();
                     typeDiv.insertBefore($('#filter_apply'));
@@ -333,7 +333,7 @@
         </div>
         <?php endif;?>
 
-        <?php if ($entity == 40):?>
+        <?php if ($entity == Entity::VIDEO):?>
             <!--Кнопки управления-->
             <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
                 <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
