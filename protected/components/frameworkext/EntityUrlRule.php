@@ -12,6 +12,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/authorlist' =>      array('idName' => '',       'nameLevel2' => 'authors',),
 		'entity/bindingslist' =>    array('idName' => '',       'nameLevel2' => 'bindings',),
 		'entity/yearslist' =>       array('idName' => '',       'nameLevel2' => 'years',),
+		'entity/yearreleaseslist' =>array('idName' => '',       'nameLevel2' => 'yearreleases',),
 		'entity/performerlist' =>   array('idName' => '',       'nameLevel2' => 'performers',),
 		'entity/medialist' =>       array('idName' => '',       'nameLevel2' => 'media',),
 		'entity/typeslist' =>       array('idName' => '',       'nameLevel2' => 'types',),
@@ -25,6 +26,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/byauthor' =>        array('idName' => 'aid',    'nameLevel2' => 'authors',      'useTitle'=>true,),
 		'entity/bybinding' =>       array('idName' => 'bid',    'nameLevel2' => 'bindings',     'useTitle'=>true,),
 		'entity/byyear' =>          array('idName' => 'year',   'nameLevel2' => 'years',        'useTitle'=>false,),
+		'entity/byyearrelease' =>   array('idName' => 'year',   'nameLevel2' => 'yearreleases', 'useTitle'=>false,),
 		'entity/byperformer' =>     array('idName' => 'pid',    'nameLevel2' => 'performers',   'useTitle'=>true,),
 		'entity/bymedia' =>         array('idName' => 'mid',    'nameLevel2' => 'media',        'useTitle'=>true,),
 		'entity/bytype' =>          array('idName' => 'type',   'nameLevel2' => 'types',        'useTitle'=>true,),
@@ -61,7 +63,6 @@ class EntityUrlRule extends CBaseUrlRule {
 				}
 			}
 		}
-//		Debug::staticRun(array($this->_other, $this->_routesLevel3));
 	}
 
 	function createUrl($manager, $route, $params, $ampersand) {

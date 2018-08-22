@@ -5,8 +5,12 @@
 			<div class="b-category-list__topic"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?></div>
 <?php foreach ($types as $type): ?>
 			<div style="float: left; margin-right: 10px; width: <?= (100/count($types)) ?>%">
-<?php /*				<div><a href="<?= Yii::app()->createUrl('entity/bytype', array('type'=>$type['id'], 'entity'=>Entity::PERIODIC)) ?>"><?= ProductHelper::GetTitle($type) ?></a></div> */ ?>
-	<?php $this->renderPartial('/entity/_level_categories', array('tree' => $type['categories'], 'entity' => $entity, 'parent'=>false, 'lvl'=>1)); ?>
+				<div>
+					<a href="<?= Yii::app()->createUrl('entity/bytype', array('entity'=>'periodics', 'type'=>$type['id'], 'title'=>ProductHelper::ToAscii($type['title']))) ?>">
+						<?= $type['title'] ?>
+					</a>
+				</div>
+	<?php $this->renderPartial('/entity/_level_categories_periodics', array('tree' => $type['categories'], 'entity' => $entity, 'parent'=>false, 'lvl'=>1, 'typeId'=>$type['id'])); ?>
 			</div>
 <?php endforeach; ?>
 			<div class="clearBoth"></div>

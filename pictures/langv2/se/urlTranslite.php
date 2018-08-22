@@ -63,6 +63,7 @@ return array(
 			'subtitles'=>'undertext-sprak',
 			'media'=>'format',
 			'years'=>'ar',
+			'yearreleases'=>'yearreleases',
 		),
 	),
 	'printed'=>array(

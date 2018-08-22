@@ -63,6 +63,7 @@ return array(
 			'subtitles'=>'idioma-de-los-subtitulos',
 			'media'=>'tipo-de-portador',
 			'years'=>'anos',
+			'yearreleases'=>'yearreleases',
 		),
 	),
 	'printed'=>array(

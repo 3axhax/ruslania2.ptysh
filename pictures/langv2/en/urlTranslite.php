@@ -63,6 +63,7 @@ return array(
 			'subtitles'=>'subtitle-language',
 			'media'=>'product-type',
 			'years'=>'years',
+			'yearreleases'=>'yearreleases',
 		),
 	),
 	'printed'=>array(

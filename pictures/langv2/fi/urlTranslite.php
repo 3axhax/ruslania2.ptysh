@@ -63,6 +63,7 @@ return array(
 			'audiostreams'=>'aaniraidat',
 			'subtitles'=>'tekstitysten-kieli',
 			'media'=>'tuotteen-tyyppi',
+			'yearreleases'=>'yearreleases',
 		),
 	),
 	'printed'=>array(
