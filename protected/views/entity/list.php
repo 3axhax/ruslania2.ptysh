@@ -51,7 +51,8 @@ $lang = Yii::app()->language;
             </div>
 
 			<div class="sortbox langsel">
-                <?php if ($entity != 15 && $entity != 30 && $entity != 22):?>
+                <?php if ($entity != Entity::SHEETMUSIC && $entity != Entity::PERIODIC
+                    && $entity != Entity::MUSIC && $entity != Entity::VIDEO):?>
                 <?php $this->widget('SelectSimulator', array(
                     'items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id),
                     'paramName'=>'lang',
