@@ -83,6 +83,14 @@ class OldPagesCommand extends CConsoleCommand {
 			);
 			$pdo->getPdoStatement()->execute($insertParams);
 		}
+		$insertParams = array(
+			':entity' => $entity,
+			':route' => 'entity/categorylist',
+			':id' => 0,
+			':path' => Yii::app()->createUrl('entity/categorylist', $urlParams),
+			':lang' => 'ru',
+		);
+		$pdo->getPdoStatement()->execute($insertParams);
 
 	}
 
@@ -113,6 +121,12 @@ class OldPagesCommand extends CConsoleCommand {
 		$smapHtml = new Sitemap();
 		list($tags, $tagsAll, $tagsHand) = $smapHtml->getTags();
 		foreach ($tags as $tag=>$param) {
+			$funcName = '_' . $tag . 'Pages';
+			if ($smapHtml->checkTagByEntity($tag, $entity)&&method_exists($this, $funcName)) {
+				$this->$funcName($entity, $params, $pdo);
+			}
+		}
+		foreach ($tagsAll as $tag=>$param) {
 			$funcName = '_' . $tag . 'Pages';
 			if ($smapHtml->checkTagByEntity($tag, $entity)&&method_exists($this, $funcName)) {
 				$this->$funcName($entity, $params, $pdo);
@@ -311,6 +325,41 @@ class OldPagesCommand extends CConsoleCommand {
 			);
 			$pdo->getPdoStatement()->execute($insertParams);
 		}
+
+	}
+
+	private function _yearsPages($entity, $params, CDbCommand $pdo) {
+		$langs = array('ru', 'en');
+		$items = $this->_query($this->_sqlYears($entity, $params['site_table']));
+		foreach ($items as $item) {
+			foreach ($langs as $lang) {
+				$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'year' => $item['year'],
+				);
+				$insertParams = array(
+					':entity'=>$entity,
+					':route'=>'entity/byyear',
+					':id'=>$item['year'],
+					':path'=>Yii::app()->createUrl('entity/byyear', $urlParams),
+					':lang'=>$lang,
+				);
+				$pdo->getPdoStatement()->execute($insertParams);
+			}
+		}
+		unset($items);
+		echo 'all_years ' . ' byyear ' . $entity . "\n";
+		$urlParams = array(
+			'entity' => Entity::GetUrlKey($entity),
+		);
+		$insertParams = array(
+			':entity'=>$entity,
+			':route'=>'entity/yearslist',
+			':id'=>0,
+			':path'=>Yii::app()->createUrl('entity/yearslist', $urlParams),
+			':lang'=>'ru',
+		);
+		$pdo->getPdoStatement()->execute($insertParams);
 
 	}
 
@@ -708,6 +757,17 @@ class OldPagesCommand extends CConsoleCommand {
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
 		'';
+		return $sql;
+	}
+
+	private function _sqlYears($entity, $table) {
+		$sql = ''.
+			'select t.year, UNIX_TIMESTAMP(max(t.last_modification_date)) dateAdd '.
+			'from `' . $table . '` t '.
+				'left join seo_redirects tSR on (tSR.id = t.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byyear") '.
+			'where (t.year is not null) and (t.year > 0) and (tSR.id is null) '.
+			'group by t.year '.
+			'';
 		return $sql;
 	}
 

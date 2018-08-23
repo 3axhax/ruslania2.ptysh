@@ -4,6 +4,7 @@ ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php sitemapxml
  * Class SitemapXMLCommand
  */
+define('cronAction', 1);
 class SitemapXMLCommand extends CConsoleCommand {
 	protected $_counts = 49500; //кол-во записей в файле
 	protected $_isLastmod = true, //дата последнего изменения, если true
@@ -23,57 +24,62 @@ class SitemapXMLCommand extends CConsoleCommand {
 
 		$smapHtml = new Sitemap();
 
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				//TODO:: надо будет цикл по языкам запускать после выполненного запроса
+				Yii::app()->setLanguage($lang);
+				echo "StaticPages ".date('d.m.Y H:i:s')."\r\n";
+				list($file, $lastmod) = $this->_staticXml($smapHtml);
+				if ($file&&file_exists($file)) {
+					$urlXml = $xml->addChild('sitemap');
+					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+					$urlXml->addChild('lastmod', date('c', $lastmod));
+				}
 
-		echo "StaticPages ".date('d.m.Y H:i:s')."\r\n";
-		list($file, $lastmod) = $this->_staticXml($smapHtml);
-		if ($file&&file_exists($file)) {
-			$urlXml = $xml->addChild('sitemap');
-			$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-			$urlXml->addChild('lastmod', date('c', $lastmod));
-		}
+				echo "ItemPages ".date('d.m.Y H:i:s')."\r\n";
+				$files = $this->_itemsXml();
+				foreach ($files as $file=>$lastmod) {
+					if ($file&&file_exists($file)) {
+						$urlXml = $xml->addChild('sitemap');
+						$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+						$urlXml->addChild('lastmod', date('c', $lastmod));
+					}
+				}
 
-		echo "ItemPages ".date('d.m.Y H:i:s')."\r\n";
-		$files = $this->_itemsXml();
-		foreach ($files as $file=>$lastmod) {
-			if ($file&&file_exists($file)) {
-				$urlXml = $xml->addChild('sitemap');
-				$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-				$urlXml->addChild('lastmod', date('c', $lastmod));
+				echo "CategoryPages ".date('d.m.Y H:i:s')."\r\n";
+				list($file, $lastmod) = $this->_categoryXml();
+				if ($file&&file_exists($file)) {
+					$urlXml = $xml->addChild('sitemap');
+					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+					$urlXml->addChild('lastmod', date('c', $lastmod));
+				}
+
+				echo "tagsPages ".date('d.m.Y H:i:s')."\r\n";
+				$files = $this->_tagsXml($smapHtml);
+				foreach ($files as $file=>$lastmod) {
+					if ($file&&file_exists($file)) {
+						$urlXml = $xml->addChild('sitemap');
+						$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+						$urlXml->addChild('lastmod', date('c', $lastmod));
+					}
+				}
+
+				echo "offersPages ".date('d.m.Y H:i:s')."\r\n";
+				list($file, $lastmod) = $this->_offersXml();
+				if ($file&&file_exists($file)) {
+					$urlXml = $xml->addChild('sitemap');
+					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+					$urlXml->addChild('lastmod', date('c', $lastmod));
+				}
+
+				echo "bookshelfPages ".date('d.m.Y H:i:s')."\r\n";
+				list($file, $lastmod) = $this->_bookshelfXml();
+				if ($file&&file_exists($file)) {
+					$urlXml = $xml->addChild('sitemap');
+					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
+					$urlXml->addChild('lastmod', date('c', $lastmod));
+				}
 			}
-		}
-
-		echo "CategoryPages ".date('d.m.Y H:i:s')."\r\n";
-		list($file, $lastmod) = $this->_categoryXml();
-		if ($file&&file_exists($file)) {
-			$urlXml = $xml->addChild('sitemap');
-			$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-			$urlXml->addChild('lastmod', date('c', $lastmod));
-		}
-
-		echo "tagsPages ".date('d.m.Y H:i:s')."\r\n";
-		$files = $this->_tagsXml($smapHtml);
-		foreach ($files as $file=>$lastmod) {
-			if ($file&&file_exists($file)) {
-				$urlXml = $xml->addChild('sitemap');
-				$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-				$urlXml->addChild('lastmod', date('c', $lastmod));
-			}
-		}
-
-		echo "offersPages ".date('d.m.Y H:i:s')."\r\n";
-		list($file, $lastmod) = $this->_offersXml();
-		if ($file&&file_exists($file)) {
-			$urlXml = $xml->addChild('sitemap');
-			$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-			$urlXml->addChild('lastmod', date('c', $lastmod));
-		}
-
-		echo "bookshelfPages ".date('d.m.Y H:i:s')."\r\n";
-		list($file, $lastmod) = $this->_bookshelfXml();
-		if ($file&&file_exists($file)) {
-			$urlXml = $xml->addChild('sitemap');
-			$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-			$urlXml->addChild('lastmod', date('c', $lastmod));
 		}
 
 
@@ -872,6 +878,19 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 		return $sql;
 	}
 
+	private function _sqlYearreleases($table) {
+		//pereodics_catalog
+		//
+		$sql = ''.
+			'select t.year, UNIX_TIMESTAMP(max(t.last_modification_date)) dateAdd '.
+			'from `' . $table . '` t '.
+			'where (t.year is not null) and (t.year > 0) '.
+			'group by t.year '.
+			'';
+//		echo $sql . "\n";
+		return $sql;
+	}
+
 	private function _sqlOffers() {
 		$sql = ''.
 			'select id, title_ru title, creation_date dateAdd '.
@@ -895,8 +914,8 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 
 
 	private function _saveFile(SimpleXMLElement $xml, $fileName) {
-		$xml->asXML($this->_dir . $fileName);
-		return $this->_dir . $fileName;
+		$xml->asXML($this->_dir . Yii::app()->language . $fileName);
+		return $this->_dir . Yii::app()->language . $fileName;
 	}
 
 	private function _query($sql, $params = null) {

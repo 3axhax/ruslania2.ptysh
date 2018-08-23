@@ -1206,7 +1206,6 @@ class SiteController extends MyController {
                         }
                     }
                 }
-                Debug::staticRun(array($this->_otherLangPaths));
                 break;
             default:
                 $this->_canonicalPath = Yii::app()->createUrl('site/' . $typePage);

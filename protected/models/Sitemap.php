@@ -10,14 +10,14 @@ class Sitemap {
 	 * 3=>route Для href тега
 	 */
 	private $_tags = array(
-//		'yearreleases'=>array('', 'A_NEW_FILTER_YEAR', '', 'byyear'),
+		'yearreleases'=>array(  '', 'A_NEW_FILTER_YEAR',        'yearreleaseslist', 'byyearrelease'),
 		'publisher'=>array(     '', 'A_NEW_FILTER_PUBLISHER',   'publisherlist',    'bypublisher'),
 		'series'=>array(        '', 'A_NEW_FILTER_SERIES',      'serieslist',       'byseries'),
 		'authors'=>array(       '', 'A_NEW_FILTER_AUTHOR',      'authorlist',       'byauthor'),
 		'actors'=>array(        '', 'Actor',                    'actorlist',        'byactor'),
 		'performers'=>array(    '', 'Performer',                'performerlist',    'byperformer'),
 		'directors'=>array(     '', 'Director',                 'directorlist',     'bydirector'),
-		'languages'=>array(     '', 'CATALOGINDEX_CHANGE_LANGUAGE', '', ''),
+//		'languages'=>array(     '', 'CATALOGINDEX_CHANGE_LANGUAGE', '', ''),
 		'binding'=>array(       '', 'Binding',                  'bindingslist',     'bybinding'),
 		'audiostreams'=>array(  '', 'AUDIO_STREAMS',            'audiostreamslist', 'byaudiostream'),
 		'subtitles'=>array(     '', 'Credits',                  'subtitleslist',    'bysubtitle'),
@@ -175,6 +175,7 @@ class Sitemap {
 		$tags = $this->_tags;
 		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 		foreach ($tags as $tag=>$param) {
+			$this->_log($tag . ' - ' . $entity . ' - ' . (int) $this->_checkTagByEntity($tag, $entity));
 			if (!empty($param[2])&&$this->_checkTagByEntity($tag, $entity)) {
 				$this->_log(Yii::app()->ui->item(Entity::GetEntitiesList()[$entity]['uikey']) . ' ' . Yii::app()->ui->item($param[1]));
 
@@ -183,6 +184,7 @@ class Sitemap {
 			}
 		}
 		foreach ($this->_tagsAll as $tag=>$param) {
+			$this->_log($tag . ' - ' . $entity . ' - ' . (int) $this->_checkTagByEntity($tag, $entity));
 			if (!empty($param[2])&&$this->_checkTagByEntity($tag, $entity)) {
 				$this->_log(Yii::app()->ui->item(Entity::GetEntitiesList()[$entity]['uikey']) . ' ' . Yii::app()->ui->item($param[1]));
 				$href = Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity)));
@@ -194,9 +196,7 @@ class Sitemap {
 	}
 
 	private function _checkTagByEntity($tag, $entity) {
-		$entitys = Entity::GetEntitiesList();
-		if (!empty($entitys[$entity])) return in_array($tag, $entitys[$entity]['with']);
-		return false;
+		return Entity::checkEntityParam($entity, $tag);
 	}
 
 	function checkTagByEntity($tag, $entity) { return $this->_checkTagByEntity($tag, $entity); }

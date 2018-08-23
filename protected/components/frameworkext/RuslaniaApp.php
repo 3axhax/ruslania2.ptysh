@@ -7,7 +7,7 @@ class RuslaniaApp extends CWebApplication
     public $currency = 1; // EUR
 
     function setLanguage($language) {
-        if (!$this->_languageInstalled&&$this->params['ValidLanguages']) {
+        if (defined('cronAction')||(!$this->_languageInstalled&&$this->params['ValidLanguages'])) {
             //первый раз после настроек
             parent::setLanguage($language);
             $this->_languageInstalled = true;
