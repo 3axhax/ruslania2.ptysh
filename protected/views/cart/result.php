@@ -1,13 +1,17 @@
 <hr />
 
 <div class="container cartorder">
-	<h1><?= Yii::app()->ui->item('HEADER_PAYTYPE' . $ptype) ?></h1>
-	<div><?= Yii::app()->ui->item('DESC_PAYTYPE' . $ptype, $number_zakaz) ?></div>
+    
+        <?php if ($ptype == 1) { $ptype_1 = 0; } else { $ptype_1 = $ptype; } ?>
+    
+	<h1><?= Yii::app()->ui->item('HEADER_PAYTYPE' . $ptype_1) ?></h1>
+        Спасибо за заказ! Номер заказа <?= $number_zakaz . $dop ?><br /><br />
+	<div><?= Yii::app()->ui->item('DESC_PAYTYPE' . $ptype_1, $number_zakaz) ?></div>
+<br />
 
-Спасибо за заказ! Номер заказа <?= $number_zakaz . $dop ?>
 
 <div class="clearBoth"></div>
-	<div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype<?= ($ptype-1) ?>'); return false;">другой способ оплаты</a></div>
+	<div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype<?= ($ptype) ?>'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
 	<div id="pay_systems" class="row spay" style="display: none;">
 		<?php $this->renderPartial('/site/pay_systems', array()); ?>
 	</div>

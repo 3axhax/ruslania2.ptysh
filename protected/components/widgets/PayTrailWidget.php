@@ -14,6 +14,12 @@ class PayTrailWidget extends CWidget
         $provider->successUrl = Yii::app()->createAbsoluteUrl('/payment/accept', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
         $provider->cancelUrl = Yii::app()->createAbsoluteUrl('/payment/cancel', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
         $provider->notifyUrl = Yii::app()->createAbsoluteUrl('/payment/notify', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
+        
+        $langInt = $provider->ptype[Yii::app()->language];
+        
+        if (!$langInt) { $langInt = 'en_US'; }
+        
+        $provider->culture = $langInt;
 
         $this->render('paytrail', array('provider' => $provider,
             'formName' => uniqid(),

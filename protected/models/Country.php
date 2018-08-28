@@ -19,9 +19,9 @@ class Country extends CActiveRecord
         return $rows;
     }
 
-    public static function GetStatesList()
+    public static function GetStatesList($id = 225)
     {
-        $sql = 'SELECT * FROM address_states_list ORDER BY title_long';
+        $sql = 'SELECT * FROM address_states_list WHERE country_id = '.$id.' ORDER BY title_long';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
         return $rows;
     }

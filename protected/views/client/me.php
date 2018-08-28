@@ -65,7 +65,7 @@
 
                                  <?php if(!$isClosed) : ?>
                                         <?php if(array_key_exists($id, $notPay)) : ?>
-                                <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>" class="order_start" style="float: right; background-color: #5bb75b;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
+                                <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>" class="order_start" style="float: right; background-color: #5bb75b; margin-right: 90px;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
                                 
                                 <?php endif; ?>
                                 <?php endif; ?>

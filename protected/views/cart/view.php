@@ -24,7 +24,7 @@ $url = $ex;
 			
 			<div class="row">
 
-			<div class=" <? if (!in_array('cart',$url)) : ?>span10<? else : ?><? endif; ?>">
+			<div class=" <? if (!in_array('korzina',$url)) : ?>span10<? else : ?><? endif; ?>">
 			
 			<h1 class="title">Корзина</h1>
             <div id="cart">
@@ -197,7 +197,7 @@ $url = $ex;
         </div>
 
                             
-                             <? if (!in_array('cart',$url)) : ?>
+                             <? if (!in_array('korzina',$url)) : ?>
                             
                             
                 <div class="span2">

@@ -37,10 +37,10 @@ function decline_goods($num) {
 
 ?>
 
-<div class="p3">1. Укажите ваши личные данные</div>
+
 
 <div class="span7">
-
+<div class="p3">1. Укажите ваши личные данные</div>
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
 <style>
@@ -127,17 +127,16 @@ function decline_goods($num) {
         </td>
         <td class="smalltxt1"></td>
     </tr>
+    
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
-        <td class="maintxt-vat">
-            <?=$form->dropDownList('state_id', CHtml::listData(Country::GetStatesList(), 'id', 'title_long'),
-            array(
-                 'data-bind' => array('enable' => 'country()==225',
-                                      'optionsCaption' => "'---'")
-            )); ?><br/>
+        <td class="maintxt-vat select_states">
+            <select name="Address[state_id]" disabled><option value="">---</option></select>
         </td>
         
     </tr>
+    
+    
     <tr>
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
@@ -216,7 +215,7 @@ function decline_goods($num) {
 
  
 
-<div class="span7" style="float: right; width: 575px;">
+<div class="span7" style="float: right; width: 575px; margin-top: 15px;">
 
         <div class="cart_header" style="width: 553px;">
             В корзине <?=decline_goods($cart['fullInfo']['count'])?> на сумму <?=$PH->FormatPrice($cart['fullInfo']['cost']);?>
@@ -251,7 +250,7 @@ function decline_goods($num) {
  
  <label for="confirm" onclick=" checked_sogl();">
      <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
-
+<span style="color: #ff0000; font-size: 12px;" class="err_confirm"></span>
 <div style="height: 20px;"></div>
  
  <div class="clearfix"></div>
@@ -265,15 +264,15 @@ function decline_goods($num) {
  
 <div class="p1">2. Где и как вы хотите получить заказ?</div>
     
-    <div class="row">
+    <div class="row dtypes">
         
         <?php
             $country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
             //if ($country == 'FI' or $country == 'fi') {
         ?>
         
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()">
-            Забрать в магазине
+        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()" style="height: 40px;">
+            <span class="zabr_market">Забрать в магазине</span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -281,7 +280,7 @@ function decline_goods($num) {
             <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
         </label>
          <?//php  } ?>
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();">
+         <label class="seld span3  seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();" style="height: 40px;">
             Доставка почтой
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 

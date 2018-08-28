@@ -149,6 +149,7 @@ class ClientController extends MyController
         $this->breadcrumbs[] = Yii::app()->ui->item("YM_CONTEXT_PERSONAL_MODIFYUSER");
 
         $model = User::model()->findByPk($uid);
+        Debug::staticRun(array($uid, $model));
         $oldPwd = $model->pwd;
         $model->pwd = null;
         $model->scenario = 'update';

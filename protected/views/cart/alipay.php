@@ -2,19 +2,24 @@
 
 <div class="container cartorder">
     <h1><?= Yii::app()->ui->item('HEADER_ALIPAY') ?></h1>
+    Спасибо за заказ! Ваш заказ № <?=$number_zakaz?><br /><br />
     <div><?= Yii::app()->ui->item('DESC_ALIPAY', $number_zakaz) ?></div>
 
-    Ваш заказ № <?=$number_zakaz?><br /><br />
+    
+    <div style="margin: 15px 0;">
+    <div>Выбрать <a style="cursor: pointer;" onclick="openPaySystems('dtype26'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
+    <div id="pay_systems" class="row spay" style="display: none; ">
+        <?php $this->renderPartial('/site/pay_systems', array()); ?>
+    </div>
+    </div>
+    
     <?php /*
     <b>Оплата через систему Alipay</b><br /><br />
     Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N XXXXXXX оплачен» на адрес orders@ruslania.com<br /><br />
     */ ?>
     <img src="/images/alipay.jpg" />
 
-    <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype4'); return false;">другой способ оплаты</a></div>
-    <div id="pay_systems" class="row spay" style="display: none;">
-        <?php $this->renderPartial('/site/pay_systems', array()); ?>
-    </div>
+    
 
 </div>
 <script type="text/javascript">

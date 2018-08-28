@@ -413,7 +413,7 @@ class SearchController extends MyController {
 		$where = array();
 		foreach($result as $cat) {
 			if (empty($cat['entity'])||empty($cat['real_id'])) continue;
-
+			
 			if (empty($where[$cat['entity']])) $where[$cat['entity']] = array();
 			$where[$cat['entity']][] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
 		}

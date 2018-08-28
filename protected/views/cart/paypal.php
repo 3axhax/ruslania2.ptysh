@@ -2,13 +2,27 @@
 
 <div class="container cartorder">
     <h1><?= Yii::app()->ui->item('HEADER_PAYPAL') ?></h1>
-    <div><a href="<?= Yii::app()->createUrl('site/static', array('page'=>'paypal')) ?>">Что такое PayPal?</a></div>
-
-    Ваш заказ № <?=$number_zakaz?>. Произведите оплату нажав на логотип PayPal внизу<br /><br />
+    
+    
+    <div class="popup0 popup<?=$p['id']?>" style="background-color: rgba(0,0,0,0.3); position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99999; opacity: 0.3; display: none;" onclick="$('.popup0').hide();"></div>
+    <div style="background-color: rgb(255, 255, 255); position: absolute; padding: 1%; width: 88%; z-index: 99999; border-radius: 2px; box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px; left: 5%; top: 5%; display: none; z-index: 999991;" class="popup0 popup1">
+        
+        <div style="position: absolute; top: 10px; right: 10px; cursor: pointer;" onclick="$('.popup0').hide();">X</div>
+        
+        <style> .popup0 div { width: auto !important; } </style>
+        <?php include ($_SERVER['DOCUMENT_ROOT'] . '/pictures/templates-static/paypal_'.Yii::app()->language.'.html.php'); ?>
+    
+    </div>
+    
+    Произведите оплату нажав на логотип PayPal внизу. Ваш заказ № <?=$number_zakaz?><br /><br />
+    
+    
     
     <?php $this->widget('PayPalPayment', array('order' => $order)); ?>
-
-    <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype1'); return false;">другой способ оплаты</a></div>
+    
+    <div><a href="javascript:;" onclick="$('.popup0').show();">Что такое PayPal?</a></div> <br />
+    
+    <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype8'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
     <div id="pay_systems" class="row spay" style="display: none;">
         <?php $this->renderPartial('/site/pay_systems', array()); ?>
     </div>
