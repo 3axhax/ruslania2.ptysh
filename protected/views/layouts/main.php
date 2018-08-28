@@ -14,10 +14,7 @@
 $url = explode('?', $_SERVER['REQUEST_URI']);
 $url = trim($url[0], '/');
 
-    Yii::app()->session['cart_coast']=1;  // - 27я строка
-        Yii::app()->session['products_incart']=2;
-        echo Yii::app()->session['cart_coast'];
-        echo Yii::app()->session['products_incart'];
+   
 
 //if (isset($_GET['langsel'])) {
 //
