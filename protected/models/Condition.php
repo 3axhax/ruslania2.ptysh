@@ -67,7 +67,6 @@ class Condition {
 		$this->_media();
 		$this->_type();
 		$this->_stream();
-		$this->_format();
 		$this->_subtitle();
 		$this->_pre_sale();
 		$this->_performer();
@@ -219,23 +218,15 @@ class Condition {
 		}
 	}
 
-	private function _format() {
-        if ($this->_entity == Entity::VIDEO) {
-            $format_video = $this->g('format_video');
-            if (($format_video === 0) || ($format_video === '0') || ($format_video === false)) return;
-            $this->_condition['format_video'] = sprintf('(t.media_id = %d)', (int) $format_video);
-        }
-    }
-
 	private function _subtitle() {
 		if (Entity::checkEntityParam($this->_entity, 'subtitles')) {
 			$pid = (int) $this->g('subtitles_video');
-			if ($pid > 0) $this->_join['tVC'] = 'join video_credits as tVC on (tVC.video_id = t.id) and (tVC.credits_id = ' . $pid . ')';
+			if ($pid > 0) $this->_join['tVC'] = 'join video_credits tVC on (tVAS.video_id = t.id) and (tVC.credits_id = ' . $pid . ')';
 		}
 	}
 
 	private function _pre_sale() {
-	    if ($this->_entity == Entity::BOOKS) {
+	    if ($this->_entity == 10) {
             $pre_sale = $this->g('pre_sale');
             if (($pre_sale === 0) || ($pre_sale === '0')) return;
 

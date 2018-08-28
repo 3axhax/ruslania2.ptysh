@@ -248,9 +248,7 @@ class FilterHelper
     }
 
     static private function getYears() {
-        $year = false;
-        if (Yii::app()->getController()->action->id == 'byyear')
-            $year = Yii::app()->getRequest()->getParam('year', false);
+        $year = Yii::app()->getRequest()->getParam('year', false);
         if ($year !== false) {
             self::$data['year_min'] = (int) $year;
             self::$data['year_max'] = (int) $year;
@@ -315,9 +313,7 @@ class FilterHelper
     }
 
     static private function getPublisher() {
-        $publisher = false;
-        if (Yii::app()->getController()->action->id == 'bypublisher')
-            $publisher = Yii::app()->getRequest()->getParam('pid', false);
+        $publisher = Yii::app()->getRequest()->getParam('pid', false);
         if ($publisher !== false) {
             self::$data['publisher'] = (int) $publisher;
             return true;
@@ -430,8 +426,6 @@ class FilterHelper
     }
     
     static private function getPerformer() {
-        $performer = false;
-        if (Yii::app()->getController()->action->id == 'byperformer')
         $performer = Yii::app()->getRequest()->getParam('pid', false);
         if ($performer !== false) {
             self::$data['performer'] = (int) $performer;
@@ -503,9 +497,7 @@ class FilterHelper
     }
 
     static private function getReleaseYears () {
-        $release_year = false;
-        if (Yii::app()->getController()->action->id == 'byyearrelease')
-            $release_year = Yii::app()->getRequest()->getParam('year', false);
+        $release_year = Yii::app()->getRequest()->getParam('release_year', false);
         if ($release_year !== false) {
             self::$data['release_year_min'] = (int) $release_year;
             self::$data['release_year_max'] = (int) $release_year;
