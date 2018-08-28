@@ -16,7 +16,7 @@
     <input name="VISIBLE_METHODS" type="hidden" value="">
     <input name="GROUP" type="hidden" value="">
     <input name="AUTHCODE" type="hidden" value="<?=$provider->GetHash($env); ?>">
-    <input type="submit" value="PAYYY" class="btn btn-success">
+    <input type="submit" value="PAY" class="btn btn-success">
 </form>
 
 <?php

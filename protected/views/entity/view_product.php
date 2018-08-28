@@ -895,7 +895,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <?php endif; ?>
 
                     <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
-                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $ui->item('A_NEW_NUMS'); ?></option>
+                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                 </select>
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
                 

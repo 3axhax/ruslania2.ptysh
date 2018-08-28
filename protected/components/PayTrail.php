@@ -29,6 +29,7 @@ class PayTrail
     public $type = 'S1';
     public $culture = 'fi_FI';
     public $paymentUniqID = '';
+    public $ptype = array('se'=>'sv_SE', 'fi'=>'fi_FI', 'en'=>'en_US', 'de'=>'de_DE', 'fr'=>'fr_FR', 'ru'=>'ru_RU');
 
     public function GetSecret($env)
     {

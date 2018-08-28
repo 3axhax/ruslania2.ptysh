@@ -14,6 +14,11 @@
 $url = explode('?', $_SERVER['REQUEST_URI']);
 $url = trim($url[0], '/');
 
+    Yii::app()->session['cart_coast']=1;  // - 27я строка
+        Yii::app()->session['products_incart']=2;
+        echo Yii::app()->session['cart_coast'];
+        echo Yii::app()->session['products_incart'];
+
 //if (isset($_GET['langsel'])) {
 //
 //Yii::app()->getRequest()->cookies['langsel'] = new CHttpCookie('langsel', $_GET['langsel']);
@@ -240,7 +245,7 @@ else $act = array('', '');
                     }
                 });
                 initPeriodicPriceSelect();
-                initAAddCart();
+                //initAAddCart();
             });
 
             $(document).ready(function () {
@@ -739,7 +744,7 @@ else $act = array('', '');
                         $el
                     );
 
-                    <?php if (in_array('cart', $url)) : ?>
+                    <?php if (in_array('korzina', $url)) : ?>
 
                     location.href = location.href;
 
@@ -813,7 +818,7 @@ else $act = array('', '');
 
             <?php
             $mess = Yii::app()->ui->item('MSG_MAIN_WELCOME_INTERNATIONAL_ORDERS');
-            if ($mess AND !in_array('cart',$url)):
+            if ($mess AND !in_array('korzina',$url) AND !in_array('cart',$url)):
             ?>
             <div class="alert_bg" style="display: block">
                 <div class="container">
@@ -823,7 +828,7 @@ else $act = array('', '');
             </div>
             <?php endif; ?>
 
-            <? if (!in_array('cart',$url)) : ?>    
+            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>    
 
             <div class="light_gray_menu">
                 <div class="container">
@@ -859,17 +864,17 @@ else $act = array('', '');
                    <?
                    
                    
-                   if (in_array('cart',$url) AND (end($url) != 'cart')) : ?>
+                   if ((in_array('korzina',$url) AND (end($url) != 'korzina')) OR (in_array('cart',$url) AND (end($url) != 'cart'))) : ?>
 
                     <a href="/cart/" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
 
-                    <? elseif (in_array('cart',$url) AND (end($url) == 'cart')) : ?>
+                    <? elseif (in_array('korzina',$url) AND (end($url) == 'korzina')) : ?>
                     
                      <a href="/" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
                     
                     <? endif; ?>
 
-                    <? if (!in_array('cart',$url)) : ?>
+                    <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
 
                     <div class="span10">
                         <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
@@ -1013,7 +1018,7 @@ else $act = array('', '');
                 })
             </script>
 
-            <? if (!in_array('cart',$url)) : ?>
+            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
 
             <div class="index_menu">
 
@@ -1409,7 +1414,7 @@ else $act = array('', '');
         <?= $content; ?>
 
 
-        <? if (!in_array('cart', $url)) : ?> 
+        <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?> 
 
         <div class="footer">
 
@@ -1533,7 +1538,7 @@ else $act = array('', '');
             <div class="clearfix"></div>
         </div>
 
-        <?php if ($mess): ?>
+        <?php if ($mess AND !in_array('korzina',$url) AND !in_array('cart',$url)): ?>
         <script>
             $(document).ready(function () {
                 document.getElementById('js_container-alert_bg').innerHTML = '<?= htmlspecialchars($mess) ?>';

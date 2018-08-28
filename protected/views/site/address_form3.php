@@ -191,12 +191,8 @@ echo '</div>';
     </tr>
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
-        <td class="maintxt-vat">
-            <?=$form->dropDownList('state_id', CHtml::listData(Country::GetStatesList(), 'id', 'title_long'),
-            array(
-                 'data-bind' => array('enable' => 'country()==225',
-                                      'optionsCaption' => "'---'")
-            )); ?><br/>
+        <td class="maintxt-vat select_states">
+            <select name="Address[state_id]" disabled><option value="">---</option></select>
         </td>
         
     </tr>

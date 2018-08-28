@@ -17,6 +17,22 @@
         
     }
     
+    label.selt {
+        padding: 1.8rem 2rem 2.2rem;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        border-radius: 2px;
+        position: relative;
+        width: 212px;
+    }
+
+    label.selt .red_checkbox {
+        position: absolute;
+        right: 5px;
+        top: 20px;
+
+    }
+    
     label.selp {
         padding: 1.8rem 2rem 2.2rem;
         border: 1px solid #ccc;
@@ -297,6 +313,22 @@
         
         if (cont.val() != '') {
             
+            
+            if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
+             
+              $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+     
+     $('.select_states').html(data);
+     
+    });
+             
+            } else {
+                
+                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
+                
+                }
+            
+            
             $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
                 
                 $('.delivery_box, .delivery_box_sp').html(data);
@@ -350,6 +382,15 @@
 				$('.info_box_smart').hide();
 				event.stopPropagation();
 			});
+                        
+           $(document).click(function (event) {
+				if ($(event.target).closest(".qbtn2,.info_box").length)
+				return;
+				$('.info_box').hide();
+				event.stopPropagation();
+			});              
+                        
+                        
        
         $('.check',$('.selp')).removeClass('active');
         $('.selp').css('border', '1px solid #ccc');
@@ -364,6 +405,26 @@
         $('.check', $('.selp #dtype2').parent()).addClass('active');
     })
     
+    function cost_izmena(city_id) {
+
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1] }, function(data) {
+
+            var al = JSON.parse(data);
+            
+            //alert(al.fullpricehidden);
+            
+            $('.cart_header').html(al.cart_header);
+            $('table.cart').html(al.cart);
+            $('.footer2').html(al.footer2);
+            $('.footer3').html(al.footer3);
+            $('input.costall').val(al.fullpricehidden);
+            
+        });
+
+    }
+    
     function checked_sogl() {
      
      var csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -373,12 +434,17 @@
         if ( $('select[name=id_address]').val() ) {
         
             var id_addr = $('select[name=id_address]').val();
-         
+            
+            
+            
+            
+            
+            
             $.post('<?=Yii::app()->createUrl('cart/getaddress')?>', {id_address: id_addr, YII_CSRF_TOKEN: csrf[1]}, function(data) {
                 
                 $('input.country_id').val(data);
                 
-                
+                cost_izmena(data);
                     
                     $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: $('input.country_id').val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
                 
@@ -544,7 +610,26 @@
         var error = 0;
         
         if ($('#dtype3').parent().hasClass('act')) {
+        
+        
+         if ($('#confirm').is(':checked') == false) {
             
+            $('.err_confirm').html('Согласитесь с условием');
+            
+            //if (error == 0) {
+                
+                $('html, body').scrollTop($('#confirm').offset().top);
+                
+           // }
+            
+            error = error + 1;
+            
+        } else {
+         
+            $('.err_confirm').html('');
+         
+        }
+        
             
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
             
@@ -577,16 +662,7 @@
          
         }
         
-        if ($('#confirm').is(':checked') == false) {
-            
-            $('.err_confirm').html('Согласитесь с условием');
-            error = error + 1;
-            
-        } else {
-         
-            $('.err_confirm').html('');
-         
-        }
+       
         
         
         if (error == 0) {
@@ -623,11 +699,11 @@
     
     function sbros_delev() {
      
-     var costall = $('input.costall').val();
+     var costall = parseFloat($('input.costall').val()).toFixed(2);
      
-      $('.itogo_cost').html(costall + $('.rows_checkbox_delivery label').attr('valute'));
+      $('.itogo_cost').html(costall + ' ' + $('.rows_checkbox_delivery label').attr('valute'));
      
-     $('.delivery_cost').html('0'+$('.rows_checkbox_delivery label').attr('valute'));
+     $('.delivery_cost').html('0 '+$('.rows_checkbox_delivery label').attr('valute'));
      
      
       $('.delivery_box .texterror, .delivery_box_sp .texterror').css('display', 'none');
@@ -707,7 +783,7 @@
                                                            'afterAjax' => 'addrInserted', 'cart'=>$cartInfo)); ?>
    
         <div class="cart_footer  footer1" style="width: 553px;">
-            Стоимость доставки <span class="delivery_cost">0&euro;</span>
+            Стоимость доставки <span class="delivery_cost">0 &euro;</span>
         </div>
     <div class="clearfix"></div>
         <div class="cart_footer footer2" style="width: 553px;">

@@ -18,15 +18,20 @@
 <hr />
 <div class="container cartorder">
   <h1><?= Yii::app()->ui->item('HEADER_APPLEPAY') ?></h1>
+  Спасибо за заказ! Ваш заказ № <?=$number_zakaz?><br /><br />
   <div><?= Yii::app()->ui->item('DESC_APPLEPAY') ?></div>
 
+  <div style="margin: 15px 0;">
+    <div>Выбрать <a style="cursor: pointer;" onclick="openPaySystems('dtype27'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
+    <div id="pay_systems" class="row spay" style="display: none; ">
+        <?php $this->renderPartial('/site/pay_systems', array()); ?>
+    </div>
+    </div>
+  
   <div id="apple-pay-text">Ваше устройство не поддерживает ApplePay</div>
   <button id="apple-pay-button"></button>
 
-  <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype5'); return false;">другой способ оплаты</a></div>
-  <div id="pay_systems" class="row spay" style="display: none;">
-    <?php $this->renderPartial('/site/pay_systems', array()); ?>
-  </div>
+  
 </div>
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
