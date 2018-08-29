@@ -72,6 +72,9 @@ class FilterHelper
     static function setFiltersData ($entity, $cid = 0, $data) {
         self::normalizeData($data);
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
+        if (Yii::app()->request->cookies[$key]->value != serialize(self::$data)) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(self::$data));
+        }
         if (Yii::app()->session[$key] != serialize(self::$data)) {
             Yii::app()->session[$key] = serialize(self::$data);
         }
@@ -81,7 +84,12 @@ class FilterHelper
 
     static function getFiltersData ($entity, $cid = 0) {
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
-        self::$sessionData = unserialize(Yii::app()->session[$key]);
+        if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
+            self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+        }
+        if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
+            self::$sessionData = unserialize(Yii::app()->session[$key]);
+        }
         $filtersData = FiltersData::instance();
         if ($filtersData->isSetKey($key)) {
             self::$sessionData = $filtersData->getFiltersData($key);
@@ -124,7 +132,9 @@ class FilterHelper
     }
 
     static function deleteEntityFilter ($entity, $cid = 0) {
-        Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = '';
+        $key = 'filter_e' . $entity . '_c_' . $cid;
+        Yii::app()->session[$key] = '';
+        Yii::app()->request->cookies[$key] = '';
         $filtersData = FiltersData::instance();
         $filtersData->deleteFiltersData();
     }
