@@ -1206,5 +1206,6 @@ IBAN DE79514303006474790001 <br>
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
     'A_NEW_LABEL' => 'Лэйбл',
-
+    'MSG_DELIVERY_TYPE_0'=>'Доставка почтой',
+    'MSG_DELIVERY_TYPE_1'=>'Забрать в магазине',
 );

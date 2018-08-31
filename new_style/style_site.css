@@ -317,10 +317,10 @@ li.valuts .label_valut span.dd { background: url('../new_img/dd.png') left cente
 top: 50%;
 margin-top: -5px;}
 
-.span1.cart .span1 { width: 100px; margin: 0; padding-top: 40px; }
+.span1.cart .span1 { width: 100px; margin: 0; padding-top: 16px; }
 .span1.cart .span2 { width: 70px; margin: 0px; position: relative; height: 100px;}
-.span1.cart .span2 .cart_box { margin: 0px; position: absolute; bottom: 9px; right: 0; }
-.span1.cart .span2 .cart_count { border-radius: 50%; background-color: rgb(237, 29, 36); width: 23px; height: 23px; position: absolute; top: 43px; left: 26px; text-align: center; line-height: 23px; color: #ffffff;}
+.span1.cart .span2 .cart_box { margin: 0px; position: absolute;     top: 19px; right: 0; }
+.span1.cart .span2 .cart_count { border-radius: 50%; background-color: rgb(237, 29, 36); width: 23px; height: 23px; position: absolute; top: 14px; left: 26px; text-align: center; line-height: 23px; color: #ffffff;}
 
 .span1.cart .span1 .cost {
 
@@ -876,6 +876,8 @@ h1.titlename {
     font-size: 18.689px;
     color: rgb(18, 87, 171);
     display: block;
+    line-height: 24px;
+    margin-bottom: 10px;
 }
 
 .listgoods ul.items li .span11 .authors {
