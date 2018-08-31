@@ -134,7 +134,7 @@ class FilterHelper
     static function deleteEntityFilter ($entity, $cid = 0) {
         $key = 'filter_e' . $entity . '_c_' . $cid;
         Yii::app()->session[$key] = '';
-        Yii::app()->request->cookies[$key] = '';
+        Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
         $filtersData = FiltersData::instance();
         $filtersData->deleteFiltersData();
     }

@@ -29,7 +29,7 @@
                     ?>
                     <li>
                         <?php $item['status'] = Product::GetStatusProduct($entity, $item['id']);?>
-                        <?php $this->renderPartial('/entity/_render_index_item', array('item' => $item)); ?>
+                        <?php $this->renderPartial('/entity/_render_index_item', array('item' => $item, 'entity' => $entity)); ?>
                     </li>
 
     <?php endforeach; ?>

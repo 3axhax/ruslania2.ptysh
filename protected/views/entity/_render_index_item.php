@@ -110,8 +110,15 @@
         <?php endif; ?>
 	</div>
                     <div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]); ?> <?=$ui->item('WITHOUT_VAT'); ?></div>
+
+    <?php if ($entity != Entity::PERIODIC):?>
                     <div class="addcart">
                         <a class="cart-action" data-action="add" data-entity="<?= $item['entity']; ?>"
                data-id="<?= $item['id']; ?>" data-quantity="1"
                href="javascript:;" style="width: 132px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
                     </div>
+    <?php else:?>
+        <div class="more">
+            <a href="<?=$url?>"><?=$ui->item('A_NEW_MORE3');?></a>
+    </div>
+    <?php endif;?>

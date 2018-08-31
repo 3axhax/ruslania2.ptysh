@@ -532,6 +532,20 @@ div.footer {
     margin-top: 18px;
 }
 
+.news_box ul.books li .more a {
+    width: 171px;
+    border-radius: 2px;
+    background: #ecad0a;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    /*padding-right: 39px;*/
+    text-align: center;
+    margin-top: 18px;
+}
+
 li.dd_box {
     position: relative;
 }
