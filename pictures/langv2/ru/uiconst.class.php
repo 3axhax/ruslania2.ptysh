@@ -331,7 +331,7 @@ return array(
 'MSG_DELIVERY_TYPE_1' => 'Express', 
 'MSG_DELIVERY_TYPE_2' => 'Priority', 
 'MSG_DELIVERY_TYPE_3' => 'Economy', 
-'MSG_DELIVERY_TYPE_4' => 'Бесплатно', 
+'MSG_DELIVERY_TYPE_4' => 'Бесплатная доставка', 
 'MSG_ERROR_DELETED_ITEM_RECORD' => 'Товара еще нет в нашем каталоге или он уже удален из него.', 
 'MSG_FIELD_X' => 'поле "%s"', 
 'MSG_FORM_VALIDATE_ERROR' => '<b>Обнаружены ошибки:</b>', 
