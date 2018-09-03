@@ -317,10 +317,10 @@ li.valuts .label_valut span.dd { background: url('../new_img/dd.png') left cente
 top: 50%;
 margin-top: -5px;}
 
-.span1.cart .span1 { width: 100px; margin: 0; padding-top: 16px; }
+.span1.cart .span1 { width: 100px; margin: 0; padding-top: 40px; }
 .span1.cart .span2 { width: 70px; margin: 0px; position: relative; height: 100px;}
-.span1.cart .span2 .cart_box { margin: 0px; position: absolute;     top: 19px; right: 0; }
-.span1.cart .span2 .cart_count { border-radius: 50%; background-color: rgb(237, 29, 36); width: 23px; height: 23px; position: absolute; top: 14px; left: 26px; text-align: center; line-height: 23px; color: #ffffff;}
+.span1.cart .span2 .cart_box { margin: 0px; position: absolute; bottom: 9px; right: 0; }
+.span1.cart .span2 .cart_count { border-radius: 50%; background-color: rgb(237, 29, 36); width: 23px; height: 23px; position: absolute; top: 43px; left: 26px; text-align: center; line-height: 23px; color: #ffffff;}
 
 .span1.cart .span1 .cost {
 
@@ -529,6 +529,20 @@ div.footer {
     padding-right: 39px;
     text-align: center;
     width: 91px;
+    margin-top: 18px;
+}
+
+.news_box ul.books li .more a {
+    width: 171px;
+    border-radius: 2px;
+    background: #ecad0a;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    /*padding-right: 39px;*/
+    text-align: center;
     margin-top: 18px;
 }
 
@@ -876,8 +890,6 @@ h1.titlename {
     font-size: 18.689px;
     color: rgb(18, 87, 171);
     display: block;
-    line-height: 24px;
-    margin-bottom: 10px;
 }
 
 .listgoods ul.items li .span11 .authors {
@@ -3081,3 +3093,46 @@ div.detail-prop { margin-bottom: 5px; }
 div.detail-prop .prop-name { float: left; width: 200px; }
 div.detail-prop .prop-value { padding-left: 210px; }
 div.detail-prop .prop-value li { list-style-type: none; }
+
+#virtual_keyboard {
+    position: absolute;
+    top: 60px;
+    z-index: 800;
+    background: #fff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    width: 406px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.close_keyboard {
+    position: absolute;
+    right: -22px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    border: 1px solid #ccc;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    z-index: 900;
+    background: #fff;
+    cursor: pointer;
+}
+.close_keyboard:hover {
+    opacity: 1;
+}
+.close_keyboard:before, .close_keyboard:after {
+    position: absolute;
+    left: 9px;
+    content: ' ';
+    height: 18px;
+    width: 3px;
+    background-color: #333;
+}
+.close_keyboard:before {
+    transform: rotate(45deg);
+}
+.close_keyboard:after {
+    transform: rotate(-45deg);
+}

@@ -331,7 +331,7 @@ return array(
 'MSG_DELIVERY_TYPE_1' => 'Express', 
 'MSG_DELIVERY_TYPE_2' => 'Priority', 
 'MSG_DELIVERY_TYPE_3' => 'Economy', 
-'MSG_DELIVERY_TYPE_4' => 'Бесплатно', 
+'MSG_DELIVERY_TYPE_4' => 'Бесплатная доставка', 
 'MSG_ERROR_DELETED_ITEM_RECORD' => 'Товара еще нет в нашем каталоге или он уже удален из него.', 
 'MSG_FIELD_X' => 'поле "%s"', 
 'MSG_FORM_VALIDATE_ERROR' => '<b>Обнаружены ошибки:</b>', 
@@ -1038,6 +1038,7 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_NEW_FLAG' => 'Новинка',
 'A_NEW_ACTION_FLAG' => 'Акция',
 'A_NEW_MORE2' => 'Подробно',
+'A_NEW_MORE3' => 'Подробнее',
 'A_NEW_NEW_CATEGORY' => 'Новинки раздела',
 'A_NEW_RECOMMENDATIONS_CATEGORY' => 'Рекомендации раздела',
 'A_NEW_OURPREDL' => 'Наши предложения',
@@ -1172,6 +1173,8 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_VIDEO_BY_CATEGORY' => 'Смотреть Видеопродукцию по категориям',
 'A_NEW_VIDEO_FI_SUBTITLES' => 'Фильмы с финскими субтитрами ',
 'A_NEW_MAPS_BY_CATEGORY' => 'Смотреть Карты по категориям',
+'A_NEW_KEYBOARD_ON' => 'Вкл.',
+'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 'ALL_CATEGORY' => 'Все категории',
 'A_SITEMAP' => 'Карта сайта',
 'PAGES_N' => 'Cтраница %d',
@@ -1206,6 +1209,5 @@ IBAN DE79514303006474790001 <br>
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
     'A_NEW_LABEL' => 'Лэйбл',
-    'MSG_DELIVERY_TYPE_0'=>'Доставка почтой',
-    'MSG_DELIVERY_TYPE_1'=>'Забрать в магазине',
+
 );

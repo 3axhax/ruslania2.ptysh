@@ -1161,6 +1161,8 @@ By clicking on a category you are interested in, you can see all the products wi
 'A_NEW_PRINTED_BY_CATEGORY' => 'Смотреть Печатную продукцию и сувениры по категориям',
 'A_NEW_VIDEO_BY_CATEGORY' => 'Смотреть Видеопродукцию по категориям',
 'A_NEW_MAPS_BY_CATEGORY' => 'Смотреть Карты по категориям',
+    'A_NEW_KEYBOARD_ON' => 'Вкл.',
+    'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
 );

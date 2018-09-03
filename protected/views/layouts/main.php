@@ -7,7 +7,7 @@
 // }
 // else
 // echo 'yes4';
-// echo $_SESSION['ert'];	
+// echo $_SESSION['ert'];
 // $session = Yii::app()->session;
 // echo  $session['shopcartkey'];
 
@@ -61,6 +61,7 @@ $ui = Yii::app()->ui;
         <?php endforeach; ?>
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
         <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
+        <link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="/css/template_styles.css" />
         <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
         <link rel="stylesheet" href="/css/opentip.css">
@@ -82,6 +83,7 @@ $ui = Yii::app()->ui;
         <script src="/new_js/jquery.bootstrap-touchspin.min.js"></script>
         <script src="/js/opentip.js"></script>
         <script type="text/javascript" src="/js/marcopolo.js"></script>
+        <script type="text/javascript" src="/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js"></script>
         <!--[if lt IE 9]>
 <script src="libs/html5shiv/es5-shim.min.js"></script>
 <script src="libs/html5shiv/html5shiv.min.js"></script>
@@ -107,7 +109,6 @@ $ui = Yii::app()->ui;
             }
 
             $(document).ready(function () {
-
 
                 $('li.dd_box .click_arrow').click(function () {
 
@@ -970,6 +971,13 @@ else $act = array('', '');
                                         </div>
 
                                     </li>
+                                    <li class="keyboard">
+                                        <div class="trigger_keyboard" style="margin-left: 30px; cursor: pointer">
+                                            <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
+                                            <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
+                                            <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
+                                        </div>
+                                    </li>
                                 </ul>
 
                             </div>
@@ -1534,7 +1542,6 @@ else $act = array('', '');
             </div>
             <div class="clearfix"></div>
         </div>
-
         <?php if ($mess AND !in_array('korzina',$url) AND !in_array('cart',$url)): ?>
         <script>
             $(document).ready(function () {
@@ -1542,5 +1549,6 @@ else $act = array('', '');
             });
         </script>
         <?php endif; ?>
+        <div id="virtual_keyboard" style="display: none"></div>
     </body>
 </html>
