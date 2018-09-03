@@ -68,12 +68,21 @@ class SearchController extends MyController {
 		foreach ($code as $codeName) {
 			switch ($codeName) {
 				case 'catalogue':
-					$sql = 'select * from music_catalog where (catalogue = :q) limit 1';
-					$item = Yii::app()->db->createCommand($sql)->queryRow(true, array(':q'=>$q));
-					if (!empty($item)) {
-						$item['is_product'] = true;
-						$item['entity'] = 22;
-						return array('22-' . $item['id']=>$item);
+					$sql = ''.
+//						'(select (220000000 + id) AS `id`, id `real_id`,22 AS `entity`,`in_stock` ,(case when ((`in_shop` > 0) and (`in_shop` < 6)) then (10 - `in_shop`) when (`in_shop` > 5) then 4 when (`econet_skip` > 0) then 3 else 0 end) AS `in_shop`,`avail_for_order` AS `avail`,`econet_skip`,`publisher_id`,`isbn`,`title_ru`,`title_en`,`title_rut`,`title_fi`,`stock_id`,`eancode`,`description_ru`,`description_en`,`description_fi`,`description_rut`,`year`,`media_id` AS `bindingid`, 1 as is_product from `music_catalog` where (catalogue = :q)) '.
+//						'union all (select (300000000 + `id`) AS `id`,`id` AS `real_id`,30 AS `entity`,`in_stock`,(case when ((`in_shop` > 0) and (`in_shop` < 6)) then (10 - `in_shop`) when (`in_shop` > 5) then 4 else `in_shop` end) AS `in_shop`,`avail_for_order` AS `avail`,1 AS `econet_skip`,NULL AS `publisher_id`,NULL AS `isbn`,`title_ru`,`title_en`,`title_rut`,`title_fi`,`stock_id`,`eancode`,`description_ru`,`description_en`,`description_fi`,`description_rut`,0 AS `year`,0 AS `bindingid`, 1 as is_product from `pereodics_catalog` where (issn = :q) or (`index` = :q)) '.
+						'(select `id`, 22 AS `entity` from `music_catalog` where (catalogue = :q)) '.
+						'union all (select `id`,30 AS `entity` from `pereodics_catalog` where (issn = :q) or (`index` = :q)) '.
+					'';
+					$items = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q'=>$q));
+					if (!empty($items)) {
+						$product = array();
+						foreach ($items as $item) {
+							if (empty($product['e' . $item['entity']])) $product['e' . $item['entity']] = array();
+							$product['e' . $item['entity']][] = $item['id'];
+						}
+						return SearchHelper::ProcessProducts2($product, false);
+//						return $items;
 					}
 					break;
 				default:
@@ -83,6 +92,7 @@ class SearchController extends MyController {
 					$find = $this->_search->query('', 'products');
 					if (!empty($find)) {
 						$product = SearchHelper::ProcessProducts($find);
+						Debug::staticRun(array($find, $product));
 						return SearchHelper::ProcessProducts2($product, false);
 					}
 					break;

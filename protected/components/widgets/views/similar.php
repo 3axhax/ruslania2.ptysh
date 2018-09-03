@@ -37,18 +37,32 @@
 				<?= ProductHelper::GetTitle($product['Binding']) ?>
 				<?php endif; ?>
 
-				<?php $price = DiscountManager::GetPrice(Yii::app()->user->id, $product); ?>
+				<?php //$price = DiscountManager::GetPrice(Yii::app()->user->id, $product); ?>
 				<div class="cost">
-					<?php if (!empty($price[DiscountManager::DISCOUNT])): ?>
+					<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
+						<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
+                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
+                </span>&nbsp;
+						<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold; white-space: nowrap;">
+                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
+                </span>
+					<?php else : ?>
+						<span class="price">
+                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
+                </span>
+					<?php endif; ?>
+
+					<?php /*if (!empty($price[DiscountManager::DISCOUNT])): ?>
 			<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?>
             </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
                 <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
             </span>
 					<?php else: ?>
 			<span class="price"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
-					<?php endif ?>
+					<?php endif*/ ?>
 				</div>
-				<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div>
+				<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+				<?php /*<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div> */ ?>
 				<div class="addcart">
 					<a class="cart-action" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1">
 	<?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART') ?>

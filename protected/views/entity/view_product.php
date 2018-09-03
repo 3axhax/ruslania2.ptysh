@@ -784,7 +784,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 						
 					}
 					
-				?>
+				?>-->
 				
                <?php else : ?><?php if ($item['entity'] != Entity::VIDEO) : ?>
 				<div class="clearBoth"></div>
@@ -803,7 +803,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 
                 <?php endif; ?>
 				
-            <?php endif; ?>-->
+            <?php endif; ?>
 			
 			<?/* if ($item['entity'] == Entity::PERIODIC) { */?><!--
 				<div style="height: 18px;"></div>
@@ -875,12 +875,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php /*endif; */?>
 				
 				
-			--><?/* } */?>
+			--><?php /* } */?>
 			
-			<?php if ($item['entity'] == Entity::PERIODIC) :
-
-                ?>
-
+			<?php if ($item['entity'] == Entity::PERIODIC): ?>
 				<div class="mb5 link__deliver" style="color:#0A6C9D; float: left;">
                     <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
                 </div>
@@ -889,13 +886,26 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
                         <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                     <?php endif; ?>
-
-                    <?php if ($item['issues_year']['show6Months']) : ?>
-                        <option value="6"<?php if(empty($item['issues_year']['show3Months'])): $count_add = 6; ?> selected="selected"<?php endif; ?>>6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
-                    <?php endif; ?>
-
+                    <?php if ($item['issues_year']['show6Months']) :
+                        $labelForIssues6 = $item['issues_year']['label_for_issues'];
+                        $issues6 = $item['issues_year']['issues'];
+                        if (!empty($item['issues_year']['show3Months'])):
+                            $issues6 = $item['issues_year']['issues']*2;
+                            if (in_array($issues6, array(2, 4))): $labelForIssues6 = $ui->item("MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2");
+                            else: $labelForIssues6 = $ui->item("MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_3");
+                            endif;
+                        else: $count_add = 6;
+                        endif;
+                        ?>
+                        <option value="6"<?php if(empty($item['issues_year']['show3Months'])): $count_add = 6; ?> selected="selected"<?php endif; ?>>6 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $issues6 ?> <?= $labelForIssues6 ?></option>
+                    <?php endif;
+                    $labelForIssues12 = $item['issues_year']['label_for_issues'];
+                    if (in_array($item['issues_year']['issues_year'], array(2, 3, 4))): $labelForIssues12 = $ui->item("MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2");
+                    elseif ($item['issues_year']['issues_year'] > 1): $labelForIssues12 = $ui->item("MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_3");
+                    endif;
+                    ?>
                     <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
-                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
+                        12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $labelForIssues12 ?></option>
                 </select>
 				<?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
                 
@@ -1107,6 +1117,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="clearBoth"></div>
         </div>
                 <?php endif; ?>
+                    <!--
                     <?php if (!empty($item['isbn2'])) : ?>
         <div class="detail-prop">
             <div class="prop-name"><?= $name ?>:</div>
@@ -1169,7 +1180,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="prop-value"><?= $item['isbn10']; ?></div>
             <div class="clearBoth"></div>
         </div>
-                <?php endif; ?>
+                <?php endif; ?>-->
             <?php endif; ?>
             <?php else: ?>
                 <?php if (!empty($item['eancode'])):

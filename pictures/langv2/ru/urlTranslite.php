@@ -28,7 +28,7 @@ return array(
 		'level_1'=>'muzyka',
 		'level_2'=>array(
 			'categories'=>'kategorii',
-			'publishers'=>'leibl',
+			'publishers'=>'lejbl',
 			'series'=>'serii',
 			'authors'=>'avtory',
 			'performers'=>'ispolniteli',
@@ -98,7 +98,7 @@ return array(
 	'aboutus'=>'o-nas',
 	'ourstore'=>'nash-magazin',
 	'csr'=>'otvetstvennost',
-	'offers_partners'=>'specialnye-predlojenija-dlja-dillerov',
+	'offers_partners'=>'specialnye-predlozhenija-dlja-dilerov',
 //	'thawte'=>'informacija-o-thawte',
 	'safety'=>'informacija-o-bezopasnosti-platezhej',
 	'zone_info'=>'zona-5',
