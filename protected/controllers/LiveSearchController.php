@@ -17,7 +17,8 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) {
-				$list = $sController->getList($q, 1, 10);
+				$list = $sController->getListExactMatch($q, 1, 10);
+				if (empty($list)) $list = $sController->getList($q, 1, 10);
 				$list = $sController->inDescription($list, $q);
 			}
 
@@ -59,7 +60,10 @@ class LiveSearchController extends MyController {
 				if (!empty($list)) $isCode = true;
 			}
 
-			if (!$isCode) $list = $sController->getList($q, 1, 10);
+			if (!$isCode) {
+				$list = $sController->getListExactMatch($q, 1, 10);
+				if (empty($list)) $list = $sController->getList($q, 1, 10);
+			}
 
 			if (!empty($list)) $list = $sController->inDescription($list, $q);
 

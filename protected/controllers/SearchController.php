@@ -141,6 +141,44 @@ class SearchController extends MyController {
 		return array_merge($authors, $categories, $publishers);
 	}
 
+	function getListExactMatch($query, $page, $pp) {
+		return array();
+		$this->_search->resetCriteria();
+		$this->_search->SetLimits(($page-1)*$pp, $pp);
+
+		$filters = array();
+		$avail = $this->GetAvail(1);
+		if ($avail) $filters['avail'] = 1;
+		$e = (int) Yii::app()->getRequest()->getParam('e');
+		if (Entity::IsValid($e)) $filters['entity'] = $e;
+
+		if (!empty($filters)) {
+			foreach ($filters as $name => $value) {
+				$this->_search->SetFilter($name, array($value));
+			}
+		}
+
+		$q = '@(title_ru,title_rut,title_en,title_fi) ^' . $this->_search->EscapeString($query) . '$';
+
+//		$this->_search->SetMatchMode(SPH_MATCH_PHRASE);
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "in_shop DESC");
+
+
+		$find = $this->_search->query($q, 'products_no_morphy');
+		if (empty($find)) return array();
+
+		$product = SearchHelper::ProcessProducts($find);
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find['matches'] as $id => $data) {
+			$attr = $data['attrs'];
+			$key = $attr['entity'] . '-' . $attr['real_id'];
+			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+		}
+
+		return $result;
+	}
+
 	function getList($query, $page, $pp) {
 		$this->_search->resetCriteria();
 		$this->_search->SetLimits(($page-1)*$pp, $pp);
