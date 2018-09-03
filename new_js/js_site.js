@@ -1,5 +1,35 @@
 $(document).ready(function(){
     initAAddCart();
+    $(".trigger_keyboard").click(function (event) {
+        $(".keyboard_on").toggle();
+        $(".keyboard_off").toggle();
+        $(".trigger_keyboard img").toggleClass('keyboard_off_img');
+        if ($(".keyboard_off").is(':visible')) {
+            $("#virtual_keyboard").hide();
+        }
+    });
+    $("input").on('focus', function (event) {
+        let keyboard_visible = false;
+        if ($(".keyboard_on").is(':visible')) {
+            keyboard_visible = true;
+        }
+        if (keyboard_visible) {
+            if (window.old_target === undefined || window.old_target !== event.target || !$("#virtual_keyboard").is(':visible')) {
+                keyboard = $("#virtual_keyboard");
+                temp_keyboard = keyboard.remove();
+                $(event.target).after(temp_keyboard);
+                temp_keyboard.show();
+                temp_keyboard.jkeyboard({
+                    layout: "russian",
+                    input: $(event.target),
+                });
+                window.old_target = event.target;
+                /*$(".close_keyboard").click(function (event) {
+                    keyboard.hide();
+                });*/
+            }
+        }
+    });
     $(document).click(function (event) {
         if ($(event.target).closest('.subcat').length) return;
         if ($(event.target).closest('.open_subcat').length) return;

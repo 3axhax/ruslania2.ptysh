@@ -1146,6 +1146,8 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
 'A_NEW_YEAR_REAL'=>'Год издания',
 'A_NEW_MENU_REK'=>'Рекомендации',
 'A_NEW_FILTER_TITLE_LANG'=>'Язык товара - ',
+    'A_NEW_KEYBOARD_ON' => 'Вкл.',
+    'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
 ); 
