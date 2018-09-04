@@ -62,7 +62,7 @@ class SearchAuthors {
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
 			'from ' . $tableAuthors . ' t '.
-			'where (t.' . $fieldFirst . ' = :q) '.
+			'where (ord(t.' . $fieldFirst . ') = ord(:q)) '.
 				'and (is_' . $entity . '_author > 0) '.
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.

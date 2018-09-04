@@ -120,11 +120,22 @@
                 <?php if (empty($route)) $route = 'entity/authorlist';
                 $lineRu = $lineOther = false;
                 if (empty($chasdr)) $chasdr = '';
+                $yo = false;
                 foreach($abc as $item) :
 				    if (trim($item['first_'.$lang]) == '') continue;
+                    if (trim($item['first_'.$lang]) == 'Ё') {
+                        $yo = true;
+                        continue;
+                    }
+                    if ($yo&&!in_array(trim($item['first_'.$lang]), array('А','Б','В','Г','Д','Е'))):
+                        $yo = false; ?>
+                        <a class="<?=(('Ё' == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
+                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>"
+                            >Ё</a>
+                    <?php endif;
                     if (!$lineOther&&preg_match("/[^a-zа-я0-9]/ui", $item['first_'.$lang])): $lineOther = true; ?>
                         <br>
-                    <?php elseif(!$lineRu&&preg_match("/[а-я]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
+                    <?php elseif(!$lineRu&&preg_match("/[а-яё]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
                         <br>
                     <?php endif; ?>
                     <a class="<?=(($item['first_'.$lang] == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
