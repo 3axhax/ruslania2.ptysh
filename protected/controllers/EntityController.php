@@ -175,6 +175,15 @@ class EntityController extends MyController {
 
         Yii::app()->session['last_e'] = 'filter_e' . $entity . '_c_' . $cid;
 
+        if (isset(Yii::app()->request->cookies['last_e']->value)
+            && (($key = Yii::app()->request->cookies['last_e']->value) != '')
+            && (Yii::app()->request->cookies['last_e']->value != 'filter_e' . $entity . '_c_' . $cid)) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
+        Yii::app()->request->cookies['last_e'] = new CHttpCookie('last_e', 'filter_e' . $entity . '_c_' . $cid);
+        $test = Yii::app()->request->cookies['last_e']->value;
+
         if ($entity == 10) {
             switch (Yii::app()->language) {
                 case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
