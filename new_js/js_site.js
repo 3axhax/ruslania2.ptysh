@@ -7,8 +7,19 @@ $(document).ready(function(){
         if ($(".keyboard_off").is(':visible')) {
             $("#virtual_keyboard").hide();
         }
+        else {
+            input_search = $("input.search_text");
+            keyboard = $("#virtual_keyboard");
+            temp_keyboard = keyboard.remove();
+            input_search.after(temp_keyboard);
+            temp_keyboard.show();
+            temp_keyboard.jkeyboard({
+                layout: "russian",
+                input: input_search,
+            });
+        }
     });
-    $("input").on('focus', function (event) {
+    $("input.enable_virtual_keyboard").on('focus', function (event) {
         let keyboard_visible = false;
         if ($(".keyboard_on").is(':visible')) {
             keyboard_visible = true;

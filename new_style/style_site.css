@@ -2501,7 +2501,7 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
     color: #afafaf;
 }
 
-.search_box .loading, .search_aut .loading { display: none; font-size: 12px; color: #aaa; position: absolute; right: 100px; top: 17px; }
+.search_box .loading, .search_aut .loading { display: none; font-size: 12px; color: #aaa; position: absolute; right: 170px; top: 17px; }
 
 .search_box.mp_busy .loading, .search_aut.mp_busy .loading { display: block; }
 
@@ -3094,6 +3094,7 @@ div.detail-prop .prop-name { float: left; width: 200px; }
 div.detail-prop .prop-value { padding-left: 210px; }
 div.detail-prop .prop-value li { list-style-type: none; }
 
+/*Виртуальная клавиатура*/
 #virtual_keyboard {
     position: absolute;
     top: 60px;
@@ -3135,4 +3136,12 @@ div.detail-prop .prop-value li { list-style-type: none; }
 }
 .close_keyboard:after {
     transform: rotate(-45deg);
+}
+
+.trigger_keyboard {
+    position: relative;
+    max-width: 100px;
+    bottom: 35px;
+    left: 620px;
+    cursor: pointer
 }
