@@ -1052,7 +1052,7 @@ class Category {
         return $ret;
     }
 
-    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array()) {
+    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array(), $checkCountAvail = false) {
         $return = array();
         # Traverse the tree and search for direct children of the root
         foreach ($tree as $idx => $node) {
@@ -1062,21 +1062,23 @@ class Category {
                 # Remove item from tree (we don't need to traverse this again)
                 unset($tree[$idx]);
                 # Append the child into result array and parse it's children
-                $p = array('payload' => $node,
-                    'parent' => $parent,
-                    'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams));
+                if (!$checkCountAvail || ($node['avail_items_count'] > 0)) {
+                    $p = array('payload' => $node,
+                        'parent' => $parent,
+                        'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams, $checkCountAvail));
 
-                foreach ($additionalParams as $key => $val)
-                    $p[$key] = $val;
+                    foreach ($additionalParams as $key => $val)
+                        $p[$key] = $val;
 
-                $return[] = $p;
+                    $return[] = $p;
+                }
             }
         }
         return empty($return) ? array() : $return;
     }
 
-    public function GetCategoriesTree($entity) {
-        $key = 'CategoryTree' . $entity;
+    public function GetCategoriesTree($entity, $checkCountAvail = false) {
+        $key = 'CategoryTree' . $entity . '_count' . (int) $checkCountAvail;
 
         $tree = Yii::app()->dbCache->get($key);
         if ($tree === false) {
@@ -1085,7 +1087,7 @@ class Category {
             $sql = 'SELECT * FROM ' . $eTable . ' ORDER BY title_'.Yii::app()->language.', sort_order';
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-            $tree = $this->parseTree(0, $rows, 'id', 'parent_id');
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), $checkCountAvail);
             Yii::app()->dbCache->set($key, $tree);
         }
 
@@ -1093,6 +1095,20 @@ class Category {
 //        foreach ($tree as $row) $ids[] = $row['id'];
 //        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
+        return $tree;
+    }
+
+    public function getPeriodicsCategoriesTree($type) {
+        $key = 'CategoryTree' . Entity::PERIODIC . '_type' . (int) $type;
+
+        $tree = Yii::app()->dbCache->get($key);
+        if ($tree === false) {
+            $sql = 'SELECT * FROM pereodics_categories where (avail_items_type_' . $type . ' > 0) ORDER BY title_'.Yii::app()->language.', sort_order';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), false);
+            Yii::app()->dbCache->set($key, $tree);
+        }
         return $tree;
     }
 
@@ -1115,6 +1131,7 @@ class Category {
 
         return $rows;
     }
+
 
 }
 
