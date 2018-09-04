@@ -3,6 +3,7 @@
 class SearchController extends MyController {
 	//количество в результате поиска
 	private $_counts = null;
+	protected $_exactMatch = false;
 
 	/**
 	 * @var DGSphinxSearch
@@ -27,10 +28,10 @@ class SearchController extends MyController {
 		$abstractInfo = array();
 		$didYouMean = array();
 		if (!$isCode) {
-			$abstractInfo = $this->getEntitys($q);
-			$didYouMean = $this->getDidYouMean($q);
 			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
 			$list = $this->inDescription($list, $q);
+			$abstractInfo = $this->getEntitys($q);
+			$didYouMean = $this->getDidYouMean($q);
 		}
 
 		if (empty($abstractInfo)) $paginatorInfo = new CPagination(count($list));
@@ -92,11 +93,28 @@ class SearchController extends MyController {
 					$find = $this->_search->query('', 'products');
 					if (!empty($find)) {
 						$product = SearchHelper::ProcessProducts($find);
-						Debug::staticRun(array($find, $product));
 						return SearchHelper::ProcessProducts2($product, false);
 					}
 					break;
 			}
+		}
+		$sql = ''.
+			'select `id`, 10 AS `entity` '.
+			'from `books_catalog` '.
+			'where (isbn2 like :q) '.
+				'or (isbn3 like :q) '.
+				'or (isbn4 like :q) '.
+				'or (isbn_wrong like :qPr) '.
+		'';
+		$items = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q'=>$q, ':qPr'=>'%' . $q . '%'));
+		if (!empty($items)) {
+			$product = array();
+			foreach ($items as $item) {
+				if (empty($product['e' . $item['entity']])) $product['e' . $item['entity']] = array();
+				$product['e' . $item['entity']][] = $item['id'];
+			}
+			return SearchHelper::ProcessProducts2($product, false);
+//						return $items;
 		}
 		return array();
 
@@ -114,13 +132,21 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@* ' . $this->_search->EscapeString($query);
 		$groupby = array(
 			'field'=>'entity',
 			'mode'=>SPH_GROUPBY_ATTR,
 			'order'=>'@group desc',
 		);
-		$res = $this->_search->groupby($groupby)->query($q, 'products');
+		if ($this->_exactMatch) {
+			$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+//			$this->_search->SetMatchMode(SPH_MATCH_ALL);
+			$res = $this->_search->groupby($groupby)->query($q, 'products_no_morphy');
+		}
+		else {
+			$q = '@* ' . $this->_search->EscapeString($query);
+			$res = $this->_search->groupby($groupby)->query($q, 'products');
+		}
+
 		if (empty($res['matches'])) return array();
 
 		$result = array();
@@ -142,7 +168,6 @@ class SearchController extends MyController {
 	}
 
 	function getListExactMatch($query, $page, $pp) {
-		return array();
 		$this->_search->resetCriteria();
 		$this->_search->SetLimits(($page-1)*$pp, $pp);
 
@@ -158,14 +183,17 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@(title_ru,title_rut,title_en,title_fi) ^' . $this->_search->EscapeString($query) . '$';
+		$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
 
-//		$this->_search->SetMatchMode(SPH_MATCH_PHRASE);
+//		$this->_search->SetMatchMode(SPH_MATCH_ALL);
+//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
 		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "in_shop DESC");
 
 
 		$find = $this->_search->query($q, 'products_no_morphy');
+//		Debug::staticRun(array($q, $find));
 		if (empty($find)) return array();
+		$this->_exactMatch = true;
 
 		$product = SearchHelper::ProcessProducts($find);
 		$prepareData =  SearchHelper::ProcessProducts2($product, false);
