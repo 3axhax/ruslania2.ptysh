@@ -144,6 +144,9 @@
             $(this.element).html('').append(keyboard_container).append($('<span/>').addClass('close_keyboard'));
             $(".close_keyboard").click(function (event) {
                 $("#virtual_keyboard").hide();
+                $(".keyboard_on").hide();
+                $(".keyboard_off").show();
+                $(".trigger_keyboard img").addClass('keyboard_off_img');
             });
         },
 
