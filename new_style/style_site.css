@@ -2776,6 +2776,7 @@ input.prod-filter__input:focus,
     border-color: #edb421;
 }
 .prod-filter__button {
+    margin-left: auto;
     width: 161px;
     border: none;
     color: #fff;

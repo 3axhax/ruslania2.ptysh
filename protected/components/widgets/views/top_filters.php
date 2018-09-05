@@ -67,7 +67,7 @@
         </div>
         <?php endif;?>
 
-        <?php if ($entity != Entity::VIDEO):?>
+        <?php if ($entity != Entity::VIDEO && isset($filters['price']) && $filters['price'] == true):?>
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_PRICE');?>:</label>
@@ -139,7 +139,8 @@
 
         <?php if ($entity != Entity::VIDEO):?>
         <!--Кнопки управления-->
-        <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
+        <button class="prod-filter__button" type="button" id="filter_apply"
+                onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
         <?php endif;?>
@@ -200,7 +201,7 @@
 
         <?php if (isset($filters['publisher']) && $filters['publisher'] == true):?>
             <!--Фильтр по издательству-->
-        <div class="prod-filter__col">
+        <div class="prod-filter__col" id="publisher_div">
             <?php if ($entity == Entity::MUSIC):?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_LABEL')?>:</label>
             <?php else:?>
@@ -216,6 +217,12 @@
             <script>
                 liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
             </script>
+            <?php if ($entity == Entity::MAPS || $entity == Entity::SOFT || $entity == Entity::PRINTED):?>
+                <script>
+                    typeDiv = $('#publisher_div').detach();
+                    typeDiv.insertBefore($('#filter_apply'));
+                </script>
+            <?php endif;?>
         </div>
         <?php endif;?>
 
@@ -269,7 +276,7 @@
         <?php endif; ?>
 
         <?php if (isset($filters['formatVideo']) && $filters['formatVideo'] == true):?>
-            <!--Фильтр формату видео-->
+            <!--Фильтр по формату видео-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_FORMAT_VIDEO')?>:</label>
                 <select class="prod-filter__input prod-filter__input__select--m"
@@ -324,7 +331,7 @@
                     width: '161px',
                 });
             </script>
-            <?php if ($entity == Entity::PERIODIC):?>
+            <?php if ($entity == Entity::PERIODIC || $entity == Entity::SOFT):?>
                 <script>
                     typeDiv = $('#binding_div').detach();
                     typeDiv.insertBefore($('#filter_apply'));
