@@ -455,10 +455,10 @@ else $act = array('', '');
 
 
             $(document).ready(function () {
-                sortCategoryMenu('#books_menu', '#books_category', '#books_sale');
-                sortCategoryMenu('#sheet_music_menu', '#sheet_music_category', '#sheet_music_sale');
-                sortCategoryMenu('#music_menu', '#music_category', '#music_sale');
-                sortCategoryMenu('#periodic_menu', '#periodic_category', '#periodic_sale');
+                sortCategoryMenu('#books_menu', '#books_category', '#books_sale', true);
+                sortCategoryMenu('#sheet_music_menu', '#sheet_music_category', '#sheet_music_sale', true);
+                sortCategoryMenu('#music_menu', '#music_category', '#music_sale', true);
+                //sortCategoryMenu('#periodic_menu', '#periodic_category', '#periodic_sale', false);
                 $(document).click(function (event) {
                     if ($(event.target).closest(".select_lang").length)
                         return;
@@ -612,7 +612,8 @@ else $act = array('', '');
 
             }
 
-            function sortCategoryMenu(id_category, id_category_item = false, id_sale_item = false) {
+            function sortCategoryMenu(id_category, id_category_item = false, id_sale_item = false, clearfix) {
+                clearfix = clearfix || false;
                 var mylist = $(id_category);
                 var listitems = mylist.children().get();
                 var category_item;
@@ -629,11 +630,11 @@ else $act = array('', '');
                         sale_item = itm;
                     else {
                         mylist.append(itm);
-                        mylist.append('<div class="clearfix"></div>');
+                        if (clearfix) mylist.append('<div class="clearfix"></div>');
                     }
                 });
                 mylist.append(sale_item);
-                mylist.append('<div class="clearfix"></div>');
+                if (clearfix) mylist.append('<div class="clearfix"></div>');
                 mylist.append(category_item);
             }
 
@@ -1158,8 +1159,9 @@ else $act = array('', '');
 
                             <div class="dd_box_bg list_subcategs" style="left: -280px;">
 
-                                <div class="span10">
-
+                                <div class="span10 mainmenu-periodics">
+<?php
+/*
                                     <ul id="periodic_menu">
                                         <?
                                         $availCategory = array(19, 48, 96, 67);
@@ -1186,7 +1188,73 @@ else $act = array('', '');
                                         </li>
 
                                     </ul>
-
+*/
+$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE');
+$availCategory1 = array(1=>'NAME_POLICY', 44=>'NAME_SPORT', 9=>'NAME_HEALTH', 12=>'NAME_HISTORY', 50=>'NAME_ASTROLOGY');
+$availCategorySale = array(100=>'MENU_SALE_PERIODICS');
+$rows = Category::GetCategoryList(Entity::PERIODIC, 0, array_merge(array_keys($availCategory2), array_keys($availCategory1), array_keys($availCategorySale)));
+$availCategory = array();
+foreach ($rows as $row) $availCategory[$row['id']] = $row;
+?>
+                                    <div style="float:left;width:250px;">
+                                        <ul>
+                                            <li style="margin-bottom: 10px;">
+                                                <a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'type' => 2)) ?>">
+                                                    <span class="title__bold"><?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_2') ?></span>
+                                                </a>
+                                            </li>
+                    <?php foreach ($availCategory2 as $id=>$name):
+                        if (!empty($availCategory[$id])&&!empty($availCategory[$id]['avail_items_type_2'])):
+                            if (empty($name)) $name = ProductHelper::GetTitle($availCategory[$id]);
+                            else $name = $ui->item($name);
+                            ?>
+                        <li>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(2))); ?>"><?= $name ?></a>
+                        </li>
+                    <?php endif; endforeach; ?>
+                                            <?php $row = Category::GetByIds(Entity::PRINTED, 33)[0] ?>
+                                            <li>
+                                                <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div style="margin-left: 250px">
+                                        <ul>
+                                            <li style="margin-bottom: 10px;">
+                                                <a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'type' => 1)) ?>">
+                                                    <span class="title__bold"><?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_1') ?></span>
+                                                </a>
+                                            </li>
+                    <?php foreach ($availCategory1 as $id=>$name):
+                        if (!empty($availCategory[$id])&&!empty($availCategory[$id]['avail_items_type_1'])):
+                            if (empty($name)) $name = ProductHelper::GetTitle($availCategory[$id]);
+                            else $name = $ui->item($name);
+                            ?>
+                            <li>
+                                <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(1))); ?>"><?= $name ?></a>
+                            </li>
+                    <?php endif; endforeach; ?>
+                                            <li style="margin-bottom: 10px;margin-top: 15px;">
+                                                <a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'type' => 3)) ?>">
+                                                    <span class="title__bold"><?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_3') ?></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div style="margin-top: 15px;">
+                                        <ul>
+                                            <li id="periodic_category">
+                                                <a href="<?= Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))) ?>"><?= $ui->item('A_NEW_ALL_CATEGORIES_PERIODICS'); ?></a>
+                                            </li>
+                                            <li>
+                                                <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[100])))); ?>"><?= $ui->item($availCategorySale[100]) ?></a>
+                                            </li>
+                                            <li>
+                                                <a href="<?= Yii::app()->createUrl('entity/gift', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))) ?>"><?= $ui->item('A_NEW_PERIODIC_FOR_GIFT'); ?></a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 <!--<div class="span2">
                                         

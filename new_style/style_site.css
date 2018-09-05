@@ -2438,6 +2438,10 @@ li.dd_box  .dd_box_bg.list_subcategs { width: 500px;}
 	border: none;
 	width: 50%;
 }
+
+.dd_box_bg.list_subcategs .span10.mainmenu-periodics li {
+    width: 100%;
+}
 .dd_box_bg.list_subcategs .span10 li a{
 	
 	padding: 0;
@@ -2449,6 +2453,10 @@ li.dd_box  .dd_box_bg.list_subcategs { width: 500px;}
 	font-weight: normal;
 	letter-spacing: 0;
 	
+}
+
+.dd_box_bg.list_subcategs .span10.mainmenu-periodics li a {
+    padding: 0;
 }
 
 .dd_box_bg.list_subcategs .span10 li a:hover {
@@ -2776,6 +2784,7 @@ input.prod-filter__input:focus,
     border-color: #edb421;
 }
 .prod-filter__button {
+    margin-left: auto;
     width: 161px;
     border: none;
     color: #fff;

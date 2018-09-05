@@ -1213,4 +1213,17 @@ IBAN DE79514303006474790001 <br>
 	'PERIODIC_TYPE_PLURAL_2' => 'Журналы',
 	'PERIODIC_TYPE_PLURAL_1' => 'Газеты',
 	'PERIODIC_TYPE_PLURAL_3' => 'Газеты онлайн',
+	'NAME_POPULAR'=>'Популярные',
+	'NAME_SCIENCE'=>'Научные',
+	'NAME_FORCHILDS'=>'Для детей',
+	'NAME_FORFEMALE'=>'Для женщин',
+	'NAME_FORMALE'=>'Для мужчин',
+	'NAME_POLICY'=>'Общество и политика',
+	'NAME_SPORT'=>'Спорт',
+	'NAME_HEALTH'=>'Здоровье',
+	'NAME_HISTORY'=>'История',
+	'NAME_ASTROLOGY'=>'Астрология',
+	'A_NEW_ALL_CATEGORIES_PERIODICS'=>'Все категории газет и журналов',
+	'MENU_SALE_PERIODICS' => 'Подписка по скидочной цене',
+
 );
