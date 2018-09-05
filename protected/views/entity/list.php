@@ -52,7 +52,8 @@ $lang = Yii::app()->language;
 
 			<div class="sortbox langsel">
                 <?php if ($entity != Entity::SHEETMUSIC && $entity != Entity::PERIODIC
-                    && $entity != Entity::MUSIC && $entity != Entity::VIDEO):?>
+                    && $entity != Entity::MUSIC && $entity != Entity::VIDEO
+                    && $entity != Entity::PRINTED && $entity != Entity::SOFT):?>
                 <?php $this->widget('SelectSimulator', array(
                     'items'=>ProductLang::getLangs($entity, empty($cat_id)?null:$cat_id),
                     'paramName'=>'lang',

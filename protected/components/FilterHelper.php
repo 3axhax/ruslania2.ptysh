@@ -37,6 +37,7 @@ class FilterHelper
         $filters = [];
 
         $category = new Category();
+        $filters['price'] = true;
         $filters['max-min'] = $category->getFilterSlider($entity, $cid);
         if (Entity::checkEntityParam($entity, 'authors')) $filters['author'] = true;
         if (Entity::checkEntityParam($entity, 'publisher')) $filters['publisher'] = true;
@@ -44,7 +45,17 @@ class FilterHelper
         if (Entity::checkEntityParam($entity, 'years')) $filters['years'] = true;
         if (Entity::checkEntityParam($entity, 'performers')) $filters['performers'] = true;
 
-        if ($entity == 40) {
+        if ($entity == Entity::SOFT) {
+            unset($filters['author']);
+            unset($filters['years']);
+        }
+
+        if ($entity == Entity::PRINTED && $cid == 6) {
+            unset($filters);
+            $filters['price'] = true;
+        }
+
+        if ($entity == Entity::VIDEO) {
             $filters['directors'] = true;
             $filters['actors'] = true;
             $filters['langVideo'] = $category->getFilterLangsVideo($entity, $cid);
@@ -52,15 +63,15 @@ class FilterHelper
             $filters['formatVideo'] = $category->getFilterFormatVideo($entity, $cid);
             $filters['release_years'] = true;
         }
-        if ($entity == 10) {
+        if ($entity == Entity::BOOKS) {
             $filters['pre_sale'] = true;
         }
 
-        if ($entity != 30) {
+        if ($entity != Entity::PERIODIC) {
             $filters['avail'] = true;
         }
 
-        if ($entity == 30) {
+        if ($entity == Entity::PERIODIC) {
             $filters['country'] = $category->getPeriodicCountry($entity, $cid);
         }
 
@@ -72,6 +83,9 @@ class FilterHelper
     static function setFiltersData ($entity, $cid = 0, $data) {
         self::normalizeData($data);
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
+        if (Yii::app()->request->cookies[$key]->value != serialize(self::$data)) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(self::$data));
+        }
         if (Yii::app()->session[$key] != serialize(self::$data)) {
             Yii::app()->session[$key] = serialize(self::$data);
         }
@@ -81,7 +95,12 @@ class FilterHelper
 
     static function getFiltersData ($entity, $cid = 0) {
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
-        self::$sessionData = unserialize(Yii::app()->session[$key]);
+        if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
+            self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+        }
+        if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
+            self::$sessionData = unserialize(Yii::app()->session[$key]);
+        }
         $filtersData = FiltersData::instance();
         if ($filtersData->isSetKey($key)) {
             self::$sessionData = $filtersData->getFiltersData($key);
@@ -124,7 +143,9 @@ class FilterHelper
     }
 
     static function deleteEntityFilter ($entity, $cid = 0) {
-        Yii::app()->session['filter_e' . $entity . '_c_' . $cid] = '';
+        $key = 'filter_e' . $entity . '_c_' . $cid;
+        Yii::app()->session[$key] = '';
+        Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
         $filtersData = FiltersData::instance();
         $filtersData->deleteFiltersData();
     }
