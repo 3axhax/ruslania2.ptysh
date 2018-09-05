@@ -1210,4 +1210,7 @@ IBAN DE79514303006474790001 <br>
     'A_NEW_TYPOGRAPHY' => 'Оформление',
     'A_NEW_LABEL' => 'Лэйбл',
 
+	'PERIODIC_TYPE_PLURAL_2' => 'Журналы',
+	'PERIODIC_TYPE_PLURAL_1' => 'Газеты',
+	'PERIODIC_TYPE_PLURAL_3' => 'Газеты онлайн',
 );

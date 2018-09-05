@@ -890,6 +890,8 @@ h1.titlename {
     font-size: 18.689px;
     color: rgb(18, 87, 171);
     display: block;
+    line-height: 24px;
+    margin-bottom: 15px;
 }
 
 .listgoods ul.items li .span11 .authors {
