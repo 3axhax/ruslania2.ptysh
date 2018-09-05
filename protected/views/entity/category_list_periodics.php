@@ -7,7 +7,7 @@
 			<div style="float: left; width: <?= (100/count($types)) ?>%">
 				<div>
 					<a href="<?= Yii::app()->createUrl('entity/bytype', array('entity'=>'periodics', 'type'=>$type['id'], 'title'=>ProductHelper::ToAscii($type['title']))) ?>">
-						<?= $type['title'] ?>
+						<?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_' . $type['id']) ?>
 					</a>
 				</div>
 	<?php $this->renderPartial('/entity/_level_categories_periodics', array('tree' => $type['categories'], 'entity' => $entity, 'parent'=>false, 'lvl'=>1, 'typeId'=>$type['id'])); ?>
