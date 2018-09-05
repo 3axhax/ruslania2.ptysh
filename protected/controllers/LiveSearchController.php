@@ -96,16 +96,18 @@ class LiveSearchController extends MyController {
 		if (!$this->_check('authors')) return;
 
 		$entity = Yii::app()->getRequest()->getParam('entity');
-		$authors = SearchAuthors::get()->getAuthors($entity, (string)Yii::app()->getRequest()->getParam('q'));
+		$authors = SearchAuthors::get()->getAuthors($entity, (string)Yii::app()->getRequest()->getParam('q'), 20, false);
 
 		$url ='/entity/byauthor';
 		$param = array('entity' => Entity::GetUrlKey($entity), 'aid' => 0, 'title' => '');
 		$titleField = 'title_' . SearchAuthors::get()->getSiteLang();
 		foreach ($authors as $i=>$author) {
+			unset($param['avail']);
 			$authors[$i]['title'] = $author[$titleField];
 			unset($authors[$i][$titleField]);
 			$param['aid'] = $author['id'];
 			$param['title'] = ProductHelper::ToAscii($authors[$i]['title']);
+			if (isset($author['availItems'])&&empty($author['availItems'])) $param['avail'] = 0;
 			$authors[$i]['href'] = Yii::app()->createUrl($url, $param);
 		}
 		$this->ResponseJson($authors);

@@ -6,6 +6,6 @@ foreach ($abstractInfo as $eNum=>$counts):
     <div class="row_category">
 	    <?= $q ?>
 	    <span><?= $ui->item('A_NEW_SEARCH_IN_CAT') ?> <?= Entity::GetTitle($eNum) ?></span>
-	    <a href="<?= Yii::app()->createUrl('search/general', $dataForSearch) ?>" class="result_search_count"><?= $counts ?></a>
+	    <a href="<?= Yii::app()->createUrl('search/general') ?>?<?= http_build_query($dataForSearch) ?>" class="result_search_count"><?= $counts ?></a>
     </div>
 <?php endforeach; ?>

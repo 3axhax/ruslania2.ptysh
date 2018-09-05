@@ -414,6 +414,19 @@ class SearchController extends MyController {
 			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
 			if (count($ids) >= $limit) break;
 		}
+/*		$ids = array();
+		$ids10 = $this->_isAuthors(10, array_keys($result));
+		$ids22 = $this->_isAuthors(22, array_keys($result));
+		$ids24 = $this->_isAuthors(24, array_keys($result));
+		foreach ($result as $id=>$item) {
+			if (in_array($id, $ids10)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author']);
+			elseif (in_array($id, $ids22)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'itemsAvail'=>$item['is_22_author']);
+			elseif (in_array($id, $ids24)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'itemsAvail'=>$item['is_24_author']);
+			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
+			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
+			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
+			if (count($ids) >= $limit) break;
+		}*/
 		if (empty($ids)) return array();
 
 		$roles = array();
@@ -423,6 +436,13 @@ class SearchController extends MyController {
 		$ids = array_keys($ids);
 		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
 		return $result;
+	}
+
+	protected function _isAuthors($entity, $ids) {
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableItemsAuthors = $entityParam['author_table'];
+		$sql = 'select author_id from ' . $tableItemsAuthors . ' where (author_id in (' . implode(',',$ids) . ')) group by author_id';
+		return Yii::app()->db->createCommand($sql)->queryColumn();
 	}
 
 	protected function _getPublishers($query) {

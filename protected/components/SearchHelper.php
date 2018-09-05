@@ -691,6 +691,7 @@ class SearchHelper
                     $key => $personID
                 );
                 if (empty($avail)) $urlParams['avail'] = 0;
+                elseif (isset($data['itemsAvail'])&&empty($data['itemsAvail'])) $urlParams['avail'] = 0;
                 $data['url'] = Yii::app()->createUrl($routes[$role], $urlParams);
                 $data['title'] = Entity::GetTitle($entity) . ': <b>' .
                     sprintf(Yii::app()->ui->item($titles[$role]), $title) . '</b>';
