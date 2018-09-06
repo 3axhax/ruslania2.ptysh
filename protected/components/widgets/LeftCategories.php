@@ -18,6 +18,7 @@ class LeftCategories extends CWidget {
 	 * @var Category
 	 */
 	private $_category = null;
+	private $_usePeriodicCategoryTypes = false;//true - что бы категории слева в подписке показывались с учетом типов
 
 	function __set($name, $value) {
 		if ($value !== null) $this->_params[$name] = $value;
@@ -29,10 +30,12 @@ class LeftCategories extends CWidget {
 
 	function run() {
 		$categories = isset($this->_params['categories'])?$this->_params['categories']:$this->_getCategories();
-		if (($this->_params['entity'] === Entity::PERIODIC)/*&&(Yii::app()->getController()->action->id == 'bytype')&&isset($_GET['ha'])*/) {
+
+		if ($this->_usePeriodicCategoryTypes&&($this->_params['entity'] === Entity::PERIODIC)) {
 			$this->_params['tpl'] = 'left_categories_periodics';
 			$categories = $this->_preparePeriodicsCategorys($categories);
 		}
+
 		if (empty($categories)) return;
 
 		$this->render($this->_params['tpl'], array(
@@ -83,7 +86,7 @@ class LeftCategories extends CWidget {
 
 	private function _getCategories($cid = null) {
 		if ($cid === null) $cid = $this->_params['cid'];
-		if ($this->_params['entity'] === Entity::PERIODIC) $cid = 0;
+		if ($this->_usePeriodicCategoryTypes&&($this->_params['entity'] === Entity::PERIODIC)) $cid = 0;
 
 		$categories = $this->_category->exists_subcategoryes($this->_params['entity'], $cid);
 		if (empty($categories)) return array();
@@ -93,7 +96,7 @@ class LeftCategories extends CWidget {
 				//убираю категории, если нет товаров в наличии
 				unset($categories[$k]);
 			}
-			elseif ($this->_params['entity'] != Entity::PERIODIC) $categories[$k]['childs'] = $this->_getCategories($category['id']);
+			elseif (($this->_params['entity'] != Entity::PERIODIC)||$this->_usePeriodicCategoryTypes) $categories[$k]['childs'] = $this->_getCategories($category['id']);
 		}
 		return $categories;
 
