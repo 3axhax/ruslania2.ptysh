@@ -59,7 +59,7 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code[] = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code[] = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code[] = 'isbnnum';
-		if (!preg_match("/[^a-z0-9-]/i", $q)) {
+		if (!preg_match("/[^a-z0-9-]/i", $q)&&preg_match("/\d/i", $q)) {
 			$code[] = 'catalogue';
 		}
 		return $code;
@@ -405,33 +405,42 @@ class SearchController extends MyController {
 
 		$limit = 3;
 		$ids = array();
+		$findAuthor = false;
 		foreach ($result as $id=>$item) {
-			if ($item['is_10_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
-			elseif ($item['is_22_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
-			elseif ($item['is_24_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
+			if ($item['is_10_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
+				$findAuthor = true;
+			}
+			elseif ($item['is_22_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
+				$findAuthor = true;
+			}
+			elseif ($item['is_24_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
+				$findAuthor = true;
+			}
 			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
 			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
 			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
 			if (count($ids) >= $limit) break;
 		}
-/*		$ids = array();
-		$ids10 = $this->_isAuthors(10, array_keys($result));
-		$ids22 = $this->_isAuthors(22, array_keys($result));
-		$ids24 = $this->_isAuthors(24, array_keys($result));
-		foreach ($result as $id=>$item) {
-			if (in_array($id, $ids10)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author']);
-			elseif (in_array($id, $ids22)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'itemsAvail'=>$item['is_22_author']);
-			elseif (in_array($id, $ids24)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'itemsAvail'=>$item['is_24_author']);
-			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
-			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
-			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
-			if (count($ids) >= $limit) break;
-		}*/
+		if (empty($findAuthor)&&(count($ids) < $limit)) {
+			$ids10 = $this->_isAuthors(10, array_keys($result));
+			$ids22 = $this->_isAuthors(22, array_keys($result));
+			$ids24 = $this->_isAuthors(24, array_keys($result));
+			foreach ($result as $id=>$item) {
+				if (in_array($id, $ids10)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author']);
+				elseif (in_array($id, $ids22)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'itemsAvail'=>$item['is_22_author']);
+				elseif (in_array($id, $ids24)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'itemsAvail'=>$item['is_24_author']);
+				if (count($ids) >= $limit) break;
+			}
+		}
 		if (empty($ids)) return array();
 
 		$roles = array();
 		foreach($ids as $id=>$r) {
 			$roles[$r['role_id']][$id] = array('real_id'=>$id, 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$id]['itemsAvail'] = $r['itemsAvail'];
 		}
 		$ids = array_keys($ids);
 		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
