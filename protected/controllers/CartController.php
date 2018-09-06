@@ -425,7 +425,9 @@ class CartController extends MyController {
     }
 
     public function actionResult() {
-
+        
+        
+        
         $cart = new Cart();
         $tmp = $cart->GetCart($this->uid, $this->sid);
 
@@ -483,7 +485,14 @@ class CartController extends MyController {
 
             $data['number_zakaz'] = $id;
             $data['ptype'] = $post['ptype'];
-
+            
+             if (Yii::app()->request->isAjaxRequest) {
+                    
+                    echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                    exit();
+                    
+                }
+            
             if ($post['ptype'] == '27') {
                 $this->render('applepay', $data);
             } elseif ($post['ptype'] == '26') {
@@ -511,6 +520,15 @@ class CartController extends MyController {
 
 
         if (Yii::app()->request->isPostRequest) {
+            
+            if (User::checkLogin($email)) {
+                
+                echo '9';
+                exit();
+                
+            } else {
+            
+            
             $type = $post['Address']['type'];
 
             $business_title = $post['Address']['business_title'];
@@ -598,7 +616,15 @@ class CartController extends MyController {
                             ), 'text/html');
                     $message->addTo($email);
                     $message->from = 'noreply@ruslania.com';
-                    Yii::app()->mail->send($message);
+                    $mailResult = Yii::app()->mail->send($message);
+                    file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
+                            date('d.m.Y H:i:s'),
+                            $email,
+                            serialize($mailResult),
+                            $message->view,
+                            serialize($message->from),
+                        )
+                    ) . "\n", FILE_APPEND);
                 }
 
                 $userID = $identity->getId();
@@ -647,12 +673,19 @@ class CartController extends MyController {
 
                 $data['order'] = $order;
 
-                $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
-                $this->breadcrumbs[] = 'Оформление заказа';
+                //$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
+               // $this->breadcrumbs[] = 'Оформление заказа';
 
                 $data['number_zakaz'] = $id;
                 $data['ptype'] = $post['ptype'];
-
+                
+                if (Yii::app()->request->isAjaxRequest) {
+                    
+                    echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                    exit();
+                    
+                }
+                
                 if ($post['ptype'] == '27') {
                     $this->render('applepay', $data);
                 } elseif ($post['ptype'] == '26') {
@@ -673,10 +706,17 @@ class CartController extends MyController {
                         $namepay = 'Оплата в магазине';
 
                     $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
-
-                    $this->render('result', $data);
+                    
+                    
+                    
+                    //$this->render('result', $data);
+                    
+                    
+                    
                 }
+                //echo '1';
             }
+        }
         }
     }
 
@@ -787,6 +827,11 @@ class CartController extends MyController {
         $cart = new Cart;
         $cartItems = array();
         $tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid), $this->uid);
+        
+        if (!count($tmp)) {
+            $this->redirect('/me/');
+        }
+        
         foreach ($tmp as $item) {
             $item['Title'] = str_replace('"', '\\"', $item['Title']); // из-за того, что это идет в JSON в виде строки в do_order.php и ломает парсеру жизнь
             if ($item['IsAvailable'])
