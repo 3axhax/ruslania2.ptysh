@@ -14,6 +14,19 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 
+		$sql = ''.
+			'update ' . $this->_table . ' set '	.
+			'first_ru = "", '.
+			'first_en = "" '.
+		'';
+		$this->_query($sql);
+		$sql = ''.
+			'update all_publishers set '	.
+			'first_ru = "", '.
+			'first_en = "" '.
+		'';
+		$this->_query($sql);
+
 		echo 'start ' . date('d.m.Y H:i:s') . "\n";
 		foreach ($this->_query($this->_sql100()) as $author) {
 			$author = $this->_checkInitials($author);
