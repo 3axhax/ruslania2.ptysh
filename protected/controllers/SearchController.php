@@ -28,7 +28,9 @@ class SearchController extends MyController {
 		$abstractInfo = array();
 		$didYouMean = array();
 		if (!$isCode) {
-			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+			$list = $this->getListExactMatch($q, $page, Yii::app()->params['ItemsPerPage']);
+			if (empty($list)) $list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+//			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
 			$list = $this->inDescription($list, $q);
 			$abstractInfo = $this->getEntitys($q);
 			$didYouMean = $this->getDidYouMean($q);
