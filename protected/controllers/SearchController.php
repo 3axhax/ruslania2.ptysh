@@ -91,7 +91,7 @@ class SearchController extends MyController {
 					$this->_search->resetCriteria();
 					$this->_search->SetFilter($codeName, array($q));
 					$find = $this->_search->query('', 'products');
-					if (!empty($find)) {
+					if (!empty($find)&&!empty($find['matches'])) {
 						$product = SearchHelper::ProcessProducts($find);
 						return SearchHelper::ProcessProducts2($product, false);
 					}

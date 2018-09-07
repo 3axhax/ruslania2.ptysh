@@ -364,7 +364,7 @@ class SearchHelper
             $ids['e'.$attr['entity']][] = $attr['real_id'];
         }
 
-        $p = new Product;
+//        $p = new Product;
 		
 		//var_dump($ids);
 		
