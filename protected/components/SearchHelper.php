@@ -584,6 +584,7 @@ class SearchHelper
 
         $res = $search->query($query, 'products');
         $result = self::ProcessProducts($res);
+        if (!empty($result)) $result = SearchHelper::ProcessProducts2($result, false);
 
         return array('Items' => $result, 'Paginator' => $paginator);
     }
