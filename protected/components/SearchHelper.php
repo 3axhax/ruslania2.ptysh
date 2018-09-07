@@ -512,6 +512,13 @@ class SearchHelper
            return array('Items' => array(), 'Paginator' => new CPagination(0));
         }
 
+        $cIds = array();
+        if (!empty($cid)) {
+            $category = new Category();
+            $cIds = $category->GetChildren($e, $cid);
+            $cIds[] = $cid;
+        }
+
         $search = self::Create();
         $search->ResetFilters();
         $authorIds = array();
@@ -548,7 +555,7 @@ class SearchHelper
         //if (!empty($perfIds)) $search->SetFilter('author', $perfIds);
         if ($only == '1') $search->SetFilter('avail', array(1));
         if (!empty($publisherIds)) $search->SetFilter('publisher_id', $publisherIds);
-        if (!empty($cid)) $search->SetFilter('category', array($cid));
+        if (!empty($cIds)) $search->SetFilter('category', $cIds);
         if(!empty($lang)) $search->SetFilter('language', array(intVal($lang)));
         if(!empty($year)) $search->SetFilter('year', array($year));
         if(!empty($binding_id)) $search->SetFilter('binding', array($binding_id));
@@ -570,7 +577,7 @@ class SearchHelper
         //if (!empty($perfIds)) $search->SetFilter('performer', $perfIds);
         if ($only == '1') $search->SetFilter('avail', array(1));
         if (!empty($publisherIds)) $search->SetFilter('publisher_id', $publisherIds);
-        if (!empty($cid)) $search->SetFilter('category', array($cid));
+        if (!empty($cIds)) $search->SetFilter('category', $cIds);
         if(!empty($lang)) $search->SetFilter('language', array(intVal($lang)));
         if(!empty($year)) $search->SetFilter('year', array($year));
         if(!empty($binding_id)) $search->SetFilter('binding', array($binding_id));
