@@ -18,7 +18,7 @@ class LeftCategories extends CWidget {
 	 * @var Category
 	 */
 	private $_category = null;
-	private $_usePeriodicCategoryTypes = false;//true - что бы категории слева в подписке показывались с учетом типов
+	private $_usePeriodicCategoryTypes = true;//true - что бы категории слева в подписке показывались с учетом типов
 
 	function __set($name, $value) {
 		if ($value !== null) $this->_params[$name] = $value;
@@ -96,7 +96,7 @@ class LeftCategories extends CWidget {
 				//убираю категории, если нет товаров в наличии
 				unset($categories[$k]);
 			}
-			elseif (($this->_params['entity'] != Entity::PERIODIC)||$this->_usePeriodicCategoryTypes) $categories[$k]['childs'] = $this->_getCategories($category['id']);
+			elseif (($this->_params['entity'] != Entity::PERIODIC)||!$this->_usePeriodicCategoryTypes) $categories[$k]['childs'] = $this->_getCategories($category['id']);
 		}
 		return $categories;
 

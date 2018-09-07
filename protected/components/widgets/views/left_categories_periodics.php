@@ -2,13 +2,13 @@
 <h2 class="cattitle"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?>:</h2>
 <?php foreach ($categories as $type=>$categorys) :?>
 <ul class="left_list divider">
-	<?php if (count($categories) > 1):?>
+	<?php //if (count($categories) > 1):?>
 	<li>
 		<a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => Entity::GetUrlKey($entity), 'type' => $type)) ?>">
 			<span class="title__bold"><?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_' . $type) ?></span>
 		</a>
 	</li>
-	<?php endif; ?>
+	<?php //endif; ?>
 	<?php
 	foreach ($categorys as $i=>$cat) : ?>
 	<li>
