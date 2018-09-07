@@ -1117,7 +1117,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="clearBoth"></div>
         </div>
                 <?php endif; ?>
-                    <!--
+
                     <?php if (!empty($item['isbn2'])) : ?>
         <div class="detail-prop">
             <div class="prop-name"><?= $name ?>:</div>
@@ -1180,7 +1180,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="prop-value"><?= $item['isbn10']; ?></div>
             <div class="clearBoth"></div>
         </div>
-                <?php endif; ?>-->
+                <?php endif; ?>
             <?php endif; ?>
             <?php else: ?>
                 <?php if (!empty($item['eancode'])):
