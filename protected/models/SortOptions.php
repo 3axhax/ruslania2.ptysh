@@ -32,6 +32,20 @@ class SortOptions
     {
         switch($sort)
         {
+            case self::NewHL : return 't.positionNewHL';
+            case self::NewLH : return 't.positionNewLH';
+            case self::TimeLH : return 't.positionTimeLH';
+            case self::TimeHL : return 't.positionTimeHL';
+            case self::PriceLH : return 't.positionPriceLH';
+            case self::PriceHL: return 't.positionPriceHL';
+            default : throw new CException('Sort not implemented '.$sort);
+        }
+    }
+
+    public static function GetSQLPrepare($sort, $lang, $entity=null)
+    {
+        switch($sort)
+        {
             case self::NewHL : return ' t.avail_for_order desc, t.add_date DESC, IF(t.in_shop < 5, FIELD(t.in_shop, 5,4,3,2,1), 0) DESC, '.
                 'deliveryTime.delivery_unit ASC, deliveryTime.delivery_type_name ASC';//' t.in_stock DESC, t.add_date DESC ';
             case self::NewLH : return ' t.avail_for_order desc, t.add_date ASC, IF(t.in_shop < 5, FIELD(t.in_shop, 5,4,3,2,1), 0) DESC, '.
@@ -56,7 +70,7 @@ class SortOptions
                 'deliveryTime.delivery_unit ASC, deliveryTime.delivery_type_name ASC';
                 else return ' t.avail_for_order desc, t.brutto DESC, IF(t.in_shop < 5, FIELD(t.in_shop, 5,4,3,2,1), 0) DESC, '.
                 'deliveryTime.delivery_unit ASC, deliveryTime.delivery_type_name ASC';
-            default : throw new CException('Sort not implemented '.$sort);
+            default : return '';
         }
     }
 }
