@@ -155,7 +155,8 @@ class SearchController extends MyController {
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
 		foreach ($res['matches'] as $data) {
-		    if (!empty($data['attrs']['@count'])) {
+			//audio не показываем
+			if (!empty($data['attrs']['@count'])&&($data['attrs']['@groupby'] != 20)) {
 			    $result[$data['attrs']['@groupby']] = $data['attrs']['@count'];
 		    }
 		}
@@ -519,7 +520,8 @@ class SearchController extends MyController {
 
 		$where = array();
 		foreach($result as $cat) {
-			if (empty($cat['entity'])||empty($cat['real_id'])) continue;
+			//audio не показываем
+			if (empty($cat['entity'])||empty($cat['real_id'])||($cat['entity'] == 20)) continue;
 			
 			if (empty($where[$cat['entity']])) $where[$cat['entity']] = array();
 			$where[$cat['entity']][] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
