@@ -303,7 +303,8 @@ class Condition {
     }
 
 	private function _lang() {
-		if (!Entity::checkEntityParam($this->_entity, 'languages')) return;
+		if (!Entity::checkEntityParam($this->_entity, 'languages') &&
+            $this->_entity != Entity::PERIODIC) return;
 
 		$langsel = (int) $this->g('lang_sel');
 		if ($langsel > 0) {
