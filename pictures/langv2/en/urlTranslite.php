@@ -51,6 +51,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'categories',
 			'types'=>'edition-type',
+			'gift'=>'as-a-gift',
 		),
 	),
 	'video'=>array(

@@ -213,6 +213,7 @@ class Entity {
         $settings = self::GetEntitiesList()[$entity];
         switch ($paramName) {
             case 'years': if ($entity == self::PERIODIC) return false; break;
+            case 'gift': if ($entity != self::PERIODIC) return false; break;
             case 'yearreleases': if ($entity != self::VIDEO) return false; break;
             default: if (!in_array($paramName, $settings['with'])) return false; break;
         }

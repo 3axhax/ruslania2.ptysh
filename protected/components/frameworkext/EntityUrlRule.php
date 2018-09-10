@@ -5,6 +5,7 @@ class EntityUrlRule extends CBaseUrlRule {
 	private $_entitys = array(), $_other = array(), $_level2 = array();
 	static private $_routes = array(
 		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',             'useTitle'=>true),
+		'entity/gift' =>            array('idName' => '',       'nameLevel2' => 'gift',),
 		'entity/categorylist' =>    array('idName' => '',       'nameLevel2' => 'categories',),
 		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',   'useTitle'=>true),
 		'entity/publisherlist' =>   array('idName' => '',       'nameLevel2' => 'publishers',),
@@ -114,6 +115,9 @@ class EntityUrlRule extends CBaseUrlRule {
 					if (empty($params['cid'])) $url = $this->_createRazd($entityStr);
 					else $url = $this->_createLevel3($route, $entityStr, $entityId, 'categories', $params['cid'], $title);
 				}
+				break;
+			case 'entity/gift':
+				$url = $this->_createLevel2($entityStr, self::$_routes[$route]['nameLevel2']);
 				break;
 			default:
 				if (empty(self::$_routes[$route]['idName'])||empty($params[self::$_routes[$route]['idName']]))
