@@ -224,6 +224,13 @@ class LiveSearchController extends MyController {
         $this->ResponseJson($items);
     }
 
+    function actionSelect_Filter_Series () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchSeries::get()->getSeriesSelectFilters($entity, $cid);
+        $this->ResponseJson($items);
+    }
+
     function actionFilter_Performers () {
         if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
             !($q = Yii::app()->getRequest()->getParam('q'))) return;
