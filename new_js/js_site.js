@@ -57,6 +57,8 @@ $(document).ready(function(){
         nextArrow:"<div class=\"btn_right slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_right_news.png\"></div>"
     });
 
+    $('.select2_series').select2();
+
 });
 
 // "X" в input-ах фильтра
@@ -237,7 +239,7 @@ function liveFindSeriesMP(entity, url, cid) {
         data:dataPost,
         formatMinChars: false,
         formatItem:function (data, $item, q) {
-            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'seria\', \'' + data.title + '\', \'new_series\')">' + data.title + '</li>';
+            return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'seria\', \'' + (data.title) + '\', \'new_series\')">' + (data.title) + '</li>';
         },
     });
 }
@@ -273,5 +275,48 @@ function liveFindActorsMP(entity, url, cid) {
         formatItem:function (data, $item, q) {
             return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'actors\', \'' + data.title + '\', \'new_actors\')">' + data.title + '</li>';
         },
+    });
+}
+
+function getSeries(entity, url, cid, selected_item) {
+    if (cid == undefined) cid = 0;
+    select_series = $('.select2_series');
+    var frm = 'entity='+entity+'&cid='+cid;
+    var csrf = $('meta[name=csrf]').attr('content').split('=');
+    frm = frm + '&' + csrf[0] + '=' + csrf[1];
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: frm,
+        beforeSend: function(){
+            select_series.attr("disabled", true);
+            //console.log('beforeSend');
+        },
+        success: function (data) {
+            titles = JSON.parse(data);
+            for (id in titles) {
+                for (tittle in titles[id]) {
+                    if (selected_item == titles[id][tittle]) {
+                        select_series
+                            .append($("<option></option>")
+                                .attr("value", id)
+                                .attr("selected", true)
+                                .text(titles[id][tittle]));
+                    }
+                    else {
+                        select_series
+                            .append($("<option></option>")
+                                .attr("value", id)
+                                .text(titles[id][tittle]));
+                    }
+                }
+            }
+            select_series.attr("disabled", false);
+            show_result_count();
+            //console.log('add completed');
+        },
+        error: function (data) {
+            console.log(data);
+        }
     });
 }

@@ -228,19 +228,35 @@
 
         <?php if (isset($filters['series']) && $filters['series'] == true):?>
             <!--Фильтр по серии-->
-        <div class="prod-filter__col">
-            <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
-            <div class="text">
-                <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
-                <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
-                       autocomplete="off" placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>"
-                    <?= ($seria) ? 'value="'.htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)).'"' : '' ?> />
-            </div>
-            <ul class="search_result search_result_series"></ul>
-            <script>
-                liveFindSeriesMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_series')?>', <?=$cid?>);
-            </script>
-        </div>
+            <?php if ($entity == Entity::BOOKS && $cid == 0):?>
+                <div class="prod-filter__col">
+                    <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
+                    <div class="text">
+                        <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
+                        <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
+                               autocomplete="off" placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>"
+                            <?= ($seria) ? 'value="'.htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)).'"' : '' ?> />
+                    </div>
+                    <ul class="search_result search_result_series"></ul>
+                    <script>
+                        liveFindSeriesMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_series')?>', <?=$cid?>);
+                    </script>
+                </div>
+            <?php else:?>
+                <div class="prod-filter__col">
+                    <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
+                    <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
+                    <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria"
+                    onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                        <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                    </select>
+                    <script>
+                        getSeries(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/select_filter_series')?>', <?=$cid?>,
+                            '<?= (isset($filter_data['series']) && $filter_data['series'] != 0) ?
+                            htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)) : ''?>');
+                    </script>
+                </div>
+            <?php endif;?>
         <?php endif;?>
 
         <?php if (isset($filters['langVideo']) && $filters['langVideo'] == true):?>
@@ -352,3 +368,8 @@
 <script>
     show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>');
 </script>
+<style>
+    .text .mp_list {
+        width: 210px;
+    }
+</style>
