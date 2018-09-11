@@ -653,17 +653,26 @@ else $act = array('', '');
                     var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
                     var finpmonthVat = cart.find('input.finmonthpricevat').val();
 
+                    var worldpmonthOrig = cart.find('input.worldmonthpriceoriginal').val();
+                    var finpmonthOrig = cart.find('input.finmonthpriceoriginal').val();
+
                     var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
                     var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
 
                     var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
                     var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
 
+                    var nPriceOrigW = (worldpmonthOrig * $el.val()).toFixed(2);
+                    var nPriceOrigF = (finpmonthOrig * $el.val()).toFixed(2);
+
                     cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
                     cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
 
                     cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
                     cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
+
+                    cart.find('.periodic_world .without_discount').html(nPriceOrigW + ' <?= Currency::ToSign(); ?>');
+                    cart.find('.periodic_fin .without_discount').html(nPriceOrigF + ' <?= Currency::ToSign(); ?>');
 
                     cart.find('a.add').attr('data-quantity', $el.val());
                 });

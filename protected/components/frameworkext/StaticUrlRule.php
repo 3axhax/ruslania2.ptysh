@@ -85,6 +85,19 @@ class StaticUrlRule extends CBaseUrlRule {
 				if (isset($this->_pages['offers']))
 					$url = $this->_pages['offers'] . '/';
 				break;
+			case 'offers/view':
+				if (isset($this->_pages['offers'])&&!empty($params['oid'])) {
+					$url = $this->_pages['offers'] . '/';
+					$titles = HrefTitles::get()->getById(0, $route, $params['oid']);
+					if (!empty($titles)) {
+						if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
+						elseif (!empty($titles['en'])) $title = $titles['en'];
+					}
+					if (empty($title)) $url .= $params['oid'] . '/';
+					else $url .= $params['oid'] . '-' . $title . '/';
+					unset($params['oid'], $params['title']);
+				}
+				break;
 			case 'site/static':
 				if (!empty($params['page'])
 					&&isset(self::$_files[$params['page']])
@@ -135,7 +148,9 @@ class StaticUrlRule extends CBaseUrlRule {
 			elseif ($page == 'bookshelf') return 'bookshelf/list';
 			elseif ($page == 'me') return 'client/me';
 			elseif ($page == 'cart') return 'cart/view';
-			elseif ($page == 'offers') return 'offers/list';
+			elseif ($page == 'offers') {
+				return 'offers/list';
+			}
 			//
 			else {
 				switch ($page) {
@@ -162,6 +177,10 @@ class StaticUrlRule extends CBaseUrlRule {
 				}
 			}
 			return 'site/' . $page;
+		}
+		elseif (preg_match("/^" . $this->_pages['offers'] . "\/(\d+)/ui", $pathInfo, $m)) {
+			$_REQUEST['oid'] = $_GET['oid'] = $m[1];
+			return 'offers/view';
 		}
 		elseif (preg_match("/^" . $this->_pages['bookshelf'] . "\/(\d+)/ui", $pathInfo, $m)) {
 			$_REQUEST['id'] = $_GET['id'] = $m[1];

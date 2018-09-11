@@ -34,7 +34,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php $this->renderStatusLables($item['status']); ?>
         <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
         <?php if (!empty($item['Lookinside'])) : ?>
-        <div style="text-align: left;background-color: #fff;     margin-top: -47px;">
+        <div style="text-align: left;background-color: #fff; margin-top: -10px;">
             <?php
             $images = array();
             $audio = array();
@@ -912,6 +912,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 				
 				<!--<div style="height: 1px; clear: both"></div>-->
 				<?php endif; ?>
+                <input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_WORLD] / 12, 2); ?>" class="worldmonthpriceoriginal"/>
+                <input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_FIN] / 12, 2); ?>" class="finmonthpriceoriginal"/>
                 <input type="hidden" value="<?= round($price[DiscountManager::WITH_VAT_WORLD] / 12, 2); ?>"
                        class="worldmonthpricevat"/>
                 <input type="hidden" value="<?= round($price[DiscountManager::WITHOUT_VAT_WORLD] / 12, 2); ?>"
@@ -1117,7 +1119,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="clearBoth"></div>
         </div>
                 <?php endif; ?>
-
+                    
                     <?php if (!empty($item['isbn2'])) : ?>
         <div class="detail-prop">
             <div class="prop-name"><?= $name ?>:</div>

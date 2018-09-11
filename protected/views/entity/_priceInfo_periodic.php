@@ -43,7 +43,7 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
 <div class="mb5 <?=strtolower($key); ?>" style="margin-bottom: 0;     margin-right: 46px;  float: left;">
     <?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
 	
-		<span style="font-size: 16px; color: #ed1d24; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold;"><?= ProductHelper::FormatPrice($price[$realKeyBrutto]); ?></span>
+		<span class="without_discount"><?= ProductHelper::FormatPrice($price[$realKeyBrutto]); ?></span>
         
         <span class="price"  style="color: #301c53;font-size: 18px; font-weight: bold;">
                 <b class="pwvat"><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></b>

@@ -128,8 +128,8 @@ return array(
 
                 'offer/download/<oid:(\d+)>' => 'offers/download',
                 'offer/download/<oid:(\d+)>/<title:(\w+)>' => 'offers/download',
-                'offer/<oid:(\d+)>/<title:(.+)>' => 'offers/view',
-                'offer/<oid:(\d+)>' => 'offers/view',
+//                'offer/<oid:(\d+)>/<title:(.+)>' => 'offers/view',
+//                'offer/<oid:(\d+)>' => 'offers/view',
             ),
         ),
 

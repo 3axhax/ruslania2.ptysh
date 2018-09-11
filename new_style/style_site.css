@@ -3173,3 +3173,5 @@ div.detail-prop .prop-value li { list-style-type: none; }
     left: 620px;
     cursor: pointer
 }
+
+.without_discount { color: #ed1d24; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
