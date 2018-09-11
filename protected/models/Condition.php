@@ -575,6 +575,12 @@ class Condition {
 	}
 
 	function getReleaseYearInterval() {
+        $settings = $this->_getCategoryData();
+        $result = array();
+        if (!empty($settings['release_year_max'])) $result['max_y'] = $settings['release_year_max'];
+        if (!empty($settings['release_year_min'])) $result['min_y'] = $settings['release_year_min'];
+        return $result;
+
         $key = 'year_r_' . (int) $this->_entity . '_' . (int) $this->_cid;
         $settings = unserialize(Yii::app()->session[$key]);
         if (!(isset($settings) && !empty($settings))) {

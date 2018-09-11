@@ -53,10 +53,7 @@ $ui = Yii::app()->ui;
         <META name="verify-v1" content="eiaXbp3vim/5ltWb5FBQR1t3zz5xo7+PG7RIErXIb/M="/>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-        <?php if (
-        (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false)
-        ||Yii::app()->getRequest()->getParam('lang')
-        ): ?>
+        <?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
         <meta name="robots" content="noindex">
         <?php endif; ?>
         <?php foreach ($this->getOtherLangPaths() as $lang=>$path): ?>
@@ -65,6 +62,8 @@ $ui = Yii::app()->ui;
         <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
         <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
         <link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
+        <link href="/new_style/select2.css" rel="stylesheet" type="text/css"/>
+
         <link rel="stylesheet" href="/css/template_styles.css" />
         <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
         <link rel="stylesheet" href="/css/opentip.css">
@@ -87,6 +86,7 @@ $ui = Yii::app()->ui;
         <script src="/js/opentip.js"></script>
         <script type="text/javascript" src="/js/marcopolo.js"></script>
         <script type="text/javascript" src="/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js"></script>
+        <script type="text/javascript" src="/new_js/modules/select2.full.js"></script>
         <!--[if lt IE 9]>
 <script src="libs/html5shiv/es5-shim.min.js"></script>
 <script src="libs/html5shiv/html5shiv.min.js"></script>
