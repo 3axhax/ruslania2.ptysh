@@ -980,8 +980,8 @@ class Category {
         //	LEFT OUTER JOIN `vendors` `vendorData` ON (`t`.`vendor`=`vendorData`.`id`)
         //LEFT OUTER JOIN `delivery_time_list` `deliveryTime` ON (`vendorData`.`dtid`=`deliveryTime`.`dtid`)
 
-        $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
-        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
+//        $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
+//        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
 
         $sql = ''.
             'select t.id '.
