@@ -47,7 +47,7 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'tidningar',
+		'level_1'=>'teckning',
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'types'=>'typ-av-utgåva',
@@ -64,7 +64,7 @@ return array(
 			'subtitles'=>'undertext-sprak',
 			'media'=>'format',
 			'years'=>'ar',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'utgivningsar',
 		),
 	),
 	'printed'=>array(

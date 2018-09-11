@@ -47,7 +47,7 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'publicaciones-periodicas',
+		'level_1'=>'suscripcion',
 		'level_2'=>array(
 			'categories'=>'categorias',
 			'types'=>'tipo-de-edicion',
@@ -64,7 +64,7 @@ return array(
 			'subtitles'=>'idioma-de-los-subtitulos',
 			'media'=>'tipo-de-portador',
 			'years'=>'anos',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'ano-de-lanzamiento',
 		),
 	),
 	'printed'=>array(

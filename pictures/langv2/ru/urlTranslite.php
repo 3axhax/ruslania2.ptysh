@@ -64,7 +64,7 @@ return array(
 			'subtitles'=>'jazyki-titrov',
 			'media'=>'tip-nositelja',
 			'years'=>'goda',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'god-izdanija',
 		),
 	),
 	'printed'=>array(
