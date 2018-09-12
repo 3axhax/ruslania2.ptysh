@@ -670,8 +670,8 @@ class Category {
 
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
-        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
-        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
+//        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
+//        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
 
         $sql = ''.
             'select t.id '.
