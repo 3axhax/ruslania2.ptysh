@@ -258,12 +258,12 @@ class Category {
                 $bindingIds = array();
                 foreach ($bindings as $binding) $bindingIds[] = $binding['ID'];
 
-                $condition = array('bindings'=>'(binding_id in (' . implode(',',$bindingIds) . '))', 'avail'=>'(avail_for_order = 1)', ) ;
+                $condition = array('bindings'=>'(binding_id > 0)', 'avail'=>'(avail_for_order = 1)', ) ;
                 if ($cid > 0) $condition['cat'] = '(`code` = ' . $cid . ' OR `subcode` = ' . $cid . ')';
 
                 $sql = ''.
                     'select binding_id '.
-                    'from ' . $tbl . ' use index (binding_id) './/mysql почему то сам не правильно определяет индекс
+                    'from ' . $tbl . ' '.
                     'where ' . implode(' and ', $condition) . ' '.
                     'group by binding_id '.
                 '';
