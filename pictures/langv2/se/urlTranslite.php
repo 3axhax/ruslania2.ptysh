@@ -47,7 +47,7 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'teckning',
+		'level_1'=>'prenumeration',
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'types'=>'typ-av-utgåva',
