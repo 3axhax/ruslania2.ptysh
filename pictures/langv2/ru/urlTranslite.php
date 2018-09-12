@@ -107,6 +107,7 @@ return array(
 	'sitemap'=>'karta-sajta',
 	'me'=>'akkaunt',
 	'advsearch'=>'poisk',
+	'forgot'=>'vosstanovlenie-parolja',
 
 
 	'offers'=>'rekomendatsii',

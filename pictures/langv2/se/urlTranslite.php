@@ -107,6 +107,7 @@ return array(
 	'sitemap'=>'sidokarta',
 	'me'=>'konto',
 	'advsearch'=>'sok',
+	'forgot'=>'losenordaterstallning',
 
 
 	'offers'=>'rekommendationer',

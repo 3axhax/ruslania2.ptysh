@@ -107,6 +107,7 @@ return array(
 	'sitemap'=>'sivustokartta',
 	'me'=>'tili',
 	'advsearch'=>'haku',
+	'forgot'=>'salasanan-palautus',
 
 
 	'offers'=>'suosituksia',

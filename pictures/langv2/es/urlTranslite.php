@@ -107,6 +107,7 @@ return array(
 	'sitemap'=>'mapa-del-sitio',
 	'me'=>'cuenta',
 	'advsearch'=>'buscar',
+	'forgot'=>'recuperacion-de-contrasena',
 
 
 	'offers'=>'recomendaciones',

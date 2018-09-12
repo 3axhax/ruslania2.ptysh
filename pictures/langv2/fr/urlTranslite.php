@@ -107,6 +107,7 @@ return array(
 	'sitemap'=>'plan-du-site',
 	'me'=>'compte',
 	'advsearch'=>'chercher',
+	'forgot'=>'recuperation-de-mot-de-passe',
 
 
 	'offers'=>'recommandations',
