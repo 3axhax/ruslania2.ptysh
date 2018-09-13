@@ -235,38 +235,38 @@ class ProductController extends MyController
             Entity::SHEETMUSIC => 'book',
         );
 		
-		$get_cats = Category::get_count_categories_bread($id, $entity);
-		
-		if (count($get_cats) == 0) {
-			
-			$entities = Entity::GetEntitiesList();
-			$tbl = $entities[$entity]['site_table'];
-			
-			$sql = 'SELECT `code`, `subcode` FROM ' . $tbl . ' WHERE id='.$id;
-			
-			$rows = Yii::app()->db->createCommand($sql)->queryAll();
-			
-			$code = (int) $rows[0]['code'];
-			
-			if (!$rows[0]['code']) {
-				$code = $rows[0]['subcode'];
+//		$get_cats = Category::get_count_categories_bread($id, $entity);
+//
+//		if (count($get_cats) == 0) {
+
+//			$entities = Entity::GetEntitiesList();
+//			$tbl = $entities[$entity]['site_table'];
+
+//			$sql = 'SELECT `code`, `subcode` FROM ' . $tbl . ' WHERE id='.$id;
+//
+//			$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+			$code = (int) $data['code'];
+
+			if (empty($code)) {
+				$code = (int) $data['subcode'];
 			}
-			
+
 			$arr = Category::getCatsBreadcrumbs($entity, $code);
-			
+
 			foreach($arr as $a) {
-				
+
 				$title2 = ProductHelper::GetTitle($a);
-				
+
 				$this->breadcrumbs[$title2] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $a['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($a))));
-				
+
 			}
-			
+
 			$this->breadcrumbs[] = ProductHelper::GetTitle($data);
-			
-		} else {
-			$this->breadcrumbs[] = ProductHelper::GetTitle($data);
-		}
+
+//		} else {
+//			$this->breadcrumbs[] = ProductHelper::GetTitle($data);
+//		}
 		
         
         //
