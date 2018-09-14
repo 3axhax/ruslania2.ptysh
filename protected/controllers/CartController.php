@@ -520,15 +520,7 @@ class CartController extends MyController {
 
 
         if (Yii::app()->request->isPostRequest) {
-            
-            if (User::checkLogin($email)) {
-                
-                echo '9';
-                exit();
-                
-            } else {
-            
-            
+
             $type = $post['Address']['type'];
 
             $business_title = $post['Address']['business_title'];
@@ -546,6 +538,16 @@ class CartController extends MyController {
             $email = $post['Address']['contact_email'];
             $phone = $post['Address']['contact_phone'];
             $comment = $post['Address']['notes'];
+
+            if (User::checkLogin($email)) {
+                
+                echo '9';
+                exit();
+                
+            } else {
+            
+            
+
 
             if ($fam AND $name AND $country AND $city AND $post_index AND $address AND $email AND $phone) {
 
@@ -897,7 +899,7 @@ class CartController extends MyController {
         $isMiniCart = 0;
         if ($ajax) {
             $isMiniCart = Yii::app()->request->getParam('is_MiniCart', 0);
-            $isMiniCart = intVal($isMtiniCart);
+            $isMiniCart = intVal($isMiniCart);
         }
         $cartGoods = $cart->GetCart($this->uid, $this->sid, $isMiniCart);
         $tmp = $cart->BeautifyCart($cartGoods, $this->uid, $isMiniCart);
