@@ -243,14 +243,13 @@ class SearchController extends MyController {
 			'description_es'=>100,
 			'description_se'=>100,
 		));
-//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
-		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC");
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
+//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC");
 		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
 //		$this->_search->SetRankingMode(SPH_RANK_EXPR,'sum(lcs*user_weight+exact_hit)*1000+bm25');
 
 
 		$find = $this->_search->query($q, 'products');
-		Debug::staticRun(array($find));
 		if (empty($find)) return array();
 
 		$product = SearchHelper::ProcessProducts($find);

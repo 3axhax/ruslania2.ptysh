@@ -26,25 +26,26 @@ class LiveSearchController extends MyController {
 			if (!$isCode) {
 				$abstractInfo = $sController->getEntitys($q);
 				if (!empty($abstractInfo))
-					$result[] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
+					$result['entitys'] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
 			}
 
-			if (!empty($list))
-				$result[] = $this->renderPartial('/search/live_header', array('q' => $q), true);
+//			if (!empty($list))
+				$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
 
 			if (!$isCode) {
 				$didYouMean = $sController->getDidYouMean($q);
 				if (!empty($didYouMean))
-					$result[] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
+					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
 			}
 
 			if (!empty($list)) {
+				$result['list'] = array();
 				foreach ($list as $row) {
-					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
+					$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
 				}
 			}
 		}
-		$this->ResponseJson($result);
+		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
 
 	function actionGeneralHa() {
