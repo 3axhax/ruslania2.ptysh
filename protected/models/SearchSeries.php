@@ -82,20 +82,32 @@ class SearchSeries
         $filter_data = FilterHelper::getFiltersData($entity, $cid);
 
         if ($cid > 0) {
-            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi 
+            /*$sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
             FROM '.$series_tbl.' as st 
             LEFT JOIN ' . $tbl . ' as tc   
             ON (tc.series_id=st.id)
             WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code) 
-            GROUP BY tc.series_id';
+            GROUP BY tc.series_id';*/
+
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
+            FROM '.$series_tbl.' as st
+            JOIN (select series_id from ' . $tbl . '
+                  WHERE (avail_for_order='.$filter_data['avail'].') AND (`code`=:code OR `subcode`=:code)
+                  GROUP BY series_id) as tc ON (tc.series_id=st.id)';
+
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi 
+            /*$sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
             FROM '.$series_tbl.' as st 
             LEFT JOIN ' . $tbl . ' as tc   
             ON (tc.series_id=st.id)
             WHERE tc.avail_for_order='.$filter_data['avail'].'
-            GROUP BY tc.series_id';
+            GROUP BY tc.series_id';*/
+            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
+            FROM '.$series_tbl.' as st
+            JOIN (select series_id from ' . $tbl . '
+                  WHERE (avail_for_order='.$filter_data['avail'].')
+                  GROUP BY series_id) as tc ON (tc.series_id=st.id)';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
         }
         $series = [];

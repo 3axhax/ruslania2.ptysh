@@ -245,7 +245,7 @@
             <?php else:?>
                 <div class="prod-filter__col">
                     <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
-                    <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
+                    <!--<input type="hidden" name="series" value="<?/*=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0*/?>">-->
                     <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria"
                     onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
                         <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>

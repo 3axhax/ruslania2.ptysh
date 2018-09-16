@@ -134,7 +134,8 @@ function show_items(url, page) {
         '/ymin/'+(( ymin = $('form.filter input.year_inp_mini').val()) ? ymin : '0')+
         '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '0')+
         '/publisher/'+(( publisher = $('form.filter input[name=publisher]').val()) ? publisher : '0')+
-        '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria : '0')+
+        '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria :
+            ((seria_s = $('form.filter select[name=seria]').val()) ? seria_s : '0'))+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
         '/max_cost/'+(( cmax = $('form.filter input.cost_inp_max').val()) ? cmax : '0')+
         '/lang/'+(( lang = $('form.filter input[name=lang]').val()) ? lang : '') +
@@ -148,7 +149,6 @@ function show_items(url, page) {
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
     items_content = $('.span10 .items');
-    //items_content = $('.span10.listgoods');
 
     $.ajax({
         url: create_url,
