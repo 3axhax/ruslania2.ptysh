@@ -367,6 +367,11 @@ class FilterHelper
             self::$data['series'] = (int) $series;
             return true;
         }
+        $series = Yii::app()->getRequest()->getParam('seria', false);
+        if ($series !== false) {
+            self::$data['series'] = (int) $series;
+            return true;
+        }
         if (isset(self::$sessionData['series']) && self::$sessionData['series'] != '') {
             self::$data['series'] = (int) self::$sessionData['series'];
             return true;
