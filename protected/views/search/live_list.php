@@ -17,7 +17,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 				<?php else: ?>
 				<div style="height: 18px;"></div>
 				<?php endif; ?>
-				<?php
+				<?php if ($item['avail_for_order'] > 0):
 				$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 				$item['priceData']['unit'] = '';
 				if ($item['entity'] == Entity::PERIODIC):
@@ -52,6 +52,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
                 </span>
 						<?php endif; ?>
 					</div>
+				<?php endif; ?>
 			</td>
 		</tr>
 	</table>

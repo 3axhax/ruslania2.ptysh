@@ -140,7 +140,8 @@ class SearchController extends MyController {
 			'order'=>'@group desc',
 		);
 		if ($this->_exactMatch) {
-			$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+//			$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+			$q = '@(title) "' . $this->_search->EscapeString($query) . '"';
 //			$this->_search->SetMatchMode(SPH_MATCH_ALL);
 			$res = $this->_search->groupby($groupby)->query($q, 'products_no_morphy');
 		}
@@ -186,7 +187,8 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+//		$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+		$q = '@(title) "' . $this->_search->EscapeString($query) . '"';
 
 //		$this->_search->SetMatchMode(SPH_MATCH_ALL);
 //		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
@@ -194,7 +196,6 @@ class SearchController extends MyController {
 
 
 		$find = $this->_search->query($q, 'products_no_morphy');
-//		Debug::staticRun(array($q, $find));
 		if (empty($find)) return array();
 		$this->_exactMatch = true;
 
@@ -211,6 +212,58 @@ class SearchController extends MyController {
 	}
 
 	function getList($query, $page, $pp) {
+		$filters = array(
+			'query'=>$query,
+			'mode'=>'mode=phrase',
+		);
+		$avail = $this->GetAvail(1);
+		if ($avail) $filters['avail'] = 'filter=avail,1';
+		$e = (int) Yii::app()->getRequest()->getParam('e');
+		if (Entity::IsValid($e)) $filters['entity'] = 'filter=entity,' . $e;
+		$filters['limit'] = 'limit=10000';
+		$filters['maxmatches'] = 'maxmatches=10000';
+
+		$sql = ''.
+			'create temporary table _tmp_products (primary key (id), index(dictionary_position, spec_position, entity_position, time_position)) '.
+			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
+			'FROM _se_products_without_morphy t '.
+			'WHERE (t.query=:q); '.
+		'';
+		//Война и мир;filter=avail,1;mode=phrase;limit=10000;maxmatches=10000
+		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
+
+		$sql = ''.
+			'insert ignore into _tmp_products '.
+			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
+			'FROM _se_products_with_morhpy t '.
+			'WHERE (t.query=:q); '.
+		'';
+		$filters['mode'] = 'mode=boolean';
+		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
+
+		$sql = ''.
+			'select * '.
+			'from _tmp_products '.
+			'order by dictionary_position, spec_position, entity_position, time_position '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+		'';
+		$find = Yii::app()->db->createCommand($sql)->queryAll();
+		Debug::staticRun(array($find));
+		if (empty($find)) return array();
+
+		$product = $this->_entityIds($find);
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find as $data) {
+			$key = $data['entity'] . '-' . $data['real_id'];
+			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+		}
+
+		return $result;
+
+
+
+
 		$this->_search->resetCriteria();
 		$this->_search->SetLimits(($page-1)*$pp, $pp);
 
@@ -229,23 +282,25 @@ class SearchController extends MyController {
 		$q = '@* ' . $this->_search->EscapeString($query);
 
 		$this->_search->SetFieldWeights(array(
-			'title_ru'=>1000,
-			'title_rut'=>1000,
-			'title_en'=>1000,
-			'title_fi'=>1000,
-			'title_eco'=>1000,
-			'description_ru'=>100,
-			'description_rut'=>100,
-			'description_en'=>100,
-			'description_fi'=>100,
-			'description_de'=>100,
-			'description_fr'=>100,
-			'description_es'=>100,
-			'description_se'=>100,
+			'title'=>1000,
+			'description'=>100,
+//			'title_ru'=>1000,
+//			'title_rut'=>1000,
+//			'title_en'=>1000,
+//			'title_fi'=>1000,
+//			'title_eco'=>1000,
+//			'description_ru'=>100,
+//			'description_rut'=>100,
+//			'description_en'=>100,
+//			'description_fi'=>100,
+//			'description_de'=>100,
+//			'description_fr'=>100,
+//			'description_es'=>100,
+//			'description_se'=>100,
 		));
-		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
-//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC");
-		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
+//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
+//		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
 //		$this->_search->SetRankingMode(SPH_RANK_EXPR,'sum(lcs*user_weight+exact_hit)*1000+bm25');
 
 
@@ -362,7 +417,7 @@ class SearchController extends MyController {
 			$oneWordQuery = preg_replace("/\d/ui", '', $oneWordQuery);
 			if (!empty($oneWordQuery)) {
 				$oneWordQuery = '^' . $oneWordQuery . '*';
-				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
+				$result = $this->_querySimple($oneWordQuery, $index, 0);
 			}
 		}
 
@@ -599,4 +654,9 @@ class SearchController extends MyController {
 		);
 	}
 
+	protected function _entityIds($find) {
+		$ids = array();
+		foreach ($find as $data) $ids['e'.$data['entity']][] = $data['real_id'];
+		return $ids;
+	}
 }
