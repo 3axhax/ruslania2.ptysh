@@ -453,6 +453,12 @@ else $act = array('', '');
 
                     update_header_cart();
 
+                    <?php if (in_array('korzina', $url)) : ?>
+
+                    location.href = location.href;
+
+                    <?php endif; ?>
+
                 })
             }
 
@@ -755,11 +761,7 @@ else $act = array('', '');
                         $el
                     );
 
-                    <?php if (in_array('korzina', $url)) : ?>
 
-                    location.href = location.href;
-
-                    <?php endif; ?>
 
                     return false;
                 });
