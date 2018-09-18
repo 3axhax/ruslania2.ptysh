@@ -238,7 +238,7 @@
                     $('#js_forgot').remove();
                     if (r) {
                         $(t).after(r);
-//                        $('.order_start').addClass('disabled');
+                       // $('.order_start').addClass('disabled');
                     }
                 }
             });
@@ -546,8 +546,11 @@
         $('.selp').css('border', '1px solid #ccc');
 
         $('.cartorder .row label.seld').slice(1, 2).css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.cartorder .row label.seld').slice(0, 1)).attr('checked', 'true');
-        $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
+        
+        
+        
+       // $('input[type=radio]', $('.cartorder .row label.seld #dtype2').slice(0, 1)).attr('checked', 'true');
+       // $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
 
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');

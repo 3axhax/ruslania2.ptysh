@@ -38,10 +38,10 @@ function decline_goods($num) {
 
 ?>
 
+
+
+<div class="span7" style="margin-left: 0;">
 <div class="p3">1. Укажите адрес доставки и плательщика</div>
-
-<div class="span7">
-
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
 <style>
@@ -67,7 +67,7 @@ $addr_list = array();
 $addr_list = $addr->GetAddresses($this->uid);
 
 //var_dump($addr_list);
-echo '<div class="addr_delivery">';
+echo ' <span class="err_addr" style="color: #ff0000; font-size: 12px;"></span><div class="clearfix" style="height: 10px;"></div><div class="addr_delivery">';
 if (count($addr_list)) {
     
     echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Выберите адрес доставки</option>';
@@ -125,55 +125,55 @@ echo '</div>';
     <tr>
         <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null)); ?>
+            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null)); ?>
+            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_title"); ?>
         </td>
         <td class="maintxt-vat" data-bind="visible: type()==1">
-            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'))); ?>
+            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'))); ?>
+            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
     <tr>
         <td class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"))); ?>
+            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"),'oninput'=>'save_form()')); ?>
         </td>
         
     </tr>
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_last_name'); ?>
+            <?=$form->textField('receiver_last_name', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_firstname"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_first_name'); ?>
+            <?=$form->textField('receiver_first_name', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
     <tr>
         <td class="maintxt"><?=$ui->item("regform_middlename"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_middle_name'); ?>
+            <?=$form->textField('receiver_middle_name', array('oninput'=>'save_form()')); ?>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
     <tr>
         <td nowrap="" class="maintxt">
@@ -183,24 +183,28 @@ echo '</div>';
             <?=$form->dropDownList('country', CHtml::listData(Country::GetCountryList(), 'id', 'title_en'),
             array(
                 'data-bind' => array('optionsCaption' => "'---'"),
-                'onchange' => 'change_city($(this))'
+                'onclick' => 'change_city($(this)); save_form();',
+                'onchange' => 'change_city($(this));'
                 )); ?>
             <span class="texterror"></span>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
+    
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
         <td class="maintxt-vat select_states">
-            <select name="Address[state_id]" disabled><option value="">---</option></select>
+            <select name="Address[state_id]" disabled onclick="save_form();"><option value="">---</option></select>
         </td>
         
     </tr>
+    
+    
     <tr>
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('city'); ?>
+            <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -208,7 +212,7 @@ echo '</div>';
         <td nowrap="" class="maintxt"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
         <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('postindex'); ?>
+            <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -223,10 +227,10 @@ echo '</div>';
     </tr>
     <tr>
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>
-            <?=$ui->item("address_contact_email"); ?>
+            <?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
-            <?= $form->textField('contact_email', array('onblur' => '')); ?>
+            <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -234,7 +238,7 @@ echo '</div>';
         <td nowrap="" class="maintxt"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('contact_phone'); ?>
+            <?=$form->textField('contact_phone', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
         <td class="smalltxt1">
@@ -245,13 +249,28 @@ echo '</div>';
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_contact_notes"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textArea('notes'); ?>
+            <?=$form->textArea('notes', array('oninput'=>'save_form()')); ?>
         </td>
-        
+        <td class="smalltxt1"></td>
     </tr>
-        
+    
+    <tr>
+        <td nowrap="" class="maintxt">&nbsp;</td>
+        <td class="maintxt-vat">
+            
+            <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+   
+    
+    <tr>
+   
+    </tr>
+    
     </tbody>
 </table>
+
 
 <a href="javascript:;" class="btn btn-success addr1" style="float: right; display: none; margin-right: 5px;" onclick="add_address(1)">Добавить</a>
 
@@ -260,7 +279,7 @@ echo '</div>';
 
  </div>
 
-<div class="span7" style="float: right; width: 575px;">
+<div class="span7" style="float: right; width: 575px; margin-top: 21px;">
 
         <div class="cart_header" style="width: 553px;">
             В корзине <?=decline_goods($cart['fullInfo']['count'])?> на сумму <?=$PH->FormatPrice($cart['fullInfo']['cost']);?>
@@ -311,15 +330,15 @@ echo '</div>';
  
 <div class="p1">2. Где и как вы хотите получить заказ?</div>
     
-    <div class="row">
+    <div class="row dtypes">
         
         <?php
             $country = geoip_country_code_by_name($_SERVER['REMOTE_ADDR']);
             //if ($country == 'FI' or $country == 'fi') {
         ?>
         
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()">
-            Забрать в магазине
+        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()">
+            <span class="zabr_market">Забрать в магазине</span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -328,7 +347,7 @@ echo '</div>';
         </label>
         
          <?//php  } ?>
-        <label class="seld span3" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();">
+        <label class="seld span3 seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();">
             Доставка почтой
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 

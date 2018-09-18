@@ -502,8 +502,8 @@
         $('input[type=radio]', $('.seld').parent()).attr('checked', 'false');
         
         $('.cartorder .row label.seld.seld2').css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.cartorder .row label.seld.seld2')).attr('checked', 'true');
-        $('.check', $('.cartorder .row label.seld.seld2')).addClass('active');
+        //$('input[type=radio]', $('.cartorder .row label.seld.seld2')).attr('checked', 'true');
+       // $('.check', $('.cartorder .row label.seld.seld2')).addClass('active');
         
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');

@@ -77,7 +77,6 @@ class CartController extends MyController {
             echo $addr['country'];
         }
     }
-
     public function actionGetCodeCity() {
 
         if (Yii::app()->request->isPostRequest) {
@@ -618,15 +617,7 @@ class CartController extends MyController {
                             ), 'text/html');
                     $message->addTo($email);
                     $message->from = 'noreply@ruslania.com';
-                    $mailResult = Yii::app()->mail->send($message);
-                    file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
-                            date('d.m.Y H:i:s'),
-                            $email,
-                            serialize($mailResult),
-                            $message->view,
-                            serialize($message->from),
-                        )
-                    ) . "\n", FILE_APPEND);
+                    Yii::app()->mail->send($message);
                 }
 
                 $userID = $identity->getId();

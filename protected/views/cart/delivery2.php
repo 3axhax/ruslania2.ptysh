@@ -40,9 +40,9 @@ foreach ($items as $item) {
  
  switch ($item['type']) {
      
-     case 'Economy': echo 'Nouto omasta tai valitsemastasi Postista tai Postin Noutopisteestä'; break;
-     case 'Priority':  echo 'kotiin posotitse,Kotipaketti, Priority-käsittely';  break;
-     case 'Express': echo 'kotiin Postitse pikana, Express-paketti, Posti sopii kanssasi toimitusajankohdan, Express-käsittely';  break;
+     case 'Economy': case 'Бесплатно,': echo 'Nouto omasta tai valitsemastasi Postista tai Postin Noutopisteestä'; break;
+     case 'Priority':  echo 'Kotiin posotitse,Kotipaketti, Priority-käsittely';  break;
+     case 'Express': echo 'Kotiin Postitse pikana, Express-paketti, Posti sopii kanssasi toimitusajankohdan, Express-käsittely';  break;
      
  }
  
