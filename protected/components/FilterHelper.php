@@ -50,7 +50,7 @@ class FilterHelper
             unset($filters['years']);
         }
 
-        if ($entity == Entity::PRINTED && $cid == 6) {
+        if ($entity == Entity::PRINTED && ($cid == 6 || in_array($cid, $category->GetChildren($entity, 6)))) {
             unset($filters);
             $filters['price'] = true;
         }
