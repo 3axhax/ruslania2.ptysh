@@ -313,6 +313,7 @@
             <label class="prod-filter__label" for="">
                 <?php if ($entity == Entity::BOOKS OR $entity == Entity::SHEETMUSIC) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
                 elseif ($entity == Entity::MUSIC) $label_binding = $ui->item('A_NEW_FILTER_TYPE3');
+                elseif ($entity == Entity::PERIODIC) $label_binding = $ui->item('A_NEW_TYPE_IZD');
                 else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
                 <?=$label_binding?>:</label>
 
