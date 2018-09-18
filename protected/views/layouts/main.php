@@ -1295,10 +1295,6 @@ foreach ($rows as $row) $availCategory[$row['id']] = $row;
                                             <a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= $ui->item('A_NEW_PRINT_PRODUCTS'); ?></a>
                                             <div class="dd_box_bg dd_box_bg-slim list_subcategs">
                                                 <ul class="list_vertical">
-                                                    <?php $row = Category::GetByIds(Entity::PRINTED, 6)[0] ?>
-                                                    <li>
-                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
-                                                    </li>
                                                     <?php $row = Category::GetByIds(Entity::PRINTED, 41)[0] ?>
                                                     <li>
                                                         <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
@@ -1311,14 +1307,22 @@ foreach ($rows as $row) $availCategory[$row['id']] = $row;
                                                     <li>
                                                         <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
                                                     </li>
-                                                    <?php $row = Category::GetByIds(Entity::PRINTED, 37)[0] ?>
+                                                    <?php $row = Category::GetByIds(Entity::PRINTED, 55)[0] ?>
                                                     <li>
-                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= $ui->item('A_NEW_SALE'); ?></a>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
+                                                    </li>
+                                                    <?php $row = Category::GetByIds(Entity::PRINTED, 42)[0] ?>
+                                                    <li>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
+                                                    </li>
+                                                    <?php $row = Category::GetByIds(Entity::PRINTED, 61)[0] ?>
+                                                    <li>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
                                                     </li>
 
-                                                    <li id="printed_category" style="color: aqua">
-                                                        <?= $ui->item('A_NEW_ALL_CATEGORIES'); ?>
-                                                    </li>
+                                                    <!--<li id="printed_category" style="color: aqua">
+                                                        <?/*= $ui->item('A_NEW_ALL_CATEGORIES'); */?>
+                                                    </li>-->
 
                                                 </ul>
                                             </div>
