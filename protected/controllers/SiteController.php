@@ -22,8 +22,62 @@ class SiteController extends MyController {
     public function actionSale() {
         $this->_checkUrl(array());
 
+        $arSales = array(
+
+            '10'=> array(
+                'Entity'=>10,
+                'cid'=>213,
+                'name' => 'Распродажа книг',
+                'url' => '/books/bycategory/213/reduced-prices'
+            ),
+            '15'=> array(
+                'Entity'=>15,
+                'cid'=>217,
+                'name'=>'Распродажа нот',
+                'url'=>'/sheetmusic/bycategory/217/sheet-music-reduced-prices'
+            ),
+            '60'=> array(
+                'Entity'=>60,
+                'cid'=>8,
+                'name'=>'Распродажа карт',
+                'url'=>'/maps/bycategory/8/reduced-prices'
+            ),
+            '22'=> array(
+                'Entity'=>22,
+                'cid'=>21,
+                'name'=>'Распродажа музыки',
+                'url'=>'/music/bycategory/21/cd-at-reduced-prices'
+            ),
+            '24'=> array(
+                'Entity'=>24,
+                'cid'=>16,
+                'name'=>'Распродажа софта',
+                'url'=>'/soft/bycategory/16/reduced-prices'
+            ),
+            '40'=> array(
+                'Entity'=>40,
+                'cid'=>43,
+                'name'=>'Распродажа DVD-дисков',
+                'url'=>'/video/bycategory/43/dvds-at-reduced-prices'
+            )
+
+        );
+
+        $category = new Category();
+
+        foreach ($arSales as $entity=>$row) {
+
+            $totalItems = $category->GetTotalItems($entity, $row['cid'], true);
+            $paginatorInfo = new CPagination($totalItems);
+            $paginatorInfo->setPageSize(10);
+            $items = $category->GetItems($entity, $row['cid'], $paginatorInfo, 11, Yii::app()->language, true, '');
+
+            $arSales[(string)$entity]['items'] = $items;
+
+        }
+
         $this->breadcrumbs[] = Yii::app()->ui->item('MENU_SALE');
-        $this->render('sale');
+        $this->render('sale', array('items'=>$arSales));
     }
 
     public function actionLandingpage() {
