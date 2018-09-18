@@ -63,37 +63,37 @@ function decline_goods($num) {
     <tr>
         <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null)); ?>
+            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null)); ?>
+            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_title"); ?>
         </td>
         <td class="maintxt-vat" data-bind="visible: type()==1">
-            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'))); ?>
+            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'))); ?>
+            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
     <tr>
         <td class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"))); ?>
+            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"),'oninput'=>'save_form()')); ?>
         </td>
         
     </tr>
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_last_name'); ?>
+            <?=$form->textField('receiver_last_name', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
         <td class="smalltxt1"></td>
@@ -101,7 +101,7 @@ function decline_goods($num) {
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_firstname"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_first_name'); ?>
+            <?=$form->textField('receiver_first_name', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
         <td class="smalltxt1"></td>
@@ -109,7 +109,7 @@ function decline_goods($num) {
     <tr>
         <td class="maintxt"><?=$ui->item("regform_middlename"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_middle_name'); ?>
+            <?=$form->textField('receiver_middle_name', array('oninput'=>'save_form()')); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -121,7 +121,8 @@ function decline_goods($num) {
             <?=$form->dropDownList('country', CHtml::listData(Country::GetCountryList(), 'id', 'title_en'),
             array(
                 'data-bind' => array('optionsCaption' => "'---'"),
-                'onchange' => 'change_city($(this))'
+                'onclick' => 'change_city($(this)); save_form();',
+                'onchange' => 'change_city($(this));'
                 )); ?>
             <span class="texterror"></span>
         </td>
@@ -131,7 +132,7 @@ function decline_goods($num) {
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
         <td class="maintxt-vat select_states">
-            <select name="Address[state_id]" disabled><option value="">---</option></select>
+            <select name="Address[state_id]" disabled onclick="save_form();"><option value="">---</option></select>
         </td>
         
     </tr>
@@ -141,7 +142,7 @@ function decline_goods($num) {
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('city'); ?>
+            <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -149,7 +150,7 @@ function decline_goods($num) {
         <td nowrap="" class="maintxt"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
         <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('postindex'); ?>
+            <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
     </tr>
@@ -164,7 +165,7 @@ function decline_goods($num) {
     </tr>
     <tr>
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>
-            <?=$ui->item("address_contact_email"); ?>
+            <?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
             <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
@@ -175,7 +176,7 @@ function decline_goods($num) {
         <td nowrap="" class="maintxt"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('contact_phone'); ?>
+            <?=$form->textField('contact_phone', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
         </td>
         <td class="smalltxt1">
@@ -186,7 +187,7 @@ function decline_goods($num) {
     <tr>
         <td nowrap="" class="maintxt"><?=$ui->item("address_contact_notes"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textArea('notes'); ?>
+            <?=$form->textArea('notes', array('oninput'=>'save_form()')); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -215,7 +216,7 @@ function decline_goods($num) {
 
  
 
-<div class="span7" style="float: right; width: 575px; margin-top: 15px;">
+<div class="span7" style="float: right; width: 575px; margin-top: 21px;">
 
         <div class="cart_header" style="width: 553px;">
             В корзине <?=decline_goods($cart['fullInfo']['count'])?> на сумму <?=$PH->FormatPrice($cart['fullInfo']['cost']);?>
@@ -231,7 +232,7 @@ function decline_goods($num) {
             
             <tr>
                 
-                <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>
+                <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" src="/pic1/cart_ibook.gif"></td>
                 <td>
                     <span class="a"><?=$item['title']?></span>
                     <div class="minitext"><?=$item['quantity']?> шт. x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight']/1000)?> кг</div>
@@ -272,7 +273,7 @@ function decline_goods($num) {
         ?>
         
         <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()" style="height: 40px;">
-            <span class="zabr_market">Забрать в магазине</span>
+            <span class="zabr_market">Забрать в магазине в Хельсинки</span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
