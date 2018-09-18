@@ -175,6 +175,15 @@ class EntityController extends MyController {
 
         Yii::app()->session['last_e'] = 'filter_e' . $entity . '_c_' . $cid;
 
+        if (isset(Yii::app()->request->cookies['last_e']->value)
+            && (($key = Yii::app()->request->cookies['last_e']->value) != '')
+            && (Yii::app()->request->cookies['last_e']->value != 'filter_e' . $entity . '_c_' . $cid)) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
+        Yii::app()->request->cookies['last_e'] = new CHttpCookie('last_e', 'filter_e' . $entity . '_c_' . $cid);
+        $test = Yii::app()->request->cookies['last_e']->value;
+
         if ($entity == 10) {
             switch (Yii::app()->language) {
                 case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
@@ -712,7 +721,8 @@ class EntityController extends MyController {
         $list = (new Media())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Media');
+        if ($entity == Entity::MUSIC) $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_FILTER_TYPE3');
+        else $this->breadcrumbs[] = Yii::app()->ui->item('Media');
 
         $this->render('media_list', array('list' => $list, 'entity' => $entity));
     }
