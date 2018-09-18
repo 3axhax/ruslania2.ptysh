@@ -50,7 +50,7 @@ class FilterHelper
             unset($filters['years']);
         }
 
-        if ($entity == Entity::PRINTED && $cid == 6) {
+        if ($entity == Entity::PRINTED && ($cid == 6 || in_array($cid, $category->GetChildren($entity, 6)))) {
             unset($filters);
             $filters['price'] = true;
         }
@@ -367,6 +367,11 @@ class FilterHelper
             self::$data['series'] = (int) $series;
             return true;
         }
+        $series = Yii::app()->getRequest()->getParam('seria', false);
+        if ($series !== false) {
+            self::$data['series'] = (int) $series;
+            return true;
+        }
         if (isset(self::$sessionData['series']) && self::$sessionData['series'] != '') {
             self::$data['series'] = (int) self::$sessionData['series'];
             return true;
@@ -395,6 +400,13 @@ class FilterHelper
     }
 
     static private function getFormatVideo() {
+        $format_video = false;
+        if (Yii::app()->getController()->action->id == 'byaudiostream')
+            $format_video = Yii::app()->getRequest()->getParam('sid', false);
+        if ($format_video !== false) {
+            self::$data['format_video'] = (int) $format_video;
+            return true;
+        }
         $format_video = Yii::app()->getRequest()->getParam('format_video', false);
         if ($format_video !== false) {
             self::$data['format_video'] = (int) $format_video;
@@ -409,6 +421,13 @@ class FilterHelper
     }
 
     static private function getLangVideo() {
+        $lang_video = false;
+        if (Yii::app()->getController()->action->id == 'byaudiostream')
+            $lang_video = Yii::app()->getRequest()->getParam('sid', false);
+        if ($lang_video !== false) {
+            self::$data['lang_video'] = (int) $lang_video;
+            return true;
+        }
         $lang_video = Yii::app()->getRequest()->getParam('lang_video', false);
         if ($lang_video !== false) {
             self::$data['lang_video'] = (int) $lang_video;
@@ -423,6 +442,13 @@ class FilterHelper
     }
 
     static private function getSubtitlesVideo() {
+        $subtitles_video = false;
+        if (Yii::app()->getController()->action->id == 'bysubtitle')
+            $subtitles_video = Yii::app()->getRequest()->getParam('sid', false);
+        if ($subtitles_video !== false) {
+            self::$data['subtitles_video'] = (int) $subtitles_video;
+            return true;
+        }
         $subtitles_video = Yii::app()->getRequest()->getParam('subtitles_video', false);
         if ($subtitles_video !== false) {
             self::$data['subtitles_video'] = (int) $subtitles_video;
