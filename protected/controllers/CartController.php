@@ -77,7 +77,6 @@ class CartController extends MyController {
             echo $addr['country'];
         }
     }
-
     public function actionGetCodeCity() {
 
         if (Yii::app()->request->isPostRequest) {
