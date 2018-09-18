@@ -136,7 +136,9 @@ class LinksToList extends CWidget {
 		if (!$this->_checkByEntity('media')) return array();
 
 		return array(
-			'name'=>Yii::app()->ui->item('A_NEW_FILTER_TYPE2'),
+			'name'=>($this->_params['entity'] == Entity::MUSIC) ?
+                Yii::app()->ui->item('A_NEW_FILTER_TYPE3') :
+                Yii::app()->ui->item('A_NEW_FILTER_TYPE2'),
 			'href'=>Yii::app()->createUrl('entity/medialist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
 		);
 	}
