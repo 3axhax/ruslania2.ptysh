@@ -231,10 +231,8 @@ class Category {
             $sql .= ' AND (t.code = ' . $cid . ' OR t.subcode = ' . $cid . ')';
 
         }
-
-        $lang = 'ru';
-        if (isset(Yii::app()->language)) $lang=Yii::app()->language;
-        $sql .= ' GROUP BY pc.title_'.$lang.' ORDER BY pc.id ASC';
+        
+        $sql .= ' GROUP BY pc.id ORDER BY pc.id ASC';
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
@@ -258,12 +256,12 @@ class Category {
                 $bindingIds = array();
                 foreach ($bindings as $binding) $bindingIds[] = $binding['ID'];
 
-                $condition = array('bindings'=>'(binding_id in (' . implode(',',$bindingIds) . '))', 'avail'=>'(avail_for_order = 1)', ) ;
+                $condition = array('bindings'=>'(binding_id > 0)', 'avail'=>'(avail_for_order = 1)', ) ;
                 if ($cid > 0) $condition['cat'] = '(`code` = ' . $cid . ' OR `subcode` = ' . $cid . ')';
 
                 $sql = ''.
                     'select binding_id '.
-                    'from ' . $tbl . ' use index (binding_id) './/mysql почему то сам не правильно определяет индекс
+                    'from ' . $tbl . ' '.
                     'where ' . implode(' and ', $condition) . ' '.
                     'group by binding_id '.
                 '';
@@ -670,8 +668,8 @@ class Category {
 
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
-        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
-        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
+//        $join['tVendots'] = 'left join vendors tVendots on (tVendots.id = t.vendor)';
+//        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid)';
 
         $sql = ''.
             'select t.id '.
@@ -980,8 +978,8 @@ class Category {
         //	LEFT OUTER JOIN `vendors` `vendorData` ON (`t`.`vendor`=`vendorData`.`id`)
         //LEFT OUTER JOIN `delivery_time_list` `deliveryTime` ON (`vendorData`.`dtid`=`deliveryTime`.`dtid`)
 
-        $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
-        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
+//        $join['tV'] = 'left join vendors tV on (tV.id = t.vendor)';
+//        $join['deliveryTime'] = 'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tV.dtid)';
 
         $sql = ''.
             'select t.id '.
@@ -1052,7 +1050,7 @@ class Category {
         return $ret;
     }
 
-    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array()) {
+    public static function parseTree($root, $tree, $idName, $pidName, $additionalParams = array(), $checkCountAvail = false) {
         $return = array();
         # Traverse the tree and search for direct children of the root
         foreach ($tree as $idx => $node) {
@@ -1062,21 +1060,23 @@ class Category {
                 # Remove item from tree (we don't need to traverse this again)
                 unset($tree[$idx]);
                 # Append the child into result array and parse it's children
-                $p = array('payload' => $node,
-                    'parent' => $parent,
-                    'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams));
+                if (!$checkCountAvail || ($node['avail_items_count'] > 0)) {
+                    $p = array('payload' => $node,
+                        'parent' => $parent,
+                        'children' => self::parseTree($node[$idName], $tree, $idName, $pidName, $additionalParams, $checkCountAvail));
 
-                foreach ($additionalParams as $key => $val)
-                    $p[$key] = $val;
+                    foreach ($additionalParams as $key => $val)
+                        $p[$key] = $val;
 
-                $return[] = $p;
+                    $return[] = $p;
+                }
             }
         }
         return empty($return) ? array() : $return;
     }
 
-    public function GetCategoriesTree($entity) {
-        $key = 'CategoryTree' . $entity;
+    public function GetCategoriesTree($entity, $checkCountAvail = false) {
+        $key = 'CategoryTree' . $entity . '_count' . (int) $checkCountAvail;
 
         $tree = Yii::app()->dbCache->get($key);
         if ($tree === false) {
@@ -1085,7 +1085,7 @@ class Category {
             $sql = 'SELECT * FROM ' . $eTable . ' ORDER BY title_'.Yii::app()->language.', sort_order';
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-            $tree = $this->parseTree(0, $rows, 'id', 'parent_id');
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), $checkCountAvail);
             Yii::app()->dbCache->set($key, $tree);
         }
 
@@ -1093,6 +1093,20 @@ class Category {
 //        foreach ($tree as $row) $ids[] = $row['id'];
 //        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
+        return $tree;
+    }
+
+    public function getPeriodicsCategoriesTree($type) {
+        $key = 'CategoryTree' . Entity::PERIODIC . '_type' . (int) $type;
+
+        $tree = Yii::app()->dbCache->get($key);
+        if ($tree === false) {
+            $sql = 'SELECT * FROM pereodics_categories where (avail_items_type_' . $type . ' > 0) ORDER BY title_'.Yii::app()->language.', sort_order';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+            $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), false);
+            Yii::app()->dbCache->set($key, $tree);
+        }
         return $tree;
     }
 
@@ -1115,6 +1129,7 @@ class Category {
 
         return $rows;
     }
+
 
 }
 
