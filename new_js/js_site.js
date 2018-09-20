@@ -58,6 +58,7 @@ $(document).ready(function(){
     });
 
     $('.select2_series').select2();
+    $('.select2_publishers').select2();
 
 });
 
@@ -101,6 +102,7 @@ function show_result_count(url) {
     var frm = $('form.filter').serialize();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
+    console.log(frm);
     $.ajax({
         url: url,
         type: "POST",
@@ -133,7 +135,8 @@ function show_items(url, page) {
         '/avail/'+(( avail = $('form.filter select[name=avail]').val()) ? avail : '1')+
         '/ymin/'+(( ymin = $('form.filter input.year_inp_mini').val()) ? ymin : '0')+
         '/ymax/'+(( ymax = $('form.filter input.year_inp_max').val()) ? ymax : '0')+
-        '/publisher/'+(( publisher = $('form.filter input[name=publisher]').val()) ? publisher : '0')+
+        '/publisher/'+(( publisher = $('form.filter input[name=publisher]').val()) ? publisher :
+            ((publisher_s = $('form.filter select[name=publisher]').val()) ? publisher_s : '0'))+
         '/seria/'+(( seria = $('form.filter input[name=seria]').val()) ? seria :
             ((seria_s = $('form.filter select[name=seria]').val()) ? seria_s : '0'))+
         '/min_cost/'+(( cmin = $('form.filter input.cost_inp_mini').val()) ? cmin : '0')+
@@ -279,8 +282,54 @@ function liveFindActorsMP(entity, url, cid) {
 }
 
 function getSeries(entity, url, cid, selected_item) {
+    $(document).ready(function () {
+        if (cid == undefined) cid = 0;
+        select_series = $('.select2_series');
+        select_series_visible = select_series.next("span").children("span").children("span");
+        var frm = 'entity='+entity+'&cid='+cid;
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        frm = frm + '&' + csrf[0] + '=' + csrf[1];
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: frm,
+            beforeSend: function(){
+                select_series_visible.addClass('disabled');
+            },
+            success: function (data) {
+                titles = JSON.parse(data);
+                for (id in titles) {
+                    for (tittle in titles[id]) {
+                        if (selected_item == titles[id][tittle]) {
+                            select_series
+                                .append($("<option></option>")
+                                    .attr("value", id)
+                                    .attr("selected", true)
+                                    .text(titles[id][tittle]));
+                        }
+                        else {
+                            select_series
+                                .append($("<option></option>")
+                                    .attr("value", id)
+                                    .text(titles[id][tittle]));
+                        }
+                    }
+                }
+                select_series_visible.removeClass('disabled');
+                show_result_count();
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    });
+
+}
+
+function getPublishers(entity, url, cid, selected_item) {
     if (cid == undefined) cid = 0;
-    select_series = $('.select2_series');
+    select_publishers = $('.select2_publishers');
+    select_publishers_visible = select_publishers.next("span").children("span").children("span");
     var frm = 'entity='+entity+'&cid='+cid;
     var csrf = $('meta[name=csrf]').attr('content').split('=');
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
@@ -289,31 +338,29 @@ function getSeries(entity, url, cid, selected_item) {
         type: "POST",
         data: frm,
         beforeSend: function(){
-            select_series.attr("disabled", true);
-            //console.log('beforeSend');
+            select_publishers_visible.addClass("disabled");
         },
         success: function (data) {
             titles = JSON.parse(data);
             for (id in titles) {
                 for (tittle in titles[id]) {
                     if (selected_item == titles[id][tittle]) {
-                        select_series
+                        select_publishers
                             .append($("<option></option>")
                                 .attr("value", id)
                                 .attr("selected", true)
                                 .text(titles[id][tittle]));
                     }
                     else {
-                        select_series
+                        select_publishers
                             .append($("<option></option>")
                                 .attr("value", id)
                                 .text(titles[id][tittle]));
                     }
                 }
             }
-            select_series.attr("disabled", false);
+            select_publishers_visible.removeClass("disabled");
             show_result_count();
-            //console.log('add completed');
         },
         error: function (data) {
             console.log(data);

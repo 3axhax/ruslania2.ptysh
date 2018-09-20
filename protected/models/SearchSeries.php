@@ -98,7 +98,6 @@ class SearchSeries
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
         }
         $series = [];
-        $i = 0;
         foreach ($rows as $row) {
             $series[(int)$row['series_id']]['ru'] = $row['title_ru'];
             if ($row['title_rut'] != $row['title_ru'])

@@ -3175,3 +3175,10 @@ div.detail-prop .prop-value li { list-style-type: none; }
 }
 
 .without_discount { color: #ed1d24; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
+
+.disabled {
+    pointer-events: none !important;
+    cursor: default !important;
+    color: #44446A !important;
+    background: #EEEEEE !important;
+}
