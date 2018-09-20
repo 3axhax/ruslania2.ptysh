@@ -231,10 +231,8 @@ class Category {
             $sql .= ' AND (t.code = ' . $cid . ' OR t.subcode = ' . $cid . ')';
 
         }
-
-        $lang = 'ru';
-        if (isset(Yii::app()->language)) $lang=Yii::app()->language;
-        $sql .= ' GROUP BY pc.title_'.$lang.' ORDER BY pc.id ASC';
+        
+        $sql .= ' GROUP BY pc.id ORDER BY pc.id ASC';
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 

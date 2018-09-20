@@ -327,7 +327,11 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			
 			  <?php if (!empty($item['Media'])) : ?>
                   <div class="authors" style="margin-bottom:5px;">
-                      <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></div>
+                      <?php if ($entity == Entity::MUSIC):?>
+                          <div style="float: left;" class="nameprop"><?= sprintf($ui->item("A_NEW_FILTER_TYPE3"), ''); ?></div>
+                      <?php else:?>
+                          <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></div>
+                      <?php endif;?>
                       <div style="padding-left: 253px;">
                           <a class="cprop" href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a>
                           <?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>

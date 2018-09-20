@@ -721,7 +721,8 @@ class EntityController extends MyController {
         $list = (new Media())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('Media');
+        if ($entity == Entity::MUSIC) $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_FILTER_TYPE3');
+        else $this->breadcrumbs[] = Yii::app()->ui->item('Media');
 
         $this->render('media_list', array('list' => $list, 'entity' => $entity));
     }

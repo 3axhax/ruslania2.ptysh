@@ -123,6 +123,23 @@ class SearchController extends MyController {
 	}
 
 	function getEntitys($query) {
+		$sql = ''.
+			'select entity, count(*) counts '.
+			'from _tmp_products '.
+			'group by entity '.
+		'';
+
+		$result = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
+
+		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $data) {
+			//audio не показываем
+			if (!empty($data['entity'])&&($data['entity'] != 20)) {
+				$result[$data['entity']] = $data['counts'];
+			}
+		}
+		return array_filter($result);
+
 		$this->_search->resetCriteria();
 		$filters = array();
 		$avail = $this->GetAvail(1);
@@ -217,16 +234,24 @@ class SearchController extends MyController {
 			'mode'=>'mode=phrase',
 		);
 		$avail = $this->GetAvail(1);
-		if ($avail) $filters['avail'] = 'filter=avail,1';
+		if ($avail) {
+			$table = '_se_products_without_morphy_avail';
+			$tableMorphy = '_se_products_with_morphy_avail';
+		}
+		else {
+			$table = '_se_products_without_morphy';
+			$tableMorphy = '_se_products_with_morphy';
+		}
+
 		$e = (int) Yii::app()->getRequest()->getParam('e');
 		if (Entity::IsValid($e)) $filters['entity'] = 'filter=entity,' . $e;
 		$filters['limit'] = 'limit=10000';
 		$filters['maxmatches'] = 'maxmatches=10000';
 
 		$sql = ''.
-			'create temporary table _tmp_products (primary key (id), index(dictionary_position, spec_position, entity_position, time_position)) '.
+			'create temporary table _tmp_products (primary key (id), index(dictionary_position, spec_position, entity_position, time_position), index(entity)) '.
 			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
-			'FROM _se_products_without_morphy t '.
+			'FROM ' . $table . ' t '.
 			'WHERE (t.query=:q); '.
 		'';
 		//Война и мир;filter=avail,1;mode=phrase;limit=10000;maxmatches=10000
@@ -235,7 +260,7 @@ class SearchController extends MyController {
 		$sql = ''.
 			'insert ignore into _tmp_products '.
 			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
-			'FROM _se_products_with_morhpy t '.
+			'FROM ' . $tableMorphy . ' t '.
 			'WHERE (t.query=:q); '.
 		'';
 		$filters['mode'] = 'mode=boolean';
