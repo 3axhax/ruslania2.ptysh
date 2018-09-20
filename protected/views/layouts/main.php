@@ -453,6 +453,12 @@ else $act = array('', '');
 
                     update_header_cart();
 
+                    <?php if (in_array('korzina', $url)) : ?>
+
+                    location.href = location.href;
+
+                    <?php endif; ?>
+
                 })
             }
 
@@ -755,11 +761,7 @@ else $act = array('', '');
                         $el
                     );
 
-                    <?php if (in_array('korzina', $url)) : ?>
 
-                    location.href = location.href;
-
-                    <?php endif; ?>
 
                     return false;
                 });
@@ -1332,24 +1334,32 @@ foreach ($rows as $row) $availCategory[$row['id']] = $row;
                                             <a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO))); ?>"><?= $ui->item("A_NEW_VIDEO"); ?></a>
                                             <div class="dd_box_bg dd_box_bg-slim list_subcategs">
                                                 <ul class="list_vertical">
-                                                    <!--<li style="color: aqua">Музыкальные видео</li>-->
-                                                    <?php $row = Category::GetByIds(Entity::VIDEO, 109)[0] ?>
+
+                                                    <li>
+                                                        <a href="<?= Yii::app()->createUrl('entity/bysubtitle', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'sid' => 8, 'title' => 'finskij')) ?>"><?= $ui->item('A_NEW_VIDEO_FI_SUBTITLES'); ?></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="<?= Yii::app()->createUrl('entity/bysubtitle', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'sid' => 2, 'title' => 'anglijskij')) ?>"><?= $ui->item('A_NEW_VIDEO_EN_SUBTITLES'); ?></a>
+                                                    </li>
+                                                    <?php $row = Category::GetByIds(Entity::VIDEO, 23)[0] ?>
                                                     <li>
                                                         <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
                                                     </li>
-                                                    <li style="color: aqua">Современные русские фильмы</li>
-                                                    <li style="color: aqua">Классические русские фильмы</li>
-
                                                     <?php $row = Category::GetByIds(Entity::VIDEO, 8)[0] ?>
                                                     <li>
                                                         <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
                                                     </li>
+                                                    <?php $row = Category::GetByIds(Entity::VIDEO, 109)[0] ?>
                                                     <li>
-                                                        <a href="<?= Yii::app()->createUrl('entity/bysubtitle', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'sid' => 8, 'title' => 'finskij')) ?>"><?= $ui->item('A_NEW_VIDEO_FI_SUBTITLES'); ?></a>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
+                                                    </li>
+                                                    <?php $row = Category::GetByIds(Entity::VIDEO, 107)[0] ?>
+                                                    <li>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= ProductHelper::GetTitle($row) ?></a>
                                                     </li>
                                                     <?php $row = Category::GetByIds(Entity::VIDEO, 43)[0] ?>
                                                     <li>
-                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= $ui->item('A_NEW_SALE'); ?></a>
+                                                        <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => $row['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($row)))) ?>"><?= $ui->item('A_NEW_SALE');?></a>
                                                     </li>
                                                     <li id="video_category">
                                                         <a href="<?= Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey(Entity::VIDEO))) ?>"><?= $ui->item('A_NEW_ALL_CATEGORIES'); ?></a>
