@@ -54,7 +54,7 @@ return array(
 'A_LEFT_MAPS_SEARCH' => 'Расширенный поиск в разделе', 
 'A_LEFT_MUSIC_AZ_PROPERTYLIST_AUTHORS' => 'Все авторы от&nbsp;А&nbsp;до&nbsp;Я', 
 'A_LEFT_MUSIC_AZ_PROPERTYLIST_PERFORMERS' => 'Все исполнители от&nbsp;А&nbsp;до&nbsp;Я', 
-'A_LEFT_MUSIC_AZ_PROPERTYLIST_PUBLISHERS' => 'Все издатели от&nbsp;А&nbsp;до&nbsp;Я', 
+'A_LEFT_MUSIC_AZ_PROPERTYLIST_PUBLISHERS' => 'Все лейблы от&nbsp;А&nbsp;до&nbsp;Я',
 'A_LEFT_MUSIC_CATTREE_PROPERTYLIST' => 'Список категорий', 
 'A_LEFT_MUSIC_SEARCH' => 'Расширенный поиск в разделе', 
 'A_LEFT_PAY_ATTENTION' => 'Внимание!', 
@@ -1159,6 +1159,7 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_YEAR'=>'Год выхода',
 'A_NEW_FILTER_TYPE1'=>'Оформление',
 'A_NEW_FILTER_TYPE2'=>'Тип',
+'A_NEW_FILTER_TYPE3'=>'Тип носителя',
 'A_NEW_FILTER_SORT_FOR'=>'Сортировать по:',
 'A_NEW_PLACEHOLDER_SEARCH'=>'Поиск по Названию / Автору / ISBN',
 'A_NEW_YEAR_REAL'=>'Год издания',
@@ -1171,7 +1172,8 @@ IBAN DE79514303006474790001 <br>
 'A_NEW_SOFT_BY_CATEGORY' => 'Смотреть Мультимедию по категориям',
 'A_NEW_PRINTED_BY_CATEGORY' => 'Смотреть Печатную продукцию и сувениры по категориям',
 'A_NEW_VIDEO_BY_CATEGORY' => 'Смотреть Видеопродукцию по категориям',
-'A_NEW_VIDEO_FI_SUBTITLES' => 'Фильмы с финскими субтитрами ',
+'A_NEW_VIDEO_FI_SUBTITLES' => 'Фильмы с финскими субтитрами',
+'A_NEW_VIDEO_EN_SUBTITLES' => 'Фильмы с английскими субтитрами',
 'A_NEW_MAPS_BY_CATEGORY' => 'Смотреть Карты по категориям',
 'A_NEW_KEYBOARD_ON' => 'Вкл.',
 'A_NEW_KEYBOARD_OFF' => 'Выкл.',
@@ -1208,7 +1210,7 @@ IBAN DE79514303006474790001 <br>
 	'DESC_PAYTYPE0' => '',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
-    'A_NEW_LABEL' => 'Лэйбл',
+    'A_NEW_LABEL' => 'Лейбл',
 
 	'PERIODIC_TYPE_PLURAL_2' => 'Журналы',
 	'PERIODIC_TYPE_PLURAL_1' => 'Газеты',
@@ -1226,4 +1228,11 @@ IBAN DE79514303006474790001 <br>
 	'A_NEW_ALL_CATEGORIES_PERIODICS'=>'Все категории газет и журналов',
 	'MENU_SALE_PERIODICS' => 'Подписка по скидочной цене',
 
+    'DELIVERY_ECONOMY_FINEST'=>'Почтовой посылкой до ближайшего почтового отделения, почтового представителя или пункта выдачи (магазины, киоски: SmartPost, pakettiautomaatti)',
+    'DELIVERY_PRIORITY_FINEST'=>'<b>Фирмы, школы, организации:</b> доставка на адрес доставки после отправки на   следующий рабочий день до 16 часов. Пакет Express 16, обслуживание Priority   (если Вы заказывайте как частное лицо, но находитесь днем по адресу доставки,   напишите об этом в "Пожеланиях к заказу".)<br /><br /><b>Частные лица:</b> доставка надом или на адрес доставки после отправки на   следующий рабочий день между 9 и 21 часов. (После того, как заказ отправлен,   Почта свяжется с получателем чтобы договориться о време доставки, по телефону   или SMS). Пакет Kotipaketti 21, обслуживание Priority',
+    'DELIVERY_EXPRESS_FINEST'=>'Доставка надом или на адрес доставки    после отправки на следующий рабочий день до 9 утра почтовым срочным   письмом или пакет Express Morning, обслуживание Express',
+
+    'DELIVERY_ECONOMY_OTHER'=>'Доставка надом или на адрес доставки   почтовым письмом/бандеролью.',
+    'DELIVERY_PRIORITY_OTHER'=>'Доставка надом или на адрес доставки почтовым   Priority-письмом/бандеролью, обслуживание Priority',
+    'DELIVERY_EXPRESS_OTHER'=>'Доставка надом или на адрес доставки почтовым срочным письмом/бандеролью,   обслуживание Express'
 );
