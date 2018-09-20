@@ -1,4 +1,4 @@
-<div style="width: 500px">
+﻿<div style="width: 500px">
 
     <DIV><I><FONT color=#0000ff>
     ¿Se pueden ver todas las rúbricas del sitio sin registrarse?</FONT></I></DIV>
@@ -27,7 +27,7 @@
     ¿Cuanto es fiable en Ruslania el procesamiento de las tarjetas de crédito?
     </FONT></I></DIV>
     <DIV>
-    Ruslania no procesa las tarjetas de crédito y no tiene ningún acceso a ellas. Si el cliente paga su pedido con la tarjeta de crédito, después del trámite el pedido se redirecciona al sitio de la organización acreditada que se encarga de procesar tarjetas de crédito. En Finlandia esa compañía es LUOTTOKUNTA. Después de haber procesado la tarjeta de crédito el sistema nos transmite el informe de la transacción: aceptada (o no). Luego el usuario podrá regresar al sitio de Ruslania o cesar la sesión.
+    Ruslania no procesa las tarjetas de crédito y no tiene ningún acceso a ellas. Si el cliente paga su pedido con la tarjeta de crédito, después del trámite el pedido se redirecciona al sitio de la organización acreditada que se encarga de procesar tarjetas de crédito. En Finlandia esa compañía es Paytrail. Después de haber procesado la tarjeta de crédito el sistema nos transmite el informe de la transacción: aceptada (o no). Luego el usuario podrá regresar al sitio de Ruslania o cesar la sesión.
     </DIV>
     <DIV>&nbsp;</DIV>
     
@@ -59,7 +59,7 @@
     ¿De qué dependen los gastos postales?
     </FONT></I></DIV>
     <DIV>
-    Según las reglas del correo finlandés, el costo de un envío postal depende del peso y el grosor de la mercancía. Si el peso excede 1kg o el grosor del paquete postal excede 3cm, los gastos postales serían 5 euros, de lo contrario son 2.90 euros. Para los clientes que residen fuera de Finlandia existen otras tarifas, las cuales son visibles durante la formación del pedido.
+    Según las reglas del correo finlandés, el costo de un envío postal depende del peso y el grosor de la mercancía. Si el peso excede 1kg o el grosor del paquete postal excede 3cm, los gastos postales serían 7 euros, de lo contrario son 3.90 euros. Para los clientes que residen fuera de Finlandia existen otras tarifas, las cuales son visibles durante la formación del pedido.
     </DIV>
     <DIV>&nbsp;</DIV>
     
@@ -168,7 +168,7 @@
     He olvidado mi contraseña para entrar en el sitio. ¿Qué puedo hacer?
     </FONT></I></DIV>
     <DIV>
-    Entre a <A href="http://www.ruslania.com/context-2097224.html">esta página</A>, escriba su dirección de correo electrónico y cliquee sobre "Recibir contraseña".
+    Entre a <A HREF="https://ruslania.com/site/forgot?language=es" target="new">esta página</A>, escriba su dirección de correo electrónico y cliquee sobre "Recibir contraseña".
     </DIV>
     
 </div>

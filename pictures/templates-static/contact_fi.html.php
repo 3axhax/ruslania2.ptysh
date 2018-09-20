@@ -1,156 +1,204 @@
-<div class="b-about-shop__topic h1">Контакты</div>
-<div class="contact_block">
-	<div class="row">
-		<div class="span6">
-		<div class="video_contact">
-			<iframe width="570" height="375" src="https://www.youtube.com/embed/4YfsAz-sNAo?list=PLqHlAwsJRxAOpWPtj2T6HhSzX-lKmKV2q" frameborder="0" allowfullscreen></iframe>
-		</div>
+﻿<table cellspacing="1" cellpadding="3" border="0" width="800">
+<tr>
+  <td bgcolor="#E5E5E5" class="maintxtb">Osoite:</td>
+  <td bgcolor="#E5E5E5" class="maintxt">
+    Ruslania Books Corp.<br/>
+    Bulevardi 7,<br/>
+    FI-00120 Helsinki, Finland <br/>
+  </td>
+</tr>
 
-		Ruslania - книжный магазин в центре Хельсинки. Магазин предлагает большой выбор
-книг, фильмов, музыки и периодических изданий на русском языке. Интернет-магазин
-Ruslania.com работает на 7 языках (русский, финский, английский, немецкий,
-французский, испанский и шведский) и осуществляет доставку книг по всему миру.
-В магазине также можно купить ноты и книги для детей.<br /><br />
+<tr>
+  <td bgcolor="#E5E5E5" class="maintxtb">Y-tunnus</td>
+  <td bgcolor="#E5E5E5" class="maintxt">
+    FI 06452788
+  </td>
+</tr>
 
-Если бы не Руслания, я бы наверное уже умерла бы от тоски здесь, от духовного голода!
-Для меня просто стало спасением, когда я нашла через поисковый сервер Русланию!
-Здравствуйте все работники этого замечательного магазина! Хочу сказать вам большое
-спасибо за отличную работу! Я просто искренне поражена, как быстро и слаженно
-вы работаете.<br /><br />
+<tr>
+  <td bgcolor="#E5E5E5" class="maintxtb" colspan="2">Puhelimet</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">WhatsApp. Lisää numero puhelimesi yhteystietoihin ja lähetä meille viesti tai soita! Olemme paikalla asiakaspalvelun aukioloaikoina.</td>
+  <td bgcolor="#F6F6F6" class="maintxt">0503889439  </td>
+</tr>
+<tr>
+ <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Asiakaspalvelu</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 2727070   </td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Kirjat</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 27270727 </td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Lehtitilaukset</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 27270737 </td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Tietokoneohjelmat</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 27270717 </td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Nuotit</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 27270747 </td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Elokuvat, musiikki</td>
+  <td bgcolor="#F6F6F6" class="maintxt">09 27270777</td>
+</tr>
+<tr>
+  <td bgcolor="#E5E5E5" class="maintxtb" colspan="2">Sähköposti</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Asiakaspalvelu</td>
+  <td bgcolor="#F6F6F6" class="maintxt">customerservice@ruslania.com</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Kirjat</td>
+  <td bgcolor="#F6F6F6" class="maintxt">books@ruslania.com</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Nuotit</td>
+  <td bgcolor="#F6F6F6" class="maintxt">sheetmusic@ruslania.com</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Videot, DVD, musiikki</td>
+  <td bgcolor="#F6F6F6" class="maintxt">video-dvd@ruslania.com</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Lehtitilaukset</td>
+  <td bgcolor="#F6F6F6" class="maintxt">periodicals@ruslania.com</td>
+</tr>
+<tr>
+  <td bgcolor="#F6F6F6" class="maintxt" style="padding-left: 10px">Tietokoneohjelmat</td>
+  <td bgcolor="#F6F6F6" class="maintxt">software@ruslania.com</td>
+</tr>
+<tr>
+  <td class="maintxtb" colspan="2">
+Kirjakauppa Ruslania sijaitsee Helsingin keskustassa, Cafe Ekbergin vieressä.<br/>
+Myymälä on avoinna arkisin 9-18 ja lauantaisin 10-16.<br>Sunnuntaisin suljettu. <br>
+Ruslanian Bulevardin myymälä on avoinna koko kesän, myös lauantaisin klo 10-16.
+<br>
+<br>
+<br>
+Pyhäinpäivä 3.11.2018 Suljettu<br>
+Itsenäisyyspäivä 6.12.2018 Suljettu<br>
+Joulupäivä 25.12.2018 Suljettu<br>
+Tapaninpäivä 26.12.2018 Suljettu<br>
+Uudenvuodenpäivä 1.1.2019 Suljettu<br>
 
-Ruslania - книжный магазин в центре Хельсинки. Магазин предлагает большой выбор
-книг, фильмов, музыки и периодических изданий на русском языке. Интернет-магазин
-Ruslania.com работает на 7 языках (русский, финский, английский, немецкий,
-французский, испанский и шведский) и осуществляет доставку книг по всему миру.
-В магазине также можно купить ноты и книги для детей.<br /><br />
+<br><br>
+Kirjakauppa ei ole varsinaisesti esteet&ouml;n, mutta py&ouml;r&auml;tuolilla liikkuvat ja lastenrattaiden kanssa liikkeell&auml; olevatkin p&auml;&auml;sev&auml;t sis&auml;&auml;n, pyyd&auml; henkil&ouml;kuntaa apuun!
+                <br>
+	</td>	
+</tr>
+<tr>
+  <td colspan="2" align="center">
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=true"></script>
+	<script type="text/javascript" src="/js/gmaps.js"></script>
 
-Если бы не Руслания, я бы наверное уже умерла бы от тоски здесь, от духовного голода!
-Для меня просто стало спасением, когда я нашла через поисковый сервер Русланию!
-Здравствуйте все работники этого замечательного магазина! Хочу сказать вам большое
-спасибо за отличную работу! Я просто искренне поражена, как быстро и слаженно
-вы работаете.
-		
-		<div class="b-about-shop__topic title">Телефон</div>
-		
-		<table class="table_contacts">
-		
-		<tr>
-			<td class="name_td"><b>WhatsApp (текст или звонок)</b></td>
-			<td>+358 503889439</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Отдел обслуживания</b></td>
-			<td>+358 9 2727070</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Книги</b></td>
-			<td>+358 9 27270727</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Периодика</b></td>
-			<td>+358 9 27270737</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Ноты</b></td>
-			<td>+358 9 27270747</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Фильмы, Музыка</b></td>
-			<td>+358 9 27270777</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Факс</b></td>
-			<td>+358 9 27270720</td>
-		</tr>
-		
-		
-		
-		</table>
-		
-		<div class="b-about-shop__topic title">Электронная почта</div>
-		
-		<table class="table_contacts">
-		
-		<tr>
-			<td class="name_td"><b>Отдел обслуживания</b></td>
-			<td>customerservice@ruslania.com</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Книги</b></td>
-			<td>books@ruslania.com</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Ноты</b></td>
-			<td>sheetmusic@ruslania.com</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Фильмы, Музыка</b></td>
-			<td>video-dvd@ruslania.com</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Периодика</b></td>
-			<td>periodicals@ruslania.com</td>
-		</tr>
-		<tr>
-			<td class="name_td"><b>Компьютерные программы</b></td>
-			<td>software@ruslania.com</td>
-		</tr>
-		
-		
-		
-		</table>
-		
-		</div>
-		<div class="span6">
-			<script type="text/javascript">
-				$(document).ready(function() {
-					$('.market-slider').slick({
-						lazyLoad: 'ondemand',
-						slidesToShow: 1,
-						slidesToScroll: 1
-					});
-				});
-			</script>
-			<div class="market-slider">
+	<div id="map"></div>		
+
+ <script type="text/javascript">
+    var map;
+    $(document).ready(function()
+   {
+      map = new GMaps({
+        div: '#map',
+        lat: 60.165033,
+        lng: 24.938481
+      });
+
+      map.addMarker({
+        lat: 60.165033,
+        lng: 24.938481});
+
+    });
+  </script>
+
+  </td>
+</tr>		
 			
-				<div class="slide"><img src="/new_img/slide.png" alt=""/></div>
-				<div class="slide"><img src="/new_img/slide.png" alt=""/></div>
-				<div class="slide"><img src="/new_img/slide.png" alt=""/></div>
-			
-			</div>
-			
-			<div class="b-about-shop__topic title">Наш адрес</div>
-			Магазин Руслания расположен в самом центре Хельсинки, недалеко от универмага
-			Stockmann и шведского театра.  Вы можете попасть в магазин с детской или инвалидной
-			коляской. По вашей просьбе персонал магазина с удовольствием поможет вам!
-			
-			<table class="table_contacts tbl2">
-			
-				<tr>
-					<td class="name_td"><b>Наш адрес</b></td>
-					<td>Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</td>
-				</tr>
-				<tr>
-					<td class="name_td"><b>Код предприятия (VAT code):</b></td>
-					<td>FI 06452788</td>
-				</tr>
-				<tr>
-					<td class="name_td"><b>Время работы:</b></td>
-					<td>по будням с 9 до 18 ч., по субботам с 10 до 16 ч.<br />
-						По воскресеньям закрыто</td>
-				</tr>
-				<tr>
-					<td class="name_td" style="color: #ff0000"><b>Нерабочие дни в 2017:</b></td>
-					<td>14.4. - закрыто (субб 15.4 - открыто), 17.4. - закрыто,
-						1.5. - закрыто, 25.5. - закрыто </td>
-				</tr>
-			
-			</table>
-			
-			<div class="map">
-				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1984.9498918521876!2d24.936087916295666!3d60.16500838195901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x468df4ac3683d5f5%3A0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!5e0!3m2!1sru!2sru!4v1516855461342" width="570" height="280" frameborder="0" style="border:0" allowfullscreen></iframe>
-			</div>
-			
-		</div>
-	</div>
-</div>
+<tr>
+  <td class="maintxt" colspan="2">				
+<br>
+Myymälässä asiointi<br>
+Vain osa tuotteista esillä<br>
+
+Pidämme myymälässä rajoitetun tilan vuoksi esillä vain osaa netissä näkyvästä tuotevalikoimastamme. Jos tuotetta ei löydy myymälästä, pyydä apua myyjältä - haluamasi tuote saattaa olla varaston puolella!
+<br><br>
+Haluamasi tuotteet sinua odottamassa<br>
+
+Voit tehdä tilauksen ja valita sen toimitustavaksi noudon myymälästä! Tällä tavalla saat varmistettua, että tilaamasi tuotteet löytyvät jo valmiiksi odottamasta sinua kun saavut myymälään - ota kuitenkin huomioon, että tilaus käsitellään muiden nettitilausten joukossa, eikä välttämättä ole vielä saman päivän aikana noudettavissa!<br>
+
+Lähetämme ilmoituksen tilauksen noutovalmiudesta sähköpostitse, tekstiviestillä tai soitamme. Noutotilaukset ovat noudettavissa yleensä 2-7 työpäivän aikana. Säilytämme noutotilauksia viikon ajan tilauspäivästä, jonka jälkeen tilaus puretaan ja palautetaan varastoon.
+<br><br>
+  
+<p style='font-weight: bold;'>Bulevardilta, Helsingin tärkeimmältä kulttuurikadulta, löytyy myös kirjakauppa Ruslania.</p>
+ 
+<p style='font-weight: bold;'>Sloganimme ”Все весело и серезно! – kaikkea kivaa tosissaan” kuvaa asennettamme bisnekseen: meiltä on kiva ostaa ja otamme asiakkuutesi tosissamme.</p>
+ 
+<h4>Ruslania</h4>
+<p>Vuonna 1986 perustettu helsinkiläinen kirjakauppa Ruslania Books Oy on 100-prosenttisesti suomalainen perheyritys, joka tuo maahan venäläisiä kirjoja, elokuvia, nuotteja, musiikkia ja lehtiä. Tarjoamme myös venäläiset ja suomalaiset matkamuistot, kalenterit sekä laadukkaita venäläisiä elintarvikkeita ja juomia.</p>
+ 
+<h4>Idea</h4>
+
+<p>Ruslanian liikeideaan kuuluu se, että pidämme valikoimissamme kaikki Suomessa ilmestyneet kirjat, jotka liittyvät jotenkin Venäjään, sekä kaunokirjallisuuden käännökset että tietokirjat. Myymälässä on maahantuojan hinnat. Tarjoamme tuotteitamme myös kirjastoille ja kirjakaupoille.</p>
+ 
+<h4>Tiimi</h4>
+ 
+<p>Henkilökunta auttaa löytämään sopivia tuotteita, oli sitten kyse lahjavinkin antamisesta tai tietyn tuotteen etsimisestä Venäjältä tai Suomesta. Konsultoimme myös opettajia uuden opetusaineiston valinnassa ja toivotamme opiskelijaryhmät tervetulleiksi opintokäynnille!</p>
+ 
+<h4>Tuotteet</h4>
+ 
+<p>Ruslanian myymälässä on omat osastot seuraaville tuotteille
+<ul>
+<li>uutuudet ja teeman mukaiset esittelyt</li>
+<li>matkamuistot</li>
+<li>musiikki (laadukkaina CD-levyinä)</li>
+<li>nuotit (soittimittain esiteltyinä)</li>
+<li>elokuvat (suomenkielisin tai englanninkielisin tekstein) (kaikki maakoodivapaita)</li>
+<li>lehdet</li>
+<li>lastenkirjat</li>
+<li>kaunokirjallisuus (venäläinen ja käännetty)</li>
+<li>Suomi-Venäjä-Karjala-aiheinen tietokirjallisuus</li>
+<li>historia</li>
+<li>elämäkerrat</li>
+<li>vapaa-aika (ruoanlaitto, käsityöt, piha, perhe yms.)</li>
+<li>sanakirjat</li>
+<li>venäjän kielen ja suomen kielen oppikirjat</li>
+<li>venäläisen koulun oppikirjat</li>
+<li>ikoni- ja ortodoksikirjat</li>
+<li>mystiikka, teosofia, rajatieto</li>
+<li>psykologia</li>
+<li>matkaoppaat</li>
+<li>kartat</li>
+<li>suomenkielinen kaunokirjallisuus</li>
+<li>suomenkielinen tietokirjallisuus</li>
+<li>suomenkielinen talouden alan tietokirjallisuus</li>
+<li>alennusmyynti: kirjat</li>
+</ul>
+</p>
+ 
+<h4>Myymälä</h4>
+ 
+<p>Myymälästä löytyy lukunurkkaus. Keitämme joka päivä tuoretta vihreää teetä, jota asiakkaamme saavat nauttia veloituksetta.
+Ruslanian kaikki tuotteet ovat uusia ja laadukkaita.
+Tervetuloa tutustumaan ja ostoksille. Käytä henkilökunnan asiantuntemus hyödyksesi ja nauti kirjakaupan tunnelmasta!</p>  
+  
+<br>  </td>
+</tr>  
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,3 @@
-<style>
-
-</style>
-
 <?php
 
 //array(3) { [0]=> array(6) { ["type"]=> string(7) "Economy" ["id"]=> int(3) ["currency"]=> int(1) ["currencyName"]=> string(3) "EUR" ["value"]=> float(20.6) ["deliveryTime"]=> string(4) "5-15" } [1]=> array(6) { ["type"]=> string(8) "Priority" ["id"]=> int(2) ["currency"]=> int(1) ["currencyName"]=> string(3) "EUR" ["value"]=> float(29.1) ["deliveryTime"]=> string(4) "3-10" } [2]=> array(6) { ["type"]=> string(7) "Express" ["id"]=> int(1) ["currency"]=> int(1) ["currencyName"]=> string(3) "EUR" ["value"]=> float(50.1) ["deliveryTime"]=> string(3) "3-7" } }
@@ -17,14 +13,28 @@ $i = 1;
 $use = false;
 
 foreach ($items as $item) {
-    
-    if ($i == 1 AND $item['value'] == '7' AND ($_POST['id_country'] == 68 OR $_POST['id_country'] == 62)) {
-        
+
+    $text_placegolder = '';
+
+    if ($i == 1 AND ($_POST['id_country'] == 68 OR $_POST['id_country'] == 62)) {
+
+     $text_placegolder1 = $ui->item('DELIVERY_ECONOMY_FINEST');
+     $text_placegolder2 = $ui->item('DELIVERY_PRIORITY_FINEST');
+     $text_placegolder3 = $ui->item('DELIVERY_EXPRESS_FINEST');
+
      $use = true;
      $oncange = ' onchange="$(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').show(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\');"';
      
+    } elseif ($i > 1  AND ($_POST['id_country'] == 68 OR $_POST['id_country'] == 62)) {
+
+        $text_placegolder2 = $ui->item('DELIVERY_PRIORITY_FINEST');
+        $text_placegolder3 = $ui->item('DELIVERY_EXPRESS_FINEST');
+
     } else {
-        
+        $text_placegolder1 = $ui->item('DELIVERY_ECONOMY_OTHER');
+        $text_placegolder2 = $ui->item('DELIVERY_PRIORITY_OTHER');
+        $text_placegolder3 = $ui->item('DELIVERY_EXPRESS_OTHER');
+
         $oncange = ' onchange="$(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').hide(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\');"';
     
     }
@@ -40,9 +50,9 @@ foreach ($items as $item) {
  
  switch ($item['type']) {
      
-     case 'Economy': case 'Бесплатно,': echo 'Nouto omasta tai valitsemastasi Postista tai Postin Noutopisteestä'; break;
-     case 'Priority':  echo 'Kotiin posotitse,Kotipaketti, Priority-käsittely';  break;
-     case 'Express': echo 'Kotiin Postitse pikana, Express-paketti, Posti sopii kanssasi toimitusajankohdan, Express-käsittely';  break;
+     case 'Economy': case 'Бесплатно,': echo $text_placegolder1; break;
+     case 'Priority':   echo $text_placegolder2;  break;
+     case 'Express': echo $text_placegolder3;  break;
      
  }
  

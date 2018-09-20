@@ -1,4 +1,4 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 <DIV><I><FONT color=#0000ff>Kann man sich die Kategorien des Onlinegeschäfts ohne Anmeldung anschauen?</FONT></I></DIV>
 <DIV>&nbsp;</DIV>
 <DIV>Man kann, aber ohne Anmeldung kann man keine Bestellung durchführen. Die Waren- und Versandpreise 
@@ -31,7 +31,7 @@ des Kartenbesitzers durch.</DIV>
 <DIV>Ruslania führt keine Kreditkartenbearbeitung durch und hat keinen Zugang zu den Kreditkarten. Wenn der 
 Kunde den Einkauf mit der Kreditkarte bezahlt, so wird der Kunde nach der Bestellung auf die Webseite der 
 zusatändigen Organisation weitergeleitet, die solche Zahlungen bearbeitet. In Finnland heißt diese 
-Organisation Luottokunta. Nach der Bearbeitung der Karte wird das System mitteilen, ob Zahlungstransfer 
+Organisation Paytrail. Nach der Bearbeitung der Karte wird das System mitteilen, ob Zahlungstransfer 
 erfolgreich war. Danach kann der Kunde auf Ruslania weiter einkaufen oder den Vorgang beenden.</DIV>
 
 <DIV>&nbsp;</DIV>
@@ -63,7 +63,7 @@ werden montags bearbeitet.</DIV>
 <DIV>&nbsp;</DIV>
 <DIV>Nach den Regeln der finnischen Post ist die Versandgebühr von dem Gewicht und der Dicke der Sendung 
 abhängig. Wenn das Gewicht mehr als 1 kg ist, oder die Dicke der Sendung 3 cm übersteigt, kostet der Versand 
-5 Euro, wenn nicht – 2.90 Euro. Für die Kunden, die außerhalb Finnlands wohnen, gelten andere Versandgebühren, 
+7 Euro, wenn nicht – 3.90 Euro. Für die Kunden, die außerhalb Finnlands wohnen, gelten andere Versandgebühren, 
 die Sie bei der Bestellung erfahren werden.</DIV>
 
 <DIV>&nbsp;</DIV>
@@ -177,10 +177,9 @@ mit der Kreditkarte).</DIV>
 
 <DIV>&nbsp;</DIV>
 
-<DIV><I><FONT color=#0000ff>Ich habe mein Passwort vergessen. Was tun?</FONT></I></DIV>
+<DIV><I><FONT color=#0000ff>Ich habe mein Kennwort vergessen. Was tun?</FONT></I></DIV>
 <DIV>&nbsp;</DIV>
-<DIV>Gehen Sie zu <a href="http://www.ruslania.com/context-2097224.html">dieser Seite</a>, 
-geben Sie Ihre E-Mail-Adresse ein und drücken Sie "Kennwort bestellen".</DIV>
+<DIV>Gehen Sie zu <A HREF="https://ruslania.com/site/forgot?language=de" target="new">dieser Seite</A>, geben Sie Ihre E-Mail-Adresse ein und drücken Sie "Kennwort bestellen".</DIV>
 
 <DIV>&nbsp;</DIV>
 

@@ -451,9 +451,19 @@ else $act = array('', '');
 
                     doCountdown();
 
+                    <?php if (!in_array('korzina', $url)) : ?>
+
                     update_header_cart();
 
+                    <? endif; ?>
+
                     <?php if (in_array('korzina', $url)) : ?>
+
+                   // var cvm = new cartVM();
+
+                    //ko.applyBindings(cvm, $('#cart')[0]);
+
+                    //cvm.AjaxCall(true);
 
                     location.href = location.href;
 

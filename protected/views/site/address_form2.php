@@ -278,7 +278,7 @@ function decline_goods($num) {
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
             
-            <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
+            <input type="radio" id="dtype1" value="0" name="dtype" style="display: none;" />
         </label>
          <?//php  } ?>
          <label class="seld span3  seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();" style="height: 40px;">
@@ -286,7 +286,7 @@ function decline_goods($num) {
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
-            <input type="radio" id="dtype2" value="0" name="dtype" style="display: none;" />
+            <input type="radio" id="dtype2" value="1" name="dtype" style="display: none;" />
         </label>
 </div>        
         <div class="clearfix"></div>

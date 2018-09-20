@@ -510,12 +510,12 @@ class SiteController extends MyController {
                 $alreadyAuthors = array();
                 $alreadyPublishers = array();
 
-                if ($res['total_found'] > 0) {
-                    foreach ($res['matches'] as $match) {
-                        $attrs = $match['attrs'];
-                        $categories = $attrs['category'];
-                        $authors = $attrs['author'];
-                        $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
+                        if ($res['total_found'] > 0) {
+                            foreach ($res['matches'] as $match) {
+                                $attrs = $match['attrs'];
+                                $categories = $attrs['category'];
+                                $authors = $attrs['author'];
+                                $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
                         if (!empty($publisher) && !in_array($publisher, $alreadyPublishers)) {
                             $tmpFilter['publisher_id'][] = $publisher;
                             $alreadyPublishers[] = $publisher;

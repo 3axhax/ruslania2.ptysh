@@ -77,6 +77,7 @@ class CartController extends MyController {
             echo $addr['country'];
         }
     }
+
     public function actionGetCodeCity() {
 
         if (Yii::app()->request->isPostRequest) {
@@ -126,7 +127,6 @@ class CartController extends MyController {
             $this->renderPartial('delivery2', array('items' => $r));
         }
     }
-
     public function actionLoadsp2() {
 
         if (Yii::app()->request->isPostRequest) {
@@ -138,7 +138,6 @@ class CartController extends MyController {
     }
 
     public function actionLoadsp() {
-
         $s = addslashes(htmlspecialchars($_POST['s']));
 
         $sql = 'SELECT * FROM `SmartPost_address` WHERE postindex LIKE "%' . $s . '%"';
@@ -617,7 +616,15 @@ class CartController extends MyController {
                             ), 'text/html');
                     $message->addTo($email);
                     $message->from = 'noreply@ruslania.com';
-                    Yii::app()->mail->send($message);
+                    $mailResult = Yii::app()->mail->send($message);
+                    file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
+                            date('d.m.Y H:i:s'),
+                            $email,
+                            serialize($mailResult),
+                            $message->view,
+                            serialize($message->from),
+                        )
+                    ) . "\n", FILE_APPEND);
                 }
 
                 $userID = $identity->getId();
@@ -635,11 +642,11 @@ class CartController extends MyController {
 
                 $ret = Yii::app()->db->createCommand($sql)->execute();
                 $idAddr = Yii::app()->db->getLastInsertID();
-                if (!$post['dtype']) {
-                    $post['dtype'] = 0;
+                if (!$post['dtid']) {
+                    $post['dtid'] = 0;
                 }
                 $s['DeliveryAddressID'] = $idAddr2;
-                $s['DeliveryTypeID'] = $post['dtype'];
+                $s['DeliveryTypeID'] = $post['dtid'];
                 $s['DeliveryMode'] = 0;
                 $s['CurrencyID'] = Yii::app()->currency;
                 $s['BillingAddressID'] = $idAddr2;

@@ -29,8 +29,7 @@
 							<li id="books_category">
 								<a href="<?= Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey(Entity::BOOKS))) ?>"><?= $ui->item('A_NEW_ALL_CATEGORIES'); ?></a>
 							</li>
-						</ul>
-					</div>
+						</ul>					</div>
 				</div>
 			</li>
 			<!--Ноты-->

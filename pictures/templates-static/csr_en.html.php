@@ -46,6 +46,8 @@
                attend self development courses, mainly to improve their language skills, and the company pays for the courses. All employees are always welcome to give their ideas and to say their opinions out loud.<br>
                <br>
                The management of the company has promised to be there if a member of the staff asks any help with issues either in work or in private life.<br>
+Every time there is someone's birthday or some other special occasion, there is cake, coffee and discussion.
+<br>
                <br>
 
                <div style="font-size: 120%; font-weight: bold; margin-top: 5px; margin-bottom: 10px">

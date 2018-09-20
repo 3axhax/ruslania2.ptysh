@@ -51,6 +51,16 @@
 	}
 
 </style>
+
+<?
+    $ordClass = new Order();
+
+    $ord = $ordClass->GetOrder((int) $_GET['id']);
+
+    if ($ord['delivery_type_id'] == 0) :
+
+?>
+
 <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'dtype1')">
 	Оплата в магазине
 	<div class="red_checkbox" style="float: right;">
@@ -58,6 +68,7 @@
 	</div>
 	<input type="radio" id="dtype1" value="1" name="ptype" style="display: none;" />
 </label>
+<? endif; ?>
 
 <label class="selp span3 oplata2" onclick="check_cart_sel($(this),'selp', 'dtype8')">
 	<img src="/images/pp.jpg" width="150" />

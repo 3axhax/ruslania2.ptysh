@@ -12,7 +12,7 @@
                     ?>
                     <li class="iconentity-<?=$item['icon_entity']; ?>">
 					
-						<?
+						<?php
 							$o = new Offer;
 							$offer = $o->GetItems($item['id']);
 							

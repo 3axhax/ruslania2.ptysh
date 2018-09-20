@@ -104,13 +104,13 @@ Versandkosten.
 <b>Zahlungsweise</b>
 <br>
 Sie k&ouml;nnen die Ware &uuml;ber
-<a href="http://www.paypal.com" class="maintxt23" target="new">Paypal</a> und <a href="http://www.google.com/wallet/" class="maintxt" target="new">Google Wallet</a>, mit den Kredit oder bankkarten Visa und MasterCard/Eurocard (Credit/Debit), Visa Electron und American Express, sowie als Kunde einer finnischen Bank per Online-Banking zahlen. Die
+<a href="http://www.paypal.com" class="maintxt23" target="new">Paypal</a> oder <a href="https://www.paytrail.com/en/for-consumers-paytrail" class="maintxt23" target="new">Paytrail</a>  (mit den Kredit oder bankkarten Visa und MasterCard/Eurocard (Credit/Debit), Visa Electron, Maestro und American Express), sowie als Kunde einer finnischen Bank per Online-Banking zahlen. Die
 Bestellung wird unmittelbar nach Zahlungseingang abgesendet. K&auml;ufer mit Wohnsitz in
 Finnland k&ouml;nnen auf Rechnung kaufen. Sie erhalten die Rechnung zusammen mit der Ware.
 Wir behalten uns das Recht vor ggfs. auch von finnischen Kunden Vorauszahlung zu verlangen.
-Bei Kunden au?erhalb Finnlands ist Vorauszahlung erforderlich. Der Kunde erh&auml;lt die
+Bei Kunden ausserhalb Finnlands ist Vorauszahlung erforderlich. Der Kunde erh&auml;lt die
 Rechnung per E-Mail im Pdf-Format, die Ware wird nach Zahlungseingang abgesendet. Um die
-&UUML;berweisungskosten zu minimieren, empfehlen wir, bei Auslands&uuml;berweisungen die
+&UUML;berweisungskosten zu minimieren, empfehlen wir, bei Auslandsuberweisungen die
 auf der Rechnung angegebene
 <a href="http://www.ruslania.com/download/HTML/IBAN-ENG.htm" class="maintxt23" target="new">IBAN (International Bank Account Number)</a> 
 zu verwenden. Beachten Sie bei der Wahl der Zahlungsweise, dass Sie bei E-Banking &uuml;ber
@@ -147,6 +147,6 @@ zu zahlen. Doppelzahlung ist ausgeschlossen, da die Banken zwei gleiche Summen a
 annehmen. Bei Fragen steht Ihnen unser Kundenservice gern zur Seite. Bitte wenden Sie sich an die
 E-Mail-Adresse <a href="mailto:customerservice@ruslania.com" class="maintxt23">customerservice@ruslania.com</a>
 oder rufen Sie uns unter einer der folgenden Nummern an:
-<a href="http://www.ruslania.com/context-584/entity-1/language-5.html" class="maintxt23">Kontakt</a>
+<a href="http://ruslania.com/contact?language=de" class="maintxt23">Kontakt</a>
 
 </div>

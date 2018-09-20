@@ -19,8 +19,8 @@
   <b>2.1</b> Nur registrierte Kunden k&ouml;nnen im unserem virtuellen Gesch&auml;ft einkaufen. Privatpersonen melden sich mit Vor- und Nachnamen, Adresse, Telefonnummer und E-Mail -Adresse an, und teilen uns (optional) auch ihre Muttersprache und Interessengebiete mit. Unternehmen und K&ouml;rperschaften m&uuml;ssen auch ihre K&ouml;rperschaftsnummer angeben. Ruslania verpflichtet sich, Kundendaten nicht an die Dritten weiterzuleiten. Konzernintern sowie an Partnerunternehmen ist die Weiterleitung im Rahmen des gesetzlichen Datenschutzes jedoch gestattet. Der Kunde hat das Recht, &uuml;ber seine in unserer Datenbank abgespeicherten Daten informiert zu werden. Die in unserem Register abgelegten Daten umfassen: Name, Adresse, Telefonnummer, E-Mail-Adresse und Password sowie (optional vom Kunden anzugeben) Muttersprache und Interessengebiete. F&uuml;r die Datensatzf&uuml;hrung ist die Kundenabteilung von Ruslania zust&auml;ndig.
 
   <br><br>
-  <b>2.2.</b> Kundendaten und Auftragshistorie werden durch ein vom Kunden gew&auml;hltes Password gesch&uuml;tzt. Der Kunde muss daf&uuml;r sorgen, dass das von ihm gew&auml;hlte Password keinem Unbefugten zug&auml;nglich ist.
-
+  <b>2.2.</b> Kundendaten und Auftragshistorie werden durch ein vom Kunden gew&auml;hltes Password gesch&uuml;tzt. Der Kunde muss daf&uuml;r sorgen, dass das von ihm gew&auml;hlte Password keinem Unbefugten zug&auml;nglich ist.<br>
+<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">Wenn Sie möchten, können Sie Ruslanias Datenschutzerklärung hier öffnen und lesen (in englischer Sprache, eine PDF-Dokumente auf unserem Server):</a><br><br>
   <br><br>
   <b>3. Preise</b>
   <br><br>

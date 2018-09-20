@@ -1,6 +1,6 @@
 <?php /*Created by Кирилл (15.09.2018 1:41)*/ if (empty($result)) $result = array(); ?>
 <?php if (!empty($result['header'])): ?>
-	<?= $result['header']; ?>
+	<?= $result['header'] ?>
 	<div class="clearBoth"></div>
 <?php endif; ?>
 <div>

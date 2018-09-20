@@ -351,6 +351,7 @@ class MyController extends CController
             if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
             else $entity = Entity::ParseFromString($entity);
             $idName = HrefTitles::get()->getIdName($entity, $route);
+            Debug::staticRun(array($idName, $data));
             if (!empty($idName)&&!empty($data[$idName])) {
                 $data['__useTitleParams'] = true;
                 foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], Yii::app()->language) as $oldTitle) {
