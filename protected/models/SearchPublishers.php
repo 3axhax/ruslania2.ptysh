@@ -201,4 +201,38 @@ class SearchPublishers {
         return $publishers;
     }
 
+    function  getPublishersSelectFilters($entity, $cid = 0) {
+        if (!Entity::checkEntityParam($entity, 'publisher')) return array();
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
+
+        $filter_data = FilterHelper::getFiltersData($entity, $cid);
+
+        if ($cid > 0) {
+            $sql = 'SELECT tc.publisher_id, pt.title_ru, pt.title_en
+            FROM all_publishers as pt
+            JOIN (select publisher_id from ' . $tbl . '
+                  WHERE (avail_for_order='.$filter_data['avail'].') AND (`code`=:code OR `subcode`=:code)
+                  GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id)';
+
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
+        } else {
+            $sql = 'SELECT tc.publisher_id, pt.title_ru, pt.title_en
+            FROM all_publishers as pt
+            JOIN (select publisher_id from ' . $tbl . '
+                  WHERE (avail_for_order='.$filter_data['avail'].')
+                  GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id)';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
+        }
+        $publishers = [];
+        foreach ($rows as $row) {
+            $publishers[(int)$row['publisher_id']]['ru'] = $row['title_ru'];
+            if ($row['title_en'] != $row['title_ru'])
+                $publishers[(int)$row['publisher_id']]['en'] = $row['title_en'];
+
+        }
+        return $publishers;
+    }
+
 }

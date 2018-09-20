@@ -35,7 +35,6 @@ class EntityController extends MyController {
                 $attrs = $match['attrs'];
                 $ids[$attrs['entity']][] = $attrs['real_id'];
             }
-
             $p = new Product();
             foreach ($ids as $entity => $ids2) {
                 $list = $p->GetProductsV2($entity, $ids2);
@@ -182,17 +181,8 @@ class EntityController extends MyController {
         }
 
         Yii::app()->request->cookies['last_e'] = new CHttpCookie('last_e', 'filter_e' . $entity . '_c_' . $cid);
-        $test = Yii::app()->request->cookies['last_e']->value;
 
-        if ($entity == 10) {
-            switch (Yii::app()->language) {
-                case 'ru' : //$this->pageTitle = 'Интернет магазин русских книг Руслания в Финляндии с доставкой по всему миру';
-                break;
-                case 'en': 
-                //$this->pageTitle = 'Ruslania.com bookstore in Finland - buy Russian books online in '.geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
-                break;
-            }
-        }
+        if ($entity == 10) { SEO::seo_change_meta_books_category($entity, $totalItems, $title_cat, $cid); } elseif ($entity == 15) { SEO::seo_change_meta_sheets_category($entity, $totalItems, $title_cat, $cid); } elseif ($entity == 30) { SEO::seo_change_meta_periodic_category($entity, $totalItems, $title_cat, $cid); } elseif ($entity==22) { SEO::seo_change_meta_music_category($entity, $totalItems, $title_cat, $cid); } else { SEO::seo_change_meta_other_category($entity, $totalItems, $title_cat, $cid); }
 
         $filters = FilterHelper::getEnableFilters($entity, $cid);
 

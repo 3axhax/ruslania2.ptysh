@@ -17,7 +17,8 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) {
-				$list = $sController->getList($q, 1, 10);
+				/*$list = $sController->getListExactMatch($q, 1, 10);
+				if (empty($list)) */$list = $sController->getList($q, 1, 10);
 				$list = $sController->inDescription($list, $q);
 			}
 
@@ -25,25 +26,26 @@ class LiveSearchController extends MyController {
 			if (!$isCode) {
 				$abstractInfo = $sController->getEntitys($q);
 				if (!empty($abstractInfo))
-					$result[] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
+					$result['entitys'] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
 			}
 
-			if (!empty($list))
-				$result[] = $this->renderPartial('/search/live_header', array('q' => $q), true);
+//			if (!empty($list))
+				$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
 
 			if (!$isCode) {
 				$didYouMean = $sController->getDidYouMean($q);
 				if (!empty($didYouMean))
-					$result[] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
+					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
 			}
 
 			if (!empty($list)) {
+				$result['list'] = array();
 				foreach ($list as $row) {
-					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
+					$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
 				}
 			}
 		}
-		$this->ResponseJson($result);
+		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
 
 	function actionGeneralHa() {
@@ -59,7 +61,10 @@ class LiveSearchController extends MyController {
 				if (!empty($list)) $isCode = true;
 			}
 
-			if (!$isCode) $list = $sController->getList($q, 1, 10);
+			if (!$isCode) {
+				/*$list = $sController->getListExactMatch($q, 1, 10);
+				if (empty($list)) */$list = $sController->getList($q, 1, 10);
+			}
 
 			if (!empty($list)) $list = $sController->inDescription($list, $q);
 
@@ -92,16 +97,18 @@ class LiveSearchController extends MyController {
 		if (!$this->_check('authors')) return;
 
 		$entity = Yii::app()->getRequest()->getParam('entity');
-		$authors = SearchAuthors::get()->getAuthors($entity, (string)Yii::app()->getRequest()->getParam('q'));
+		$authors = SearchAuthors::get()->getAuthors($entity, (string)Yii::app()->getRequest()->getParam('q'), 20, false);
 
 		$url ='/entity/byauthor';
 		$param = array('entity' => Entity::GetUrlKey($entity), 'aid' => 0, 'title' => '');
 		$titleField = 'title_' . SearchAuthors::get()->getSiteLang();
 		foreach ($authors as $i=>$author) {
+			unset($param['avail']);
 			$authors[$i]['title'] = $author[$titleField];
 			unset($authors[$i][$titleField]);
 			$param['aid'] = $author['id'];
 			$param['title'] = ProductHelper::ToAscii($authors[$i]['title']);
+			if (isset($author['availItems'])&&empty($author['availItems'])) $param['avail'] = 0;
 			$authors[$i]['href'] = Yii::app()->createUrl($url, $param);
 		}
 		$this->ResponseJson($authors);
@@ -210,11 +217,25 @@ class LiveSearchController extends MyController {
         $this->ResponseJson($items);
     }
 
+    function actionSelect_Filter_Publishers () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchPublishers::get()->getPublishersSelectFilters($entity, $cid);
+        $this->ResponseJson($items);
+    }
+
     function actionFilter_Series () {
         if (!($entity = Yii::app()->getRequest()->getParam('entity')) ||
             !($q = Yii::app()->getRequest()->getParam('q'))) return;
         $cid = Yii::app()->getRequest()->getParam('cid');
         $items = SearchSeries::get()->getSeriesForFilters($entity, $q, $cid);
+        $this->ResponseJson($items);
+    }
+
+    function actionSelect_Filter_Series () {
+        if (!($entity = Yii::app()->getRequest()->getParam('entity'))) return;
+        $cid = Yii::app()->getRequest()->getParam('cid');
+        $items = SearchSeries::get()->getSeriesSelectFilters($entity, $cid);
         $this->ResponseJson($items);
     }
 
