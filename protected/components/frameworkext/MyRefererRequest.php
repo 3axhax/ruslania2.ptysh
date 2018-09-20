@@ -1,7 +1,7 @@
 <?php
 /*Created by Кирилл (27.07.2018 23:22)*/
 
-/** класс написан, чтоб можно было получить route любого путь (например получить referer)
+/** класс написан, чтоб можно было получить route любого пути (например получить referer)
  * Class MyRefererRequest
  */
 class MyRefererRequest extends CHttpRequest {

@@ -195,7 +195,15 @@ class MyUrlRule extends CUrlRule {
      * @param $rawPathInfo
      * @return bool|string
      */
-    private function _parseReferer($manager,MyRefererRequest $request,$pathInfo,$rawPathInfo) {
+    private function _parseReferer($manager, MyRefererRequest $request, $pathInfo,$rawPathInfo) {
+        $urlRule = new EntityUrlRule();
+        $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
+        if ($result !== false) return $result;
+
+        $urlRule = new StaticUrlRule();
+        $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
+        if ($result !== false) return $result;
+
         if($this->verb!==null && !in_array($request->getRequestType(), $this->verb, true))
             return false;
 
@@ -220,15 +228,12 @@ class MyUrlRule extends CUrlRule {
 
         $pathInfo.='/';
 
-        if(preg_match($this->pattern.$case,$pathInfo,$matches))
-        {
-            foreach($this->defaultParams as $name=>$value)
-            {
+        if(preg_match($this->pattern.$case,$pathInfo,$matches)) {
+            foreach($this->defaultParams as $name=>$value) {
                 $request->setParam($name, $value);
             }
             $tr=array();
-            foreach($matches as $key=>$value)
-            {
+            foreach($matches as $key=>$value) {
                 if(isset($this->references[$key]))
                     $tr[$this->references[$key]]=$value;
                 else if(isset($this->params[$key]))
