@@ -92,7 +92,10 @@
 
 
             <div class="text charbox">
-			    <?php if (empty($liveAction)) $liveAction = 'authors'?>
+			    <?php if (empty($liveAction)) $liveAction = 'authors';
+			    if (($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) &&
+                    mb_strtoupper($liveAction) == 'PUBLISHERS') $liveAction = 'producers';
+			    ?>
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                     <input placeholder="<?= $ui->item('NAME_' . mb_strtoupper($liveAction) . '_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>

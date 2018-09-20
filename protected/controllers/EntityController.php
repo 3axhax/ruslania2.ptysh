@@ -259,7 +259,8 @@ class EntityController extends MyController {
         }
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_PUBLISHERS');
+        $this->breadcrumbs[] = ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) ?
+            Yii::app()->ui->item('PROPERTYLIST_FOR_PROD') : Yii::app()->ui->item('PROPERTYLIST_FOR_PUBLISHERS');
 
         $paginatorInfo = false;
         if ($list_count > count($list)) {

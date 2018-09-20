@@ -204,6 +204,8 @@
         <div class="prod-filter__col" id="publisher_div">
             <?php if ($entity == Entity::MUSIC):?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_LABEL')?>:</label>
+            <?php elseif ($entity == Entity::MAPS || $entity == Entity::SOFT || $entity == Entity::PRINTED):?>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_PRODUCER')?>:</label>
             <?php else:?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <?php endif;?>

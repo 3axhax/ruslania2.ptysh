@@ -164,6 +164,7 @@ $entityKey = Entity::GetUrlKey($entity);
             <span class="nameprop">
                 <?php
                 if ($entity == Entity::MUSIC) echo $ui->item('A_NEW_LABEL');
+                elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo $ui->item('A_NEW_PRODUCER');
                 else echo sprintf($ui->item("Published by"), '');
                 ?>
                 :</span> <a class="cprop" href="<?=
