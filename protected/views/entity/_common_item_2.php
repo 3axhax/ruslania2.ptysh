@@ -131,15 +131,14 @@ $entityKey = Entity::GetUrlKey($entity);
 
         <?php endif; ?>
         <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) : ?> 
-            
-           
+
             <?php
             $langs = array();
             foreach ($item['Languages'] as $lang) {
                 $langs[] = '' . Language::GetTitleByID($lang['language_id']) . '';
             }
 
-            echo '<span class="langs">'.$ui->item('CATALOGINDEX_CHANGE_LANGUAGE'). ': '.implode(', ', $langs) . '</span>';
+            echo '<span class="langs">'.(($entity == Entity::PRINTED) ? $ui->item('CATALOGINDEX_CHANGE_THEME') : $ui->item('CATALOGINDEX_CHANGE_LANGUAGE')). ': '.implode(', ', $langs) . '</span>';
             ?>
         <?php endif; ?>
 
