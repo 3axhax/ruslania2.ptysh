@@ -92,7 +92,10 @@
 
 
             <div class="text charbox">
-			    <?php if (empty($liveAction)) $liveAction = 'authors'?>
+			    <?php if (empty($liveAction)) $liveAction = 'authors';
+			    if (($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) &&
+                    mb_strtoupper($liveAction) == 'PUBLISHERS') $liveAction = 'producers';
+			    ?>
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                     <input placeholder="<?= $ui->item('NAME_' . mb_strtoupper($liveAction) . '_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
@@ -120,11 +123,22 @@
                 <?php if (empty($route)) $route = 'entity/authorlist';
                 $lineRu = $lineOther = false;
                 if (empty($chasdr)) $chasdr = '';
+                $yo = false;
                 foreach($abc as $item) :
 				    if (trim($item['first_'.$lang]) == '') continue;
+                    if (trim($item['first_'.$lang]) == 'Ё') {
+                        $yo = true;
+                        continue;
+                    }
+                    if ($yo&&!in_array(trim($item['first_'.$lang]), array('А','Б','В','Г','Д','Е'))):
+                        $yo = false; ?>
+                        <a class="<?=(('Ё' == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
+                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>"
+                            >Ё</a>
+                    <?php endif;
                     if (!$lineOther&&preg_match("/[^a-zа-я0-9]/ui", $item['first_'.$lang])): $lineOther = true; ?>
                         <br>
-                    <?php elseif(!$lineRu&&preg_match("/[а-я]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
+                    <?php elseif(!$lineRu&&preg_match("/[а-яё]/ui", $item['first_'.$lang])): $lineRu = true;  ?>
                         <br>
                     <?php endif; ?>
                     <a class="<?=(($item['first_'.$lang] == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
