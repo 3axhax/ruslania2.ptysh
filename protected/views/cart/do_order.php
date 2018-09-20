@@ -354,8 +354,8 @@
         $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
 
     }
-    
-    
+
+
     function checkEmail(t) {
         var value = t.value;
         if (value != '') {
@@ -366,8 +366,10 @@
                 type: 'post',
                 success: function (r) {
                     $('#js_forgot').remove();
-                    if (r) { $(t).after(r); //$('.order_start').addClass('disabled'); 
-                         } 
+                    if (r) {
+                        $(t).after(r);
+                        // $('.order_start').addClass('disabled');
+                    }
                 }
             });
         }
@@ -381,9 +383,19 @@
             type: 'post',
             data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
             success: function () {
-                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+
+                window.setTimeout('document.location.href = "<?= Yii::app()->createUrl('cart/variants') ?>";', 1000);
+
+
             }
         });
+    }
+
+    function dontClick() {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пожалуйста, введите другой e-mail!</div>';
+
+        window.setTimeout('$(document).ready(function() { $("#js_forgot").remove() })', 1200);
+
     }
 
     function change_city(cont) {
@@ -505,9 +517,9 @@
         //$('input[type=radio]', $('.cartorder .row label.seld.seld2')).attr('checked', 'true');
        // $('.check', $('.cartorder .row label.seld.seld2')).addClass('active');
         
-        $('.selp #dtype2').parent().css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
-        $('.check', $('.selp #dtype2').parent()).addClass('active');
+        $('.seld #dtype2').parent().css('border', '1px solid #64717f');
+        $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
+        $('.check', $('.seld #dtype2').parent()).addClass('active');
     $('.delivery_box').show();
     
     })
