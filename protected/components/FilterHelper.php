@@ -246,10 +246,6 @@ class FilterHelper
             self::$data['lang_sel'] = (int) $lang_sel;
             return true;
         }
-        if (isset(self::$sessionData['lang_sel']) && self::$sessionData['lang_sel'] != '') {
-            self::$data['lang_sel'] = (int) self::$sessionData['lang_sel'];
-            return true;
-        }
         self::$data['lang_sel'] = 0;
         return false;
     }

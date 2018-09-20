@@ -51,8 +51,9 @@ Kundens
 personuppgifter och k&ouml;phistorik skyddas med ett l&ouml;senord som kunden
 v&auml;ljer. Kunden skall f&ouml;rvara sina inloggningsuppgifter s&aring; att
 utomst&aring;ende inte f&aring;r tillg&aring;ng till dessa.
+<br><a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">Om du vill kan du öppna och läsa Ruslanias sekretesspolicy här (på engelska, en PDF-fil på vår server):</a>
   <br><br>
-  <b>3. Prices</b>
+  <b>3. Priserna</b>
 
     <br><br>
     

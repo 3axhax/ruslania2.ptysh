@@ -20,8 +20,8 @@ class CommonAuthor extends CMyActiveRecord {
         if(!array_key_exists('author_table', $data)) return array();
 
         $sql = ''.
-            'select `first_'.$lang.'` '.
-            'from `all_authorslist` '.
+            'select`first_'.$lang.'` '.
+            'from`all_authorslist` '.
             'where (first_'.$lang.' regexp "[[:alpha:]]") '.
                 'and (`first_'.$lang.'` != "") '.
                 'and (is_' . $entity . '_author > 0) '.

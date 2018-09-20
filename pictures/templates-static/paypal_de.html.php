@@ -37,7 +37,7 @@
   <b>Адрес Ruslania.com на PayPal</b>
       <br>
 
-  Высылайте оплату вашего заказа на Русланию по адресу paypal@ruslania.com<br>
+  Высылайте оплату вашего заказа на Русланию по адресу paypal@ruslania.com<br><br><br>www.paypal.com<br>
 
   <br>
 

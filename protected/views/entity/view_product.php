@@ -418,7 +418,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                  }
                  ?>
                  <div class="authors" style="margin-bottom:5px;">
-                     <div style="float: left;" class="nameprop"><?= $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
+                     <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? $ui->item("CATALOGINDEX_CHANGE_THEME") : $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
                      <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
                      <div class="clearBoth"></div>
                  </div>
@@ -437,7 +437,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <div class="authors" style="margin-bottom:5px;">
             <div style="float: left;" class="nameprop">
                 <?php
-                if ($entity == 22) echo $ui->item('A_NEW_LABEL');
+                if ($entity == Entity::MUSIC) echo $ui->item('A_NEW_LABEL');
+                elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo $ui->item('A_NEW_PRODUCER');
                 else echo sprintf($ui->item("Published by"), '');
                 ?>
             </div>

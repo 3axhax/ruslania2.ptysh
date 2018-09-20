@@ -1151,4 +1151,16 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
+
+
+    'DELIVERY_ECONOMY_FINEST'=>'Nouto omasta Postista tai Postin   Pakettiautomaatista',
+    'DELIVERY_PRIORITY_FINEST'=>'<b>Firmat, koulut ja organisaatiot:</b> suoraan toimitusosoitteeseen pakettina   klo 16 mennessä lähetystä seuraavana arkipäivänä, Express-paketti,   Priority-käsittely (Jos olet yksityishenkilö, mutta olet toimitusosoitteessa päiväsaikaan, valitse tämä ja kirjoita huomautus toivomuksiin).<br /><br /><b>Yksityishenkilöt:</b> suoraan kotiin tai toimitusosoitteeseen lähetystä   seuraavana arkipäivänä klo 9-21. Kotipaketti 21, Priority-käsittely. (Kun   paketti on lähtenyt Ruslaniasta, Posti sopii toimitusajan vastaanottajan   kanssa etukäteen puhelimitse tai tekstiviestillä.)',
+    'DELIVERY_EXPRESS_FINEST'=>'Kotiin tai toimitusosoitteeseen lähetystä seuraavana arkiaamuna klo 9 mennessä. Pikakirje tai  Express   Morning-paketti, Express-käsittely',
+
+    'DELIVERY_ECONOMY_OTHER'=>'Toimitus suoraan kotiin tai   toimitusosoitteeseen kirjeenä',
+    'DELIVERY_PRIORITY_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen Priority-kirjeenä, Priority-käsittely',
+    'DELIVERY_EXPRESS_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen pikakirjeenä, Express-käsittely'
+
+
+
 );

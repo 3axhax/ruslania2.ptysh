@@ -1,4 +1,4 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 
   <div style="font-size: 130%; font-weight: bold; margin-top: 5px; margin-bottom: 10px">
   LEHTITILAUSTEN OHJEET JA EHDOT
@@ -42,7 +42,7 @@
   <b>5. Tilauksen maksaminen </b>
   <br><br>
   
-   Yksityiskohtaiset ohjeet tilauksen maksamiseksi löytyvät <a href="http://www.ruslania.com/language-4/context-4136.html">Tilausohjeet</a> –alta kohdasta "Maksutapa".  
+   Yksityiskohtaiset ohjeet tilauksen maksamiseksi löytyvät <a href="http://ruslania.com/conditions_order?language=fi">Tilausohjeet</a> –alta kohdasta "Maksutapa".  
 
   <br><br>
   <b>6. Huomautukset ja tiedustelut</b>
@@ -58,7 +58,7 @@
   <br><br>
   <b>7. Tilauksen peruutus</b>
   <br><br>
-    Koska kyseess&auml; ovat ulkomailta toimitetut lehdet, normaalit peruutusehdot eiv&auml;t ole voimassa Ruslanian lehtitilauksissa. Tilauksen voi peruuttaa ainoastaan kustantajan suostumuksella. Kun kustantaja/v&auml;litt&auml;j&auml; on hyv&auml;ksynyt peruutuksen ja palauttanut k&auml;ytt&auml;m&auml;tt&ouml;m&auml;n osan tilausmaksusta, asiakas voi tilata kyseisen summan edest&auml; jonkin muun lehden tai muita kirjakaupan tuotteita. Kaikki peruutuksiin liittyv&auml;t kysymykset tulee toimittaa osoitteeseen: periodicals@ruslania.com.
+    Koska kyseess&auml; ovat ulkomailta toimitetut lehdet, normaalit peruutusehdot eiv&auml;t ole voimassa Ruslanian lehtitilauksissa. Tilauksen voi peruuttaa ainoastaan Ruslanian ja/tai kustantajan suostumuksella. Kun kustantaja/v&auml;litt&auml;j&auml; on hyv&auml;ksynyt peruutuksen ja palauttanut k&auml;ytt&auml;m&auml;tt&ouml;m&auml;n osan tilausmaksusta, asiakas voi tilata kyseisen summan edest&auml; jonkin muun lehden tai muita kirjakaupan tuotteita. Kaikki peruutuksiin liittyv&auml;t kysymykset tulee toimittaa osoitteeseen: periodicals@ruslania.com.
   
   <br><br>
   <b>8. Vastuut</b>

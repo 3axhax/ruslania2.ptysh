@@ -510,12 +510,12 @@ class SiteController extends MyController {
                 $alreadyAuthors = array();
                 $alreadyPublishers = array();
 
-                if ($res['total_found'] > 0) {
-                    foreach ($res['matches'] as $match) {
-                        $attrs = $match['attrs'];
-                        $categories = $attrs['category'];
-                        $authors = $attrs['author'];
-                        $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
+                        if ($res['total_found'] > 0) {
+                            foreach ($res['matches'] as $match) {
+                                $attrs = $match['attrs'];
+                                $categories = $attrs['category'];
+                                $authors = $attrs['author'];
+                                $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
                         if (!empty($publisher) && !in_array($publisher, $alreadyPublishers)) {
                             $tmpFilter['publisher_id'][] = $publisher;
                             $alreadyPublishers[] = $publisher;
@@ -1075,7 +1075,6 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
-            $test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }

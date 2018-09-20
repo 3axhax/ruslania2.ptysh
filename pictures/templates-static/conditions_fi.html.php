@@ -1,7 +1,7 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 
   <div style="font-size: 130%; font-weight: bold; margin-top: 5px">
-  VERKKOKAUPAN K&Auml;YTT&Ouml;EHDOT 
+  VERKKOKAUPAN K&auml;YTT&ouml;EHDOT 
   </div>
   <br><br>
   Ruslania Books Oy:n (josta j&auml;ljemp&auml;n&auml; k&auml;ytet&auml;&auml;n nime&auml; Ruslania) ja sen 
@@ -37,6 +37,7 @@
           s&auml;ilytett&auml;v&auml; huolellisesti tunnuksiaan, jottei n&auml;ihin tietoihin p&auml;&auml;sisi 
           k&auml;siksi kukaan ulkopuolinen.
 
+		  <a href="http://www.ruslania.com/download/Rekisteriseloste_ruslania.pdf">Lue rekisteriseloste kokonaisuudessaan t&auml;&auml;lt&auml; (PDF-tiedosto serverillämme).</a>
 
   <br><br>
   <b>3. Hinnat</b>
@@ -103,12 +104,18 @@
   <br><br>
 
   <b>7.1</b> Yksityisasiakkaalle postitse toimitettavissa tuotteissa on normaali Suomen kuluttajasuojalain mukainen 
-          14 p&auml;iv&auml;n palautusoikeus. Ruslanian toivomus olisi, että palautustapauksista sovittaisiin ennen l&auml;hetyst&auml; asiakaspalvelumme kanssa. Palautettavan tuotteen tulee olla olennaisesti samassa kunnossa kuin
+          14 p&auml;iv&auml;n palautusoikeus. Asiakkaan on maksettava palautuksesta aiheutuvat postituskulut. Palautuksista on aina sovittava Ruslanian asiakaspalvelun kanssa. Palautettavan tuotteen tulee olla olennaisesti samassa kunnossa kuin
     sit&auml; vastaanotettaessa. Palautusoikeus ei koske tietokoneohjelmia, DVD- tai CD-levyj&auml;, jos niiden pakkaus on avattu. Palautusoikeus ei my&ouml;sk&auml;&auml;n 
-         koske Internetin v&auml;lityksell&auml; (”imurointi”) toimitettuja tietokoneohjelmia tai s&auml;hk&ouml;isi&auml; kirjoja.
+         koske Internetin v&auml;lityksell&auml; (”imurointi”) toimitettuja tietokoneohjelmia tai s&auml;hk&ouml;isi&auml; kirjoja. Ruslania korvaa asiakkaalle virheellisen, rikkoutuneen tai viallisen tuotteen palautuksesta aiheutuneet kustannukset, jos palautuksesta on sovittu etuk&auml;teen Ruslanian asiakaspalvelun kanssa. <br>
+<br>
+<a href="http://ruslania.com/download/1.pdf">Peruuttamislomake</a> 
+<br>
+<a href="http://ruslania.com/download/2.pdf">Peruuttamislomakkeen malli</a>
+
+
   <br><br>
   
-  <b>7.2</b> Yritysasiakkaiden v&auml;lisiss&auml; palautusasioissa noudatetaan suomalaista 
+  <b>7.2</b> Yritysasiakkaiden palautusasioissa noudatetaan suomalaista 
           kauppalains&auml;&auml;d&auml;nt&ouml;&auml; sek&auml; hyv&auml;&auml; kauppatapaa. 
           Palautuksista on aina sovittava Ruslanian asiakaspalvelun kanssa (ks. ”Yhteystiedot”).
 

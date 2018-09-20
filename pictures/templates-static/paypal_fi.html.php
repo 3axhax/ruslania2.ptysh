@@ -1,46 +1,36 @@
 <div style="width: 500px">
+<b>Mikä on PayPal?</b>
 
-  <b>PayPal</b><br>
-  <b>Безопасный и простой способ оплаты</b><br>
-  Создайте бесплатный PayPal-аккаунт и начните наслаждаться оплатой онлайн всего за несколько кликов. Нет необходимости вводить свои данные карты для каждого сайта, все, что вам нужно, это адрес электронной почты и пароль.<br>
-    <br>
+<p>Turvallinen ja helppo tapa maksaa </p>
+<p>Luo ilmainen PayPal-tili ja nauti maksamisesta netissä vain muutamalla klikkauksella. Sinun ei tarvitse syöttää maksukorttisi tietoja jokaiselle nettisivulle. Kaikki, mitä tarvitset, on sähköpostiosoite ja salasana.</p>
 
-  <b>У вас нет PayPal-счета?</b>
-      <br>
-        Создайте бесплатный аккаунт прямо сейчас.<br>
-          <br>
+<p><b>Eikö sinulla ole Paypal-tiliä?</b><br/>
+Luo ilmainen PayPal-tili vaikka heti.
 
-  <b>Создать учетную запись:</b>
-            <br>
-    <b>Это безопасно</b>
-     
-  <br>
-  Ваша безопасность является нашим приоритетом. Вот почему группа специалистов по борьбе с мошенничеством контролирует проводимые операции 24 часа в сутки, 7 дней в неделю. Все конфиденциальные сведения, передаваемые между вашим компьютером 
-  и нашими серверами, автоматически шифруется, поэтому они защищены от потенциальных мошенников. Когда вы оплачиваете покупки по системе PayPal, продавец никогда не может завладеть вашей финансовой информацией.<br>
+PayPal palvelun avulla voit nyt myös maksaa tilauksesi jopa ilman luottokorttia!
+</p>
 
-  <b>Это просто</b>
-    <br>
-  С PayPal вам не придется каждый раз вводить длинные номера вашей кредитной или дебетовой карты, когда вы хотите оплатить что-то через Интернет. Все, что вам нужно, это ввести адрес электронной почты и пароль, это не только просто, но и быстро. 
-  PayPal идеально подходит для совершения и оплаты покупок через мобильный телефон. Вы можете отправлять деньги, и проверить свой счет через мобильный телефон.<br>
 
-  <b>Это бесплатно</b>
-    <br>
-  Создание счета PayPal бесплатно. При оплате покупок при помощи системы PayPal комиссия с покупателя не снимается, если покупке совершены на внутреннем рынке. Комиссия взимается с продавца в том случае, если товар приобретен за рубежом.<br>
-  <b>Это глобальная</b>
-    <br>
-  Вы можете использовать PayPal в 190 странах и 24 различных валютах на миллионах веб-сайтов по всему миру. Как глобальная компания с более чем 10 летним опытом работы в онлайн-платежах, мы знаем, как сделать, что бы покупки в Интернете 
-  приносили удовольствие.<br>
-    <br>
+<p>
+<b>Edut:</b><br/>
+Se on turvallista<br/>
+Turvallisuutesi on meidän prioriteettimme. Huijauksia vastaan taisteleva asiantuntijaryhmä kontrolloi PayPalissa tehtyjä toimintoja 24 tuntia vuorokaudessa, 7 päivää viikossa. Kaikki luottamuksellinen tieto, joka välittyy tietokoneesi ja meidän serverin välillä, muuttuu automaattisesti salakieleksi, näin se on suojassa potentiaalisilta huijauksilta. Kun maksat ostoksiasi PayPal-järjestelmällä, myyjä ei koskaan saa pääsyä taloudellisiin tietoihisi.
+</p>
+
+
+<p>
+<b>Se on helppoa</b><br/>
+PayPalilla sinun ei tarvitse joka kerta syöttää maksukorttisi tietoja, kun haluat maksaa jotakin netin kautta. Kaikki, mitä sinun tulee tehdä, on syöttää sähköpostiosoitteesi ja salasanasi. Se ei ole vain helppoa, vaan myös todella nopeaa. 
+</p>
+
+<p><b>Se on ilmaista</b><br/>
+PayPal-tilin luominen on ilmaista. Maksaessasi ostoksia Paypalin avulla, PayPal ei veloita maksajalta hyvikettä, jos ostokset tehdään sisäisessä ostopaikassa. Hyvike veloitetaan maksajalta vain siinä tapauksessa, jos tuote on hankittu ulkomailta.
+</p>
 
 
 
-  <b>Адрес Ruslania.com на PayPal</b>
-      <br>
-
-  Высылайте оплату вашего заказа на Русланию по адресу paypal@ruslania.com<br>
-
-  <br>
-
-
+<p><b>Ruslania.com:in osoite PayPalissa</b><br/>
+Lähettäkää tilauksenne maksusuoritus Ruslanialle osoitteeseen paypal@ruslania.com.<br><br>www.paypal.com
+</p>
 
 </div>

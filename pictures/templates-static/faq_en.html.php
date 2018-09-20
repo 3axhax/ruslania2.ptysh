@@ -1,4 +1,4 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 
 <DIV><I><FONT color=#0000ff>Can I browse the catalogue of the webstore without registration?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
@@ -17,13 +17,18 @@
 
 <DIV><I><FONT color=#0000ff>How secure is credit card treatment with Ruslania?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
-<DIV>Ruslania carries out no credit card treatment and has no access to credit cards of it's customers. If the customer pays the purchase with a credit card, the customer is passed on after the order on to the web page of the credit card organisation which processes the payments. In Finland this organisation is called Luottokunta. After processing the card the system will inform whether payment transfer was successful. Then the customer of Ruslania can make further purchases or finish the process.</DIV>
+<DIV>Ruslania carries out no credit card treatment and has no access to credit cards of it's customers. If the customer pays the purchase with a credit card, the customer is passed on after the order on to the web page of the credit card organisation which processes the payments. Ruslania uses a Finnish company called Paytrail. After processing the card the system will inform whether payment transfer was successful. Then the customer of Ruslania can make further purchases or finish the process.</DIV>
 <div>&nbsp;</div>
 
 <DIV><I><FONT color=#0000ff>Why is the credit card not accepted, although the credit card is valid and the account balance is in order?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
 <DIV>Probably because your card is not admitted for shopping on the Internet. Ask for it at your bank. If everything is in order and the payment transfer, nevertheless, is not successful, inform us of this please.</DIV>
 <div>&nbsp;</div>
+
+<DIV><I><FONT color=#0000ff>Why is the credit card not accepted, I trayed to pay with MasterCard but it asks something about 3D payments secure...?</FONT></I></DIV>
+<DIV><I></I>&nbsp;</DIV>
+<DIV>There are different layers of security with credit cards and a credit card payment can be linked with a SMS sent to a telephone or with bank codes, where the credit card payment requires authentication trough internet banking. If your credit card payment does not go through, you can contact your bank or contact us directly.</DIV>
+
 
 <DIV><I><FONT color=#0000ff>Can another person have access to my orders?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
@@ -78,8 +83,12 @@
 
 <DIV><I><FONT color=#0000ff>In which case is the return of the product possible?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
-<DIV>Returns are always to be arranged in advance with our customer service department (see Contacts). The right of return does not exist for CDs, DVDs and software which was unsealed by the customer, as well as not with the products which were delivered online (e.g., download software). If the return of the product occurs from abroad (beyond Finland), the customer carries the dispatch expenses of the return.</DIV>
+<DIV> According to the Finnish Consumer Protection Act, any goods mailed to a private citizen may be returned within 14 days from the receipt. A returned item shall be essentially in the same condition as it was at the time of receipt. The right of return does not apply to DVD and CD disks,
+    if the wrappings have been opened, nor does the right of return apply to computer software and electronic books transferred via the Internet. 
+In the event of return, customer carries the postage fee of the return, except for faulty or incorrect items, for which Ruslania will cover the postage fee of the return. Any return shall be settled with the Customer service in advance.
+</DIV>
 <div>&nbsp;</div>
+
 
 <DIV><I><FONT color=#0000ff>What is "zone 5" and how one can watch DVDs that carry that zone?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
@@ -99,7 +108,7 @@ There are some ways to watch such DVDs:
 <DIV>We do carry translations of Russian authors, books about Russian economy, culture, history, guide and textbooks in Estonian, Finnish and English and into some other languages, as well as of films with the subtitles into different languages. Most books, however, are in Russian.</DIV>
 <div>&nbsp;</div>
  
-<DIV><I><FONT color=#0000ff>If I carry out at the same time an order and a query how I can avoid double dispatch expenses?</FONT></I></DIV>
+<DIV><I><FONT color=#0000ff>If I carry out at the same time an order and a query how I can avoid double postage fee?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
 <DIV>In both cases you are asked to write in "Wishes concerning the order / query" that the goods are to be sent in a package.</DIV>
 <div>&nbsp;</div>
@@ -121,8 +130,7 @@ There are some ways to watch such DVDs:
 
 <DIV><I><FONT color=#0000ff>I have forgotten my password. What to do?</FONT></I></DIV>
 <DIV><I></I>&nbsp;</DIV>
-<DIV>Go to this page, enter your e-mail address and press "get password" <br/>
-<a href="http://www.ruslania.com/context-2097224/entity-1/language-1.html">http://www.ruslania.com/context-2097224/entity-1/language-1.html</a>
+<DIV>Go to <A HREF="https://ruslania.com/site/forgot?language=en" target="new">this page</A>, enter your e-mail address and press "get password" <br/>
 </DIV>
  
 

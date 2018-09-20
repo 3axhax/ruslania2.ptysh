@@ -1,9 +1,9 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 
 <DIV><I><FONT color=#0000ff>
 Voiko sivuja katsella ilman rekister&ouml;itymist&auml;?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
-Kyll&auml; voi, mutta tilausta tai kysely&auml; ei voi tehd&auml; ilman rekister&ouml;itymist&auml;. My&ouml;sk&auml;&auml;n tuotteiden hinnat ja l&auml;hetyskulut eiv&auml;t ilman rekister&ouml;itymist&auml; v&auml;ltt&auml;m&auml;tt&auml; tule n&auml;kyviin oikein. EU:n alueelta olevat tilaajat n&auml;kev&auml;t hinnat verollisina (arvonlis&auml;vero ALV, VAT), muista maista tilattaessa hinnat n&auml;kyv&auml;t ilman ALV:t&auml;. </DIV>
+Kyll&auml; voi, mutta tilausta tai kysely&auml; ei voi tehd&auml; ilman rekister&ouml;itymist&auml;. My&ouml;sk&auml;&auml;n tuotteiden hinnat ja l&auml;hetyskulut eiv&auml;t ilman rekister&ouml;itymist&auml; v&auml;ltt&auml;m&auml;tt&auml; tule n&auml;kyviin oikein. EU:n alueelta olevat tilaajat n&auml;kev&auml;t hinnat verollisina (arvonlis&auml;vero ALV, VAT), muista maista tilattaessa hinnat n&auml;kyv&auml;t ilman ALV:t&auml;. </DIV>
 <DIV>&nbsp;</DIV>
 <DIV><I><FONT color=#0000ff>
 
@@ -27,6 +27,21 @@ Luottokorttien tietoja ei k&auml;sitell&auml; Ruslaniassa eik&auml; Ruslanialla 
 T&auml;m&auml; saattaa johtua siit&auml;, ett&auml; kortissasi ei ole Internet-ostoksia mahdollistavaa ominaisuutta. Ota yhteytt&auml; kortin my&ouml;nt&auml;neeseen pankkiisi saadaksesi tiet&auml;&auml; onko asia n&auml;in. Jos kaikki on kunnossa eik&auml; maksaminen siit&auml; huolimatta onnistu, ota yhteytt&auml; meihin. </DIV>
 <DIV>&nbsp;</DIV>
 
+<DIV><I><FONT color=#0000ff>Yritin maksaa MasterCardillani, mutta minulta kysytään jotain "3D secure payments"?</FONT></I></DIV><DIV>&nbsp;</DIV>
+<DIV>
+T&auml;m&auml; tarkoittaa sit&auml;, ett&auml; maksaja ohjataan yleens&auml; luottokorttitietojen sy&ouml;tt&auml;misen j&auml;lkeen verkkopankkiin todentamaan maksutapahtuma omilla pankkitunnuksillaan tai vaihtoehtoisesti kortin my&ouml;nt&auml;neelt&auml; taholta saadulla salasanalla. K&auml;yt&auml;nn&ouml;ll&auml; on tarkoitus ehk&auml;ist&auml; luottokorttitietojen v&auml;&auml;rink&auml;ytt&ouml;&auml; ja parantaa Internet-maksamisen turvallisuutta. Jos korttitiedot p&auml;&auml;tyv&auml;t v&auml;&auml;riin k&auml;siin, niin todentamisk&auml;yt&auml;nt&ouml; est&auml;&auml; kuitenkin korttitietojen v&auml;&auml;rink&auml;ytt&ouml;&auml;. </DIV>
+<DIV>&nbsp;</DIV>
+
+<DIV><I><FONT color=#0000ff>Onko tanskalaisella Dankortilla mahdollista maksaa Ruslanian nettikaupassa?</FONT></I></DIV><DIV>&nbsp;</DIV>
+<DIV>
+Dankortti ei itsessään toimi meillä, mutta jos korttiin on liitetty Visa -ominaisuus eli se on ns. yhdistelm&auml;kortti, toimii se t&auml;ll&ouml;in luottokorttina.</DIV>
+<DIV>&nbsp;</DIV>
+
+DIV><I><FONT color=#0000ff>Onko kiinalaisella Union Pay -kortilla mahdollista maksaa Ruslanian nettikaupassa?</FONT></I></DIV><DIV>&nbsp;</DIV>
+<DIV>
+Union Pay -kortilla ei ole t&auml;ll&auml; hetkell&auml; mahdollista maksaa meid&auml;n nettikaupassamme.</DIV>
+<DIV>&nbsp;</DIV>
+
 <DIV><I><FONT color=#0000ff>Voiko ulkopuolinen henkil&ouml; n&auml;hd&auml; tekem&auml;ni tilaukset?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
 Ei, se on mahdotonta, ellet ole antanut salasanaasi kenellek&auml;&auml;n. Jos joku on saanut tietoonsa salasanasi, h&auml;n p&auml;&auml;see tilaustietoihisi. </DIV>
@@ -39,13 +54,13 @@ Ty&ouml;p&auml;ivin&auml; t&auml;t&auml; tehd&auml;&auml;n koko ajan, viikonlopp
 
 <DIV><I><FONT color=#0000ff>Miten l&auml;hetyskulut m&auml;&auml;r&auml;ytyv&auml;t?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
-Suomen Postin tariffien mukaan l&auml;hetyskulut m&auml;&auml;r&auml;ytyv&auml;t l&auml;hetyksen painon ja paksuuden mukaan. Jos postitettavan tuotteen paino ylitt&auml;&auml; yhden kilon tai se on paksumpi kuin 3 cm, postikulut ovat 5 euroa, muussa tapauksessa 2.90 euroa. Jos asut muualla kuin Suomessa, n&auml;et l&auml;hetyskulut tilausta tehdess&auml;si. </DIV><DIV>&nbsp;</DIV>
+Suomen Postin tariffien mukaan l&auml;hetyskulut m&auml;&auml;r&auml;ytyv&auml;t l&auml;hetyksen painon ja paksuuden mukaan. Jos postitettavan tuotteen paino ylitt&auml;&auml; yhden kilon tai se on paksumpi kuin 3 cm, postikulut ovat 7 euroa, muussa tapauksessa 3.90 euroa. Jos asut muualla kuin Suomessa, n&auml;et l&auml;hetyskulut tilausta tehdess&auml;si. </DIV><DIV>&nbsp;</DIV>
 
 <DIV><I><FONT color=#0000ff>Miksi alle viiden euron tilauksissa  (esim. yksi postikortti) ohjelma nostaa tilauksen arvon viiteen euroon?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
 N&auml;in tapahtuu siksi, ett&auml; tilauksen loppusumman v&auml;himm&auml;isarvo Ruslanian nettikaupassa on viisi euroa. </DIV><DIV>&nbsp;</DIV>
 
-<DIV><I><FONT color=#0000ff>Kuinka usein Ruslanian Internetsivut p&auml;ivitet&auml;&auml;n, ent&auml; tiedot tuotteiden saatavuudesta?</FONT></I></DIV><DIV>&nbsp;</DIV>
+<DIV><I><FONT color=#0000ff>Kuinka usein Ruslanian nettikauppaa p&auml;ivitet&auml;&auml;n, ent&auml; tiedot tuotteiden saatavuudesta?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
 Sivumme p&auml;ivitet&auml;&auml;n yleens&auml; 1-2 kertaa p&auml;iv&auml;ss&auml;, tuotteiden saatavuustiedot p&auml;ivittyv&auml;t automaattisesti kaksi kertaa tunnissa. </DIV>
 <DIV>&nbsp;</DIV>
@@ -64,10 +79,12 @@ Merkint&auml; "Tilap&auml;isesti lopussa varastosta" tarkoittaa, ett&auml; t&aum
 <DIV>
 Meill&auml; on Internet-kaupan lis&auml;ksi my&ouml;s myym&auml;l&auml; Helsingin keskustassa. Valitettavasti joskus k&auml;y niin, ett&auml; asiakas ehtii ostaa myym&auml;l&auml;st&auml;mme viimeisen kappaleen jotain tuotetta, joka on samaan aikaan tilattu nettikaupastamme, ja joudumme odottamaan uutta toimitusta. Kerromme aina asiakkaalle viivytyksen syyn.</DIV>
 <DIV>&nbsp;</DIV>
- 
+ 
 <DIV><I><FONT color=#0000ff>Millaisessa tapauksessa tuotteen voi palauttaa?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
-Lains&auml;&auml;d&auml;nn&ouml;ss&auml; on m&auml;&auml;ritelty tuotteiden palautusoikeus. Ennen palautuksen tekemist&auml; asiakkaan on otettava yhteytt&auml; asiakaspalveluumme (ks. <a href="http://www.ruslania.com/language-4/context-296.html">Yhteystiedot</a>). Palautus- tai vaihto-oikeus ei koske &auml;&auml;ni- ja videokasetteja, CD-levyj&auml;, DVDt&auml; eik&auml; ohjelmia, mik&auml;li tuotteen alkuper&auml;inen pakkaus on avattu. Palautusoikeus ei my&ouml;sk&auml;&auml;n koske ohjelmia, jotka on ladattu Internetin kautta. Jos tuote palautetaan Suomen ulkopuolisesta maasta, on asiakkaan maksettava palautuksesta aiheutuvat postikulut (lukuun ottamatta virheellisi&auml; tai rikkoutuneita tuotteita). </DIV>
+Yksityisasiakkaalle postitse toimitettavissa tuotteissa on normaali Suomen kuluttajasuojalain mukainen 14 p&auml;iv&auml;n palautusoikeus. Asiakkaan on maksettava palautuksesta aiheutuvat postituskulut. Palautuksista on sovittava Ruslanian asiakaspalvelun kanssa (ks. <A href="http://ruslania.com/contact">Yhteystiedot</a>).Palautettavan tuotteen tulee olla olennaisesti samassa kunnossa kuin sit&auml; vastaanotettaessa. Palautusoikeus ei koske tietokoneohjelmia, DVD- tai CD-levyj&auml;, jos niiden pakkaus on avattu. Palautusoikeus ei my&ouml;sk&auml;&auml;n koske Internetin v&auml;lityksell&auml; (”imurointi”) toimitettuja tietokoneohjelmia tai s&auml;hk&ouml;isi&auml; kirjoja. Ruslania korvaa asiakkaalle virheellisen, rikkoutuneen tai viallisen tuotteen palautuksesta aiheutuneet kustannukset, jos palautuksesta on sovittu etuk&auml;teen Ruslanian asiakaspalvelun kanssa.
+Yritysasiakkaiden palautusasioissa noudatetaan suomalaista kauppalains&auml;&auml;d&auml;nt&ouml;&auml; sek&auml; hyv&auml;&auml; kauppatapaa. Palautuksista on sovittava Ruslanian asiakaspalvelun kanssa (ks. ”Yhteystiedot”).
+</DIV>
 <DIV>&nbsp;</DIV>
 
 <DIV><I><FONT color=#0000ff>Mik&auml; on vy&ouml;hyke 5 ja miten se n&auml;kyy?</FONT></I></DIV><DIV>&nbsp;</DIV>
@@ -103,8 +120,9 @@ N&auml;in voi k&auml;yd&auml; siin&auml; tapauksessa, ett&auml; olet kertaalleen
 
 <DIV><I><FONT color=#0000ff>Olen unohtanut salasanani enk&auml; siis p&auml;&auml;se sivuillenne. Mit&auml; teen?</FONT></I></DIV><DIV>&nbsp;</DIV>
 <DIV>
-Klikkaa <A href="http://www.ruslania.com/context-2097224.html">t&auml;st&auml;</A>, anna s&auml;hk&ouml;postiosoitteesi ja paina "Tilaa salasana". </DIV>
+Klikkaa <A href="http://ruslania.com/site/forgot">t&auml;st&auml;</A>, anna s&auml;hk&ouml;postiosoitteesi ja paina "Tilaa salasana". </DIV>
 <DIV>&nbsp;</DIV>
 
- 
+ 
+
 

@@ -1,4 +1,4 @@
-
+﻿
 
   <div style="width: 500px; font-size: 130%; font-weight: bold; margin-top: 5px; margin-bottom: 10px">
     PayPal
@@ -14,10 +14,10 @@
   <b>У вас нет PayPal-счета?</b>
       <br>
         Создайте бесплатный аккаунт прямо сейчас.<br>
-          <br>
+          <br>  <br>С помощью сервиса PayPal теперь тоже можно оплатить заказ даже не имея кредитной карты!
             <br>
 
-  <b>Создать учетную запись:</b>
+  <b></b>
             <br>
               <br>
     <b>Это безопасно</b>
@@ -48,7 +48,7 @@
 
   Высылайте оплату вашего заказа на Русланию по адресу paypal@ruslania.com<br>
 
-  <br>
+  <br><br>www.paypal.com<br>
 
 
 

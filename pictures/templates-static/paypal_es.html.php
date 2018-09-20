@@ -1,46 +1,49 @@
 <div style="width: 500px">
+<b>What is PayPal?</b>
 
-  <b>PayPal</b><br>
-  <b>Безопасный и простой способ оплаты</b><br>
-  Создайте бесплатный PayPal-аккаунт и начните наслаждаться оплатой онлайн всего за несколько кликов. Нет необходимости вводить свои данные карты для каждого сайта, все, что вам нужно, это адрес электронной почты и пароль.<br>
-    <br>
+<p>The safer, easier way to pay </p>
+<p>Create a free PayPal account and start enjoying paying online in just a few
+clicks. No need to enter your card details on every site, all you need is
+your email address and password.</p>
 
-  <b>У вас нет PayPal-счета?</b>
-      <br>
-        Создайте бесплатный аккаунт прямо сейчас.<br>
-          <br>
-
-  <b>Создать учетную запись:</b>
-            <br>
-    <b>Это безопасно</b>
-     
-  <br>
-  Ваша безопасность является нашим приоритетом. Вот почему группа специалистов по борьбе с мошенничеством контролирует проводимые операции 24 часа в сутки, 7 дней в неделю. Все конфиденциальные сведения, передаваемые между вашим компьютером 
-  и нашими серверами, автоматически шифруется, поэтому они защищены от потенциальных мошенников. Когда вы оплачиваете покупки по системе PayPal, продавец никогда не может завладеть вашей финансовой информацией.<br>
-
-  <b>Это просто</b>
-    <br>
-  С PayPal вам не придется каждый раз вводить длинные номера вашей кредитной или дебетовой карты, когда вы хотите оплатить что-то через Интернет. Все, что вам нужно, это ввести адрес электронной почты и пароль, это не только просто, но и быстро. 
-  PayPal идеально подходит для совершения и оплаты покупок через мобильный телефон. Вы можете отправлять деньги, и проверить свой счет через мобильный телефон.<br>
-
-  <b>Это бесплатно</b>
-    <br>
-  Создание счета PayPal бесплатно. При оплате покупок при помощи системы PayPal комиссия с покупателя не снимается, если покупке совершены на внутреннем рынке. Комиссия взимается с продавца в том случае, если товар приобретен за рубежом.<br>
-  <b>Это глобальная</b>
-    <br>
-  Вы можете использовать PayPal в 190 странах и 24 различных валютах на миллионах веб-сайтов по всему миру. Как глобальная компания с более чем 10 летним опытом работы в онлайн-платежах, мы знаем, как сделать, что бы покупки в Интернете 
-  приносили удовольствие.<br>
-    <br>
+<p><b>Don't have a PayPal account?</b><br/>
+Create a free account now.</p>
 
 
+<p>
+<b>Advantages:</b><br/>
+It's safer<br/>
+Your safety is our priority. That's why a team of anti-fraud specialists
+monitor transactions 24 hours a day, 7 days a week. All sensitive
+information sent between your computer and our servers is automatically
+encrypted so it's not exposed to potential fraudsters. Wherever you shop
+with PayPal, your financial information is never shared with who you're
+buying from.
+</p>
 
-  <b>Адрес Ruslania.com на PayPal</b>
-      <br>
 
-  Высылайте оплату вашего заказа на Русланию по адресу paypal@ruslania.com<br>
+<p>
+<b>It's easier</b><br/>
+With PayPal, you don't enter the long numbers on your credit or debit card
+every time you want to pay for something online. All you enter is your email
+address and password so not only is it easier, it's quicker too. This means
+PayPal is perfect for shopping on your mobile. You can even send money and
+check your account on your mobile too.
+</p>
 
-  <br>
+<p><b>It's free</b><br/>
+Creating a PayPal account is free. And buying with PayPal is also free when
+you're shopping domestically. The seller pays a small fee for us to securely
+process a payment and there are charges when you shop internationally.
+</p>
 
 
+
+<p><b>It's global</b><br/>
+You can use PayPal in 190 countries and 24 different currencies at millions
+of websites around the world. As a global company with over 10 years
+experience in online payments, we know how to make shopping online a
+pleasure.<br><br>www.paypal.com<br>
+</p>
 
 </div>

@@ -7,8 +7,8 @@
  
 	<div class="title_book"><a href="<?=$url; ?>"><?=ProductHelper::GetTitle($item, 'title'); ?></a></div>
 	
-	<?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors']) OR !empty($item['Subtitles']) OR !empty($item['AudioStreams'])) : ?>
-        <div class="author">
+	<div class="author"><?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors']) OR !empty($item['Subtitles']) OR !empty($item['AudioStreams'])) : ?>
+        
             <?php $tmp = array(); if (!empty($item['Authors'])) : ?>
             <?php foreach ($item['Authors'] as $author)
             {
@@ -84,9 +84,9 @@
         
 			
 
-       </div>
+      
     <?php endif; ?>
-	
+	 </div>
         
     <?php $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 

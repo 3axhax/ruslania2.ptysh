@@ -222,11 +222,7 @@
                         <td class="maintxt" align="left" nowrap>Инфо-Финляндия</td>
                         <td class="maintxt" align="right" nowrap><a class="maintxt" href="http://info-finlandia.ru"><img src="pictures/partners/infofinland.gif" alt="" width="120" style="border: none;"></a></td>
                     </tr>
-                  <tr>
-                    <td class="maintxt" align="left" nowrap="">Русскоязычное сообщество Европейского союза</td>
-                    <td class="maintxt" align="right" nowrap=""><a class="maintxt" href="http://eulife.ru">http://eulife.ru</a>
-                    </td>
-                  </tr>
+                  
                   <tr>
                     <td class="maintxt" align="left" nowrap="">Форум Шотландия-Россия</td>
                     <td class="maintxt" align="right" nowrap="">

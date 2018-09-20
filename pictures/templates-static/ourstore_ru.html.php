@@ -5,7 +5,7 @@
       <div class="b-our-store__product">
         <div class="b-our-store__topic">Our Store</div>
         <div class="b-store-product">
-          <div class="b-store-product__img"><img src="./img/book-item.jpg" alt="Книга"></div>
+          <div class="b-store-product__img"><img src="/img/book-item.jpg" alt="Книга"></div>
           <div class="b-store-product__about">
             <div class="b-store-product__topic">Неделя сатиры и юмора в Руслании 17-22.07.2017</div>
             <div class="b-store-product__aftertopic">Сатирическая проза, шутки, анекдоты и биографии мэтров комедийного жанра</div>
@@ -25,12 +25,12 @@
       <div class="b-about-shop__store">
         <div class="b-about-shop__topic">Shopping at the store</div>
         <div class="b-about-shop__text">Because of limited space in the store, we only display some of our online product line. If the item is not found at the store, ask for help from the seller - the product you want may be on the stock side!</div>
-        <div class="b-about-shop__img"><img src="./img/about-shop_item.jpg"></div>
+        <div class="b-about-shop__img"><img src="/img/about-shop_item.jpg"></div>
       </div>
       <div class="b-about-shop__products">
         <div class="b-about-shop__topic">The products you want are waiting for you</div>
         <div class="b-about-shop__text">You can place your order and choose the delivery method "fetch the order at the store"! In this way, you will be assured that the products you order are already waiting for you when you arrive at the store - however, note that the order is handled among other online orders and may not be available for pickup during the same day! We will send a notification upon completion of the order via email, SMS or call. Pickup orders are usually ready for pick up within 2-7 business days. We keep the pick up orders for a week from the order date, after which the order is dismantled and returned to the warehouse.</div>
-        <div class="b-about-shop__img"><img src="./img/about-shop_item2.jpg"></div>
+        <div class="b-about-shop__img"><img src="/img/about-shop_item2.jpg"></div>
       </div>
     </div>
   </section>
@@ -108,7 +108,7 @@
                 <div class="b-trigger__text">The Ruslania store is open throughout the whole summer, including Saturdays. Closed on Midsummer: Friday 23 June and Saturday 24 June.</div>
               </div>
             </div>
-            <div class="b-trigger__contacts-map"><img src="./img/map.jpg"></div>
+            <div class="b-trigger__contacts-map"><img src="/img/map.jpg"></div>
           </div>
         </div>
       </div>

@@ -253,10 +253,22 @@
             type: 'post',
             data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
             success: function () {
-                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+
+                window.setTimeout('document.location.href = "<?= Yii::app()->createUrl('cart/variants') ?>";', 1000);
+
+
             }
         });
     }
+
+    function dontClick() {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пожалуйста, введите другой e-mail!</div>';
+
+        window.setTimeout('$(document).ready(function() { $("#js_forgot").remove() })', 1200);
+
+    }
+
+
     function cost_izmena(city_id) {
 
         var csrf = $('meta[name=csrf]').attr('content').split('=');

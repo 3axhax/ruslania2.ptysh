@@ -204,19 +204,33 @@
         <div class="prod-filter__col" id="publisher_div">
             <?php if ($entity == Entity::MUSIC):?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_LABEL')?>:</label>
+            <?php elseif ($entity == Entity::MAPS || $entity == Entity::SOFT || $entity == Entity::PRINTED):?>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_PRODUCER')?>:</label>
             <?php else:?>
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <?php endif;?>
-            <div class="text">
-                <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
-                <input type="text" name="new_publisher" class="find_publisher prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
-                       placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off"
-                       <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
-            </div>
-            <ul class="search_result search_result_publisher"></ul>
-            <script>
-                liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
-            </script>
+            <?php if ($entity == Entity::BOOKS && $cid == 0):?>
+                <div class="text">
+                    <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
+                    <input type="text" name="new_publisher" class="find_publisher prod-filter__input prod-filter__input--m clearable <?= ($publisher) ? 'x' : ''?>"
+                           placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off"
+                           <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
+                </div>
+                <ul class="search_result search_result_publisher"></ul>
+                <script>
+                    liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
+                </script>
+            <?php else:?>
+                <select class="select2_publishers prod-filter__input prod-filter__input prod-filter__input__select--m" name="publisher"
+                        onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                    <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                </select>
+                <script>
+                    getPublishers(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/select_filter_publishers')?>', <?=$cid?>,
+                        '<?= (isset($filter_data['publisher']) && $filter_data['publisher'] != 0) ?
+                            htmlspecialchars(ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language)) : ''?>');
+                </script>
+            <?php endif;?>
             <?php if ($entity == Entity::MAPS || $entity == Entity::SOFT || $entity == Entity::PRINTED):?>
                 <script>
                     typeDiv = $('#publisher_div').detach();
@@ -228,9 +242,9 @@
 
         <?php if (isset($filters['series']) && $filters['series'] == true):?>
             <!--Фильтр по серии-->
-            <?php if ($entity == Entity::BOOKS && $cid == 0):?>
-                <div class="prod-filter__col">
-                    <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
+            <div class="prod-filter__col">
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
+                <?php if ($entity == Entity::BOOKS && $cid == 0):?>
                     <div class="text">
                         <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
                         <input type="text" name="new_series" class="find_series prod-filter__input prod-filter__input--m clearable <?= ($seria) ? 'x' : ''?>"
@@ -241,22 +255,19 @@
                     <script>
                         liveFindSeriesMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_series')?>', <?=$cid?>);
                     </script>
-                </div>
-            <?php else:?>
-                <div class="prod-filter__col">
-                    <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
-                    <!--<input type="hidden" name="series" value="<?/*=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0*/?>">-->
+                <?php else:?>
                     <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria"
-                    onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                        onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
                         <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     </select>
                     <script>
                         getSeries(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/select_filter_series')?>', <?=$cid?>,
                             '<?= (isset($filter_data['series']) && $filter_data['series'] != 0) ?
-                            htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)) : ''?>');
+                                htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)) : ''?>');
                     </script>
-                </div>
-            <?php endif;?>
+
+                <?php endif;?>
+            </div>
         <?php endif;?>
 
         <?php if (isset($filters['langVideo']) && $filters['langVideo'] == true):?>
