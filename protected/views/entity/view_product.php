@@ -418,7 +418,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                  }
                  ?>
                  <div class="authors" style="margin-bottom:5px;">
-                     <div style="float: left;" class="nameprop"><?= $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
+                     <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? $ui->item("CATALOGINDEX_CHANGE_THEME") : $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
                      <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
                      <div class="clearBoth"></div>
                  </div>
