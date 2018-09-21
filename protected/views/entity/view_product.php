@@ -236,7 +236,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 	</div>
 	<? endif; ?>
 
-	<?php if ($item['type']) : ?>
+	<?php if ($item['type'] && $entity != Entity::PRINTED) : ?>
 	<span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
 
         if ($item['entity'] == Entity::PERIODIC) :

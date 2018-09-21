@@ -102,7 +102,6 @@ function show_result_count(url) {
     var frm = $('form.filter').serialize();
     var csrf = $('meta[name=csrf]').attr('content').split('=');
     frm = frm + '&' + csrf[0] + '=' + csrf[1];
-    console.log(frm);
     $.ajax({
         url: url,
         type: "POST",
@@ -327,43 +326,45 @@ function getSeries(entity, url, cid, selected_item) {
 }
 
 function getPublishers(entity, url, cid, selected_item) {
-    if (cid == undefined) cid = 0;
-    select_publishers = $('.select2_publishers');
-    select_publishers_visible = select_publishers.next("span").children("span").children("span");
-    var frm = 'entity='+entity+'&cid='+cid;
-    var csrf = $('meta[name=csrf]').attr('content').split('=');
-    frm = frm + '&' + csrf[0] + '=' + csrf[1];
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: frm,
-        beforeSend: function(){
-            select_publishers_visible.addClass("disabled");
-        },
-        success: function (data) {
-            titles = JSON.parse(data);
-            for (id in titles) {
-                for (tittle in titles[id]) {
-                    if (selected_item == titles[id][tittle]) {
-                        select_publishers
-                            .append($("<option></option>")
-                                .attr("value", id)
-                                .attr("selected", true)
-                                .text(titles[id][tittle]));
-                    }
-                    else {
-                        select_publishers
-                            .append($("<option></option>")
-                                .attr("value", id)
-                                .text(titles[id][tittle]));
+    $(document).ready(function () {
+        if (cid == undefined) cid = 0;
+        select_publishers = $('.select2_publishers');
+        select_publishers_visible = select_publishers.next("span").children("span").children("span");
+        var frm = 'entity=' + entity + '&cid=' + cid;
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        frm = frm + '&' + csrf[0] + '=' + csrf[1];
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: frm,
+            beforeSend: function () {
+                select_publishers_visible.addClass('disabled');
+            },
+            success: function (data) {
+                titles = JSON.parse(data);
+                for (id in titles) {
+                    for (tittle in titles[id]) {
+                        if (selected_item == titles[id][tittle]) {
+                            select_publishers
+                                .append($("<option></option>")
+                                    .attr("value", id)
+                                    .attr("selected", true)
+                                    .text(titles[id][tittle]));
+                        }
+                        else {
+                            select_publishers
+                                .append($("<option></option>")
+                                    .attr("value", id)
+                                    .text(titles[id][tittle]));
+                        }
                     }
                 }
+                select_publishers_visible.removeClass("disabled");
+                show_result_count();
+            },
+            error: function (data) {
+                console.log(data);
             }
-            select_publishers_visible.removeClass("disabled");
-            show_result_count();
-        },
-        error: function (data) {
-            console.log(data);
-        }
+        });
     });
 }

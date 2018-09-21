@@ -175,24 +175,17 @@ $entityKey = Entity::GetUrlKey($entity);
 		
 		<?
 			
-			if (isset($item['type'])) {
+			if (isset($item['type']) && $entity != Entity::PRINTED) {
 			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>: </span><?
                             
                             
                             
                             
 			 if ($item['entity'] == Entity::PERIODIC) :
-
-	 
-        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
-        
-        
-        
-        else :
-        
-        $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
-        
-         endif;
+                 $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
+			 else :
+                 $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
+			 endif;
 			 
 			 echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
