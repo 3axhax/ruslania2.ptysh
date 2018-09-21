@@ -3,6 +3,7 @@
 class Banners extends MyWidget {
     public $entity;
     protected $_params = array();//здесь массив начальных значений
+    static private $_listBanners = null;
 
     function __set($name, $value) {
         if ($value !== null) $this->_params[$name] = $value;
@@ -35,11 +36,81 @@ class Banners extends MyWidget {
     }
 
     protected function _viewList() {
-        $location = 'topInList';//когда будет готова база будет понятно какой сделать location
-        if (!empty($this->_params['location'])) $location = $this->_params['location'];
+        $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+        $lang = strtolower(Yii::app()->language);
+        if (!in_array($lang, $langs)) $lang = 'en';
+        if (self::$_listBanners === null) {
+            $page = 1;
+            if (!empty($this->_params['page'])) $page = $this->_params['page'];
+           /* if ($page > 1) {
+                $sql = ''.
+                    'select count(*) '.
+                    'from banners_entity t '.
+                        'join all_banners tAB on (tAB.id = t.banner_id) '.
+                    'where (t.entity_id = ' . (int) $this->_params['entity'] . ') '.
+                        'and (t.img_' . $lang . ' = 1) '.
+                '';
+            }*/
+            $sql = ''.
+                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'from banners_entity t '.
+                    'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
+                'where (t.entity_id = ' . (int) $this->entity . ') '.
+                'order by t.position '.
+            '';
+            $banners = Yii::app()->db->createCommand($sql)->queryAll();
+            self::$_listBanners = array();
+            if (!empty($banners)) {
+                if (count($banners) == 1) {
+                    self::$_listBanners = array(0=>$banners[0], 1=>$banners[0]);
+                }
+                else {
+                    $startBanner = $page%count($banners) + 1;
+                    for ($i=0;$i<2;$i++) {
+                        self::$_listBanners[$i] = $banners[($startBanner+$i)%count($banners)];
+                    }
+                }
+            }
+        }
+        if (!empty(self::$_listBanners)) {
+            $location = 'topInList';//когда будет готова база будет понятно какой сделать location
+            if (!empty($this->_params['location'])) $location = $this->_params['location'];
+            switch ($location) {
+                case 'topInList':
+                    $href = $this->_getBannerHref(self::$_listBanners[0]);
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath(self::$_listBanners[0]['bannerId'], $lang), 'title'=>''));
+                    break;
+                case 'centerInList':
+                    $href = $this->_getBannerHref(self::$_listBanners[1]);
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath(self::$_listBanners[1]['bannerId'], $lang), 'title'=>''));
+                    break;
+            }
 
-        $this->render('banners_list', array('href' => '/', 'img'=>'http://ruslania2.ptysh.ru/pictures/banners/moomintroll.gif', 'title'=>''));
+        }
     }
+
+    private function _getBannerHref($banner) {
+        if (!empty($banner['path_route'])) {
+            $params = array( );
+            if (!empty($banner['path_entity'])){
+                $params['entity'] = $banner['path_entity'];
+                if (!empty($banner['path_id'])) {
+                    $idName = HrefTitles::get()->getIdName($params['entity'], $banner['path_route']);
+                    if (!empty($idName)) $params[$idName] = $banner['path_id'];
+                }
+            }
+            $href = Yii::app()->createUrl($banner['path_route'], $params);
+        }
+        else {
+            $href = $banner['url'];
+        }
+        return $href;
+    }
+
+    private function _getBannerFilePath($id, $lang) {
+        return 'http://ruslania2.ptysh.ru/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
+    }
+
 
     protected function _viewDetail() {
         $type = 'image';
@@ -47,7 +118,20 @@ class Banners extends MyWidget {
 
         switch ($type) {
             case 'image':
-                $this->render('banners_detail', array('href' => '/', 'img'=>'http://ruslania2.ptysh.ru/pictures/banners/moomintroll.gif', 'title'=>''));
+                $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+                $lang = strtolower(Yii::app()->language);
+                if (!in_array($lang, $langs)) $lang = 'en';
+                $sql = ''.
+                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                    'from banners_entity t '.
+                        'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1) '.
+                    'where (t.entity_id = ' . (int) $this->entity . ') '.
+                    'order by rand() '.
+                    'limit 1 '.
+                '';
+                $banner = Yii::app()->db->createCommand($sql)->queryRow();
+                $href = $this->_getBannerHref($banner);
+                $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
                 break;
             case 'slider':
                 $items = [

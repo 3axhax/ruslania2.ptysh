@@ -1269,7 +1269,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 </div>
 
 <?php $this->widget('Similar', array('entity'=>$entity, 'item'=>$item)); ?>
-<?php $this->widget('Banners', array()); ?>
+<?php $this->widget('Banners', array('entity'=>$entity)); ?>
 
 
 <script type="text/javascript">
