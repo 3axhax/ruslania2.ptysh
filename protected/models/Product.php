@@ -389,11 +389,16 @@ class Product
     /* Получаем статус продука из таблицы "offer_items" ("В подборке") */
     private function GetStatusProductOffer($entity, $id)
     {
-        if (!empty(self::$_offerItems[$entity])&&isset(self::$_offerItems[$entity][$id])) {
+        if (/*false && */!empty(self::$_offerItems[$entity])&&isset(self::$_offerItems[$entity][$id])) {
             $row = array(self::$_offerItems[$entity][$id]);
         }
         else {
-            $sql = 'SELECT * FROM `offer_items` WHERE `item_id` = '.$id.' AND `entity_id` = '.$entity;
+            //$sql = 'SELECT * FROM `offer_items` WHERE `item_id` = '.$id.' AND `entity_id` = '.$entity;
+            $sql = sprintf("SELECT oi.id
+                        FROM `offer_items` as oi
+                        JOIN (select id from offers where is_active = 1) as of ON of.id = oi.offer_id
+                        WHERE `item_id` = %d AND `entity_id` = %d",
+                        $id, $entity);
             $row = Yii::app()->db->createCommand($sql)->queryAll();
         }
         $status = false;
