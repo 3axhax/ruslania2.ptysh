@@ -149,6 +149,20 @@ class Banners extends MyWidget {
         }
     }
 
+	/** 10 - это entity, получить ид книг
+	 * @param $counts int количество в результате
+	 * @return array
+	 */
+    private function _get10Ids($counts) {
+	    /**
+	    Книги : по приоритету: только последние 2 года, например сейчас 2017-2018, та же подборка, если ничего нет,
+	     * тогда та же серия,
+	     * тот же автор или то же издательство,
+	     */
+		$ids = array();
+		return $ids;
+    }
+
     protected function _getLables($items) {
 
     }
