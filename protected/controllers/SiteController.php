@@ -173,7 +173,7 @@ class SiteController extends MyController {
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
-        if (!file_exists($file)||in_array($page, array('safety', 'partners', 'links'))) {
+        if (!file_exists($file)||in_array($page, array('thawte', 'partners', 'links'))) {
             throw new CHttpException(404);
         }
         $data = file_get_contents($file);
