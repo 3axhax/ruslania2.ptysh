@@ -17,8 +17,9 @@ class LanguageItemsCommand extends CConsoleCommand {
 
 		$sql = ''.
 			'insert into all_items_languages (entity, item_id, language_id) '.
-			'select 30, periodic_id, language_id '.
-			'from periodics_languages '.
+			'select 30, t.periodic_id, t.language_id '.
+			'from periodics_languages t '.
+				'join pereodics_catalog tPC on (tPC.id = t.periodic_id) and (tPC.avail_for_order = 1) '.
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 

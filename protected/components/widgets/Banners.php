@@ -134,33 +134,37 @@ class Banners extends MyWidget {
                 $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
                 break;
             case 'slider':
-                $items = [
-                    ['entity'=>10, 'id'=>1305213],
-                    ['entity'=>10, 'id'=>1311683],
-                    ['entity'=>15, 'id'=>154655],
-                    ['entity'=>60, 'id'=>837],
-                    ['entity'=>40, 'id'=>919],
-                ];
-//		        require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/AllProducts.php';
-//                $banners = new IteratorsAllProducts($items);
+                $items = array();
+                switch ((int)$this->_params['item']['entity']) {
+                    case 10:
+                        foreach ($this->_get10Ids(10) as $id) $items[] = array('entity'=>10, 'id'=>$id);
+                        break;
+                    case 15:
+                        foreach ($this->_get15Ids(10) as $id) $items[] = array('entity'=>15, 'id'=>$id);
+                        break;
+                    case 22:
+                        foreach ($this->_get22Ids(10) as $id) $items[] = array('entity'=>22, 'id'=>$id);
+                        break;
+                    case 30:
+                        foreach ($this->_get30Ids(10) as $id) $items[] = array('entity'=>30, 'id'=>$id);
+                        break;
+                    case 50:
+                        foreach ($this->_get50Ids(10) as $id) $items[] = array('entity'=>50, 'id'=>$id);
+                        break;
+                    case 40:
+                        foreach ($this->_get40Ids(10) as $id) $items[] = array('entity'=>40, 'id'=>$id);
+                        break;
+                    case 60:
+                        foreach ($this->_get60Ids(10) as $id) $items[] = array('entity'=>60, 'id'=>$id);
+                        break;
+                    case 24:
+                        foreach ($this->_get24Ids(10) as $id) $items[] = array('entity'=>24, 'id'=>$id);
+                        break;
+                }
                 $banners = $this->_getProducts($items);
                 $this->render('banners_detail_slider', array('items' => $banners));
                 break;
         }
-    }
-
-	/** 10 - это entity, получить ид книг
-	 * @param $counts int количество в результате
-	 * @return array
-	 */
-    private function _get10Ids($counts) {
-	    /**
-	    Книги : по приоритету: только последние 2 года, например сейчас 2017-2018, та же подборка, если ничего нет,
-	     * тогда та же серия,
-	     * тот же автор или то же издательство,
-	     */
-		$ids = array();
-		return $ids;
     }
 
     protected function _getLables($items) {
@@ -201,6 +205,7 @@ class Banners extends MyWidget {
             if ($entity == Entity::PERIODIC) {
                 if (isset($fields['sub_fin_year'])) $fields['sub_fin_year'] = 'sub_fin_year';
                 if (isset($fields['sub_world_year'])) $fields['sub_world_year'] = 'sub_world_year';
+                unset($fields['unitweight_skip'], $fields['brutto']);
             }
             if (isset($fields['year'])&&!Entity::checkEntityParam($entity, 'years')) $fields['year'] = '0 year';
             if (isset($fields['series_id'])&&!Entity::checkEntityParam($entity, 'series')) $fields['series_id'] = '0 series_id';
@@ -214,4 +219,432 @@ class Banners extends MyWidget {
         return Yii::app()->db->createCommand($sql)->queryAll();
     }
 
+
+    /** 10 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get10Ids($counts) {
+        /**
+        Книги : по приоритету: только последние 2 года, например сейчас 2017-2018, та же подборка, если ничего нет,
+         * тогда та же серия, тот же автор или то же издательство,
+         * сортировка в случайном порядке
+         */
+
+        $ids = array();
+        if (!empty($this->_params['item']['Offers'])) {
+            //в подборке
+            $offerIds = array();
+            foreach ($this->_params['item']['Offers'] as $offer) $offerIds[] = $offer['id'];
+            if (!empty($offerIds)) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `books_catalog` as t '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                    'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
+                        'and (t.year between ' . (date('Y')-1) . ' and ' . date('Y') . ') '.
+                        'and (t.avail_for_order = 1) '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+                $counts = $counts - count($ids);
+            }
+        }
+        if ($counts > 0) {
+            $exclude = $ids;
+            $exclude[] = (int) $this->_params['item']['id'];
+            $beforeIds = array(
+                'authors' => array(),
+                'serie' => array(),
+                'publisher' => array(),
+            );
+            if (!empty($this->_params['item']['Authors'])) {
+                $authors = array();
+                foreach ($this->_params['item']['Authors'] as $author) $authors[] = $author['id'];
+                if (!empty($authors)) {
+                    $sql = ''.
+                        'select t.id ' .
+                        'from `books_catalog` as t '.
+                            'join books_authors tA on (tA.book_id = t.id) and (tA.author_id in (' . implode(',',$authors) . ')) '.
+                        'where (t.avail_for_order = 1) '.
+                            'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                        'group by t.id '.
+                        'order by rand() '.
+                        'limit ' . $counts . ' '.
+                    '';
+                    $beforeIds['authors'] = Yii::app()->db->createCommand($sql)->queryColumn();
+                    $exclude = array_merge($exclude, $beforeIds['authors']);
+                }
+            }
+            if (!empty($this->_params['item']['series_id'])) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `books_catalog` as t '.
+                    'where (t.avail_for_order = 1) '.
+                        'and (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
+                        'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $beforeIds['serie'] = Yii::app()->db->createCommand($sql)->queryColumn();
+                $exclude = array_merge($exclude, $beforeIds['serie']);
+            }
+            if (!empty($this->_params['item']['publisher_id'])) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `books_catalog` as t '.
+                    'where (t.avail_for_order = 1) '.
+                        'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
+                        'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $beforeIds['publisher'] = Yii::app()->db->createCommand($sql)->queryColumn();
+            }
+            $beforeIds = array_merge($beforeIds['authors'], $beforeIds['serie'], $beforeIds['publisher']);
+            shuffle($beforeIds);
+            $ids = array_merge($ids, array_slice($beforeIds, 0, $counts));
+        }
+        return $ids;
+    }
+
+    /** 15 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get15Ids($counts) {
+        /**
+        Ноты : тот же автор, если ничего нет, тогда та же категория
+         * сортировка в случайном порядке
+         */
+        $ids = array();
+        $exclude = $ids;
+        $exclude[] = (int) $this->_params['item']['id'];
+        if (!empty($this->_params['item']['Authors'])) {
+            $authors = array();
+            foreach ($this->_params['item']['Authors'] as $author) $authors[] = $author['id'];
+            if (!empty($authors)) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `musicsheets_catalog` as t '.
+                        'join musicsheets_authors tA on (tA.musicsheet_id = t.id) and (tA.author_id in (' . implode(',',$authors) . ')) '.
+                    'where (t.avail_for_order = 1) '.
+                        'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'group by t.id '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+                $counts = $counts - count($ids);
+                $exclude = array_merge($exclude, $ids);
+            }
+        }
+        if ($counts > 0) {
+            $sql = ''.
+                'select t.id ' .
+                'from `musicsheets_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+            '';
+            $ids = array_merge($ids, Yii::app()->db->createCommand($sql)->queryColumn());
+        }
+        return $ids;
+    }
+
+    /** 22 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get22Ids($counts) {
+        /**
+        Музыка:по приоритету: та же подборка,
+         * тот же исполнитель,
+         * та же категория,
+         * тот же формат
+         * сортировка в случайном порядке
+         */
+        $ids = array();
+        if (!empty($this->_params['item']['Offers'])) {
+            //в подборке
+            $offerIds = array();
+            foreach ($this->_params['item']['Offers'] as $offer) $offerIds[] = $offer['id'];
+            if (!empty($offerIds)) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `music_catalog` as t '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                    'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
+                        'and (t.avail_for_order = 1) '.
+                    'group by t.id '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+                $counts = $counts - count($ids);
+            }
+        }
+        $exclude = $ids;
+        $exclude[] = (int) $this->_params['item']['id'];
+        if ($counts > 0) {
+            //исполнитель
+            if (!empty($this->_params['item']['Performers'])) {
+                $performers = array();
+                foreach ($this->_params['item']['Performers'] as $author) $performers[] = $author['id'];
+                if (!empty($performers)) {
+                    $sql = ''.
+                        'select t.id ' .
+                        'from `music_catalog` as t '.
+                            'join music_performers tA on (tA.music_id = t.id) and (tA.person_id in (' . implode(',',$performers) . ')) '.
+                        'where (t.avail_for_order = 1) '.
+                            'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                        'group by t.id '.
+                        'order by rand() '.
+                        'limit ' . $counts . ' '.
+                    '';
+                    $result = Yii::app()->db->createCommand($sql)->queryColumn();
+                    $ids = array_merge($ids, $result);
+                    $exclude = array_merge($exclude, $result);
+                    $counts = $counts - count($result);
+                }
+            }
+        }
+        if ($counts > 0) {
+            //категория
+            $sql = ''.
+                'select t.id ' .
+                'from `music_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+            '';
+            $result = Yii::app()->db->createCommand($sql)->queryColumn();
+            $ids = array_merge($ids, $result);
+            $exclude = array_merge($exclude, $result);
+            $counts = $counts - count($result);
+        }
+        if (($counts > 0)&&!empty($this->_params['item']['media_id'])) {
+            //формат
+            $sql = ''.
+                'select t.id ' .
+                'from `music_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
+                'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+            '';
+            $result = Yii::app()->db->createCommand($sql)->queryColumn();
+            $ids = array_merge($ids, $result);
+        }
+        return $ids;
+    }
+
+    /** 30 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get30Ids($counts) {
+        /**
+        Подписка: та же категория, тот же язык
+         * сортировка в случайном порядке
+         */
+        $sql = 'select language_id from _support_languages_periodics where (id = ' . (int)$this->_params['item']['id'] . ') limit 1';
+        $langId = (int) Yii::app()->db->createCommand($sql)->queryScalar();
+        $condition = array(
+            'category_id'=>'(category_id in (' . (int)$this->_params['item']['code'] . ', ' . (int)$this->_params['item']['subcode'] . '))',
+        );
+        if ($langId > 0) $condition['lang'] = '(t.language_id = ' . $langId . ')';
+        $sql = ''.
+            'select t.id ' .
+            'from `_support_languages_periodics` as t '.
+            'where ' . implode(' and ', $condition) . ' '.
+            'order by rand() '.
+            'limit ' . $counts . ' '.
+        '';
+        $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+        return $ids;
+    }
+
+    /** 50 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get50Ids($counts) {
+        /**
+        Сувениры: та же тематика
+         * сортировка в случайном порядке
+         */
+        $condition = array(
+            'category_id'=>'((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))',
+        );
+        $sql = ''.
+            'select t.id ' .
+            'from `printed_catalog` as t '.
+            'where ' . implode(' and ', $condition) . ' '.
+            'order by rand() '.
+            'limit ' . $counts . ' '.
+        '';
+        $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+        return $ids;
+    }
+
+    /** 40 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get40Ids($counts) {
+        /**
+        Видео:по приоритету: того же режиссера,
+         * того же актера,
+         * той же категории
+         * сортировка в случайном порядке
+         */
+        $ids = array();
+        $exclude = $ids;
+        $exclude[] = (int) $this->_params['item']['id'];
+        if ($counts > 0) {
+            //режисер
+            if (!empty($this->_params['item']['Directors'])) {
+                $directors = array();
+                foreach ($this->_params['item']['Directors'] as $author) $directors[] = $author['id'];
+                if (!empty($directors)) {
+                    $sql = ''.
+                        'select t.id ' .
+                        'from `video_catalog` as t '.
+                            'join video_directors tA on (tA.video_id = t.id) and (tA.person_id in (' . implode(',',$directors) . ')) '.
+                        'where (t.avail_for_order = 1) '.
+                            'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                        'group by t.id '.
+                        'order by rand() '.
+                        'limit ' . $counts . ' '.
+                    '';
+                    $result = Yii::app()->db->createCommand($sql)->queryColumn();
+                    $ids = array_merge($ids, $result);
+                    $exclude = array_merge($exclude, $result);
+                    $counts = $counts - count($result);
+                }
+            }
+        }
+        if ($counts > 0) {
+            //актер
+            if (!empty($this->_params['item']['Actors'])) {
+                $actors = array();
+                foreach ($this->_params['item']['Actors'] as $author) $actors[] = $author['id'];
+                if (!empty($directors)) {
+                    $sql = ''.
+                        'select t.id ' .
+                        'from `video_catalog` as t '.
+                            'join video_actors tA on (tA.video_id = t.id) and (tA.person_id in (' . implode(',',$actors) . ')) '.
+                        'where (t.avail_for_order = 1) '.
+                            'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                        'group by t.id '.
+                        'order by rand() '.
+                        'limit ' . $counts . ' '.
+                    '';
+                    $result = Yii::app()->db->createCommand($sql)->queryColumn();
+                    $ids = array_merge($ids, $result);
+                    $exclude = array_merge($exclude, $result);
+                    $counts = $counts - count($result);
+                }
+            }
+        }
+        if ($counts > 0) {
+            //категория
+            $sql = ''.
+                'select t.id ' .
+                'from `video_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+                '';
+            $result = Yii::app()->db->createCommand($sql)->queryColumn();
+            $ids = array_merge($ids, $result);
+        }
+        return $ids;
+    }
+
+    /** 60 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get60Ids($counts) {
+        /**
+        Карты: того же издателя
+         * сортировка в случайном порядке
+         */
+        $ids = array();
+        if (!empty($this->_params['item']['publisher_id'])) {
+            $exclude = $ids;
+            $exclude[] = (int) $this->_params['item']['id'];
+            $sql = ''.
+                'select t.id ' .
+                'from `maps_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+            '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn();
+        }
+        return $ids;
+    }
+
+    /** 24 - это entity, получить ид книг
+     * @param $counts int количество в результате
+     * @return array
+     */
+    private function _get24Ids($counts) {
+        /**
+        Мультимедиа: по приоритету: та же подборка,
+         * тот же формат,
+         * та же категория
+         * сортировка в случайном порядке
+         */
+        $ids = array();
+        $exclude = array();
+        $exclude[] = (int) $this->_params['item']['id'];
+        if (!empty($this->_params['item']['Offers'])) {
+            //в подборке
+            $offerIds = array();
+            foreach ($this->_params['item']['Offers'] as $offer) $offerIds[] = $offer['id'];
+            if (!empty($offerIds)) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `soft_catalog` as t '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                    'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
+                        'and (t.avail_for_order = 1) '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $result = Yii::app()->db->createCommand($sql)->queryColumn();
+                $ids = array_merge($ids, $result);
+                $exclude = array_merge($exclude, $result);
+            }
+        }
+        if (($counts > 0)&&!empty($this->_params['item']['media_id'])) {
+            //формат
+            $sql = ''.
+                'select t.id ' .
+                'from `soft_catalog` as t '.
+                'where (t.avail_for_order = 1) '.
+                    'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'order by rand() '.
+                'limit ' . $counts . ' '.
+            '';
+            $result = Yii::app()->db->createCommand($sql)->queryColumn();
+            $ids = array_merge($ids, $result);
+        }
+        return $ids;
+    }
 }

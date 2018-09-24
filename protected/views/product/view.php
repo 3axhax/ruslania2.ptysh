@@ -14,4 +14,4 @@
 	</div>
 
 </div>
-<?php $this->widget('Banners', array('type'=>'slider')) ?>
+<?php $this->widget('Banners', array('type'=>'slider', 'item'=>$item)) ?>
