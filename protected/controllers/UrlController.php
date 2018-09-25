@@ -36,7 +36,7 @@ class UrlController extends MyController {
 		}
 		else {
 			$row = DiscountManager::getOfferDay();
-			if (!empty($row)) Yii::app()->end();;
+			if (empty($row)) Yii::app()->end();;
 
 			if (!Entity::IsValid($row['entity_id'])) Yii::app()->end();
 
