@@ -273,7 +273,6 @@ class SearchController extends MyController {
 			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 		'';
 		$find = Yii::app()->db->createCommand($sql)->queryAll();
-		Debug::staticRun(array($find));
 		if (empty($find)) return array();
 
 		$product = $this->_entityIds($find);
