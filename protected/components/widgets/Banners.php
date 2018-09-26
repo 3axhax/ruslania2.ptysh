@@ -4,6 +4,7 @@ class Banners extends MyWidget {
     public $entity;
     protected $_params = array();//здесь массив начальных значений
     static private $_listBanners = null;
+    static private $_mainBanners = null;
 
     function __set($name, $value) {
         if ($value !== null) $this->_params[$name] = $value;
