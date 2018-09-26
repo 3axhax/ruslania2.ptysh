@@ -357,7 +357,9 @@ class Product
     }
 
     static function setOfferItems($entity, $ids) {
-        $sql = 'select * from offer_items where (entity_id = ' . (int) $entity . ') and (item_id in (' . implode(',', $ids) . '))';
+        $sql = 'select oi.* from offer_items as oi 
+        join offers as o on (o.id = oi.offer_id)
+        where (o.is_active = 1) and (oi.entity_id = ' . (int) $entity . ') and (oi.item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_offerItems[$entity])) self::$_offerItems[$entity] = array();
         foreach ($ids as $id) self::$_offerItems[$entity][$id] = array();
         foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
