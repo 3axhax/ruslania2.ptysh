@@ -13,6 +13,7 @@
 		</div>
 		<div class="span2 text">
 			<div class="title"><a href="<?= $url; ?>" title="<?=htmlspecialchars($title); ?>"><?= $title; ?></a></div>
+			<?php if (!empty($item['avail_for_order'])): ?>
 			<div class="cost">
 	<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])) : ?>
 				<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
@@ -28,6 +29,7 @@
 	<?php endif; ?>
 			</div>
 			<div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $item['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+			<?php endif; ?>
 		</div>
 		<div class="clearfix"></div>
 	</li>
