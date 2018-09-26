@@ -1018,7 +1018,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     </div>
                 </div>
             <?php endif; ?>
-			
+
+            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
+
 			<?php if ($item['entity'] != Entity::PERIODIC) : ?>
 			
 			<?php if (!empty($items['dvds'])) : ?>
@@ -1028,11 +1030,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                         <div class="clearBoth"></div>
                     </div>
             <?php endif; ?>
-
-            <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
-
-           
-
 
             <?php if (!empty($item['size'])) : ?>
         <div class="detail-prop">
