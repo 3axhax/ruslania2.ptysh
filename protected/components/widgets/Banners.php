@@ -23,6 +23,12 @@ class Banners extends MyWidget {
             return;
         }
 
+        if (!empty($this->_params['type'])&& ($ctrl == 'site')&&($action == 'index')) {
+            //type - big и small
+            $this->_viewMain();
+            return;
+        }
+
         //TODO:: далее слишком много не нужных данных, когда нибудь переделать
         $b = new Banner;
         $list = $b->GetAllBanners();
@@ -36,22 +42,10 @@ class Banners extends MyWidget {
         $this->render('banners', array('list' => $list));;
     }
 
-    protected function _viewList() {
-        $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
-        $lang = strtolower(Yii::app()->language);
-        if (!in_array($lang, $langs)) $lang = 'en';
+    private function _getListBanners($lang) {
         if (self::$_listBanners === null) {
             $page = 1;
             if (!empty($this->_params['page'])) $page = $this->_params['page'];
-           /* if ($page > 1) {
-                $sql = ''.
-                    'select count(*) '.
-                    'from banners_entity t '.
-                        'join all_banners tAB on (tAB.id = t.banner_id) '.
-                    'where (t.entity_id = ' . (int) $this->_params['entity'] . ') '.
-                        'and (t.img_' . $lang . ' = 1) '.
-                '';
-            }*/
             $sql = ''.
                 'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
                 'from banners_entity t '.
@@ -73,17 +67,123 @@ class Banners extends MyWidget {
                 }
             }
         }
-        if (!empty(self::$_listBanners)) {
+        return self::$_listBanners;
+    }
+
+    private function _getMainBanners($lang) {
+        if (self::$_mainBanners === null) {
+            $sql = ''.
+                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'from banners_main t '.
+                    'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
+                'order by t.position, t.id desc '.
+            '';
+            $banners = Yii::app()->db->createCommand($sql)->queryAll();
+            self::$_mainBanners = array();
+            foreach ($banners as $banner) {
+                if (empty(self::$_mainBanners[$banner['location']])) {
+                    $location = $banner['location'];
+                    unset($banner['location']);
+                    self::$_mainBanners[$location] = $banner;
+                }
+            }
+        }
+        return self::$_mainBanners;
+    }
+
+    /** есть или нет большой баннер на главной (location = 3)
+     * @return bool
+     */
+    static function checkBigBanner() {
+        $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+        $lang = strtolower(Yii::app()->language);
+        if (!in_array($lang, $langs)) $lang = 'en';
+        $banners = self::_getMainBanners($lang);
+        return isset($banners[3]);
+    }
+
+    protected function _viewMain() {
+        $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+        $lang = strtolower(Yii::app()->language);
+        if (!in_array($lang, $langs)) $lang = 'en';
+        $banners = $this->_getMainBanners($lang);
+        switch ($this->_params['type']) {
+            case 'big':
+                if (!empty($banners[3])) {
+                    $href = $this->_getBannerHref($banners[3]);
+                    $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''));
+                }
+                break;
+            case 'small':
+                $offerDay = DiscountManager::getOfferDay();
+                if (!empty($offerDay)) {
+                    $entity = $offerDay['entity_id'];
+                    $p = new Product();
+                    $offerDay = $p->GetProduct($entity, $offerDay['item_id']);
+                    $offerDay['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $offerDay);
+                    $offerDay['priceData']['unit'] = '';
+                    if ($entity == Entity::PERIODIC) {
+                        $issues = Periodic::getCountIssues($offerDay['issues_year']);
+                        if (!empty($issues['show3Months'])) {
+                            $offerDay['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO]/4;
+                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT]/4;
+                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT]/4;
+                        }
+                        elseif (!empty($issues['show6Months'])) {
+                            $offerDay['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO]/2;
+                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT]/2;
+                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT]/2;
+                        }
+                        else {
+                            $offerDay['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                        }
+                    }
+                }
+
+                $leftBanner = $rightBanner = array();
+                if (!empty($banners[1])) {
+                    $leftBanner = array(
+                        'href' => $this->_getBannerHref($banners[1]),
+                        'img'=>$this->_getBannerFilePath($banners[1]['bannerId'], $lang),
+                        'title'=>'',
+                    );
+                }
+                if (!empty($banners[2])) {
+                    $rightBanner = array(
+                        'href' => $this->_getBannerHref($banners[2]),
+                        'img'=>$this->_getBannerFilePath($banners[2]['bannerId'], $lang),
+                        'title'=>'',
+                    );
+                }
+                elseif (!empty($leftBanner)&&!empty($offerDay)) {
+                    $rightBanner = $leftBanner;
+                    $leftBanner = array();
+                }
+                if (!empty($offerDay)||!empty($rightBanner)||!empty($leftBanner)) {
+                    $this->render('banners_main_small', array('offerDay' => $offerDay, 'leftBanner'=>$leftBanner, 'rightBanner'=>$rightBanner));
+                }
+                break;
+        }
+    }
+
+    protected function _viewList() {
+        $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+        $lang = strtolower(Yii::app()->language);
+        if (!in_array($lang, $langs)) $lang = 'en';
+        $listBanners = $this->_getListBanners($lang);
+        if (!empty($listBanners)) {
             $location = 'topInList';//когда будет готова база будет понятно какой сделать location
             if (!empty($this->_params['location'])) $location = $this->_params['location'];
             switch ($location) {
                 case 'topInList':
-                    $href = $this->_getBannerHref(self::$_listBanners[0]);
-                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath(self::$_listBanners[0]['bannerId'], $lang), 'title'=>''));
+                    $href = $this->_getBannerHref($listBanners[0]);
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[0]['bannerId'], $lang), 'title'=>''));
                     break;
                 case 'centerInList':
-                    $href = $this->_getBannerHref(self::$_listBanners[1]);
-                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath(self::$_listBanners[1]['bannerId'], $lang), 'title'=>''));
+                    $href = $this->_getBannerHref($listBanners[1]);
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[1]['bannerId'], $lang), 'title'=>''));
                     break;
             }
 
@@ -111,7 +211,6 @@ class Banners extends MyWidget {
     private function _getBannerFilePath($id, $lang) {
         return 'http://ruslania2.ptysh.ru/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
     }
-
 
     protected function _viewDetail() {
         $type = 'image';
@@ -481,12 +580,21 @@ class Banners extends MyWidget {
         Сувениры: та же тематика
          * сортировка в случайном порядке
          */
-        $condition = array(
-            'category_id'=>'((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))',
-        );
+        $sql = 'select language_id from _support_languages_printed where (id = ' . (int)$this->_params['item']['id'] . ')';
+        $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        if (empty($langIds)) {
+            $condition = array(
+                'category_id'=>'(category_id in (' . (int)$this->_params['item']['code'] . ', ' . (int)$this->_params['item']['subcode'] . '))',
+            );
+        }
+        else {
+            $condition = array(
+                'lang'=>'(t.language_id in (' . implode(',', $langIds) . '))',
+            );
+        }
         $sql = ''.
             'select t.id ' .
-            'from `printed_catalog` as t '.
+            'from `_support_languages_printed` as t '.
             'where ' . implode(' and ', $condition) . ' '.
             'order by rand() '.
             'limit ' . $counts . ' '.

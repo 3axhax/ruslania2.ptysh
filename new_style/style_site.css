@@ -3184,4 +3184,12 @@ div.detail-prop .prop-value li { list-style-type: none; }
 }
 
 .list-banner-content, .detail-banner-content { width: 900px; height: 236px; overflow: hidden; text-align: center; }
-.list-bannerImg, .detail-bannerImg { max-width: 100%; max-height: 100%; }
+.list-bannerImg, .detail-bannerImg, .main-bannerImg { max-width: 100%; max-height: 100%; }
+.main-banner-content { height: 157px; overflow: hidden; text-align: center; font-size: 20px;}
+.main-banner-content .photo {height: 100%; float: left; }
+.main-banner-content .photo img { max-height: 100%; }
+.main-banner-content .title, .main-banner-content .cost { font-weight: bold; }
+.main-banner-content .discount { font-weight: bold; margin-bottom: 10px; }
+.main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; }
+.main-banner-content .cost span { font-weight: bold; }
+/*.main-banner-content .nds { font-size: 17px; color: rgb(116, 116, 116);}*/

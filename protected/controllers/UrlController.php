@@ -50,7 +50,6 @@ class UrlController extends MyController {
 		}
 		$row['image'] = Picture::Get($row, Picture::BIG);
 		$row['url'] = Yii::app()->createUrl('product/view', array('entity'=>$row['entity_id'], 'id'=>$row['item_id']));
-		Debug::staticRun(array($row));
 		$this->ResponseJson($row);
 	}
 
