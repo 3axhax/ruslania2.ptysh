@@ -66,15 +66,18 @@ class Similar extends CWidget {
 				}
 			}
 		}
+		Debug::staticRun(array($products));
 		return $products;
 	}
 
 	private function _getSimilarIds() {
 		$sql = ''.
-			'select similar_id, similar_entity '.
-			'from `similar_items` '.
-			'where (`item_id` = ' . $this->_params['item']['id'] . ') and (`item_entity` = ' . $this->_params['entity'] . ') '.
-			'order by similar_id desc '.
+			'select t.similar_id, t.similar_entity '.
+			'from `similar_items` t '.
+				'join ' . Entity::GetEntitiesList()[$this->_params['entity']]['site_table'] . ' tG on (tG.id = t.`item_id`) and (tG.avail_for_order = 1) '.
+			'where (t.`item_id` = ' . $this->_params['item']['id'] . ') '.
+				'and (t.`item_entity` = ' . $this->_params['entity'] . ') '.
+			'order by t.similar_id desc '.
 			'limit 10 '.
 		'';
 		$items = array();
