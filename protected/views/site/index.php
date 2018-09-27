@@ -6,6 +6,7 @@ else {
 	if(count($actionItems) > 0)
 		$this->renderPartial('action_items', array('actionItems' => $actionItems));
 }
+$this->widget('InfoText');
 $this->widget('Banners', array('type'=>'small'));
 
 foreach($groups as $entity=>$group) {

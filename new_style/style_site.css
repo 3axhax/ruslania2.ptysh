@@ -3193,3 +3193,6 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; }
 .main-banner-content .cost span { font-weight: bold; }
 /*.main-banner-content .nds { font-size: 17px; color: rgb(116, 116, 116);}*/
+
+.infotext { color: #ed1d24; text-align: center; font-size: 18px; padding: 20px 0; }
+.infotext a { color: #ed1d24; }
