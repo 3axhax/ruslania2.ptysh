@@ -887,7 +887,7 @@ else $act = array('', '');
                    <?
                    
                    
-                   if ((in_array('korzina',$url) AND (end($url) != 'korzina')) OR (in_array('cart',$url) AND (end($url) != 'cart'))) : ?>
+                   if ((in_array('korzina',$url) AND (end($url) != 'korzina')) OR (in_array('cart',$url) AND (end($url) != 'cart')) AND !in_array('orderPay',$url)) : ?>
 
                     <a href="/cart/" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
 

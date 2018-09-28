@@ -906,9 +906,9 @@
 
         var costall = parseFloat($('input.costall').val()).toFixed(2);
 
-        $('.itogo_cost').html(costall + ' ' + $('.delivery_box label').attr('valute'));
+        $('.itogo_cost').html(costall + ' ' + $('.valute').val());
 
-        $('.delivery_cost').html('0 ' + $('.delivery_box label').attr('valute'));
+        $('.delivery_cost').html('0 ' + $('.valute').val());
 
 
         $('.selt .check').removeClass('active');
@@ -989,13 +989,13 @@
             $t2 = true;
         }
 
-
+        $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
         $cartInfo['items'][$item['id']]['price'] = $price;
         if ($item['entity'] == 30) {
 
-            $item['quantity'] = 1;
+            $item['quantity'] = $item['quantity'];
             $fullprice += $price;
-            $cartInfo['items'][$item['id']]['quantity'] = 1;
+            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
         } else {
             $fullprice += $price * $item['quantity'];
             $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];

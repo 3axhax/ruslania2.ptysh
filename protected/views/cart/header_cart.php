@@ -62,7 +62,7 @@
                     </div>
 					
 					<div class="b-basket-list__bottom">
-                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+(CartItems().length-3)+' <?=$ui->item('A_NEW_CART_MORE_ORDER2')?> ', visible: CartItems().length > 3"></a></div>
+                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
                                 <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
                             </div>
@@ -107,6 +107,34 @@
                     return item.UseVAT() ? item.PriceVATWorld() : item.PriceVAT0World();
             }
         };
+
+        self.priceStrToPrice = function(count)
+        {
+
+            var num, out;
+
+            num = count % 100;
+            if (num > 19) {
+                num = num % 10;
+            }
+
+            //$out = (show) ?  $value . ' ' : '';
+            switch (num) {
+                case 1:
+                    out = count+' товар';
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    out = count+' товара';
+                    break;
+                default:
+                    out = count+' товаров';
+                    break;
+            }
+            return out;
+
+        }
 
         self.ReadyPriceStr = function(item)
         {

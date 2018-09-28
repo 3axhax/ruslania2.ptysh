@@ -88,7 +88,7 @@
     <div style="height: 20px;"></div>
     <center> <h1 class="h1_reg" style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;">Войти с помощью социальных сетей</h1></center>
 
-    <div style="margin:0 auto; width: 260px;" id="uLogin" data-ulogin="display=panel;theme=classic;fields=first_name,last_name;providers=vkontakte,odnoklassniki,googleplus,facebook,twitter,instagram;redirect_uri=<?=urlencode('http://ruslania2.ptysh.ru/red.php')?>;mobilebuttons=0;"></div>
+    <div style="margin:0 auto; width: 260px;" id="uLogin" data-ulogin="display=panel;theme=classic;fields=first_name,last_name,email;providers=vkontakte,odnoklassniki,googleplus,facebook,twitter,instagram;redirect_uri=<?=urlencode('/ulogin.php')?>;mobilebuttons=0;"></div>
     </div>
         
     </div> <div class="clearfix"></div>

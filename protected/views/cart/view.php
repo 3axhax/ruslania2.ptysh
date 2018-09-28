@@ -82,7 +82,7 @@ $url = $ex;
 								<td style="padding-left: 20px;">
                                     <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
                                         data-bind="attr: { href: Url, title: Title},text: Title"
-                                        class="maintxt1"><?= htmlspecialchars($cart['Title']) ?>
+                                        class="maintxt1" target="_blank"><?= htmlspecialchars($cart['Title']) ?>
                                     </a></div>
                                     <!--<div data-bind="text: Authors"><?= $cart['Authors'] ?></div>-->
                                 <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "><?= htmlspecialchars($cart['InfoField']) ?></p>
@@ -230,7 +230,7 @@ $url = $ex;
         });
     </script>
 
-<div class="news_box" style="margin-top: 150px;">
+<div class="news_box" style="margin-top: 60px;">
 
 
 		<div class="">
@@ -263,10 +263,10 @@ $url = $ex;
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
     </div>
  
-	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
+	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
 		
 		if ($product['isbn']) {
 			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';

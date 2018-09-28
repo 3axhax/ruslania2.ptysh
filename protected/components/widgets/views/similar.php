@@ -23,7 +23,7 @@
 					</a>
 				</div>
 
-				<div class="title_book"<?php if (!empty($product['Authors'])): ?> style="height:29px;min-height:0;margin-bottom:0;" <?php endif; ?>><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
+				<div class="title_book"<?php if (!empty($product['Authors'])): ?> style="height:29px;min-height:auto;margin-bottom:0;" <?php endif; ?>><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
 
 				<?php if (!empty($product['Authors'])):
 					$author = array_shift($product['Authors']);

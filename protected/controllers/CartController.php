@@ -397,6 +397,13 @@ class CartController extends MyController {
         $data['number_zakaz'] = $id;
         $data['ptype'] = $ptype;
 
+        //меняем в базе тип оплаты
+
+        $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
+
+        //выводим соответствующий шаблон
+
         if ($ptype == '27') {
             $this->render('applepay', $data);
         } elseif ($ptype == '26') {
@@ -685,7 +692,10 @@ class CartController extends MyController {
                     exit();
                     
                 }
-                
+
+
+
+
                 if ($post['ptype'] == '27') {
                     $this->render('applepay', $data);
                 } elseif ($post['ptype'] == '26') {

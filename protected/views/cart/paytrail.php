@@ -2,9 +2,9 @@
 
 
 <div class="container cartorder">
-    <h1><?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?></h1>
+
     Спасибо за заказ! Ваш заказ № <?=$number_zakaz?>. Произведите оплату, выбрав чем хотите оплатить<br /><br />
-    <div>Выбранный способ оплаты: <?= Yii::app()->ui->item('DESC_PAYTRAIL') ?></div>
+    <div>Выбранный способ оплаты: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?></div>
    
     
     <div style="margin: 15px 0;">
@@ -13,11 +13,16 @@
         <?php $this->renderPartial('/site/pay_systems', array()); ?>
     </div>
     </div>
-    
+
+
+
     <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
 
     <div class="clearBoth"></div>
-    
+
+    <div style="margin: 15px 0;">
+        Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href=""tel:+35892727070">+358 9 2727070</a> по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).
+    </div>
    
 </div>
 <script type="text/javascript">
