@@ -494,8 +494,8 @@ class Cart extends CActiveRecord
 			
 			if ($item['entity'] == 30) {
 				
-			    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
-			    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/2.log', print_r($price,1));
+			    //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
+			    //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/2.log', print_r($price,1));
 
 			    if ($item['type'] == 2) {
 			        $s_one = $item['sub_world_month'];
