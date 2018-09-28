@@ -139,16 +139,30 @@
         self.ReadyPriceStr = function(item)
         {
 			
-			return item.PriceVATStr();
-			
+			//return item.PriceVATStr();
+
+            //alert(item.Quantity());
+
             if(item.Entity() != <?=Entity::PERIODIC; ?>)
-                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str();
+                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str() + '<?=Currency::ToSign()?>';
             else
             {
-                if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>)
-                    return item.UseVAT() ? item.PriceVATFinStr() : item.PriceVAT0FinStr();
-                else
-                    return item.UseVAT() ? item.PriceVATWorldStr() : item.PriceVAT0WorldStr();
+                if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>) {
+
+                    return item.UseVAT() ? (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
+
+                } else {
+
+                    return item.UseVAT() ? ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
+
+
+                }
+                   /*  return item.UseVAT() ? (parseInt(item.Quantity()) * item.PriceVATFinStr()) : (parseInt(item.Quantity()) * item.PriceVAT0FinStr());
+
+                } else {
+                    alert(item.PriceVAT0WorldStr());
+                    return item.UseVAT() ? ((item.Quantity()) * item.PriceVATWorldStr()) : ((item.Quantity()) * item.PriceVAT0WorldStr());
+                } */
             }
         };
 
