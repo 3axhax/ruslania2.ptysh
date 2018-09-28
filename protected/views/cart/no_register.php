@@ -847,6 +847,10 @@
 
             $('.err_confirm').html('');
 
+            $('label[for=confirm]').css('padding', '');
+            $('label[for=confirm]').css('border', '');
+            $('label[for=confirm]').css('border-radius', '');
+
         }
 
 

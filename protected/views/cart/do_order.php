@@ -769,10 +769,18 @@
          if ($('#confirm').is(':checked') == false) {
             
             $('.err_confirm').html('Согласитесь с условием');
-            
+
+
+             $('label[for=confirm]').css('padding', '5px');
+             $('label[for=confirm]').css('border', '1px solid rgb(237, 29, 36)');
+             $('label[for=confirm]').css('border-radius', '6px');
+
             //if (error == 0) {
                 
                 $('html, body').scrollTop($('#confirm').offset().top);
+             $('label[for=confirm]').css('padding', '');
+             $('label[for=confirm]').css('border', '');
+             $('label[for=confirm]').css('border-radius', '');
                 
            // }
             
