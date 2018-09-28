@@ -759,6 +759,14 @@ li.dd_box ul li:nth-child(6n) {
 	margin-right: 15px;
 }
 
+.content_books .span2 ul.items li a {
+    font-size: 13px;
+    color: #0088cc;
+    display: block;
+    padding: 8px 0;
+    margin-right: 15px;
+}
+
 .content_books .span2 ul li a.open_subcat {
     margin: 0;
     background: url('/new_img/plus.png') right center no-repeat;

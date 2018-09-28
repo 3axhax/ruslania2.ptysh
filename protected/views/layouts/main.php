@@ -839,19 +839,8 @@ else $act = array('', '');
 
         <div class="header_logo_search_cart">
 
-            <?php
-            $mess = Yii::app()->ui->item('MSG_MAIN_WELCOME_INTERNATIONAL_ORDERS');
-            if ($mess AND !in_array('korzina',$url) AND !in_array('cart',$url)):
-            ?>
-            <div class="alert_bg" style="display: block">
-                <div class="container">
-                    <span class="text" id="js_container-alert_bg"></span>
-                    <span class="close_alert" onclick="$(this).parent().parent().remove()"><img src="/new_img/close_alert.png" /></span>
-                </div>
-            </div>
-            <?php endif; ?>
-
-            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>    
+            <?php $this->widget('InfoText', array('isFrame'=>1)); ?>
+            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
 
             <div class="light_gray_menu">
                 <div class="container">
@@ -1673,13 +1662,7 @@ foreach ($rows as $row) $availCategory[$row['id']] = $row;
             </div>
             <div class="clearfix"></div>
         </div>
-        <?php if ($mess AND !in_array('korzina',$url) AND !in_array('cart',$url)): ?>
-        <script>
-            $(document).ready(function () {
-                document.getElementById('js_container-alert_bg').innerHTML = '<?= htmlspecialchars($mess) ?>';
-            });
-        </script>
-        <?php endif; ?>
+        <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
         <div id="virtual_keyboard" style="display: none"></div>
     </body>
 </html>

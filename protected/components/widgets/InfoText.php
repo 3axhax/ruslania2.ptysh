@@ -1,43 +1,40 @@
-<?php /*Created by Êèðèëë (27.09.2018 21:38)*/
+<?php /*Created by ÐšÐ¸Ñ€Ð¸Ð»Ð» (27.09.2018 21:38)*/
 
 class InfoText extends CWidget {
 	/**
-	 * @var array çäåñü ìàññèâ íà÷àëüíûõ çíà÷åíèé
+	 * @var array Ð·Ð´ÐµÑÑŒ Ð¼Ð°ÑÑÐ¸Ð² Ð½Ð°Ñ‡Ð°Ð»ÑŒÐ½Ñ‹Ñ… Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ð¹
 	 */
-	protected $_params = array( );
+	protected $_params = array('isFrame'=>1);
+	static private $_text = null;
 
-	function init() {
-
-	}
+	function init() { }
 
 	function __set($name, $value) {
 		if ($value !== null) $this->_params[$name] = $value;
 	}
 
 	function run() {
-		$item = self::_getItem();
-		if (empty($item)) return;
+		$ctrl = $this->getController()->id;
+		$action = $this->getController()->action->id;
+		if ($ctrl == 'cart') return;
 
-		if (!empty($item['path_route'])) {
-			$params = array( );
-			if (!empty($item['path_entity'])){
-				$params['entity'] = $item['path_entity'];
-				if (!empty($item['path_id'])) {
-					$idName = HrefTitles::get()->getIdName($params['entity'], $item['path_route']);
-					if (!empty($idName)) $params[$idName] = $item['path_id'];
-				}
-			}
-			$href = Yii::app()->createUrl($item['path_route'], $params);
-		}
-		else $href = $item['url'];
+		$text = self::_getItem();
+		if (empty($text)) return;
 
-		$this->render('info_text', array('name'=>$item['name'], 'href'=>$href));
+		if (!empty($this->_params['isFrame'])) $this->render('info_text_frame', array('text'=>$text));
+		else $this->render('info_text', array('text'=>$text));
 	}
 
 	private function _getItem() {
-		$sql = 'select name, url, path_entity, path_route, path_id from info_text order by id desc limit 1';
-		$row = Yii::app()->db->createCommand($sql)->queryRow();
-		return $row;
+		if (self::$_text === null) {
+			$langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
+			$lang = strtolower(Yii::app()->language);
+			if (!in_array($lang, $langs)) $lang = 'en';
+
+			$sql = 'select text_' . $lang . ' from info_text order by id desc limit 1';
+			self::$_text = (string) Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		return self::$_text;
 	}
 
 
