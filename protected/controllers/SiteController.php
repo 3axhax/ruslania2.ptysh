@@ -173,7 +173,7 @@ class SiteController extends MyController {
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
-        if (!file_exists($file)||in_array($page, array('thawte', 'partners', 'links'))) {
+        if (!file_exists($file)||in_array($page, array('safety', 'partners', 'links'))) {
             throw new CHttpException(404);
         }
         $data = file_get_contents($file);
@@ -954,6 +954,32 @@ class SiteController extends MyController {
         $this->PerformAjaxValidation($model, 'remind-form');
         $user = null;
 
+        if (Yii::app()->request->isAjaxRequest) {
+
+            $model->attributes = $_POST['User'];
+
+            if ($model->validate()) {
+                $user = User::model()->findByAttributes(array('login' => $model->login));
+                if (empty($user)) {
+                    echo '9';
+                    return;
+                }
+
+                $message = new YiiMailMessage('Ruslania.com password');
+                $message->view = 'forgot';
+                $message->setBody($user->attributes, 'text/html');
+                $message->addTo($user->login);
+                $message->from = 'ruslania@ruslania.com';
+                Yii::app()->mail->send($message);
+                echo '1';
+            } else {
+                echo '10';
+            }
+
+            return;
+
+        }
+
         if (Yii::app()->request->isPostRequest) {
             $model->attributes = $_POST['User'];
             if ($model->validate()) {
@@ -1075,6 +1101,7 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
+            $test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }

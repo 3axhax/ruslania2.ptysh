@@ -80,7 +80,7 @@
 
 <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype25')" style="width: 484px;">
 
-	<img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="font-size: 10px">Кредитные карты и Финские банки</span>
+	<img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>

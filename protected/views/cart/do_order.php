@@ -440,40 +440,7 @@
                 $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
                 
                 }
-            
-            
-            $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
-                
-                $('.delivery_box, .delivery_box_sp').html(data);
-                $('.box_opacity .op').hide();
-                //$('.order_start').removeClass('disabled');
-                sbros_delev();
-                checked_sogl();
-            })
-            
-            //if ($('#Address_contact_phone').val() == '') {
-            
-                $.post('<?=Yii::app()->createUrl('cart')?>getcodecity', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
-                    if (data != '') {        
-                        $('#Address_contact_phone').val('+'+data);
-                    } else {
-                    
-                        $('#Address_contact_phone').val('');
-                    
-                    }
-                });
-    
-           // }
-            
-            
-            
-            
-        } else {
-            $('.delivery_box').html('');
-            $('.box_opacity .op').show();
-           // $('.order_start').addClass('disabled');
-            
-        }
+
         
        
         
@@ -521,6 +488,7 @@
         $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
         $('.check', $('.seld #dtype2').parent()).addClass('active');
     $('.delivery_box').show();
+        $('.seld #dtype2').parent().addClass('act');
     
     })
     
@@ -643,8 +611,7 @@
          
         } else if ( $('select[name=id_address]').val() && $('select[name=id_address_b]').val() && $('#confirm').prop('checked') ) {
             $('.box_opacity .op').hide();
-            //$('.order_start').removeClass('disabled');
-         
+
         }
         
         
@@ -802,10 +769,18 @@
          if ($('#confirm').is(':checked') == false) {
             
             $('.err_confirm').html('Согласитесь с условием');
-            
+
+
+             $('label[for=confirm]').css('padding', '5px');
+             $('label[for=confirm]').css('border', '1px solid rgb(237, 29, 36)');
+             $('label[for=confirm]').css('border-radius', '6px');
+
             //if (error == 0) {
                 
-                $('html, body').scrollTop($('#confirm').offset().top);
+             $('html, body').scrollTop($('#confirm').offset().top);
+             $('label[for=confirm]').css('padding', '');
+             $('label[for=confirm]').css('border', '');
+             $('label[for=confirm]').css('border-radius', '');
                 
            // }
             
@@ -888,12 +863,12 @@
      
      var costall = parseFloat($('input.costall').val()).toFixed(2);
      
-      $('.itogo_cost').html(costall + ' ' + $('.rows_checkbox_delivery label').attr('valute'));
+      $('.itogo_cost').html(costall + ' ' + $('.delivery_box .row label').attr('valute'));
      
-     $('.delivery_cost').html('0 '+$('.rows_checkbox_delivery label').attr('valute'));
+     $('.delivery_cost').html('0 '+$('.delivery_box .row label').attr('valute'));
      
      
-      $('.delivery_box .texterror, .delivery_box_sp .texterror').css('display', 'none');
+      $('.delivery_box .texterror').css('display', 'none');
      
      
     }
@@ -938,7 +913,7 @@
             
             $cartInfo['items'][$item['ID']]['title'] = $item['Title'];
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
-            
+            $cartInfo['items'][$item['ID']] = $item['entity'];
             
             $price = $item['PriceVAT0'];
             

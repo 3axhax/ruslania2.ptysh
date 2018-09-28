@@ -62,7 +62,7 @@
                     </div>
 					
 					<div class="b-basket-list__bottom">
-                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+(CartItems().length-3)+' <?=$ui->item('A_NEW_CART_MORE_ORDER2')?> ', visible: CartItems().length > 3"></a></div>
+                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
                                 <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
                             </div>
@@ -108,19 +108,61 @@
             }
         };
 
+        self.priceStrToPrice = function(count)
+        {
+
+            var num, out;
+
+            num = count % 100;
+            if (num > 19) {
+                num = num % 10;
+            }
+
+            //$out = (show) ?  $value . ' ' : '';
+            switch (num) {
+                case 1:
+                    out = count+' товар';
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    out = count+' товара';
+                    break;
+                default:
+                    out = count+' товаров';
+                    break;
+            }
+            return out;
+
+        }
+
         self.ReadyPriceStr = function(item)
         {
 			
-			return item.PriceVATStr();
-			
+			//return item.PriceVATStr();
+
+            //alert(item.Quantity());
+
             if(item.Entity() != <?=Entity::PERIODIC; ?>)
-                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str();
+                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str() + '<?=Currency::ToSign()?>';
             else
             {
-                if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>)
-                    return item.UseVAT() ? item.PriceVATFinStr() : item.PriceVAT0FinStr();
-                else
-                    return item.UseVAT() ? item.PriceVATWorldStr() : item.PriceVAT0WorldStr();
+                if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>) {
+
+                    return item.UseVAT() ? (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
+
+                } else {
+
+                    return item.UseVAT() ? ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
+
+
+                }
+                   /*  return item.UseVAT() ? (parseInt(item.Quantity()) * item.PriceVATFinStr()) : (parseInt(item.Quantity()) * item.PriceVAT0FinStr());
+
+                } else {
+                    alert(item.PriceVAT0WorldStr());
+                    return item.UseVAT() ? ((item.Quantity()) * item.PriceVATWorldStr()) : ((item.Quantity()) * item.PriceVAT0WorldStr());
+                } */
             }
         };
 

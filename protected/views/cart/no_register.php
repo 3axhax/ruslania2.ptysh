@@ -831,6 +831,10 @@
 
             $('.err_confirm').html('Согласитесь с условием');
 
+            $('label[for=confirm]').css('padding', '5px');
+            $('label[for=confirm]').css('border', '1px solid rgb(237, 29, 36)');
+            $('label[for=confirm]').css('border-radius', '6px');
+
             if (error == 0) {
 
                 $('html, body').scrollTop($('#confirm').offset().top);
@@ -842,6 +846,10 @@
         } else {
 
             $('.err_confirm').html('');
+
+            $('label[for=confirm]').css('padding', '');
+            $('label[for=confirm]').css('border', '');
+            $('label[for=confirm]').css('border-radius', '');
 
         }
 
@@ -906,9 +914,9 @@
 
         var costall = parseFloat($('input.costall').val()).toFixed(2);
 
-        $('.itogo_cost').html(costall + ' ' + $('.delivery_box label').attr('valute'));
+        $('.itogo_cost').html(costall + ' ' + $('.valute').val());
 
-        $('.delivery_cost').html('0 ' + $('.delivery_box label').attr('valute'));
+        $('.delivery_cost').html('0 ' + $('.valute').val());
 
 
         $('.selt .check').removeClass('active');
@@ -989,13 +997,13 @@
             $t2 = true;
         }
 
-
+        $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
         $cartInfo['items'][$item['id']]['price'] = $price;
         if ($item['entity'] == 30) {
 
-            $item['quantity'] = 1;
+            $item['quantity'] = $item['quantity'];
             $fullprice += $price;
-            $cartInfo['items'][$item['id']]['quantity'] = 1;
+            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
         } else {
             $fullprice += $price * $item['quantity'];
             $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
