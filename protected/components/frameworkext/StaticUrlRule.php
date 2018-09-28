@@ -140,6 +140,9 @@ class StaticUrlRule extends CBaseUrlRule {
 		$pathInfo = mb_strtolower(trim($pathInfo, '/'));
 		if (empty($pathInfo)) return false;
 
+		if (in_array($pathInfo, array('site', 'site/index')))
+			throw new CHttpException(404);;
+
 		if ($page = array_search($pathInfo, $this->_pages)) {
 			if (isset(self::$_files[$page])) {
 				$_REQUEST['page'] = $_GET['page'] = $page;

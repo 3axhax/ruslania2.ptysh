@@ -870,7 +870,7 @@ else $act = array('', '');
             <div class="container">
                 <div class="row">
                     <div class="span1 logo">
-                        <a href="/"><img src="/new_img/logo.png" alt=""/></a>
+                        <a href="<?= Yii::app()->createUrl('site/index') ?>"><img src="/new_img/logo.png" alt=""/></a>
                     </div>
 
                    <?
