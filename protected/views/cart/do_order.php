@@ -777,7 +777,7 @@
 
             //if (error == 0) {
                 
-                $('html, body').scrollTop($('#confirm').offset().top);
+             $('html, body').scrollTop($('#confirm').offset().top);
              $('label[for=confirm]').css('padding', '');
              $('label[for=confirm]').css('border', '');
              $('label[for=confirm]').css('border-radius', '');
