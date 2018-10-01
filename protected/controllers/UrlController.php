@@ -54,7 +54,7 @@ class UrlController extends MyController {
 	}
 
 	function actionInfoText() {
-		$sql = 'select name, url from info_text order by id desc limit 1';
+		$sql = 'select * from info_text order by id desc limit 1';
 		$row = Yii::app()->db->createCommand($sql)->queryRow();
 		$this->ResponseJson($row);
 	}

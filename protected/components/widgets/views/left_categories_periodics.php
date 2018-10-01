@@ -23,9 +23,13 @@
 	</li>
 	<?php endforeach; ?>
 	<?php if ($hide): ?>
+	<li onclick="$(this).hide().siblings().show();" class="category_all">
+		<?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?>
+	</li>
+		<?php /*
 	<li style="cursor: pointer; text-align: right;" onclick="$(this).hide().siblings().show();" title="<?= Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?>">
 		<img src="/new_img/btn_right.png" style="transform: rotate(90deg); ">
 	</li>
-	<?php endif; ?>
+	<?php */ endif; ?>
 </ul>
 <?php endforeach; ?>
