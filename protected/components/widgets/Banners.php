@@ -230,8 +230,10 @@ class Banners extends MyWidget {
                     'limit 1 '.
                 '';
                 $banner = Yii::app()->db->createCommand($sql)->queryRow();
-                $href = $this->_getBannerHref($banner);
-                $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
+                if (!empty($banner)) {
+                    $href = $this->_getBannerHref($banner);
+                    $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
+                }
                 break;
             case 'slider':
                 $items = array();
