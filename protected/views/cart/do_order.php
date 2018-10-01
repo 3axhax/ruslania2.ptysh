@@ -399,51 +399,35 @@
     }
 
     function change_city(cont) {
-        
-        var csrf = $('meta[name=csrf]').attr('content').split('=');
-        
-        $('.check',$('.seld:visible')).removeClass('active');
-        $('input[type=radio]', $('.seld:visible')).attr('checked','true');
-        $('.seld').css('border','1px solid rgb(204, 204, 204)');
-        $('.seld').removeClass('act');
-        $('.select_dd_box, .delivery_box_sp, .delivery_box').hide();
-        
-        $('.seld #dtype1').parent().css('border','1px solid rgb(100, 113, 127)');
-        $('.check',$('.seld:visible').slice(0,1)).addClass('active');
-        $('.selp #dtype2').parent().addClass('act');
-        
-        
-        $('input[type=radio]', $('.seld:visible').slice(0,1)).attr('checked','true');
-        
-       
-            
-            show_all();
-            
-       
-        
-        
-        if (cont.val() != '') {
-            
-            
-            if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
-             
-              $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
-     
-     $('.select_states').html(data);
-     
-     $('.select_states select').val($.cookie('Address_state_id2'));
-     
-    });
-             
-            } else {
-                
-                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
-                
-                }
 
-        
-       
-        
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+
+        if (cont.val() != '') {
+
+
+            if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
+
+                $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {
+                    id: cont.val(),
+                    YII_CSRF_TOKEN: csrf[1]
+                }, function (data) {
+
+                    $('.select_states').html(data);
+
+                    $('.select_states select').val($.cookie('Address_state_id2'));
+
+                });
+
+            } else {
+
+                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
+
+            }
+
+
+        }
+
     }
     
     function select_row(cont) {
