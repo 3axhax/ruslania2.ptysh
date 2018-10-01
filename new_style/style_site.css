@@ -481,7 +481,7 @@ div.footer {
 .slider_bg .slider_container .container_slides ul li .span1.photo.akciya .new_block {background: #ed2024; }
 .slider_bg .slider_container .container_slides ul li .span1.photo.rec .new_block {background: #42b455; }
 
-.slider_bg .slider_container .container_slides ul li .span2.text { width: auto;/*width: 187px;*/ }
+.slider_bg .slider_container .container_slides ul li .span2.text { /*width: auto;*/width: 175px; }
 .slider_bg .slider_container .container_slides ul li .span2.text .title a { font-size: 14px; font-weight: bold; color: rgb(18, 87, 171); text-decoration: none;}
 .slider_bg .slider_container .container_slides ul li .span2.text .cost { font-size: 18px; color: rgb(48, 28, 83); font-weight: bold; margin-top: 5px;}
 .slider_bg .slider_container .container_slides ul li .span2.text .cost .n { color: #ed1d24; }

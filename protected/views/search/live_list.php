@@ -14,9 +14,9 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 				<a href="<?= $url ?>"><?= ProductHelper::GetTitle($item) ?></a>
 				<?php if (!empty($item['inDescription'])): ?>
 					<div><?= Yii::app()->ui->item('IN_DESCRIPTION') ?>: <?= $item['inDescription'] ?></div>
-				<?php else: ?>
+				<?php /*else: ?>
 				<div style="height: 18px;"></div>
-				<?php endif; ?>
+				<?php */endif; ?>
 				<?php if ($item['avail_for_order'] > 0):
 				$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 				$item['priceData']['unit'] = '';
@@ -52,7 +52,11 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
                 </span>
 						<?php endif; ?>
 					</div>
+					<?php if ($item['entity'] != Entity::PERIODIC): ?><div style="color: #747474;"><?= Availability::ToStr($item) ?><?php endif; ?></div>
+				<?php else: ?>
+					<div style="color: #ed1d24;"><?= Availability::ToStr($item) ?></div>
 				<?php endif; ?>
+
 			</td>
 		</tr>
 	</table>
