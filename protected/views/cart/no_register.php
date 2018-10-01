@@ -402,10 +402,10 @@
             $.post('<?= Yii::app()->createUrl('cart') ?>getdeliveryinfo2', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
 
                 $('.delivery_box').html(data);
-                $('.box_opacity .op').hide();
+                //$('.box_opacity .op').hide();
                // $('.order_start').removeClass('disabled');
                 sbros_delev();
-                //checked_sogl();
+                checked_sogl();
 
             });
 
@@ -578,11 +578,11 @@
         if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
 
            // $('.order_start').addClass('disabled');
-
+            $('.box_opacity .op').show();
 
         } else if ($('#Address_country').val() && $('#confirm').prop('checked')) {
 
-
+            $('.box_opacity .op').hide();
            // $('.order_start').removeClass('disabled');
 
         }
