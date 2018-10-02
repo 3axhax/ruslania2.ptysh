@@ -466,20 +466,22 @@ class Cart extends CActiveRecord
     function getPriceSum($uid, $sid, $type) {
         
         $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2, uid ) '
-              .'WHERE ';
+              .'WHERE ' . $this->CartType(self::TYPE_ORDER) .' AND ';
         list($where, $params) = $this->GetFilter($uid, $sid);
         $sql .= $where;
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
-        
-        // var_dump($rows);
+
+        $defaultAddress = Address::GetDefaultAddress(Yii::app()->user->id);
+        $useVAT = Address::UseVAT($defaultAddress);
+                // var_dump($rows);
         
         $priceSum = 0;
         $summa = 0; 
 		
 		//var_dump($uid);
 		//var_dump($sid);
-		
+
         foreach ($rows as $row) {
             
             $item = Product::GetProduct($row['entity'], $row['iid']);
@@ -493,14 +495,38 @@ class Cart extends CActiveRecord
 			endif;
 			
 			if ($item['entity'] == 30) {
-				
-			    //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
+
+
+
+			    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
 			    //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/2.log', print_r($price,1));
 
-			    if ($item['type'] == 2) {
-			        $s_one = $item['sub_world_month'];
+                $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+
+                $priceVATFin = $price[DiscountManager::WITH_VAT_FIN];
+                $priceVAT0Fin = $price[DiscountManager::WITHOUT_VAT_FIN];
+
+                $priceVATWorld = $price[DiscountManager::WITH_VAT_WORLD];
+                $priceVAT0World = $price[DiscountManager::WITHOUT_VAT_WORLD];
+
+                //echo $useVAT;
+
+                if ($useVAT) {
+
+                    $s_one1 = $priceVATFin;
+                    $s_one2 = $priceVATWorld;
+
                 } else {
-                    $s_one = $item['sub_fin_month'];
+
+                    $s_one1 = $priceVAT0Fin;
+                    $s_one2 = $priceVAT0World;
+
+                }
+
+			    if ($item['type'] == 2) {
+			        $s_one = $s_one2 / 12;
+                } else {
+                    $s_one = $s_one1 / 12;
                 }
 			    
 				//$s_one = $price[DiscountManager::WITH_VAT] / 12;
