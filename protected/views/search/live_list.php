@@ -54,7 +54,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 					</div>
 					<?php if ($item['entity'] != Entity::PERIODIC): ?><div style="color: #747474;"><?= Availability::ToStr($item) ?><?php endif; ?></div>
 				<?php else: ?>
-					<div style="color: #ed1d24;"><?= Availability::ToStr($item) ?></div>
+					<div style="color: #747474;"><?= Availability::ToStr($item) ?></div>
 				<?php endif; ?>
 
 			</td>

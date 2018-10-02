@@ -65,7 +65,8 @@ class Availability
             case self::ENDING_IN_SHOP :
                 return Yii::app()->ui->item("ITEM_AVAIBLE_STATUS_AVAIBLE_LESS_5"); //заканчивается в магазине
             case self::TEMPORARY_OUT :
-                return Yii::app()->ui->item("ITEM_AVAIBLE_STATUS_NOT_AVAIBLE"); //временно отсутствует
+                //Андреас по скайпу сказал, что нет такого и если, что то ставить Нет в нашем ассортименте
+                //return Yii::app()->ui->item("ITEM_AVAIBLE_STATUS_NOT_AVAIBLE"); //временно отсутствует
             case self::NOT_AVAIL_AT_ALL :
                 return Yii::app()->ui->item("ITEM_AVAIBLE_STATUS_NOT_AVAILABLE_AT_ALL"); // Нет в нашем ассортименте.
             case self::TO_ORDER_FAST : // return Yii::app()->ui->item('ITEM_FAST_DELIVERY');
