@@ -51,11 +51,9 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
             <?= $ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?>:
         <?php endif; ?>
         </div>
-        <span class="price"  style="color: #301c53;font-size: 18px; font-weight: bold;">
-            <span class="title__bold pwvat">
-            <?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></span>
-            <span class="pwovat" style="color: #747474; font-size: 14px;"><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
-        </span>
+
+        <span class="price"  style="color: #301c53;font-size: 18px; font-weight: bold;"><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></span>
+        <span class="pwovat" style="color: #747474; font-size: 14px;"><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
 
     <?php else : ?>
 

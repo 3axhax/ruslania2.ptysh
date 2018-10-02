@@ -13,7 +13,7 @@ class Banners extends MyWidget {
     public function run() {
         $ctrl = $this->getController()->id;
         $action = $this->getController()->action->id;
-        if (($ctrl == 'entity')&&($action == 'list')) {
+        if (($ctrl == 'entity')/*&&($action == 'list')*/) {
             $this->_viewList();
             return;
         }
@@ -29,17 +29,17 @@ class Banners extends MyWidget {
             return;
         }
 
-        //TODO:: далее слишком много не нужных данных, когда нибудь переделать
-        $b = new Banner;
-        $list = $b->GetAllBanners();
-        if($this->entity == 'index') $this->entity = 1;
-        $lang = strtoupper(Yii::app()->language);
-        if(isset($list[$this->entity][$lang]))
-            $list = $list[$this->entity][$lang];
-        else
-            $list = array();
-
-        $this->render('banners', array('list' => $list));;
+//        //TODO:: далее слишком много не нужных данных, когда нибудь переделать
+//        $b = new Banner;
+//        $list = $b->GetAllBanners();
+//        if($this->entity == 'index') $this->entity = 1;
+//        $lang = strtoupper(Yii::app()->language);
+//        if(isset($list[$this->entity][$lang]))
+//            $list = $list[$this->entity][$lang];
+//        else
+//            $list = array();
+//
+//        $this->render('banners', array('list' => $list));;
     }
 
     private function _getListBanners($lang) {
