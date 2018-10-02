@@ -83,9 +83,10 @@ class MainMenu extends CWidget {
 		if ($ctrl == 'cart') return;
 
 		$file = Yii::getPathOfAlias('webroot') . '/test/mainmenu_' . Yii::app()->language . '.html.php';
-//		if (!file_exists($file)) {
-			file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true), FILE_APPEND);
-//		}
+		//TODO:: когда будут готовы переводы  сделать сохранение в файл
+		if (file_exists($file)) unlink($file);
+
+		file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true), FILE_APPEND);
 		readfile($file);
 	}
 
