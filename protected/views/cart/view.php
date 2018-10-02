@@ -54,7 +54,7 @@ $url = $ex;
                         <tr>
                             <th valign="middle"
                                 class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
-								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('SHIPPING'); ?></th>
+								<th valign="middle" align="center" class="cart1header1">Наличие<?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
@@ -85,7 +85,7 @@ $url = $ex;
                                         class="maintxt1" target="_blank"><?= htmlspecialchars($cart['Title']) ?>
                                     </a></div>
                                     <!--<div data-bind="text: Authors"><?= $cart['Authors'] ?></div>-->
-                                <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "><?= htmlspecialchars($cart['InfoField']) ?></p>
+                                <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "></p>
 								</td>
 								</tr>
 								</table>
