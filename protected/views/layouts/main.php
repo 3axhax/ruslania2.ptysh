@@ -38,6 +38,8 @@ $ex = explode('/', $ex[0]);
 
 $url = $ex;
 
+$ctrl = Yii::app()->getController()->id;
+
 $ui = Yii::app()->ui;
 ?><!DOCTYPE html><html>
     <head>
@@ -451,13 +453,13 @@ else $act = array('', '');
 
                     doCountdown();
 
-                    <?php if (!in_array('korzina', $url)) : ?>
+                    <?php if ($ctrl != 'cart') : ?>
 
                     update_header_cart();
 
                     <? endif; ?>
 
-                    <?php if (in_array('korzina', $url)) : ?>
+                    <?php if ($ctrl == 'cart') : ?>
 
                    // var cvm = new cartVM();
 
@@ -840,7 +842,7 @@ else $act = array('', '');
         <div class="header_logo_search_cart">
 
             <?php $this->widget('InfoText', array('isFrame'=>1)); ?>
-            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
+            <? if ($ctrl != 'cart') : ?>
 
             <div class="light_gray_menu">
                 <div class="container">
@@ -876,17 +878,17 @@ else $act = array('', '');
                    <?
                    
                    
-                   if ((in_array('korzina',$url) AND (end($url) != 'korzina')) OR (in_array('cart',$url) AND (end($url) != 'cart')) AND !in_array('orderPay',$url)) : ?>
+                   if (($ctrl == 'cart' AND (!in_array('orderPay',$url)))) : ?>
 
                     <a href="/cart/" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
 
-                    <? elseif (in_array('korzina',$url) AND (end($url) == 'korzina')) : ?>
+                    <? elseif ($ctrl == 'cart') : ?>
                     
                      <a href="/" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
                     
                     <? endif; ?>
 
-                    <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
+                    <? if ($ctrl != 'cart') : ?>
 
                     <div class="span10">
                         <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
@@ -1042,7 +1044,7 @@ else $act = array('', '');
                 })
             </script>
 
-            <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?>
+            <? if ($ctrl != 'cart') : ?>
 
             <div class="index_menu">
 
@@ -1539,7 +1541,7 @@ foreach ($rows as $row) $availCategory[$row['id']] = $row;
         <?= $content; ?>
 
 
-        <? if (!in_array('korzina',$url) AND !in_array('cart',$url)) : ?> 
+        <? if ($ctrl != 'cart') : ?>
 
         <div class="footer">
 
