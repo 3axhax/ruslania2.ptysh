@@ -162,7 +162,7 @@ class CartController extends MyController {
     public function actionView() {
         $data = $this->GetFormRequest();
         if (!empty($data)) {
-            foreach ($data as $id => $value) {
+            foreach ($data as $igetalld => $value) {
                 $this->actionAdd(array_values($value));
             }
         }
@@ -1006,6 +1006,8 @@ class CartController extends MyController {
         list($entity, $id, $quantity, $product, $originalQuantity, $finOrWorldPrice) = $data;
         $type = ProductHelper::IsAvailableForOrder($product) ? Cart::TYPE_ORDER : Cart::TYPE_REQUEST;
 
+        $quantity2 = $originalQuantity;
+
         // Проверить на SKIP и InternetKolvo
         $p = new Product;
         $availCount = $p->IsQuantityAvailForOrder($entity, $id, $quantity);
@@ -1057,7 +1059,14 @@ class CartController extends MyController {
 
             $quantity = $availCount;
             $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
+
+        if ($entity == 30) {
+            $changedStr = sprintf('Количество товара было изменено с %d до %d', $quantity2, $quantity);
         }
+
+        }
+
+
 
         $cart = new Cart;
         $ret = $cart->ChangeQuantity($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorldPrice);

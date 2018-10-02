@@ -1048,7 +1048,7 @@ else $act = array('', '');
                 <?php $this->widget('MainMenu'); ?>
             <?php else: ?>
             <? if ($ctrl != 'cart') : ?>
-
+            
             <div class="index_menu">
 
                 <div class="container">
