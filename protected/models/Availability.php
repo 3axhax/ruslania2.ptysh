@@ -58,6 +58,11 @@ class Availability
     public static function ToStr($item)
     {
         $code = self::GetStatus($item);
+
+        if ($item['entity'] == 30) {
+            return 'В наличии';
+        }
+
         switch ($code)
         {
             case self::AVAIL_IN_SHOP :
