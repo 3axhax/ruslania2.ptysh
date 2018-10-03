@@ -801,6 +801,21 @@ class EntityController extends MyController {
         $this->render('years_list', array('list' => $list, 'entity' => $entity));
     }
 
+    public function actionYearreleasesList($entity) {
+
+        $entity = Entity::ParseFromString($entity);
+        if ($entity === false) $entity = Entity::VIDEO;
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
+        $list = (new YearRetriever)->getAllReleases($entity);
+
+        $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_YEAR_REAL');
+
+        $this->render('yearreleases_list', array('list' => $list, 'entity' => $entity));
+    }
+
     public function actionByPerformer($entity, $pid, $sort = null, $avail = true) {
         $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
@@ -1181,6 +1196,7 @@ class EntityController extends MyController {
 
         $title = Entity::GetTitle($entity, Yii::app()->language);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[Yii::app()->ui->item('A_NEW_YEAR_REAL')] = Yii::app()->createUrl('entity/yearreleaseslist', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('IN_YEAR'), $year);
 
         $yr = new YearRetriever;
@@ -1336,7 +1352,40 @@ class EntityController extends MyController {
 
         $o = new Offer();
         $group = $o->GetItems(Offer::INDEX_PAGE, $entity);
-        $this->render('gift', array('entity' => $entity, 'group' => current($group)['items']));
+
+
+        $title = Entity::GetTitle($entity);
+        $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_PERIODIC_FOR_GIFT');
+
+        $data = FilterHelper::getFiltersData($entity);
+        $lang = Yii::app()->getRequest()->getParam('lang');
+        $cat = new Category();
+        $popular = $cat->result_filter($data, $lang);
+
+        $cid = 67; //Популярные издания
+
+        $category = new Category();
+        $path = $category->GetCategoryPath($entity, $cid);
+
+        $cnt = count($path);
+        $ids = array();
+        $selectedCategory = null;
+
+        for ($i = 0; $i < $cnt; $i++) {
+            $p = $path[$i];
+            if ($i == $cnt - 1) {
+                $selectedCategory = $p;
+            }
+            $ids[] = $p['id'];
+        }
+        $title_cat = ProductHelper::GetTitle($selectedCategory);
+
+        $this->render('gift', array('entity' => $entity,
+            'group' => current($group)['items'],
+            'popular' => $popular,
+            'title_cat' => $title_cat,
+            'cid' => $cid));
     }
 
     private function _checkTagByEntity($tag, $entity) {
