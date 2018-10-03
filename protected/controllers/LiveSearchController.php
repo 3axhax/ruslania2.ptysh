@@ -47,7 +47,6 @@ class LiveSearchController extends MyController {
 				}
 			}
 		}
-		if (empty($result))
 		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
 
