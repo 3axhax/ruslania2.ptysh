@@ -20,20 +20,22 @@ class LiveSearchController extends MyController {
 				/*$list = $sController->getListExactMatch($q, 1, 10);
 				if (empty($list)) */$list = $sController->getList($q, 1, 10);
 				$list = $sController->inDescription($list, $q);
+				$didYouMean = $sController->getDidYouMean($q);
+				$abstractInfo = $sController->getEntitys($q);
 			}
 
+			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
+				$this->ResponseJson(array());
 
 			if (!$isCode) {
-				$abstractInfo = $sController->getEntitys($q);
 				if (!empty($abstractInfo))
 					$result['entitys'] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo), true);
 			}
 
-//			if (!empty($list))
+//			if (!empty($list)||!empty($abstractInfo)||!empty($didYouMean))
 				$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
 
 			if (!$isCode) {
-				$didYouMean = $sController->getDidYouMean($q);
 				if (!empty($didYouMean))
 					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
 			}
@@ -45,6 +47,7 @@ class LiveSearchController extends MyController {
 				}
 			}
 		}
+		if (empty($result))
 		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
 
