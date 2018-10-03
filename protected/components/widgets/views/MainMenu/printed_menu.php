@@ -1,0 +1,10 @@
+<?php /*Created by Кирилл (02.10.2018 23:50)*/ ?>
+<div class="click_arrow"></div>
+<a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED))); ?>"><?= Yii::app()->ui->item("A_NEW_OTHER"); ?></a>
+<div class="dd_box_bg dd_box_bg-slim list_subcategs">
+	<ul class="list_vertical">
+		<?php foreach ($rows as $row): ?>
+			<li><a href="<?= $row['href'] ?>"><?= $row['name'] ?></a></li>
+		<?php endforeach;  ?>
+	</ul>
+</div>
