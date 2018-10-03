@@ -3204,3 +3204,14 @@ div.detail-prop .prop-value li { list-style-type: none; }
 
 .infotext { color: #ed1d24; text-align: center; font-size: 18px; padding: 20px 0; }
 .infotext a { color: #ed1d24; }
+
+.entity_icons { background-color: #edb421; border-radius: 2px; display: inline-block; position: relative; width: 35px; height: 35px; }
+.entity_icons i:before {position: absolute; top: 0; left: 0; color: #fff;font-size: 21px;}
+.entity_icons i.e10:before { content: '\f02d'; top: 8px; left: 8px; }    /*books*/
+.entity_icons i.e15:before { content: '\f001'; top: 7px; left: 8px; }    /*sheetmusic*/
+.entity_icons i.e22:before { content: '\f144'; top: 8px; left: 9px; }    /*music*/
+.entity_icons i.e30:before { content: '\f1ea'; top: 7px; left: 6px; }    /*periodics*/
+.entity_icons i.e50:before { content: '\f0a3'; top: 7px; left: 9px; }    /*printed*/
+.entity_icons i.e40:before { content: '\f008'; top: 7px; left: 7px; }    /*video*/
+.entity_icons i.e60:before { content: '\f278'; top: 8px; left: 6px; }    /*maps*/
+.entity_icons i.e24:before { content: '\f108'; top: 9px; left: 7px; }    /*soft*/

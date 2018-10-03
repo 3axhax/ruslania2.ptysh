@@ -232,7 +232,13 @@ function decline_goods($num) {
             
             <tr>
                 
-                <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" src="/pic1/cart_ibook.gif"></td>
+                <td style="width: 35px; height: 35px;">
+                    <span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
+
+                    <?php /*
+                    <img width="31" height="31" align="middle" alt="" style="vertical-align: middle" src="/pic1/cart_ibook.gif">
+ */ ?>
+                </td>
                 <td>
                     <span class="a"><?=$item['title']?></span>
                     <div class="minitext"><?=$item['quantity']?> <?if ($item['entity'] == 30) { echo 'мес.'; } else {?>шт.<? } ?> x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight']/1000)?> кг</div>

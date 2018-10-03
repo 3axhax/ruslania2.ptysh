@@ -66,6 +66,7 @@ $ui = Yii::app()->ui;
         <link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
         <link href="/new_style/select2.css" rel="stylesheet" type="text/css"/>
 
+        <link rel="stylesheet" href="/new_style/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="/css/template_styles.css" />
         <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
         <link rel="stylesheet" href="/css/opentip.css">

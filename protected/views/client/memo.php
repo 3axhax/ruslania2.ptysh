@@ -25,8 +25,12 @@
 
                 <tr id="row<?=$item['entity'].'_'.$item['id']; ?>">
                     <td width="100%" valign="middle" class="cart1contents1">
+                        <span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
+                        <?php /*
                         <img width="31" height="31" align="middle" alt="" style="vertical-align: middle"
-                            src="/pic1/cart_ibook.gif">&nbsp;&nbsp;<a
+                            src="/pic1/cart_ibook.gif">
+                        */ ?>
+                        &nbsp;&nbsp;<a
                             title="<?=$ui->item("ITEM_MORE_INFO"); ?>"
                             href="<?=$url; ?>" class="maintxt1"><?=ProductHelper::GetTitle($item); ?></a></td>
 
