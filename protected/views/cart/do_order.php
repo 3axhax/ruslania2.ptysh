@@ -891,28 +891,37 @@
         $cartInfo['items'] = array();
         
         $cart = $cart2;
-        
+
+        //var_dump($cart);
+
         foreach ($cart as $item) {
-            
-            $cartInfo['items'][$item['ID']]['title'] = $item['Title'];
-            $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
-            $cartInfo['items'][$item['ID']] = $item['entity'];
+
+            //var_dump($item['Title']);
+
+
+            $cartInfo['items'][(string)$item['ID']]['title'] = $item['Title'];
+            $cartInfo['items'][(string)$item['ID']]['weight'] = $item['UnitWeight'];
+
             
             $price = $item['PriceVAT0'];
             
             $fullweight += $item['UnitWeight'];
             $fullprice += $price * $item['Quantity'];
             $full_count += $item['Quantity'];
-            $cartInfo['items'][$item['ID']]['price'] = $price;
-            $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
+
+
+            $cartInfo['items'][(string)$item['ID']]['entity'] = $item['entity'];
+
+            $cartInfo['items'][(string)$item['ID']]['price'] = $price;
+            $cartInfo['items'][(string)$item['ID']]['quantity'] = $item['Quantity'];
             
         }
         
         $cartInfo['fullInfo']['count'] = $full_count;
         $cartInfo['fullInfo']['cost'] = $fullprice;
         $cartInfo['fullInfo']['weight'] = $fullweight;
-        
-        
+
+        //var_dump($cartInfo);
         echo '<input type="hidden" value="'.$cartInfo['fullInfo']['cost'].'" name="costall" class="costall">';
         
     $user = Yii::app()->user->GetModel();
