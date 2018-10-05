@@ -47,10 +47,11 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'subscriptions',
+		'level_1'=>'subscription',
 		'level_2'=>array(
 			'categories'=>'categories',
 			'types'=>'edition-type',
+			'gift'=>'as-a-gift',
 		),
 	),
 	'video'=>array(
@@ -63,7 +64,7 @@ return array(
 			'subtitles'=>'subtitle-language',
 			'media'=>'product-type',
 			'years'=>'years',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'release-year',
 		),
 	),
 	'printed'=>array(
@@ -106,6 +107,7 @@ return array(
 	'sitemap'=>'sitemap',
 	'me'=>'account',
 	'advsearch'=>'search',
+	'forgot'=>'password-recovery',
 
 
 	'offers'=>'recommendations',

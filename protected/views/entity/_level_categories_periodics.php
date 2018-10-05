@@ -2,7 +2,7 @@
 /*Created by Кирилл (22.08.2018 22:36)*/
 if (!empty($tree) && count($tree) > 0):
 	if (empty($parent)): ?>
-<ul class="b-category-list__item-outer">
+<ul class="b-category-list__item-outer" style="padding-right: 30px;">
 	<?php else: ?>
 <ul class="b-category-list__inner-list js-slide-content-inner-list tglvl<?= $lvl ?>">
 	<?php endif; ?>

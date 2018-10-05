@@ -103,4 +103,17 @@ class YearRetriever
         return Yii::app()->db->createCommand($sql)->queryColumn();
     }
 
+    function getAllReleases($entity) {
+        if (!Entity::checkEntityParam($entity, 'yearreleases')) return array();
+
+        $sql = ''.
+            'select t.release_year '.
+            'from `' . Entity::GetEntitiesList()[$entity]['site_table'] . '` t '.
+            'where (t.release_year is not null) and (t.release_year > 0) '.
+            'group by t.release_year '.
+            'order by t.release_year '.
+            '';
+        return Yii::app()->db->createCommand($sql)->queryColumn();
+    }
+
 }

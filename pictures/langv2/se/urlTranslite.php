@@ -47,10 +47,11 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'tidningar',
+		'level_1'=>'prenumeration',
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'types'=>'typ-av-utgåva',
+			'gift'=>'som-gava',
 		),
 	),
 	'video'=>array(
@@ -63,7 +64,7 @@ return array(
 			'subtitles'=>'undertext-sprak',
 			'media'=>'format',
 			'years'=>'ar',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'utgivningsar',
 		),
 	),
 	'printed'=>array(
@@ -106,6 +107,7 @@ return array(
 	'sitemap'=>'sidokarta',
 	'me'=>'konto',
 	'advsearch'=>'sok',
+	'forgot'=>'losenordaterstallning',
 
 
 	'offers'=>'rekommendationer',

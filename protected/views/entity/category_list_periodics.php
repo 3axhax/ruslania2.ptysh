@@ -4,10 +4,10 @@
 		<div class="b-category-list">
 			<div class="b-category-list__topic"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?></div>
 <?php foreach ($types as $type): ?>
-			<div style="float: left; margin-right: 10px; width: <?= (100/count($types)) ?>%">
+			<div style="float: left; width: <?= (100/count($types)) ?>%">
 				<div>
 					<a href="<?= Yii::app()->createUrl('entity/bytype', array('entity'=>'periodics', 'type'=>$type['id'], 'title'=>ProductHelper::ToAscii($type['title']))) ?>">
-						<?= $type['title'] ?>
+						<?= Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_' . $type['id']) ?>
 					</a>
 				</div>
 	<?php $this->renderPartial('/entity/_level_categories_periodics', array('tree' => $type['categories'], 'entity' => $entity, 'parent'=>false, 'lvl'=>1, 'typeId'=>$type['id'])); ?>

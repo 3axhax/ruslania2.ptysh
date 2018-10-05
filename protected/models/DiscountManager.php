@@ -38,6 +38,21 @@ class DiscountManager
     private static $rusDaysInfo = null;
     private static $discounts = null;
 
+    private static $_offerDay = null;
+
+    static function getOfferDay() {
+        if (self::$_offerDay === null) {
+            $sql = ''.
+                'select entity entity_id, item_id, discount '.
+                'from action_items '.
+                'where (type = 3) '.
+                'limit 1 '.
+            '';
+            self::$_offerDay = Yii::app()->db->createCommand($sql)->queryRow();
+        }
+        return self::$_offerDay;
+    }
+
     public static function GetPrice($uid, $item)
     {
         $discountType = null;
@@ -86,6 +101,11 @@ class DiscountManager
                 if(isset($item['entity']) && $item['entity'] == Entity::PERIODIC) $itemDiscount = $item['discount']; //$itemDiscount = $item['discount'] * 100;
                 else $itemDiscount = (1 - ($item['discount'] / $price)) * 100;
             }
+        }
+
+        $offerDay = self::getOfferDay();
+        if (!empty($offerDay['discount'])&&($offerDay['entity_id'] == $item['entity'])&&($offerDay['item_id'] == $item['id'])&&($offerDay['discount'] > $itemDiscount)) {
+            $itemDiscount = $offerDay['discount'];
         }
 
         if(!empty($itemDiscount))

@@ -65,7 +65,7 @@ $r['components']['urlManager'] = array(
         '<entity:(' . $entities . ')>' => 'entity/list',
 
         '<entity:(' . $entities . ')>/types/<type:(\d+)>' => 'entity/bytype',
-        '<entity:(' . $entities . ')>/years/<year:(\d{4})>' => 'entity/byyear',
+        '<entity:(' . $entities . ')>/byyear/<year:(\d{4})>' => 'entity/byyear',
         '<entity:(' . $entities . ')>/yearreleases/<year:(\d{4})>' => 'entity/byyearrelease',
 
         '<entity:(' . $entities . ')>/byseries/<sid:(\d+)>/<title:(.+)>' => 'entity/byseries',

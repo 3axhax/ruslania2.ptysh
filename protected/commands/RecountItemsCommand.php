@@ -17,6 +17,8 @@ class RecountItemsCommand extends CConsoleCommand {
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'create temporary table _tmp_types (id int, avail_items_type_1 int, avail_items_type_2 int, avail_items_type_3 int, avail_items_type_4 int, primary key(id))';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
+		$sql = 'create temporary table _tmp_position (position int AUTO_INCREMENT, id int, primary key(position), UNIQUE INDEX (id))';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			$sql = 'update ' . $params['site_category_table'] . ' set items_count = 0, avail_items_count = 0';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -35,6 +37,7 @@ class RecountItemsCommand extends CConsoleCommand {
 
 			$sql = 'truncate _tmp_least_categorys';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
+			$this->_updatePosition($entity, $params);
 		}
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
@@ -152,6 +155,28 @@ class RecountItemsCommand extends CConsoleCommand {
 			$isCount = (bool) Yii::app()->db->createCommand('select 1 from ' . $catTable . ' where (items_count = 0) limit 1')->queryScalar();
 		} while ($isCount&&(++$i<10)); // делаю 10 итераций на всякий случай
 
+	}
+
+	private function _updatePosition($entity, $params) {
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql = ''.
+				'insert into _tmp_position (id) '.
+				'select t.id '.
+				'from ' . $params['site_table'] . ' t '.
+					'left join vendors tVendots on (tVendots.id = t.vendor) '.
+					'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
+				'order by ' . SortOptions::GetSQLPrepare($sort, '', $entity) .
+			'';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+			$sql = ''.
+				'update ' . $params['site_table'] . ' t '.
+					'join _tmp_position tTmp using (id) '.
+				'set ' . SortOptions::GetSQL($sort, '', $entity) . ' = tTmp.position '.
+			'';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+			$sql = 'truncate _tmp_position';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+		}
 	}
 
 }

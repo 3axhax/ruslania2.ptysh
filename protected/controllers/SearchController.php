@@ -3,6 +3,7 @@
 class SearchController extends MyController {
 	//количество в результате поиска
 	private $_counts = null;
+	protected $_exactMatch = false;
 
 	/**
 	 * @var DGSphinxSearch
@@ -27,10 +28,12 @@ class SearchController extends MyController {
 		$abstractInfo = array();
 		$didYouMean = array();
 		if (!$isCode) {
+			/*$list = $this->getListExactMatch($q, $page, Yii::app()->params['ItemsPerPage']);
+			if (empty($list)) */$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+//			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
+			$list = $this->inDescription($list, $q);
 			$abstractInfo = $this->getEntitys($q);
 			$didYouMean = $this->getDidYouMean($q);
-			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
-			$list = $this->inDescription($list, $q);
 		}
 
 		if (empty($abstractInfo)) $paginatorInfo = new CPagination(count($list));
@@ -58,7 +61,7 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code[] = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code[] = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code[] = 'isbnnum';
-		if (!preg_match("/[^a-z0-9-]/i", $q)) {
+		if (!preg_match("/[^a-z0-9-]/i", $q)&&preg_match("/\d/i", $q)) {
 			$code[] = 'catalogue';
 		}
 		return $code;
@@ -68,12 +71,21 @@ class SearchController extends MyController {
 		foreach ($code as $codeName) {
 			switch ($codeName) {
 				case 'catalogue':
-					$sql = 'select * from music_catalog where (catalogue = :q) limit 1';
-					$item = Yii::app()->db->createCommand($sql)->queryRow(true, array(':q'=>$q));
-					if (!empty($item)) {
-						$item['is_product'] = true;
-						$item['entity'] = 22;
-						return array('22-' . $item['id']=>$item);
+					$sql = ''.
+//						'(select (220000000 + id) AS `id`, id `real_id`,22 AS `entity`,`in_stock` ,(case when ((`in_shop` > 0) and (`in_shop` < 6)) then (10 - `in_shop`) when (`in_shop` > 5) then 4 when (`econet_skip` > 0) then 3 else 0 end) AS `in_shop`,`avail_for_order` AS `avail`,`econet_skip`,`publisher_id`,`isbn`,`title_ru`,`title_en`,`title_rut`,`title_fi`,`stock_id`,`eancode`,`description_ru`,`description_en`,`description_fi`,`description_rut`,`year`,`media_id` AS `bindingid`, 1 as is_product from `music_catalog` where (catalogue = :q)) '.
+//						'union all (select (300000000 + `id`) AS `id`,`id` AS `real_id`,30 AS `entity`,`in_stock`,(case when ((`in_shop` > 0) and (`in_shop` < 6)) then (10 - `in_shop`) when (`in_shop` > 5) then 4 else `in_shop` end) AS `in_shop`,`avail_for_order` AS `avail`,1 AS `econet_skip`,NULL AS `publisher_id`,NULL AS `isbn`,`title_ru`,`title_en`,`title_rut`,`title_fi`,`stock_id`,`eancode`,`description_ru`,`description_en`,`description_fi`,`description_rut`,0 AS `year`,0 AS `bindingid`, 1 as is_product from `pereodics_catalog` where (issn = :q) or (`index` = :q)) '.
+						'(select `id`, 22 AS `entity` from `music_catalog` where (catalogue = :q)) '.
+						'union all (select `id`,30 AS `entity` from `pereodics_catalog` where (issn = :q) or (`index` = :q)) '.
+					'';
+					$items = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q'=>$q));
+					if (!empty($items)) {
+						$product = array();
+						foreach ($items as $item) {
+							if (empty($product['e' . $item['entity']])) $product['e' . $item['entity']] = array();
+							$product['e' . $item['entity']][] = $item['id'];
+						}
+						return SearchHelper::ProcessProducts2($product, false);
+//						return $items;
 					}
 					break;
 				default:
@@ -81,18 +93,53 @@ class SearchController extends MyController {
 					$this->_search->resetCriteria();
 					$this->_search->SetFilter($codeName, array($q));
 					$find = $this->_search->query('', 'products');
-					if (!empty($find)) {
+					if (!empty($find)&&!empty($find['matches'])) {
 						$product = SearchHelper::ProcessProducts($find);
 						return SearchHelper::ProcessProducts2($product, false);
 					}
 					break;
 			}
 		}
+		$sql = ''.
+			'select `id`, 10 AS `entity` '.
+			'from `books_catalog` '.
+			'where (isbn2 like :q) '.
+				'or (isbn3 like :q) '.
+				'or (isbn4 like :q) '.
+				'or (isbn_wrong like :qPr) '.
+		'';
+		$items = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q'=>$q, ':qPr'=>'%' . $q . '%'));
+		if (!empty($items)) {
+			$product = array();
+			foreach ($items as $item) {
+				if (empty($product['e' . $item['entity']])) $product['e' . $item['entity']] = array();
+				$product['e' . $item['entity']][] = $item['id'];
+			}
+			return SearchHelper::ProcessProducts2($product, false);
+//						return $items;
+		}
 		return array();
 
 	}
 
 	function getEntitys($query) {
+		$sql = ''.
+			'select entity, count(*) counts '.
+			'from _tmp_products '.
+			'group by entity '.
+		'';
+
+		$result = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
+
+		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $data) {
+			//audio не показываем
+			if (!empty($data['entity'])&&($data['entity'] != 20)) {
+				$result[$data['entity']] = $data['counts'];
+			}
+		}
+		return array_filter($result);
+
 		$this->_search->resetCriteria();
 		$filters = array();
 		$avail = $this->GetAvail(1);
@@ -104,20 +151,30 @@ class SearchController extends MyController {
 			}
 		}
 
-		$q = '@* ' . $this->_search->EscapeString($query);
 		$groupby = array(
 			'field'=>'entity',
 			'mode'=>SPH_GROUPBY_ATTR,
 			'order'=>'@group desc',
 		);
-		$res = $this->_search->groupby($groupby)->query($q, 'products');
+		if ($this->_exactMatch) {
+//			$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+			$q = '@(title) "' . $this->_search->EscapeString($query) . '"';
+//			$this->_search->SetMatchMode(SPH_MATCH_ALL);
+			$res = $this->_search->groupby($groupby)->query($q, 'products_no_morphy');
+		}
+		else {
+			$q = '@* ' . $this->_search->EscapeString($query);
+			$res = $this->_search->groupby($groupby)->query($q, 'products');
+		}
+
 		if (empty($res['matches'])) return array();
 
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
 		foreach ($res['matches'] as $data) {
-		    if (!empty($data['attrs']['@count'])) {
+			//audio не показываем
+			if (!empty($data['attrs']['@count'])&&($data['attrs']['@groupby'] != 20)) {
 			    $result[$data['attrs']['@groupby']] = $data['attrs']['@count'];
 		    }
 		}
@@ -131,7 +188,106 @@ class SearchController extends MyController {
 		return array_merge($authors, $categories, $publishers);
 	}
 
+	function getListExactMatch($query, $page, $pp) {
+		$this->_search->resetCriteria();
+		$this->_search->SetLimits(($page-1)*$pp, $pp);
+
+		$filters = array();
+		$avail = $this->GetAvail(1);
+		if ($avail) $filters['avail'] = 1;
+		$e = (int) Yii::app()->getRequest()->getParam('e');
+		if (Entity::IsValid($e)) $filters['entity'] = $e;
+
+		if (!empty($filters)) {
+			foreach ($filters as $name => $value) {
+				$this->_search->SetFilter($name, array($value));
+			}
+		}
+
+//		$q = '@(title_ru,title_rut,title_en,title_fi) "' . $this->_search->EscapeString($query) . '"';
+		$q = '@(title) "' . $this->_search->EscapeString($query) . '"';
+
+//		$this->_search->SetMatchMode(SPH_MATCH_ALL);
+//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "in_shop DESC");
+
+
+		$find = $this->_search->query($q, 'products_no_morphy');
+		if (empty($find)) return array();
+		$this->_exactMatch = true;
+
+		$product = SearchHelper::ProcessProducts($find);
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find['matches'] as $id => $data) {
+			$attr = $data['attrs'];
+			$key = $attr['entity'] . '-' . $attr['real_id'];
+			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+		}
+
+		return $result;
+	}
+
 	function getList($query, $page, $pp) {
+		$filters = array(
+			'query'=>$query,
+			'mode'=>'mode=phrase',
+		);
+		$avail = $this->GetAvail(1);
+		if ($avail) {
+			$table = '_se_products_without_morphy_avail';
+			$tableMorphy = '_se_products_with_morphy_avail';
+		}
+		else {
+			$table = '_se_products_without_morphy';
+			$tableMorphy = '_se_products_with_morphy';
+		}
+
+		$e = (int) Yii::app()->getRequest()->getParam('e');
+		if (Entity::IsValid($e)) $filters['entity'] = 'filter=entity,' . $e;
+		$filters['limit'] = 'limit=10000';
+		$filters['maxmatches'] = 'maxmatches=10000';
+
+		$sql = ''.
+			'create temporary table _tmp_products (primary key (id), index(dictionary_position, spec_position, entity_position, time_position), index(entity)) '.
+			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
+			'FROM ' . $table . ' t '.
+			'WHERE (t.query=:q); '.
+		'';
+		//Война и мир;filter=avail,1;mode=phrase;limit=10000;maxmatches=10000
+		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
+
+		$sql = ''.
+			'insert ignore into _tmp_products '.
+			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
+			'FROM ' . $tableMorphy . ' t '.
+			'WHERE (t.query=:q); '.
+		'';
+		$filters['mode'] = 'mode=boolean';
+		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
+
+		$sql = ''.
+			'select * '.
+			'from _tmp_products '.
+			'order by dictionary_position, spec_position, entity_position, time_position '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+		'';
+		$find = Yii::app()->db->createCommand($sql)->queryAll();
+		if (empty($find)) return array();
+
+		$product = $this->_entityIds($find);
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find as $data) {
+			$key = $data['entity'] . '-' . $data['real_id'];
+			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+		}
+
+		return $result;
+
+
+
+
 		$this->_search->resetCriteria();
 		$this->_search->SetLimits(($page-1)*$pp, $pp);
 
@@ -150,22 +306,25 @@ class SearchController extends MyController {
 		$q = '@* ' . $this->_search->EscapeString($query);
 
 		$this->_search->SetFieldWeights(array(
-			'title_ru'=>1000,
-			'title_rut'=>1000,
-			'title_en'=>1000,
-			'title_fi'=>1000,
-			'title_eco'=>1000,
-			'description_ru'=>100,
-			'description_rut'=>100,
-			'description_en'=>100,
-			'description_fi'=>100,
-			'description_de'=>100,
-			'description_fr'=>100,
-			'description_es'=>100,
-			'description_se'=>100,
+			'title'=>1000,
+			'description'=>100,
+//			'title_ru'=>1000,
+//			'title_rut'=>1000,
+//			'title_en'=>1000,
+//			'title_fi'=>1000,
+//			'title_eco'=>1000,
+//			'description_ru'=>100,
+//			'description_rut'=>100,
+//			'description_en'=>100,
+//			'description_fi'=>100,
+//			'description_de'=>100,
+//			'description_fr'=>100,
+//			'description_es'=>100,
+//			'description_se'=>100,
 		));
-		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, in_shop DESC");
-		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
+//		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "@weight DESC, dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
+		$this->_search->SetSortMode(SPH_SORT_EXTENDED, "dictionary_position ASC, spec_position ASC, entity_position ASC, time_position ASC");
+//		$this->_search->setRankingMode(SPH_RANK_EXPR, 'sum((4*lcs+2*(min_hit_pos==1)+exact_hit*100)*user_weight)*1000+bm25');
 //		$this->_search->SetRankingMode(SPH_RANK_EXPR,'sum(lcs*user_weight+exact_hit)*1000+bm25');
 
 
@@ -282,7 +441,7 @@ class SearchController extends MyController {
 			$oneWordQuery = preg_replace("/\d/ui", '', $oneWordQuery);
 			if (!empty($oneWordQuery)) {
 				$oneWordQuery = '^' . $oneWordQuery . '*';
-				$result = $this->_querySimple($oneWordQuery, 'authors', 0);
+				$result = $this->_querySimple($oneWordQuery, $index, 0);
 			}
 		}
 
@@ -329,24 +488,53 @@ class SearchController extends MyController {
 
 		$limit = 3;
 		$ids = array();
+		$findAuthor = false;
 		foreach ($result as $id=>$item) {
-			if ($item['is_10_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
-			elseif ($item['is_22_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
-			elseif ($item['is_24_author'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
+			if ($item['is_10_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
+				$findAuthor = true;
+			}
+			elseif ($item['is_22_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
+				$findAuthor = true;
+			}
+			elseif ($item['is_24_author'] > 0) {
+				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
+				$findAuthor = true;
+			}
 			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
 			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
 			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
 			if (count($ids) >= $limit) break;
+		}
+		if (empty($findAuthor)&&(count($ids) < $limit)) {
+			$ids10 = $this->_isAuthors(10, array_keys($result));
+			$ids22 = $this->_isAuthors(22, array_keys($result));
+			$ids24 = $this->_isAuthors(24, array_keys($result));
+			foreach ($result as $id=>$item) {
+				if (in_array($id, $ids10)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author']);
+				elseif (in_array($id, $ids22)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'itemsAvail'=>$item['is_22_author']);
+				elseif (in_array($id, $ids24)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'itemsAvail'=>$item['is_24_author']);
+				if (count($ids) >= $limit) break;
+			}
 		}
 		if (empty($ids)) return array();
 
 		$roles = array();
 		foreach($ids as $id=>$r) {
 			$roles[$r['role_id']][$id] = array('real_id'=>$id, 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$id]['itemsAvail'] = $r['itemsAvail'];
 		}
 		$ids = array_keys($ids);
 		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
 		return $result;
+	}
+
+	protected function _isAuthors($entity, $ids) {
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableItemsAuthors = $entityParam['author_table'];
+		$sql = 'select author_id from ' . $tableItemsAuthors . ' where (author_id in (' . implode(',',$ids) . ')) group by author_id';
+		return Yii::app()->db->createCommand($sql)->queryColumn();
 	}
 
 	protected function _getPublishers($query) {
@@ -412,7 +600,8 @@ class SearchController extends MyController {
 
 		$where = array();
 		foreach($result as $cat) {
-			if (empty($cat['entity'])||empty($cat['real_id'])) continue;
+			//audio не показываем
+			if (empty($cat['entity'])||empty($cat['real_id'])||($cat['entity'] == 20)) continue;
 			
 			if (empty($where[$cat['entity']])) $where[$cat['entity']] = array();
 			$where[$cat['entity']][] = '((entity='.intVal($cat['entity']).') AND (real_id='.intVal($cat['real_id']).'))';
@@ -489,4 +678,9 @@ class SearchController extends MyController {
 		);
 	}
 
+	protected function _entityIds($find) {
+		$ids = array();
+		foreach ($find as $data) $ids['e'.$data['entity']][] = $data['real_id'];
+		return $ids;
+	}
 }

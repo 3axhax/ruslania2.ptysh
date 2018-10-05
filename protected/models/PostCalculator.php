@@ -115,7 +115,7 @@ class PostCalculator
             if ($c['not_in_envelope']) $notInEnvelope = true;
         }
 
-        $free = array('type' => Delivery::ToString(Delivery::TYPE_FREE) . ' (Economy)',
+        $free = array('type' => Delivery::ToString(Delivery::TYPE_FREE) . ',',
             'id' => Delivery::TYPE_FREE,
             'currency' => Currency::EUR,
             'currencyName' => 'EUR',
@@ -124,7 +124,7 @@ class PostCalculator
 
         if ($onlySubscription)
         {
-            return array($free);
+            //return array($free);
         }
 
 //        $class = 'Group' . $group . 'PostCalc';

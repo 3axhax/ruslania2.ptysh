@@ -17,7 +17,7 @@
     custody gives a written permission by e-mail or by fax to the purchase of goods.
 
   <br><br>
-  <b>2. Registering</b>
+  <b>2. Registeration</b>
   <br><br>
     <b>2.1</b> In e-commerce orders are accepted by Ruslania only from a registered Customer. A private Customer should 
                   give his credentials (name, address, telephone number and e-mail address; a corporate Customer shall also 
@@ -31,7 +31,8 @@
     <b>2.2</b> The Customer's order information and purchase history are protected by the choosed password. The 
                   Customer is asked to store the password in secresy in order to prevent any outsider to get access to this 
                   information.
-    
+    <br><br>
+	<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">If you wish, you can open and read Ruslania’s privacy statement here (a PDF file on our server):</a>
   <br><br>
   <b>3. Prices</b>
     <br><br>
@@ -53,19 +54,13 @@
   <b>4. Terms of payment</b>
   <br><br>
 
-    <b>4.1</b> At Ruslania's web-store user pays via Finnish 
-                 <a href="http://www.danskebank.fi/en-fi/Personal/Pages/Personal.aspx" class="maintxt" target="new">DanskeBank</a>, <a href="https://www.op.fi/op/private-customers?id=10000&srcpl=1&kielikoodi=en" class="maintxt" target="new">OP-Pohjola</a>
-                 or <a href="http://www.nordea.fi/e/val-index.asp" class="maintxt" target="new">Nordea</a> e-banking or the service of a 
-                 national credit card company 
-                 <a href="http://www.luottokunta.fi/en/" class="maintxt" target="new">Luottokunta</a>, 
-                 which accepts payments with Visa and MasterCard/Eurocard (Credit/Debit), Visa Electron and American Express or the international online payment systems
-                 <a href="http://www.paypal.com/" class="maintxt" target="new">PayPal</a> and <a href="http://www.google.com/wallet/" class="maintxt" target="new">Google Wallet</a>. Also, payments in USD checks are accepted.
+    <b>4.1</b> At Ruslania's web-store user pays via a Finnish third-party company Paytrail, which accepts payments with Visa, MasterCard/Eurocard (Credit/Debit), Visa Electron and Diners or the international online payment systems
+                 <a href="http://www.paypal.com/" class="maintxt" target="new">PayPal</a>. Also, payments in USD checks are accepted.
     Both corporate customers and individuals may be invoiced. Additional info on payment may be seen at
     <a href="http://www.ruslania.com/context-8264/entity-1/language-1.html">How to place an order</a>.
     <br><br>
-    <b>4.2</b> When making a purchase, the Customer is transferred to the web payment service of the matching credit 
-                  card company or bank. Only the information on the accepted/rejected payment and the payment date 
-                  reaches Ruslania. Ruslania doesn't store or have access to any credit card information whatsoever. 
+    <b>4.2</b> When making a purchase, the Customer is transferred to the web payment service of the matching payment accepting company. Only the information on the accepted/rejected payment and the payment date 
+                  reaches Ruslania. Ruslania doesn't have access to any credit card information when payments are processed at the webstore. 
 
     <br><br>
     <b>4.3</b> If the delivery takes place against invoice, the term of payment shall be fourteen (14) days from the 
@@ -91,16 +86,10 @@
                 may vary from 2 to 20 working days, depending on whether the book/item is in stock or not. All the delivery
 		times indicated  during ordering process are estimated and can not be guaranteed.
 
+   
     <br><br>
 
-    <b>5.2</b> In the case of express delivery the parcel tracking service is provided only for the following countries: Belgium,
-		Brazil, Canada, Denmark, Finland, France (European part), Germany, Ireland, Luxembourg, the Netherlands, Portugal,
-		Slovakia, Spain, Sweden. The express deliveries dispatched to all the other countries can not be tracked further
-		than Finland and the delivery time indicated can not be guaranteed.
-
-    <br><br>
-
-    <b>5.3</b> In the event of an exceptionally long term of delivery Ruslania shall without delay inform the Customer 
+    <b>5.2</b> In the event of an exceptionally long term of delivery Ruslania shall without delay inform the Customer 
         about this by e-mail. The Customer has the right to cancel his order, if the item/title should be delivered within 
         an exceptionally long term. Ruslania retains the right to cancel a placed order if a title is out of print/out 
         of stock, or it is exceptionally difficult to attain. In such a case the Customer will be offered a similar product to
@@ -108,7 +97,7 @@
 
     <br><br>
 
-    <b>5.4</b> Should an order include more than one item with different terms of delivery, the order will normally 
+    <b>5.3</b> Should an order include more than one item with different terms of delivery, the order will normally 
         be despatched not until all items are ready for shipment. The delivery may, however, be divided into two 
         or several parties at the discretion of the Customer service. In case of a mail delivery in several parties, the 
         postage shall usually be charged only once (during the first shipment).
@@ -131,17 +120,13 @@
     returned within 14 days from the receipt. A returned item shall be essentially in the same condition as
     it was at the time of receipt. The right of return does not apply to DVD and CD disks,
     if the wrappings have been opened, nor does the right of return apply to computer software and electronic books transferred
-    via the Internet.
+    via the Internet. 
 
     <br><br>
 
     <b>7.2</b> Return policy in business-to-business shall be in compliance with the Finnish Trade Law and fair trade 
                   usage. Any return shall be settled with our Customer service (see <a href="http://www.ruslania.com/context-584/entity-1/language-1.html">Contacts</a>).
     <br><br>
-
-    <b>7.3</b> In the event of return from abroad (from outside Finland), the mailage cost shall be borne by the Customer. 
-                 Any return from abroad shall be settled with the Customer service in advance.
-
 
   <br><br>
   <b>8. Claims</b>

@@ -226,7 +226,7 @@ EEE;
 
     public function textField($attribute, $htmlOptions = array())
     {
-        $htmlOptions['data-bind'] = $this->SetupDataBind($attribute, $htmlOptions);
+       // $htmlOptions['data-bind'] = $this->SetupDataBind($attribute, $htmlOptions);
         CHtml::resolveNameID($this->model, $attribute, $htmlOptions);
         $ret = CHtml::activeTextField($this->model, $attribute, $htmlOptions);
         $this->attributes[$attribute] = array(CKnockoutForm::TYPE_STRING, $htmlOptions['id'], true);

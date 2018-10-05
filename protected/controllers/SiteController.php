@@ -954,6 +954,32 @@ class SiteController extends MyController {
         $this->PerformAjaxValidation($model, 'remind-form');
         $user = null;
 
+        if (Yii::app()->request->isAjaxRequest) {
+
+            $model->attributes = $_POST['User'];
+
+            if ($model->validate()) {
+                $user = User::model()->findByAttributes(array('login' => $model->login));
+                if (empty($user)) {
+                    echo '9';
+                    return;
+                }
+
+                $message = new YiiMailMessage('Ruslania.com password');
+                $message->view = 'forgot';
+                $message->setBody($user->attributes, 'text/html');
+                $message->addTo($user->login);
+                $message->from = 'ruslania@ruslania.com';
+                Yii::app()->mail->send($message);
+                echo '1';
+            } else {
+                echo '10';
+            }
+
+            return;
+
+        }
+
         if (Yii::app()->request->isPostRequest) {
             $model->attributes = $_POST['User'];
             if ($model->validate()) {
@@ -1075,6 +1101,7 @@ class SiteController extends MyController {
             $cid = $_POST['cid_val'];
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
+            $test = FilterHelper::getFiltersData($entity, $cid);
 			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }

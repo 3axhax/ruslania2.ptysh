@@ -22,16 +22,19 @@ class SearchAuthors {
 
 	function getSiteLang() { return $this->_siteLang; }
 
-	function getAuthors($entity, $q, $limit = 20) {
+	function getAuthors($entity, $q, $limit = 20, $useAvail = true) {
 		if ($q == '') return array();
 		if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
 		$authors = array();
-		//сначала ищу если начанается
-		if (mb_strlen($q, 'utf-8') == 1) $authors = $this->getBegin($entity, $q, array(), $limit);
+		//сначала ищу если начинается
+		$count = false;
+		if (mb_strlen($q, 'utf-8') == 1) $authors = $this->getBegin($entity, $q, array(), $limit, $count, true);
 		else {
-			$authors = $this->getLike($entity, $q, array(), $limit, true);
-			if (empty($authors))$authors = $this->getFromCompliances($entity, $q, array(), $limit);
+			$count = false;
+			$authors = $this->getLike($entity, $q, array(), $limit, true, $count, true);
+			$count = false;
+			if (empty($authors)) $authors = $this->getFromCompliances($entity, $q, array(), $limit, $count, true);
 		}
 		//сначала ищу если начанается
 
@@ -40,13 +43,38 @@ class SearchAuthors {
 			$ids = array();
 			foreach ($authors as $author) $ids[] = $author['id'];
 
-			$authors = array_merge($authors, $this->getLike($entity, $q, $ids, $limit - count($ids)));
+			$count = false;
+			$authors = array_merge($authors, $this->getLike($entity, $q, $ids, $limit - count($ids), false, $count, true));
 		}
 		//потом добавляю тем, что содержит
+
+		//если нужны с товарами, которые не продаются
+		if (($limit > count($authors))&&!$useAvail) {
+			$ids = array();
+			foreach ($authors as $author) $ids[] = $author['id'];
+			$count = false;
+			if (mb_strlen($q, 'utf-8') == 1) $authors = array_merge($authors, $this->getBegin($entity, $q, $ids, $limit - count($ids), $count, $useAvail));
+			else {
+				$count = false;
+				$authors = array_merge($authors, $this->getLike($entity, $q, $ids, $limit - count($ids), true, $count, $useAvail));
+			}
+			//сначала ищу если начанается
+
+			//потом добавляю тем, что содержит
+			if ($limit > count($authors)) {
+				$ids = array();
+				foreach ($authors as $author) $ids[] = $author['id'];
+
+				$count = false;
+				$authors = array_merge($authors, $this->getLike($entity, $q, $ids, $limit - count($ids), false, $count, $useAvail));
+			}
+
+		}
+
 		return $authors;
 	}
 
-	function getBegin($entity, $q, $excludes = array(), $limit = '', &$count = false) {
+	function getBegin($entity, $q, $excludes = array(), $limit = '', &$count = false, $useAvail = true) {
 		if ($q == '') return array();
 		if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
@@ -60,13 +88,16 @@ class SearchAuthors {
 		if (!in_array($this->_siteLang, array('ru', 'en'))) $fieldFirst = 'first_en'; //не на всех языках
 
 		$sql = ''.
-			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
+				'if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ', '.
+				'is_' . $entity . '_author availItems '.
 			'from ' . $tableAuthors . ' t '.
-			'where (t.' . $fieldFirst . ' = :q) '.
-				'and (is_' . $entity . '_author > 0) '.
+			(!$useAvail?'join ' . $tableItemsAuthors . ' tA on (tA.author_id = t.id) ':'').
+			'where (ord(t.' . $fieldFirst . ') = ord(:q)) '.
+				($useAvail?'and (is_' . $entity . '_author > 0) ':'').
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 			'group by t.id '.
-			'order by title_' . $this->_siteLang . ' '.
+			'order by ' . (!$useAvail?'is_' . $entity . '_author desc, ':'') . 'title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
 
@@ -95,7 +126,7 @@ class SearchAuthors {
 		return $authors;
 	}
 
-	function getLike($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false) {
+	function getLike($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false, $useAvail = true) {
 		if ($q == '') return array();
 		if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
@@ -106,15 +137,19 @@ class SearchAuthors {
 		$fieldIdItem = $entityParam['author_entity_field'];
 
 		$sql = ''.
-			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
+				'if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ', '.
+				'is_' . $entity . '_author availItems '.
 			'from ' . $tableAuthors . ' t '.
+			(!$useAvail?'join ' . $tableItemsAuthors . ' tA on (tA.author_id = t.id) ':'').
 //				'join ' . $tableItemsAuthors . ' tIA on (tIA.author_id = t.id) '.
 //				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
-				'and (is_' . $entity . '_author > 0) '.
+				($useAvail?'and (is_' . $entity . '_author > 0) ':'').
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
 //			'group by t.id '.
-			'order by title_' . $this->_siteLang . ' '.
+			(!$useAvail?'group by t.id ':'').
+			'order by ' . (!$useAvail?'is_' . $entity . '_author desc, ':'') . 'title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
 		$qStr = $q . '%';
@@ -132,9 +167,19 @@ class SearchAuthors {
 		return $authors;
 	}
 
-	function getFromCompliances($entity, $q, $excludes = array(), $limit = '', &$count = false) {
+	function getFromCompliances($entity, $q, $excludes = array(), $limit = '', &$count = false, $useAvail = true) {
+		if ($q == '') return array();
+		if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableItemsAuthors = $entityParam['author_table'];
+		$condition = array();
+		if ($useAvail) $condition['avail'] = '(is_' . $entity . '_author > 0)';
+		if (!empty($excludes)) $condition['excl'] = '(t.id not in (' . implode(', ', $excludes) . '))';
 		$sql = ''.
-			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ' '.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
+				'if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ', '.
+				'is_' . $entity . '_author availItems '.
 			'from all_authorslist t '.
 				'join ('.
 					'select db_id id '.
@@ -143,9 +188,10 @@ class SearchAuthors {
 						'and (type_id = 4) '.
 					'group by db_id '.
 				') tCompl using (id) '.
-			'where (is_' . $entity . '_author > 0) '.
-				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
-			'order by title_' . $this->_siteLang . ' '.
+			(!$useAvail?'join ' . $tableItemsAuthors . ' tA on (tA.author_id = t.id) ':'').
+			(empty($condition)?'':'where ' . implode(' and ', $condition) . ' ') .
+			(!$useAvail?'group by t.id ':'').
+			'order by ' . (!$useAvail?'is_' . $entity . '_author desc, ':'') . 'title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
 		$qStr = $q . '%';

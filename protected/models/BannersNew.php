@@ -56,7 +56,7 @@ class BannersNew
 	
 	public function getActionItems()
 	{		
-		$sql = 'SELECT * FROM action_items Order By id';
+		$sql = 'SELECT * FROM action_items where (`type` <> 3) Order By id';
 		$actionItems = Yii::app()->db->createCommand($sql)->queryAll();
 		if($actionItems)
 			return $actionItems;

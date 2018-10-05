@@ -88,9 +88,9 @@ $lang = Yii::app()->language;
                         <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
                     </li>
                     <?php if ($i == 2): ?>
-                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'topInList')) ?></li>
+                        <?php $this->widget('Banners', array('location'=>'topInList', 'entity' => $entity, 'page'=>(int) Yii::app()->getRequest()->getParam('page'))) ?>
                     <?php elseif ($i == 20): ?>
-                        <li class="list-banner-content"><?php $this->widget('Banners', array('location'=>'centerInList')) ?></li>
+                        <?php $this->widget('Banners', array('location'=>'centerInList', 'entity' => $entity, 'page'=>(int) Yii::app()->getRequest()->getParam('page'))) ?>
                     <?php endif; ?>
                 <?php endforeach; ?>
 

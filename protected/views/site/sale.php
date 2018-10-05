@@ -1,35 +1,55 @@
-       <!-- content -->
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
-            <!-- /content -->
-<div class="container">
+<!-- content -->
+<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<!-- /content -->
 
-            <?php
-            $lang = 'en';
-            switch(Yii::app()->language)
-            {
-                case 'ru':
-                case 'rut' : $lang = 'ru'; break;
-                case 'fi' : $lang = 'fi'; break;
-            }
+
+
+<?php
+$serGoods = unserialize(Yii::app()->getRequest()->cookies['yourView']->value);
+
+//var_dump(Yii::app()->getRequest()->cookies['yourView']->value);
+
+$arrGoods = array();
+
+if ($serGoods) {
+    $arrGoods = $serGoods;
+}
+
 ?>
+<style>
+    .sale_item .container { width: 901px; }
+    .sale_item { margin-top: 30px; }
+</style>
 
-            <div class="sale_header">
-                <?=$ui->item('SALE_HEADER'); ?>
-            </div>
+<div class="container view_product">
+    
+    
+    
+    <div class="row" style="float: left">
+        <div class="span10" style="width: 901px; margin-left: 20px;">
+		<h1>Большая распродажа в Руслании<br />
+Скидки до 80%!</h1>
+		Отличные предложения во всех категориях товаров.<br />
+Нажав на интересующую вас категорию, вы сможете увидеть все товары со скидками из этой категории.
+                <br /><br />
+                <?php
+                if ($items) {
+                    foreach ($items as $row) {
+                        if (count($row['items']) == 0) {
+                            continue;
+                        }
 
-            <div class="sale_text">
-                <?=$ui->item('SALE_TEXT'); ?>
-            </div>
 
-            <div class="sale">
-                <a href="/books/bycategory/213/reduced-prices"><img src="/pic1/sale/rasprodazhaknig_<?=$lang; ?>.jpg" /></a>
-                <a href="/sheetmusic/bycategory/217/sheet-music-reduced-prices"><img src="/pic1/sale/rasprodazhanot_<?=$lang; ?>.jpg" /></a>
-                <a href="/maps/bycategory/8/reduced-prices"><img src="/pic1/sale/rasprodazhamap_<?=$lang; ?>.jpg" style="margin-right: 0px;" /></a>
-            </div>
+                        $this->renderPartial('/entity/_sale_item', array('items' => $row['items'], 'entity' => $row['Entity'], 'title' => $row['name'], 'link' => $row['url']));
 
-            <div class="sale">
-                <a href="/music/bycategory/21/cd-at-reduced-prices"><img src="/pic1/sale/rasprodazhacd_<?=$lang; ?>.jpg" /></a>
-                <a href="/soft/bycategory/16/reduced-prices"><img src="/pic1/sale/rasprodazhasoft_<?=$lang; ?>.jpg" /></a>
-                <a href="/video/bycategory/43/dvds-at-reduced-prices"><img src="/pic1/sale/rasprodazhadvd_<?=$lang; ?>.jpg"  style="margin-right: 0px;"/></a>
-            </div>
+                    }
+                }
+                ?>
+                
+    </div>
+	<div class="span2">
+	<?php $this->widget('YouView', array()); ?>
+	</div>
+
+</div>
 </div>

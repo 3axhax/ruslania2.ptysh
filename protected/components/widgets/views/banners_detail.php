@@ -1,2 +1,2 @@
 <?php /*Created by Кирилл (04.07.2018 22:12)*/ ?>
-<div class="detail-banner-content"><a href="<?= $href ?>" title="<?= htmlspecialchars($title) ?>"><img src="<?= $img ?>" alt="<?= htmlspecialchars($title) ?>"></a></div>
+<div class="detail-banner-content"><a href="<?= $href ?>" title="<?= htmlspecialchars($title) ?>"><img class="detail-bannerImg" src="<?= $img ?>" alt="<?= htmlspecialchars($title) ?>"></a></div>

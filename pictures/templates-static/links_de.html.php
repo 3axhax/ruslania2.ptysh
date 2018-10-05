@@ -157,14 +157,7 @@
             </td>
           </tr>
 
-      tr>
-      <td class="maintxt" align="left" nowrap="">Music Monster</td>
-      <td class="maintxt" align="right" nowrap="">
-        <a class="maintxt" href="http://clk.tradedoubler.com/click?p=112877&a=2145841&g=17878818" target="_BLANK">
-          <img src="http://impde.tradedoubler.com/imp?type(img)g(17878818)a(2145841)" alt="MusicMonster" style="border: none;">
-              </a>
-      </td>
-      </tr>
+   
           
       <td style="font-size: 80%; font-weight: bold; margin-top: 5px; margin-bottom: 10px">
             

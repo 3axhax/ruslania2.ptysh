@@ -74,12 +74,28 @@
                     <td><?= $form->textField($model, 'middle_name'); ?></td>
                     <td></td>
                 </tr>
+
+                <tr>
+                    <td>Привязка к соцсети</td>
+                    <td style="padding: 5px 0;">
+                        <?
+                        if ($model->network) {
+
+                            echo $model->network . '&nbsp;&nbsp;&nbsp;<a href="?otv=1">отвязать</a>';
+
+                        } else {?>
+                        <script src="//ulogin.ru/js/ulogin.js"></script>
+                        <div style="width: 260px;" id="uLogin" data-ulogin="display=panel;theme=classic;fields=first_name,last_name,email;providers=vkontakte,odnoklassniki,googleplus,facebook,twitter,instagram;redirect_uri=<?=urlencode('/ulogin_mrg.php')?>;mobilebuttons=0;"></div>
+                    <?}?>
+                    </td>
+                </tr>
                 <tr>
                     <td></td>
                     <td colspan="2" style="text-align: left">
                         <?= $ui->item("regform_messages_language"); ?>
                     </td>
                 </tr>
+
                 <tr>
                     <td></td>
                     <td colspan="2" style="text-align: left">
@@ -142,6 +158,7 @@
 
                     </td>
                 </tr>
+
                 <tr>
                     <td></td>
                     <td colspan="2" style="text-align: left;">
@@ -237,11 +254,11 @@
 
                     })
                 </script>
-
                 </tbody>
             </table>
 
             <?php $this->endWidget(); ?>
+
 
             <!-- /content -->
         </div>

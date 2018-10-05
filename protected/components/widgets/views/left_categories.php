@@ -1,8 +1,8 @@
 <?php /*Created by Кирилл (05.06.2018 23:19)*/ ?>
 <h2 class="cattitle"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?>:</h2>
-<ul class="left_list divider">
+<ul class="left_list divider"><?php /*
 	<li>
-<?php if (empty($cid)): Entity::GetTitle($entity)?>
+<?php if (empty($cid)): ?>
 		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity))) ?>">
 			<span class="title__bold"><?= Entity::GetTitle($entity) ?></span>
 		</a>
@@ -12,10 +12,9 @@
 		</a>
 <?php endif; ?>
 	</li>
-	<?php
-	$hide = false;
+	<?php */
 	foreach ($categories as $i=>$cat) : ?>
-	<li<?php if ($i > 5): $hide = true; ?> style="display: none;" <?php endif; ?>>
+	<li>
 		<?php if (!empty($cat['childs'])): ?>
 			<a class="open_subcat subcatlvl1" onclick="show_sc($('ul.sc<?= $cat['id'] ?>'), $(this), 1); return false;"></a>
 		<?php endif; ?>
@@ -23,11 +22,4 @@
 		<?php $this->widget('LeftCategories', array('entity'=>$entity, 'cid'=>$cat['id'], 'catTitle'=>ProductHelper::GetTitle($cat), 'categories'=>$cat['childs'], 'tpl'=>'sub_left_categories')); ?>
 	</li>
 	<?php endforeach; ?>
-	<?php if ($hide): ?>
-		<li onclick="$(this).hide().siblings().show();" class="category_all">
-			<?=Yii::app()->ui->item('A_NEW_VIEW_ALL_CATEGORY'); ?>
-		</li>
-	<?php endif; ?>
 </ul>
-
-<div style="height: 47px"></div>

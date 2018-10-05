@@ -85,6 +85,19 @@ class StaticUrlRule extends CBaseUrlRule {
 				if (isset($this->_pages['offers']))
 					$url = $this->_pages['offers'] . '/';
 				break;
+			case 'offers/view':
+				if (isset($this->_pages['offers'])&&!empty($params['oid'])) {
+					$url = $this->_pages['offers'] . '/';
+					$titles = HrefTitles::get()->getById(0, $route, $params['oid']);
+					if (!empty($titles)) {
+						if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
+						elseif (!empty($titles['en'])) $title = $titles['en'];
+					}
+					if (empty($title)) $url .= $params['oid'] . '/';
+					else $url .= $params['oid'] . '-' . $title . '/';
+					unset($params['oid'], $params['title']);
+				}
+				break;
 			case 'site/static':
 				if (!empty($params['page'])
 					&&isset(self::$_files[$params['page']])
@@ -127,44 +140,61 @@ class StaticUrlRule extends CBaseUrlRule {
 		$pathInfo = mb_strtolower(trim($pathInfo, '/'));
 		if (empty($pathInfo)) return false;
 
+		if (in_array($pathInfo, array('site', 'site/index')))
+			throw new CHttpException(404);;
+
 		if ($page = array_search($pathInfo, $this->_pages)) {
 			if (isset(self::$_files[$page])) {
 				$_REQUEST['page'] = $_GET['page'] = $page;
+				if (method_exists($request, 'setParam')) $request->setParam('page', $page);
 				return 'site/static';
 			}
 			elseif ($page == 'bookshelf') return 'bookshelf/list';
 			elseif ($page == 'me') return 'client/me';
 			elseif ($page == 'cart') return 'cart/view';
-			elseif ($page == 'offers') return 'offers/list';
+			elseif ($page == 'offers') {
+				return 'offers/list';
+			}
 			//
 			else {
 				switch ($page) {
 					case 'for-firms':
 						$_REQUEST['mode'] = $_GET['mode'] = 'firms';
+						if (method_exists($request, 'setParam')) $request->setParam('mode', 'firms');
 						return 'offers/special';
 						break;
 					case 'for-uni':
 						$_REQUEST['mode'] = $_GET['mode'] = 'uni';
+						if (method_exists($request, 'setParam')) $request->setParam('mode', 'uni');
 						return 'offers/special';
 						break;
 					case 'for-lib':
 						$_REQUEST['mode'] = $_GET['mode'] = 'lib';
+						if (method_exists($request, 'setParam')) $request->setParam('mode', 'lib');
 						return 'offers/special';
 						break;
 					case 'for-fs':
 						$_REQUEST['mode'] = $_GET['mode'] = 'fs';
+						if (method_exists($request, 'setParam')) $request->setParam('mode', 'fs');
 						return 'offers/special';
 						break;
 					case 'for-alle2':
 						$_REQUEST['mode'] = $_GET['mode'] = 'alle2';
+						if (method_exists($request, 'setParam')) $request->setParam('mode', 'alle2');
 						return 'offers/special';
 						break;
 				}
 			}
 			return 'site/' . $page;
 		}
+		elseif (preg_match("/^" . $this->_pages['offers'] . "\/(\d+)/ui", $pathInfo, $m)) {
+			$_REQUEST['oid'] = $_GET['oid'] = $m[1];
+			if (method_exists($request, 'setParam')) $request->setParam('oid', $m[1]);
+			return 'offers/view';
+		}
 		elseif (preg_match("/^" . $this->_pages['bookshelf'] . "\/(\d+)/ui", $pathInfo, $m)) {
 			$_REQUEST['id'] = $_GET['id'] = $m[1];
+			if (method_exists($request, 'setParam')) $request->setParam('id', $m[1]);
 			return 'bookshelf/view';
 		}
 		return false;

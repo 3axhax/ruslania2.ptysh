@@ -47,10 +47,11 @@ return array(
 		),
 	),
 	'periodics'=>array(
-		'level_1'=>'lehtitilaukset',
+		'level_1'=>'lehtitilaus',
 		'level_2'=>array(
 			'categories'=>'luokat',
 			'types'=>'julkaisutyyppi',
+			'gift'=>'lahjaksi',
 		),
 	),
 	'video'=>array(
@@ -63,7 +64,7 @@ return array(
 			'audiostreams'=>'aaniraidat',
 			'subtitles'=>'tekstitysten-kieli',
 			'media'=>'tuotteen-tyyppi',
-			'yearreleases'=>'yearreleases',
+			'yearreleases'=>'julkaisuvuosi',
 		),
 	),
 	'printed'=>array(
@@ -106,6 +107,7 @@ return array(
 	'sitemap'=>'sivustokartta',
 	'me'=>'tili',
 	'advsearch'=>'haku',
+	'forgot'=>'salasanan-palautus',
 
 
 	'offers'=>'suosituksia',

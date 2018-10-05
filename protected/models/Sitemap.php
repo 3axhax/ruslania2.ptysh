@@ -26,6 +26,7 @@ class Sitemap {
 	);
 	private $_tagsAll = array(
 		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear', array('pereodics_catalog')),
+		'gift'=>array('', 'A_NEW_PERIODIC_FOR_GIFT', 'gift', '', array()),
 	);
 
 	private $_tagsHand = array(//в итоге получились не теги, но менять название не стал

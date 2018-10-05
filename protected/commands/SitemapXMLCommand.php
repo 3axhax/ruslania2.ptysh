@@ -291,6 +291,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 			foreach ($tagsAll as $tag=>$param) {
 				$funcName = '_' . $tag . 'Xml';
 				if (!in_array($params['site_table'], $param[4])&&method_exists($this, $funcName)) {
+					//TODO:: gift доделать
 					$urlRoot = Yii::app()->createUrl('entity/' . $param[2], array('entity' => Entity::GetUrlKey($entity)));
 					$urlXmlRoot = $xmlRoot->addChild('url');
 					$urlXmlRoot->addChild('loc', $urlRoot);

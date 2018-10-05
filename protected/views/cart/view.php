@@ -54,7 +54,7 @@ $url = $ex;
                         <tr>
                             <th valign="middle"
                                 class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
-								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('SHIPPING'); ?></th>
+								<th valign="middle" align="center" class="cart1header1">Наличие<?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
@@ -74,18 +74,21 @@ $url = $ex;
                                 <table>
 								<tr>
 								<td>
+                                    <span class="entity_icons"><i class="fa e<?= $cart['Entity'] ?>" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
+<?php /*
 								<img width="31" height="31" align="middle"
                                      alt="<?= htmlspecialchars($cart['Title']) ?>" style="vertical-align: middle"
                                      data-bind="attr: { alt: Title}"
                                      src="/pic1/cart_ibook.gif">
+*/ ?>
 								</td>
 								<td style="padding-left: 20px;">
                                     <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
                                         data-bind="attr: { href: Url, title: Title},text: Title"
-                                        class="maintxt1"><?= htmlspecialchars($cart['Title']) ?>
+                                        class="maintxt1" target="_blank"><?= htmlspecialchars($cart['Title']) ?>
                                     </a></div>
                                     <!--<div data-bind="text: Authors"><?= $cart['Authors'] ?></div>-->
-                                <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "><?= htmlspecialchars($cart['InfoField']) ?></p>
+                                <p class="cartInfo" data-bind="text: InfoField, visible: InfoField() != null && InfoField().length > 0 "></p>
 								</td>
 								</tr>
 								</table>
@@ -230,7 +233,7 @@ $url = $ex;
         });
     </script>
 
-<div class="news_box" style="margin-top: 150px;">
+<div class="news_box" style="margin-top: 60px;">
 
 
 		<div class="">
@@ -263,10 +266,10 @@ $url = $ex;
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
     </div>
  
-	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
+	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
 		
 		if ($product['isbn']) {
 			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';

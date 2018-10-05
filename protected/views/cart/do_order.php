@@ -8,6 +8,7 @@
         border-radius: 2px;
         position: relative;
         width: 212px;
+        height: 40px;
     }
     
     label.seld .red_checkbox {
@@ -181,10 +182,102 @@
         background-color: #eaeaea;
     }
     
+    .seld1.act_city {
+        border: none !important;
+        width: auto !important;
+    }    
+
+    label.seld1.act_city .red_checkbox {
+
+        right: -3px !important;
+        top: 28px !important;
+
+    }
     
 </style>
 
+<script src="/js/jquery.cookie.js"></script>
+
 <script>
+    
+    var s = false;
+    
+    function clear_cook() {
+        
+        $.cookie('Address_business_title2', '');
+        $.cookie('Address_business_number12', '');
+        $.cookie('Address_type2', '');
+        $.cookie('Address_receiver_title_name2', '');
+        $.cookie('Address_receiver_last_name2', '');
+        $.cookie('Address_receiver_first_name2', '');
+        $.cookie('Address_country2', '');
+        $.cookie('Address_state_id2', '');
+        $.cookie('Address_city2', '');
+        $.cookie('Address_postindex2', '');
+        $.cookie('Address_streetaddress2', '');
+        $.cookie('Address_contact_email2', '');
+        $.cookie('Address_contact_phone2', '');
+        $.cookie('Address_notes2', '');
+        
+       // $.cookie('Address_notes');
+     
+    }
+    
+    function save_form() {
+        
+        if (s) {
+        
+        $.cookie('Address_business_title2', $('#Address_business_title').val());
+        $.cookie('Address_business_number12', $('#Address_business_number1').val());
+        $.cookie('Address_type2', $('#Address_type:checked').val());
+        $.cookie('Address_receiver_title_name2', $('#Address_receiver_title_name').val());
+        $.cookie('Address_receiver_last_name2', $('#Address_receiver_last_name').val());
+        $.cookie('Address_receiver_first_name2', $('#Address_receiver_first_name').val());
+        $.cookie('Address_receiver_middle_name2', $('#Address_receiver_middle_name').val());
+        $.cookie('Address_country2', $('#Address_country').val());
+        $.cookie('Address_state_id2', $('.select_states select').val());
+        $.cookie('Address_city2', $('#Address_city').val());
+        $.cookie('Address_postindex2', $('#Address_postindex').val());
+        $.cookie('Address_streetaddress2', $('#Address_streetaddress').val());
+        $.cookie('Address_contact_email2', $('#Address_contact_email').val());
+        $.cookie('Address_contact_phone2', $('#Address_contact_phone').val());
+        $.cookie('Address_notes2', $('#Address_notes').val());
+        
+       // $.cookie('Address_notes');
+     
+     // $('title').html($.cookie('Address_state_id'));
+        }
+    }
+    
+    function load_form() {
+        $('#Address_receiver_title_name').val($.cookie('Address_receiver_title_name2'));
+        $('#Address_receiver_last_name').val($.cookie('Address_receiver_last_name2'));
+        $('#Address_receiver_first_name').val($.cookie('Address_receiver_first_name2'));
+        $('#Address_receiver_middle_name').val($.cookie('Address_receiver_middle_name2'));
+        
+        $('#Address_country').val($.cookie('Address_country2'));
+         $('#Address_country').change();
+        
+        $('#Address_city').val($.cookie('Address_city2'));
+        $('#Address_postindex').val($.cookie('Address_postindex2'));
+        $('#Address_streetaddress').val($.cookie('Address_streetaddress2'));
+        $('#Address_contact_email').val($.cookie('Address_contact_email2'));
+        $('#Address_contact_phone').val($.cookie('Address_contact_phone2'));
+        $('#Address_notes').val($.cookie('Address_notes2'));
+        
+        if ($.cookie('Address_type')) {
+            $('#Address_type[value='+$.cookie('Address_type2')+']').click();
+            $('#Address_type[value='+$.cookie('Address_type2')+']').change();
+            $('#Address_business_title').val($.cookie('Address_business_title2'));
+        $('#Address_business_number1').val($.cookie('Address_business_number12'));
+            
+        }
+        
+       // alert($.cookie('Address_state_id'));
+        
+        s = true;
+        
+    }
     
     function add_address(num_cont) {
         
@@ -249,15 +342,20 @@
     
     
     function select_smartpost_row(cont) {
-    
+
+        $('.row_smartpost').hide();
+        $('.more_points').show();
         $('.row_smartpost').removeClass('act');
         $(cont).parent().addClass('act');
-        
+        $(cont).parent().show();
+
+        $('.btn.btn-success', $(cont).parent()).html('Выбран');
+
         $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
-        
+
     }
-    
-    
+
+
     function checkEmail(t) {
         var value = t.value;
         if (value != '') {
@@ -268,7 +366,10 @@
                 type: 'post',
                 success: function (r) {
                     $('#js_forgot').remove();
-                    if (r) { $(t).after(r); $('.order_start').addClass('disabled'); } 
+                    if (r) {
+                        $(t).after(r);
+                        // $('.order_start').addClass('disabled');
+                    }
                 }
             });
         }
@@ -282,88 +383,50 @@
             type: 'post',
             data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
             success: function () {
-                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+
+                window.setTimeout('document.location.href = "<?= Yii::app()->createUrl('cart/variants') ?>";', 1000);
+
+
             }
         });
     }
 
+    function dontClick() {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пожалуйста, введите другой e-mail!</div>';
+
+        window.setTimeout('$(document).ready(function() { $("#js_forgot").remove() })', 1200);
+
+    }
+
     function change_city(cont) {
-        
+
         var csrf = $('meta[name=csrf]').attr('content').split('=');
-        
-        $('.check',$('.seld:visible')).removeClass('active');
-        $('input[type=radio]', $('.seld:visible')).attr('checked','true');
-        $('.seld').css('border','1px solid rgb(204, 204, 204)');
-        $('.seld').removeClass('act');
-        $('.select_dd_box, .delivery_box_sp, .delivery_box').hide();
-        
-        $('.seld #dtype1').parent().css('border','1px solid rgb(100, 113, 127)');
-        $('.check',$('.seld:visible').slice(0,1)).addClass('active');
-        $('.selp #dtype2').parent().addClass('act');
-        
-        
-        $('input[type=radio]', $('.seld:visible').slice(0,1)).attr('checked','true');
-        
-       
-            
-            show_all();
-            
-       
-        
-        
+
+
         if (cont.val() != '') {
-            
-            
+
+
             if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
-             
-              $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
-     
-     $('.select_states').html(data);
-     
-    });
-             
-            } else {
-                
-                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
-                
-                }
-            
-            
-            $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
-                
-                $('.delivery_box, .delivery_box_sp').html(data);
-                $('.box_opacity .op').hide();
-                $('.order_start').removeClass('disabled');
-                sbros_delev();
-                checked_sogl();
-            })
-            
-            //if ($('#Address_contact_phone').val() == '') {
-            
-                $.post('<?=Yii::app()->createUrl('cart')?>getcodecity', { id_country: cont.val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
-                    if (data != '') {        
-                        $('#Address_contact_phone').val('+'+data);
-                    } else {
-                    
-                        $('#Address_contact_phone').val('');
-                    
-                    }
+
+                $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {
+                    id: cont.val(),
+                    YII_CSRF_TOKEN: csrf[1]
+                }, function (data) {
+
+                    $('.select_states').html(data);
+
+                    $('.select_states select').val($.cookie('Address_state_id2'));
+
                 });
-    
-           // }
-            
-            
-            
-            
-        } else {
-            $('.delivery_box').html('');
-            $('.box_opacity .op').show();
-            $('.order_start').addClass('disabled');
-            
+
+            } else {
+
+                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
+
+            }
+
         }
-        
-       
-        
+
     }
     
     function select_row(cont) {
@@ -375,6 +438,8 @@
 
     
     $(document).ready(function() {
+        
+        load_form();
         
         $(document).click(function (event) {
 				if ($(event.target).closest(".qbtn, .info_box_smart").length)
@@ -394,15 +459,20 @@
        
         $('.check',$('.selp')).removeClass('active');
         $('.selp').css('border', '1px solid #ccc');
+        $('.check',$('.seld')).removeClass('active');
+        $('.seld').css('border', '1px solid #ccc');
+        $('input[type=radio]', $('.seld').parent()).attr('checked', 'false');
         
+        $('.cartorder .row label.seld.seld2').css('border', '1px solid #64717f');
+        //$('input[type=radio]', $('.cartorder .row label.seld.seld2')).attr('checked', 'true');
+       // $('.check', $('.cartorder .row label.seld.seld2')).addClass('active');
         
-        $('.cartorder .row label.seld').slice(0,1).css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.cartorder .row label.seld').slice(0,1)).attr('checked', 'true');
-        $('.check', $('.cartorder .row label.seld').slice(0,1)).addClass('active');
-        
-        $('.selp #dtype2').parent().css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
-        $('.check', $('.selp #dtype2').parent()).addClass('active');
+        $('.seld #dtype2').parent().css('border', '1px solid #64717f');
+        $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
+        $('.check', $('.seld #dtype2').parent()).addClass('active');
+    $('.delivery_box').show();
+        $('.seld #dtype2').parent().addClass('act');
+    
     })
     
     function cost_izmena(city_id) {
@@ -425,6 +495,9 @@
 
     }
     
+    var zamena1 = false;
+    var zamena2 = true;
+    
     function checked_sogl() {
      
      var csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -444,6 +517,9 @@
                 
                 $('input.country_id').val(data);
                 
+                
+                
+                
                 cost_izmena(data);
                     
                     $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: $('input.country_id').val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
@@ -453,6 +529,53 @@
                         //$('.order_start').removeClass('disabled');
                         sbros_delev();
                         //checked_sogl();
+                        
+                        if ($('input.country_id').val()=='68' || $('input.country_id').val()=='62' || $('input.country_id').val()=='') {
+                
+                $('.seld1').removeClass('act_city');  
+                
+            } else {
+                $('.seld1').addClass('act_city');  
+            }
+            
+            if ($('input.country_id').val() == '68' || $('input.country_id').val()=='62') {
+                var b1 = $('.dtypes .seld1');
+                var b2 = $('.dtypes .seld2');
+                //$('.dtypes').html('');
+                if (zamena1) {
+
+
+
+                    b2.replaceWith(b1.clone());
+                    b1.replaceWith(b2);
+
+                    zamena1 = false;
+                    zamena2 = true;
+
+                }
+                    
+                  
+
+                $('.zabr_market').html('Забрать в магазине в Хельсинки');
+
+            } else {
+
+                var b1 = $('.dtypes .seld1');
+                var b2 = $('.dtypes .seld2');
+
+                if (zamena2) {
+
+                    b1.replaceWith(b2.clone());
+                    b2.replaceWith(b1);
+
+                    zamena1 = true;
+                    zamena2 = false;
+
+                }
+                
+                 $('.zabr_market').html('Будете в Хельсинки? Отметьте, чтобы забрать в магазине');
+                
+                }
 
                     });
                     
@@ -466,14 +589,17 @@
         }
         if ( !$('select[name=id_address]').val() || !$('select[name=id_address_b]').val() || !$('#confirm').prop('checked') ) {
          
-            $('.order_start').addClass('disabled');
+            //$('.order_start').addClass('disabled');
             $('.box_opacity .op').show();
          
         } else if ( $('select[name=id_address]').val() && $('select[name=id_address_b]').val() && $('#confirm').prop('checked') ) {
             $('.box_opacity .op').hide();
-            $('.order_start').removeClass('disabled');
-         
+
         }
+        
+        
+        
+        
     }
     
     function check_cart_sel(cont,cont2,inputId) {
@@ -609,16 +735,35 @@
        
         var error = 0;
         
-        if ($('#dtype3').parent().hasClass('act')) {
+        if ($('select[name=id_address]').val() == '' || $('select[name=id_address_b]').val() == '') {
+         
+            $('.err_addr').html('Выберите адреса');
+         error = error + 1;
+         $('html, body').scrollTop($('.err_addr').offset().top);
+        } else {
+         
+             $('.err_addr').html('');
+         
+        }
+        
+        //if ($('#dtype3').parent().hasClass('act')) {
         
         
          if ($('#confirm').is(':checked') == false) {
             
             $('.err_confirm').html('Согласитесь с условием');
-            
+
+
+             $('label[for=confirm]').css('padding', '5px');
+             $('label[for=confirm]').css('border', '1px solid rgb(237, 29, 36)');
+             $('label[for=confirm]').css('border-radius', '6px');
+
             //if (error == 0) {
                 
-                $('html, body').scrollTop($('#confirm').offset().top);
+             $('html, body').scrollTop($('#confirm').offset().top);
+             $('label[for=confirm]').css('padding', '');
+             $('label[for=confirm]').css('border', '');
+             $('label[for=confirm]').css('border-radius', '');
                 
            // }
             
@@ -630,26 +775,21 @@
          
         }
         
+        
+        
+        
+        
             
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
             
-            if ($('.delivery_box_sp .rows_checkbox_delivery input').is(':checked') == false) {
-                $('.delivery_box_sp .texterror').css('display', 'inline-block');
-                $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
-                error = error + 1;
-            } else {
-                $('.delivery_box_sp .texterror').html('');
-                $('.delivery_box_sp .texterror').css('display', 'none');
-            }
-         
-        }
+            
         
         
         if ($('#dtype2').parent().hasClass('act')) {
             
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
             
-            if ($('.delivery_box .rows_checkbox_delivery input').is(':checked') == false) {
+            if ($('.delivery_box .row input').is(':checked') == false) {
                 
             $('.delivery_box .texterror').css('display', 'inline-block');    
                 
@@ -669,21 +809,26 @@
         
         //alert(frmall);
         
-            $.post('<?=Yii::app()->createUrl('cart')?>valid/', frmall, function(data) {
+            $.post('<?=Yii::app()->createUrl('cart')?>result/', frmall, function(data) {
 
-                if (data == '1') {
+                 if (data != '') {
 
-                    $('#add-address').submit();
-
-                } else {
-                    alert(data);
+                    if (data == '9') {
+                        alert('Такой e-mail уже есть зарегистрирован!');
+                    } else {
+                        
+                        clear_cook();
+                        
+                        location.href = data;
+                    }
                 }
 
 
             });
         
-        }
+       // }
         
+    }
     }
     
     function check_delivery(cont) {
@@ -701,12 +846,12 @@
      
      var costall = parseFloat($('input.costall').val()).toFixed(2);
      
-      $('.itogo_cost').html(costall + ' ' + $('.rows_checkbox_delivery label').attr('valute'));
+      $('.itogo_cost').html(costall + ' ' + $('.delivery_box .row label').attr('valute'));
      
-     $('.delivery_cost').html('0 '+$('.rows_checkbox_delivery label').attr('valute'));
+     $('.delivery_cost').html('0 '+$('.delivery_box .row label').attr('valute'));
      
      
-      $('.delivery_box .texterror, .delivery_box_sp .texterror').css('display', 'none');
+      $('.delivery_box .texterror').css('display', 'none');
      
      
     }
@@ -746,28 +891,37 @@
         $cartInfo['items'] = array();
         
         $cart = $cart2;
-        
+
+        //var_dump($cart);
+
         foreach ($cart as $item) {
-            
-            $cartInfo['items'][$item['ID']]['title'] = $item['Title'];
-            $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
-            
+
+            //var_dump($item['Title']);
+
+
+            $cartInfo['items'][(string)$item['ID']]['title'] = $item['Title'];
+            $cartInfo['items'][(string)$item['ID']]['weight'] = $item['UnitWeight'];
+
             
             $price = $item['PriceVAT0'];
             
             $fullweight += $item['UnitWeight'];
             $fullprice += $price * $item['Quantity'];
             $full_count += $item['Quantity'];
-            $cartInfo['items'][$item['ID']]['price'] = $price;
-            $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
+
+
+            $cartInfo['items'][(string)$item['ID']]['entity'] = $item['entity'];
+
+            $cartInfo['items'][(string)$item['ID']]['price'] = $price;
+            $cartInfo['items'][(string)$item['ID']]['quantity'] = $item['Quantity'];
             
         }
         
         $cartInfo['fullInfo']['count'] = $full_count;
         $cartInfo['fullInfo']['cost'] = $fullprice;
         $cartInfo['fullInfo']['weight'] = $fullweight;
-        
-        
+
+        //var_dump($cartInfo);
         echo '<input type="hidden" value="'.$cartInfo['fullInfo']['cost'].'" name="costall" class="costall">';
         
     $user = Yii::app()->user->GetModel();
@@ -802,7 +956,7 @@
     
     
     <div class="clearfix"></div>
-        <a href="javascript:;" class="order_start disabled" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
+        <a href="javascript:;" class="order_start" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
     
    
    

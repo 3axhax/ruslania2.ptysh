@@ -5,6 +5,7 @@ class EntityUrlRule extends CBaseUrlRule {
 	private $_entitys = array(), $_other = array(), $_level2 = array();
 	static private $_routes = array(
 		'product/view' =>           array('idName' => 'id',     'nameLevel2' => '',             'useTitle'=>true),
+		'entity/gift' =>            array('idName' => '',       'nameLevel2' => 'gift',),
 		'entity/categorylist' =>    array('idName' => '',       'nameLevel2' => 'categories',),
 		'entity/list' =>            array('idName' => 'cid',    'nameLevel2' => 'categories',   'useTitle'=>true),
 		'entity/publisherlist' =>   array('idName' => '',       'nameLevel2' => 'publishers',),
@@ -115,6 +116,9 @@ class EntityUrlRule extends CBaseUrlRule {
 					else $url = $this->_createLevel3($route, $entityStr, $entityId, 'categories', $params['cid'], $title);
 				}
 				break;
+			case 'entity/gift':
+				$url = $this->_createLevel2($entityStr, self::$_routes[$route]['nameLevel2']);
+				break;
 			default:
 				if (empty(self::$_routes[$route]['idName'])||empty($params[self::$_routes[$route]['idName']]))
 					$url = $this->_createLevel2($entityStr, self::$_routes[$route]['nameLevel2']);
@@ -148,6 +152,7 @@ class EntityUrlRule extends CBaseUrlRule {
 			array_shift($pathInfo);
 			if (empty($pathInfo)) return false;
 			$_REQUEST['lang'] = $_GET['lang'] = $langId;
+			if (method_exists($request, 'setParam')) $request->setParam('lang', $langId);
 		}
 		unset($langGoods);
 
@@ -157,14 +162,14 @@ class EntityUrlRule extends CBaseUrlRule {
 		do {
 			$urlParam = array_shift($pathInfo);
 			switch ($level++) {
-				case 0: if (($route['id'] = $this->_parseLevel1($urlParam)) === false) return false; break;
+				case 0: if (($route['id'] = $this->_parseLevel1($urlParam, $request)) === false) return false; break;
 				case 1:
-					$res = $this->_parseLevel2($urlParam);
+					$res = $this->_parseLevel2($urlParam, $request);
 					if ($res === false) return false;
 					list($route['id'], $route['actionId']) = $res;
 					break;
 				case 2:
-					$res = $this->_parseLevel3($urlParam, $urlParamPrev);
+					$res = $this->_parseLevel3($urlParam, $urlParamPrev, '', $request);
 					if ($res === false) return false;
 					list($route['id'], $route['actionId']) = $res;
 					break;
@@ -227,27 +232,28 @@ class EntityUrlRule extends CBaseUrlRule {
 		return $url . $this->_level2[$entityStr][$name] . '/';
 	}
 
-	private function _parseLevel1($urlParam) {
+	private function _parseLevel1($urlParam, $request) {
 		if ($entity = array_search($urlParam, $this->_entitys)) {
 			$_REQUEST['entity'] = $_GET['entity'] = $entity;
+			if (method_exists($request, 'setParam')) $request->setParam('entity', $entity);
 			return 'entity';
 		}
 		return false;
 	}
 
-	private function _parseLevel2($urlParam) {
+	private function _parseLevel2($urlParam, $request) {
 		if (empty($_GET['entity'])) return false;
 
 		if ($nameLevel2 = array_search($urlParam, $this->_level2[$_GET['entity']])) {
 			if (isset($this->_routesLevel2[$nameLevel2]))
 				return explode('/', $this->_routesLevel2[$nameLevel2]);
 		}
-		else return $this->_parseLevel3($urlParam, $urlParam, 'product/view');
+		else return $this->_parseLevel3($urlParam, $urlParam, 'product/view', $request);
 
 		return false;
 	}
 
-	private function _parseLevel3($urlParam, $urlParamPrev, $route = '') {
+	private function _parseLevel3($urlParam, $urlParamPrev, $route = '', $request) {
 		if (empty($_GET['entity'])) return false;
 		if (empty($route)) {
 			if ($nameLevel2 = array_search($urlParamPrev, $this->_level2[$_GET['entity']])) {
@@ -261,6 +267,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		$urlId = (int) $urlId;
 		if (($urlId > 0)&&!empty($route)&&!empty(self::$_routes[$route]['idName'])) {
 			$_REQUEST[self::$_routes[$route]['idName']] = $_GET[self::$_routes[$route]['idName']] = $urlId;
+			if (method_exists($request, 'setParam')) $request->setParam(self::$_routes[$route]['idName'], $urlId);
 			return explode('/', $route);
 		}
 		return false;

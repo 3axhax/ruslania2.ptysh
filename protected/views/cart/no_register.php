@@ -16,7 +16,7 @@
         top: 20px;
 
     }
-    
+
     label.selt {
         padding: 1.8rem 2rem 2.2rem;
         border: 1px solid #ccc;
@@ -97,7 +97,7 @@
 
     .cart_box {
         overflow: auto;
-        max-height: 565px;
+        max-height: 724px;
     }
 
     .cart_footer { float: right; }
@@ -182,25 +182,43 @@
     }
 
 
+
+
+
+    .seld1.act_city {
+        border: none !important;
+        width: auto !important;
+    }    
+
+    label.seld1.act_city .red_checkbox {
+
+        right: -3px !important;
+        top: 28px !important;
+
+    }
+
+
 </style>
+
+<script src="/js/jquery.cookie.js"></script>
 
 <script>
 
     function checkForm() {
 
-
+        
 
     }
 
 
     function select_smartpost_row(cont) {
-        
+
         $('.row_smartpost').hide();
         $('.more_points').show();
         $('.row_smartpost').removeClass('act');
         $(cont).parent().addClass('act');
         $(cont).parent().show();
-        
+
         $('.btn.btn-success', $(cont).parent()).html('Выбран');
 
         $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
@@ -220,7 +238,7 @@
                     $('#js_forgot').remove();
                     if (r) {
                         $(t).after(r);
-                        $('.order_start').addClass('disabled');
+                       // $('.order_start').addClass('disabled');
                     }
                 }
             });
@@ -235,26 +253,38 @@
             type: 'post',
             data: 'User[login]=' + email + '&' + csrf[0] + '=' + csrf[1],
             success: function () {
-                document.location.href = '<?= Yii::app()->createUrl('cart/variants') ?>';
+
+                window.setTimeout('document.location.href = "<?= Yii::app()->createUrl('cart/variants') ?>";', 1000);
+
+
             }
         });
     }
+
+    function dontClick() {
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пожалуйста, введите другой e-mail!</div>';
+
+        window.setTimeout('$(document).ready(function() { $("#js_forgot").remove() })', 1200);
+
+    }
+
+
     function cost_izmena(city_id) {
 
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1] }, function(data) {
+        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', {id_country: city_id, YII_CSRF_TOKEN: csrf[1]}, function (data) {
 
             var al = JSON.parse(data);
-            
+
             //alert(al.fullpricehidden);
-            
+
             $('.cart_header').html(al.cart_header);
             $('table.cart').html(al.cart);
             $('.footer2').html(al.footer2);
             $('.footer3').html(al.footer3);
             $('input.costall').val(al.fullpricehidden);
-            
+
         });
 
     }
@@ -271,48 +301,67 @@
         $('.seld').css('border', '1px solid rgb(204, 204, 204)');
         $('.seld').removeClass('act');
         $('.delivery_box_sp, .delivery_box').hide();
-        
-        check_cart_sel($('.selp #dtype2').parent(),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();
-        
+
+        check_cart_sel($('.selp #dtype2').parent(), 'seld', 'dtype2');
+        showALL();
+        hide_oplata(1);
+        $('.delivery_box_sp').hide();
+        $('.rows_checkbox_delivery input').prop('checked', false);
+        $('.delivery_box').show();
+        $('.delivery_name').html('Доставка почтой');
+        sbros_delev();
+
         $('.seld #dtype2').parent().css('border', '1px solid rgb(100, 113, 127)');
         $('.check', $('.seld #dtype2').parent()).addClass('active');
-        $('.selp #dtype2').parent().addClass('act');
-        
+        $('.seld #dtype2').parent().addClass('act');
+
         //$('.selp #dtype2').parent().click();
 
         $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
-        
+
         //show_all();
 
 
         if (cont.val() != '') {
-            
+
             if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
-             
-              $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
-     
-     $('.select_states').html(data);
-     
-    });
-             
+
+                $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+
+                    $('.select_states').html(data);
+                    
+                    if ($.cookie('Address_country')) {
+         
+                       $('.select_states select').val($.cookie('Address_state_id'));
+
+                    }
+                    
+                });
+
             } else {
-                
+
                 $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
-                
-                }
-            
+
+            }
+
 
             cost_izmena(cont.val());
-            
-           
-            
-            if (cont.val() == 68) {
+
+            if (cont.val()==68 || cont.val()==62 || cont.val()=='') {
+                
+                $('.seld1').removeClass('act_city');  
+                
+            } else {
+                $('.seld1').addClass('act_city');  
+            }
+
+            if (cont.val() == 68 || cont.val()==62) {
                 var b1 = $('.dtypes .seld1');
                 var b2 = $('.dtypes .seld2');
                 //$('.dtypes').html('');
-                 if (zamena1) {
-            
-                
+                if (zamena1) {
+
+
 
                     b2.replaceWith(b1.clone());
                     b1.replaceWith(b2);
@@ -321,37 +370,42 @@
                     zamena2 = true;
 
                 }
-                
-                
-                $('.zabr_market').html('Забрать в магазине');
-             
+                    
+                  
+
+                $('.zabr_market').html('Забрать в магазине в Хельсинки');
+
             } else {
-                
+
                 var b1 = $('.dtypes .seld1');
                 var b2 = $('.dtypes .seld2');
-                
-                if( zamena2 ) {
-                
+
+                if (zamena2) {
+
                     b1.replaceWith(b2.clone());
                     b2.replaceWith(b1);
-                    
+
                     zamena1 = true;
                     zamena2 = false;
-                    
+
                 }
+
+               // $('.seld1').addClass('act_city');
                 
-                $('.zabr_market').html('Забрать в магазине в Хельсинки');
-             
+
+
+                $('.zabr_market').html('Будете в Хельсинки? Отметьте, чтобы забрать в магазине');
+
             }
-            
+
 
             $.post('<?= Yii::app()->createUrl('cart') ?>getdeliveryinfo2', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
 
                 $('.delivery_box').html(data);
-                $('.box_opacity .op').hide();
-                $('.order_start').removeClass('disabled');
+                //$('.box_opacity .op').hide();
+               // $('.order_start').removeClass('disabled');
                 sbros_delev();
-                //checked_sogl();
+                checked_sogl();
 
             });
 
@@ -381,7 +435,7 @@
         } else {
             $('.delivery_box').html('');
             $('.box_opacity .op').show();
-            $('.order_start').addClass('disabled');
+            //$('.order_start').addClass('disabled');
 
         }
 
@@ -395,10 +449,95 @@
         $('.select_dd_popup').html('');
         $('.select_dd_popup').hide();
     }
-
+    
+    
+    var s = false;
+    
+    function clear_cook() {
+        
+        $.cookie('Address_business_title', '');
+        $.cookie('Address_business_number1', '');
+        $.cookie('Address_type', '');
+        $.cookie('Address_receiver_title_name', '');
+        $.cookie('Address_receiver_last_name', '');
+        $.cookie('Address_receiver_first_name', '');
+        $.cookie('Address_country', '');
+        $.cookie('Address_state_id', '');
+        $.cookie('Address_city', '');
+        $.cookie('Address_postindex', '');
+        $.cookie('Address_streetaddress', '');
+        $.cookie('Address_contact_email', '');
+        $.cookie('Address_contact_phone', '');
+        $.cookie('Address_notes', '');
+        
+       // $.cookie('Address_notes');
+     
+    }
+    
+    function save_form() {
+        
+        if (s) {
+        
+        $.cookie('Address_business_title', $('#Address_business_title').val());
+        $.cookie('Address_business_number1', $('#Address_business_number1').val());
+        $.cookie('Address_type', $('#Address_type:checked').val());
+        $.cookie('Address_receiver_title_name', $('#Address_receiver_title_name').val());
+        $.cookie('Address_receiver_last_name', $('#Address_receiver_last_name').val());
+        $.cookie('Address_receiver_first_name', $('#Address_receiver_first_name').val());
+        $.cookie('Address_receiver_middle_name', $('#Address_receiver_middle_name').val());
+        $.cookie('Address_country', $('#Address_country').val());
+        $.cookie('Address_state_id', $('.select_states select').val());
+        $.cookie('Address_city', $('#Address_city').val());
+        $.cookie('Address_postindex', $('#Address_postindex').val());
+        $.cookie('Address_streetaddress', $('#Address_streetaddress').val());
+        $.cookie('Address_contact_email', $('#Address_contact_email').val());
+        $.cookie('Address_contact_phone', $('#Address_contact_phone').val());
+        $.cookie('Address_notes', $('#Address_notes').val());
+        
+       // $.cookie('Address_notes');
+     
+      $('title').html($.cookie('Address_state_id'));
+        }
+    }
+    
+    function load_form() {
+        
+        
+        
+        $('#Address_receiver_title_name').val($.cookie('Address_receiver_title_name'));
+        $('#Address_receiver_last_name').val($.cookie('Address_receiver_last_name'));
+        $('#Address_receiver_first_name').val($.cookie('Address_receiver_first_name'));
+        $('#Address_receiver_middle_name').val($.cookie('Address_receiver_middle_name'));
+        
+        
+        
+        $('#Address_country').val($.cookie('Address_country'));
+         $('#Address_country').change();
+        $('.select_states select').val($.cookie('Address_state_id'));
+        $('#Address_city').val($.cookie('Address_city'));
+        $('#Address_postindex').val($.cookie('Address_postindex'));
+        $('#Address_streetaddress').val($.cookie('Address_streetaddress'));
+        $('#Address_contact_email').val($.cookie('Address_contact_email'));
+        $('#Address_contact_phone').val($.cookie('Address_contact_phone'));
+        $('#Address_notes').val($.cookie('Address_notes'));
+        
+        if ($.cookie('Address_type')) {
+            $('#Address_type[value='+$.cookie('Address_type')+']').click();
+            $('#Address_type[value='+$.cookie('Address_type')+']').change();
+            $('#Address_business_title').val($.cookie('Address_business_title'));
+        $('#Address_business_number1').val($.cookie('Address_business_number1'));
+            
+        }
+        
+       // alert($.cookie('Address_state_id'));
+        
+        s = true;
+        
+    }
 
     $(document).ready(function () {
-
+        
+        load_form();
 
         $(document).click(function (event) {
             if ($(event.target).closest(".qbtn, .info_box_smart").length)
@@ -406,22 +545,24 @@
             $('.info_box_smart').hide();
             event.stopPropagation();
         });
-        
+
         $(document).click(function (event) {
-				if ($(event.target).closest(".qbtn2,.info_box").length)
-				return;
-				$('.info_box').hide();
-				event.stopPropagation();
-			});
+            if ($(event.target).closest(".qbtn2,.info_box").length)
+                return;
+            $('.info_box').hide();
+            event.stopPropagation();
+        });
 
 
         $('.check', $('.selp')).removeClass('active');
         $('.selp').css('border', '1px solid #ccc');
 
-
         $('.cartorder .row label.seld').slice(1, 2).css('border', '1px solid #64717f');
-        $('input[type=radio]', $('.cartorder .row label.seld').slice(0, 1)).attr('checked', 'true');
-        $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
+        
+        
+        
+       // $('input[type=radio]', $('.cartorder .row label.seld #dtype2').slice(0, 1)).attr('checked', 'true');
+       // $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
 
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
@@ -436,13 +577,13 @@
 
         if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
 
-            $('.order_start').addClass('disabled');
-
+           // $('.order_start').addClass('disabled');
+            $('.box_opacity .op').show();
 
         } else if ($('#Address_country').val() && $('#confirm').prop('checked')) {
 
-
-            $('.order_start').removeClass('disabled');
+            $('.box_opacity .op').hide();
+           // $('.order_start').removeClass('disabled');
 
         }
 
@@ -489,6 +630,16 @@
             $('.oplata4, .oplata7').hide();
 
         }
+        
+        if ($('#Address_country').val()==68 || $('#Address_country').val()==62) {
+                
+                $('.seld1').removeClass('act_city');  
+                
+            } else {
+                $('.seld1').addClass('act_city');  
+            }
+        
+        
 
 
         $('.selp span.check.active').parent().parent().parent().addClass('act');
@@ -605,7 +756,7 @@
         } else {
             $('#Address_receiver_first_name').removeClass('error');
             $('.texterror', $('#Address_receiver_first_name').parent()).html('');
-        }
+    }
 
         if (!$('#Address_country').val()) {
             $('#Address_country').addClass('error');
@@ -675,39 +826,30 @@
             $('input.error').slice(0, 1).focus();
 
         }
-        
-         if ($('#confirm').is(':checked') == false) {
-            
+
+        if ($('#confirm').is(':checked') == false) {
+
             $('.err_confirm').html('Согласитесь с условием');
-            
+
+            $('label[for=confirm]').css('padding', '5px');
+            $('label[for=confirm]').css('border', '1px solid rgb(237, 29, 36)');
+            $('label[for=confirm]').css('border-radius', '6px');
+
             if (error == 0) {
-                
+
                 $('html, body').scrollTop($('#confirm').offset().top);
-                
+
             }
-            
+
             error = error + 1;
-            
+
         } else {
-         
+
             $('.err_confirm').html('');
-         
-        }
-        
 
-        if ($('#dtype3').parent().hasClass('act')) {
-
-
-            //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
-
-            if ($('.delivery_box_sp .rows_checkbox_delivery input').is(':checked') == false) {
-                $('.delivery_box_sp .texterror').css('display', 'inline-block');
-                $('.delivery_box_sp .texterror').html('Выберите тариф доставки');
-                error = error + 1;
-            } else {
-                $('.delivery_box_sp .texterror').html('');
-                $('.delivery_box_sp .texterror').css('display', 'none');
-            }
+            $('label[for=confirm]').css('padding', '');
+            $('label[for=confirm]').css('border', '');
+            $('label[for=confirm]').css('border-radius', '');
 
         }
 
@@ -716,7 +858,7 @@
 
             //alert($('.delivery_box .rows_checkbox_delivery input').is(':checked'));
 
-            if ($('.delivery_box .rows_checkbox_delivery input').is(':checked') == false) {
+            if ($('.delivery_box .row input').is(':checked') == false) {
 
                 $('.delivery_box .texterror').css('display', 'inline-block');
 
@@ -728,22 +870,26 @@
             }
 
         }
-        
-        
-       
+
+
+
 
         if (error == 0) {
 
             //alert(frmall);
 
-            $.post('<?= Yii::app()->createUrl('cart') ?>valid/', frmall, function (data) {
+            $.post('<?= Yii::app()->createUrl('cart') ?>result/', frmall, function (data) {
 
-                if (data == '1') {
+                if (data != '') {
 
-                    $('#add-address').submit();
-
-                } else {
-                    //alert(data);
+                    if (data == '9') {
+                        alert('Такой e-mail уже есть зарегистрирован!');
+                    } else {
+                        
+                        clear_cook();
+                        
+                        location.href = data;
+                    }
                 }
 
 
@@ -768,11 +914,11 @@
 
         var costall = parseFloat($('input.costall').val()).toFixed(2);
 
-        $('.itogo_cost').html(costall + ' ' + $('.delivery_box label').attr('valute'));
+        $('.itogo_cost').html(costall + ' ' + $('.valute').val());
 
-        $('.delivery_cost').html('0 ' + $('.delivery_box label').attr('valute'));
-        
-        
+        $('.delivery_cost').html('0 ' + $('.valute').val());
+
+
         $('.selt .check').removeClass('active');
         $('.selt input').removeAttr('checked');
         $('.select_dd_box').hide();
@@ -843,17 +989,21 @@
         }
 
         $fullweight += $item['InCartUnitWeight'];
-        
-        if ($item['InCartUnitWeight'] == '0') { $t1 = true; }
-        if ($item['InCartUnitWeight'] != '0') { $t2 = true; }
-        
 
+        if ($item['InCartUnitWeight'] == '0') {
+            $t1 = true;
+        }
+        if ($item['InCartUnitWeight'] != '0') {
+            $t2 = true;
+        }
+
+        $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
         $cartInfo['items'][$item['id']]['price'] = $price;
         if ($item['entity'] == 30) {
 
-            $item['quantity'] = 1;
+            $item['quantity'] = $item['quantity'];
             $fullprice += $price;
-            $cartInfo['items'][$item['id']]['quantity'] = 1;
+            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
         } else {
             $fullprice += $price * $item['quantity'];
             $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
@@ -881,20 +1031,20 @@
         'mode' => 'new',
         'afterAjax' => 'addrInserted', 'cart' => $cartInfo));
     ?>
-    
-    <?php if ($t1 AND $t2) : ?>
-    
-    <script>
-    
-        $(document).ready(function() {
-            
-            $('.add_cost').show();
-            
-        })
-    
-    </script>
-    
-    <?php endif; ?>
+
+<?php if ($t1 AND $t2) : ?>
+
+        <script>
+
+            $(document).ready(function () {
+
+                $('.add_cost').show();
+
+            })
+
+        </script>
+
+<?php endif; ?>
 
     <div class="cart_footer  footer1" style="width: 553px;">
         Стоимость доставки <span class="delivery_cost">0 &euro;</span> <span class="add_cost" style="font-weight: bold; display: none;">(в корзине имеются товары с платной доставкой)</span>
@@ -916,7 +1066,7 @@
 
 
     <div class="clearfix"></div>
-    <a href="javascript:;" class="order_start disabled" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
+    <a href="javascript:;" class="order_start" style="float: right; margin-left: 320px; display: block" onclick="sendforma();">Оформить заказ</a>     
 
 
 

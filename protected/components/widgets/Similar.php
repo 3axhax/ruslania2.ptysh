@@ -42,19 +42,42 @@ class Similar extends CWidget {
 			if (!empty($ids)) {
 				foreach ($p->GetProductsV2($entity, $ids) as $item) {
 					$item['status'] = $p->GetStatusProduct($entity, $item['id']);
+					$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+					$item['priceData']['unit'] = '';
+					if ($entity == Entity::PERIODIC) {
+						$issues = Periodic::getCountIssues($item['issues_year']);
+						if (!empty($issues['show3Months'])) {
+							$item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+							$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/4;
+							$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/4;
+							$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/4;
+						}
+						elseif (!empty($issues['show6Months'])) {
+							$item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+							$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/2;
+							$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/2;
+							$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/2;
+						}
+						else {
+							$item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+						}
+					}
 					$products[] = $item;
 				}
 			}
 		}
+		Debug::staticRun(array($products));
 		return $products;
 	}
 
 	private function _getSimilarIds() {
 		$sql = ''.
-			'select similar_id, similar_entity '.
-			'from `similar_items` '.
-			'where (`item_id` = ' . $this->_params['item']['id'] . ') and (`item_entity` = ' . $this->_params['entity'] . ') '.
-			'order by similar_id desc '.
+			'select t.similar_id, t.similar_entity '.
+			'from `similar_items` t '.
+				'join ' . Entity::GetEntitiesList()[$this->_params['entity']]['site_table'] . ' tG on (tG.id = t.`item_id`) and (tG.avail_for_order = 1) '.
+			'where (t.`item_id` = ' . $this->_params['item']['id'] . ') '.
+				'and (t.`item_entity` = ' . $this->_params['entity'] . ') '.
+			'order by t.similar_id desc '.
 			'limit 10 '.
 		'';
 		$items = array();

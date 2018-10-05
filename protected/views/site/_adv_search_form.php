@@ -29,7 +29,7 @@
 
         <tr>
             <td><?= $ui->item('Related categories'); ?>:</td>
-            <td><select name="+cid"
+            <td><select name="cid"
                         data-bind="options: Categories, optionsText: 'Name',
                          optionsCaption: '---',
                         optionsValue: 'ID', value: CID"></select>
@@ -119,7 +119,7 @@
             {
                 self.Categories.removeAll();
                 self.CID(0);
-                $.getJSON('site/categorylistjson', { e: e }, function (json)
+                $.getJSON('<?= Yii::app()->createUrl('site/categorylistjson') ?>', { e: e }, function (json)
                 {
                     ko.mapping.fromJS(json, {}, self.Categories);
                     if (firstTime && <?=$cid; ?> > 0 && e == <?=$e; ?>) self.CID(<?=$cid; ?>);

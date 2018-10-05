@@ -16,9 +16,14 @@
               $total += $totalLine;
         ?>
     <tr>
-        <td width="100%" valign="middle" class="cart1contents1"><img width="31" height="31" align="middle"
+        <td width="100%" valign="middle" class="cart1contents1">
+            <span class="entity_icons"><i class="fa e<?= $c['Entity'] ?>"></i></span>
+            <?php /*
+            <img width="31" height="31" align="middle"
                                                                      style="vertical-align: middle"
-                                                                     src="/pic1/cart_ibook.gif">&nbsp;&nbsp;<a
+                                                                     src="/pic1/cart_ibook.gif">
+ */ ?>
+            &nbsp;&nbsp;<a
                 title="Получить дополнительную информацию об этом товаре"
                 href="<?=$c['Url']; ?>" class="maintxt1"><?=CHtml::encode($c['Title']); ?></a></td>
         <td valign="middle" nowrap="" align="center" class="cart1contents1"><?=CHtml::encode($c['PriceStr']); ?></td>

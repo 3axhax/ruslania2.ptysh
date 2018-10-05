@@ -500,7 +500,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 </div>
             <?php endif; ?>
 
-			<?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC, Entity::BOOKS))) :
+			<?php if (!empty($item['isbn'])&&in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::BOOKS))) :
                 //isbn только для книг и нот
                 $name = 'ISBN';
                 if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
@@ -512,13 +512,15 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 </div>
             <?php endif; ?>
 			<?php /* на конференции решили ean показывать внизу в описании
- if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::SHEETMUSIC)))) : ?>
+ задание https://dfaktor.bitrix24.ru/company/personal/user/836/tasks/task/view/7394/
+ */
+            if (!empty($item['eancode'])&&(in_array($entity, array(Entity::SHEETMUSIC, Entity::MUSIC)))) : ?>
                 <div class="authors" style="margin-bottom:5px;">
                     <div style="float: left;" class="nameprop">EAN</div>
                     <div style="padding-left: 253px;"><?= $item['eancode'] ?></div>
                     <div class="clearBoth"></div>
                 </div>
-            <?php endif; */?>
+            <?php endif; ?>
 
     <?php if ($item['entity'] == Entity::PERIODIC) : ?>
 			
@@ -1114,14 +1116,22 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <?php else:
                     $name = 'ISBN';
                     if ($entity == Entity::SHEETMUSIC) $name = 'ISMN/ISBN';
-                    if (!empty($item['eancode']) ): ?>
+                    if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::MUSIC, Entity::SHEETMUSIC)))): ?>
         <div class="detail-prop">
             <div class="prop-name">EAN:</div>
             <div class="prop-value"><?= $item['eancode']; ?></div>
             <div class="clearBoth"></div>
         </div>
                 <?php endif; ?>
-                    
+
+                <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>
+        <div class="detail-prop">
+            <div class="prop-name"><?= $name ?>:</div>
+            <div class="prop-value"><?= $item['isbn']; ?></div>
+            <div class="clearBoth"></div>
+        </div>
+                <?php endif ?>
+
                     <?php if (!empty($item['isbn2'])) : ?>
         <div class="detail-prop">
             <div class="prop-name"><?= $name ?>:</div>

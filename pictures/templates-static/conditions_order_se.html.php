@@ -99,22 +99,20 @@ avh&auml;mtning i butiken slipper du frakt- och expeditionskostnader.
 <br><br>
 <b>Betalningss&auml;tt</b>
 <br>
+Du kan betala din best&auml;llning med <a href="https://www.paytrail.com/en" target="new" class="maintxt23">Paytrail</a> eller betalningssystemen <a href="http://www.paypal.com" class="maintxt23" target="new">Paypal</a>. Med Paytrail du kan betala med Nordiska n&auml;tbankstj&auml;nster, Visa, MasterCard, EuroCard(Debit/Credit), Visa Electron, Maestro, Diners, American Express betal- och kreditkort. Dankort kan anv&auml;ndas om det har kreditkort bef&aring;gat.
 
-Du kan betala din best&auml;llning med
-<a href="http://www.danskebank.fi/sv-fi/Privat/Pages/Privat.aspx" class="maintxt23" target="new">DanskeBank</a>, <a href="http://www.nordea.fi/729000.html" class="maintxt23" target="new">Nordea</a> och <a href="https://www.op.fi/op" class="maintxt23" target="new">OP-Pohjola</a> 
-n&auml;tbankstj&auml;nster, med Visa, MasterCard, EuroCard(Debit/Credit), Visa Electron, American Express betal-
-och kreditkort och &ouml;ver betalningssystemen <a href="http://www.paypal.com" class="maintxt23" target="new">Paypal</a> och <a href="http://www.google.com/wallet/" class="maintxt" target="new">Google Wallet</a>. Du kan ocks&aring;
+ Du kan ocks&aring;
 f&ouml;rskottsbetala best&auml;llningen till Ruslanias bankkonto (v&aring;ra
 bankuppgifter finns p&aring; webbsidan f&ouml;r betalningss&auml;tt).
 Best&auml;llningen expedieras omedelbart n&auml;r vi f&aring;r uppgift om att
-betalning har skett. Till organisationer i EU-l&auml;nder och till
+betalning har skett. <br>Till organisationer i EU-l&auml;nder och till
 privatpersoner i Finland kan vi dessutom leverera mot faktura. Best&auml;llare
 i Finland f&aring;r fakturan tillsammans med de levererade varorna. Privatkunder utomlands m&aring;ste betala i
 f&ouml;rskott. De best&auml;llda varorna skickas omedelbart n&auml;r betalning
 kommer till Ruslania. Om s&aring; &ouml;nskas kan vi skicka faktura i
 PDF-format som e-postbilaga. Det &auml;r obligatoriskt att ange kontonummer i
 <A class="maintxt23" HREF="http://www.ruslania.com/download/HTML/IBAN-ENG.htm" target="new">IBAN</A>-format (International Bank Account Number) f&ouml;r betalningar mellan
-l&auml;nder inom EU samt Norge, Island, Liechtenstein och Schweiz. Vi
+l&auml;nder inom EU samt Norge, Island, Liechtenstein och Schweiz. <br>Vi
 f&ouml;rbeh&aring;ller oss r&auml;tten att beg&auml;ra f&ouml;rskottsbetalning
 av finl&auml;ndska kunder. Var uppm&auml;rksam n&auml;r du v&auml;ljer
 betalningss&auml;tt. Observera att du m&aring;ste ha n&auml;tbankskoderna
@@ -158,6 +156,6 @@ n&auml;tbankerna inte till&aring;ter tv&aring; likadana betalningar samma dag.
 V&aring;r kundtj&auml;nst hj&auml;lper dig g&auml;rna att reda ut eventuella
 problem och svarar p&aring; dina fr&aring;gor. Du kan kontakta oss genom att
 skicka e-post till <u>asiakaspalvelu@ruslania.com</u> eller ringa oss p&aring;
-telefonnumret i <a href="http://www.ruslania.com/context-584/entity-1/language-8.html" class="maintxt23">Kontaktuppgifter</a>.
+telefonnumret i <a href="http://ruslania.com/contact?language=se" class="maintxt23">Kontaktuppgifter</a>.
 
 </div>

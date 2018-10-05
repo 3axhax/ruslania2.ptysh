@@ -1,4 +1,4 @@
-<div style="width:500px">
+﻿<div style="width:500px">
 
   <div style="font-size: 130%; font-weight: bold; margin-top: 5px">
   CONDICIONES PARA LAS COMPRAS A TRAVÉS DE INTERNET
@@ -50,6 +50,10 @@
     bajo responsabilidad del servicio de atención al cliente.
 
   <br><br>
+  <b>2.1</b> 
+  La información de pedido del Cliente y el historial de compras están protegidos por la contraseña elegida. Se le pide al Cliente que guarde la contraseña en secreto para evitar que cualquier persona ajena tenga acceso a esta información.
+  <br><a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">Si lo desea, puede abrir y leer la declaración de privacidad de Ruslania aquí (en inglés, un documento PDF en nuestro servidor)</a><br><br>
+  
   <b>3. Precios</b>
     <br><br>
     

@@ -29,7 +29,7 @@ personne exercant l’autorite parentale.
 <b>2.1</b> Ruslania ne vend dans sa boutique en ligne qu’a ses clients inscrits. Les particuliers doivent indiquer leur nom, leur adresse, leur numero de telephone et leur adresse electronique ; les societes et autres personnes morales doivent en outre indiquer leur numero de TVA. Ruslania s’engage a ne pas divulguer les donnees de ses clients, sauf a ses partenaires faisant partie du meme groupe ou dans les limites admises par la loi. Le client dispose du droit prevu par la loi relative aux donnees personnelles de verifier les donnees figurant dans le registre. Ces donnees sont le nom, l’adresse, le numero de telephone, l’adresse electronique et le mot de passe, ainsi que (si le client le souhaite) la langue maternelle et les eventuels domaines d’interet. Le registre clients est place sous la responsabilite du service clients de Ruslania.
 <br><br>
 <b>2.2</b> Les donnees personnelles du client et l’historique de ses achats sont proteges par le mot de passe qu’il a choisi. Il incombe au client de conserver soigneusement ses identifiants pour qu’aucune personne tierce n’ait acces a ces donnees.
-    
+    <br><a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf">Si vous le souhaitez, vous pouvez ouvrir et lire la déclaration de confidentialité de Ruslania ici (en anglais, un fichier PDF sur notre serveur):</a><br><br>
 <br><br>
 <b>3. Prix </b>
 <br><br>

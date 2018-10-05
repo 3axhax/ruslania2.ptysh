@@ -222,7 +222,7 @@ class Address extends CActiveRecord
 
     public function GetAddresses($uid)
     {
-        $sql = 'SELECT *, cl.title_en AS country_name, cl.code FROM users_addresses AS uas '
+        $sql = 'SELECT *, cl.title_en AS country_name, cl.code, ua.id as id FROM users_addresses AS uas '
               .'JOIN user_address AS ua ON uas.address_id=ua.id '
               .'LEFT JOIN country_list AS cl ON ua.country=cl.id '
               .'LEFT JOIN address_states_list AS asl ON ua.state_id=asl.id '

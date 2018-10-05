@@ -36,6 +36,7 @@ class CategoryDataCommand extends CConsoleCommand {
 			$sql = ''.
 				'select 0 catId, min(t.brutto) minP, max(t.brutto) maxP, '.
 					'min(' . $brutto . ') minPD, max(' . $brutto . ') maxPD, '.
+					(($entity == Entity::VIDEO)?'min(convert(t.release_year, SIGNED)) minRY, max(convert(t.release_year, SIGNED)) maxRY, ':'').
 					'min(t.year) minY, max(t.year) maxY '.
 				'from ' . $params['site_table'] . ' t '.
 				'where (t.avail_for_order = 1) '.
@@ -45,6 +46,7 @@ class CategoryDataCommand extends CConsoleCommand {
 			$sql = ''.
 				'select t.code catId, min(t.brutto) minP, max(t.brutto) maxP, '.
 					'min(' . $brutto . ') minPD, max(' . $brutto . ') maxPD, '.
+					(($entity == Entity::VIDEO)?'min(convert(t.release_year, SIGNED)) minRY, max(convert(t.release_year, SIGNED)) maxRY, ':'').
 					'min(t.year) minY, max(t.year) maxY '.
 				'from ' . $params['site_table'] . ' t '.
 				'where (t.avail_for_order = 1) '.
@@ -55,6 +57,7 @@ class CategoryDataCommand extends CConsoleCommand {
 			$sql = ''.
 				'select t.subcode catId, min(t.brutto) minP, max(t.brutto) maxP, '.
 					'min(' . $brutto . ') minPD, max(' . $brutto . ') maxPD, '.
+					(($entity == Entity::VIDEO)?'min(convert(t.release_year, SIGNED)) minRY, max(convert(t.release_year, SIGNED)) maxRY, ':'').
 					'min(t.year) minY, max(t.year) maxY '.
 				'from ' . $params['site_table'] . ' t '.
 				'where (t.avail_for_order = 1) '.
@@ -73,6 +76,8 @@ class CategoryDataCommand extends CConsoleCommand {
 						'cost_min_discount' => $set['minPD'], //все скидки без учета скидок пользователя
 						'cost_max_discount' => $set['maxPD'], //все скидки без учета скидок пользователя
 					);
+					if (isset($set['minRY'])) $settitngs['release_year_min'] = $set['minRY'];
+					if (isset($set['maxRY'])) $settitngs['release_year_max'] = $set['maxRY'];
 					$insertParams = array(
 						':entity'=>$entity,
 						':catId'=>$id,
@@ -108,6 +113,8 @@ class CategoryDataCommand extends CConsoleCommand {
 		$row['maxPD'] = max($row['maxPD'], $cat['maxPD']);
 		$row['minY'] = min($row['minY'], $cat['minY']);
 		$row['maxY'] = max($row['maxY'], $cat['maxY']);
+		if(isset($row['maxRY'])) $row['maxRY'] = max($row['maxRY'], $cat['maxRY']);
+		if(isset($row['minRY'])) $row['minRY'] = max($row['minRY'], $cat['minRY']);
 		return $row;
 	}
 

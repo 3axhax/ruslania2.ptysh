@@ -146,6 +146,15 @@ class ClientController extends MyController
     {
         if(Yii::app()->user->isGuest) throw new CHttpException(403, 'login required');
         $uid = Yii::app()->user->id;
+
+        if ($_GET['otv'] == '1') {
+
+            $sql = 'UPDATE users SET network="", socuid="" WHERE id = '.$uid;
+
+            Yii::app()->db->createCommand($sql)->execute();
+
+        }
+
         $this->breadcrumbs[] = Yii::app()->ui->item("YM_CONTEXT_PERSONAL_MODIFYUSER");
 
         $model = User::model()->findByPk($uid);
@@ -153,6 +162,8 @@ class ClientController extends MyController
         $oldPwd = $model->pwd;
         $model->pwd = null;
         $model->scenario = 'update';
+
+
 
         if(isset($_POST['ajax']) && $_POST['ajax']==='address-form')
         {

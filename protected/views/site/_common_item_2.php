@@ -240,6 +240,8 @@ $entityKey = Entity::GetUrlKey($entity);
 				
 				<div style="height: 1px; clear: both"></div>
 				<?php endif; ?>
+                <input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_WORLD] / 12, 2); ?>" class="worldmonthpriceoriginal"/>
+                <input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_FIN] / 12, 2); ?>" class="finmonthpriceoriginal"/>
                 <input type="hidden" value="<?= round($price[DiscountManager::WITH_VAT_WORLD] / 12, 2); ?>"
                        class="worldmonthpricevat"/>
                 <input type="hidden" value="<?= round($price[DiscountManager::WITHOUT_VAT_WORLD] / 12, 2); ?>"
