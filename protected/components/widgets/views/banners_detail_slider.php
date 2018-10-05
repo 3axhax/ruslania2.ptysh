@@ -26,7 +26,13 @@
 								<?php endif; ?>
 							</div>
 							<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
-							<a href="<?=$url;?>" class="btn_yellow">Подробнее</a>
+							<?php if ($item['entity'] == Entity::PERIODIC): ?>
+							<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
+							<?php else: ?>
+							<div class="addcart" style="margin-top: 10px;">
+								<a class="cart-action add_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 103px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
+							</div>
+							<?php endif; ?>
 						</div>
 					</li>
 <?php endforeach; ?>

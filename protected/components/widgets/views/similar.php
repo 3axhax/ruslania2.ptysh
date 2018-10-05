@@ -31,8 +31,11 @@
 					<div><?= ProductHelper::GetTitle($author) ?></div>
 				<?php endif; ?>
 
-				<?php if ($product['isbn']): ?>
+				<?php if (!empty($product['isbn'])&&!in_array($product['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))): ?>
 				<div>ISBN: <?= str_replace('-', '' ,$product['isbn']) ?></div>
+				<?php endif; ?>
+				<?php if (!empty($product['eancode'])&&in_array($product['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))) : ?>
+				<div>EAN: <?= str_replace('-', '' ,$product['eancode']) ?></div>
 				<?php endif; ?>
 
 				<?php if ($product['year']): ?>
@@ -69,12 +72,15 @@
 				</div>
 				<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 				<?php /*<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div> */ ?>
+				<?php if ($product['entity'] == Entity::PERIODIC): ?>
+					<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
+				<?php else: ?>
 				<div class="addcart">
-					<a class="cart-action" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1">
+					<a class="cart-action" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1" href="javascript:;">
 	<?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART') ?>
 					</a>
 				</div>
-
+				<?php endif; ?>
 			</li>
 		<?php endforeach; ?>
 		</ul>

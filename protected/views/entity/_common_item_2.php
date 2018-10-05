@@ -198,7 +198,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		
         <div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 200, $url)); ?></div>
 		
-		<? if  (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC, Entity::BOOKS))) :
+		<? if  (!empty($item['isbn'])&&in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::BOOKS))) :
             $name = 'ISBN';
             if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
             ?>
@@ -206,7 +206,10 @@ $entityKey = Entity::GetUrlKey($entity);
 			<div style="margin-top: 16px;"><?= $name ?>: <?=str_replace('-','',$item['isbn'])?></div>
 		
 		<? endif; ?>
-		
+        <?php if (!empty($item['eancode'])&&(in_array($entity, array(Entity::SHEETMUSIC/*, Entity::MUSIC*/)))) : ?>
+            <div style="margin-top: 16px;">EAN: <?=str_replace('-','',$item['eancode'])?></div>
+        <?php endif; ?>
+
 		
 		<?php if (!empty($item['binding_id'])) : ?>
                  <?php
