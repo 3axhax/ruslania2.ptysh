@@ -48,7 +48,7 @@
 					$actionTitle = '';
 					if($product['status'] == 'new')
 					{
-						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
 						$actionTitleClass = ' new';
 					}
 					elseif($product['status'] == 'sale')
@@ -58,7 +58,7 @@
 					}
 					elseif($product['status'] == 'recommend')
 					{
-						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
 						$actionTitleClass = ' rec';
 					}
 					?>
