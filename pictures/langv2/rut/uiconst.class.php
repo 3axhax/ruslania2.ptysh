@@ -1150,4 +1150,8 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
+
+    'IN_RECOMMEND' => 'Рекомендации',
+    'IN_NEW' => 'Новинка!',
+    'IN_SALE' => 'Акция',
 ); 

@@ -65,7 +65,7 @@
                 </ul>
             </div>
         </div>
-        <div class="news_box nb<?= $entity ?>">
+        <div class="news_box nb67">
             <div class="container">
                 <div class="title">
                     <?= Entity::GetTitle($entity); ?>:
@@ -75,8 +75,8 @@
                             </span>
                         </a>
                     <div class="pult">
-                        <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""/></a>
-                        <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""/></a>
+                        <a href="javascript:;" onclick="$('.nb67 .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""/></a>
+                        <a href="javascript:;" onclick="$('.nb67 .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""/></a>
                     </div>
 
                 </div>
@@ -93,7 +93,7 @@
             </script>
 
             <div class="container cnt67">
-                <ul class="books">
+                <ul class="books">!!!
                     <?php
                     foreach ($popular as $item) :
                         ?>
