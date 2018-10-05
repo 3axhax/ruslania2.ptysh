@@ -1159,8 +1159,10 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
 
     'DELIVERY_ECONOMY_OTHER'=>'Toimitus suoraan kotiin tai   toimitusosoitteeseen kirjeenä',
     'DELIVERY_PRIORITY_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen Priority-kirjeenä, Priority-käsittely',
-    'DELIVERY_EXPRESS_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen pikakirjeenä, Express-käsittely'
+    'DELIVERY_EXPRESS_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen pikakirjeenä, Express-käsittely',
 
-
+    'IN_RECOMMEND' => 'Рекомендации',
+    'IN_NEW' => 'Новинка!',
+    'IN_SALE' => 'Акция',
 
 );
