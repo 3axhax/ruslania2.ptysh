@@ -51,7 +51,7 @@ class CartController extends MyController {
 
 
             $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
-                    . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
+                . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
             $idAddr2 = Yii::app()->db->getLastInsertID();
 
@@ -251,7 +251,7 @@ class CartController extends MyController {
             $this->redirect('/cart/doorder/');
         }
     }
-    
+
     function decline_goods($num) {
         $count = $num;
 
@@ -264,19 +264,19 @@ class CartController extends MyController {
         switch ($num) {
 
             case 1: {
-                    return $count . ' товар';
-                }
+                return $count . ' товар';
+            }
 
             case 2: case 3: case 4: {
-                    return $count . ' товара';
-                }
+            return $count . ' товара';
+        }
 
             default: {
-                    return $count . ' товаров';
-                }
+                return $count . ' товаров';
+            }
         }
     }
-    
+
     function actionGetCostIzmena() {
 
         //var_dump($_POST);
@@ -325,11 +325,11 @@ class CartController extends MyController {
                     $price = $item['discount'];
                 }
             }
-            
+
             if (!$withVat) {
-            
+
                 $price = $price - ($price * $item['vat'] / 100);
-            
+
             }
             $fullweight += $item['InCartUnitWeight'];
 
@@ -344,6 +344,8 @@ class CartController extends MyController {
                 $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
             }
 
+            $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
+
             $full_count += $item['quantity'];
         }
 
@@ -353,31 +355,31 @@ class CartController extends MyController {
 
 
         $input['fullpricehidden'] = $cartInfo['fullInfo']['cost'];
-        
-        
+
+
         $input['footer2'] = 'Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: ' . $cartInfo['fullInfo']['weight'] .' кг';
-        
+
         $input['footer3'] = 'Итоговая стоимость: <span class="itogo_cost">'. $PH->FormatPrice($cartInfo['fullInfo']['cost']) .'</span>';
-        
+
         $input['cart_header'] = 'В корзине '.self::decline_goods($cartInfo['fullInfo']['count']).' на сумму '.$PH->FormatPrice($cartInfo['fullInfo']['cost']);
-        
+
         //$input['cart'] = array();
-        
+
         foreach ($cartInfo['items'] as $id => $item) :
-            
-             $input['cart'][] = '<tr>
-                
-                <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>
-                <td>
+
+            $input['cart'][] = '<tr>'.
+
+                //'<td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>'.
+                '<td style="width: 35px; height: 35px"> <span class="entity_icons"><i class="fa e' . $item['entity'] . '"></i></span></td>'.
+                '<td>
                     <span class="a">'.$item['title'].'</span>
                     <div class="minitext">'.$item['quantity'].' шт. x '.$PH->FormatPrice($item['price']).'<br /> Вес: '.($item['weight']/1000).' кг</div>
                 </td>
                 
             </tr>';
-            
-            endforeach;
 
-        
+        endforeach;
+
         echo json_encode($input);
     }
 
@@ -431,24 +433,24 @@ class CartController extends MyController {
     }
 
     public function actionResult() {
-        
-        
-        
+
+
+
         $cart = new Cart();
         $tmp = $cart->GetCart($this->uid, $this->sid);
 
         $post = $_POST;
-        
+
         foreach ($post['Address'] as $k=>$v) {
-            
+
             if (!is_string($v)) continue;
-            
+
             $post['Address'][$k] = addslashes(htmlspecialchars($v));
-            
+
         }
-        
+
         //var_dump($post);
-        
+
         if (!Yii::app()->user->isGuest) {
 
             $adr1 = Address::GetAddress($this->uid, $post['id_address']);
@@ -491,14 +493,14 @@ class CartController extends MyController {
 
             $data['number_zakaz'] = $id;
             $data['ptype'] = $post['ptype'];
-            
-             if (Yii::app()->request->isAjaxRequest) {
-                    
-                    echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
-                    exit();
-                    
-                }
-            
+
+            if (Yii::app()->request->isAjaxRequest) {
+
+                echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                exit();
+
+            }
+
             if ($post['ptype'] == '27') {
                 $this->render('applepay', $data);
             } elseif ($post['ptype'] == '26') {
@@ -546,188 +548,188 @@ class CartController extends MyController {
             $comment = $post['Address']['notes'];
 
             if (User::checkLogin($email)) {
-                
+
                 echo '9';
                 exit();
-                
+
             } else {
-            
-            
 
 
-            if ($fam AND $name AND $country AND $city AND $post_index AND $address AND $email AND $phone) {
 
 
-                /*
-                 * 
-                 * 1. Для начала создаем покупателя и получаем его ID
-                 * 2. Выполняем вход покупателя 
-                 * 3. Добавляем адрес в базу с привязкой покупателя к этому
-                 * адресу
-                 * 4. Создаем заказ на этого покупателя
-                 * 5. Определяем каким способом он выбрал оплату и делаем
-                 * переадресацию на соответствующую страницу где уже будет 
-                 * написан код с переадресацией на страницу сервиса оплаты 
-                 * 
-                 */
+                if ($fam AND $name AND $country AND $city AND $post_index AND $address AND $email AND $phone) {
 
-                /*
-                 *  1. Для начала создаем покупателя и получаем его ID
-                 */
-                $cart = new Cart();
-                $tmp = $cart->GetCart($this->uid, $this->sid);
-                $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
-                $m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
-                $razds = array();
-                foreach ($beautyItems as $p) {
-                    $mn = 'm' . $p['Entity'] . 'n';
-                    $$mn = 1;
-                    $razds[$p['Entity']] = Yii::app()->ui->item(Entity::GetEntitiesList()[$p['Entity']]['uikey']);
-                }
-                $psw = rand(1000000, 9999999) . 'sS';
 
-                $langID = Language::ConvertToInt(Yii::app()->language);
-                $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
+                    /*
+                     *
+                     * 1. Для начала создаем покупателя и получаем его ID
+                     * 2. Выполняем вход покупателя
+                     * 3. Добавляем адрес в базу с привязкой покупателя к этому
+                     * адресу
+                     * 4. Создаем заказ на этого покупателя
+                     * 5. Определяем каким способом он выбрал оплату и делаем
+                     * переадресацию на соответствующую страницу где уже будет
+                     * написан код с переадресацией на страницу сервиса оплаты
+                     *
+                     */
+
+                    /*
+                     *  1. Для начала создаем покупателя и получаем его ID
+                     */
+                    $cart = new Cart();
+                    $tmp = $cart->GetCart($this->uid, $this->sid);
+                    $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
+                    $m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
+                    $razds = array();
+                    foreach ($beautyItems as $p) {
+                        $mn = 'm' . $p['Entity'] . 'n';
+                        $$mn = 1;
+                        $razds[$p['Entity']] = Yii::app()->ui->item(Entity::GetEntitiesList()[$p['Entity']]['uikey']);
+                    }
+                    $psw = rand(1000000, 9999999) . 'sS';
+
+                    $langID = Language::ConvertToInt(Yii::app()->language);
+                    $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
                         . 'mail_maps_news, mail_music_news, mail_musicsheets_news, mail_soft_news, mail_video_news, currency) VALUES '
                         . '(:login, :pwd, :fName, :lName, :lang, :m20n, :m10n, :m60n, :m22n, :m15n, :m24n, :m40n, :currency)';
-                $ret = Yii::app()->db->createCommand($sql)->execute(array(
-                    ':login' => $email,
-                    ':pwd' => $psw,
-                    ':fName' => $name,
-                    ':lName' => $fam,
-                    ':lang' => $langID,
-                    ':m20n' => $m20n,
-                    ':m10n' => $m10n,
-                    ':m60n' => $m60n,
-                    ':m22n' => $m22n,
-                    ':m15n' => $m15n,
-                    ':m24n' => $m24n,
-                    ':m40n' => $m40n,
-                    ':currency' => Yii::app()->currency));
+                    $ret = Yii::app()->db->createCommand($sql)->execute(array(
+                        ':login' => $email,
+                        ':pwd' => $psw,
+                        ':fName' => $name,
+                        ':lName' => $fam,
+                        ':lang' => $langID,
+                        ':m20n' => $m20n,
+                        ':m10n' => $m10n,
+                        ':m60n' => $m60n,
+                        ':m22n' => $m22n,
+                        ':m15n' => $m15n,
+                        ':m24n' => $m24n,
+                        ':m40n' => $m40n,
+                        ':currency' => Yii::app()->currency));
 
-                $idUser = Yii::app()->db->getLastInsertID(); //получаем ID юзера
+                    $idUser = Yii::app()->db->getLastInsertID(); //получаем ID юзера
 
 
-                $identity = new RuslaniaUserIdentity($email, $psw);
+                    $identity = new RuslaniaUserIdentity($email, $psw);
 
-                if ($identity->authenticate()) {
+                    if ($identity->authenticate()) {
 
-                    Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
-                    $cart->UpdateCartToUid($this->sid, $identity->getId());
-                    //echo $this->sid;
+                        Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
+                        $cart->UpdateCartToUid($this->sid, $identity->getId());
+                        //echo $this->sid;
 
-                    $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
-                    $message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en')) ? Yii::app()->language : 'en');
-                    $message->setBody(array(
-                        'user' => User::model()->findByPk(Yii::app()->user->id)->attributes,
-                        'razds' => $razds,
-                            ), 'text/html');
-                    $message->addTo($email);
-                    $message->from = 'noreply@ruslania.com';
-                    $mailResult = Yii::app()->mail->send($message);
-                    file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
-                            date('d.m.Y H:i:s'),
-                            $email,
-                            serialize($mailResult),
-                            $message->view,
-                            serialize($message->from),
-                        )
-                    ) . "\n", FILE_APPEND);
-                }
+                        $message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
+                        $message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en')) ? Yii::app()->language : 'en');
+                        $message->setBody(array(
+                            'user' => User::model()->findByPk(Yii::app()->user->id)->attributes,
+                            'razds' => $razds,
+                        ), 'text/html');
+                        $message->addTo($email);
+                        $message->from = 'noreply@ruslania.com';
+                        $mailResult = Yii::app()->mail->send($message);
+                        file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
+                                    date('d.m.Y H:i:s'),
+                                    $email,
+                                    serialize($mailResult),
+                                    $message->view,
+                                    serialize($message->from),
+                                )
+                            ) . "\n", FILE_APPEND);
+                    }
 
-                $userID = $identity->getId();
+                    $userID = $identity->getId();
 
-                /*
-                 * 2. Добавляем адрес в базу с привязкой покупателя к этому 
-                 * адресу
-                 */
-                $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
+                    /*
+                     * 2. Добавляем адрес в базу с привязкой покупателя к этому
+                     * адресу
+                     */
+                    $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
                         . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
-                $ret = Yii::app()->db->createCommand($sql)->execute();
-                $idAddr2 = Yii::app()->db->getLastInsertID();
+                    $ret = Yii::app()->db->createCommand($sql)->execute();
+                    $idAddr2 = Yii::app()->db->getLastInsertID();
 
-                $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
+                    $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
 
-                $ret = Yii::app()->db->createCommand($sql)->execute();
-                $idAddr = Yii::app()->db->getLastInsertID();
-                if (!$post['dtid']) {
-                    $post['dtid'] = 0;
-                }
-                $s['DeliveryAddressID'] = $idAddr2;
-                $s['DeliveryTypeID'] = $post['dtid'];
-                $s['DeliveryMode'] = 0;
-                $s['CurrencyID'] = Yii::app()->currency;
-                $s['BillingAddressID'] = $idAddr2;
-                $s['Notes'] = 0;
-                $s['Mandate'] = 0;
-                //$s['payment'] = $post['ptype'];
-                $order = new OrderForm($this->sid);
-                $order->attributes = $s;
+                    $ret = Yii::app()->db->createCommand($sql)->execute();
+                    $idAddr = Yii::app()->db->getLastInsertID();
+                    if (!$post['dtid']) {
+                        $post['dtid'] = 0;
+                    }
+                    $s['DeliveryAddressID'] = $idAddr2;
+                    $s['DeliveryTypeID'] = $post['dtid'];
+                    $s['DeliveryMode'] = 0;
+                    $s['CurrencyID'] = Yii::app()->currency;
+                    $s['BillingAddressID'] = $idAddr2;
+                    $s['Notes'] = 0;
+                    $s['Mandate'] = 0;
+                    //$s['payment'] = $post['ptype'];
+                    $order = new OrderForm($this->sid);
+                    $order->attributes = $s;
 
-                //var_dump ($order);
+                    //var_dump ($order);
 //            $c = new Cart;
 
-                $items = array();
-                foreach ($tmp as $item) {
-                    if (ProductHelper::IsAvailableForOrder($item))
-                        $items[] = $item;
+                    $items = array();
+                    foreach ($tmp as $item) {
+                        if (ProductHelper::IsAvailableForOrder($item))
+                            $items[] = $item;
+                    }
+
+                    $o = new Order;
+                    $id = $o->CreateNewOrder($userID, $this->sid, $order, $items, $post['ptype']);
+
+                    $o = new Order;
+                    $order = $o->GetOrder($id);
+
+                    $data['order'] = $order;
+
+                    //$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
+                    // $this->breadcrumbs[] = 'Оформление заказа';
+
+                    $data['number_zakaz'] = $id;
+                    $data['ptype'] = $post['ptype'];
+
+                    if (Yii::app()->request->isAjaxRequest) {
+
+                        echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                        exit();
+
+                    }
+
+
+
+
+                    if ($post['ptype'] == '27') {
+                        $this->render('applepay', $data);
+                    } elseif ($post['ptype'] == '26') {
+                        $this->render('alipay', $data);
+                    } elseif ($post['ptype'] == '8') {
+                        $this->render('paypal', $data);
+                    } elseif ($post['ptype'] == '25') {
+                        $this->render('paytrail', $data);
+                    } else {
+
+                        if ($post['ptype'] == '7')
+                            $namepay = 'Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС';
+                        if ($post['ptype'] == '13')
+                            $namepay = 'Предоплата на банковский счет в Финляндии';
+                        if ($post['ptype'] == '14')
+                            $namepay = 'Предоплата на банковский счет в России';
+                        if ($post['ptype'] == '1')
+                            $namepay = 'Оплата в магазине';
+
+                        $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
+
+
+
+                        //$this->render('result', $data);
+
+
+
+                    }
+                    //echo '1';
                 }
-
-                $o = new Order;
-                $id = $o->CreateNewOrder($userID, $this->sid, $order, $items, $post['ptype']);
-
-                $o = new Order;
-                $order = $o->GetOrder($id);
-
-                $data['order'] = $order;
-
-                //$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
-               // $this->breadcrumbs[] = 'Оформление заказа';
-
-                $data['number_zakaz'] = $id;
-                $data['ptype'] = $post['ptype'];
-                
-                if (Yii::app()->request->isAjaxRequest) {
-                    
-                    echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
-                    exit();
-                    
-                }
-
-
-
-
-                if ($post['ptype'] == '27') {
-                    $this->render('applepay', $data);
-                } elseif ($post['ptype'] == '26') {
-                    $this->render('alipay', $data);
-                } elseif ($post['ptype'] == '8') {
-                    $this->render('paypal', $data);
-                } elseif ($post['ptype'] == '25') {
-                    $this->render('paytrail', $data);
-                } else {
-
-                    if ($post['ptype'] == '7')
-                        $namepay = 'Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС';
-                    if ($post['ptype'] == '13')
-                        $namepay = 'Предоплата на банковский счет в Финляндии';
-                    if ($post['ptype'] == '14')
-                        $namepay = 'Предоплата на банковский счет в России';
-                    if ($post['ptype'] == '1')
-                        $namepay = 'Оплата в магазине';
-
-                    $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
-                    
-                    
-                    
-                    //$this->render('result', $data);
-                    
-                    
-                    
-                }
-                //echo '1';
             }
-        }
         }
     }
 
@@ -838,11 +840,11 @@ class CartController extends MyController {
         $cart = new Cart;
         $cartItems = array();
         $tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid), $this->uid);
-        
+
         if (!count($tmp)) {
             $this->redirect('/me/');
         }
-        
+
         foreach ($tmp as $item) {
             $item['Title'] = str_replace('"', '\\"', $item['Title']); // из-за того, что это идет в JSON в виде строки в do_order.php и ломает парсеру жизнь
             if ($item['IsAvailable'])
@@ -1061,9 +1063,9 @@ class CartController extends MyController {
             $quantity = $availCount;
             $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
 
-        if ($entity == 30) {
-            $changedStr = sprintf('Количество товара было изменено с %d до %d', $quantity2, $quantity);
-        }
+            if ($entity == 30) {
+                $changedStr = sprintf('Количество товара было изменено с %d до %d', $quantity2, $quantity);
+            }
 
         }
 
