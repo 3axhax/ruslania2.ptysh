@@ -48,17 +48,17 @@
 					$actionTitle = '';
 					if($product['status'] == 'new')
 					{
-						$actionTitle = '<div class="new_block">Новинка!</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
 						$actionTitleClass = ' new';
 					}
 					elseif($product['status'] == 'sale')
 					{
-						$actionTitle = '<div class="new_block">Акция</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_SALE').'</div>';
 						$actionTitleClass = ' akciya';
 					}
 					elseif($product['status'] == 'recommend')
 					{
-						$actionTitle = '<div class="new_block">В подборке</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
 						$actionTitleClass = ' rec';
 					}
 					?>

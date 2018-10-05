@@ -1195,6 +1195,10 @@ IBAN DE79514303006474790001 <br>
 	'IN_OFFERS'=>'В подборке',
 	'SHOW_ALL'=>'Показать все',
 
+	'IN_RECOMMEND' => 'Рекомендации',
+	'IN_NEW' => 'Новинка!',
+	'IN_SALE' => 'Акция',
+
 	'HEADER_PAYTRAIL' => 'Оплата Paytrail',
 	'HEADER_PAYPAL' => 'Оплата PayPal',
 	'HEADER_ALIPAY' => 'Оплата AliPay',

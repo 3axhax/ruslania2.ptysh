@@ -1165,4 +1165,8 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_KEYBOARD_OFF' => 'Выкл.',
 
     'A_NEW_TYPOGRAPHY' => 'Оформление',
+
+    'IN_RECOMMEND' => 'Рекомендации',
+    'IN_NEW' => 'Новинка!',
+    'IN_SALE' => 'Акция',
 );
