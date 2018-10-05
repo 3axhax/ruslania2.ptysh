@@ -74,10 +74,13 @@ $url = $ex;
                                 <table>
 								<tr>
 								<td>
+                                    <span class="entity_icons"><i class="fa e<?= $cart['Entity'] ?>" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
+<?php /*
 								<img width="31" height="31" align="middle"
                                      alt="<?= htmlspecialchars($cart['Title']) ?>" style="vertical-align: middle"
                                      data-bind="attr: { alt: Title}"
                                      src="/pic1/cart_ibook.gif">
+*/ ?>
 								</td>
 								<td style="padding-left: 20px;">
                                     <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"

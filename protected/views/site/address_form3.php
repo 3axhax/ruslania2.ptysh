@@ -295,7 +295,12 @@ echo '</div>';
             
             <tr>
                 
-                <td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>
+                <td style="width: 31px;">
+            <span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
+                <?php /*
+                <img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif">
+ */ ?>
+                </td>
                 <td>
                     <span class="a"><?=$item['title']?></span>
                     <div class="minitext"><?=$item['quantity']?> <?if ($item['entity'] == 30) { echo 'мес.'; } else {?>шт.<? } ?> x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight'])?> кг</div>

@@ -24,7 +24,7 @@
                     </td>
                     <td width="65%" valign="top">
 
-                        <?php foreach($groups as $group=>$data) : ?>
+                        <?php foreach($groups as $group=>$data): ?>
                             <table height="30" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top" class="text">
                                 <tr>
                                     <td colspan="3">
@@ -32,7 +32,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="31" class="maintxt" style="padding-top: 2px;padding-bottom: 2px;padding-left: 2px;padding-right: 5px;"><img width="31" height="31" border="0" src="/pic1/cart_ibook.gif"></td>
+                                    <td width="31" class="maintxt" style="padding-top: 2px;padding-bottom: 2px;padding-left: 2px;padding-right: 5px;">
+                                        <span class="entity_icons"><i class="fa e<?= $data['entity'] ?>"></i></span>
+                                        <?php /*<img width="31" height="31" border="0" src="/pic1/cart_ibook.gif"> */ ?>
+                                    </td>
                                     <td width="100%" class="maintxt" style="padding: 2px;"><a href="<?=Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($data['entity']))); ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a></td>
                                 </tr>
                             </table>

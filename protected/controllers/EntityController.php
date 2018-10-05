@@ -1352,7 +1352,40 @@ class EntityController extends MyController {
 
         $o = new Offer();
         $group = $o->GetItems(Offer::INDEX_PAGE, $entity);
-        $this->render('gift', array('entity' => $entity, 'group' => current($group)['items']));
+
+
+        $title = Entity::GetTitle($entity);
+        $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_PERIODIC_FOR_GIFT');
+
+        $data = FilterHelper::getFiltersData($entity);
+        $lang = Yii::app()->getRequest()->getParam('lang');
+        $cat = new Category();
+        $popular = $cat->result_filter($data, $lang);
+
+        $cid = 67; //Популярные издания
+
+        $category = new Category();
+        $path = $category->GetCategoryPath($entity, $cid);
+
+        $cnt = count($path);
+        $ids = array();
+        $selectedCategory = null;
+
+        for ($i = 0; $i < $cnt; $i++) {
+            $p = $path[$i];
+            if ($i == $cnt - 1) {
+                $selectedCategory = $p;
+            }
+            $ids[] = $p['id'];
+        }
+        $title_cat = ProductHelper::GetTitle($selectedCategory);
+
+        $this->render('gift', array('entity' => $entity,
+            'group' => current($group)['items'],
+            'popular' => $popular,
+            'title_cat' => $title_cat,
+            'cid' => $cid));
     }
 
     private function _checkTagByEntity($tag, $entity) {

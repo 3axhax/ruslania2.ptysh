@@ -52,9 +52,10 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
                 </span>
 						<?php endif; ?>
 					</div>
-					<?php if ($item['entity'] != Entity::PERIODIC): ?><div style="color: #747474;"><?= Availability::ToStr($item) ?><?php endif; ?></div>
+				<?php if ($item['entity'] != Entity::PERIODIC): ?>
+					<div style="color: #747474; font-size: 10px;"><?= Availability::ToStr($item) ?><?php endif; ?></div>
 				<?php else: ?>
-					<div style="color: #747474;"><?= Availability::ToStr($item) ?></div>
+					<div style="color: #747474; font-size: 10px;""><?= Availability::ToStr($item) ?></div>
 				<?php endif; ?>
 
 			</td>

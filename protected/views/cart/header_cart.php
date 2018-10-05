@@ -26,9 +26,12 @@
 						
 						
                                     <div class="b-basket-list__img-wrapper">
-									<div class="b-basket-list__img"><img width="31" height="31" align="middle"
+									<div class="b-basket-list__img">
+                                        <span class="entity_icons"><i class="fa" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
+                                        <?php /*<img width="31" height="31" align="middle"
                                      alt="" style="vertical-align: middle"
-                                     src="/pic1/cart_ibook.gif"></div>
+                                     src="/pic1/cart_ibook.gif"> */ ?>
+                                    </div>
                                     </div>
                                     <div class="b-basket-list__about" style="width: 180px;">
                                         <div class="b-basket-list__item-name"><a

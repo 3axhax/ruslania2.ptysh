@@ -20,11 +20,16 @@ class MainMenu extends CWidget {
 		'sheetmusic'=>array(47, 160, 249, 128, 136, 217),
 		'music'=>array(78, 74, 4, 11, 6, 17, 2, 73, 38, 21),
 		'periodics'=>array(67, 47, 19, 48, 61, 44, 9, 12, 50, 100),
-		'printed'=>array(33, 6, 41, 38, 43, 55, 42, 61, 2, 3, 30, 44, 15, 8, 34, 42, 37),
+		'printed'=>array(2, 3, 30, 44, 15, 8, 34, 42, 37),
 		'video'=>array(23, 8, 109, 107, 43),
 		'maps'=>array(9, 8),
 		'soft'=>array(1, 20, 16),
 	);
+
+	/**
+	 * Это printed, только в отдельном меню "сувениры"
+	 */
+	private $_suvenirs = array(33, 6, 41, 38, 43, 55, 42, 61, );
 
 	/**
 	 * здесь будут все категории, которые используются в меню, но у другого раздела
@@ -70,6 +75,7 @@ class MainMenu extends CWidget {
 			$entityId = Entity::ParseFromString($entityStr);
 			$_categorys[$entityStr] = array();
 			$ids = array_merge($ids, array_keys($this->_relocated[$entityStr]), array_keys($this->_sales[$entityStr]));
+			if ($entityStr == 'printed') $ids = array_merge($ids, $this->_suvenirs);
 			foreach ($this->_category->GetCategoryList($entityId, 0, $ids) as $category) {
 				if (isset($this->_relocated[$entityStr][$category['id']])) $this->_relocated[$entityStr][$category['id']] = $category;
 				elseif (isset($this->_sales[$entityStr][$category['id']])) $this->_sales[$entityStr][$category['id']] = $category;
@@ -183,24 +189,27 @@ class MainMenu extends CWidget {
 	function viewSuvenirs() {
 		$entityStr = 'printed';
 		$categorys = $this->_categorys[$entityStr];
+		unset($categorys[6]);
+		foreach ($this->_categoryIds[$entityStr] as $id) unset($categorys[$id]);
 //
 		$rows = array();
-		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'lang'=>7)),
-			'name'=>Yii::app()->ui->item('PRINTED_RUS')
-		);
-		$rows[] = array(
+		foreach ($categorys as $category) {
+			$rows[] = array(
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'name'=>ProductHelper::GetTitle($category)
+			);
+		}
+		usort($rows, array($this, '_sort'));
+
+		array_unshift($rows, array(
 			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'lang'=>14)),
 			'name'=>Yii::app()->ui->item('PRINTED_FIN')
-		);
-		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $categorys[43]['id'])),
-			'name'=>ProductHelper::GetTitle($categorys[43])
-		);
-		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $categorys[38]['id'])),
-			'name'=>ProductHelper::GetTitle($categorys[38])
-		);
+		));
+
+		array_unshift($rows, array(
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'lang'=>7)),
+			'name'=>Yii::app()->ui->item('PRINTED_RUS')
+		));
 		$this->render('MainMenu/suvenirs_menu', array('rows'=>$rows));
 	}
 
@@ -233,7 +242,7 @@ class MainMenu extends CWidget {
 	function viewPrinted() {
 		$entityStr = 'printed';
 		$categorys = $this->_categorys[$entityStr];
-		unset($categorys[33], $categorys[6], $categorys[41], $categorys[38], $categorys[43], $categorys[55], $categorys[61]);
+		foreach ($this->_suvenirs as $id) unset($categorys[$id]);
 //
 		$rows = array();
 		foreach ($categorys as $category) {
