@@ -38,8 +38,6 @@ class MyController extends CController
 
         return $avail;
 
-        return $avail;
-
         var_dump($availCookie);
         if(!empty($availCookie)) $avail = $availCookie->value ? true : false;
         else $avail = true;
@@ -227,9 +225,9 @@ class MyController extends CController
     // вывод ярлычков
     public function renderStatusLables($status, $size = '', $isOffer = false)
     {
-        if ($status == 'sale') echo '<div class="status-block'.$size.' sale">Акция</div>';
-        if ($status == 'new') echo '<div class="status-block'.$size.' new">Новинка!</div>';
-        if (!$isOffer && ($status == 'recommend')) echo '<div class="status-block'.$size.' rec">В подборке</div>';
+        if ($status == 'sale') echo '<div class="status-block'.$size.' sale">'.Yii::app()->ui->item('IN_SALE').'</div>';
+        if ($status == 'new') echo '<div class="status-block'.$size.' new">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
+        if (!$isOffer && ($status == 'recommend')) echo '<div class="status-block'.$size.' rec">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
     }
 
     public function getPreferLanguage()
