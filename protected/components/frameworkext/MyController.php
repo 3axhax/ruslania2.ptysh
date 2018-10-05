@@ -226,8 +226,8 @@ class MyController extends CController
     public function renderStatusLables($status, $size = '', $isOffer = false)
     {
         if ($status == 'sale') echo '<div class="status-block'.$size.' sale">'.Yii::app()->ui->item('IN_SALE').'</div>';
-        if ($status == 'new') echo '<div class="status-block'.$size.' new">'.Yii::app()->ui->item('IN_NEW').'</div>';
-        if (!$isOffer && ($status == 'recommend')) echo '<div class="status-block'.$size.' rec">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
+        if ($status == 'new') echo '<div class="status-block'.$size.' new">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
+        if (!$isOffer && ($status == 'recommend')) echo '<div class="status-block'.$size.' rec">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
     }
 
     public function getPreferLanguage()
