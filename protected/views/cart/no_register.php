@@ -82,7 +82,7 @@
     }
 
     table.cart {
-        border: 1px solid #ececec; 
+        border: 1px solid #ececec;
     }
 
     .cart tbody tr td {
@@ -172,7 +172,7 @@
     }
 
     .row_smartpost {
-        padding: 15px 5px;  
+        padding: 15px 5px;
         border: 1px solid #ccc;
         margin: 5px 0;
     }
@@ -188,7 +188,7 @@
     .seld1.act_city {
         border: none !important;
         width: auto !important;
-    }    
+    }
 
     label.seld1.act_city .red_checkbox {
 
@@ -206,7 +206,7 @@
 
     function checkForm() {
 
-        
+
 
     }
 
@@ -238,7 +238,7 @@
                     $('#js_forgot').remove();
                     if (r) {
                         $(t).after(r);
-                       // $('.order_start').addClass('disabled');
+                        // $('.order_start').addClass('disabled');
                     }
                 }
             });
@@ -308,7 +308,7 @@
         $('.delivery_box_sp').hide();
         $('.rows_checkbox_delivery input').prop('checked', false);
         $('.delivery_box').show();
-        $('.delivery_name').html('Доставка почтой');
+
         sbros_delev();
 
         $('.seld #dtype2').parent().css('border', '1px solid rgb(100, 113, 127)');
@@ -329,13 +329,13 @@
                 $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
 
                     $('.select_states').html(data);
-                    
+
                     if ($.cookie('Address_country')) {
-         
-                       $('.select_states select').val($.cookie('Address_state_id'));
+
+                        $('.select_states select').val($.cookie('Address_state_id'));
 
                     }
-                    
+
                 });
 
             } else {
@@ -348,11 +348,11 @@
             cost_izmena(cont.val());
 
             if (cont.val()==68 || cont.val()==62 || cont.val()=='') {
-                
-                $('.seld1').removeClass('act_city');  
-                
+
+                $('.seld1').removeClass('act_city');
+
             } else {
-                $('.seld1').addClass('act_city');  
+                $('.seld1').addClass('act_city');
             }
 
             if (cont.val() == 68 || cont.val()==62) {
@@ -370,8 +370,8 @@
                     zamena2 = true;
 
                 }
-                    
-                  
+
+
 
                 $('.zabr_market').html('Забрать в магазине в Хельсинки');
 
@@ -390,8 +390,8 @@
 
                 }
 
-               // $('.seld1').addClass('act_city');
-                
+                // $('.seld1').addClass('act_city');
+
 
 
                 $('.zabr_market').html('Будете в Хельсинки? Отметьте, чтобы забрать в магазине');
@@ -403,7 +403,7 @@
 
                 $('.delivery_box').html(data);
                 //$('.box_opacity .op').hide();
-               // $('.order_start').removeClass('disabled');
+                // $('.order_start').removeClass('disabled');
                 sbros_delev();
                 checked_sogl();
 
@@ -430,7 +430,7 @@
             // }
 
 
-
+            $('.delivery_name').html('Доставка почтой');
 
         } else {
             $('.delivery_box').html('');
@@ -449,12 +449,12 @@
         $('.select_dd_popup').html('');
         $('.select_dd_popup').hide();
     }
-    
-    
+
+
     var s = false;
-    
+
     function clear_cook() {
-        
+
         $.cookie('Address_business_title', '');
         $.cookie('Address_business_number1', '');
         $.cookie('Address_type', '');
@@ -469,50 +469,50 @@
         $.cookie('Address_contact_email', '');
         $.cookie('Address_contact_phone', '');
         $.cookie('Address_notes', '');
-        
-       // $.cookie('Address_notes');
-     
+
+        // $.cookie('Address_notes');
+
     }
-    
+
     function save_form() {
-        
+
         if (s) {
-        
-        $.cookie('Address_business_title', $('#Address_business_title').val());
-        $.cookie('Address_business_number1', $('#Address_business_number1').val());
-        $.cookie('Address_type', $('#Address_type:checked').val());
-        $.cookie('Address_receiver_title_name', $('#Address_receiver_title_name').val());
-        $.cookie('Address_receiver_last_name', $('#Address_receiver_last_name').val());
-        $.cookie('Address_receiver_first_name', $('#Address_receiver_first_name').val());
-        $.cookie('Address_receiver_middle_name', $('#Address_receiver_middle_name').val());
-        $.cookie('Address_country', $('#Address_country').val());
-        $.cookie('Address_state_id', $('.select_states select').val());
-        $.cookie('Address_city', $('#Address_city').val());
-        $.cookie('Address_postindex', $('#Address_postindex').val());
-        $.cookie('Address_streetaddress', $('#Address_streetaddress').val());
-        $.cookie('Address_contact_email', $('#Address_contact_email').val());
-        $.cookie('Address_contact_phone', $('#Address_contact_phone').val());
-        $.cookie('Address_notes', $('#Address_notes').val());
-        
-       // $.cookie('Address_notes');
-     
-      $('title').html($.cookie('Address_state_id'));
+
+            $.cookie('Address_business_title', $('#Address_business_title').val());
+            $.cookie('Address_business_number1', $('#Address_business_number1').val());
+            $.cookie('Address_type', $('#Address_type:checked').val());
+            $.cookie('Address_receiver_title_name', $('#Address_receiver_title_name').val());
+            $.cookie('Address_receiver_last_name', $('#Address_receiver_last_name').val());
+            $.cookie('Address_receiver_first_name', $('#Address_receiver_first_name').val());
+            $.cookie('Address_receiver_middle_name', $('#Address_receiver_middle_name').val());
+            $.cookie('Address_country', $('#Address_country').val());
+            $.cookie('Address_state_id', $('.select_states select').val());
+            $.cookie('Address_city', $('#Address_city').val());
+            $.cookie('Address_postindex', $('#Address_postindex').val());
+            $.cookie('Address_streetaddress', $('#Address_streetaddress').val());
+            $.cookie('Address_contact_email', $('#Address_contact_email').val());
+            $.cookie('Address_contact_phone', $('#Address_contact_phone').val());
+            $.cookie('Address_notes', $('#Address_notes').val());
+
+            // $.cookie('Address_notes');
+
+            $('title').html($.cookie('Address_state_id'));
         }
     }
-    
+
     function load_form() {
-        
-        
-        
+
+
+
         $('#Address_receiver_title_name').val($.cookie('Address_receiver_title_name'));
         $('#Address_receiver_last_name').val($.cookie('Address_receiver_last_name'));
         $('#Address_receiver_first_name').val($.cookie('Address_receiver_first_name'));
         $('#Address_receiver_middle_name').val($.cookie('Address_receiver_middle_name'));
-        
-        
-        
+
+
+
         $('#Address_country').val($.cookie('Address_country'));
-         $('#Address_country').change();
+        $('#Address_country').change();
         $('.select_states select').val($.cookie('Address_state_id'));
         $('#Address_city').val($.cookie('Address_city'));
         $('#Address_postindex').val($.cookie('Address_postindex'));
@@ -520,23 +520,23 @@
         $('#Address_contact_email').val($.cookie('Address_contact_email'));
         $('#Address_contact_phone').val($.cookie('Address_contact_phone'));
         $('#Address_notes').val($.cookie('Address_notes'));
-        
+
         if ($.cookie('Address_type')) {
             $('#Address_type[value='+$.cookie('Address_type')+']').click();
             $('#Address_type[value='+$.cookie('Address_type')+']').change();
             $('#Address_business_title').val($.cookie('Address_business_title'));
-        $('#Address_business_number1').val($.cookie('Address_business_number1'));
-            
+            $('#Address_business_number1').val($.cookie('Address_business_number1'));
+
         }
-        
-       // alert($.cookie('Address_state_id'));
-        
+
+        // alert($.cookie('Address_state_id'));
+
         s = true;
-        
+
     }
 
     $(document).ready(function () {
-        
+
         load_form();
 
         $(document).click(function (event) {
@@ -558,15 +558,16 @@
         $('.selp').css('border', '1px solid #ccc');
 
         $('.cartorder .row label.seld').slice(1, 2).css('border', '1px solid #64717f');
-        
-        
-        
-       // $('input[type=radio]', $('.cartorder .row label.seld #dtype2').slice(0, 1)).attr('checked', 'true');
-       // $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
+
+
+
+        // $('input[type=radio]', $('.cartorder .row label.seld #dtype2').slice(0, 1)).attr('checked', 'true');
+        // $('.check', $('.cartorder .row label.seld').slice(1, 2)).addClass('active');
 
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked', 'true');
         $('.check', $('.selp #dtype2').parent()).addClass('active');
+        $('.delivery_name').html('Доставка почтой');
     })
 
     function checked_sogl() {
@@ -577,13 +578,13 @@
 
         if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
 
-           // $('.order_start').addClass('disabled');
+            // $('.order_start').addClass('disabled');
             $('.box_opacity .op').show();
 
         } else if ($('#Address_country').val() && $('#confirm').prop('checked')) {
 
             $('.box_opacity .op').hide();
-           // $('.order_start').removeClass('disabled');
+            // $('.order_start').removeClass('disabled');
 
         }
 
@@ -630,16 +631,16 @@
             $('.oplata4, .oplata7').hide();
 
         }
-        
+
         if ($('#Address_country').val()==68 || $('#Address_country').val()==62) {
-                
-                $('.seld1').removeClass('act_city');  
-                
-            } else {
-                $('.seld1').addClass('act_city');  
-            }
-        
-        
+
+            $('.seld1').removeClass('act_city');
+
+        } else {
+            $('.seld1').addClass('act_city');
+        }
+
+
 
 
         $('.selp span.check.active').parent().parent().parent().addClass('act');
@@ -756,7 +757,7 @@
         } else {
             $('#Address_receiver_first_name').removeClass('error');
             $('.texterror', $('#Address_receiver_first_name').parent()).html('');
-    }
+        }
 
         if (!$('#Address_country').val()) {
             $('#Address_country').addClass('error');
@@ -885,9 +886,9 @@
                     if (data == '9') {
                         alert('Такой e-mail уже есть зарегистрирован!');
                     } else {
-                        
+
                         clear_cook();
-                        
+
                         location.href = data;
                     }
                 }
@@ -1032,7 +1033,7 @@
         'afterAjax' => 'addrInserted', 'cart' => $cartInfo));
     ?>
 
-<?php if ($t1 AND $t2) : ?>
+    <?php if ($t1 AND $t2) : ?>
 
         <script>
 
@@ -1044,7 +1045,7 @@
 
         </script>
 
-<?php endif; ?>
+    <?php endif; ?>
 
     <div class="cart_footer  footer1" style="width: 553px;">
         Стоимость доставки <span class="delivery_cost">0 &euro;</span> <span class="add_cost" style="font-weight: bold; display: none;">(в корзине имеются товары с платной доставкой)</span>
@@ -1066,9 +1067,8 @@
 
 
     <div class="clearfix"></div>
-    <a href="javascript:;" class="order_start" style="float: right; margin-left: 320px; display: block" onclick="sendforma();">Оформить заказ</a>     
+    <a href="javascript:;" class="order_start" style="float: right; margin-left: 320px; display: block" onclick="sendforma();">Оформить заказ</a>
 
 
 
 </div>
-

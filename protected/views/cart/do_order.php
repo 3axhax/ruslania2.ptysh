@@ -472,6 +472,7 @@
         $('.check', $('.seld #dtype2').parent()).addClass('active');
     $('.delivery_box').show();
         $('.seld #dtype2').parent().addClass('act');
+        $('.delivery_name').html('Доставка почтой');
     
     })
     
