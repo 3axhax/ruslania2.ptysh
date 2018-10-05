@@ -376,6 +376,7 @@ class CartController extends MyController {
             </tr>';
             
             endforeach;
+
         
         echo json_encode($input);
     }
