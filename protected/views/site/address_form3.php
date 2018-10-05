@@ -286,13 +286,15 @@ echo '</div>';
         </div>
     
     <div class="cart_box">
-    
+        <?//var_dump($cart);?>
         <table class="cart" style="width: 100%;">
         <tbody>
             
             
             <?php foreach ($cart['items'] as $id => $item) : ?>
-            
+
+            <?//var_dump($cart);?>
+
             <tr>
                 
                 <td style="width: 31px;">
