@@ -27,37 +27,37 @@ class SiteController extends MyController {
             '10'=> array(
                 'Entity'=>10,
                 'cid'=>213,
-                'name' => 'Распродажа книг',
+                'name' =>Yii::app()->ui->item('A_NEW_SALE_BOOKS'),
                 'url' => '/books/bycategory/213/reduced-prices'
             ),
             '15'=> array(
                 'Entity'=>15,
                 'cid'=>217,
-                'name'=>'Распродажа нот',
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_SHEETMUSIC'),
                 'url'=>'/sheetmusic/bycategory/217/sheet-music-reduced-prices'
             ),
             '60'=> array(
                 'Entity'=>60,
                 'cid'=>8,
-                'name'=>'Распродажа карт',
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_MAPS'),
                 'url'=>'/maps/bycategory/8/reduced-prices'
             ),
             '22'=> array(
                 'Entity'=>22,
                 'cid'=>21,
-                'name'=>'Распродажа музыки',
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_MUSIC'),
                 'url'=>'/music/bycategory/21/cd-at-reduced-prices'
             ),
             '24'=> array(
                 'Entity'=>24,
                 'cid'=>16,
-                'name'=>'Распродажа софта',
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_SOFT'),
                 'url'=>'/soft/bycategory/16/reduced-prices'
             ),
             '40'=> array(
                 'Entity'=>40,
                 'cid'=>43,
-                'name'=>'Распродажа DVD-дисков',
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_DVD'),
                 'url'=>'/video/bycategory/43/dvds-at-reduced-prices'
             )
 
@@ -70,7 +70,7 @@ class SiteController extends MyController {
             $totalItems = $category->GetTotalItems($entity, $row['cid'], true);
             $paginatorInfo = new CPagination($totalItems);
             $paginatorInfo->setPageSize(10);
-            $items = $category->GetItems($entity, $row['cid'], $paginatorInfo, 11, Yii::app()->language, true, '');
+            $items = $category->GetItems($entity, $row['cid'], /*$paginatorInfo*/ false, 11, Yii::app()->language, true, '');
 
             $arSales[(string)$entity]['items'] = $items;
 
