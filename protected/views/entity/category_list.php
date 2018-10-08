@@ -9,7 +9,7 @@ function printTree($tree, $entity, $parent = false, $lvl = 1, $breadcrumbs = arr
 		if (!$parent): /* ?>
 			<div class="b-category-list__topic">'.Yii::app()->ui->item('A_NEW_CATEGORYES').'</div>
 			*/ ?>
-<h1 class="titlenameзаголовки уровней h по типам (шаблонам) страниц><?php
+<h1 class="titlename poht" style="margin-bottom: 20px;"><?php
 	$h1 = array_pop($breadcrumbs);
 	unset($breadcrumbs) ;
 	$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
