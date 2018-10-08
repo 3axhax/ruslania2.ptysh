@@ -2,7 +2,15 @@
 <section class="b-all-category">
 	<div class="container b-all-category__wrapper">
 		<div class="b-category-list">
+			<?php /*
 			<div class="b-category-list__topic"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?></div>
+ */ ?>
+			<h1 class="titlename poht" style="margin-bottom: 20px;"><?php
+				$breadcrumbs = $this->breadcrumbs;
+				$h1 = array_pop($breadcrumbs);
+				unset($breadcrumbs) ;
+				$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+			?><?= $h1 ?></h1>
 <?php foreach ($types as $type): ?>
 			<div style="float: left; width: <?= (100/count($types)) ?>%">
 				<div>

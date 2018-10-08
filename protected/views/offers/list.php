@@ -3,7 +3,15 @@
 			<div class="row">
 
         <div class="span10">
+			<?php /*
             <h2 class="cattitle"><?=$ui->item('RUSLANIA_RECOMMENDS'); ?>:</h2>
+ */ ?>
+			<h1 class="titlename poht" style="margin-bottom: 20px;"><?php
+				$breadcrumbs = $this->breadcrumbs;
+				$h1 = array_pop($breadcrumbs);
+				unset($breadcrumbs) ;
+				$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+				?><?= $h1 ?></h1>
             <ul class="left_list entity text recomends">
                 <?php $i = 1;  foreach($list as $item): ?>
                     <?php $title = ProductHelper::GetTitle($item->attributes);

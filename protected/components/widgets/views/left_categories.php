@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (05.06.2018 23:19)*/ ?>
-<h2 class="cattitle"><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?>:</h2>
+<div class="poht" style="margin: 10px 0 0 0; "><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?>:</div>
 <ul class="left_list divider"><?php /*
 	<li>
 <?php if (empty($cid)): ?>

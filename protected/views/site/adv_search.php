@@ -1,6 +1,12 @@
 
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 <div class="container content_books">
+    <h1 class="titlename poht" style="margin-bottom: 20px;"><?php
+        $breadcrumbs = $this->breadcrumbs;
+        $h1 = array_pop($breadcrumbs);
+        unset($breadcrumbs) ;
+        $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+    ?><?= $h1 ?></h1>
             <?php $this->renderPartial('_adv_search_form'); ?>
 
             <div class="text" style="margin-top: 7px;">

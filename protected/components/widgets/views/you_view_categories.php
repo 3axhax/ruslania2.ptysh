@@ -1,5 +1,8 @@
 <?php /*Created by Кирилл (10.08.2018 20:52)*/ ?>
+<?php /*
 <div class="b-user-seen__topic"><?=Yii::app()->ui->item('A_NEW_VIEWD_ITEMS')?>:</div>
+ */ ?>
+<div class="poht"><?=Yii::app()->ui->item('A_NEW_VIEWD_ITEMS')?>:</div>
 <div class="you_view">
 	<ul>
 <?php foreach ($items as $item):

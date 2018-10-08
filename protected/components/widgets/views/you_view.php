@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (10.08.2018 20:52)*/ ?>
-<h2 class="poht" style="margin-top: 0; margin-bottom: 20px;"><?=Yii::app()->ui->item('A_NEW_VIEWD_ITEMS')?>:</h2>
+<div class="poht"><?=Yii::app()->ui->item('A_NEW_VIEWD_ITEMS')?>:</div>
 <div class="you_view">
 	<ul>
 <?php foreach ($items as $item):

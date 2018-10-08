@@ -85,17 +85,22 @@
 			<div class="row">
 
         <div class="span10">
+            <?php if (empty($liveAction)) $liveAction = 'authors';
+            if (($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) &&
+                mb_strtoupper($liveAction) == 'PUBLISHERS') $liveAction = 'producers';
+            ?>
 
-
+<h1 class="titlename"><?php 
+    $breadcrumbs = $this->breadcrumbs; 
+    $h1 = array_pop($breadcrumbs);
+    unset($breadcrumbs) ;
+    $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+?><?= $h1 ?></h1>
 
 
 
 
             <div class="text charbox">
-			    <?php if (empty($liveAction)) $liveAction = 'authors';
-			    if (($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) &&
-                    mb_strtoupper($liveAction) == 'PUBLISHERS') $liveAction = 'producers';
-			    ?>
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                     <input placeholder="<?= $ui->item('NAME_' . mb_strtoupper($liveAction) . '_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>

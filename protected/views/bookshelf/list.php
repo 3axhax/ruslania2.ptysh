@@ -6,10 +6,18 @@
         </td>
         <td valign="top" style="padding: 5px;">
             <!-- content -->
-            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+            <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs));
+            /*?>
             <!-- /content -->
 
             <h3 style="font-size: 18px; margin-left: 10px;"><?=$ui->item('BOOKSHELF_LIST'); ?>:</h3>
+            */ ?>
+            <h1 class="titlename poht" style="margin-bottom: 20px;"><?php
+                $breadcrumbs = $this->breadcrumbs;
+                $h1 = array_pop($breadcrumbs);
+                unset($breadcrumbs) ;
+                $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+                ?><?= $h1 ?></h1>
             <?php
 
             $models = $dp->getData();

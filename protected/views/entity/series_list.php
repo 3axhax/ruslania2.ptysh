@@ -5,8 +5,13 @@
 <script src="/js/jquery.autocolumnlist.js"></script>
 
 <div class="container cabinet">
-          
 
+<h1 class="titlename"><?php
+    $breadcrumbs = $this->breadcrumbs;
+    $h1 = array_pop($breadcrumbs);
+    unset($breadcrumbs) ;
+    $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+?><?= $h1 ?></h1>
             <div class="text">
                 <ul class="list" id="al50">
                     <?php foreach($list as $item) : ?>

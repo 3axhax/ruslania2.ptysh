@@ -5,6 +5,12 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
     <div class="row">
         
         <div class="span10">
+            <h1 class="titlename poht" style="margin-bottom: 20px;"><?php
+                $breadcrumbs = $this->breadcrumbs;
+                $h1 = array_pop($breadcrumbs);
+                unset($breadcrumbs) ;
+                $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+            ?><?= $h1 ?></h1>
 <?php $desc = ProductHelper::GetTitle($offer, 'description'); ?>
 
             <?php if(!empty($desc)) : ?>

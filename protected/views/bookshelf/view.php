@@ -12,7 +12,7 @@
             <table width="100%" cellspacing="0" cellpadding="0" style="vertical-align: top;">
                 <tr>
                     <td width="35%" valign="top" style="padding-right: 20px;">
-                        <h2><?=CHtml::encode($model['title']); ?></h2>
+                        <h1 class="titlename"><?=CHtml::encode($model['title']); ?></h1>
                         <p><?=nl2br(CHtml::encode($model['small_desc'])); ?></p>
 
                         <audio controls>

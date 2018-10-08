@@ -31,7 +31,7 @@
         </ul>
 
 <?= $form->textField('login', array('placeholder' => $ui->item('regform_email'))); ?>
-<?= $form->passwordField('pwd', array('placeholder' => $ui->item('regform_password'))); ?><a href="<?= Yii::app()->createUrl('site/forgot'); ?>" title="<?= $ui->item('A_REMIND_PASS'); ?>"><?= $ui->item('A_REMIND_PASS'); ?></a>  <a href="<?= Yii::app()->createUrl('site/register'); ?>" title="Регистрация" style="float: right">Регистрация</a>
+<?= $form->passwordField('pwd', array('placeholder' => $ui->item('regform_password'))); ?><a href="<?= Yii::app()->createUrl('site/forgot'); ?>" title="<?= $ui->item('A_REMIND_PASS'); ?>"><?= $ui->item('A_REMIND_PASS'); ?></a>  <a href="<?= Yii::app()->createUrl('site/register'); ?>" title="Регистрация" style="float: right"><?= $ui->item('regform_password') ?></a>
 
         <div style="margin-top: 10px;"><?= $form->submitButton($ui->item('A_SIGNIN'), array('class' => 'sort')); ?></div>
 

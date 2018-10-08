@@ -1,22 +1,23 @@
 <?php
-function printTree($tree, $entity, $parent = false, $lvl = 1)
+function printTree($tree, $entity, $parent = false, $lvl = 1, $breadcrumbs = array())
 
 {
 	
     if (!is_null($tree) && count($tree) > 0)
     {
         
-		if (!$parent) {
-				
-			echo ' <div class="b-category-list__topic">'.Yii::app()->ui->item('A_NEW_CATEGORYES').'</div><ul class="b-category-list__item-outer">';
-		
-		} else {
-			
-			
-			echo '
-            <ul class="b-category-list__inner-list js-slide-content-inner-list tglvl'.$lvl.'">';
-		}
-		
+		if (!$parent): /* ?>
+			<div class="b-category-list__topic">'.Yii::app()->ui->item('A_NEW_CATEGORYES').'</div>
+			*/ ?>
+<h1 class="titlenameзаголовки уровней h по типам (шаблонам) страниц><?php
+	$h1 = array_pop($breadcrumbs);
+	unset($breadcrumbs) ;
+	$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+?><?= $h1 ?></h1>
+<ul class="b-category-list__item-outer">
+		<?php else: ?>
+<ul class="b-category-list__inner-list js-slide-content-inner-list tglvl'.$lvl.'">
+		<?php endif;
 		
         
 		foreach ($tree as $node)
@@ -65,7 +66,7 @@ function printTree($tree, $entity, $parent = false, $lvl = 1)
 		<div class="b-category-list">
 
 
-		<?php printTree($tree, $entity, false); ?>
+		<?php printTree($tree, $entity, false, 1, $this->breadcrumbs); ?>
 	</div>
 		<div class="b-user-seen">
 				<?php $this->widget('YouView', array('tpl'=>'you_view_categories')); ?>

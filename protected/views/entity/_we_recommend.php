@@ -5,7 +5,7 @@
             <div class="triangle-l"></div>
             <div class="triangle-r"></div>
             <div class="infobox">
-                <h3><span><?=$ui->item('WE_RECOMMEND'); ?></span></h3>
+                <div style="font-size: 23px; "><span><?=$ui->item('WE_RECOMMEND'); ?></span></div>
                 <p><?=$ui->item('WE_RECOMMEND_TEXT'); ?><p/>
             </div>
         </div>
