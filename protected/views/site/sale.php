@@ -27,10 +27,8 @@ if ($serGoods) {
     
     <div class="row" style="float: left">
         <div class="span10" style="width: 901px; margin-left: 20px;">
-		<h1>Большая распродажа в Руслании<br />
-Скидки до 80%!</h1>
-		Отличные предложения во всех категориях товаров.<br />
-Нажав на интересующую вас категорию, вы сможете увидеть все товары со скидками из этой категории.
+		<h1><?=$ui->item('A_NEW_SALE_H1')?></h1>
+		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?>
                 <br /><br />
                 <?php
                 if ($items) {
