@@ -987,7 +987,9 @@ class Category {
             implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
             'order by ' . SortOptions::GetSQL($sort, $lang, $entity) . ' '.
-            'limit ' . $paginator->getOffset() . ', ' . $paginator->getLimit() . ' '.
+            (($paginator) ?
+            ('limit ' . $paginator->getOffset() . ', ' . $paginator->getLimit() . ' ')
+            : ' ').
             '';
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
 
