@@ -59,5 +59,26 @@ class UrlController extends MyController {
 		$this->ResponseJson($row);
 	}
 
+	/**
+	 * эта функция написана, что бы руками добавить в файлы-переводчики недостающие данные
+	 */
+	function actionLables() {
+
+		$fileSource = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'ru/uiconst.class.php';
+		$dataSource = require_once($fileSource);
+		$langs = array('de', 'en', 'es', 'fi', 'fr', 'rut', 'se');
+		foreach ($langs as $lang) {
+			$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
+			$data = require_once($file);
+			echo '<b>' . $lang . '</b><br><br>';
+			foreach ($dataSource as $k=>$v) {
+				if (!isset($data[$k])) {
+					echo "'" . $k . "' => '" . htmlspecialchars($v) . "',<br>";
+				}
+			}
+			echo '<br>';
+		}
+
+	}
 
 }
