@@ -61,3 +61,8 @@
         </ul>
     </div>
 </div>
+<style>
+    .slick-slide.slick-active {
+        width: 199px !important;
+    }
+</style>
