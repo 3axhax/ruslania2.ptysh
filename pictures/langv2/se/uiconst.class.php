@@ -1252,4 +1252,6 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
+    'RUSLANIA_RECOMEND' => 'Se personalens rekommendationer',
+
 );

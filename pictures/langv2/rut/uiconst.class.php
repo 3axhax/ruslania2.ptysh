@@ -1256,4 +1256,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
+    'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
+
 );

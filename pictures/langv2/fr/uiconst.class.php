@@ -1243,4 +1243,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
+    'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
+
 );
