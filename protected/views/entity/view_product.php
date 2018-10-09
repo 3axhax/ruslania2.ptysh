@@ -1021,8 +1021,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
-        <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
-
         <?php if ($item['entity'] != Entity::PERIODIC) : ?>
 
             <?php if (!empty($items['dvds'])) : ?>
@@ -1051,7 +1049,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php endif; ?>
 
-
             <?php if (!empty($item['Series'])) : ?>
                 <div class="detail-prop">
                     <div class="prop-name"><?= sprintf($ui->item("SERIES_IS"), ''); ?></div>
@@ -1061,9 +1058,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php endif; ?>
 
-
-
-
             <?php if (!empty($item['catalogue'])) : ?>
                 <div class="detail-prop">
                     <div class="prop-name">Catalogue N:</div>
@@ -1071,10 +1065,6 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
-
-
-
-
 
             <?php if (!empty($item['requirements'])) : ?>
                 <div class="detail-prop">
@@ -1210,6 +1200,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 $this->renderPartial('/entity/_issues_year', array('item' => $item)) ?>
             <?php endif; ?>
         <?php endif; ?>
+
+        <?php $this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>$item['id'], 'index_show'=>0)) ?>
+
     </div>
 
 
