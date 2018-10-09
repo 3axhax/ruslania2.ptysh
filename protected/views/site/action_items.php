@@ -48,7 +48,7 @@
 					$actionTitle = '';
 					if($product['status'] == 'new')
 					{
-						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_RECOMMEND').'</div>';
+						$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_NEW').'</div>';
 						$actionTitleClass = ' new';
 					}
 					elseif($product['status'] == 'sale')
