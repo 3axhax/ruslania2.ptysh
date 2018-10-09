@@ -62,7 +62,9 @@ class ProductHelper
 
         $key = $sKey . '_' . $lang;
         $ret = '';
-        while (true)
+        $i=0;
+        $maxI = count($langs);
+        while (!empty($key)||($i++<=$maxI))
         {
             //if (isset($item[$key]) && !empty($item[$key])) return trim($item[$key]);
             if(array_key_exists($key, $item))
@@ -72,6 +74,7 @@ class ProductHelper
             }
             $key = $langs[$key];
         }
+        if (empty($ret)&&isset($item[$sKey]))  $ret = trim($item[$sKey]);
 
         if(!empty($ret)) {
 
@@ -212,7 +215,7 @@ class ProductHelper
             if($pos !== false)  $tmp = substr($ret, 0, $pos);
             else $tmp = substr($ret, 0, $cnt);
             if($len > 0) { 
-				
+				//var_dump($len);
 				if (!$url) {
 				
 					$tmp .= '...';
