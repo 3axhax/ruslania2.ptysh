@@ -69,8 +69,8 @@ class SiteController extends MyController {
 
             $totalItems = $category->GetTotalItems($entity, $row['cid'], true);
             $paginatorInfo = new CPagination($totalItems);
-            $paginatorInfo->setPageSize(10);
-            $items = $category->GetItems($entity, $row['cid'], /*$paginatorInfo*/ false, 11, Yii::app()->language, true, '');
+            $paginatorInfo->setPageSize(40);
+            $items = $category->GetItems($entity, $row['cid'], $paginatorInfo, 11, Yii::app()->language, true, '');
 
             $arSales[(string)$entity]['items'] = $items;
 
