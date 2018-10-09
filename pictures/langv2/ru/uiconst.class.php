@@ -1192,7 +1192,7 @@ IBAN DE79514303006474790001 <br>
 	'NAME_PUBLISHERS_BY_SEARCH'=>'Начните вводить имя издателя',
 	'NAME_PRODUCERS_BY_SEARCH'=>'Начните вводить имя производителя',
 	'IN_DESCRIPTION'=>'Найдено в описании',
-	'IN_OFFERS'=>'В подборке',
+	'IN_OFFERS'=>'Рекомендуем',
 	'SHOW_ALL'=>'Показать все',
 
 	'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',

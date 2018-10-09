@@ -1200,7 +1200,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Vinkkilistalla',
     'SHOW_ALL' => 'Показать все',
     'HEADER_PAYTRAIL' => 'Оплата Paytrail',
     'HEADER_PAYPAL' => 'Оплата PayPal',
