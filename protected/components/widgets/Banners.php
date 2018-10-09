@@ -468,27 +468,12 @@ class Banners extends MyWidget {
          * та же категория,
          * тот же формат
          * сортировка в случайном порядке
+         *
+         * задание https://dfaktor.bitrix24.ru/company/personal/user/836/tasks/task/view/6440/?MID=23520&IFRAME=Y&IFRAME_TYPE=SIDE_SLIDER#com23520
+         * Музыка:по приоритету: тот же исполнитель, та же категория, та же подборка, тот же формат
          */
+
         $ids = array();
-        if (!empty($this->_params['item']['Offers'])) {
-            //в подборке
-            $offerIds = array();
-            foreach ($this->_params['item']['Offers'] as $offer) $offerIds[] = $offer['id'];
-            if (!empty($offerIds)) {
-                $sql = ''.
-                    'select t.id ' .
-                    'from `music_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
-                    'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-                        'and (t.avail_for_order = 1) '.
-                    'group by t.id '.
-                    'order by rand() '.
-                    'limit ' . $counts . ' '.
-                '';
-                $ids = Yii::app()->db->createCommand($sql)->queryColumn();
-                $counts = $counts - count($ids);
-            }
-        }
         $exclude = $ids;
         $exclude[] = (int) $this->_params['item']['id'];
         if ($counts > 0) {
@@ -529,6 +514,27 @@ class Banners extends MyWidget {
             $ids = array_merge($ids, $result);
             $exclude = array_merge($exclude, $result);
             $counts = $counts - count($result);
+        }
+        if (($counts > 0)&&!empty($this->_params['item']['Offers'])) {
+            //в подборке
+            $offerIds = array();
+            foreach ($this->_params['item']['Offers'] as $offer) $offerIds[] = $offer['id'];
+            if (!empty($offerIds)) {
+                $sql = ''.
+                    'select t.id ' .
+                    'from `music_catalog` as t '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                    'where (t.id not in (' . implode(',', $exclude) . '))'.
+                        'and (t.avail_for_order = 1) '.
+                    'group by t.id '.
+                    'order by rand() '.
+                    'limit ' . $counts . ' '.
+                '';
+                $result = Yii::app()->db->createCommand($sql)->queryColumn();
+                $ids = array_merge($ids, $result);
+                $exclude = array_merge($exclude, $result);
+                $counts = $counts - count($result);
+            }
         }
         if (($counts > 0)&&!empty($this->_params['item']['media_id'])) {
             //формат
