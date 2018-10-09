@@ -1192,7 +1192,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Рекомендуем',
     'SHOW_ALL' => 'Показать все',
     'IN_RECOMMEND' => 'Рекомендации',
     'IN_NEW' => 'Новинка!',
@@ -1251,5 +1251,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+
+    'RUSLANIA_RECOMEND' => 'Se personalens rekommendationer',
 
 );

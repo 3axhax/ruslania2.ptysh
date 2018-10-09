@@ -1200,7 +1200,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Рекомендуем',
     'SHOW_ALL' => 'Показать все',
     'HEADER_PAYTRAIL' => 'Оплата Paytrail',
     'HEADER_PAYPAL' => 'Оплата PayPal',
@@ -1255,5 +1255,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+
+    'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
 
 );
