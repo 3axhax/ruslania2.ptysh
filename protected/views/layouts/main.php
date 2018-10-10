@@ -1138,7 +1138,7 @@ else $act = array('', '');
                         <img src="/new_img/payment2.png" alt="secures by thawte" />
                                                 <!-- <img src="https://seal.thawte.com/getthawteseal?at=0&sealid=1&dn=RUSLANIA.COM&lang=en&gmtoff=-180" alt="" /> -->
 */ ?>
-                        <img src="/new_img/gls.png" alt="FlexDeliveryService" style="width: 80px;" />
+                        <img src="/new_img/gls_square.png" alt="FlexDeliveryService" style="width: 80px;" />
                         <img src="/new_img/payment3.png" alt="PayPal verified" />
                         <img src="/new_img/buyer_protection.jpg" alt="PayPal buyer protection" />
                         <img src="/new_img/payment4.png" alt="verified by visa MasterCard" />
