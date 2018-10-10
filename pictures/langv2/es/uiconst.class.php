@@ -1250,6 +1250,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
 

@@ -1249,6 +1249,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'RUSLANIA_RECOMEND' => 'Katso henkilökunnan suositukset',
 

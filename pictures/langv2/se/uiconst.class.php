@@ -1251,6 +1251,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'RUSLANIA_RECOMEND' => 'Se personalens rekommendationer',
 

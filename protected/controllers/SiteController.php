@@ -25,41 +25,54 @@ class SiteController extends MyController {
         $arSales = array(
 
             '10'=> array(
-                'Entity'=>10,
+                'Entity'=>Entity::BOOKS,
                 'cid'=>213,
                 'name' =>Yii::app()->ui->item('A_NEW_SALE_BOOKS'),
-                'url' => '/books/bycategory/213/reduced-prices'
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::BOOKS), 'cid' => 213))
             ),
             '15'=> array(
-                'Entity'=>15,
+                'Entity'=>Entity::SHEETMUSIC,
                 'cid'=>217,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_SHEETMUSIC'),
-                'url'=>'/sheetmusic/bycategory/217/sheet-music-reduced-prices'
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC), 'cid' => 217))
             ),
             '60'=> array(
-                'Entity'=>60,
+                'Entity'=>Entity::MAPS,
                 'cid'=>8,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_MAPS'),
-                'url'=>'/maps/bycategory/8/reduced-prices'
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::MAPS), 'cid' => 8))
             ),
             '22'=> array(
-                'Entity'=>22,
+                'Entity'=>Entity::MUSIC,
                 'cid'=>21,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_MUSIC'),
-                'url'=>'/music/bycategory/21/cd-at-reduced-prices'
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::MUSIC), 'cid' => 21))
             ),
             '24'=> array(
-                'Entity'=>24,
+                'Entity'=>Entity::SOFT,
                 'cid'=>16,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_SOFT'),
-                'url'=>'/soft/bycategory/16/reduced-prices'
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::SOFT), 'cid' => 16))
             ),
             '40'=> array(
-                'Entity'=>40,
+                'Entity'=>Entity::VIDEO,
                 'cid'=>43,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_DVD'),
-                'url'=>'/video/bycategory/43/dvds-at-reduced-prices'
-            )
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => 43))
+            ),
+            '30'=> array(
+                'Entity'=>Entity::PERIODIC,
+                'cid'=>100,
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_DVD'),
+                'url'=>Yii::app()->createUrl('entity/list',
+                    array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100))
+        )
 
         );
 
