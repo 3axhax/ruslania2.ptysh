@@ -512,7 +512,8 @@ div.footer {
 .news_box ul.books { margin: 0; margin-top: 30px; padding: 0; list-style: none;}
 .news_box ul.books li { width: 170px; float: left; margin-left: 30px; }
 .news_box ul.books li:first-child { margin-left: 0; }
-.news_box ul.books li .title_book { margin-top: 10px; margin-bottom: 5px; height: 90px; line-height: 15px; font-size: 13px;overflow: hidden;}
+.news_box ul.books li .title_book { margin-top: 10px; margin-bottom: 5px; height: 16px; line-height: 15px; font-size: 13px;overflow: hidden;}
+.news_box ul.books li .title_periodic {height: 30px;}
 .news_box ul.books li .title_book a { text-decoration: none; color: rgb(18, 87, 171); font-weight: bold;}
 .news_box ul.books li .author { font-size: 13px; color: rgb(136, 136, 136); height: 30px; overflow: hidden; line-height: 25px;}
 .news_box ul.books li .cost { font-size: 19px; color: rgb(48, 28, 83); font-weight: bold;}
@@ -1406,13 +1407,15 @@ a.addmark span.tooltip span.arrow {
 .tabcontent { display: none; padding: 32px 29px; border-bottom: 1px solid #ececec;border-left: 1px solid #ececec;border-right: 1px solid #ececec; } 
 .tabcontent.active { display: block; } 
 
-h2.poht {
+h2.poht, .poht {
 	margin-top: 40px;
 	font-size: 23px;
 	color: rgb(76, 76, 76);
 	border-bottom: 1px solid #ececec;
 	padding-bottom: 14px;
 }
+
+div.poht {margin-top: 0; margin-bottom: 20px; font-weight: bold; line-height: 40px;}
 
 .more_goods ul.books { margin: 0; margin-top: 30px; padding: 0; list-style: none;}
 .more_goods ul.books li { width: 130px; float: left; margin-left: 30px; }
@@ -3215,7 +3218,3 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .entity_icons i.e40:before { content: '\f008'; top: 7px; left: 7px; }    /*video*/
 .entity_icons i.e60:before { content: '\f278'; top: 8px; left: 6px; }    /*maps*/
 .entity_icons i.e24:before { content: '\f108'; top: 9px; left: 7px; }    /*soft*/
-
-.slick-slide.slick-active {
-    width: 199px !important;
-}

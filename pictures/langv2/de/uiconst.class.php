@@ -1193,7 +1193,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Рекомендуем',
     'SHOW_ALL' => 'Показать все',
     'IN_RECOMMEND' => 'Рекомендации',
     'IN_NEW' => 'Новинка!',
@@ -1255,5 +1255,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
     'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
 );

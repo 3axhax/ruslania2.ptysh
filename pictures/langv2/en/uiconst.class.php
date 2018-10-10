@@ -1204,7 +1204,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Recommended',
     'SHOW_ALL' => 'Показать все',
     'HEADER_PAYTRAIL' => 'Оплата Paytrail',
     'HEADER_PAYPAL' => 'Оплата PayPal',
@@ -1261,5 +1261,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
     'RUSLANIA_RECOMEND' => 'Check out the Ruslania’s recommendations',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
 );

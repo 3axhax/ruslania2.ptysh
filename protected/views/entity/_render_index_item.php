@@ -5,9 +5,12 @@
     <a href="<?=$url; ?>"><img src="<?=Picture::Get($item, Picture::SMALL); ?>" alt="" /></a>
  </div>
  
-	<div class="title_book"><a href="<?=$url; ?>"><?=ProductHelper::GetTitle($item, 'title'); ?></a></div>
+    <div class="title_book <?= ($entity == Entity::PERIODIC) ? 'title_periodic' : ''?>">
+        <a href="<?=$url; ?>" title="<?=ProductHelper::GetTitle($item, 'title'); ?>">
+            <?=ProductHelper::GetTitle($item, 'title'); ?></a>
+    </div>
 	
-	<div class="author"><?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors']) OR !empty($item['Subtitles']) OR !empty($item['AudioStreams'])) : ?>
+	<div class="author"><?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors'])) : ?>
         
             <?php $tmp = array(); if (!empty($item['Authors'])) : ?>
             <?php foreach ($item['Authors'] as $author)
@@ -38,34 +41,6 @@
 			<?php foreach ($item['Directors'] as $director) : ?>
                <? $tmp[] = ProductHelper::GetTitle($director); ?>
             <?php endforeach; ?>
-			<?php endif; ?>
-			
-			
-			<?php if (empty($tmp)&&!empty($item['Subtitles'])) : ?>
-        
-            <?
-            foreach ($item['Subtitles'] as $subtitle)
-            {
-                $tmp[] = ProductHelper::GetTitle($subtitle);
-            }
-            
-            ?>
-        
-			<?php endif; ?>
-			  
-			
-			
-			<?php if (empty($tmp)&&!empty($item['AudioStreams'])) : ?>
-        
-            <?php 
-            foreach ($item['AudioStreams'] as $stream)
-            {
-                $tmp[] = ProductHelper::GetTitle($stream);
-            }
-            
-            ?>
-       
-
 			<?php endif; ?>
 			
 			<? if (!empty($tmp)) {

@@ -1200,7 +1200,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'NAME_PUBLISHERS_BY_SEARCH' => 'Начните вводить имя издателя',
     'NAME_PRODUCERS_BY_SEARCH' => 'Начните вводить имя производителя',
     'IN_DESCRIPTION' => 'Найдено в описании',
-    'IN_OFFERS' => 'В подборке',
+    'IN_OFFERS' => 'Vinkkilistalla',
     'SHOW_ALL' => 'Показать все',
     'HEADER_PAYTRAIL' => 'Оплата Paytrail',
     'HEADER_PAYPAL' => 'Оплата PayPal',
@@ -1249,6 +1249,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'A_NEW_SALE_MUSIC' => 'Распродажа музыки на CD',
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
+    'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'RUSLANIA_RECOMEND' => 'Katso henkilökunnan suositukset',
 
