@@ -9,9 +9,10 @@
         <a href="<?=$url; ?>" title="<?=ProductHelper::GetTitle($item, 'title'); ?>">
             <?=ProductHelper::GetTitle($item, 'title'); ?></a>
     </div>
-	
+
+    <?php if($entity != Entity::PERIODIC):?>
 	<div class="author"><?php if (!empty($item['Authors']) OR !empty($item['Performers']) OR !empty($item['Directors'])) : ?>
-        
+
             <?php $tmp = array(); if (!empty($item['Authors'])) : ?>
             <?php foreach ($item['Authors'] as $author)
             {
@@ -56,12 +57,13 @@
             }
 
             ?>
-        
-			
 
-      
+
+
+
     <?php endif; ?>
 	 </div>
+    <?php endif;?>
         
     <?php $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 

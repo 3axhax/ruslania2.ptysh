@@ -69,7 +69,7 @@ class SiteController extends MyController {
             '30'=> array(
                 'Entity'=>Entity::PERIODIC,
                 'cid'=>100,
-                'name'=>Yii::app()->ui->item('A_NEW_SALE_DVD'),
+                'name'=>Yii::app()->ui->item('A_NEW_SALE_PERIODIC'),
                 'url'=>Yii::app()->createUrl('entity/list',
                     array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100))
         )
