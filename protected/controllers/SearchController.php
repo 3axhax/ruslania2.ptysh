@@ -183,9 +183,14 @@ class SearchController extends MyController {
 
 	function getDidYouMean($q) {
 		$authors = $this->_getAuthors($q);
+		foreach ($authors as $i=>$item) $authors[$i]['didYouMeanType'] = 'authors';
 		$publishers = $this->_getPublishers($q);
+		foreach ($publishers as $i=>$item) $publishers[$i]['didYouMeanType'] = 'publishers';
 		$categories = $this->_getCategories($q);
-		return array_merge($authors, $categories, $publishers);
+		foreach ($categories as $i=>$item) $categories[$i]['didYouMeanType'] = 'categories';
+		$series = $this->_getSeries($q);
+		foreach ($series as $i=>$item) $series[$i]['didYouMeanType'] = 'series';
+		return array_merge($authors, $categories, $publishers, $series);
 	}
 
 	function getListExactMatch($query, $page, $pp) {
@@ -343,6 +348,103 @@ class SearchController extends MyController {
 		return $result;
 	}
 
+	/** функция показывает товары авторов, режисеров, актеров, исполнителей найденных в "возможно вы имели ввиду"
+	 * @param $didYouMean
+	 * @return array
+	 */
+	function getListByDidYouMean($didYouMean) {
+		$peoples = array(
+			'authors'=>array(
+				10=>array(),
+				22=>array(),
+				24=>array(),
+			),
+			'directors'=>array(
+				40=>array(),
+			),
+			'actors'=>array(
+				40=>array(),
+			),
+			'performers'=>array(
+				22=>array(),
+			),
+		);
+		$countAll = 0;
+		foreach ($didYouMean as $i=>$item) {
+			if ($item['didYouMeanType'] == 'authors') {
+				if (!empty($item['orig_data']['is_10_author'])) {
+					$sql = 'select t.id from books_catalog t join books_authors tA on (tA.book_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['authors'][10][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+				if (!empty($item['orig_data']['is_22_author'])) {
+					$sql = 'select t.id from music_catalog t join music_authors tA on (tA.music_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['authors'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+				if (!empty($item['orig_data']['is_24_author'])) {
+					$sql = 'select t.id from soft_catalog t join soft_authors tA on (tA.soft_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['authors'][24][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+				if (!empty($item['orig_data']['is_40_actor'])) {
+					$sql = 'select t.id from video_catalog t join video_actors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['actors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+				if (!empty($item['orig_data']['is_40_director'])) {
+					$sql = 'select t.id from video_catalog t join video_directors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['directors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+				if (!empty($item['orig_data']['is_22_performer'])) {
+					$sql = 'select t.id from music_catalog t join music_performers tA on (tA.music_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+					$peoples['performers'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+					$countAll++;
+				}
+			}
+		}
+		if (empty($countAll)) return array();
+
+		$count = max(1, floor(10/$countAll));
+		$ids = array(
+			'e10' => array(),
+			'e22' => array(),
+			'e24' => array(),
+			'e40' => array(),
+		);
+		foreach ($peoples['authors'][10] as $aId=>$items) {
+			shuffle($items);
+			$ids['e10'] = array_merge($ids['e10'], array_slice($items, 0, $count));
+		}
+		foreach ($peoples['authors'][22] as $aId=>$items) {
+			shuffle($items);
+			$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
+		}
+		foreach ($peoples['authors'][24] as $aId=>$items) {
+			shuffle($items);
+			$ids['e24'] = array_merge($ids['e24'], array_slice($items, 0, $count));
+		}
+		foreach ($peoples['actors'][40] as $aId=>$items) {
+			shuffle($items);
+			$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
+		}
+		foreach ($peoples['directors'][40] as $aId=>$items) {
+			shuffle($items);
+			$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
+		}
+		foreach ($peoples['performers'][22] as $aId=>$items) {
+			shuffle($items);
+			$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
+		}
+		if (empty($ids['e10'])) unset($ids['e10']);
+		if (empty($ids['e22'])) unset($ids['e22']);
+		if (empty($ids['e24'])) unset($ids['e24']);
+		if (empty($ids['e40'])) unset($ids['e40']);
+		return SearchHelper::ProcessProducts2($ids, false);
+//		if (!empty($result)) $result = arr_sl
+	}
+
 	/** функция проверяет найденное в title_. Если не нашло, то в результирующий массив добавляет inDescription
 	 * @param $list
 	 * @param $query
@@ -486,47 +588,103 @@ class SearchController extends MyController {
 
 		if (empty($result)) return array();
 
-		$limit = 3;
-		$ids = array();
-		$findAuthor = false;
+		$limit = 5;
+		$peoples = array(
+			'authors'=>array(
+				10=>array(),
+				22=>array(),
+				24=>array(),
+			),
+			'actors'=>array(
+				40=>array(),
+			),
+			'directors'=>array(
+				40=>array(),
+			),
+			'performers'=>array(
+				22=>array(),
+			),
+		);
 		foreach ($result as $id=>$item) {
-			if ($item['is_10_author'] > 0) {
-				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10);
-				$findAuthor = true;
+			if ((count($peoples['authors'][10]) < $limit)&&($item['is_10_author'] > 0)) {
+				$peoples['authors'][10][$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'id'=>$id);
 			}
-			elseif ($item['is_22_author'] > 0) {
-				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22);
-				$findAuthor = true;
+			if ((count($peoples['authors'][22]) < $limit)&&($item['is_22_author'] > 0)) {
+				$peoples['authors'][22][$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'id'=>$id);
 			}
-			elseif ($item['is_24_author'] > 0) {
-				$ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24);
-				$findAuthor = true;
+			if ((count($peoples['authors'][24]) < $limit)&&($item['is_24_author'] > 0)) {
+				$peoples['authors'][24][$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'id'=>$id);
 			}
-			elseif ($item['is_40_actor'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40);
-			elseif ($item['is_40_director'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40);
-			elseif ($item['is_22_performer'] > 0) $ids[$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22);
-			if (count($ids) >= $limit) break;
+			if ((count($peoples['actors'][40]) < $limit)&&($item['is_40_actor'] > 0)) {
+				$peoples['actors'][40][$id] = array('role_id'=>Person::ROLE_ACTOR, 'entity'=>40, 'id'=>$id);
+			}
+			if ((count($peoples['directors'][40]) < $limit)&&($item['is_40_director'] > 0)) {
+				$peoples['directors'][40][$id] = array('role_id'=>Person::ROLE_DIRECTOR, 'entity'=>40, 'id'=>$id);
+			}
+			if ((count($peoples['performers'][22]) < $limit)&&($item['is_22_performer'] > 0)) {
+				$peoples['performers'][22][$id] = array('role_id'=>Person::ROLE_PERFORMER, 'entity'=>22, 'id'=>$id);
+			}
+			if ((count($peoples['authors'][10]) >= $limit)&&
+				(count($peoples['authors'][22]) >= $limit)&&
+				(count($peoples['authors'][24]) >= $limit)&&
+				(count($peoples['actors'][40]) >= $limit)&&
+				(count($peoples['directors'][40]) >= $limit)&&
+				(count($peoples['performers'][22]) >= $limit)
+			) break;
 		}
-		if (empty($findAuthor)&&(count($ids) < $limit)) {
+
+		if (count($peoples['authors'][10]) < $limit) {
 			$ids10 = $this->_isAuthors(10, array_keys($result));
-			$ids22 = $this->_isAuthors(22, array_keys($result));
-			$ids24 = $this->_isAuthors(24, array_keys($result));
 			foreach ($result as $id=>$item) {
-				if (in_array($id, $ids10)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author']);
-				elseif (in_array($id, $ids22)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>22, 'itemsAvail'=>$item['is_22_author']);
-				elseif (in_array($id, $ids24)) $ids[$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>24, 'itemsAvail'=>$item['is_24_author']);
-				if (count($ids) >= $limit) break;
+				if (!isset($peoples['authors'][10][$id])&&in_array($id, $ids10)) {
+					$peoples['authors'][10][$id] = array('role_id'=>Person::ROLE_AUTHOR, 'entity'=>10, 'itemsAvail'=>$item['is_10_author'], 'id'=>$id);
+				}
+				if (count($peoples['authors'][10]) >= $limit) break;
 			}
 		}
-		if (empty($ids)) return array();
+
+		if (empty($peoples['authors'][10])&&
+			empty($peoples['authors'][22])&&
+			empty($peoples['authors'][24])&&
+			empty($peoples['actors'][40])&&
+			empty($peoples['directors'][40])&&
+			empty($peoples['performers'][22])
+		)  return array();
 
 		$roles = array();
-		foreach($ids as $id=>$r) {
-			$roles[$r['role_id']][$id] = array('real_id'=>$id, 'entity'=>$r['entity']);
-			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$id]['itemsAvail'] = $r['itemsAvail'];
+		$authorIds = array();
+
+		foreach($peoples['authors'][10] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
 		}
-		$ids = array_keys($ids);
-		$result = SearchHelper::ProcessPersons($roles, $ids, array(), $this->GetAvail(1));
+		foreach($peoples['authors'][22] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
+		}
+		foreach($peoples['authors'][24] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
+		}
+		foreach($peoples['actors'][40] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
+		}
+		foreach($peoples['directors'][40] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
+		}
+		foreach($peoples['performers'][22] as $r) {
+			$authorIds[$r['id']] = 1;
+			$roles[$r['role_id']][$r['id']] = array('real_id'=>$r['id'], 'entity'=>$r['entity']);
+			if (isset($r['itemsAvail'])) $roles[$r['role_id']][$r['id']]['itemsAvail'] = $r['itemsAvail'];
+		}
+		$result = SearchHelper::ProcessPersons($roles, array_keys($authorIds), array(), $this->GetAvail(1));
 		return $result;
 	}
 
@@ -610,13 +768,15 @@ class SearchController extends MyController {
 
 		$i = 0;
 		$condition = array();
+		$max = count($where);
 		do {
 			foreach ($where as $e=>$cond) {
 				$condition[] = array_shift($cond);
 				if (empty($cond)) unset($where[$e]);
+				else $where[$e] = $cond;
 				$i++;
 			}
-		} while (($i < 3)&&!empty($where));
+		} while (($i < max(3, $max))&&!empty($where));
 
 		if(empty($condition)) return array();
 
@@ -638,6 +798,59 @@ class SearchController extends MyController {
 			if (!$this->GetAvail(1)) $urlParams['avail'] = 0;
 			$row['url'] = Yii::app()->createUrl('entity/list', $urlParams);
 			$row['title'] = Entity::GetTitle($item['entity']) . ' - ' . Yii::app()->ui->item('Related categories') . ': <b>' . $itemTitle . '</b>';
+			$row['is_product'] = false;
+			$row['orig_data'] = $item;
+			$ret[] = $row;
+		}
+		return $ret;
+	}
+
+	protected function _getSeries($query) {
+		$result = $this->_queryIndex($query, 'series', 0);
+		if (empty($result)) return array();
+
+		$where = array();
+		foreach($result as $serie) {
+			//audio не показываем
+			if (empty($serie['entity'])||empty($serie['real_id'])||($serie['entity'] == 20)) continue;
+
+			if (empty($where[$serie['entity']])) $where[$serie['entity']] = array();
+			$where[$serie['entity']][] = '((entity='.intVal($serie['entity']).') AND (id='.intVal($serie['real_id']).'))';
+		}
+		if(empty($where)) return array();
+
+		$i = 0;
+		$condition = array();
+		$max = count($where);
+		do {
+			foreach ($where as $e=>$cond) {
+				$condition[] = array_shift($cond);
+				if (empty($cond)) unset($where[$e]);
+				else $where[$e] = $cond;
+				$i++;
+			}
+		} while (($i < max(3, $max))&&!empty($where));
+
+		if(empty($condition)) return array();
+
+
+
+		$sql = 'SELECT * FROM all_series WHERE '.implode(' OR ', $condition);
+		$rows = Yii::app()->db->createCommand($sql)->queryAll();
+
+		$ret = array();
+		foreach ($rows as $item) {
+			$itemTitle = ProductHelper::GetTitle($item);
+			$row = array();
+
+			$urlParams = array(
+				'sid' => $item['id'],
+				'title' => ProductHelper::ToAscii($itemTitle),
+				'entity' => Entity::GetUrlKey($item['entity'])
+			);
+			if (!$this->GetAvail(1)) $urlParams['avail'] = 0;
+			$row['url'] = Yii::app()->createUrl('entity/byseries', $urlParams);
+			$row['title'] = Yii::app()->ui->item('FOUND_' . mb_strtoupper(Entity::GetUrlKey($item['entity'])) . '_SERIES', $itemTitle);
 			$row['is_product'] = false;
 			$row['orig_data'] = $item;
 			$ret[] = $row;

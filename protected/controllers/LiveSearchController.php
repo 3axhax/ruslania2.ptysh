@@ -40,12 +40,14 @@ class LiveSearchController extends MyController {
 					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
 			}
 
+			if (empty($list)&&!empty($didYouMean)) $list = $sController->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
 				$result['list'] = array();
 				foreach ($list as $row) {
 					$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
 				}
 			}
+
 		}
 		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
@@ -85,6 +87,7 @@ class LiveSearchController extends MyController {
 					$result[] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean));
 			}
 
+			if (empty($list)&&!empty($didYouMean)) $list = $sController->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
 				foreach ($list as $row) {
 					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));

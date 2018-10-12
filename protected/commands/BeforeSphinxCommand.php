@@ -31,6 +31,19 @@ class BeforeSphinxCommand extends CConsoleCommand {
 			}
 		}
 
+		$sql = 'truncate all_series';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			if (($entity != 20)&&!empty($params['site_series_table'])) {
+				$sql = ''.
+					'insert ignore into all_series (entity, id, title_ru, title_en, title_fi, title_rut) '.
+					'select ' . $entity . ', id, title_ru, title_en, title_fi, title_rut '.
+					'from ' . $params['site_series_table'] . ' '.
+					'';
+				Yii::app()->db->createCommand()->setText($sql)->execute();
+			}
+		}
+
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 

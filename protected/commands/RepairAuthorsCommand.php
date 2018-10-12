@@ -13,6 +13,7 @@ class RepairAuthorsCommand extends CConsoleCommand {
 	private $_apostropheAuthors = array();//авторы, у которых есть апострофы. Надо, что бы сравнить О'Генри и О. Генри и О.Генри
 
 	public function actionIndex() {
+		echo 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		$sql = ''.
 			'update ' . $this->_table . ' set '	.
@@ -27,7 +28,6 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			'';
 		$this->_query($sql);
 
-		echo 'start ' . date('d.m.Y H:i:s') . "\n";
 		foreach ($this->_query($this->_sql100()) as $author) {
 			$author = $this->_checkInitials($author);
 			if (!empty($author['repair_title_ru'])) $this->_update($author);
@@ -230,11 +230,27 @@ class RepairAuthorsCommand extends CConsoleCommand {
 	private function _updateLables() {
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			switch ((int)$entity) {
-				case 10: case 15: case 24:
+				case 10:
+					$sql = ''.
+						'create temporary table _tmp_authors_books (id int, primary key(id)) '.
+						'select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by tIA.author_id'.
+					'';
+					$this->_query($sql);
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
-							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+							'left join _tmp_authors_books tI using (id)'.
+	//							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
+	//							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+						'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+					'';
+				$this->_query($sql);
+				break;
+				case 15: case 24:
+					$sql = ''.
+						'update ' . $this->_table . ' t '.
+							'left join (select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+//							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
+//							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
 						'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
 					'';
 					$this->_query($sql);
@@ -242,16 +258,18 @@ class RepairAuthorsCommand extends CConsoleCommand {
 				case 20:case 22:
 				$sql = ''.
 					'update ' . $this->_table . ' t '.
-						'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
-						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
-					'set is_' . $entity . '_author = if(tI.id is null, 0, 1), '.
-						'is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
+						'left join (select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+//						'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
+//						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+					'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+//						'is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
 				'';
 				$this->_query($sql);
 				$sql = ''.
 					'update ' . $this->_table . ' t '.
-						'left join ' . $params['performer_table'] . ' tIA on (tIA.person_id = t.id) '.
-						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
+						'left join (select tIA.person_id id from ' . $params['performer_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+//						'left join ' . $params['performer_table'] . ' tIA on (tIA.person_id = t.id) '.
+//						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
 					'set is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
 				'';
 				$this->_query($sql);
@@ -259,15 +277,17 @@ class RepairAuthorsCommand extends CConsoleCommand {
 				case 40:
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join video_directors tID on (tID.person_id = t.id) '.
-							'left join video_catalog tI on (tI.id = tID.video_id) AND (tI.avail_for_order = 1) '.
+							'left join (select tIA.person_id id from video_directors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+//							'left join video_directors tID on (tID.person_id = t.id) '.
+//							'left join video_catalog tI on (tI.id = tID.video_id) AND (tI.avail_for_order = 1) '.
 						'set is_' . $entity . '_director = if(tI.id is null, 0, 1) '.
 					'';
 					$this->_query($sql);
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join video_actors tIA on (tIA.person_id = t.id) '.
-							'left join video_catalog tI on (tI.id = tIA.video_id) AND (tI.avail_for_order = 1) '.
+							'left join (select tIA.person_id id from video_actors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id) '.
+//							'left join video_actors tIA on (tIA.person_id = t.id) '.
+//							'left join video_catalog tI on (tI.id = tIA.video_id) AND (tI.avail_for_order = 1) '.
 						'set is_' . $entity . '_actor = if(tI.id is null, 0, 1) '.
 					'';
 					$this->_query($sql);
