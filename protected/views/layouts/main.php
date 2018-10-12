@@ -1139,7 +1139,7 @@ else $act = array('', '');
                                                 <!-- <img src="https://seal.thawte.com/getthawteseal?at=0&sealid=1&dn=RUSLANIA.COM&lang=en&gmtoff=-180" alt="" /> -->
 */ ?>
                         <img src="/new_img/gls_square.png" alt="FlexDeliveryService" style="width: 80px;" />
-                        <img src="/new_img/payment3.png" alt="PayPal verified" />
+                        <a href="<?= Yii::app()->createUrl('site/static', array('page'=>'paypal')) ?>"><img src="/new_img/payment3.png" alt="PayPal verified" /></a>
                         <img src="/new_img/buyer_protection.jpg" alt="PayPal buyer protection" />
                         <img src="/new_img/payment4.png" alt="verified by visa MasterCard" />
 

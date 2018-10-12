@@ -414,15 +414,16 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) :
             $langs = array();
             foreach ($item['Languages'] as $lang) {
-                $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
+                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
             }
+            if (!empty($langs)):
             ?>
             <div class="authors" style="margin-bottom:5px;">
                 <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? $ui->item("CATALOGINDEX_CHANGE_THEME") : $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
                 <div class="clearBoth"></div>
             </div>
-        <?php endif; ?>
+        <?php endif; endif; ?>
 
         <?php if (!empty($item['format'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
