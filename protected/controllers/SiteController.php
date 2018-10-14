@@ -379,7 +379,7 @@ class SiteController extends MyController {
 
     public function actionLogout() {
         Yii::app()->user->logout();
-        $this->redirect('/');
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function afterAction($action) {
