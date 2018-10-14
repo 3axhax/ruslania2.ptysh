@@ -48,7 +48,7 @@
         <?php if($refresh) : ?>
         window.location.reload();
         <?php else : ?>
-        window.location.href = '/';
+        window.location.href = '<?=$_SERVER['HTTP_REFERER'];?>';
         <?php endif; ?>
     }
 </script>
