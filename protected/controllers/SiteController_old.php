@@ -45,9 +45,9 @@ class SiteController extends MyController {
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(10);
         $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail);
-		
-		
-		
+
+
+
         //var_dump($items);
 
         $this->renderPartial('listmenu', array('categoryList' => $catList,
@@ -159,7 +159,7 @@ class SiteController extends MyController {
                 $address->DeleteAddress($uid, $oldID);
                 // Если у человека были подписки, то послать емейл в отдел подписок о смене адреса
                 $address->NotifyIfAddressChanged($uid, $oldID, $address->attributes);
- 
+
                 $this->ResponseJsonOk('Address inserted');
             }
             $this->ResponseJson($ret);
@@ -490,70 +490,70 @@ class SiteController extends MyController {
             foreach ($result as $idx => $data)
                 unset($result[$idx]['orig_data']);
             $arr = array_merge($result, $products);
-			
+
 			$this->searchResults = count($arr);
-			
+
 			$ents = Entity::GetEntitiesList();
-			
+
 			foreach($arr as $k => $goods) {
-				
+
 				$curCount = (int) $r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']][1];
-				
+
 				$r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']] = array($q,$curCount+1, 'в разделе '. Entity::GetTitle($goods['entity']), '/site/search?q='.$q.'&e='.$goods['entity'].'&avail='.$avail);
-				
+
 			}
-			
+
 			$r[] = $arr;
-			
+
 			$this->ResponseJson($r);
         }
 
         $paginatorInfo = new CPagination($totalFound);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-        $this->searchResults = $totalFound;		
-		
+        $this->searchResults = $totalFound;
+
 		$arr_order = array_filter($products, function ($arr) {
-			
+
 			if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-				
+
 				return true;
-				
+
 			}
-			
+
 		});
-		
+
 		$arr_order2 = array_filter($products, function ($arr) {
-			
+
 			if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
-				
+
 				return true;
-				
+
 			}
-			
+
 		});
-		
+
 		$arr_not_order = array_filter($products, function ($arr) {
-			
+
 			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
-				
+
 				return true;
-				
+
 			}
-			
+
 		});
-		
+
 		$arr_not_avail = array_filter($products, function ($arr) {
-			
+
 			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
-				
+
 				return true;
-				
+
 			}
-			
+
 		});
-		
+
 		//$products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
-		
+
 		// постраничный результат
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
         $this->render('search', array('q' => $q, 'items' => $result,
@@ -729,7 +729,7 @@ class SiteController extends MyController {
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
         if (Yii::app()->request->isPostRequest) {
             $category = new Category();
-			
+
             echo $category->count_filter($_POST['entity_val'], $_POST['cid_val'], $_POST);
         }
     }
@@ -744,21 +744,21 @@ class SiteController extends MyController {
     function actionGGfilter($entity = 0, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0', $izda = '0', $seria = '0', $cmin = '0', $cmax = '0', $binding = '0', $langsel = '') {
 
         /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/cmin/1000/cmax/9000/ */
-		
+
 		//var_dump($binding);
-		
+
         $_GET['name_search'] = $_POST['search_name'];
         $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
         $_GET['binding'] = serialize($_POST['binding_id']);
         //$_GET['langsel'] = serialize($_POST['langsel']);
-		
+
 		//var_dump($_GET);
 
         //записываем фильтр в куки каждой категории
         if (Yii::app()->getRequest()->cookies['filter_e' . $entity . '_c_' . $cid]->value != serialize($_GET)) {
 
             Yii::app()->getRequest()->cookies['filter_e' . $entity . '_c_' . $cid] = new CHttpCookie('filter_e' . $entity . '_c_' . $cid, serialize($_GET));
-			
+
         }
 
         $data = unserialize(Yii::app()->getRequest()->cookies['filter_e' . $entity . '_c_' . $cid]->value); //получаем строку с куки
@@ -784,18 +784,18 @@ class SiteController extends MyController {
             'cid' => $cid
         ));
     }
-	
+
 	function actionAddComments() {
 		if (Yii::app()->request->isPostRequest) {
-			
+
 			if (!trim(strip_tags($_POST['comment_text']))) {
 				return '';
 			}
-			
+
 			$text = trim(strip_tags($_POST['comment_text']));
-			
+
 			$text = str_replace("\n", '<br />', $text);
-			
+
 			$comm = new Comments;
 			$comm->date_publ = date('Y-m-d');
 			$comm->text = $text;
@@ -803,33 +803,33 @@ class SiteController extends MyController {
 			$comm->product_entity = $_POST['entity'];
 			$comm->user_id = Yii::app()->user->id;
 			$comm->moder = 0;
-			
+
 			$comm->save(false);
-			
+
 			$comments = $comm->get_list($_POST['entity'], $_POST['id']);
-			
+
 			echo '1';
-		
+
 		}
 	}
-	
+
 	function actionLoadHistorySubs() {
 		if (Yii::app()->request->isPostRequest) {
-				
+
 				$sql = 'SELECT * FROM `subscriptions_sentlog` WHERE econet_id='.$_POST['uid'].' AND periodic_id='.$_POST['sid'].' ORDER BY sent_date DESC';
-				
+
 				$subs_id = $_POST['subsid'];
-				
+
 				$rowc = Yii::app()->db->createCommand($sql)->queryAll();
-								
+
 				if (!$rowc) {
 					echo Yii::app()->ui->item('A_NEW_SUBS_NOTFOUND');
 				} else {
-								
-					
-						
+
+
+
 						$month = array(
-							
+
 							'',
 							Yii::app()->ui->item("A_NEW_SUBS_MONTH1"),
 							Yii::app()->ui->item("A_NEW_SUBS_MONTH2"),
@@ -843,9 +843,9 @@ class SiteController extends MyController {
 							Yii::app()->ui->item("A_NEW_SUBS_MONTH10"),
 							Yii::app()->ui->item("A_NEW_SUBS_MONTH11"),
 							Yii::app()->ui->item("A_NEW_SUBS_MONTH12")
-					
+
 						);
-						
+
 					echo '
 					
 					<table>
@@ -857,29 +857,29 @@ class SiteController extends MyController {
 				</tr>
 			</thead>
 			<tbody>';
-				
-				foreach($rowc as $k=>$row) : 
-				
+
+				foreach($rowc as $k=>$row) :
+
 				echo '<tr>
 					<td>'.date('d '.$month[date('n',strtotime($row['sent_date']))].' Y', strtotime($row['sent_date'])). '<br />'.date('H:i:s', strtotime($row['sent_date'])).'</td>
 					<td>'.$subs_id.'</td>
 					<td style="text-align: center;">'.$row['number'].' / '.$row['year_of'].'</td>
 				</tr>';
-				
+
 				endforeach;
-				
+
 			echo '</tbody>
 		</table>
 					
 					
-					';	
-						
-						
-						
-					
-								
+					';
+
+
+
+
+
 				}
-				
+
 		}
 	}
 

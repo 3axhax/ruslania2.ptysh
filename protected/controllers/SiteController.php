@@ -8,12 +8,12 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-                'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
-                    'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                    'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
-                'users' => array('*')),
+            'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
+                'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
+                'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
+            'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                    'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs'),
+                'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs'),
                 'users' => array('@')),
             array('deny',
                 'users' => array('*')));
@@ -72,7 +72,7 @@ class SiteController extends MyController {
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_PERIODIC'),
                 'url'=>Yii::app()->createUrl('entity/list',
                     array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100))
-        )
+            )
 
         );
 
@@ -116,9 +116,9 @@ class SiteController extends MyController {
         $paginatorInfo = new CPagination($totalItems);
         $paginatorInfo->setPageSize(10);
         $items = $category->GetItems($entity, $cid, $paginatorInfo, $sort, Yii::app()->language, $avail);
-		
-		
-		
+
+
+
         //var_dump($items);
 
         $this->renderPartial('listmenu', array('categoryList' => $catList,
@@ -238,7 +238,7 @@ class SiteController extends MyController {
                 $address->DeleteAddress($uid, $oldID);
                 // Если у человека были подписки, то послать емейл в отдел подписок о смене адреса
                 $address->NotifyIfAddressChanged($uid, $oldID, $address->attributes);
- 
+
                 $this->ResponseJsonOk('Address inserted');
             }
             $this->ResponseJson($ret);
@@ -300,42 +300,42 @@ class SiteController extends MyController {
             Yii::app()->end();
         }
     }
-    
+
     public function actionAllSearch() {
-        
-        
+
+
         $ser = new Series();
         $rows = $ser->allSearch();
-        
+
         if (!$_GET['page']) {
             $_GET['page'] = 1;
         }
-        
+
         $count = ceil($rows/1500);
         $p = $_GET['page'] * 1500;
         $limit = (($_GET['page']-1) * 1500) . ',1500';
-        
+
         for ($i = 0; $i < $count; $i++) {
-            
+
             if ($_GET['page']-1 == $i) {
                 echo ($i+1).'&nbsp;&nbsp;&nbsp;';
                 continue;
             }
-            
+
             echo '<a href="?page='.($i+1).'">'.($i+1).'</a>&nbsp;&nbsp;&nbsp;';
-        
+
         }
         echo '<br /><br />';
         $sql = 'SELECT * FROM `users_search_log` ORDER BY date_of LIMIT '.$limit;
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
-        
+
         foreach ($rows as $key) {
-            
+
             echo $key['query'].'<br />';
-            
+
         }
     }
-    
+
     public function actionRegister() {
         $user = new User('register');
         if (Yii::app()->request->isPostRequest) {
@@ -379,7 +379,7 @@ class SiteController extends MyController {
 
     public function actionLogout() {
         Yii::app()->user->logout();
-        $this->redirect('/');
+        $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
     public function afterAction($action) {
@@ -463,13 +463,13 @@ class SiteController extends MyController {
 
             $categoriesResult = SearchHelper::SearchInCategories($q, $searchFilters);
             $seriesResult = array(); //$this->SearchInSeries($search, $q, $e);
-			
-			//var_dump($authorsResult);
-			
+
+            //var_dump($authorsResult);
+
             $authorsIds = array();
             foreach ($authorsResult as $author)
                 $authorsIds[] = $author['orig_data']['id'];
-				$publishersIds = array();
+            $publishersIds = array();
             foreach ($publishersResult as $publisher)
                 $publishersIds[] = $publisher['orig_data']['id'];
             $categoriesIds = array();
@@ -523,12 +523,12 @@ class SiteController extends MyController {
                 $alreadyAuthors = array();
                 $alreadyPublishers = array();
 
-                        if ($res['total_found'] > 0) {
-                            foreach ($res['matches'] as $match) {
-                                $attrs = $match['attrs'];
-                                $categories = $attrs['category'];
-                                $authors = $attrs['author'];
-                                $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
+                if ($res['total_found'] > 0) {
+                    foreach ($res['matches'] as $match) {
+                        $attrs = $match['attrs'];
+                        $categories = $attrs['category'];
+                        $authors = $attrs['author'];
+                        $publisher = array_key_exists('publisher_id', $attrs) ? $attrs['publisher_id'] : false;
                         if (!empty($publisher) && !in_array($publisher, $alreadyPublishers)) {
                             $tmpFilter['publisher_id'][] = $publisher;
                             $alreadyPublishers[] = $publisher;
@@ -608,133 +608,133 @@ class SiteController extends MyController {
             }
 
             $products = array_merge($products, $realProducts);
-			
-			//var_dump($products);
-			
-			$tF = 0;
+
+            //var_dump($products);
+
+            $tF = 0;
             $prodCrossAuthors = SearchHelper::SearchCrossProdAuthors($q, $searchFilters, $authorsResult, $page, $pp, $tF);
             $products = array_merge($prodCrossAuthors['Items'], $products);
-			
+
             $totalFound += $tF;
-			
-			//$k = array();
-			$s = 0;
-			
-			$products2 = array();
-			
-			foreach($products as $e=>$ids) {
-				
-				$k = array();
-				
-				$ids = (array)$ids;
-				
-				
-				if (count($ids)) {
-				
-				foreach ($ids as $id) {
-					
-					if (!in_array($id, $k)) {
-						$k[] = $id;
-						$s++;
-					}
-					
-				}
-				
-				}
-				
-				$products2[$e] = $k;
-				
-			}
-			
-			$products = SearchHelper::ProcessProducts2($products2);
-			
-			
-			
-			//var_dump($products);
-			
-			//сортировка товаров
-			
-			$arr_order = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-           
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_order2 = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_not_order = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_not_avail = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
-         
-		
-		 
-		/* разбиваем на страницы */
-		$page_count = Yii::app()->params['ItemsPerPage'];
-		
-		$curpage = (int) $_GET['page'];
-		
-		if (!$curpage) $curpage = 1;
-		
-		$min = ($curpage-1) * $page_count;
-		
-		if ($min == 0) { $min = 1; }
-		
-		$max = $min+$page_count;
-		
-		//var_dump($page_count);
-		
-		$i = 0;
-			
-			$products2 = array();
-			
-			foreach($products as $e=>$ids) {
-				
-								
-					$i++;
-			
-					if ($i<$min OR $max<=$i) continue;
-					
-					$products2[(string)$e] = $ids;
-				
-				
-				
-			}
-			
-			
-			$products = $products2;
-			
-			
-			 if (count($filterResult) > 3)
+
+            //$k = array();
+            $s = 0;
+
+            $products2 = array();
+
+            foreach($products as $e=>$ids) {
+
+                $k = array();
+
+                $ids = (array)$ids;
+
+
+                if (count($ids)) {
+
+                    foreach ($ids as $id) {
+
+                        if (!in_array($id, $k)) {
+                            $k[] = $id;
+                            $s++;
+                        }
+
+                    }
+
+                }
+
+                $products2[$e] = $k;
+
+            }
+
+            $products = SearchHelper::ProcessProducts2($products2);
+
+
+
+            //var_dump($products);
+
+            //сортировка товаров
+
+            $arr_order = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_order2 = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_not_order = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_not_avail = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
+
+
+
+            /* разбиваем на страницы */
+            $page_count = Yii::app()->params['ItemsPerPage'];
+
+            $curpage = (int) $_GET['page'];
+
+            if (!$curpage) $curpage = 1;
+
+            $min = ($curpage-1) * $page_count;
+
+            if ($min == 0) { $min = 1; }
+
+            $max = $min+$page_count;
+
+            //var_dump($page_count);
+
+            $i = 0;
+
+            $products2 = array();
+
+            foreach($products as $e=>$ids) {
+
+
+                $i++;
+
+                if ($i<$min OR $max<=$i) continue;
+
+                $products2[(string)$e] = $ids;
+
+
+
+            }
+
+
+            $products = $products2;
+
+
+            if (count($filterResult) > 3)
                 $filterResult = array_splice($filterResult, 0, 3);
             $result = array_merge($result, $filterResult);
             if (count($authorsResult) > 3)
@@ -748,165 +748,165 @@ class SiteController extends MyController {
                 $publishersResult = array_splice($publishersResult, 0, 3);
             $result = array_merge($result, $publishersResult);
             $result = array_merge($result, $seriesResult);
-			
-			
+
+
         }
 
         if (!empty($resArray)) {
             $t = SearchHelper::ProcessProducts($resArray);
-			$s = 0;
-			
-			$products2 = array();
-			
-			foreach($t as $e=>$ids) {
-				
-				$k = array();
-				
-				foreach ($ids as $id) {
-					
-					if (!in_array($id, $k)) {
-						$k[] = $id;
-						$s++;
-					}
-					
-				}
-				
-				$products2[$e] = $k;
-				
-			}
-			
-			$products = SearchHelper::ProcessProducts2($products2);
-			
-			
-			
-			//var_dump($products);
-			
-			//сортировка товаров
-			
-			$arr_order = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_order2 = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_not_order = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$arr_not_avail = array_filter($products, function ($arr) {
-			
-			if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
-				
-				return true;
-				
-			}
-			
-		});
-		
-		$products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
-         
-		
-		 
-		/* разбиваем на страницы */
-		$page_count = Yii::app()->params['ItemsPerPage'];
-		
-		$curpage = (int) $_GET['page'];
-		
-		if (!$curpage) $curpage = 1;
-		
-		$min = ($curpage-1) * $page_count;
-		
-		if ($min == 0) { $min = 1; }
-		
-		$max = $min+$page_count;
-		
-		//var_dump($page_count);
-		
-		$i = 0;
-			
-			$products2 = array();
-			
-			foreach($products as $e=>$ids) {
-				
-								
-					$i++;
-			
-					if ($i<$min OR $max<=$i) continue;
-					
-					$products2[(string)$e] = $ids;
-				
-				
-				
-			}
-			
-			
-			$products = $products2;
-			
-			
+            $s = 0;
+
+            $products2 = array();
+
+            foreach($t as $e=>$ids) {
+
+                $k = array();
+
+                foreach ($ids as $id) {
+
+                    if (!in_array($id, $k)) {
+                        $k[] = $id;
+                        $s++;
+                    }
+
+                }
+
+                $products2[$e] = $k;
+
+            }
+
+            $products = SearchHelper::ProcessProducts2($products2);
+
+
+
+            //var_dump($products);
+
+            //сортировка товаров
+
+            $arr_order = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] > 5 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_order2 = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] < 5 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_not_order = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] != '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $arr_not_avail = array_filter($products, function ($arr) {
+
+                if ($arr['in_shop'] == 0 AND $arr['avail_for_order'] == '0') {
+
+                    return true;
+
+                }
+
+            });
+
+            $products = array_merge($arr_order, $arr_order2, $arr_not_order, $arr_not_avail);
+
+
+
+            /* разбиваем на страницы */
+            $page_count = Yii::app()->params['ItemsPerPage'];
+
+            $curpage = (int) $_GET['page'];
+
+            if (!$curpage) $curpage = 1;
+
+            $min = ($curpage-1) * $page_count;
+
+            if ($min == 0) { $min = 1; }
+
+            $max = $min+$page_count;
+
+            //var_dump($page_count);
+
+            $i = 0;
+
+            $products2 = array();
+
+            foreach($products as $e=>$ids) {
+
+
+                $i++;
+
+                if ($i<$min OR $max<=$i) continue;
+
+                $products2[(string)$e] = $ids;
+
+
+
+            }
+
+
+            $products = $products2;
+
+
             //$products = array_merge($products, $t);
             $totalFound = count($products);
         }
 
-        
 
-       
+
+
         $totalFound = $s;
 
         if (Yii::app()->request->isAjaxRequest) {
-            
-			$products = array_values($products);
-			
-			foreach ($result as $idx => $data)
+
+            $products = array_values($products);
+
+            foreach ($result as $idx => $data)
                 unset($result[$idx]['orig_data']);
             $arr = array_merge($result, $products);
-			
-			$this->searchResults = count($arr);
-			
-			$ents = Entity::GetEntitiesList();
-			
-			foreach($arr as $k => $goods) {
-				
-				$curCount = (int) $r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']][1];
-				
-				$r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']] = array($q,$curCount+1, 'в разделе '. Entity::GetTitle($goods['entity']), '/site/search?q='.$q.'&e='.$goods['entity'].'&avail='.$avail);
-				
-			}
-			
-			$r[] = $arr;
-			
-			
-			
-			$this->ResponseJson($r);
+
+            $this->searchResults = count($arr);
+
+            $ents = Entity::GetEntitiesList();
+
+            foreach($arr as $k => $goods) {
+
+                $curCount = (int) $r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']][1];
+
+                $r[0]['Counts']['enityes'][$ents[$goods['entity']]['site_id']] = array($q,$curCount+1, 'в разделе '. Entity::GetTitle($goods['entity']), '/site/search?q='.$q.'&e='.$goods['entity'].'&avail='.$avail);
+
+            }
+
+            $r[] = $arr;
+
+
+
+            $this->ResponseJson($r);
         }
 
         $paginatorInfo = new CPagination($totalFound);
         $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
         $this->_maxPages = ceil($totalFound/Yii::app()->params['ItemsPerPage']);
-        $this->searchResults = $totalFound;		
-		
-		
-		
-		// постраничный результат
+        $this->searchResults = $totalFound;
+
+
+
+        // постраничный результат
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
         $this->render('search', array('q' => $q, 'items' => $result,
             'products' => $products,
@@ -1115,7 +1115,7 @@ class SiteController extends MyController {
             $data = $_POST;
             FilterHelper::setFiltersData($entity, $cid, $data);
             $test = FilterHelper::getFiltersData($entity, $cid);
-			echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
+            echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
         }
     }
 
@@ -1174,69 +1174,69 @@ class SiteController extends MyController {
             'cid' => $cid
         ));
     }
-	
-	function actionAddComments() {
-		if (Yii::app()->request->isPostRequest) {
-			
-			if (!trim(strip_tags($_POST['comment_text']))) {
-				return '';
-			}
-			
-			$text = trim(strip_tags($_POST['comment_text']));
-			
-			$text = str_replace("\n", '<br />', $text);
-			
-			$comm = new Comments;
-			$comm->date_publ = date('Y-m-d');
-			$comm->text = $text;
-			$comm->product_id = $_POST['id'];
-			$comm->product_entity = $_POST['entity'];
-			$comm->user_id = Yii::app()->user->id;
-			$comm->moder = 0;
-			
-			$comm->save(false);
-			
-			$comments = $comm->get_list($_POST['entity'], $_POST['id']);
-			
-			echo '1';
-		
-		}
-	}
-	
-	function actionLoadHistorySubs() {
-		if (Yii::app()->request->isPostRequest) {
-				
-				$sql = 'SELECT * FROM `subscriptions_sentlog` WHERE econet_id='.$_POST['uid'].' AND periodic_id='.$_POST['sid'].' ORDER BY sent_date DESC';
-				
-				$subs_id = $_POST['subsid'];
-				
-				$rowc = Yii::app()->db->createCommand($sql)->queryAll();
-								
-				if (!$rowc) {
-					echo Yii::app()->ui->item('A_NEW_SUBS_NOTFOUND');
-				} else {
-								
-					
-						
-						$month = array(
-							
-							'',
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH1"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH2"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH3"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH4"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH5"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH6"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH7"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH8"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH9"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH10"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH11"),
-							Yii::app()->ui->item("A_NEW_SUBS_MONTH12")
-					
-						);
-						
-					echo '
+
+    function actionAddComments() {
+        if (Yii::app()->request->isPostRequest) {
+
+            if (!trim(strip_tags($_POST['comment_text']))) {
+                return '';
+            }
+
+            $text = trim(strip_tags($_POST['comment_text']));
+
+            $text = str_replace("\n", '<br />', $text);
+
+            $comm = new Comments;
+            $comm->date_publ = date('Y-m-d');
+            $comm->text = $text;
+            $comm->product_id = $_POST['id'];
+            $comm->product_entity = $_POST['entity'];
+            $comm->user_id = Yii::app()->user->id;
+            $comm->moder = 0;
+
+            $comm->save(false);
+
+            $comments = $comm->get_list($_POST['entity'], $_POST['id']);
+
+            echo '1';
+
+        }
+    }
+
+    function actionLoadHistorySubs() {
+        if (Yii::app()->request->isPostRequest) {
+
+            $sql = 'SELECT * FROM `subscriptions_sentlog` WHERE econet_id='.$_POST['uid'].' AND periodic_id='.$_POST['sid'].' ORDER BY sent_date DESC';
+
+            $subs_id = $_POST['subsid'];
+
+            $rowc = Yii::app()->db->createCommand($sql)->queryAll();
+
+            if (!$rowc) {
+                echo Yii::app()->ui->item('A_NEW_SUBS_NOTFOUND');
+            } else {
+
+
+
+                $month = array(
+
+                    '',
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH1"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH2"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH3"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH4"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH5"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH6"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH7"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH8"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH9"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH10"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH11"),
+                    Yii::app()->ui->item("A_NEW_SUBS_MONTH12")
+
+                );
+
+                echo '
 					
 					<table>
 			<thead>
@@ -1247,25 +1247,25 @@ class SiteController extends MyController {
 				</tr>
 			</thead>
 			<tbody>';
-				
-				foreach($rowc as $k=>$row) : 
-				
-				echo '<tr>
+
+                foreach($rowc as $k=>$row) :
+
+                    echo '<tr>
 					<td>'.date('d '.$month[date('n',strtotime($row['sent_date']))].' Y', strtotime($row['sent_date'])). '<br />'.date('H:i:s', strtotime($row['sent_date'])).'</td>
 					<td>'.$subs_id.'</td>
 					<td style="text-align: center;">'.$row['number'].' / '.$row['year_of'].'</td>
 				</tr>';
-				
-				endforeach;
-				
-			echo '</tbody>
+
+                endforeach;
+
+                echo '</tbody>
 		</table>
 					
 					
 					';
-				}
-		}
-	}
+            }
+        }
+    }
 
     /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
      * если совпадают, то возвращаю false
@@ -1273,13 +1273,13 @@ class SiteController extends MyController {
      * @param array $data параметры для формирования пути
      */
     private function _checkUrl($data) {
-   		$path = urldecode(getenv('REQUEST_URI'));
-   		$ind = mb_strpos($path, "?", null, 'utf-8');
-   		$query = '';
-   		if ($ind !== false) {
-   			$query = mb_substr($path, $ind, null, 'utf-8');
-   			$path = substr($path, 0, $ind);
-   		}
+        $path = urldecode(getenv('REQUEST_URI'));
+        $ind = mb_strpos($path, "?", null, 'utf-8');
+        $query = '';
+        if ($ind !== false) {
+            $query = mb_substr($path, $ind, null, 'utf-8');
+            $path = substr($path, 0, $ind);
+        }
         $typePage = $this->action->id;
 
         switch ($typePage) {
@@ -1317,7 +1317,7 @@ class SiteController extends MyController {
         if ($ind !== false) {
             $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
         }
-   		if ($canonicalPath === $path) return;
+        if ($canonicalPath === $path) return;
 
         $this->_redirectOldPages($path, $this->_canonicalPath, $query);
         throw new CHttpException(404);

@@ -5,9 +5,10 @@
     <a href="<?=$url; ?>"><img src="<?=Picture::Get($item, Picture::SMALL); ?>" alt="" /></a>
  </div>
  
-    <div class="title_book <?= ($entity == Entity::PERIODIC) ? 'title_periodic' : ''?>">
+    <div class="title_book">
         <a href="<?=$url; ?>" title="<?=ProductHelper::GetTitle($item, 'title'); ?>">
-            <?=ProductHelper::GetTitle($item, 'title'); ?></a>
+                <?=ProductHelper::GetTitle($item, 'title'); ?><span class="gradient_link"></span></a>
+
     </div>
 
     <?php if($entity != Entity::PERIODIC):?>
