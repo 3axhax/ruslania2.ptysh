@@ -411,7 +411,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) :
+        <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) :
             $langs = array();
             foreach ($item['Languages'] as $lang) {
                 if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
