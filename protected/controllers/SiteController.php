@@ -182,7 +182,13 @@ class SiteController extends MyController {
         $this->_checkUrl(array('page' => $page));
 
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
+        $isWordpanel = false;
         if ($page == 'sitemap') $file = (new Sitemap)->builder(true);
+        else {
+//            Debug::staticRun(array($this->uid));
+            if ((int)$this->uid === 72459) $isWordpanel = true;
+            //72459
+        }
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
         if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
@@ -194,7 +200,7 @@ class SiteController extends MyController {
         $titles = StaticUrlRule::getTitles();
 
         $this->breadcrumbs[] = Yii::app()->ui->item($titles[$page]);
-        $this->render('static', array('data' => $data, 'entity' => 'static'));
+        $this->render('static', array('data' => $data, 'entity' => 'static', 'isWordpanel'=>$isWordpanel));
     }
 
     public function actionAddAddress() {
