@@ -130,7 +130,7 @@ $entityKey = Entity::GetUrlKey($entity);
             </div>
 
         <?php endif; ?>
-        <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])) : ?> 
+        <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) : ?>
 
             <?php
             $langs = array();
