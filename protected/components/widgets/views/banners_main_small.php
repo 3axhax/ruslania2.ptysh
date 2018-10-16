@@ -13,7 +13,7 @@
 	<?php if (!empty($offerDay['priceData'][DiscountManager::DISCOUNT])) : ?>
 			<div class="discount"><?= Yii::app()->ui->item('PRODUCT_OF_DAY_INFO', $offerDay['priceData'][DiscountManager::DISCOUNT]) ?></div>
 	<?php endif; ?>
-			<div class="title"><a href="<?= $url ?>"><?= $productTitle ?></a></div>
+			<div class="title"><a href="<?= $url ?>"><?= $productTitle ?><span class="gradient_link"></span></a></div>
 			<div class="cost">
                 <?= Yii::app()->ui->item('CART_COL_PRICE') ?>
                 <span><?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITH_VAT]); ?>

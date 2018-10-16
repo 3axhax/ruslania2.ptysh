@@ -3221,6 +3221,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .main-banner-content .photo {height: 100%; float: left; }
 .main-banner-content .photo img { max-height: 100%; }
 .main-banner-content .title, .main-banner-content .cost { font-weight: bold; }
+.main-banner-content .title { height: 70px; overflow: hidden; position: relative; }
 .main-banner-content .discount { font-weight: bold; margin-bottom: 10px; }
 .main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; }
 .main-banner-content .cost span { font-weight: bold; }

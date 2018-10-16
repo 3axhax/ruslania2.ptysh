@@ -17,12 +17,12 @@ class GraberStaticCommand extends CConsoleCommand {
         $pages = StaticUrlRule::getTitles();
         $path = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/';
         if (!is_dir($path)) mkdir($path);
-        foreach ($pages as $page=>$name) {
+/*        foreach ($pages as $page=>$name) {
             foreach ($langs as $lang) {
                 $txt = trim($this->_loadText($page, $lang));
                 if (!empty($txt)) $this->_saveText($path . $page . '_' . $lang . '.html.php', $txt);
             }
-        }
+        }*/
 
         /*'это для восстановления файлов
          *
@@ -35,6 +35,26 @@ class GraberStaticCommand extends CConsoleCommand {
                 rename($path . $fileName, $path . $fileNew);
             }
         }*/
+
+        $files = new FilesystemIterator($path);
+        foreach($files as $file) {
+            $fileName = $file->getFilename();
+            if (preg_match("/_(ru|rut|en|fi|de|fr|se|es)\.html\.php$/ui", $fileName, $m)) {
+//                @unlink($path . $fileNew);
+//                rename($path . $fileName, $path . $fileNew);
+//                var_dump($m[0]); echo "\n";
+                $name = str_replace($m[0], '', $fileName);
+                $lang = $m[1];
+                $sql = ''.
+                    'insert into static_pages (name, description_' . $lang . ') '.
+                    'values (:name, :desc) '.
+                    'on duplicate key update description_' . $lang . ' = :desc ' .
+                '';
+                Yii::app()->db->createCommand()->setText($sql)->execute(array(':name'=>$name, ':desc'=>@file_get_contents($path . $fileName)));
+            }
+        }
+
+
 
     }
 
