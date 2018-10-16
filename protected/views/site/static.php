@@ -1,7 +1,7 @@
 <div class="container">
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
             
-            <div style="padding-left: 10px" class="text" id="js_wordpanel">
+            <div style="padding-left: 10px" class="text"<?php if (!empty($isWordpanel)): ?> id="js_wordpanel" contenteditable="true"<?php endif; ?>>
                 <?= $data; ?>
             </div>
             <!-- /content -->
