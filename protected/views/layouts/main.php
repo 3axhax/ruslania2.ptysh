@@ -55,7 +55,7 @@ $ui = Yii::app()->ui;
         <META name="verify-v1" content="eiaXbp3vim/5ltWb5FBQR1t3zz5xo7+PG7RIErXIb/M="/>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
         <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-        <?php if (mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false): ?>
+        <?php if ((mb_strpos(Yii::app()->getRequest()->getPathInfo(), 'request-books', null, 'utf-8') !== false)||Yii::app()->getRequest()->getParam('lang')): ?>
         <meta name="robots" content="noindex">
         <?php endif; ?>
         <?php foreach ($this->getOtherLangPaths() as $lang=>$path): ?>
