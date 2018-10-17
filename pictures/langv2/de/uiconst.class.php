@@ -635,7 +635,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Bitte die Bestellnummer bei de
 'VIDEO_ZONE' => 'Zone: %s', 
 'WEIGHT_FORMAT' => '%01.2f kg', 
 'WEIGHT_UNIT_TITLE' => 'Kg', 
-'WRITTEN_BY' => 'Autor(s): %s', 
+'WRITTEN_BY' => 'Autor(s) %s',
 'X items found' => 'Suchergebnis:  %s', 
 'X items here' => 'Artikel in dieser Kategorie:  %s', 
 'X_DAYS_1' => '%s Tag', 

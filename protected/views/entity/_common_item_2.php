@@ -125,7 +125,7 @@ $entityKey = Entity::GetUrlKey($entity);
                                 'sid' => $stream['id'],
                                 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($stream)))) . '" class="cprop">' . ProductHelper::GetTitle($stream) . '</a>';
                 }
-                echo $ui->item("AUDIO_STREAMS") . ': ' . implode(', ', $ret);
+                echo $ui->item("AUDIO_STREAMS") . ' ' . implode(', ', $ret);
                 ?>
             </div>
 
@@ -138,13 +138,13 @@ $entityKey = Entity::GetUrlKey($entity);
                 if (!empty($lang['language_id'])) $langs[] = '' . Language::GetTitleByID($lang['language_id']) . '';
             }
 
-            if (!empty($langs)) echo '<span class="langs">'.(($entity == Entity::PRINTED) ? $ui->item('CATALOGINDEX_CHANGE_THEME') : $ui->item('CATALOGINDEX_CHANGE_LANGUAGE')). ': '.implode(', ', $langs) . '</span>';
+            if (!empty($langs)) echo '<span class="langs">'.(($entity == Entity::PRINTED) ? $ui->item('CATALOGINDEX_CHANGE_THEME') : $ui->item('CATALOGINDEX_CHANGE_LANGUAGE')). ' '.implode(', ', $langs) . '</span>';
             ?>
         <?php endif; ?>
 
 		<? if  (isset($item['year'])) : ?>
 			
-			<br><span><?=$ui->item('A_NEW_YEAR');?>: <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
+			<span><?=$ui->item('A_NEW_YEAR');?> <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
                                 'year' => $item['year'])); ?>"><?=$item['year']?></a></span>
 		
 		<? endif; ?>
@@ -152,7 +152,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		<? if  (isset($item['release_year'])) : ?>
 			
 			
-			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_REAL');?>: <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
+			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_REAL');?> <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
                                 'year' => $item['release_year'])); ?>"><?=$item['release_year']?></a></span></div>
 			
 			
@@ -176,7 +176,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		<?
 			
 			if (isset($item['type']) && $entity != Entity::PRINTED) {
-			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>: </span><?
+			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?> </span><?
                             
                             
                             
@@ -203,7 +203,7 @@ $entityKey = Entity::GetUrlKey($entity);
             if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
             ?>
 
-			<div style="margin-top: 16px;"><?= $name ?>: <?=str_replace('-','',$item['isbn'])?></div>
+			<div style="margin-top: 16px;"><?= $name ?> <?=str_replace('-','',$item['isbn'])?></div>
 		
 		<? endif; ?>
         <?php if (!empty($item['eancode'])&&(in_array($entity, array(Entity::SHEETMUSIC/*, Entity::MUSIC*/)))) : ?>
@@ -214,7 +214,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		<?php if (!empty($item['binding_id'])) : ?>
                  <?php
 					if (!empty($item['Binding']['title_' . Yii::app()->language])): ?>
-                        <?=$ui->item('A_NEW_TYPOGRAPHY')?>: <?= $item['Binding']['title_' . Yii::app()->language] ?>
+                        <?=$ui->item('A_NEW_TYPOGRAPHY')?> <?= $item['Binding']['title_' . Yii::app()->language] ?>
                        <?php else:
 //					$row = Binding::GetBinding($entity, $item['binding_id']);
 //					echo 'Переплет: '.$row['title_' . Yii::app()->language];

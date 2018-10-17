@@ -635,7 +635,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Objazatelno ukazhite nomer zak
 'VIDEO_ZONE' => 'zona: %s', 
 'WEIGHT_FORMAT' => '%01.2f kg', 
 'WEIGHT_UNIT_TITLE' => 'kg', 
-'WRITTEN_BY' => 'Avtor(y): %s', 
+'WRITTEN_BY' => 'Avtor(y) %s',
 'X items found' => 'Najdeno sootvetstvij: %s', 
 'X items here' => 'Naimenovanij v etom razdele: %s', 
 'X_DAYS_1' => '%s den', 

@@ -636,7 +636,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Please mention the order numbe
 'VIDEO_ZONE' => 'region: %s', 
 'WEIGHT_FORMAT' => '%01.2f kg', 
 'WEIGHT_UNIT_TITLE' => 'Kg', 
-'WRITTEN_BY' => 'Author(s): %s', 
+'WRITTEN_BY' => 'Author(s) %s',
 'X items found' => 'Matches found: %s', 
 'X items here' => 'Products in this category:  %s', 
 'X_DAYS_1' => '%s day', 

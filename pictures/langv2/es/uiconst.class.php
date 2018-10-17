@@ -635,7 +635,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Por favor infórmenos del núm
 'VIDEO_ZONE' => 'Código de zona DVD: %s', 
 'WEIGHT_FORMAT' => '%01.2f kg', 
 'WEIGHT_UNIT_TITLE' => 'Kg', 
-'WRITTEN_BY' => 'Autor(s): %s', 
+'WRITTEN_BY' => 'Autor(s) %s',
 'X items found' => 'Títulos encontrados: %s', 
 'X items here' => 'Títulos en esta categoría: %s', 
 'X_DAYS_1' => '%s día', 
