@@ -233,7 +233,8 @@ class SearchController extends MyController {
 		return $result;
 	}
 
-	function getList($query, $page, $pp) {
+	function fillDataTable($query) {
+		$resultTable = '_tmp_products';
 		$filters = array(
 			'query'=>$query,
 			'mode'=>'mode=phrase',
@@ -250,30 +251,36 @@ class SearchController extends MyController {
 
 		$e = (int) Yii::app()->getRequest()->getParam('e');
 		if (Entity::IsValid($e)) $filters['entity'] = 'filter=entity,' . $e;
+
 		$filters['limit'] = 'limit=10000';
 		$filters['maxmatches'] = 'maxmatches=10000';
 
 		$sql = ''.
-			'create temporary table _tmp_products (primary key (id), index(dictionary_position, spec_position, entity_position, time_position), index(entity)) '.
+			'create temporary table ' . $resultTable . ' (primary key (id), index(dictionary_position, spec_position, entity_position, time_position), index(entity)) '.
 			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
 			'FROM ' . $table . ' t '.
 			'WHERE (t.query=:q); '.
-		'';
+			'';
 		//Война и мир;filter=avail,1;mode=phrase;limit=10000;maxmatches=10000
 		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
 
 		$sql = ''.
-			'insert ignore into _tmp_products '.
+			'insert ignore into ' . $resultTable . ' '.
 			'SELECT t.id, t.entity, t.real_id, t.dictionary_position, t.spec_position, t.entity_position, t.time_position '.
 			'FROM ' . $tableMorphy . ' t '.
 			'WHERE (t.query=:q); '.
-		'';
+			'';
 		$filters['mode'] = 'mode=boolean';
 		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
+		return $resultTable;
+	}
+
+	function getList($query, $page, $pp) {
+		$resultTable = $this->fillDataTable($query);
 
 		$sql = ''.
 			'select * '.
-			'from _tmp_products '.
+			'from ' . $resultTable . ' '.
 			'order by dictionary_position, spec_position, entity_position, time_position '.
 			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 		'';

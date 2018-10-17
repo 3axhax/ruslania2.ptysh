@@ -497,20 +497,180 @@ class SearchHelper
         return $result;
     }
 
-    public static function AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $lang, $year, $pp, $page, $binding_id)
-    {
-		
-		//var_dump($binding_id);
-		
-        $title = trim($title);
+    public static function AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $lang, $year, $pp, $page, $binding_id) {
+        $title = trim((string) $title);
         $e = intVal($e);
         $year = intVal($year);
         if(empty($year) || $year <=0 || $year > date('Y')) $year = '';
+        if (!Entity::checkEntityParam($e, 'languages')) $lang = '';
 
-        if(empty($title) && empty($author) && empty($perf) && empty($publisher) && empty($only) && empty($cid) && empty($lang))
-        {
-           return array('Items' => array(), 'Paginator' => new CPagination(0));
+        if(empty($title) && empty($author) && empty($perf) && empty($publisher) && empty($only) && empty($cid) && empty($lang)) {
+            return array('Items' => array(), 'Paginator' => new CPagination(0));
         }
+
+        $dp = Entity::CreateDataProvider($e);
+        $condition = $join = array();
+
+        if (!empty($cid)&&empty($lang)) {
+            $category = new Category();
+            $allChildren = $category->GetChildren($e, $cid);
+            if (count($allChildren) > 0) {
+                array_push($allChildren, $cid);
+                $ids = '(' . implode(',', $allChildren) . ')';
+                $condition['category'] = '(t.code IN ' . $ids . ' OR t.subcode IN ' . $ids . ')';
+            }
+            else {
+                $condition['category'] = '(t.code = ' . (int)$cid . ' OR t.subcode = ' . (int)$cid . ')';
+            }
+        }
+        if (Entity::checkEntityParam($e, 'authors')&&!empty($author)) {
+            $filter = array('query'=>$author, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
+            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_author,1';
+            else unset($filter['filter']);
+            $sql = ''.
+                'select t.id '.
+                'from _se_authors t '.
+                    (empty($only)?'join ' . Entity::GetEntitiesList()[$e]['author_table'] . ' tBA on (tBA.author_id = t.id) ':'').
+                'where (t.query = :q) '.
+                (empty($only)?'group by t.id ':'').
+            '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':q'=>implode(';', $filter)));
+            if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $join['tBA'] = 'join ' . Entity::GetEntitiesList()[$e]['author_table'] . ' tBA on (tBA.' . Entity::GetEntitiesList()[$e]['author_entity_field'] . ' = t.id) and (tBA.author_id in (' . implode(',',$ids) . '))';
+        }
+        if (Entity::checkEntityParam($e, 'performers')&&!empty($perf)) {
+            $filter = array('query'=>$perf, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
+            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_performer,1';
+            else unset($filter['filter']);
+            $sql = ''.
+                'select t.id '.
+                'from _se_authors t '.
+                    (empty($only)?'join ' . Entity::GetEntitiesList()[$e]['performer_table'] . ' tBA on (tBA.person_id = t.id) ':'').
+                'where (t.query = :q) '.
+                (empty($only)?'group by t.id ':'').
+            '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':q'=>implode(';', $filter)));
+            if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $join['tBA'] = 'join ' . Entity::GetEntitiesList()[$e]['performer_table'] . ' tBA on (tBA.' . Entity::GetEntitiesList()[$e]['performer_field'] . ' = t.id) and (tBA.person_id in (' . implode(',',$ids) . '))';
+        }
+        if (Entity::checkEntityParam($e, 'actors')&&!empty($perf)) {
+            $filter = array('query'=>$perf, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
+            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_performer,1';
+            else unset($filter['filter']);
+            $sql = ''.
+                'select t.id '.
+                'from _se_authors t '.
+                (empty($only)?'join ' . Entity::GetEntitiesList()[$e]['actors_table'] . ' tBA on (tBA.person_id = t.id) ':'').
+                'where (t.query = :q) '.
+                (empty($only)?'group by t.id ':'').
+                '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':q'=>implode(';', $filter)));
+            if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $join['tBA'] = 'join ' . Entity::GetEntitiesList()[$e]['actors_table'] . ' tBA on (tBA.video_id = t.id) and (tBA.person_id in (' . implode(',',$ids) . '))';
+        }
+
+        if (Entity::checkEntityParam($e, 'publisher')&&!empty($publisher)) {
+            $filter = array('query'=>$publisher, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
+            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . ',1';
+            else unset($filter['filter']);
+            $sql = ''.
+                'select t.id '.
+                'from _se_publishers t '.
+                'where (t.query = :q) '.
+            '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':q'=>implode(';', $filter)));
+            if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $condition['publisher_id'] = '(t.publisher_id in (' . implode(',', $ids) . '))';
+        }
+
+        if (empty($title)&&empty($lang)&&!empty($only)&&empty($author)&&empty($perf)&&empty($publisher)) {
+            $condition['avail_for_order'] = '(t.avail_for_order = 1)';
+        }
+
+        if (empty($lang)&&!empty($year)) {
+            $condition['year'] = '(t.year = ' . (int) $year . ')';
+        }
+        if (!empty($lang)) {
+            $entityStr = Entity::GetUrlKey($e);
+            $supportTable = '_support_languages_' . $entityStr;
+            $join['tL'] = 'join ' . $supportTable . ' tL on (tL.id = t.id) and (language_id = ' . (int) $lang . ')';
+            if (!empty($cid)) {
+                $category = new Category();
+                $allChildren = $category->GetChildren($e, $cid);
+                $allChildren[] = $cid;
+                $join['tL'] .= ' and (tL.category_id in (' . implode(',',$allChildren) . '))';
+            }
+            if (!empty($year)) $join['tL'] .= ' and (tL.year = ' . (int) $year . ')';
+        }
+        if (!empty($binding_id)) {
+            $condition['binding_id'] = '(t.binding_id = ' . (int) $binding_id . ')';
+        }
+
+        if (!empty($title)) {
+            $sController = new SearchController(Yii::app()->getController()->getId(), Yii::app()->getController()->getModule());
+            $sController->beforeAction(Yii::app()->getController()->getAction());
+            $resultTable = $sController->fillDataTable($title);
+            $join['tRes'] = 'join ' . $resultTable . ' tRes on (tRes.real_id = t.id) and (tRes.entity = ' . $e . ')';
+        }
+
+        $page = max(1, min(100000, (int)$page));
+
+        $sql = ''.
+            'select sql_calc_found_rows t.id '.
+            'from ' . $dp->model->tableName() . ' t '.
+                implode(' ', $join) . ' '.
+            (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
+            'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e) . ' '.
+            (!empty($lang)?'group by t.id ':'').
+            'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+        '';
+        $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        $sql = 'select found_rows();';
+        $counts = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        if (empty($counts)) array('Items' => array(), 'Paginator' => new CPagination(0));
+
+        HrefTitles::get()->getByIds($e, 'product/view', $itemIds);
+
+        Product::setActionItems($e, $itemIds);
+        Product::setOfferItems($e, $itemIds);
+        $criteria = $dp->getCriteria();
+
+        //$lang = 'fi';
+
+        $criteria->alias = 't';
+        $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
+        $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
+
+        $dp->setCriteria($criteria);
+        $dp->pagination = false;
+
+        $data = $dp->getData();
+
+        //file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/test/items.txt', print_r($criteria,1));
+
+        $ret = Product::FlatResult($data);
+        foreach ($ret as $k=>$v) $ret[$k]['entity'] = $e;
+
+        $paginator = new CPagination($counts);
+        $paginator->setPageSize($pp);
+
+        return array('Items' => $ret, 'Paginator' => $paginator);
+
+
+
+
+
+        //var_dump($binding_id);
+		
+
+
+
+
 
         $cIds = array();
         if (!empty($cid)) {
@@ -553,7 +713,10 @@ class SearchHelper
 		if (!empty($e)) $search->SetFilter('entity', array($e));
         if (!empty($authorIds)) $search->SetFilter('author', $authorIds);
         //if (!empty($perfIds)) $search->SetFilter('author', $perfIds);
-        if ($only == '1') $search->SetFilter('avail', array(1));
+        if ($only == '1') {
+            $_GET['avail'] = 1;
+            $search->SetFilter('avail', array(1));
+        }
         if (!empty($publisherIds)) $search->SetFilter('publisher_id', $publisherIds);
         if (!empty($cIds)) $search->SetFilter('category', $cIds);
         if(!empty($lang)) $search->SetFilter('language', array(intVal($lang)));
