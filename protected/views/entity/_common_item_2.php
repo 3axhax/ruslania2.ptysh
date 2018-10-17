@@ -167,7 +167,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo $ui->item('A_NEW_PRODUCER');
                 else echo sprintf($ui->item("Published by"), '');
                 ?>
-                :</span> <a class="cprop" href="<?=
+                </span> <a class="cprop" href="<?=
                 Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
                     'pid' => $item['Publisher']['id'],
                     'title' => ProductHelper::ToAscii($pubTitle)));
