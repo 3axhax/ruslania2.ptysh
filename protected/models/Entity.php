@@ -67,7 +67,7 @@ class Entity {
                 'site_category_table' => 'pereodics_categories',
                 'type_table' => 'pereodics_types',
                 'uikey' => 'A_GOTOPEREODICALS',
-                'with' => array('category', 'subcategory', 'lookinside', 'magazinetype', 'periodicCountry', 'vendorData', 'vendorData.deliveryTime'),
+                'with' => array('languages', 'category', 'subcategory', 'lookinside', 'magazinetype', 'periodicCountry', 'vendorData', 'vendorData.deliveryTime'),
             ),
             40 => array('title' => 'Видео', 'site_id' => 3, 'table' => 'tblVideo', 'site_table' => 'video_catalog',
                 'entity' => 'video', 'model' => 'Video',

@@ -533,7 +533,7 @@ class SearchHelper
         $perfIds = array();
         if(!empty($perf))
         {
-            $performerResult = self::SearchInPersons($perf, array('aentity' => Person::ROLE_PERFORMER));
+            $performerResult = self::SearchInPersons($perf, array(/*'aentity' => Person::ROLE_PERFORMER*/));
             foreach($performerResult as $p) $perfIds[] = $p['orig_data']['id'];
             if(empty($performerResult)) $perfIds[] = -1;
         }
@@ -591,7 +591,7 @@ class SearchHelper
 
     public static function SearchAuthor($query)
     {
-        return self::SearchInPersons($query, array('aentity' => Person::ROLE_AUTHOR));
+        return self::SearchInPersons($query, array(/*'aentity' => Person::ROLE_AUTHOR*/));
     }
 
     public static function SearchInPersons($query, $filters = array())

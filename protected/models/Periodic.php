@@ -25,6 +25,7 @@ class Periodic extends CMyActiveRecord
             'periodicCountry' => array(self::BELONGS_TO, 'PeriodicCountry', 'country'),
             'offers' => array(self::MANY_MANY, 'Offer', 'offer_items(item_id, offer_id)', 'on' => 'offers_offers.entity_id='.Entity::PERIODIC),
             'vendorData' => array(self::BELONGS_TO, 'Vendor', 'vendor'),
+            'languages' => array(self::HAS_MANY, 'ItemLanguage', 'item_id', 'on' => 'languages.entity='.Entity::PERIODIC ),
         );
     }
 
