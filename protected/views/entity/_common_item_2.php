@@ -35,7 +35,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		
         <?php if (!empty($item['Authors'])) : ?>
             <div class="authors" style="margin-top: 0;">
-                <?= str_replace(':', '', sprintf($ui->item("WRITTEN_BY"), '')); ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("WRITTEN_BY"), '')); ?></div>
                 <?php
                 foreach ($item['Authors'] as $author) {
                     $authorTitle = ProductHelper::GetTitle($author);
@@ -46,13 +46,13 @@ $entityKey = Entity::GetUrlKey($entity);
                 }
                 ?>
 
-                <?= implode(', ', $tmp); ?>
-
+                <div style="padding-left: 140px;"><?= implode(', ', $tmp); ?></div>
+                <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
         <?php if (!empty($item['Performers'])) : ?>
             <div class="authors"  style="margin-top: 0;">
-                <?= str_replace(':', '', sprintf($ui->item("READ_BY"), '')); ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("READ_BY"), '')); ?></div>
                 <?php
                 $tmp = array();
                 foreach ($item['Performers'] as $performer) {
@@ -61,15 +61,16 @@ $entityKey = Entity::GetUrlKey($entity);
                                 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($performer)))) . '" class="cprop">'
                             . ProductHelper::GetTitle($performer) . '</a>';
                 }
-
-                echo implode(', ', $tmp);
                 ?>
+                <div style="padding-left: 140px;"><?= implode(', ', $tmp); ?></div>
+                <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
 
         <?php if (!empty($item['Directors'])) : ?>
             <div class="authors" style="margin-top: 0;">
-                <?= str_replace(':', '', sprintf($ui->item("DIRECTOR_IS"), '')); ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("DIRECTOR_IS"), '')); ?></div>
+                <div style="padding-left: 140px;">
                 <?php foreach ($item['Directors'] as $director) : ?>
                     <a href="<?=
                     Yii::app()->createUrl('entity/bydirector', array('entity' => $entityKey,
@@ -78,6 +79,8 @@ $entityKey = Entity::GetUrlKey($entity);
                     ?>"
                        class="cprop"><?= ProductHelper::GetTitle($director); ?></a>
                    <?php endforeach; ?>
+                </div>
+                <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
 
@@ -96,9 +99,10 @@ $entityKey = Entity::GetUrlKey($entity);
 					$ret[] = '<a href="' . Yii::app()->createUrl('entity/byactor', array('entity' => $entityKey,
                                 'aid' => $actor['id'],
                                 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($actor)))) . '" class="cprop">' . ProductHelper::GetTitle($actor) . '</a>';
-                }
-                echo sprintf(str_replace(':', '', $ui->item("VIDEO_ACTOR_IS")), implode(', ', $ret));
-                ?>
+                } ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("VIDEO_ACTOR_IS"), '')) ?></div>
+                <div style="padding-left: 140px;"><?= implode(', ', $ret); ?></div>
+                <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
 
@@ -121,9 +125,10 @@ $entityKey = Entity::GetUrlKey($entity);
                     $ret[] = '<a href="' . Yii::app()->createUrl('entity/bysubtitle', array('entity' => $entityKey,
                                 'sid' => $subtitle['id'],
                                 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($subtitle)))) . '" class="cprop">' . ProductHelper::GetTitle($subtitle) . '</a>';
-                }
-                echo sprintf(str_replace(':', '', $ui->item("VIDEO_CREDITS_IS")), implode(', ', $ret));
-                ?>
+                } ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("VIDEO_CREDITS_IS"), '')) ?></div>
+                <div style="padding-left: 140px;"><?= implode(', ', $ret) ?></div>
+                <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
 
@@ -135,9 +140,10 @@ $entityKey = Entity::GetUrlKey($entity);
                     $ret[] = '<a href="' . Yii::app()->createUrl('entity/byaudiostream', array('entity' => $entityKey,
                                 'sid' => $stream['id'],
                                 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($stream)))) . '" class="cprop">' . ProductHelper::GetTitle($stream) . '</a>';
-                }
-                echo str_replace(':', '', $ui->item("AUDIO_STREAMS")) . ' ' . implode(', ', $ret);
-                ?>
+                } ?>
+                <div style="float: left;width: 130px;" class="nameprop"><?= str_replace(':', '', $ui->item("AUDIO_STREAMS")) ?></div>
+                <div style="padding-left: 140px;"><?= implode(', ', $ret); ?></div>
+                <div class="clearBoth"></div>
             </div>
 
         <?php endif; ?>
@@ -151,7 +157,11 @@ $entityKey = Entity::GetUrlKey($entity);
 
             if (!empty($langs)): ?>
     <div class="authors" style="margin-top: 0;">
-        <span class="langs"><?= (($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_THEME')) : str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_LANGUAGE'))) ?> <?= implode(', ', $langs) ?></span>
+        <div style="float: left;width: 130px;" class="nameprop">
+            <?= (($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_THEME')) : str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_LANGUAGE'))) ?>
+        </div>
+        <div style="padding-left: 140px;"><?= implode(', ', $langs) ?></div>
+        <div class="clearBoth"></div>
     </div>
             <?php endif; ?>
         <?php endif; ?>
@@ -160,80 +170,92 @@ $entityKey = Entity::GetUrlKey($entity);
     ?>
 		<? if  (isset($item['year'])) : ?>
     <div class="authors" style="margin-top: 0;">
-        <span><?=str_replace(':', '', ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL'));?> <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
-                                'year' => $item['year'])); ?>"><?=$item['year']?></a></span>
+        <div style="float: left;width: 130px;" class="nameprop"><?=str_replace(':', '', ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL'));?></div>
+        <div style="padding-left: 140px;"><a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey, 'year' => $item['year'])); ?>"><?=$item['year']?></a></div>
+        <div class="clearBoth"></div>
     </div>
 		<? endif; ?>
-		
 		<? if  (isset($item['release_year'])) : ?>
-			
-			
-			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_FILM');?> <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
-                                'year' => $item['release_year'])); ?>"><?=$item['release_year']?></a></span></div>
-			
-			
-		
+			<div class="authors" style="margin-top: 0;">
+                <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_YEAR_FILM');?></div>
+                <div style="padding-left: 140px;"><a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey, 'year' => $item['release_year'])); ?>"><?=$item['release_year']?></a></div>
+                <div class="clearBoth"></div>
+            </div>
 		<? endif; ?>
 <?php endif; ?>
 		<?php if (!empty($item['Publisher'])) : ?>
     <?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?>
     <div class="authors" style="margin-top: 0;">
-            <span class="nameprop">
-                <?php
-                if ($entity == Entity::MUSIC) echo str_replace(':', '', $ui->item('A_NEW_LABEL'));
-                elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo str_replace(':', '', $ui->item('A_NEW_PRODUCER'));
-                else echo str_replace(':', '', sprintf($ui->item("Published by"), ''));
-                ?>
-                </span> <a class="cprop" href="<?=
-                Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
-                    'pid' => $item['Publisher']['id'],
-                    'title' => ProductHelper::ToAscii($pubTitle)));
-                ?>"><?= $pubTitle; ?></a>
+        <div style="float: left;width: 130px;" class="nameprop">
+            <?php
+            if ($entity == Entity::MUSIC) echo str_replace(':', '', $ui->item('A_NEW_LABEL'));
+            elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo str_replace(':', '', $ui->item('A_NEW_PRODUCER'));
+            else echo str_replace(':', '', sprintf($ui->item("Published by"), ''));
+            ?>
         </div>
+        <div style="padding-left: 140px;">
+            <a class="cprop" href="<?=
+            Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
+                'pid' => $item['Publisher']['id'],
+                'title' => ProductHelper::ToAscii($pubTitle)));
+            ?>"><?= $pubTitle; ?></a>
+        </div>
+        <div class="clearBoth"></div>
+    </div>
             <?php endif; ?>
 		
 		<?
 			
-			if (isset($item['type']) && $entity != Entity::PRINTED) {
-			?><div style="margin-top: 10px;"><span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?> </span><?
-                            
-                            
-                            
-                            
+			if (isset($item['type']) && $entity != Entity::PRINTED): ?>
+        <div class="authors" style="margin-top: 0;">
+            <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?></div>
+            <?php
 			 if ($item['entity'] == Entity::PERIODIC) :
                  $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
 			 else :
                  $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
-			 endif;
-			 
-			 echo '<a href="'.
-                Yii::app()->createUrl('entity/bytype', array(
-                    'entity' => $entityKey,
-                    'type' => $item['type'])).'">' . ProductHelper::GetTitle($binding) . '</a></div>';
-			}
+			 endif; ?>
+            <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => $entityKey, 'type' => $item['type'])) ?>"><?= ProductHelper::GetTitle($binding) ?></a></div>
+            <div class="clearBoth"></div>
+        </div>
+            <?php endif;
 		
 		?>
 		
+		<?php $txt = nl2br(ProductHelper::GetDescription($item, 200, $url));
+        if (!empty($txt)): ?>
+        <div class="desc_text" style="margin-bottom: 10px;"><?= $txt ?></div>
+        <?php endif; ?>
 		
-        <div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 200, $url)); ?></div>
-		
-		<? if  (!empty($item['isbn'])&&in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::BOOKS))) :
+		<?php if  (!empty($item['isbn'])&&in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::BOOKS))) :
             $name = 'ISBN';
             if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
             ?>
 
-			<div style="margin-top: 16px;"><?= $name ?> <?=str_replace('-','',$item['isbn'])?></div>
+			<div class="authors" style="margin-top: 0;">
+                <div style="float: left;width: 130px;" class="nameprop"><?= $name ?></div>
+                <div style="padding-left: 140px;"><?=str_replace('-','',$item['isbn'])?></div>
+                <div class="clearBoth"></div>
+            </div>
 		
 		<? endif; ?>
         <?php if (!empty($item['eancode'])&&(in_array($entity, array(Entity::SHEETMUSIC/*, Entity::MUSIC*/)))) : ?>
-            <div style="margin-top: 16px;">EAN: <?=str_replace('-','',$item['eancode'])?></div>
+            <div class="authors" style="margin-top: 0;">
+                <div style="float: left;width: 130px;" class="nameprop">EAN</div>
+                <div style="padding-left: 140px;"><?=str_replace('-','',$item['eancode'])?></div>
+                <div class="clearBoth"></div>
+            </div>
         <?php endif; ?>
 
 		
 		<?php if (!empty($item['binding_id'])) : ?>
                  <?php
 					if (!empty($item['Binding']['title_' . Yii::app()->language])): ?>
-                        <?=$ui->item('A_NEW_TYPOGRAPHY')?> <?= $item['Binding']['title_' . Yii::app()->language] ?>
+        <div class="authors" style="margin-top: 0;">
+            <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_TYPOGRAPHY')?></div>
+            <div style="padding-left: 140px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
+            <div class="clearBoth"></div>
+        </div>
                        <?php else:
 //					$row = Binding::GetBinding($entity, $item['binding_id']);
 //					echo 'Переплет: '.$row['title_' . Yii::app()->language];
