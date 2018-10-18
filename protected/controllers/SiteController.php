@@ -13,7 +13,7 @@ class SiteController extends MyController {
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs'),
+                'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs', 'staticSave'),
                 'users' => array('@')),
             array('deny',
                 'users' => array('*')));
@@ -183,24 +183,38 @@ class SiteController extends MyController {
 
         $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_' . Yii::app()->language . '.html.php';
         $isWordpanel = false;
+        $data = null;
         if ($page == 'sitemap') $file = (new Sitemap)->builder(true);
         else {
-//            Debug::staticRun(array($this->uid));
+            $staticPage = new StaticPages();
+            $item = $staticPage->getPage($page);
+            if (!empty($item)) $data = $item['description_' . Yii::app()->language];
             if ((int)$this->uid === 72459) $isWordpanel = true;
-            //72459
         }
-        if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
-        if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
+        if ($data === null) {
+            if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';
+            if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_ru.html.php';
 
-        if (!file_exists($file)||in_array($page, array('safety', 'partners', 'links'))) {
-            throw new CHttpException(404);
+            if (!file_exists($file)||in_array($page, array('safety', 'partners', 'links'))) {
+                throw new CHttpException(404);
+            }
+            $data = file_get_contents($file);
         }
-        $data = file_get_contents($file);
 
         $titles = StaticUrlRule::getTitles();
 
         $this->breadcrumbs[] = Yii::app()->ui->item($titles[$page]);
-        $this->render('static', array('data' => $data, 'entity' => 'static', 'isWordpanel'=>$isWordpanel));
+        $this->render('static', array('data' => $data, 'entity' => 'static', 'page'=>$page, 'isWordpanel'=>$isWordpanel));
+    }
+
+    function actionStaticSave() {
+        if (Yii::app()->request->isPostRequest) {
+            $page = Yii::app()->getRequest()->getPost('page');
+            $text = Yii::app()->getRequest()->getPost('editabledata');
+            $lang = Yii::app()->language;
+            $staticPage = new StaticPages();
+            $staticPage->save($page, $lang, null, $text);
+        }
     }
 
     public function actionAddAddress() {
