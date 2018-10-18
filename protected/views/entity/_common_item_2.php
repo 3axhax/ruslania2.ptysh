@@ -102,6 +102,16 @@ $entityKey = Entity::GetUrlKey($entity);
             </div>
         <?php endif; ?>
 
+        <?php if (!empty($item['videoStudio'])) : ?>
+            <div class="authors" style="margin-top: 0;">
+                <?php
+                $studio = $item['videoStudio'];
+                $title = ProductHelper::GetTitle($studio);
+                echo $ui->item("A_NEW_STUDIO").' "'.$title.'"';
+                ?>
+            </div>
+        <?php endif; ?>
+
         <?php if (!empty($item['Subtitles'])) : ?>
             <div class="authors" style="margin-top: 0;">
                 <?php
@@ -147,7 +157,7 @@ $entityKey = Entity::GetUrlKey($entity);
 
 		<? if  (isset($item['year'])) : ?>
     <div class="authors" style="margin-top: 0;">
-        <span><?=str_replace(':', '', $ui->item('A_NEW_YEAR'));?> <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
+        <span><?=str_replace(':', '', ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL'));?> <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
                                 'year' => $item['year'])); ?>"><?=$item['year']?></a></span>
     </div>
 		<? endif; ?>
@@ -155,7 +165,7 @@ $entityKey = Entity::GetUrlKey($entity);
 		<? if  (isset($item['release_year'])) : ?>
 			
 			
-			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_REAL');?> <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
+			<div><span style="margin-left: 0;"><?=$ui->item('A_NEW_YEAR_FILM');?> <a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey,
                                 'year' => $item['release_year'])); ?>"><?=$item['release_year']?></a></span></div>
 			
 			

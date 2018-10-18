@@ -88,7 +88,7 @@
         <?php if (isset($filters['years']) && $filters['years'] == true):?>
             <!--Фильтр по году/году выхода-->
             <div class="prod-filter__col">
-                <label class="prod-filter__label" for=""><?=($entity != Entity::VIDEO) ? $ui->item('A_NEW_FILTER_YEAR') : $ui->item('A_NEW_YEAR')?>:</label>
+                <label class="prod-filter__label" for=""><?=($entity != Entity::VIDEO) ? $ui->item('A_NEW_FILTER_YEAR') : $ui->item('A_NEW_YEAR_REAL')?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
                            name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
@@ -106,7 +106,7 @@
         <?php if (isset($filters['release_years']) && $filters['release_years'] == true):?>
             <!--Фильтр по году издания-->
             <div class="prod-filter__col">
-                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_YEAR_REAL')?>:</label>
+                <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_YEAR_FILM')?>:</label>
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['release_year_min']) && $filter_data['release_year_min'] != '')) ? $filter_data['release_year_min'] : '' ?>"
                            name="release_year_min" class="prod-filter__input prod-filter__input--s release_year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"

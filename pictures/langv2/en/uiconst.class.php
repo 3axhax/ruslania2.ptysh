@@ -1263,4 +1263,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'RUSLANIA_RECOMEND' => 'Check out the Ruslania’s recommendations',
     'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
+    'A_NEW_STUDIO' => 'Студия',
+    'A_NEW_YEAR_FILM' => 'Год выхода фильма',
+
 );

@@ -32,6 +32,7 @@ class Video extends CMyActiveRecord
             'offers' => array(self::MANY_MANY, 'Offer', 'offer_items(item_id, offer_id)', 'on' => 'offers_offers.entity_id='.Entity::VIDEO),
             'audiostreams' => array(self::MANY_MANY, 'VideoAudioStream', 'video_audiostreams(video_id, stream_id)'),
             'vendorData' => array(self::BELONGS_TO, 'Vendor', 'vendor'),
+            'videoStudio' => array(self::BELONGS_TO, 'VideoStudio', 'studio'),
         );
     }
 }

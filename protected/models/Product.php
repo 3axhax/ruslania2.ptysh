@@ -138,6 +138,12 @@ class Product
                 if (!empty($attrs['id'])) $forHref[$entity]['entity/bymedia'][] = $attrs['id'];
                 $item['Media'] = $attrs;
             }
+            if (isset($d->videoStudio)) {
+                if (!isset($forHref[$entity]['entity/bystudio'])) $forHref[$entity]['entity/bystudio'] = array();
+                $attrs = $d->videoStudio->attributes;
+                if (!empty($attrs['id'])) $forHref[$entity]['entity/bystudio'][] = $attrs['id'];
+                $item['videoStudio'] = $attrs;
+            }
             if (isset($d->magazinetype)) {
                 if (!isset($forHref[$entity]['entity/bymagazinetype'])) $forHref[$entity]['entity/bymagazinetype'] = array();
                 $attrs = $d->magazinetype->attributes;

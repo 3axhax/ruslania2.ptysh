@@ -78,7 +78,7 @@ class Entity {
                 'with' => array('directors', 'actors', 'producers', 'subtitles', 'media',
                     'category', 'subcategory', 'lookinside',
                     'directors', 'actors', 'subtitles', 'zone2',
-                    'languages', 'offers', 'audiostreams', 'vendorData', 'vendorData.deliveryTime'
+                    'languages', 'offers', 'audiostreams', 'vendorData', 'vendorData.deliveryTime', 'videoStudio'
                 ),
             ),
             50 => array('title' => 'Печатная продукция', 'site_id' => 5, 'table' => 'tblPrinted', 'site_table' => 'printed_catalog',
