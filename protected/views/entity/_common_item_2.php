@@ -102,15 +102,16 @@ $entityKey = Entity::GetUrlKey($entity);
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($item['videoStudio'])) : ?>
+        <?php //https://dfaktor.bitrix24.ru/workgroups/group/130/tasks/task/view/7930/?MID=23978#com23978
+        /*if (!empty($item['videoStudio'])) : ?>
             <div class="authors" style="margin-top: 0;">
                 <?php
                 $studio = $item['videoStudio'];
                 $title = ProductHelper::GetTitle($studio);
-                echo $ui->item("A_NEW_STUDIO").' "'.$title.'"';
+                echo $ui->item("A_NEW_STUDIO").' ' . $title;
                 ?>
             </div>
-        <?php endif; ?>
+        <?php endif;*/ ?>
 
         <?php if (!empty($item['Subtitles'])) : ?>
             <div class="authors" style="margin-top: 0;">
@@ -154,7 +155,9 @@ $entityKey = Entity::GetUrlKey($entity);
     </div>
             <?php endif; ?>
         <?php endif; ?>
-
+<?php if ($entity != Entity::VIDEO):
+    //https://dfaktor.bitrix24.ru/workgroups/group/130/tasks/task/view/7930/?MID=23978#com23978
+    ?>
 		<? if  (isset($item['year'])) : ?>
     <div class="authors" style="margin-top: 0;">
         <span><?=str_replace(':', '', ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL'));?> <a href="<?=Yii::app()->createUrl('entity/byyear', array('entity' => $entityKey,
@@ -171,7 +174,7 @@ $entityKey = Entity::GetUrlKey($entity);
 			
 		
 		<? endif; ?>
-		
+<?php endif; ?>
 		<?php if (!empty($item['Publisher'])) : ?>
     <?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?>
     <div class="authors" style="margin-top: 0;">
