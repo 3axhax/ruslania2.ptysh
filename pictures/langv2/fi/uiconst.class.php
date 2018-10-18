@@ -634,7 +634,7 @@ Danske Pankki, tilinumero FI80001470689309. Pyydämme mainitsemaan tilausnumeron
 'VIDEO_ZONE' => 'maakoodi: %s', 
 'WEIGHT_FORMAT' => '%01.2f kg', 
 'WEIGHT_UNIT_TITLE' => 'Kg', 
-'WRITTEN_BY' => 'Tekijä(t) %s',
+'WRITTEN_BY' => 'Tekijä(t): %s', 
 'X items found' => 'Nimikettä löytyi: %s', 
 'X items here' => 'Nimikkeitä tässä osastossa:  %s', 
 'X_DAYS_1' => '%s päivä', 
