@@ -7,7 +7,7 @@
 $url = ProductHelper::CreateUrl($item);
 $urlPicture = ProductHelper::Link2Picture($item, true);
 if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/')): ?>
-				<a href="<?= $url ?>"><img style="max-width: 100%;" height="86" src="<?= $urlPicture ?>" /></a>
+				<a href="<?= $url ?>"><img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" /></a>
 <?php endif; ?>
 			</td>
 			<td class="name">
