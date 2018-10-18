@@ -1246,4 +1246,7 @@ By clicking on a category you are interested in, you can see all the products wi
 
     'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
 
+    'A_NEW_STUDIO' => 'Студия',
+    'A_NEW_YEAR_FILM' => 'Год выхода фильма',
+
 );

@@ -325,6 +325,23 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
+        <?php if (!empty($item['videoStudio'])) :
+            $studio = $item['videoStudio'];
+            $studio_title = ProductHelper::GetTitle($studio);
+            $ret = array();
+            foreach ($item['Actors'] as $actor) {
+                $ret[] = '<a href="' . Yii::app()->createUrl('entity/byactor', array('entity' => $entityKey,
+                        'aid' => $actor['id'],
+                        'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($actor)))) . '" class="cprop">' . ProductHelper::GetTitle($actor) . '</a>';
+            }
+            ?>
+            <div class="authors" style="margin-bottom:5px;">
+                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_STUDIO"); ?></div>
+                <div style="padding-left: 253px;">"<?= $studio_title ?>"</div>
+                <div class="clearBoth"></div>
+            </div>
+        <?php endif; ?>
+
         <?php if (!empty($item['Media'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
                 <?php if ($entity == Entity::MUSIC):?>
@@ -455,7 +472,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['year'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item('A_NEW_YEAR') ?></div>
+                <div style="float: left;" class="nameprop"><?= ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL') ?></div>
                 <div style="padding-left: 253px;">
                     <a href="<?= Yii::app()->createUrl('entity/byyear', array(
                         'entity' => $entityKey,
@@ -468,7 +485,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['release_year'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_YEAR_REAL"); ?></div>
+                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_YEAR_FILM"); ?></div>
                 <div style="padding-left: 253px;">
                     <a href="<?= Yii::app()->createUrl('entity/byyearrelease', array(
                         'entity' => $entityKey,
