@@ -1,5 +1,5 @@
 <?php
-/*Created by Êèðèëë (18.10.2018 22:09)*/
+/*Created by ÐšÐ¸Ñ€Ð¸Ð»Ð» (18.10.2018 22:09)*/
 class StaticPages {
 
 	function getPage($page) {
@@ -23,6 +23,13 @@ class StaticPages {
 				'description_' . $lang . ' = :desc '.
 		'';
 		return Yii::app()->db->createCommand($sql)->execute(array(':page'=>$page, ':title'=>(string)$title, ':desc'=>$desc));
+	}
+
+	function isWordpanel($uid) {
+		//72459 - kirill.ruh@gmail.com | kirill
+		//5 - aa@ruslania.com
+		$allowUsers = array(5, 72459);
+		return in_array($uid, $allowUsers);
 	}
 
 }

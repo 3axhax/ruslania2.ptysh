@@ -1,34 +1,24 @@
-<div class="container">
+<div class="container"<?php if ($page == 'ourstore'): ?> style="width: 100%;" <?php endif; ?>>
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
             
-            <div style="padding-left: 10px" class="text"<?php if (!empty($isWordpanel)): ?> id="js_wordpanel" contenteditable="true"<?php endif; ?>>
+            <div style="padding-left: 10px" class="text"<?php if (!empty($isWordpanel)): ?> id="js_wordpanel"<?php endif; ?>>
                 <?= $data; ?>
             </div>
             <!-- /content -->
 </div>
-<?php if(!empty($isWordpanel)):
-    /*
-	config.allowedContent = true;
-	config.filebrowserBrowseUrl = 'js/kcfinder/browse.php?type=files';
-	config.filebrowserImageBrowseUrl = 'js/kcfinder/browse.php?type=images';
-	config.filebrowserFlashBrowseUrl = 'js/kcfinder/browse.php?type=flash';
-	config.filebrowserUploadUrl = 'js/kcfinder/upload.php?type=files';
-	config.filebrowserImageUploadUrl = 'js/kcfinder/upload.php?type=images';
-	config.filebrowserFlashUploadUrl = 'js/kcfinder/upload.php?type=flash';
-	config.extraPlugins = 'oembed,widget';
-	config.image_previewText = " ";
-	config.toolbar = 'Basic';
-	config.toolbar_Basic =
-	[
-	];
-    */
-    ?>
+<?php if(!empty($isWordpanel)): ?>
+    <div class="buttonCKEDITOR"><a onclick="runCKEDITOR(); $('.buttonCKEDITOR').toggle(); return false;">Редактировать</a></div>
+    <div class="buttonCKEDITOR" style="display: none;"><a onclick="if (confirm('Не сохраненные данные будут потеряны!!!')) { closeCKEDITOR(); $('.buttonCKEDITOR').toggle(); } return false;">Закрыть</a></div>
     <style>
         .cke_button_label.cke_button__inlinesave_label {display: inline;}
+        .buttonCKEDITOR {position: fixed; top: 30px; right: 10px; padding: 20px; background-color: #000; opacity: 0.4;}
+        .buttonCKEDITOR a { color: #fff; cursor: pointer; font-weight: bold;}
     </style>
     <script src="/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript">
         function runCKEDITOR() {
+            // contenteditable="true"
+            $('#js_wordpanel').attr('contenteditable', 'true');
             var csrf = $('meta[name=csrf]').attr('content').split('=');
             var postData = {page: '<?= $page ?>'};
             postData[csrf[0]] = csrf[1];
@@ -86,12 +76,16 @@
                     errorMessage: 'Something went wrong :(',
                     useJSON: false,
                     useColorIcon: true
-                },
-                contentsCss: [ '/new_style/style_site.css' ]
+                }
+//                contentsCss: [ '/new_style/style_site.css' ]
             }).on('change', function() {
-                console.log(this.getData());
+//                console.log(this.getData());
             });
         }
-        runCKEDITOR();
+        function closeCKEDITOR() {
+            $('#js_wordpanel').removeAttr('contenteditable');
+            if (CKEDITOR.instances['js_wordpanel']) CKEDITOR.instances['js_wordpanel'].destroy(true);
+        }
+//        runCKEDITOR();
     </script>
 <?php endif; ?>

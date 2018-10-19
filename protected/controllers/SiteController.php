@@ -189,7 +189,7 @@ class SiteController extends MyController {
             $staticPage = new StaticPages();
             $item = $staticPage->getPage($page);
             if (!empty($item)) $data = $item['description_' . Yii::app()->language];
-            if ((int)$this->uid === 72459) $isWordpanel = true;
+            $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
         }
         if ($data === null) {
             if (!file_exists($file)) $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-static/' . $page . '_en.html.php';

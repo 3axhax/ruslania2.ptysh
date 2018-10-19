@@ -81,4 +81,14 @@ class UrlController extends MyController {
 
 	}
 
+	function actionHref() {
+		$route = Yii::app()->getRequest()->getParam('route');
+		$params = [];
+		foreach ($_GET as $k=>$v) {
+			$params[$k] = $v;
+		}
+		$href = Yii::app()->createUrl($route, $params);
+		$this->ResponseJson(array('href'=>$href));
+	}
+
 }
