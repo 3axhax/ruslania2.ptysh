@@ -65,6 +65,7 @@ return array(
 			'media'=>'type-de-porteur',
 			'years'=>'annees',
 			'yearreleases'=>'annee-de-sortie',
+			'studios'=>'studios',
 		),
 	),
 	'printed'=>array(

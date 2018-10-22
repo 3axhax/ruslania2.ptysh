@@ -21,6 +21,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/directorlist' =>    array('idName' => '',       'nameLevel2' => 'directors',),
 		'entity/audiostreamslist' => array('idName' => '',      'nameLevel2' => 'audiostreams',),
 		'entity/subtitleslist' =>   array('idName' => '',       'nameLevel2' => 'subtitles',),
+		'entity/studioslist' =>     array('idName' => '',       'nameLevel2' => 'studios',),
 
 		'entity/bypublisher' =>     array('idName' => 'pid',    'nameLevel2' => 'publishers',   'useTitle'=>true,),
 		'entity/byseries' =>        array('idName' => 'sid',    'nameLevel2' => 'series',       'useTitle'=>true,),
@@ -35,6 +36,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/bydirector' =>      array('idName' => 'did',    'nameLevel2' => 'directors',    'useTitle'=>true,),
 		'entity/byaudiostream' =>   array('idName' => 'sid',    'nameLevel2' => 'audiostreams', 'useTitle'=>true,),
 		'entity/bysubtitle' =>      array('idName' => 'sid',    'nameLevel2' => 'subtitles',    'useTitle'=>true,),
+		'entity/bystudio' =>        array('idName' => 'sid',    'nameLevel2' => 'studios',      'useTitle'=>true,),
 
 	);
 

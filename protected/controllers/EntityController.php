@@ -1452,4 +1452,79 @@ class EntityController extends MyController {
    	}
 
 
+    public function actionStudiosList($entity) {
+        $entity = Entity::ParseFromString($entity);
+        if (!$this->_checkTagByEntity('videoStudio', $entity)) throw new CHttpException(404);
+
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
+
+        $vs = new VideoStudio();
+//        $this->GetAvail(1);
+        list($list, $counts) = $vs->getAll($entity, 1);
+
+        $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('STUDIOS');
+
+        $paginatorInfo = false;
+        if ($counts > count($list)) {
+            $paginatorInfo = new CPagination($counts);
+            $paginatorInfo->setPageSize($vs->getPerToPage());
+            $paginatorInfo->route = 'studioslist';
+        }
+
+        $this->render('studios_list', array('list' => $list, 'paginatorInfo' => $paginatorInfo, 'entity' => $entity));
+    }
+
+    public function actionByStudio($entity, $sid, $sort = null) {
+        $avail = $this->GetAvail(1);
+        $entity = Entity::ParseFromString($entity);
+        if ($entity != Entity::VIDEO) throw new CHttpException(404);
+
+        $s = new VideoStudio();
+        $studio = $s->model()->findByPk($sid);
+        if (empty($studio)) throw new CHttpException(404);
+
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
+        $dataForPath['sid'] = $sid;
+        $dataForPath['title'] = ProductHelper::ToAscii(ProductHelper::GetTitle($studio->attributes));
+
+        $langTitles = array();
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($studio->attributes, 'title', 0, $_lang));
+            }
+        }
+        $this->_checkUrl($dataForPath, $langTitles);
+
+        $title = Entity::GetTitle($entity);
+        $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[Yii::app()->ui->item('STUDIOS')] = Yii::app()->createUrl('entity/studioslist', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_STUDIO') . ': ' . ProductHelper::GetTitle($studio->attributes);
+
+        $totalItems = $s->GetTotalItems($entity, $sid, $avail);
+        $paginatorInfo = new CPagination($totalItems);
+        $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
+        $sort = SortOptions::GetDefaultSort($sort);
+
+        $items = $totalItems > 0 ? $this->AppendCartInfo($s->GetItems($entity, $sid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
+
+        $filters = FilterHelper::getEnableFilters($entity);
+        FilterHelper::deleteEntityFilter($entity);
+        $filter_data = FilterHelper::getFiltersData($entity);
+
+        $this->render('list', array('entity' => Entity::VIDEO,
+            'items' => $items,
+            'paginatorInfo' => $paginatorInfo,
+            'filters' => $filters,
+            'filter_data' => $filter_data,
+        ));
+    }
+
+
+
 }

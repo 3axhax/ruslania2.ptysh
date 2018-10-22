@@ -1256,6 +1256,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'RUSLANIA_RECOMEND' => 'Se personalens rekommendationer',
 
     'A_NEW_STUDIO' => 'Студия',
+	'STUDIOS' => 'Студии',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 
 );

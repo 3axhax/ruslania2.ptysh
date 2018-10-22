@@ -118,6 +118,7 @@ class HrefTitles {
 			case 'entity/byperformer':
 				return 'all_authorslist';
 				break;
+			case 'entity/bystudio': return 'video_studios'; break;
 		}
 		return '';
 	}
@@ -145,6 +146,7 @@ class HrefTitles {
 			case 'entity/byperformer':
 				return array('ru', 'rut', 'en', 'fi');
 				break;
+			case 'entity/bystudio': return array('ru', 'rut', 'en', 'fi'); break;
 		}
 		return array();
 	}

@@ -65,6 +65,7 @@ return array(
 			'media'=>'tip-nositelja',
 			'years'=>'goda',
 			'yearreleases'=>'god-izdanija',
+			'studios'=>'studios',
 		),
 	),
 	'printed'=>array(

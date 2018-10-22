@@ -22,7 +22,8 @@ class Sitemap {
 		'audiostreams'=>array(  '', 'AUDIO_STREAMS',            'audiostreamslist', 'byaudiostream'),
 		'subtitles'=>array(     '', 'Credits',                  'subtitleslist',    'bysubtitle'),
 		'media'=>array(         '', 'A_NEW_FILTER_TYPE2',       'medialist',        'bymedia'),
-		'magazinetype'=>array(  '', 'A_NEW_TYPE_IZD',           'typeslist',            'bytype'),
+		'magazinetype'=>array(  '', 'A_NEW_TYPE_IZD',           'typeslist',        'bytype'),
+		'videoStudio'=>array(       '', 'STUDIOS',                  'studioslist',      'bystudio'),
 	);
 	private $_tagsAll = array(
 		'years'=>array('', 'A_NEW_FILTER_YEAR', 'yearslist', 'byyear', array('pereodics_catalog')),

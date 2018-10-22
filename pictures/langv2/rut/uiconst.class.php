@@ -1260,6 +1260,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'RUSLANIA_RECOMEND' => 'Cмотрите рекомендации Руслании',
 
     'A_NEW_STUDIO' => 'Студия',
+	'STUDIOS' => 'Студии',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 
 );

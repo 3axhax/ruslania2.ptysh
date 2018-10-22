@@ -161,6 +161,15 @@ class LinksToList extends CWidget {
 		);
 	}
 
+	private function _videoStudioLink() {
+		if (!$this->_checkByEntity('videoStudio')) return array();
+
+		return array(
+			'name'=>Yii::app()->ui->item('STUDIOS'),
+			'href'=>Yii::app()->createUrl('entity/studioslist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
+		);
+	}
+
 	private function _checkByEntity($linkName) {
 		return Entity::checkEntityParam($this->_params['entity'], $linkName);
 	}
