@@ -32,7 +32,7 @@
                 filebrowserUploadUrl: '/js/kcfinder/upload.php?type=files',
                 filebrowserImageUploadUrl: '/js/kcfinder/upload.php?type=images',
                 filebrowserFlashUploadUrl: '/js/kcfinder/upload.php?type=flash',
-                extraPlugins: 'oembed,widget,inlinesave',
+                extraPlugins: 'oembed,widget,inlinesave,wenzgmap',
                 image_previewText: " ",
                 toolbar: [
                     { name: 'document', items: [ /*'Save', 'Source', '-', 'inlinesave', 'NewPage', 'Preview', 'Print', '-', */'Templates' ] },
@@ -43,7 +43,7 @@
                     { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'CopyFormatting', 'RemoveFormat' ] },
                     { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
                     { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-                    { name: 'insert', items: [ 'Image','oembed', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
+                    { name: 'insert', items: [ 'Image','oembed', 'wenzgmap', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
                     '/',
                     { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
                     { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
