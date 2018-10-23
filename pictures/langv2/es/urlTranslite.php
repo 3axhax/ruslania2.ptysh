@@ -109,6 +109,7 @@ return array(
 	'me'=>'cuenta',
 	'advsearch'=>'buscar',
 	'forgot'=>'recuperacion-de-contrasena',
+	'delivery'=>'delivery',
 
 
 	'offers'=>'recomendaciones',

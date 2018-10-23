@@ -109,6 +109,7 @@ return array(
 	'me'=>'account',
 	'advsearch'=>'search',
 	'forgot'=>'password-recovery',
+	'delivery'=>'delivery',
 
 
 	'offers'=>'recommendations',

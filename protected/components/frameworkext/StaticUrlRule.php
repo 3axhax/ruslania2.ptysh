@@ -22,6 +22,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		'safety' => 'MSG_YAHLIST_INFO_PAYMENTS_ARE_SECURE',
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
+		'delivery' => 'CART_COL_SUBTOTAL_DELIVERY',
 		'sitemap' => 'A_SITEMAP',
 	);
 
