@@ -53,7 +53,7 @@ class VideoStudio extends CMyActiveRecord
         $page = min($page, 100000);
 
         $lang = Yii::app()->language;
-        $allowLangs = array('ru', 'rut', 'en', 'fi', 'de', 'fr', 'it', 'es', 'se');
+        $allowLangs = array('ru', 'rut', 'en', 'fi');
         if (!in_array($lang, $allowLangs)) $lang = 'en';
 
         $sql = ''.
@@ -67,7 +67,7 @@ class VideoStudio extends CMyActiveRecord
             ') tId using (id) '.
             'order by title '.
             'limit ' . ($page-1)*$this->_perToPage . ', ' . $this->_perToPage . ' '.
-            '';
+        '';
         $studios = Yii::app()->db->createCommand($sql)->queryAll();
         $sql = 'select found_rows();';
         $counts = Yii::app()->db->createCommand($sql)->queryScalar();

@@ -65,7 +65,7 @@ return array(
 			'media'=>'format',
 			'years'=>'jahr',
 			'yearreleases'=>'jahr-der-veroffentlichung',
-			'studios'=>'studios',
+			'studios'=>'produktionsfirmen',
 		),
 	),
 	'printed'=>array(

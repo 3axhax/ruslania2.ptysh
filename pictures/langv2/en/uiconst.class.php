@@ -1264,7 +1264,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'A_NEW_STUDIO' => 'Студия',
-	'STUDIOS' => 'Студии',
+	'STUDIOS' => 'Production companies',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 
 );

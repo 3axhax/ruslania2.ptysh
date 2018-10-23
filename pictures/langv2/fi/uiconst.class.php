@@ -1254,7 +1254,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'RUSLANIA_RECOMEND' => 'Katso henkilökunnan suositukset',
 
     'A_NEW_STUDIO' => 'Студия',
-    'STUDIOS' => 'Студии',
+    'STUDIOS' => 'Tuotantoyhtiöt',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 
 );

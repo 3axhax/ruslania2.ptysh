@@ -65,7 +65,7 @@ return array(
 			'subtitles'=>'tekstitysten-kieli',
 			'media'=>'tuotteen-tyyppi',
 			'yearreleases'=>'julkaisuvuosi',
-			'studios'=>'studios',
+			'studios'=>'tuotantoyhtiot',
 		),
 	),
 	'printed'=>array(
