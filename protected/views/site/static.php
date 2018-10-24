@@ -29,6 +29,7 @@
             CKEDITOR.inline('js_wordpanel', {
                 title: false,
                 allowedContent: true,
+                extraAllowedContent: 'iframe[*]',
                 filebrowserBrowseUrl: '/js/kcfinder/browse.php?type=files',
                 filebrowserImageBrowseUrl: '/js/kcfinder/browse.php?type=images',
                 filebrowserFlashBrowseUrl: '/js/kcfinder/browse.php?type=flash',
@@ -81,13 +82,25 @@
                     useColorIcon: true
                 }
 //                contentsCss: [ '/new_style/style_site.css' ]
-            }).on('change', function() {
+            })/*.on('change', function() {
 //                console.log(this.getData());
+            })*/.on('instanceReady', function () {
+                var CKEIframes = $('.cke_iframe');
+                var CKEIframesL = CKEIframes.length;
+                for (i = 0; i <CKEIframesL; i ++ )
+                    $(CKEIframes[i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
             });
         }
         function closeCKEDITOR() {
             $('#js_wordpanel').removeAttr('contenteditable');
-            if (CKEDITOR.instances['js_wordpanel']) CKEDITOR.instances['js_wordpanel'].destroy(true);
+            if (CKEDITOR.instances['js_wordpanel']) {
+                CKEDITOR.instances['js_wordpanel'].destroy(true);
+                var CKEIframes = $('.cke_iframe');
+                var CKEIframesL = CKEIframes.length;
+                for (i = 0; i <CKEIframesL; i ++ ) {
+                    $(CKEIframes [i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
+                }
+            }
         }
 //        runCKEDITOR();
     </script>
