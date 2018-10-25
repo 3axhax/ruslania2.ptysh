@@ -2,6 +2,7 @@
 
 class SortOptions
 {
+//    const DefaultSort = 0;
     const PriceLH  = 3;
     const PriceHL = 4;
     const TimeLH = 7;
@@ -12,6 +13,7 @@ class SortOptions
     public static function GetSortData()
     {
         return array(
+//            self::DefaultSort => Yii::app()->ui->item('SORTBY_DEFAULT'),
             self::PriceLH => Yii::app()->ui->item('SORTBY_ALL_PRICE_ASC'),
             self::PriceHL => Yii::app()->ui->item('SORTBY_ALL_PRICE_DESC'),
             self::TimeLH => Yii::app()->ui->item('SORTBY_ALL_DATE_ASC'),
@@ -26,12 +28,14 @@ class SortOptions
         $data = self::GetSortData();
         if(array_key_exists($sort, $data)) return $sort;
         return self::NewHL;
+//        return self::DefaultSort;
     }
 
     public static function GetSQL($sort, $lang, $entity=null)
     {
         switch($sort)
         {
+//            case self::DefaultSort : return 't.positionDefault';
             case self::NewHL : return 't.positionNewHL';
             case self::NewLH : return 't.positionNewLH';
             case self::TimeLH : return 't.positionTimeLH';

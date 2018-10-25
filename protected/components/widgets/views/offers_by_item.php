@@ -1,7 +1,7 @@
 <?php /*Created by Кирилл (04.07.2018 19:00) */ ?>
 <?php //$this->widget('OffersByItem', array('entity'=>$entity, 'idItem'=>)); ?>
 <div class="detail-prop">
-	<div class="prop-name"><?= Yii::app()->ui->item("RUSLANIA_RECOMEND"); ?>:</div>
+	<div class="prop-name"><?= str_replace(':', '', Yii::app()->ui->item("RUSLANIA_RECOMEND")); ?></div>
 	<div class="prop-value"><ul>
 <?php $i = 0; foreach ($offers as $offer):
 	if (empty($offer['is_special'])):

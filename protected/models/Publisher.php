@@ -50,7 +50,7 @@ class Publisher extends CMyActiveRecord {
         );
         return array($authors, $counts);
         $sql = 'SELECT * FROM all_publishers AS al '
-              .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
+//              .'JOIN all_publishers_entity AS e ON al.id=e.publisher '
               .'WHERE first_'.$lang.'=:char AND e.entity=:entity '
               .'ORDER BY title_'.$lang;
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':char' => $char, ':entity' => $entity));
