@@ -26,7 +26,8 @@ $lang = Yii::app()->language;
                 <?php //if (isset($_GET['ha'])): ?>
                 <div class="sort_lable"><?=$ui->item('A_NEW_FILTER_SORT_FOR')?></div>
                     <?php
-                    $value = SortOptions::GetDefaultSort(Yii::app()->getRequest()->getParam('sort'));
+                    $filterData = FilterHelper::getFiltersData($entity, $cid);
+                    $value = SortOptions::GetDefaultSort(Yii::app()->getRequest()->getParam('sort', isset($filterData['sort'])?$filterData['sort']:null));
                     $this->widget('SelectSimulator', array(
                             'items'=>SortOptions::GetSortData(),
                             'paramName'=>'sort',

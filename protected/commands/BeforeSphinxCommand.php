@@ -14,9 +14,9 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		$sql = 'insert ignore into _items_with_label (entity_id, item_id) select entity_id, item_id from offer_items';
+		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity_id, item_id, 2 from offer_items';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		$sql = 'insert ignore into _items_with_label (entity_id, item_id) select entity entity_id, item_id from action_items';
+		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity entity_id, item_id, 1 from action_items';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'truncate all_categories';
 		Yii::app()->db->createCommand()->setText($sql)->execute();

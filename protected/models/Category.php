@@ -526,11 +526,10 @@ class Category {
         $entity = $data['entity'];
         $cid = $data['cid'];
 
-        if ($_GET['sort']) $sort = $_GET['sort'];
-        else {
-            $sort = $data['sort'];
-            if (!$sort) $sort = 12;
-        }
+        $sort = 0;
+        if (isset($_GET['sort'])) $sort = $_GET['sort'];
+        elseif (isset($data['sort'])) $sort = $data['sort'];
+
         $sort = SortOptions::GetDefaultSort($sort);
         return $this->getFilterResult($entity, $cid, $sort, $page);
 

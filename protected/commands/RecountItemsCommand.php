@@ -20,6 +20,7 @@ class RecountItemsCommand extends CConsoleCommand {
 		$sql = 'create temporary table _tmp_position (position int AUTO_INCREMENT, id int, primary key(position), UNIQUE INDEX (id))';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			if ($entity == 20) continue;
 			$sql = 'update ' . $params['site_category_table'] . ' set items_count = 0, avail_items_count = 0';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 			$sql = ''.
@@ -159,15 +160,98 @@ class RecountItemsCommand extends CConsoleCommand {
 
 	private function _updatePosition($entity, $params) {
 		foreach (SortOptions::GetSortData() as $sort=>$name) {
-			$sql = ''.
-				'insert into _tmp_position (id) '.
-				'select t.id '.
-				'from ' . $params['site_table'] . ' t '.
-					'left join vendors tVendots on (tVendots.id = t.vendor) '.
-					'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
-				'order by ' . SortOptions::GetSQLPrepare($sort, '', $entity) .
-			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();
+			if ($sort == SortOptions::DefaultSort) {
+				if ($entity == Entity::PERIODIC) {
+					$sql = ''.
+						'insert into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
+//						'where (t.avail_for_order = 1) '.
+						'order by t.avail_for_order desc, tAI.type asc, t.id desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+					$sql = ''.
+						'insert ignore into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
+						'where (tAI.item_id is null) '.
+						'order by t.avail_for_order desc, t.id desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+				}
+				else {
+/*1 товары с флажками "новинка"
+*внутри них: дата вписывания, свежая дата вперед
+*независимо от того, есть-ли товар на складе или нет
+
+2 товары с флажками "в рекомендованных"
+*внутри них: дата вписывания, свежая дата вперед
+*независимо от того, есть-ли товар на складе или нет */
+					$sql = ''.
+						'insert into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
+						'where (t.avail_for_order = 1) '.
+						'order by tAI.type asc, t.id desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*3 товар есть в магазине или "заканчивается в магазине"
+*внутри них: дата вписывания, свежая дата вперед */
+					$sql = ''.
+						'insert ignore into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
+						'where (t.avail_for_order = 1) and (t.in_shop > 0) and (tAI.item_id is null) '.
+						'order by t.id desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*4 товары, который нет в магазине, но которые можно купить (есть скип)
+* по году издании (дата вписывании не играет роли)
+* по сроку доставки (зависит от поставщика) (у каждого поставщика есть свой срок доставки)
+*** возможно ли сделать два критерии, и как с ними оперировать?
+*** му хотим так , чтобы в книгах нет в магазине шли вперед новые с короткими сроками доставки, если это возможно.*/
+					$sql = ''.
+						'insert ignore into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
+							'left join vendors tVendots on (tVendots.id = t.vendor) '.
+							'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
+						'where (t.avail_for_order = 1) and (t.in_shop = 0) and (tAI.item_id is null) '.
+						'order by t.year desc, deliveryTime.delivery_unit ASC, deliveryTime.delivery_type_name ASC ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*После товаров в наличии "в корзину" идет товар не в наличии "сообщить о поступлении"
+*внутри товаров не в наличии порядок по дате вписывание. Как на старом сайте.*/
+					$sql = ''.
+						'insert ignore into _tmp_position (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+						'where (t.avail_for_order = 0) '.
+						'order by t.id desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+				}
+			}
+			else {
+				$sql = ''.
+					'insert into _tmp_position (id) '.
+					'select t.id '.
+					'from ' . $params['site_table'] . ' t '.
+						'left join vendors tVendots on (tVendots.id = t.vendor) '.
+						'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
+					'order by ' . SortOptions::GetSQLPrepare($sort, '', $entity) .
+				'';
+				Yii::app()->db->createCommand()->setText($sql)->execute();
+			}
 			$sql = ''.
 				'update ' . $params['site_table'] . ' t '.
 					'join _tmp_position tTmp using (id) '.
