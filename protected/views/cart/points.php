@@ -41,8 +41,18 @@
     if (count($points)) {
     
         echo '<div style="display: none; text-align: right;" class="more_points">';
-        echo '<a href="javascript:;" onclick="$(\'.row_smartpost\').removeClass(\'act\'); $(\'.row_smartpost\').show(); $(this).parent().hide(); $(\'.row_smartpost .btn.btn-success\').html(\'Выбрать\');">Показать все</a>';
+        echo '<a href="javascript:;" onclick="$(\'.row_smartpost\').removeClass(\'act\'); $(\'.row_smartpost, .close_points\',).show(); $(this).parent().hide(); $(\'.row_smartpost .btn.btn-success\').html(\'Выбрать\');">Показать все</a>';
         echo '</div>';
+
+        echo '<div style="display: block; text-align: right;" class="close_points">';
+        echo '<a href="javascript:;" onclick="$(\'.row_smartpost\').removeClass(\'act\'); $(\'.row_smartpost\').show(); $(\'.box_smartpost\').html(\'\'); $(\'.smartpost_index\').val(\'\')">Свернуть</a>';
+        echo '</div>';
+
+
+    } else {
+
+        echo 'К сожалению ничего не найдено.';
+
     }
 
 

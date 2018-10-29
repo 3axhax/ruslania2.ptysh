@@ -214,6 +214,7 @@
     function select_smartpost_row(cont) {
 
         $('.row_smartpost').hide();
+        $('.close_points').hide();
         $('.more_points').show();
         $('.row_smartpost').removeClass('act');
         $(cont).parent().addClass('act');
