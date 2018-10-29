@@ -1152,7 +1152,7 @@ class SiteController extends MyController {
 
         /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
 
-        $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : 3);
+        $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : SortOptions::GetDefaultSort());
         if (isset($_GET['entity'])) $entity = $_GET['entity'];
         if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
 
@@ -1172,11 +1172,10 @@ class SiteController extends MyController {
         $entity = $data['entity'];
         $cid = $data['cid'];
 
-        if ($_GET['sort']) $sort = $_GET['sort'];
-        else {
-            $sort = $data['sort'];
-            if (!$sort) $sort = 12;
-        }
+        $sort = 0;
+        if (isset($_GET['sort'])) $sort = $_GET['sort'];
+        elseif (isset($data['sort'])) $sort = $data['sort'];
+
         $sort = SortOptions::GetDefaultSort($sort);
         $items = $cat->getFilterResult($entity, $cid, $sort, $paginator->currentPage);
 

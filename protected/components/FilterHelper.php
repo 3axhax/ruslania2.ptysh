@@ -251,16 +251,18 @@ class FilterHelper
     }
 
     static private function getSort() {
-        $sort = Yii::app()->getRequest()->getParam('sort', false);
-        if ($sort !== false) {
-            self::$data['sort'] = (int) $sort;
-            return true;
+        if (!isset(self::$data['sort'])) {
+            $sort = Yii::app()->getRequest()->getParam('sort', false);
+            if ($sort !== false) {
+                self::$data['sort'] = (int) $sort;
+                return true;
+            }
+            if (isset(self::$sessionData['sort']) && self::$sessionData['sort'] != '') {
+                self::$data['sort'] = (int) self::$sessionData['sort'];
+                return true;
+            }
+            self::$data['sort'] = SortOptions::GetDefaultSort();
         }
-        if (isset(self::$sessionData['sort']) && self::$sessionData['sort'] != '') {
-            self::$data['sort'] = (int) self::$sessionData['sort'];
-            return true;
-        }
-        self::$data['sort'] = 8;
         return false;
     }
 

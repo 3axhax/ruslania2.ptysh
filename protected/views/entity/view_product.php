@@ -230,7 +230,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <? if ($item['title_original']) : ?>
             <div class="authors" style="margin-bottom:10px;">
-                <div style="float: left;width: 220px;" class="nameprop"><?= $ui->item("ORIGINAL_NAME") ?>:</div>
+                <div style="float: left;width: 220px;" class="nameprop"><?= str_replace(':', '', $ui->item("ORIGINAL_NAME")) ?></div>
                 <div style="padding-left: 253px;"><?=$item['title_original']?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -270,7 +270,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             }
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("WRITTEN_BY"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("WRITTEN_BY"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $tmp); ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -288,7 +288,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             }
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("READ_BY"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("READ_BY"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $tmp); ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -304,7 +304,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php endforeach;
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("DIRECTOR_IS"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("DIRECTOR_IS"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $ret); ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -319,7 +319,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             }
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("VIDEO_ACTOR_IS"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("VIDEO_ACTOR_IS"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $ret); ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -330,7 +330,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             $studio_title = ProductHelper::GetTitle($studio);
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_STUDIO"); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_STUDIO")); ?></div>
                 <div style="padding-left: 253px;"><a href="<?= Yii::app()->createUrl('entity/bystudio', array('entity' => $entityKey, 'sid' => $studio['id'], 'title' => ProductHelper::ToAscii($studio_title))) ?>" class="cprop"><?= $studio_title ?></a></div>
                 <div class="clearBoth"></div>
             </div>
@@ -339,9 +339,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($item['Media'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
                 <?php if ($entity == Entity::MUSIC):?>
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("A_NEW_FILTER_TYPE3"), ''); ?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("A_NEW_FILTER_TYPE3"), '')); ?></div>
                 <?php else:?>
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MEDIA_TYPE_OF"), ''); ?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("MEDIA_TYPE_OF"), '')); ?></div>
                 <?php endif;?>
                 <div style="padding-left: 253px;">
                     <a class="cprop" href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a>
@@ -362,7 +362,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['playtime'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("MSG_AUDIO_PLAYING_TIME"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("MSG_AUDIO_PLAYING_TIME"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= $item['playtime'] ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -393,7 +393,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             }
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("VIDEO_CREDITS_IS"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("VIDEO_CREDITS_IS"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $ret) ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -408,7 +408,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             }
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("AUDIO_STREAMS"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("AUDIO_STREAMS"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $ret) ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -416,7 +416,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['Country'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= sprintf($ui->item("COUNTRY_OF_ORIGIN"), ''); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("COUNTRY_OF_ORIGIN"), '')); ?></div>
                 <div style="padding-left: 253px;"><?= ProductHelper::GetTitle($item['Country']) ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -430,7 +430,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             if (!empty($langs)):
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? $ui->item("CATALOGINDEX_CHANGE_THEME") : $ui->item("CATALOGINDEX_CHANGE_LANGUAGE"); ?></div>
+                <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_THEME")) : str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_LANGUAGE")); ?></div>
                 <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -438,7 +438,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['format'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item("Media"); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("Media")); ?></div>
                 <div style="padding-left: 253px;"><?= $item['format'] ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -449,9 +449,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="authors" style="margin-bottom:5px;">
                 <div style="float: left;" class="nameprop">
                     <?php
-                    if ($entity == Entity::MUSIC) echo $ui->item('A_NEW_LABEL');
-                    elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo $ui->item('A_NEW_PRODUCER');
-                    else echo sprintf($ui->item("Published by"), '');
+                    if ($entity == Entity::MUSIC) echo str_replace(':', '', $ui->item('A_NEW_LABEL'));
+                    elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo str_replace(':', '', $ui->item('A_NEW_PRODUCER'));
+                    else echo str_replace(':', '', sprintf($ui->item("Published by"), ''));
                     ?>
                 </div>
                 <div style="padding-left: 253px;">
@@ -466,7 +466,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['year'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= ($entity != Entity::VIDEO) ? $ui->item('A_NEW_YEAR') : $ui->item('A_NEW_YEAR_REAL') ?></div>
+                <div style="float: left;" class="nameprop"><?= ($entity != Entity::VIDEO) ? str_replace(':', '', $ui->item('A_NEW_YEAR')) : str_replace(':', '', $ui->item('A_NEW_YEAR_REAL')) ?></div>
                 <div style="padding-left: 253px;">
                     <a href="<?= Yii::app()->createUrl('entity/byyear', array(
                         'entity' => $entityKey,
@@ -479,7 +479,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['release_year'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_YEAR_FILM"); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_YEAR_FILM")); ?></div>
                 <div style="padding-left: 253px;">
                     <a href="<?= Yii::app()->createUrl('entity/byyearrelease', array(
                         'entity' => $entityKey,
@@ -495,9 +495,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             ?>
             <div class="authors" style="margin-bottom:5px;">
                 <?php if($entity == 10 || $entity == 15): ?>
-                    <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_TYPOGRAPHY"); ?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_TYPOGRAPHY")); ?></div>
                 <?php else: ?>
-                    <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_PEREP"); ?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_PEREP")); ?></div>
                 <?php endif;?>
                 <div style="padding-left: 253px;"><?= $row['title_' . Yii::app()->language] ?></div>
                 <div class="clearBoth"></div>
@@ -506,7 +506,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if (!empty($item['numpages'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $ui->item("A_NEW_COUNT_PAGE"); ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_COUNT_PAGE")); ?></div>
                 <div style="padding-left: 253px;"><?= $item['numpages'] ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -518,7 +518,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             if ($entity == Entity::SHEETMUSIC) {$name = 'ISMN/ISBN';}
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= $name ?></div>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $name) ?></div>
                 <div style="padding-left: 253px;"><?= $item['isbn'] ?></div>
                 <div class="clearBoth"></div>
             </div>
@@ -539,7 +539,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['size'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item('PRINTED_SIZE'),''));?></div>
                     <div style="padding-left: 253px;"><?= $item['size'] ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -547,7 +547,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['Series'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item('SERIES_IS'),'');?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item('SERIES_IS'),''));?></div>
                     <div style="padding-left: 253px;">
                         <a class="cprop" href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a>
                     </div>
@@ -558,7 +558,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if (!empty($item['Media'])) : ?>
 
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item('MEDIA_TYPE_OF'),'');?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item('MEDIA_TYPE_OF'),''));?></div>
                     <div style="padding-left: 253px;">
                         <a class="cprop" href="<?= Media::Url($item); ?>"><?= $item['Media']['title']; ?></a>
                         <?php if (!empty($item['Zone'])) : ?>, <?= sprintf($ui->item('VIDEO_ZONE'), '<span class="title__bold">' . $item['Zone']['title'] . '</span>'); ?>
@@ -573,7 +573,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['catalogue'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop">Catalogue N:</div>
+                    <div style="float: left;" class="nameprop">Catalogue N</div>
                     <div style="padding-left: 253px;"><?= $item['catalogue']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -581,7 +581,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['issn'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop">ISSN:</div>
+                    <div style="float: left;" class="nameprop">ISSN</div>
                     <div style="padding-left: 253px;"><?= $item['issn']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -589,7 +589,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['requirements'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item('A_SOFT_REQUIREMENTS')); ?></div>
                     <div style="padding-left: 253px;"><?= $item['requirements']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -598,7 +598,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['index'])) : ?>
                 <div class="authors" style="margin-bottom:5px;">
-                    <div style="float: left;" class="nameprop"><?= sprintf($ui->item("PERIOD_INDEX"), ''); ?></div>
+                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', sprintf($ui->item("PERIOD_INDEX"), '')); ?></div>
                     <div style="padding-left: 253px;"><?= $item['index']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1017,7 +1017,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($cat)) : ?>
             <div class="blue_arrow text" style="margin: 20px 0;">
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $ui->item('Related categories'); ?>:</div>
+                    <div class="prop-name"><?= str_replace(':', '', $ui->item('Related categories')); ?></div>
                     <div class="prop-value">
                         <?php foreach ($cat as $c) : ?>
                             <?php $catTitle = ProductHelper::GetTitle($c); ?>
@@ -1037,7 +1037,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($items['dvds'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name">DVDs:</div>
+                    <div class="prop-name">DVDs</div>
                     <div class="prop-value"><?=$item['dvds']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1045,7 +1045,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['size'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= sprintf($ui->item('PRINTED_SIZE'),'');?></div>
+                    <div class="prop-name"><?= str_replace(':', '', sprintf($ui->item('PRINTED_SIZE'),''));?></div>
                     <div class="prop-value"><? echo $item['size']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1054,7 +1054,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if (!empty($item['playtime'])) : ?>
 
                 <div class="detail-prop">
-                    <div class="prop-name"><?= sprintf($ui->item('MSG_AUDIO_PLAYING_TIME'),'');?></div>
+                    <div class="prop-name"><?= str_replace(':', '', sprintf($ui->item('MSG_AUDIO_PLAYING_TIME'),''));?></div>
                     <div class="prop-value"><? echo $item['playtime']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1063,7 +1063,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['Series'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= sprintf($ui->item("SERIES_IS"), ''); ?></div>
+                    <div class="prop-name"><?= str_replace(':', '', sprintf($ui->item("SERIES_IS"), '')); ?></div>
                     <div class="prop-value"><a class="cprop" href="<?= Series::Url($item['Series']); ?>"><?= ProductHelper::GetTitle($item['Series']); ?></a></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1072,7 +1072,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['catalogue'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name">Catalogue N:</div>
+                    <div class="prop-name">Catalogue N</div>
                     <div class="prop-value"><?= $item['catalogue']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1080,7 +1080,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['requirements'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $ui->item('A_SOFT_REQUIREMENTS'); ?>:</div>
+                    <div class="prop-name"><?= str_replace(':', '', $ui->item('A_SOFT_REQUIREMENTS')); ?></div>
                     <div class="prop-value"><?= $item['requirements']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1089,7 +1089,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['index'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= sprintf($ui->item("PERIOD_INDEX"), '');?></div>
+                    <div class="prop-name"><?= str_replace(':', '', sprintf($ui->item("PERIOD_INDEX"), ''));?></div>
                     <div class="prop-value"><?=$item['index']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1097,7 +1097,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['issn'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name">ISSN:</div>
+                    <div class="prop-name">ISSN</div>
                     <div class="prop-value"><?= $item['issn']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1105,7 +1105,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
             <?php if (!empty($item['stock_id'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $ui->item('Stock_id'); ?>:</div>
+                    <div class="prop-name"><?= str_replace(':', '', $ui->item('Stock_id')); ?></div>
                     <div class="prop-value"><?= $item['stock_id']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1120,7 +1120,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 if ($entity == Entity::SHEETMUSIC) $name = 'ISMN/ISBN';
                 if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::MUSIC, Entity::SHEETMUSIC)))): ?>
                     <div class="detail-prop">
-                        <div class="prop-name">EAN:</div>
+                        <div class="prop-name">EAN</div>
                         <div class="prop-value"><?= $item['eancode']; ?></div>
                         <div class="clearBoth"></div>
                     </div>
@@ -1128,7 +1128,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
                 <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1136,63 +1136,63 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
                 <?php if (!empty($item['isbn2'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn2']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn3'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn3']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn4'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn4']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn5'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn5']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn6'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn6']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn7'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn7']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn8'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn8']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn9'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn9']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn10'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?>:</div>
+                    <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn10']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1203,7 +1203,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 //не поймешь, то надо то не надо https://dfaktor.bitrix24.ru/company/personal/user/836/tasks/task/view/6810/
                 ?>
                 <div class="detail-prop">
-                    <div class="prop-name">EAN:</div>
+                    <div class="prop-name">EAN</div>
                     <div class="prop-value"><?= $item['eancode']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
