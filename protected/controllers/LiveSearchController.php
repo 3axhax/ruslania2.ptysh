@@ -15,6 +15,18 @@ class LiveSearchController extends MyController {
 				$list = $sController->getByCode($code, $q);
 				if (!empty($list)) $isCode = true;
 			}
+			else {
+				$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
+				if ($code = $sController->isCode($likeCode)) {
+					$list = $sController->getByCode($code, $likeCode);
+					if (!empty($list)) $isCode = true;
+				}
+			}
+
+			if (!$isCode&&($pathParams = $sController->isPath($q))) {
+				$list = $sController->getByPath($pathParams);
+				if (!empty($list)) $isCode = true;
+			}
 
 			if (!$isCode) {
 				/*$list = $sController->getListExactMatch($q, 1, 10);
