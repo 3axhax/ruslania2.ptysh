@@ -29,8 +29,8 @@ class OffersByItem extends CWidget {
 	}
 
 	protected function _getOffers() {
-		$lang = Yii::app()->language;
-		if (!in_array($lang, $this->_availLanguages)) $lang = $this->_defaultLanguage;
+		/*$lang = Yii::app()->language;
+		if (!in_array($lang, $this->_availLanguages)) $lang = $this->_defaultLanguage;*/
                 $sql_add = '';
                 if ($this->_params['index_show'] == 0) {
                     
@@ -39,7 +39,7 @@ class OffersByItem extends CWidget {
                 }
                 
 		$sql = ''.
-			'select t.id, t.title_' . $lang . ', t.is_special '.
+			'select t.id, t.title_ru, t.title_rut, t.title_en, t.title_fi, t.is_special '.
 			'from offers t '.
 				'join offer_items tI on (tI.offer_id = t.id) '.
 					'and (tI.entity_id = ' . (int) $this->_params['entity'] . ') '.
