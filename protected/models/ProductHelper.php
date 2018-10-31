@@ -108,7 +108,7 @@ class ProductHelper
         if($lang == 'ru' && isset($item[$sKey.'_ru']) && !empty($item[$sKey.'_ru']))
         {
 
-            $ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+            $ret = trim($item[$sKey.'_ru']);
             $tmp = $ret;
             if ($cnt > 0) {
                 $len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
@@ -128,7 +128,7 @@ class ProductHelper
             {
                 if(array_key_exists($key, $item) && !empty($item[$key])) {
 
-                    $ret = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
+                    $ret = trim($item[$sKey.'_ru']);
                     $tmp = $ret;
                     if ($cnt > 0) {
                         $len = mb_strlen(trim($item[$sKey.'_ru']), 'utf-8');
