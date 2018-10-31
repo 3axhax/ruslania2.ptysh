@@ -10,13 +10,20 @@ class SiteController extends MyController {
         return array(array('allow',
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
+                'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
+                'certificate'
+            ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs', 'staticSave'),
                 'users' => array('@')),
             array('deny',
                 'users' => array('*')));
+    }
+
+    function actionCertificate() {
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->render('certificate', array());
     }
 
     public function actionSale() {

@@ -1257,5 +1257,6 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'A_NEW_STUDIO' => 'Студия',
     'STUDIOS' => 'Tuotantoyhtiöt',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
+    'GIFT_CERTIFICATE' => 'Сертификат в подарок',
 
 );
