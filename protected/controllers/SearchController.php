@@ -23,6 +23,18 @@ class SearchController extends MyController {
 			$list = $this->getByCode($code, $q);
 			if (!empty($list)) $isCode = true;
 		}
+		else {
+			$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
+			if ($code = $this->isCode($likeCode)) {
+				$list = $this->getByCode($code, $likeCode);
+				if (!empty($list)) $isCode = true;
+			}
+		}
+
+		if (!$isCode&&($pathParams = $this->isPath($q))) {
+			$list = $this->getByPath($pathParams);
+			if (!empty($list)) $isCode = true;
+		}
 
 		$page = $this->_getNumPage();
 		$abstractInfo = array();
@@ -120,6 +132,22 @@ class SearchController extends MyController {
 		}
 		return array();
 
+	}
+
+	function isPath($q) {
+		$request = new MyRefererRequest();
+		$request->setFreePath($q);
+		//$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
+		$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+		return $request->getParams();
+	}
+
+	function getByPath($params) {
+		$entity = 0;
+		if (!empty($params['entity'])) $entity = Entity::ParseFromString($params['entity']);
+		if (empty($entity)) return array();
+		if (empty($params['id'])) return array();
+		return SearchHelper::ProcessProducts2(array('e' . $entity=>array($params['id'])), false);
 	}
 
 	function getEntitys($query) {
