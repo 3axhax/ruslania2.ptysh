@@ -1117,7 +1117,11 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             ) : ?>
             <?php else:
                 $name = 'ISBN';
-                if ($entity == Entity::SHEETMUSIC) $name = 'ISMN/ISBN';
+                $isbnNum = 1;
+                if ($entity == Entity::SHEETMUSIC) {
+                    $name = 'ISMN/ISBN';
+                    $isbnNum = null;
+                }
                 if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::MUSIC, Entity::SHEETMUSIC)))): ?>
                     <div class="detail-prop">
                         <div class="prop-name">EAN</div>
@@ -1136,63 +1140,63 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
                 <?php if (!empty($item['isbn2'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn2']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn3'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn3']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn4'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn4']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn5'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn5']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn6'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn6']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn7'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn7']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn8'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn8']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn9'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn9']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
                 <?php if (!empty($item['isbn10'])) : ?>
                 <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?></div>
+                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':(++$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn10']; ?></div>
                     <div class="clearBoth"></div>
                 </div>
