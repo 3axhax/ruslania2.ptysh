@@ -40,10 +40,10 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 				endif; ?>
 					<div class="cost">
 						<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])) : ?>
-							<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
+							<span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-							<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold; white-space: nowrap;">
+							<span class="price with_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
 						<?php else : ?>

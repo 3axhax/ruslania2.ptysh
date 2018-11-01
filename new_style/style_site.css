@@ -3206,7 +3206,11 @@ div.detail-prop .prop-value li { list-style-type: none; }
     cursor: pointer
 }
 
-.without_discount { color: #ed1d24; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
+.without_discount { color: #301c53/*#ed1d24*/; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
+.price .pwvat { color: #ed1d24; }
+
+.cost span.without_discount {font-size: 90%; color: #301c53/*#ed1d24*/; text-decoration: line-through;}
+.cost span.with_discount {color: #ed1d24/*#301c53*/;font-size: 18px; font-weight: bold; white-space: nowrap;}
 
 .disabled {
     pointer-events: none !important;

@@ -49,10 +49,10 @@
 				<?php //$price = DiscountManager::GetPrice(Yii::app()->user->id, $product); ?>
 				<div class="cost">
 					<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
-						<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
+						<span class="without_discount">
                     <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-						<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold; white-space: nowrap;">
+						<span class="price with_discount">
                     <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
                 </span>
 					<?php else : ?>

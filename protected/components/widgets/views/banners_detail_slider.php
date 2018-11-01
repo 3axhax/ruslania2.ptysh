@@ -19,8 +19,8 @@
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
 							<div class="cost">
 								<?php if (!empty($price[DiscountManager::DISCOUNT])): ?>
-									<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?></span>&nbsp;
-									<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
+									<span class="without_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?></span>&nbsp;
+									<span class="price with_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
 								<?php else: ?>
 									<?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
 								<?php endif; ?>
