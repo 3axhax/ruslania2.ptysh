@@ -1262,5 +1262,6 @@ By clicking on a category you are interested in, you can see all the products wi
 	'STUDIOS' => 'Produktionsfirmen',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 	'GIFT_CERTIFICATE' => 'Сертификат в подарок',
+	'ALTERNATIVE'=>'Альтернативный',
 
 );
