@@ -3256,4 +3256,4 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .gift_certificate .form .form_row { display: table-row; }
 .gift_certificate .form .form_row div {display: table-cell; }
 .gift_certificate .form .form_row div.row_name { width: 190px; vertical-align: top; text-align: right; padding-right: 15px; }
-.gift_certificate .form .form_row div.row_name span { color: #ed1d24; }
+.gift_certificate .form .form_row div.row_name span { color: #ed1d24; width: 5px }
