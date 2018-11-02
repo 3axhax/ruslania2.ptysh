@@ -3206,10 +3206,13 @@ div.detail-prop .prop-value li { list-style-type: none; }
     cursor: pointer
 }
 
-.without_discount { color: #301c53/*#ed1d24*/; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
-.price .pwvat { color: #ed1d24; }
+.price_h { font-size: 16px; color: #301c53; }
+.without_discount { color: #301c53/*#ed1d24*/; margin-right: 5px; text-decoration: line-through; font-size: 16px; font-weight: bold; }
+.price { color: #301c53;font-size: 18px; font-weight: bold; }
+.price b.pwvat { color: #ed1d24; }
+.price .pwovat { color: #747474; font-size: 14px; font-weight: normal; white-space: nowrap;}
 
-.cost span.without_discount {font-size: 90%; color: #301c53/*#ed1d24*/; text-decoration: line-through;}
+.cost span.without_discount {font-size: 13px; color: #301c53/*#ed1d24*/; text-decoration: line-through;}
 .cost span.with_discount {color: #ed1d24/*#301c53*/;font-size: 18px; font-weight: bold; white-space: nowrap;}
 
 .disabled {

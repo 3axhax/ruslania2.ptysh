@@ -18,12 +18,12 @@
 	<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])) : ?>
 				<span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
-                </span>&nbsp;
-				<span class="price with_discount">
+                </span>
+				<span class="price with_discount" style="font-size: 15px;">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
 	<?php else : ?>
-				<span class="price">
+				<span class="price" style="font-size: 15px;">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
 	<?php endif; ?>

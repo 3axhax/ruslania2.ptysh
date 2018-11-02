@@ -25,7 +25,7 @@ KnockoutForm::RegisterScripts();
 		<div class="span10">
 			<h1 class="titlename poht" style="margin-bottom: 20px;"><?= $h1 ?></h1>
 			<div class="text gift_certificate">
-				<div class="sample"><img src="/new_img/gift1.jpg" id="gifg_preview"></div>
+				<div class="sample"><img src="/new_img/gift1.jpg" id="gift_preview"></div>
 				<div class="form">
 					<?= CHtml::beginForm(Yii::app()->createUrl('site/certificate'), 'post'); ?>
 					<div class="form_row">
@@ -72,7 +72,6 @@ KnockoutForm::RegisterScripts();
 	$(function() {
 		$('#gift_maket').change(function () {
 			$('#gift_preview').attr('src', '/new_img/gift' + this.value + '.jpg');
-			console.log($('#gift_preview').attr('src'));
 		});
 	});
 

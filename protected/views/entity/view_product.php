@@ -664,7 +664,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <?php if (isset($item['AlreadyInCart'])) : ?>
 
 
-                    <div style="font-size: 16px; color: #4c3a6a;">&nbsp;</div>
+                    <div class="price_h">&nbsp;</div>
                     <?php if ($item['entity'] != Entity::PERIODIC) : ?>
                         <?= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
                     <?php else : ?>
