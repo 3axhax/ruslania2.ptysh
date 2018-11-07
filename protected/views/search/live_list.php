@@ -13,7 +13,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 			<td class="name">
 				<a href="<?= $url ?>"><?= ProductHelper::GetTitle($item) ?></a>
 				<?php if (!empty($item['inDescription'])): ?>
-					<div><?= Yii::app()->ui->item('IN_DESCRIPTION') ?>: <?= $item['inDescription'] ?></div>
+					<div class="in_desc"><span><?= Yii::app()->ui->item('IN_DESCRIPTION') ?></span>: <?= $item['inDescription'] ?></div>
 				<?php /*else: ?>
 				<div style="height: 18px;"></div>
 				<?php */endif; ?>
