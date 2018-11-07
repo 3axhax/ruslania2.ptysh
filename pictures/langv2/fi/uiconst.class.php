@@ -1158,9 +1158,17 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'DELIVERY_PRIORITY_FINEST'=>'<b>Firmat, koulut ja organisaatiot:</b> suoraan toimitusosoitteeseen pakettina   klo 16 mennessä lähetystä seuraavana arkipäivänä, Express-paketti,   Priority-käsittely (Jos olet yksityishenkilö, mutta olet toimitusosoitteessa päiväsaikaan, valitse tämä ja kirjoita huomautus toivomuksiin).<br /><br /><b>Yksityishenkilöt:</b> suoraan kotiin tai toimitusosoitteeseen lähetystä   seuraavana arkipäivänä klo 9-21. Kotipaketti 21, Priority-käsittely. (Kun   paketti on lähtenyt Ruslaniasta, Posti sopii toimitusajan vastaanottajan   kanssa etukäteen puhelimitse tai tekstiviestillä.)',
     'DELIVERY_EXPRESS_FINEST'=>'Kotiin tai toimitusosoitteeseen lähetystä seuraavana arkiaamuna klo 9 mennessä. Pikakirje tai  Express   Morning-paketti, Express-käsittely',
 
-    'DELIVERY_ECONOMY_OTHER'=>'Toimitus suoraan kotiin tai   toimitusosoitteeseen kirjeenä',
-    'DELIVERY_PRIORITY_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen Priority-kirjeenä, Priority-käsittely',
-    'DELIVERY_EXPRESS_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen pikakirjeenä, Express-käsittely',
+    'DELIVERY_ECONOMY_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen kirjeenä, ilman seurantatunnusta',
+    'DELIVERY_PRIORITY_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen Priority-kirjeenä, ilman seurantatunnusta, Priority-käsittely',
+    'DELIVERY_EXPRESS_OTHER'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen pikakirjeenä, seurantatunnuksella, Express-käsittely',
+
+    'DELIVERY_ECONOMY_OTHER_YES'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen, seurantatunnuksella, kuljetusyritys toimittaa perille, lähetämme myös sähköpostilla mahdollisuuden vaihtaa toimituksen noutopisteeseen, GLS Flex delivery service',
+    'DELIVERY_PRIORITY_OTHER_YES'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen, seurantatunnuksella, kuljetusyritys toimittaa perille, lähetämme myös sähköpostilla mahdollisuuden vaihtaa toimituksen noutopisteeseen, GLS Flex delivery service, Priority-käsittely',
+    'DELIVERY_EXPRESS_OTHER_YES'=>'Toimitus suoraan kotiin tai toimitusosoitteeseen, seurantatunnuksella, kuljetusyritys toimittaa perille, Suomen Posti EMS-paketti tai pikakirje, Express-käsittely',
+
+
+
+
 
     'IN_RECOMMEND' => 'Рекомендации',
     'IN_NEW' => 'Новинка!',
