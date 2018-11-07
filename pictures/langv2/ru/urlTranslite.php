@@ -109,7 +109,7 @@ return array(
 	'me'=>'akkaunt',
 	'advsearch'=>'poisk',
 	'forgot'=>'vosstanovlenie-parolja',
-	'delivery'=>'delivery',
+	'delivery'=>'dostavka',
 	'news'=>'novosti',
 
 

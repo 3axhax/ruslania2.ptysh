@@ -109,7 +109,7 @@ return array(
 	'me'=>'tili',
 	'advsearch'=>'haku',
 	'forgot'=>'salasanan-palautus',
-	'delivery'=>'delivery',
+	'delivery'=>'toimitus',
 	'news'=>'news',
 
 
