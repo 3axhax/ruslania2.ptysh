@@ -110,6 +110,7 @@ return array(
 	'advsearch'=>'buscar',
 	'forgot'=>'recuperacion-de-contrasena',
 	'delivery'=>'delivery',
+	'news'=>'news',
 
 
 	'offers'=>'recomendaciones',

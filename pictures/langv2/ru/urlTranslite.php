@@ -110,6 +110,7 @@ return array(
 	'advsearch'=>'poisk',
 	'forgot'=>'vosstanovlenie-parolja',
 	'delivery'=>'delivery',
+	'news'=>'novosti',
 
 
 	'offers'=>'rekomendatsii',

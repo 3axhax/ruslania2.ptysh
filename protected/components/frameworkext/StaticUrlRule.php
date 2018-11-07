@@ -23,6 +23,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		'zone_info' => 'Zone',
 		'paypal' => 'MSG_WHAT_IS_PAYPAL',
 		'delivery' => 'CART_COL_SUBTOTAL_DELIVERY',
+		'news' => 'NEWS',
 		'sitemap' => 'A_SITEMAP',
 	);
 

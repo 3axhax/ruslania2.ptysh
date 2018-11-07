@@ -110,6 +110,7 @@ return array(
 	'advsearch'=>'haku',
 	'forgot'=>'salasanan-palautus',
 	'delivery'=>'delivery',
+	'news'=>'news',
 
 
 	'offers'=>'suosituksia',

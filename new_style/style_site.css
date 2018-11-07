@@ -3260,3 +3260,4 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .gift_certificate .form .form_row div.row_name span { color: #ed1d24; width: 5px }
 
 .in_desc span { font-weight: bold; }
+.cke_editable_inline { border: inset 1px yellowgreen; }

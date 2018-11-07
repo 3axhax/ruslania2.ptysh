@@ -1265,5 +1265,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
 	'GIFT_CERTIFICATE' => 'Сертификат в подарок',
 	'ALTERNATIVE'=>'Alternative',
+	'NEWS'=>'Новости',
 
 );
