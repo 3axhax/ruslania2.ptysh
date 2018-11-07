@@ -3206,7 +3206,14 @@ div.detail-prop .prop-value li { list-style-type: none; }
     cursor: pointer
 }
 
-.without_discount { color: #ed1d24; margin-right: 13px; text-decoration: line-through; font-size: 18px; font-weight: bold; }
+.price_h { font-size: 16px; color: #301c53; }
+.without_discount { color: #301c53/*#ed1d24*/; margin-right: 5px; text-decoration: line-through; font-size: 16px; font-weight: bold; }
+.price { color: #301c53;font-size: 18px; font-weight: bold; }
+.price b.pwvat { color: #ed1d24; }
+.price .pwovat { color: #747474; font-size: 14px; font-weight: normal; white-space: nowrap;}
+
+.cost span.without_discount {font-size: 13px; color: #301c53/*#ed1d24*/; text-decoration: line-through;}
+.cost span.with_discount {color: #ed1d24/*#301c53*/;font-size: 18px; font-weight: bold; white-space: nowrap;}
 
 .disabled {
     pointer-events: none !important;
@@ -3227,6 +3234,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .main-banner-content .discount { font-weight: bold; margin: 5px 0; }
 .main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; padding-right: 20px;}
 .main-banner-content .cost span { font-weight: bold; }
+.main-banner-content .extra-txt span { font-size: 17px; font-weight: bold; background-color: #fff; padding: 0 5px; }
 /*.main-banner-content .nds { font-size: 17px; color: rgb(116, 116, 116);}*/
 
 .infotext { color: #ed1d24; text-align: center; font-size: 18px; padding: 20px 0; }
@@ -3242,3 +3250,14 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .entity_icons i.e40:before { content: '\f008'; top: 7px; left: 7px; }    /*video*/
 .entity_icons i.e60:before { content: '\f278'; top: 8px; left: 6px; }    /*maps*/
 .entity_icons i.e24:before { content: '\f108'; top: 9px; left: 7px; }    /*soft*/
+
+.gift_certificate .sample { float: left; }
+.gift_certificate .sample img { width: 400px; }
+.gift_certificate .form { margin-left: 420px; }
+.gift_certificate .form .form_row { display: table-row; }
+.gift_certificate .form .form_row div {display: table-cell; }
+.gift_certificate .form .form_row div.row_name { width: 190px; vertical-align: top; text-align: right; padding-right: 15px; }
+.gift_certificate .form .form_row div.row_name span { color: #ed1d24; width: 5px }
+
+.in_desc span { font-weight: bold; }
+.cke_editable_inline { border: inset 1px yellowgreen; }

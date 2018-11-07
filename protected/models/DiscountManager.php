@@ -43,12 +43,14 @@ class DiscountManager
     static function getOfferDay() {
         if (self::$_offerDay === null) {
             $sql = ''.
-                'select entity entity_id, item_id, discount '.
+                'select entity entity_id, item_id, discount, extra_txt '.
                 'from action_items '.
                 'where (type = 3) '.
                 'limit 1 '.
             '';
             self::$_offerDay = Yii::app()->db->createCommand($sql)->queryRow();
+            if (!empty(self::$_offerDay['extra_txt'])) self::$_offerDay['extra_txt'] = unserialize(self::$_offerDay['extra_txt']);
+            else self::$_offerDay['extra_txt'] = array();
         }
         return self::$_offerDay;
     }

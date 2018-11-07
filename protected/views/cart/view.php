@@ -294,8 +294,8 @@ $url = $ex;
         
     	<div class="cost">';
 		if (!empty($price[DiscountManager::DISCOUNT])) :
-            echo '<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
-            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
+            echo '<span class="without_discount">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
+            </span>&nbsp;<span class="price with_discount">
                 '.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
             </span>';
 

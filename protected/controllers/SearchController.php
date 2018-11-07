@@ -262,6 +262,7 @@ class SearchController extends MyController {
 	}
 
 	function fillDataTable($query) {
+		$query = preg_replace("/[^a-zа-я0-9]/ui", ' ', $query);
 		$resultTable = '_tmp_products';
 		$filters = array(
 			'query'=>$query,

@@ -66,7 +66,6 @@ class Similar extends CWidget {
 				}
 			}
 		}
-		Debug::staticRun(array($products));
 		return $products;
 	}
 

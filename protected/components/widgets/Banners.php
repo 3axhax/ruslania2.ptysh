@@ -118,6 +118,7 @@ class Banners extends MyWidget {
                 $offerDay = DiscountManager::getOfferDay();
                 if (!empty($offerDay)) {
                     $entity = $offerDay['entity_id'];
+                    $extraTxt = $offerDay['extra_txt'];
                     $p = new Product();
                     $offerDay = $p->GetProduct($entity, $offerDay['item_id']);
                     $offerDay['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $offerDay);
@@ -140,6 +141,8 @@ class Banners extends MyWidget {
                             $offerDay['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
                         }
                     }
+                    if (empty($extraTxt[Yii::app()->language])) $offerDay['extraTxt'] = '';
+                    else $offerDay['extraTxt'] = $extraTxt[Yii::app()->language];
                 }
 
                 $leftBanner = $rightBanner = array();

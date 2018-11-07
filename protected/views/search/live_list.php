@@ -13,7 +13,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 			<td class="name">
 				<a href="<?= $url ?>"><?= ProductHelper::GetTitle($item) ?></a>
 				<?php if (!empty($item['inDescription'])): ?>
-					<div><?= Yii::app()->ui->item('IN_DESCRIPTION') ?>: <?= $item['inDescription'] ?></div>
+					<div class="in_desc"><span><?= Yii::app()->ui->item('IN_DESCRIPTION') ?></span>: <?= $item['inDescription'] ?></div>
 				<?php /*else: ?>
 				<div style="height: 18px;"></div>
 				<?php */endif; ?>
@@ -40,10 +40,10 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 				endif; ?>
 					<div class="cost">
 						<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])) : ?>
-							<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;">
+							<span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-							<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold; white-space: nowrap;">
+							<span class="price with_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
 						<?php else : ?>
