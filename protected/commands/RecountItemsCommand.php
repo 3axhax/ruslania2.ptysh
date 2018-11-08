@@ -9,6 +9,13 @@ ini_set('max_execution_time', 3600);
 
 class RecountItemsCommand extends CConsoleCommand {
 
+	function __destruct() {
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql = 'drop table if exists _tmp_position_' . $sort;
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+		}
+	}
+
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 		$sql = 'create temporary table _tmp_least_categorys (id int, primary key(id))';
@@ -17,8 +24,12 @@ class RecountItemsCommand extends CConsoleCommand {
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'create temporary table _tmp_types (id int, avail_items_type_1 int, avail_items_type_2 int, avail_items_type_3 int, avail_items_type_4 int, primary key(id))';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		$sql = 'create temporary table _tmp_position (position int AUTO_INCREMENT, id int, primary key(position), UNIQUE INDEX (id))';
-		Yii::app()->db->createCommand()->setText($sql)->execute();
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql = 'create table if not exists _tmp_position_' . $sort . ' (position int AUTO_INCREMENT, id int, primary key(position), UNIQUE INDEX (id))';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+			$sql = 'truncate _tmp_position_' . $sort . '';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+		}
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			if ($entity == 20) continue;
 			$sql = 'update ' . $params['site_category_table'] . ' set items_count = 0, avail_items_count = 0';
@@ -163,7 +174,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			if ($sort == SortOptions::DefaultSort) {
 				if ($entity == Entity::PERIODIC) {
 					$sql = ''.
-						'insert into _tmp_position (id) '.
+						'insert into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
@@ -172,7 +183,7 @@ class RecountItemsCommand extends CConsoleCommand {
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 					$sql = ''.
-						'insert ignore into _tmp_position (id) '.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
@@ -190,7 +201,7 @@ class RecountItemsCommand extends CConsoleCommand {
 *внутри них: дата вписывания, свежая дата вперед
 *независимо от того, есть-ли товар на складе или нет */
 					$sql = ''.
-						'insert into _tmp_position (id) '.
+						'insert into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
@@ -202,7 +213,7 @@ class RecountItemsCommand extends CConsoleCommand {
 /*3 товар есть в магазине или "заканчивается в магазине"
 *внутри них: дата вписывания, свежая дата вперед */
 					$sql = ''.
-						'insert ignore into _tmp_position (id) '.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
@@ -217,7 +228,7 @@ class RecountItemsCommand extends CConsoleCommand {
 *** возможно ли сделать два критерии, и как с ними оперировать?
 *** му хотим так , чтобы в книгах нет в магазине шли вперед новые с короткими сроками доставки, если это возможно.*/
 					$sql = ''.
-						'insert ignore into _tmp_position (id) '.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
@@ -231,7 +242,7 @@ class RecountItemsCommand extends CConsoleCommand {
 /*После товаров в наличии "в корзину" идет товар не в наличии "сообщить о поступлении"
 *внутри товаров не в наличии порядок по дате вписывание. Как на старом сайте.*/
 					$sql = ''.
-						'insert ignore into _tmp_position (id) '.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 						'where (t.avail_for_order = 0) '.
@@ -243,7 +254,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			}
 			else {
 				$sql = ''.
-					'insert into _tmp_position (id) '.
+					'insert into _tmp_position_' . $sort . ' (id) '.
 					'select t.id '.
 					'from ' . $params['site_table'] . ' t '.
 						'left join vendors tVendots on (tVendots.id = t.vendor) '.
@@ -252,13 +263,21 @@ class RecountItemsCommand extends CConsoleCommand {
 				'';
 				Yii::app()->db->createCommand()->setText($sql)->execute();
 			}
-			$sql = ''.
-				'update ' . $params['site_table'] . ' t '.
-					'join _tmp_position tTmp using (id) '.
-				'set ' . SortOptions::GetSQL($sort, '', $entity) . ' = tTmp.position '.
-			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();
-			$sql = 'truncate _tmp_position';
+		}
+
+		$sql = 'update ' . $params['site_table'] . ' t ';
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql .= 'left join _tmp_position_' . $sort . ' tTmp' . $sort . ' using (id) ';
+		}
+		$sql .= 'set ';
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql .= SortOptions::GetSQL($sort, '', $entity) . ' = tTmp' . $sort . '.position, ';
+		}
+		$sql = mb_substr($sql, 0, -2, 'utf-8');
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
+		foreach (SortOptions::GetSortData() as $sort=>$name) {
+			$sql = 'truncate _tmp_position_' . $sort . '';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
 	}
