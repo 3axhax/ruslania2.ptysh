@@ -267,7 +267,7 @@ class RecountItemsCommand extends CConsoleCommand {
 
 		$sql = 'update ' . $params['site_table'] . ' t ';
 		foreach (SortOptions::GetSortData() as $sort=>$name) {
-			$sql .= 'left join _tmp_position_' . $sort . ' tTmp' . $sort . ' using (id) ';
+			$sql .= 'left join _tmp_position_' . $sort . ' tTmp' . $sort . ' on (tTmp' . $sort . '.id = t.id) ';
 		}
 		$sql .= 'set ';
 		foreach (SortOptions::GetSortData() as $sort=>$name) {
