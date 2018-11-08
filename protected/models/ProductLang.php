@@ -5,20 +5,37 @@ class ProductLang {
 
 	static function getLangItems($entity, $cat) {
 		if (self::$_langItems === null) {
-			$join = array();
-			if (!empty($cat)) {
-				$entities = Entity::GetEntitiesList();
-				$tbl = $entities[$entity]['site_table'];
-				$join['tI'] = 'join ' . $tbl . ' tI on (tI.id = t.item_id) and ((tI.code = ' . $cat['id'] . ') or (tI.subcode = ' . $cat['id'] . '))';
-			}
-			$sql = ''.
-				'select t.language_id '.
-				'from all_items_languages t '.
-				implode(' ', $join) . ' '.
-				'where (t.entity = ' . (int) $entity . ') '.
-				'group by t.language_id '.
+			$avail = Yii::app()->getController()->GetAvail(1);
+			$category = new Category();
+			$allChildren = $category->GetChildren($entity, $cat['id']);
+			$allChildren[] = $cat['id'];
+			if (empty($avail)) {
+				$join = array();
+				if (!empty($cat)) {
+					$entities = Entity::GetEntitiesList();
+					$tbl = $entities[$entity]['site_table'];
+					$join['tI'] = 'join ' . $tbl . ' tI on (tI.id = t.item_id) and ((tI.code in (' . implode(',', $allChildren) . ')) or (tI.subcode in (' . implode(',', $allChildren) . ')))';
+				}
+				$sql = ''.
+					'select t.language_id '.
+					'from all_items_languages t '.
+					implode(' ', $join) . ' '.
+					'where (t.entity = ' . (int) $entity . ') '.
+					'group by t.language_id '.
 				'';
-			$langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+				$langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+			}
+			else {
+				$entityStr = Entity::GetUrlKey($entity);
+				$supportTable = '_support_languages_' . $entityStr;
+				$sql = ''.
+					'select t.language_id '.
+					'from ' . $supportTable . ' t '.
+					'where (t.category_id in (' . implode(',', $allChildren) . ')) '.
+					'group by t.language_id '.
+				'';
+				$langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+			}
 			if (empty($langIds)) return array();
 
 			$sql = ''.
@@ -26,7 +43,7 @@ class ProductLang {
 				'from languages tL ' .
 				'where (tL.id in (' . implode(',', $langIds) . ')) '.
 				'order by title '.
-				'';
+			'';
 			self::$_langItems = Yii::app()->db->createCommand($sql)->queryAll();
 		}
 		return self::$_langItems;
