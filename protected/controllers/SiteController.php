@@ -981,6 +981,17 @@ class SiteController extends MyController {
         if ($page < 1)
             $page = 1;
         $e = abs(intVal($e));
+        if (empty($e)) {
+            $referer = Yii::app()->getRequest()->getUrlReferrer();
+            if ($referer) {
+                $request = new MyRefererRequest();
+                $request->setFreePath($referer);
+                $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+                $refererParams = $request->getParams();
+                if (!empty($refererParams['entity'])) $_GET['e'] = Entity::ParseFromString($refererParams['entity']);
+//                Debug::staticRun(array($e, $_GET['e'], $request->getParams()));
+           }
+        }
 
         $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');

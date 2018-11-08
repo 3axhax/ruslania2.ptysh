@@ -110,7 +110,7 @@ return array(
 	'advsearch'=>'sok',
 	'forgot'=>'losenordaterstallning',
 	'delivery'=>'leverans',
-	'news'=>'news',
+	'news'=>'nyheter',
 
 
 	'offers'=>'rekommendationer',
