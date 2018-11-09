@@ -51,7 +51,7 @@ class SortOptions
         switch($sort)
         {
             case self::DefaultSort :
-                //не получилось одним запросом, такая сортировка делается по специальному алгоритму в RecountItemsCommand::_updatePosition
+                //РЅРµ РїРѕР»СѓС‡РёР»РѕСЃСЊ РѕРґРЅРёРј Р·Р°РїСЂРѕСЃРѕРј, С‚Р°РєР°СЏ СЃРѕСЂС‚РёСЂРѕРІРєР° РґРµР»Р°РµС‚СЃСЏ РїРѕ СЃРїРµС†РёР°Р»СЊРЅРѕРјСѓ Р°Р»РіРѕСЂРёС‚РјСѓ РІ RecountItemsCommand::_updatePosition
                 return ''.
                 '';
                 break;
