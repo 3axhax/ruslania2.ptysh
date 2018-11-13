@@ -1261,7 +1261,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_SALE_SOFT' => 'Распродажа софта',
     'A_NEW_SALE_DVD' => 'Распродажа DVD-дисков',
 
-    'RUSLANIA_RECOMEND' => 'Check out the Ruslania’s recommendations',
+    'RUSLANIA_RECOMEND' => 'Check out Ruslania’s recommendations',
     'A_NEW_SALE_PERIODIC' => 'Подписка по скидочной цене',
 
     'A_NEW_STUDIO' => 'Студия',
