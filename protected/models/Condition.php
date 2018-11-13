@@ -190,7 +190,7 @@ class Condition {
 	}
 
 	private function _media() {
-		if (Entity::checkEntityParam($this->_entity, 'media')) {
+		if (Entity::checkEntityParam($this->_entity, 'media') && $this->_entity != Entity::SOFT) {
 			$pid = (int) $this->g('binding');
 			if ($pid > 0) $this->_condition['media_id'] = '(t.media_id = ' . $pid . ')';
 		}
