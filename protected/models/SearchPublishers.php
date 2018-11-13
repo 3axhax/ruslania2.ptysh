@@ -166,21 +166,54 @@ class SearchPublishers {
 
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_en) LIKE LOWER(:q)';
         if ($cid > 0) {
-            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en 
-                    FROM (SELECT id, title_ru, title_en FROM all_publishers 
-                    WHERE ('.$whereLike.')) as ap 
-                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
-                    WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code)
-                    GROUP BY tc.publisher_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
-        } else {
-            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en 
-                    FROM (SELECT id, title_ru, title_en FROM all_publishers 
-                    WHERE ('.$whereLike.')) as ap 
-                    LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
-                    WHERE tc.avail_for_order='.$filter_data['avail'].'
-                    GROUP BY tc.publisher_id LIMIT 0,'.$limit;
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
+	        $category = new Category();
+	        $allChildren = $category->GetChildren($entity, $cid);
+	        $allChildren[] = $cid;
+/*            $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en
+					FROM (SELECT id, title_ru, title_en FROM all_publishers
+					WHERE ('.$whereLike.')) as ap
+					LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
+					WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code)
+					GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+			$rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));*/
+		        $sql = ''.
+			        'select t.id publisher_id, t.title_ru, t.title_en '.
+			        'from all_publishers t '.
+				        'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
+				        'join ' . $tbl . ' as tc ON (tc.publisher_id = t.id) '.
+			                'and ((tc.code in (' . implode(', ', $allChildren) . ')) or (tc.subcode in (' . implode(', ', $allChildren) . '))) '.
+			                (empty($filter_data['avail'])?'':'and (tc.avail_for_order = 1) ').
+			        'group by t.id '.
+		            'limit ' . $limit.
+		        '';
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+        }
+        else {
+	        if (empty($filter_data['avail'])) {
+/*                $sql = 'SELECT tc.publisher_id, ap.title_ru, ap.title_en
+						FROM (SELECT id, title_ru, title_en FROM all_publishers
+						WHERE ('.$whereLike.')) as ap
+						LEFT JOIN ' . $tbl . ' as tc ON (ap.id = tc.publisher_id)
+						GROUP BY tc.publisher_id LIMIT 0,'.$limit;
+				$rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));*/
+		        $sql = ''.
+			        'select t.id publisher_id, t.title_ru, t.title_en '.
+			        'from all_publishers t '.
+			            'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
+			            'join ' . $tbl . ' as tc ON (tc.publisher_id = t.id) '.
+			        'group by t.id '.
+			        'limit ' . $limit.
+		        '';
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+	        }
+	        else {
+		        $sql = ''.
+			        'select t.id publisher_id, t.title_ru, t.title_en '.
+			        'from all_publishers t '.
+			            'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
+		        '';
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
+	        }
         }
         $publishers = [];
         $i = 0;
@@ -210,19 +243,20 @@ class SearchPublishers {
         $filter_data = FilterHelper::getFiltersData($entity, $cid);
 
         if ($cid > 0) {
-            $sql = 'SELECT tc.publisher_id, pt.title_ru, pt.title_en
-            FROM all_publishers as pt
-            JOIN (select publisher_id from ' . $tbl . '
-                  WHERE (avail_for_order='.$filter_data['avail'].') AND (`code`=:code OR `subcode`=:code)
-                  GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id)';
-
+            $sql = ''.
+	            'SELECT tc.publisher_id, pt.title_ru, pt.title_en '.
+	            'FROM all_publishers as pt '.
+	                'JOIN (select publisher_id from ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id) '.
+            '';
+	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' = 1)';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
-            $sql = 'SELECT tc.publisher_id, pt.title_ru, pt.title_en
-            FROM all_publishers as pt
-            JOIN (select publisher_id from ' . $tbl . '
-                  WHERE (avail_for_order='.$filter_data['avail'].')
-                  GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id)';
+            $sql = ''.
+				'SELECT tc.publisher_id, pt.title_ru, pt.title_en '.
+				'FROM all_publishers as pt '.
+					'JOIN (select publisher_id from ' . $tbl . ' WHERE (avail_for_order='.$filter_data['avail'].') GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id) '.
+            '';
+	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' = 1)';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
         }
         $publishers = [];

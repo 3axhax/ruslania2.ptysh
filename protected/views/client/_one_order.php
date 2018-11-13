@@ -42,6 +42,7 @@
                 <table cellspacing="1" cellpadding="5" border="0" width="100%" class="cart1 items_orders" id="cnt<?=$order['id']; ?>" style="display: <?=$enableSlide ? 'none' : 'table'; ?>">
                     <tbody>
                     <tr>
+                        <th></th>
                         <th width="70%" class="cart1header1"><?=$ui->item("CART_COL_TITLE"); ?></th>
                         <th width="10%" class="cart1header1 center"><?=$ui->item("CART_COL_QUANTITY"); ?></th>
                         <th width="20%" class="cart1header1 center"><?=$ui->item("CART_COL_SUBTOTAL_PRICE"); ?></th>
@@ -49,6 +50,10 @@
 
                     <?php foreach($order['Items'] as $item) : ?>
                     <tr>
+                        <td class="cart1contents1">
+                            <span class="entity_icons"><i class="fa e<?=$item['entity']?>"></i></span>
+
+                        </td>
                         <td class="cart1contents1"><a class="maintxt"
                                                       href="<?=ProductHelper::CreateUrl($item); ?>"><?=ProductHelper::GetTitle($item); ?></a></td>
                         <td class="cart1contents1 center"><?=$item['quantity']; ?></td>

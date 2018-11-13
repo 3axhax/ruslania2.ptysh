@@ -109,7 +109,8 @@ return array(
 	'me'=>'konto',
 	'advsearch'=>'suche',
 	'forgot'=>'passwort-wiederherstellung',
-	'delivery'=>'delivery',
+	'delivery'=>'versand',
+	'news'=>'nachrichten',
 
 
 	'offers'=>'empfehlungen',

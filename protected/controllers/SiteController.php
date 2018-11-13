@@ -10,13 +10,20 @@ class SiteController extends MyController {
         return array(array('allow',
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
-                'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs'),
+                'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
+                'certificate'
+            ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'MyAddresses', 'Me', 'gtfilter', 'ggfilter', 'addcomments', 'loadhistorysubs', 'staticSave'),
                 'users' => array('@')),
             array('deny',
                 'users' => array('*')));
+    }
+
+    function actionCertificate() {
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->render('certificate', array());
     }
 
     public function actionSale() {
@@ -399,6 +406,7 @@ class SiteController extends MyController {
 
     public function actionLogout() {
         Yii::app()->user->logout();
+        Debug::staticRun(array(Yii::app()->user, 'exit'));
         $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -974,6 +982,17 @@ class SiteController extends MyController {
         if ($page < 1)
             $page = 1;
         $e = abs(intVal($e));
+        if (empty($e)) {
+            $referer = Yii::app()->getRequest()->getUrlReferrer();
+            if ($referer) {
+                $request = new MyRefererRequest();
+                $request->setFreePath($referer);
+                $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+                $refererParams = $request->getParams();
+                if (!empty($refererParams['entity'])) $_GET['e'] = Entity::ParseFromString($refererParams['entity']);
+//                Debug::staticRun(array($e, $_GET['e'], $request->getParams()));
+           }
+        }
 
         $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');

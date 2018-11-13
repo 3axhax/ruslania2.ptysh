@@ -110,6 +110,7 @@ return array(
 	'advsearch'=>'search',
 	'forgot'=>'password-recovery',
 	'delivery'=>'delivery',
+	'news'=>'news',
 
 
 	'offers'=>'recommendations',

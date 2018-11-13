@@ -1,4 +1,4 @@
-<?php /*Created by Êèðèëë (26.09.2018 20:41)*/ ?>
+<?php /*Created by ÐšÐ¸Ñ€Ð¸Ð»Ð» (26.09.2018 20:41)*/ ?>
 <div class="banners">
 	<div class="container">
 <?php if (!empty($offerDay)):
@@ -13,7 +13,7 @@
 	<?php if (!empty($offerDay['priceData'][DiscountManager::DISCOUNT])) : ?>
 			<div class="discount"><?= Yii::app()->ui->item('PRODUCT_OF_DAY_INFO', $offerDay['priceData'][DiscountManager::DISCOUNT]) ?></div>
 	<?php endif; ?>
-			<div class="title"><div><a href="<?= $url ?>"><?= $productTitle ?><?php /*<span class="gradient_link"></span> */ ?></a></div></div>
+			<div class="title"<?php if (!empty($offerDay['extraTxt'])):?> style="height: 65px;" <?php endif; ?>><div<?php if (!empty($offerDay['extraTxt'])):?> style="height: 65px;" <?php endif; ?>><a href="<?= $url ?>"><?= $productTitle ?><?php /*<span class="gradient_link"></span> */ ?></a></div></div>
 <?php /*
 			<div class="cost">
                 <?= Yii::app()->ui->item('CART_COL_PRICE') ?>
@@ -30,6 +30,9 @@
 <?= Yii::app()->ui->item('CART_COL_PRICE') ?> <?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITH_VAT]); ?> <?= $offerDay['priceData']['unit'] ?>
 (<?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITHOUT_VAT]); ?> <?= $offerDay['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?>)
 			</div>
+			<?php if (!empty($offerDay['extraTxt'])): ?>
+				<div class="extra-txt"><span><?= $offerDay['extraTxt'] ?></span></div>
+			<?php endif; ?>
 		</div>
 <?php elseif (!empty($leftBanner)): ?>
 		<div class="span6 main-banner-content"><a href="<?= $leftBanner['href'] ?>"><img class="main-bannerImg" src="<?= $leftBanner['img'] ?>" alt="<?= htmlspecialchars($leftBanner['title']) ?>"/></a></div>

@@ -21,8 +21,25 @@ class SearchSeries
         $whereLike = 'LOWER(title_ru) LIKE LOWER(:q) OR LOWER(title_rut) LIKE LOWER(:q) OR 
             LOWER(title_en) LIKE LOWER(:q) OR LOWER(title_fi) LIKE LOWER(:q)';
 
+        $allChildren = array();
         if ($cid > 0) {
-            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi 
+            $category = new Category();
+            $allChildren = $category->GetChildren($entity, $cid);
+            $allChildren[] = $cid;
+        }
+            $sql = ''.
+                'select t.id series_id, t.title_ru, t.title_en, t.title_rut, t.title_fi '.
+                'from ' . $series_tbl . ' t '.
+                'join (select real_id from _se_series where (query=:q)) as tS on (tS.real_id = t.id) '.
+                    'join ' . $tbl . ' as tc ON (tc.series_id = t.id) '.
+                        (empty($allChildren)?'':'and ((tc.code in (' . implode(', ', $allChildren) . ')) or (tc.subcode in (' . implode(', ', $allChildren) . '))) ').
+                        (empty($filter_data['avail'])?'':'and (tc.avail_for_order = 1) ').
+                'group by t.id '.
+                'limit ' . $limit.
+            '';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;filter=entity,' . $entity . ';limit=1000;maxmatches=1000;'));
+
+/*            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
             FROM (SELECT id, title_ru, title_rut, title_en, title_fi FROM '.$series_tbl.' 
             WHERE ('.$whereLike.')) as st 
             LEFT JOIN ' . $tbl . ' as tc   
@@ -30,7 +47,8 @@ class SearchSeries
             WHERE tc.avail_for_order='.$filter_data['avail'].' AND (tc.`code`=:code OR tc.`subcode`=:code) 
             GROUP BY tc.series_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid, ':q' => '%'.$q.'%'));
-        } else {
+        }
+        else {
             $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi 
             FROM (SELECT id, title_ru, title_rut, title_en, title_fi FROM '.$series_tbl.' 
             WHERE ('.$whereLike.')) as st 
@@ -39,7 +57,7 @@ class SearchSeries
             WHERE tc.avail_for_order='.$filter_data['avail'].'
             GROUP BY tc.series_id LIMIT 0,'.$limit;
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => '%'.$q.'%'));
-        }
+        }*/
         $series = [];
         $i = 0;
         foreach ($rows as $row) {

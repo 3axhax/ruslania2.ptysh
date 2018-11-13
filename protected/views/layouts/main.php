@@ -684,11 +684,11 @@ $ui = Yii::app()->ui;
                 var nPriceOrigW = (worldpmonthOrig * $el.val()).toFixed(2);
                 var nPriceOrigF = (finpmonthOrig * $el.val()).toFixed(2);
 
-                cart.find('.periodic_world .price').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
-                cart.find('.periodic_world .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
+                cart.find('.periodic_world .price .pwvat').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
+                cart.find('.periodic_world .price .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
 
-                cart.find('.periodic_fin .price').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
-                cart.find('.periodic_fin .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
+                cart.find('.periodic_fin .price .pwvat').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
+                cart.find('.periodic_fin .price .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
 
                 cart.find('.periodic_world .without_discount').html(nPriceOrigW + ' <?= Currency::ToSign(); ?>');
                 cart.find('.periodic_fin .without_discount').html(nPriceOrigF + ' <?= Currency::ToSign(); ?>');

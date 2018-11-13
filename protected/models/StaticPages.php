@@ -28,7 +28,8 @@ class StaticPages {
 	function isWordpanel($uid) {
 		//72459 - kirill.ruh@gmail.com | kirill
 		//5 - aa@ruslania.com
-		$allowUsers = array(5, 72459);
+		//60093 - maria.ponomareva@gmail.com
+		$allowUsers = array(5, 72459, 60093);
 		return in_array($uid, $allowUsers);
 	}
 
