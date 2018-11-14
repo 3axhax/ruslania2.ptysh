@@ -6,7 +6,10 @@ class OrderController extends MyController
     {
         $o = new Order;
         $order = $o->GetOrder($oid);
-        if(!empty($order) && $order['uid'] != $this->uid) throw new CException('NotYourOrder');
+        if(!empty($order) && $order['uid'] != $this->uid) {
+            $this->redirect(Yii::app()->createUrl('site/index'));
+            throw new CException('NotYourOrder');
+        }
         if(empty($order)) throw new CHttpException(404);
 
         $this->breadcrumbs[Yii::app()->ui->item("A_LEFT_PERSONAL_ORDERS")] = Yii::app()->createUrl('my/orders');

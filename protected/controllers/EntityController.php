@@ -308,12 +308,16 @@ class EntityController extends MyController {
         $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $s = new Series;
-        $list = $s->GetList($entity, Yii::app()->language);
+        list($list, $countsAll) = $s->GetList($entity, Yii::app()->language);
+
+        $paginatorInfo = new CPagination($countsAll);
+        $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+        $this->_maxPages = ceil($countsAll/Yii::app()->params['ItemsPerPage']);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_BOOKS_SERIES_PROPERTYLIST');
 
-        $this->render('series_list', array('list' => $list, 'entity' => $entity));
+        $this->render('series_list', array('list' => $list, 'entity' => $entity, 'paginatorInfo' => $paginatorInfo));
     }
 
     public function actionBySeries($entity, $sid, $sort = null, $avail = true) {

@@ -24,6 +24,8 @@
                                  )); ?>" title="<?=$title;?>"><?=$title;?></a></li>
                     <?php endforeach; ?>
                 </ul>
+                <div class="clearfix"></div>
+                <?php if ($paginatorInfo) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
             </div>
 
             <!-- /content -->
