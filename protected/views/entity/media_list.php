@@ -10,7 +10,8 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
                 $h1 = array_pop($breadcrumbs);
                 unset($breadcrumbs) ;
                 $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
-            ?><?= $h1 ?></h1>
+                if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                ?><?= $h1 ?></h1>
             <div class="text">
                 <ul class="list" id="al">
                     <?php foreach($list as $item) :
