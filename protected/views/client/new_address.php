@@ -14,7 +14,6 @@
                                                                    'afterAjax' => 'redirectToAddressList')); ?>
 
 
-
             <script type="text/javascript">
                 function redirectToAddressList(json)
                 {
