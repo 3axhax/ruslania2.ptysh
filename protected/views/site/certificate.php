@@ -84,6 +84,7 @@ Debug::staticRun(array($price, Currency::GetRates()));
 					</div>
 					<?= CHtml::endForm(); ?>
 				</div>
+				<?php $this->renderPartial('/payment/_payment_only_online', array()); ?>
 			</div>
 		</div>
 	</div>

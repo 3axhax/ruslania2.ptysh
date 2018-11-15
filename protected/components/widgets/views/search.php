@@ -20,7 +20,7 @@
             <option value="2">Аудиокниги
             <option value="3">Видеопродукция
             <option value="7">Музыка
-            <option value="8">Мультимедия
+            <option value="8">Мультимедиа
             <option value="9">Карты
             <option value="5">Печатная продукция и сувениры
         </select>

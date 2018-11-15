@@ -16,7 +16,7 @@ function printTree($tree, $entity, $parent = false, $lvl = 1, $breadcrumbs = arr
 ?><?= $h1 ?></h1>
 <ul class="b-category-list__item-outer">
 		<?php else: ?>
-<ul class="b-category-list__inner-list js-slide-content-inner-list tglvl'.$lvl.'">
+<ul class="b-category-list__inner-list js-slide-content-inner-list tglvl<?= $lvl ?>">
 		<?php endif;
 		
         
