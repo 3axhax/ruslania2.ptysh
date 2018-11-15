@@ -199,7 +199,32 @@
 <script src="/js/jquery.cookie.js"></script>
 
 <script>
-    
+
+    function hide_dostavka(cont) {
+
+        if (cont.html() == 'Доставка не нужна') {
+
+            $('.seld2').hide();
+            $('.seld1').click();
+            $('.step1').html('1. Укажите адрес плательщика')
+
+            $('select[name=id_address]').hide();
+
+            cont.html('Нужна доставка');
+
+        } else {
+            $('.step1').html('1. Укажите адрес доставки и плательщика')
+            $('.seld2').show();
+            $('.seld2').click();
+
+            $('select[name=id_address]').show();
+            cont.html('Доставка не нужна');
+
+        }
+
+    }
+
+
     var s = false;
     
     function clear_cook() {
@@ -438,7 +463,9 @@
 
     
     $(document).ready(function() {
-        
+
+
+
         load_form();
         
         $(document).click(function (event) {
@@ -483,15 +510,15 @@
         $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1] }, function(data) {
 
             var al = JSON.parse(data);
-            
+
             //alert(al.fullpricehidden);
-            
+
             $('.cart_header').html(al.cart_header);
             $('table.cart').html(al.cart);
             $('.footer2').html(al.footer2);
             $('.footer3').html(al.footer3);
             $('input.costall').val(al.fullpricehidden);
-            
+
         });
 
     }
@@ -597,9 +624,9 @@
             $('.box_opacity .op').hide();
 
         }
-        
-        
-        
+
+
+        $('.delivery_name').html('Доставка почтой');
         
     }
     
@@ -646,8 +673,8 @@
         
         
         $('.selp span.check.active').parent().parent().parent().addClass('act');
-        
-       
+
+
         
     }
     
@@ -867,9 +894,12 @@
         <?php
         
         $delivery = new PostCalculator();
-        
-        $r = $delivery->GetRates2(10,$this->uid, $this->sid);
-        
+
+        $addrs = Address::GetDefaultAddress($this->uid);
+
+        $r = $delivery->GetRates2($addrs['country'],$this->uid, $this->sid);
+
+
         //var_dump($r);
         
         $cart = new Cart();
@@ -895,32 +925,54 @@
 
         //var_dump($cart);
 
-        foreach ($cart as $item) {
+        foreach ($cart_get as $item) {
 
-            //var_dump($item['Title']);
+            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 
-
-            $cartInfo['items'][(string)$item['ID']]['title'] = $item['Title'];
-            $cartInfo['items'][(string)$item['ID']]['weight'] = $item['UnitWeight'];
-
-            
-            $price = $item['PriceVAT0'];
-            
-            $fullweight += $item['UnitWeight'];
-            $fullprice += $price * $item['Quantity'];
-            $full_count += $item['Quantity'];
+            $cartInfo['items'][$item['id']]['title'] = $PH->GetTitle($item);
+            $cartInfo['items'][$item['id']]['weight'] = $item['InCartUnitWeight']  / 1000;
 
 
-            $cartInfo['items'][(string)$item['ID']]['entity'] = $item['Entity'];
+            if ($item['entity'] == 30) {
 
-            $cartInfo['items'][(string)$item['ID']]['price'] = $price;
-            $cartInfo['items'][(string)$item['ID']]['quantity'] = $item['Quantity'];
-            
+                if ($item['type'] == '1') { //фины
+                    $price = $item['quantity'] * $item['sub_fin_month'];
+                } else {
+
+                    $price = $item['quantity'] * $item['sub_world_month'];
+                }
+            } else {
+
+                $price = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]);
+            }
+
+            $fullweight += $item['InCartUnitWeight'];
+
+            if ($item['InCartUnitWeight'] == '0') {
+                $t1 = true;
+            }
+            if ($item['InCartUnitWeight'] != '0') {
+                $t2 = true;
+            }
+
+            $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
+            $cartInfo['items'][$item['id']]['price'] = $price;
+            if ($item['entity'] == 30) {
+
+                $item['quantity'] = $item['quantity'];
+                $fullprice += $price;
+                $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
+            } else {
+                $fullprice += $price * $item['quantity'];
+                $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
+            }
+
+            $full_count += $item['quantity'];
         }
         
         $cartInfo['fullInfo']['count'] = $full_count;
         $cartInfo['fullInfo']['cost'] = $fullprice;
-        $cartInfo['fullInfo']['weight'] = $fullweight;
+        $cartInfo['fullInfo']['weight'] = $fullweight / 1000;
 
         //var_dump($cartInfo);
         echo '<input type="hidden" value="'.$cartInfo['fullInfo']['cost'].'" name="costall" class="costall">';
