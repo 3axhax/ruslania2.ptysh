@@ -102,115 +102,115 @@ $ui = Yii::app()->ui;
         function show_subs(uid, sid, subsid) {
             var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-            $.post('/site/loadhistorysubs', {uid: uid, sid: sid, YII_CSRF_TOKEN: csrf[1], subsid: subsid}, function (data) {
+            $.post('<?=Yii::app()->createUrl('site/loadhistorysubs')?>', {uid: uid, sid: sid, YII_CSRF_TOKEN: csrf[1], subsid: subsid}, function (data) {
 
-                $('.history_subs_box').css('top', $(window).scrollTop() + 50);
+                            $('.history_subs_box').css('top', $(window).scrollTop() + 50);
 
-                $('.history_subs_box .table_box').html(data);
+                            $('.history_subs_box .table_box').html(data);
 
-                $('.history_subs_box, .opacity').show();
+                            $('.history_subs_box, .opacity').show();
 
-            });
+                        });
 
-        }
-
-        $(document).ready(function () {
-
-            $('li.dd_box .click_arrow').click(function () {
-
-                if ($(this).closest('li').hasClass('show_dd')) {
-
-                    $('.dd_box').removeClass('show_dd');
-                    if ($(this).parents().is('li.more_menu') && !$(this).parent().is('li.more_menu')) {
-                        $(this).parents('li.more_menu').addClass('show_dd');
                     }
 
-                } else {
+                    $(document).ready(function () {
 
-                    $('.dd_box').removeClass('show_dd');
+                        $('li.dd_box .click_arrow').click(function () {
 
-                    $(this).closest('li').addClass('show_dd');
-                    $(this).closest('li.more_menu').addClass('show_dd');
+                            if ($(this).closest('li').hasClass('show_dd')) {
 
-                }
+                                $('.dd_box').removeClass('show_dd');
+                                if ($(this).parents().is('li.more_menu') && !$(this).parent().is('li.more_menu')) {
+                                    $(this).parents('li.more_menu').addClass('show_dd');
+                                }
 
-                return false;
-            })
+                            } else {
 
+                                $('.dd_box').removeClass('show_dd');
 
-            $('li.dd_box.more_menu').click(function () {
+                                $(this).closest('li').addClass('show_dd');
+                                $(this).closest('li.more_menu').addClass('show_dd');
 
-                if ($(this).hasClass('show_dd')) {
+                            }
 
-                    $('.dd_box').removeClass('show_dd');
-
-                } else {
-
-                    $('.dd_box').removeClass('show_dd');
-
-                    $(this).addClass('show_dd');
-
-                }
+                            return false;
+                        })
 
 
-            })
+                        $('li.dd_box.more_menu').click(function () {
 
-            $(document).click(function (event) {
-                if ($(event.target).closest("li.dd_box").length)
-                    return;
-                $('li.dd_box').removeClass('show_dd');
-                event.stopPropagation();
-            });
+                            if ($(this).hasClass('show_dd')) {
+
+                                $('.dd_box').removeClass('show_dd');
+
+                            } else {
+
+                                $('.dd_box').removeClass('show_dd');
+
+                                $(this).addClass('show_dd');
+
+                            }
 
 
-            $(document).ready(function ()
-            {
-                $('.search_text').on('keydown', function (a)
-                {
-                    if (a.keyCode == 13)
-                    {
-                        $('#srch').submit();
-                    }
-                });
+                        })
 
-                function decline_days(num) {
-                    var count = num;
+                        $(document).click(function (event) {
+                            if ($(event.target).closest("li.dd_box").length)
+                                return;
+                            $('li.dd_box').removeClass('show_dd');
+                            event.stopPropagation();
+                        });
 
-                    num = num % 100;
 
-                    if (num > 19) {
-                        num = num % 10;
-                    }
-
-                    switch (num) {
-
-                        case 1:
+                        $(document).ready(function ()
                         {
-                            return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT3'); ?>';
-                        }
+                            $('.search_text').on('keydown', function (a)
+                            {
+                                if (a.keyCode == 13)
+                                {
+                                    $('#srch').submit();
+                                }
+                            });
 
-                        case 2:
-                        case 3:
-                        case 4:
-                        {
-                            return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT2'); ?>';
-                        }
+                            function decline_days(num) {
+                                var count = num;
 
-                        default:
-                        {
-                            return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT1'); ?>';
-                        }
-                    }
-                }
+                                num = num % 100;
 
-                <?php
-                $act = array();
-                $act = array(1, ' active');
-                if (isset($_GET['avail'])) {
-                    if ($_GET['avail'] == '1') $act = array(1, ' active');
-                    else $act = array('', '');
-                }
-                ?>
+                                if (num > 19) {
+                                    num = num % 10;
+                                }
+
+                                switch (num) {
+
+                                    case 1:
+                                    {
+                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT3'); ?>';
+                                    }
+
+                                    case 2:
+                                    case 3:
+                                    case 4:
+                                    {
+                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT2'); ?>';
+                                    }
+
+                                    default:
+                                    {
+                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT1'); ?>';
+                                    }
+                                }
+                            }
+
+                            <?php
+                            $act = array();
+                            $act = array(1, ' active');
+                            if (isset($_GET['avail'])) {
+                                if ($_GET['avail'] == '1') $act = array(1, ' active');
+                                else $act = array('', '');
+                            }
+                            ?>
                 $('#Search').marcoPolo({
                     url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
                     cache: false,

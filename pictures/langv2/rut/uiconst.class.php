@@ -1276,5 +1276,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'CERTIFICATE_SOURCE_NAME' => 'Имя отправителя',
     'CERTIFICATE_SOURCE_EMAIL' => 'E-mail отправителя',
     'CERTIFICATE_NOMINAL' => 'Номинал',
+    'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
 );

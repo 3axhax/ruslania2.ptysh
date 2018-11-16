@@ -1278,5 +1278,6 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'CERTIFICATE_SOURCE_NAME' => 'Имя отправителя',
     'CERTIFICATE_SOURCE_EMAIL' => 'E-mail отправителя',
     'CERTIFICATE_NOMINAL' => 'Номинал',
+    'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
 );
