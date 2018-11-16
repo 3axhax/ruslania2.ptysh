@@ -1264,4 +1264,13 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'ALTERNATIVE'=>'Alternative',
     'NEWS'=>'Новости',
 
+    'CERTIFICATE_BUTTON_PAY' => 'Подарить',
+    'CERTIFICATE_MAKET' => 'Вид сертификата',
+    'CERTIFICATE_DEST_NAME' => 'Имя получателя',
+    'CERTIFICATE_DEST_EMAIL' => 'E-mail получателя',
+    'CERTIFICATE_TXT' => 'Текст сообщения',
+    'CERTIFICATE_SOURCE_NAME' => 'Имя отправителя',
+    'CERTIFICATE_SOURCE_EMAIL' => 'E-mail отправителя',
+    'CERTIFICATE_NOMINAL' => 'Номинал',
+
 );

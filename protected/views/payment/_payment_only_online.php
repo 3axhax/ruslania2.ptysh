@@ -192,61 +192,44 @@
 				$(cont).css('border', '1px solid #64717f');
 				$('#'+inputId, cont).attr('checked', 'true');
 			}
-
-			$('a.order_start').attr('href', '/ru/cart/orderPay/?id=<?=$order['id']?>&ptype='+$('#'+inputId).val())
-
 			$('.selp span.check.active').parent().parent().parent().addClass('act');
-
-
-
 		}
 
 	</script>
+<div class="row spay">
+<label class="selp span3 oplata3 <?php if ($pid == 25) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 490px;<?php if ($pid == 25) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
 
-	<?php
+	<img src="/images/pt2.png" style="margin-top: -3px;" />
+	<span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
 
-	$href = Yii::app()->createUrl('cart/orderPay').'?id='.$order['id'].'&ptype='.$pid;
-
-	?>
-
-	<div class="row spay">
-		<label class="selp span3 oplata3 <?php if ($pid == 25) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 490px;<?php if ($pid == 25) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
-
-			<img src="/images/pt2.png" style="margin-top: -3px;" />
-			<span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
-
-			<div class="red_checkbox" style="float: right;">
-				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 25) { echo ' active';}?>"></span></span>
-			</div>
-			<input type="radio" id="dtype2" value="25" name="ptype" style="display: none;"  <?php if ($pid == 25) { echo 'checked="checked"';}?>/>
-		</label>
-
-		<label class="selp span3 oplata2<?php if ($pid == 8) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype1')" style="<?php if ($pid == 8) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
-			<img src="/images/pp.jpg" width="150" />
-			<div class="red_checkbox" style="float: right;">
-				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 8) { echo ' active';}?>"></span></span>
-			</div>
-			<input type="radio" id="dtype1" value="8" name="ptype" style="display: none;"  <?php if ($pid == 8) { echo 'checked="checked"';}?>/>
-		</label>
-
-		<label class="selp span3 oplata5<?php if ($pid == 26) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype4')" style="<?php if ($pid == 26) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
-			<img src="/images/ap.png" width="100" style="margin-top: -15px;" />
-			<div class="red_checkbox" style="float: right;">
-				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 26) { echo ' active';}?>"></span></span>
-			</div>
-			<input type="radio" id="dtype4" value="26" name="ptype" style="display: none;"  <?php if ($pid == 26) { echo 'checked="checked"';}?>/>
-		</label>
-
-		<label class="selp span3 oplata6<?php if ($pid == 27) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype5')" style="<?php if ($pid == 27) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
-			<img src="/images/app.png" width="100" style="margin-top: -15px;" />
-			<div class="red_checkbox" style="float: right;">
-				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 27) { echo ' active';}?>"></span></span>
-			</div>
-			<input type="radio" id="dtype5" value="27" name="ptype" style="display: none;"  <?php if ($pid == 27) { echo 'checked="checked"';}?>/>
-		</label>
-
+	<div class="red_checkbox" style="float: right;">
+		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 25) { echo ' active';}?>"></span></span>
 	</div>
+	<input type="radio" id="dtype2" value="25" name="payment_type_id" style="display: none;"  <?php if ($pid == 25) { echo 'checked="checked"';}?>/>
+</label>
 
-	<div class="clearfix" style="margin-bottom: 10px;"></div>
+<label class="selp span3 oplata2<?php if ($pid == 8) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype1')" style="<?php if ($pid == 8) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
+	<img src="/images/pp.jpg" width="150" />
+	<div class="red_checkbox" style="float: right;">
+		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 8) { echo ' active';}?>"></span></span>
+	</div>
+	<input type="radio" id="dtype1" value="8" name="payment_type_id" style="display: none;"  <?php if ($pid == 8) { echo 'checked="checked"';}?>/>
+</label>
 
-	<a href="<?=$href?>" class="order_start" style="float: right;">Оплатить</a>
+<label class="selp span3 oplata5<?php if ($pid == 26) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype4')" style="<?php if ($pid == 26) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
+	<img src="/images/ap.png" width="100" style="margin-top: -15px;" />
+	<div class="red_checkbox" style="float: right;">
+		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 26) { echo ' active';}?>"></span></span>
+	</div>
+	<input type="radio" id="dtype4" value="26" name="payment_type_id" style="display: none;"  <?php if ($pid == 26) { echo 'checked="checked"';}?>/>
+</label>
+
+<label class="selp span3 oplata6<?php if ($pid == 27) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype5')" style="<?php if ($pid == 27) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
+	<img src="/images/app.png" width="100" style="margin-top: -15px;" />
+	<div class="red_checkbox" style="float: right;">
+		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 27) { echo ' active';}?>"></span></span>
+	</div>
+	<input type="radio" id="dtype5" value="27" name="payment_type_id" style="display: none;"  <?php if ($pid == 27) { echo 'checked="checked"';}?>/>
+</label>
+
+</div>
