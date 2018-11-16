@@ -267,6 +267,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($a->getPerToPage());
             $paginatorInfo->route = 'publisherlist';
         }
+        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array(
             'entity' => $entity,
@@ -516,6 +517,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($a->getPerToPage());
             $paginatorInfo->route = 'AuthorList';
         }
+        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo, 'abc' => $abc, 'list' => $list, 'lang' => $lang,'chasdr'=>$char));
     }
@@ -608,6 +610,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize(10);
             $paginatorInfo->route = 'performerlist';
         }
+        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array(
             'entity' => $entity,
@@ -648,6 +651,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($p->getPerToPage());
             $paginatorInfo->route = 'ActorList';
         }
+        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array(
             'entity' => $entity,
@@ -763,6 +767,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($p->getPerToPage());
             $paginatorInfo->route = 'directorlist';
         }
+        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array(
             'entity' => $entity,
@@ -1475,6 +1480,7 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($vs->getPerToPage());
             $paginatorInfo->route = 'studioslist';
         }
+        $this->_maxPages = ceil($counts/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('studios_list', array('list' => $list, 'paginatorInfo' => $paginatorInfo, 'entity' => $entity));
     }

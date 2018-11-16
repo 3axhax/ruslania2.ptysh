@@ -38,6 +38,7 @@ class OffersController extends MyController
         $list = $o->GetList();
         $this->breadcrumbs[] = Yii::app()->ui->item('RUSLANIA_RECOMMENDS');
 
+        $this->_maxPages = ceil($list['Paginator']->getItemCount()/$list['Paginator']->getPageSize());
         $this->render('list', array('list' => $list['Items'], 'paginator' => $list['Paginator']));
     }
 
