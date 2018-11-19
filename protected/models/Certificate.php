@@ -36,10 +36,23 @@ class Certificate extends CActiveRecord {
 		return array();
 	}
 
-	function paid($id) {
-		$sql = 'update ' . $this->tableName() . ' set date_pay = CURRENT_TIMESTAMP where (id = ' . (int) $id . ')';
+	function paid($certificate) {
+		$model = new Promocodes();
+		$model->setAttributes(array(
+			'type_id'=>$model::CODE_CERTIFICATE,
+			'settings'=>serialize(array($certificate)),
+		));
+		$promocodeId = 0;
+		if ($model->save()) $promocodeId = (int) $model->id;
+
+		$sql = ''.
+			'update ' . $this->tableName() . ' set '.
+			'date_pay = CURRENT_TIMESTAMP, '.
+			'promocode_id = ' . $promocodeId . ' '.
+			'where (id = ' . (int) $certificate['id'] . ') '.
+			'';
 		Yii::app()->db->createCommand($sql)->execute();
-		//TODO:: добавить получение промокода и отправку писем
+		//TODO:: добавить отправку писем
 	}
 
 }

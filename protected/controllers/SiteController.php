@@ -28,20 +28,6 @@ class SiteController extends MyController {
             $model->setAttribute('payment_type_id', Yii::app()->getRequest()->getPost('payment_type_id'));
             if ($model->save()) {
                 Yii::app()->getRequest()->redirect(Yii::app()->createUrl('cart/certificatePay', array('id'=>$model->id, 'ptype'=>$model->getAttribute('payment_type_id'))));
-
-//                $ptype = (int) $model->getAttribute('payment_type_id');
-//                $data = array();
-//                $data['order'] = array();//$order;
-//                $data['number_zakaz'] = $model->id;
-//                $data['ptype'] = $ptype;
-//
-//                switch ($ptype) {
-//                    case 27: $this->render('applepay', $data); break;
-//                    case 26: $this->render('alipay', $data); break;
-//                    case 25: $data['payName'] = 'PayTrailWidget'; break;
-//                    case 8: $this->render('paypal', $data); break;
-//                }
-//                $this->render('certificate_pay', $data);
                 Yii::app()->end();
             }
         }

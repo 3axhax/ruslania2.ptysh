@@ -91,14 +91,14 @@ class PaymentController extends MyController
         if(empty($order)) throw new CHttpException(404);
 
         $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
-
-        $view = 'cancel_certificate';
-        if($check) {
-            $view = 'accept_certificate';
-            $o->paid($id);
+        if (empty($order['promocode_id'])) {
+            $view = 'cancel_certificate';
+            if($check) {
+                $view = 'accept_certificate';
+                $o->paid($order);
+            }
         }
-
-        if($order['uid'] != $this->uid) throw new CException('Wrong order id');
+        else $view = 'accept_certificate';
 
         $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
         $this->breadcrumbs[] = $check
