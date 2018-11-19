@@ -39,7 +39,7 @@ class Certificate extends CActiveRecord {
 	function paid($id) {
 		$sql = 'update ' . $this->tableName() . ' set date_pay = CURRENT_TIMESTAMP where (id = ' . (int) $id . ')';
 		Yii::app()->db->createCommand($sql)->execute();
-		//TODO:: добавить отправку писем
+		//TODO:: добавить получение промокода и отправку писем
 	}
 
 }

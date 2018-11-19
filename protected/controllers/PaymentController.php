@@ -82,28 +82,20 @@ class PaymentController extends MyController
     }
 
     public function actionAcceptCertificate($oid, $tid) {
+        $id = 0;
+        if (mb_strpos($oid, 'c', null, 'utf-8') === 0) $id = (int) mb_substr($oid, 1, null, 'utf-8');
+        if ($id <= 0) throw new CHttpException(404);
+
         $o = new Certificate();
-        $order = $o->getCertificate($oid);
+        $order = $o->getCertificate($id);
         if(empty($order)) throw new CHttpException(404);
 
-        $check = Payment::CheckPayment($oid, $tid, $_REQUEST, $order);
-        $ret = 0;
+        $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
 
         $view = 'cancel_certificate';
-        if($check)
-        {
+        if($check) {
             $view = 'accept_certificate';
-            $uid = Yii::app()->user->id;
-            $o->ChangeOrderPaymentType($uid, $oid, $tid);
-            $ret = $o->AddStatus($oid, OrderState::AutomaticPaymentConfirmation);
-            if(empty($ret))
-            {
-                CommonHelper::Log('Payment status not added '.$oid.' - '.$tid);
-            }
-            else if($ret == -1)
-            {
-                CommonHelper::Log('Payment already exists '.$oid.' - '.$tid, 'mywarnings');
-            }
+            $o->paid($id);
         }
 
         if($order['uid'] != $this->uid) throw new CException('Wrong order id');

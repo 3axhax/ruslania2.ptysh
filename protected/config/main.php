@@ -87,7 +87,7 @@ return array(
         ),
 
       'request' => array('class' => 'MyRequest',
-                           'dontCheckCsrf' => array('payment/accept', 'payment/cancel'),
+                           'dontCheckCsrf' => array('payment/accept', 'payment/cancel', 'payment/acceptCertificate', 'payment/cancelCertificate'),
                            'enableCsrfValidation' => true,
                            'enableCookieValidation' => true,
                            'csrfCookie' => array('httpOnly' => true)),
@@ -206,7 +206,8 @@ return array(
         'Base' => 'ruslania2.ptysh.ru',
         'DataProviderCacheID' => 'queryCache', // cacheQuery
         'DataProviderCacheTimeout' => (60 * 60 * 4), // 4 hours
-        'PAYMENT_ENVIRONMENT' => 'prod',
+        //'PAYMENT_ENVIRONMENT' => 'prod',
+        'PAYMENT_ENVIRONMENT' => 'test',
     ),
 );
 
