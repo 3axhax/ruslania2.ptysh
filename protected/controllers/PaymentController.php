@@ -74,4 +74,45 @@ class PaymentController extends MyController
         $get = "NOTIFY_PAYTRAIL\n".print_r($_GET, true);
         Yii::log($get);
     }
+
+    function actionCancelCertificate($oid, $tid) {
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
+        $this->render('cancel_certificate', array());
+    }
+
+    public function actionAcceptCertificate($oid, $tid) {
+        $o = new Certificate();
+        $order = $o->getCertificate($oid);
+        if(empty($order)) throw new CHttpException(404);
+
+        $check = Payment::CheckPayment($oid, $tid, $_REQUEST, $order);
+        $ret = 0;
+
+        $view = 'cancel_certificate';
+        if($check)
+        {
+            $view = 'accept_certificate';
+            $uid = Yii::app()->user->id;
+            $o->ChangeOrderPaymentType($uid, $oid, $tid);
+            $ret = $o->AddStatus($oid, OrderState::AutomaticPaymentConfirmation);
+            if(empty($ret))
+            {
+                CommonHelper::Log('Payment status not added '.$oid.' - '.$tid);
+            }
+            else if($ret == -1)
+            {
+                CommonHelper::Log('Payment already exists '.$oid.' - '.$tid, 'mywarnings');
+            }
+        }
+
+        if($order['uid'] != $this->uid) throw new CException('Wrong order id');
+
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->breadcrumbs[] = $check
+            ? Yii::app()->ui->item('A_SAMPO_PAYMENT_ACCEPTED')
+            : Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
+        $this->render($view, array('checkResult' => $check, 'order' => $order));
+    }
+
 }

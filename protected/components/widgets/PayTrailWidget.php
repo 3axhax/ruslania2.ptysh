@@ -4,6 +4,9 @@ class PayTrailWidget extends CWidget
 {
     public $order;
     public $env = PayTrail::ENV_TEST;
+    public $acceptUrl = '/payment/accept',
+        $cancelUrl = '/payment/cancel',
+        $notifyUrl = '/payment/notify';
 
     public function run()
     {
@@ -11,9 +14,9 @@ class PayTrailWidget extends CWidget
         $provider->orderNumber = $this->order['id'];
         $provider->amount = Currency::ConvertToEUR($this->order['full_price'], $this->order['currency_id']);
         $provider->currency = 'EUR';
-        $provider->successUrl = Yii::app()->createAbsoluteUrl('/payment/accept', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
-        $provider->cancelUrl = Yii::app()->createAbsoluteUrl('/payment/cancel', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
-        $provider->notifyUrl = Yii::app()->createAbsoluteUrl('/payment/notify', array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
+        $provider->successUrl = Yii::app()->createAbsoluteUrl($this->acceptUrl, array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
+        $provider->cancelUrl = Yii::app()->createAbsoluteUrl($this->cancelUrl, array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
+        $provider->notifyUrl = Yii::app()->createAbsoluteUrl($this->notifyUrl, array('oid' => $this->order['id'], 'tid' => Payment::Paytrail));
         
         $langInt = $provider->ptype[Yii::app()->language];
         

@@ -5,7 +5,7 @@ class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
             'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'getaddress',
-                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates',),
+                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay',),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
                 'users' => array('@')),
@@ -303,6 +303,8 @@ class CartController extends MyController {
 
         foreach ($cart as $item) {
 
+            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+
             $cartInfo['items'][$item['id']]['title'] = $PH->GetTitle($item);
             $cartInfo['items'][$item['id']]['weight'] = $item['InCartUnitWeight'];
 
@@ -317,13 +319,9 @@ class CartController extends MyController {
                 }
             } else {
 
-                if ($item['discount'] == '' OR $item['discount'] == '0.00') {
+                $price = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]);
 
-                    $price = $item['brutto'];
-                } else {
 
-                    $price = $item['discount'];
-                }
             }
 
             if (!$withVat) {
@@ -387,7 +385,7 @@ class CartController extends MyController {
         $id = (int) Yii::app()->getRequest()->getParam('id');
         $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
         if ($ptype <= 0)
-            $ptype = 3;
+            $ptype = 13;
 
         $o = new Order;
         $order = $o->GetOrder($id);
@@ -612,8 +610,8 @@ class CartController extends MyController {
 
                     $identity = new RuslaniaUserIdentity($email, $psw);
 
-                    if ($identity->authenticate()) {
 
+                    if ($identity->authenticate()) {
                         Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
                         $cart->UpdateCartToUid($this->sid, $identity->getId());
                         //echo $this->sid;
@@ -939,7 +937,6 @@ class CartController extends MyController {
             }
         }
 
-
         $ret = array('CartItems' => $inCart,
             'EndedItems' => $endedItems,
 //                     'RequestItems' => $inReq
@@ -1227,5 +1224,31 @@ class CartController extends MyController {
             throw new CException('Wrong id');
         return array($entity, $id, $quantity, $product, $originalQuantity, $type);
     }
+
+    function actionCertificatePay() {
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $id = (int) Yii::app()->getRequest()->getParam('id');
+
+        $certificate = new Certificate();
+        $data = array();
+        $data['order'] = $certificate->getCertificate($id);
+        if (empty($data['order'])) throw new CException('Wrong id');
+        $data['order']['id'] = $data['order']['id'] = 'c' . $id;;
+
+        $data['number_zakaz'] = $data['order']['id'];
+        $data['ptype'] = (int)$data['order']['payment_type_id'];
+        $data['order']['full_price'] = $data['order']['nominal'];
+        $data['order']['currency_id'] = $data['order']['currency'];
+
+//выводим соответствующий шаблон
+        switch ($data['ptype']) {
+//            case 27: $this->render('applepay', $data); break;
+//            case 26: $this->render('alipay', $data); break;
+            case 25: $data['payName'] = 'PayTrailWidget'; break;
+//            case 8: $data['payName'] = 'PayPalPayment'; break;
+        }
+        if (!empty($data['payName'])) $this->render('certificate_pay', $data);
+    }
+
 
 }

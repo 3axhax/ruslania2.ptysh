@@ -207,7 +207,7 @@
 	</div>
 	<input type="radio" id="dtype2" value="25" name="payment_type_id" style="display: none;"  <?php if ($pid == 25) { echo 'checked="checked"';}?>/>
 </label>
-
+<?php /* ?>
 <label class="selp span3 oplata2<?php if ($pid == 8) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype1')" style="<?php if ($pid == 8) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
 	<img src="/images/pp.jpg" width="150" />
 	<div class="red_checkbox" style="float: right;">
@@ -231,5 +231,5 @@
 	</div>
 	<input type="radio" id="dtype5" value="27" name="payment_type_id" style="display: none;"  <?php if ($pid == 27) { echo 'checked="checked"';}?>/>
 </label>
-
+<?php */ ?>
 </div>
