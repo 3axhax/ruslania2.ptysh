@@ -1260,7 +1260,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'A_NEW_STUDIO' => 'Студия',
     'STUDIOS' => 'Företag',
     'A_NEW_YEAR_FILM' => 'Год выхода фильма',
-    'GIFT_CERTIFICATE' => 'Сертификат в подарок',
+    'GIFT_CERTIFICATE' => 'Presentkort',
     'ALTERNATIVE'=>'Alternative',
     'NEWS'=>'Новости',
 

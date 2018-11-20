@@ -111,7 +111,7 @@ return array(
 	'forgot'=>'vosstanovlenie-parolja',
 	'delivery'=>'delivery',
 	'news'=>'novosti',
-
+	'certificate'=>'podarochnyj_sertifikat',
 
 	'offers'=>'rekomendatsii',
 	'for-firms'=>'specialnye-predlozhenija-dlja-firm',

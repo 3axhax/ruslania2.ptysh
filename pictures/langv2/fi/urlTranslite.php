@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'salasanan-palautus',
 	'delivery'=>'toimitus',
 	'news'=>'uutisia',
+	'certificate'=>'lahjakortti',
 
 
 	'offers'=>'suosituksia',

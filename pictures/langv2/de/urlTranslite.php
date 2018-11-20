@@ -111,7 +111,7 @@ return array(
 	'forgot'=>'passwort-wiederherstellung',
 	'delivery'=>'versand',
 	'news'=>'nachrichten',
-
+	'certificate'=>'geschenkgutschein',
 
 	'offers'=>'empfehlungen',
 	'for-firms'=>'spezielle-angebote-fur-unternehmen',

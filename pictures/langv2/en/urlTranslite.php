@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'password-recovery',
 	'delivery'=>'delivery',
 	'news'=>'news',
+	'certificate'=>'gift_certificate',
 
 
 	'offers'=>'recommendations',
