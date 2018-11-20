@@ -17,7 +17,7 @@ class LiveSearchController extends MyController {
 			}
 			else {
 				$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
-				if ($code = $sController->isCode($likeCode)) {
+				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $sController->isCode($likeCode))) {
 					$list = $sController->getByCode($code, $likeCode);
 					if (!empty($list)) $isCode = true;
 				}

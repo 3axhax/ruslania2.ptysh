@@ -25,7 +25,7 @@ class SearchController extends MyController {
 		}
 		else {
 			$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
-			if ($code = $this->isCode($likeCode)) {
+			if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $this->isCode($likeCode))) {
 				$list = $this->getByCode($code, $likeCode);
 				if (!empty($list)) $isCode = true;
 			}
@@ -73,7 +73,7 @@ class SearchController extends MyController {
 		if (ProductHelper::IsShelfId($q)) $code[] = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code[] = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code[] = 'isbnnum';
-		if (!preg_match("/[^a-z0-9-]/i", $q)&&preg_match("/\d/i", $q)) {
+		if ((mb_strlen($q, 'utf-8') > 5)&&!preg_match("/[^a-z0-9-]/i", $q)&&preg_match("/\d/i", $q)) {
 			$code[] = 'catalogue';
 		}
 		return $code;

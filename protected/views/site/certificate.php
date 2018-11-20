@@ -80,7 +80,7 @@ KnockoutForm::RegisterScripts();
 
 <script type="text/javascript">
 	$(function() {
-		$('#gift_maket_id').change(function () {
+		$('#Certificate_maket_id').change(function () {
 			$('#gift_preview').attr('src', '/new_img/gift' + this.value + '.jpg');
 		});
 	});

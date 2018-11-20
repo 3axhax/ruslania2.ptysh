@@ -93,7 +93,7 @@
             </script>
 
             <div class="container cnt67">
-                <ul class="books">!!!
+                <ul class="books">
                     <?php
                     foreach ($popular as $item) :
                         ?>
