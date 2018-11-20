@@ -169,6 +169,22 @@ class RecountItemsCommand extends CConsoleCommand {
 
 	}
 
+	/**
+	 *
+	1. Новинка
+	2. В магазине или заканчивается, дата вписывания до 6 мес
+	3. skip, дата вписывания до 2 мес
+	4. В магазине или заканчивается, дата вписывания от 6 мес до 1 года
+	5. skip, дата вписывания от 2 мес до 1 года
+	6. В магазине или заканчивается, дата вписывания более 1 года
+	7. skip, дата вписывания более 1 года
+	8. нет в наличии по дате вписания
+	 *
+	 * @param $entity
+	 * @param $params
+	 * @throws CDbException
+	 * @throws CException
+	 */
 	private function _updatePosition($entity, $params) {
 		foreach (SortOptions::GetSortData() as $sort=>$name) {
 			if ($sort == SortOptions::DefaultSort) {
@@ -179,7 +195,7 @@ class RecountItemsCommand extends CConsoleCommand {
 						'from ' . $params['site_table'] . ' t '.
 							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
 //						'where (t.avail_for_order = 1) '.
-						'order by t.avail_for_order desc, tAI.type asc, t.id desc ' .
+						'order by t.avail_for_order desc, tAI.type asc, t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 					$sql = ''.
@@ -188,68 +204,117 @@ class RecountItemsCommand extends CConsoleCommand {
 						'from ' . $params['site_table'] . ' t '.
 							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
 						'where (tAI.item_id is null) '.
-						'order by t.avail_for_order desc, t.id desc ' .
+						'order by t.avail_for_order desc, t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 				}
 				else {
+					$time = date('Y-m-d H:0:0');
 /*1 товары с флажками "новинка"
 *внутри них: дата вписывания, свежая дата вперед
 *независимо от того, есть-ли товар на складе или нет
-
-2 товары с флажками "в рекомендованных"
-*внутри них: дата вписывания, свежая дата вперед
-*независимо от того, есть-ли товар на складе или нет */
+*/
 					$sql = ''.
 						'insert into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
-							'join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
-						'where (t.avail_for_order = 1) '.
-						'order by tAI.type asc, t.id desc ' .
+							'join action_items tAI on (tAI.item_id = t.id) and (tAI.entity = ' . (int) $entity . ') and (tAI.type = 1) '. //3-товар дня, 1-новинка
+						'order by t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 
-/*3 товар есть в магазине или "заканчивается в магазине"
-*внутри них: дата вписывания, свежая дата вперед */
+/*2 товар есть в магазине или "заканчивается в магазине"
+* внутри них: дата вписывания, свежая дата вперед
+* дата вписывания до 6 мес */
 					$sql = ''.
 						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
-							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
-						'where (t.avail_for_order = 1) and (t.in_shop > 0) and (tAI.item_id is null) '.
-						'order by t.id desc ' .
+						'where (t.avail_for_order = 1) and (t.in_shop > 0) and (t.add_date > DATE_ADD("' . $time . '", INTERVAL -6 MONTH)) '.
+						'order by t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 
-/*4 товары, который нет в магазине, но которые можно купить (есть скип)
-* по году издании (дата вписывании не играет роли)
+/*3 товары, который нет в магазине, но которые можно купить (есть скип)
+* дата вписывания до 2 мес
 * по сроку доставки (зависит от поставщика) (у каждого поставщика есть свой срок доставки)
-*** возможно ли сделать два критерии, и как с ними оперировать?
-*** му хотим так , чтобы в книгах нет в магазине шли вперед новые с короткими сроками доставки, если это возможно.*/
+* внутри них: дата вписывания, свежая дата вперед
+*/
 					$sql = ''.
 						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
-							'left join _items_with_label tAI on (tAI.item_id = t.id) and (entity_id = ' . (int) $entity . ') and (tAI.type <> 3) '. //3-товар дня
 							'left join vendors tVendots on (tVendots.id = t.vendor) '.
 							'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
-						'where (t.avail_for_order = 1) and (t.in_shop = 0) and (tAI.item_id is null) '.
-						'order by t.year desc, deliveryTime.delivery_unit ASC, deliveryTime.delivery_type_name ASC ' .
+						'where (t.avail_for_order = 1) and (t.in_shop = 0) and (t.add_date > DATE_ADD("' . $time . '", INTERVAL -2 MONTH)) '.
+						'order by deliveryTime.position ASC, t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
 
-/*После товаров в наличии "в корзину" идет товар не в наличии "сообщить о поступлении"
-*внутри товаров не в наличии порядок по дате вписывание. Как на старом сайте.*/
+/*4 В магазине или заканчивается, дата вписывания от 6 мес до 1 года
+* внутри них: дата вписывания, свежая дата вперед
+*/					$sql = ''.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+						'where (t.avail_for_order = 1) and (t.in_shop > 0) and (t.add_date between DATE_ADD("' . $time . '", INTERVAL -12 MONTH) and DATE_ADD("' . $time . '", INTERVAL -6 MONTH)) '.
+						'order by t.add_date desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*5 товары, который нет в магазине, но которые можно купить (есть скип)
+* дата вписывания от 2 мес до 1 года
+* по сроку доставки (зависит от поставщика) (у каждого поставщика есть свой срок доставки)
+* внутри них: дата вписывания, свежая дата вперед
+*/
+					$sql = ''.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'left join vendors tVendots on (tVendots.id = t.vendor) '.
+							'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
+						'where (t.avail_for_order = 1) and (t.in_shop = 0) and (t.add_date between DATE_ADD("' . $time . '", INTERVAL -12 MONTH) and DATE_ADD("' . $time . '", INTERVAL -2 MONTH)) '.
+						'order by deliveryTime.position ASC, t.add_date desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*6 товар есть в магазине или "заканчивается в магазине"
+* внутри них: дата вписывания, свежая дата вперед
+* дата вписывания более 1 года */
+					$sql = ''.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+						'where (t.avail_for_order = 1) and (t.in_shop > 0) and (t.add_date < DATE_ADD("' . $time . '", INTERVAL -12 MONTH)) '.
+						'order by t.add_date desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*7 товары, который нет в магазине, но которые можно купить (есть скип)
+* дата вписывания более 1 годаа
+* по сроку доставки (зависит от поставщика) (у каждого поставщика есть свой срок доставки)
+* внутри них: дата вписывания, свежая дата вперед
+*/
+					$sql = ''.
+						'insert ignore into _tmp_position_' . $sort . ' (id) '.
+						'select t.id '.
+						'from ' . $params['site_table'] . ' t '.
+							'left join vendors tVendots on (tVendots.id = t.vendor) '.
+							'left join delivery_time_list deliveryTime on (deliveryTime.dtid = tVendots.dtid) '.
+						'where (t.avail_for_order = 1) and (t.in_shop = 0) and (t.add_date < DATE_ADD("' . $time . '", INTERVAL -12 MONTH)) '.
+						'order by deliveryTime.position ASC, t.add_date desc ' .
+					'';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
+
+/*нет в наличии по дате вписания */
 					$sql = ''.
 						'insert ignore into _tmp_position_' . $sort . ' (id) '.
 						'select t.id '.
 						'from ' . $params['site_table'] . ' t '.
 						'where (t.avail_for_order = 0) '.
-						'order by t.id desc ' .
+						'order by t.add_date desc ' .
 					'';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
-
 				}
 			}
 			else {
