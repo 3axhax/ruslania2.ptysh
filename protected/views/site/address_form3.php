@@ -41,7 +41,7 @@ function decline_goods($num) {
 
 
 <div class="span7" style="margin-left: 0;">
-<div class="p3">1. Укажите адрес доставки и плательщика</div>
+<div class="p3 step1">1. Укажите адрес доставки и плательщика</div>
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
 <style>
@@ -70,13 +70,10 @@ $addr_list = $addr->GetAddresses($this->uid);
 echo ' <span class="err_addr" style="color: #ff0000; font-size: 12px;"></span><div class="clearfix" style="height: 10px;"></div><div class="addr_delivery">';
 if (count($addr_list)) {
     
-    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Выберите адрес доставки</option>';
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">Выберите адрес доставки</option>' : '' );
 
     $ch = new CommonHelper();
-    
-    
-    
-    
+
     foreach ($addr_list as $addr) {
         
         $adr_str = $ch->FormatAddress($addr);
@@ -87,6 +84,12 @@ if (count($addr_list)) {
 
     echo '</select>';
     
+}else {
+
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Добавьте адрес доставки</option>';
+
+    echo '</select>';
+
 }
 
 ?>
@@ -95,7 +98,7 @@ if (count($addr_list)) {
 echo '<div class="addr_buyer" style="margin-top: 10px">';
 if (count($addr_list)) {
     
-    echo '<select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Выберите адрес плательщика</option>';
+    echo '<select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">Выберите адрес плательщика</option>' : '' );
 
     $ch = new CommonHelper();
     
@@ -104,20 +107,29 @@ if (count($addr_list)) {
     foreach ($addr_list as $addr) {
         
         $adr_str = $ch->FormatAddress($addr);
-        
+
         echo '<option value="'.$addr['address_id'].'">'.$adr_str.'</option>';
 
     }
 
     echo '</select>';
     
+} else {
+
+    echo '<select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Добавьте адрес плательщика</option>';
+
+    echo '</select>';
+
 }
 
 echo '</div>';
 
 ?>
 
-<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1').toggle('fade');" class="btn btn-success" style="margin-top: 10px;">Добавить адрес</a></div>
+    <!--<a href="javascript:;" onclick="hide_dostavka($(this))" class="btn btn-link" style="margin-top: 10px;">Доставка не нужна</a>-->
+    <? $user = User::getUserID(Yii::app()->user->id); ?>
+
+<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="btn btn-success" style="margin-top: 10px; float: right">Добавить адрес</a></div>
 
 <table class="address addr1" style="display: none; margin-top: 10px;">
     <tbody>
@@ -176,7 +188,7 @@ echo '</div>';
         <td class="smalltxt1"></td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt">
+        <td nowrap="" class="maintxt country_lbl">
             <span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_country"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
@@ -201,7 +213,7 @@ echo '</div>';
     
     
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
+        <td nowrap="" class="maintxt city_lbl"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
@@ -209,7 +221,7 @@ echo '</div>';
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
+        <td nowrap="" class="maintxt postindex_lbl"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
@@ -217,7 +229,7 @@ echo '</div>';
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
+        <td nowrap="" class="maintxt streetaddress_lbl"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_streetaddress"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('streetaddress',array('placeholder'=>$ui->item("MSG_PERSONAL_ADDRESS_COMMENT_2"))); ?>
@@ -230,13 +242,13 @@ echo '</div>';
             <?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
-            <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
+            <?= $form->textField('contact_email', array('disabled'=>"true")); ?>
             <span class="texterror"></span>
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
-                                            class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
+        <td nowrap="" class="maintxt contact_phone_lbl"><span style="width: 5pt"
+                                           class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('contact_phone', array('oninput'=>'save_form()')); ?>
             <span class="texterror"></span>
@@ -265,15 +277,14 @@ echo '</div>';
    
     
     <tr>
-   
+        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa"/> Отметьте чекбокс если придете в магазин, в этом случай адрес и телефон не обязательны</label></td>
     </tr>
     
     </tbody>
 </table>
 
-
 <a href="javascript:;" class="btn btn-success addr1" style="float: right; display: none; margin-right: 5px;" onclick="add_address(1)">Добавить</a>
-
+<a href="javascript:;" onclick="$('table.addr1, .btn.btn-success.addr1, .cancel_add_adr').toggle('fade');" class="cancel_add_adr btn btn-link" style="display: none; float: right;">Отменить</a>
 <div class="clearfix" style="margin: 5px 0;"></div>
 
 

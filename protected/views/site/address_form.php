@@ -154,7 +154,27 @@
     <tr>
         <td nowrap="" style="padding-left: 10pt;" class="maintxt">&nbsp;</td>
         <td class="maintxt-vat">
-            <input data-bind="visible: !disableSubmitButton()" type="image" src="/pic1/<?= $ui->item("SAVE_PICTURE"); ?>"/>
+
+            <style>
+
+                input.order_start {
+                    display: inline-block;
+                    width: 180px;
+                    border-radius: 4px;
+                    background-color: rgb(117, 132, 149);
+                    border: 0;
+                    padding: 9px 0;
+                    text-align: center;
+                    font-size: 14px;
+                    color: rgb(255, 255, 255);
+                    font-weight: bold;
+                }
+
+
+            </style>
+
+            <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="Сохранить"/>
+
             <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
         </td>
         <td class="smalltxt1"></td>

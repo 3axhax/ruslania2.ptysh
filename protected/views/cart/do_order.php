@@ -264,7 +264,7 @@
         $.cookie('Address_city2', $('#Address_city').val());
         $.cookie('Address_postindex2', $('#Address_postindex').val());
         $.cookie('Address_streetaddress2', $('#Address_streetaddress').val());
-        $.cookie('Address_contact_email2', $('#Address_contact_email').val());
+
         $.cookie('Address_contact_phone2', $('#Address_contact_phone').val());
         $.cookie('Address_notes2', $('#Address_notes').val());
         
@@ -286,7 +286,7 @@
         $('#Address_city').val($.cookie('Address_city2'));
         $('#Address_postindex').val($.cookie('Address_postindex2'));
         $('#Address_streetaddress').val($.cookie('Address_streetaddress2'));
-        $('#Address_contact_email').val($.cookie('Address_contact_email2'));
+
         $('#Address_contact_phone').val($.cookie('Address_contact_phone2'));
         $('#Address_notes').val($.cookie('Address_notes2'));
         
@@ -303,7 +303,21 @@
         s = true;
         
     }
-    
+
+    function check_desc_address(cont) {
+
+        if (cont.prop('checked')) {
+
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').hide();
+
+        } else {
+
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').show();
+
+        }
+
+    }
+
     function add_address(num_cont) {
         
         var cont = $('table.addr'+num_cont);
@@ -315,7 +329,9 @@
         //query = query + '&t=1';
         
         var error = 0;
-        
+
+
+
         $('.texterror', $('#Address_receiver_last_name', cont).parent()).html('Заполните это поле');
         
         if (!$('#Address_receiver_last_name',cont).val()) { $('#Address_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_last_name',cont).parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name',cont).removeClass('error'); $('.texterror', $('#Address_receiver_last_name',cont).parent()).html(''); }
@@ -325,11 +341,11 @@
         
         if (!$('#Address_receiver_first_name',cont).val()) { $('#Address_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('');}
         
-        if (!$('#Address_country',cont).val()) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('Выберите страну');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
+        if (!$('#Address_country',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('Выберите страну');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
         
-        if (!$('#Address_city',cont).val()) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('Заполните это поле');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
-        if (!$('#Address_postindex',cont).val()) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('Заполните это поле');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
-        if (!$('#Address_streetaddress',cont).val()) { $('#Address_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_streetaddress',cont).parent()).html('Заполните это поле');} else {  $('#Address_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address_streetaddress',cont).parent()).html('');}
+        if (!$('#Address_city',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('Заполните это поле');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
+        if (!$('#Address_postindex',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('Заполните это поле');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
+        if (!$('#Address_streetaddress',cont).val() && !$('.check_addressa').prop('checУed')) { $('#Address_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_streetad192dress',cont).parent()).html('Заполните это поле');} else {  $('#Address_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address_streetaddress',cont).parent()).html('');}
          var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
         
         if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else if(pattern.test($('#Address_contact_email').val())){  $('#Address_contact_email').removeClass('error');  $('.texterror', $('#Address_contact_email').parent()).html('');} else {
@@ -337,7 +353,7 @@
          $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Неверно введен E-mail адрес');
             
         }
-        if (!$('#Address_contact_phone',cont).val()) { $('#Address_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone',cont).parent()).html('Заполните это поле');} else {  $('#Address_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address_contact_phone',cont).parent()).html('');}
+        if (!$('#Address_contact_phone',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone',cont).parent()).html('Заполните это поле');} else {  $('#Address_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address_contact_phone',cont).parent()).html('');}
         
         
         if (error > 0) {
@@ -466,7 +482,7 @@
 
 
 
-        load_form();
+        //load_form();
         
         $(document).click(function (event) {
 				if ($(event.target).closest(".qbtn, .info_box_smart").length)
@@ -500,7 +516,13 @@
     $('.delivery_box').show();
         $('.seld #dtype2').parent().addClass('act');
         $('.delivery_name').html('Доставка почтой');
-    
+
+        $('.oplata1').hide();
+        $('.oplata3').addClass('act');
+        $('.oplata3 span.check').addClass('active');
+        $('.oplata3 input').attr('checked', 'checked');
+
+
     })
     
     function cost_izmena(city_id) {

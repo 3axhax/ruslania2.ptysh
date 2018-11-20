@@ -287,7 +287,7 @@ function decline_goods($num) {
             <input type="radio" id="dtype1" value="0" name="dtype" style="display: none;" />
         </label>
          <?//php  } ?>
-         <label class="seld span3  seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();" style="height: 40px;">
+         <label class="seld span3  seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev(); $('.selt1').click();" style="height: 40px;">
             Доставка почтой
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
