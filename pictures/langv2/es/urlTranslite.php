@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'recuperacion-de-contrasena',
 	'delivery'=>'envio',
 	'news'=>'noticias',
+	'certificate'=>'certificado_de_regalo',
 
 
 	'offers'=>'recomendaciones',

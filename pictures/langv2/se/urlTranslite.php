@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'losenordaterstallning',
 	'delivery'=>'leverans',
 	'news'=>'nyheter',
+	'certificate'=>'presentkort',
 
 
 	'offers'=>'rekommendationer',
