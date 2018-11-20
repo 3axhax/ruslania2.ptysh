@@ -27,7 +27,7 @@ class SiteController extends MyController {
             $model->setAttributes(Yii::app()->getRequest()->getPost('Certificate'));
             $model->setAttribute('payment_type_id', Yii::app()->getRequest()->getPost('payment_type_id'));
             if ($model->save()) {
-                Yii::app()->getRequest()->redirect(Yii::app()->createUrl('cart/certificatePay', array('id'=>$model->id, 'ptype'=>$model->getAttribute('payment_type_id'))));
+                Yii::app()->getRequest()->redirect(Yii::app()->createUrl('cart/certificatePay', array('id'=>$model->id)));
                 Yii::app()->end();
             }
         }

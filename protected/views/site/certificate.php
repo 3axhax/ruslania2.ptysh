@@ -50,7 +50,7 @@ KnockoutForm::RegisterScripts();
 						<div class="row_name"><span>*</span><?= Yii::app()->ui->item('CERTIFICATE_NOMINAL') ?></div>
 						<div class="row_value span11" style="margin: 0; width: inherit;">
 							<div><?= CHtml::activeDropDownList($model, 'nominal', $nominals, array('style'=>'width: 70px;', 'class'=>'periodic')); ?>&nbsp;<?= Currency::ToSign(Yii::app()->currency) ?></div>
-							<div class="mb5 periodic_world" style="white-space:nowrap; ">
+							<?php /*<div class="mb5 periodic_world" style="white-space:nowrap; ">
 								<?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
 									<span class="without_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO_WORLD]); ?></span>
 									<span class="price">
@@ -67,7 +67,7 @@ KnockoutForm::RegisterScripts();
 								<input type="hidden" value="<?= round($price[DiscountManager::WITH_VAT_WORLD] / $price[DiscountManager::BRUTTO_WORLD], 2); ?>" class="worldmonthpricevat"/>
 								<input type="hidden" value="<?= round($price[DiscountManager::WITHOUT_VAT_WORLD] / $price[DiscountManager::BRUTTO_WORLD], 2); ?>" class="worldmonthpricevat0"/>
 							</div>
-						</div>
+						</div> */ ?>
 					</div>
 				</div>
 			</div>

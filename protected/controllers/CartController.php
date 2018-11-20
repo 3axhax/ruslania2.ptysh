@@ -385,7 +385,7 @@ class CartController extends MyController {
         $id = (int) Yii::app()->getRequest()->getParam('id');
         $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
         if ($ptype <= 0)
-            $ptype = 13;
+            $ptype = 999;
 
         $o = new Order;
         $order = $o->GetOrder($id);
@@ -421,7 +421,7 @@ class CartController extends MyController {
                 $namepay = 'Предоплата на банковский счет в Финляндии';
             if ($ptype == '14')
                 $namepay = 'Предоплата на банковский счет в России';
-            if ($ptype == '1')
+            if ($ptype == '999')
                 $namepay = 'Оплата в магазине';
 
             $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
