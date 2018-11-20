@@ -320,6 +320,8 @@
 
         $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
 
+
+
         //show_all();
 
 
@@ -407,7 +409,7 @@
                 // $('.order_start').removeClass('disabled');
                 sbros_delev();
                 checked_sogl();
-
+                $('.selt1').click();
             });
 
 
@@ -426,6 +428,9 @@
                     $('#Address_contact_phone').val('');
 
                 }
+
+                $('.delivery_name').html('Доставка почтой');
+
             });
 
             // }
@@ -544,7 +549,7 @@
             if ($(event.target).closest(".qbtn, .info_box_smart").length)
                 return;
             $('.info_box_smart').hide();
-            event.stopPropagation();
+        event.stopPropagation();
         });
 
         $(document).click(function (event) {
@@ -778,20 +783,20 @@
             $('.texterror', $('#Address_city').parent()).html('');
         }
         if (!$('#Address_postindex').val()) {
-            $('#Address_postindex').addClass('error');
-            error = error + 1;
-            $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
-        } else {
-            $('#Address_postindex').removeClass('error');
-            $('.texterror', $('#Address_postindex').parent()).html('');
-        }
-        if (!$('#Address_streetaddress').val()) {
-            $('#Address_streetaddress').addClass('error');
-            error = error + 1;
-            $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
-        } else {
-            $('#Address_streetaddress').removeClass('error');
-            $('.texterror', $('#Address_streetaddress').parent()).html('');
+                $('#Address_postindex').addClass('error');
+                error = error + 1;
+            } else {
+                $('#Address_postindex').removeClass('error');
+                $('.texterror', $('#Address_postindex').parent()).html('');
+            }
+            if (!$('#Address_streetaddress').val()) {
+                $('#Address_streetaddress').addClass('error');
+                $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
+                error = error + 1;
+                $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
+            } else {
+                $('#Address_streetaddress').removeClass('error');
+                $('.texterror', $('#Address_streetaddress').parent()).html('');
         }
 
         var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
@@ -948,12 +953,16 @@
 
     $cart = new Cart();
 
+    $tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid), $this->uid);
+
     $PH = new ProductHelper();
 
     $cart = $cart->GetCart($this->uid, $this->sid);
 
+
+
     //echo '<pre>';
-    //var_dump($cart);
+    //var_dump($tmp);
     //echo '</pre>';
     $cartInfo = '';
     $fullprice = 0;
@@ -967,6 +976,13 @@
 
     foreach ($cart as $item) {
 
+        $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+
+
+        //var_dump($price);
+
+        //echo ;
+        
         $cartInfo['items'][$item['id']]['title'] = $PH->GetTitle($item);
         $cartInfo['items'][$item['id']]['weight'] = $item['InCartUnitWeight'];
 
@@ -981,13 +997,7 @@
             }
         } else {
 
-            if ($item['discount'] == '' OR $item['discount'] == '0.00') {
-
-                $price = $item['brutto'];
-            } else {
-
-                $price = $item['discount'];
-            }
+            $price = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]);
         }
 
         $fullweight += $item['InCartUnitWeight'];

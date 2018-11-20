@@ -55,6 +55,8 @@
 <?
     $ordClass = new Order();
 
+
+
     $ord = $ordClass->GetOrder((int) $_GET['id']);
 
     if ($ord['delivery_type_id'] == 0) :

@@ -5,7 +5,7 @@ class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
             'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'getaddress',
-                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay',),
+                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates',),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
                 'users' => array('@')),
@@ -384,7 +384,7 @@ class CartController extends MyController {
     function actionOrderPay() {
         $id = (int) Yii::app()->getRequest()->getParam('id');
         $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
-        if ($ptype <= 0)
+        if ($ptype <= 1)
             $ptype = 999;
 
         $o = new Order;
@@ -1224,31 +1224,5 @@ class CartController extends MyController {
             throw new CException('Wrong id');
         return array($entity, $id, $quantity, $product, $originalQuantity, $type);
     }
-
-    function actionCertificatePay() {
-        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
-        $id = (int) Yii::app()->getRequest()->getParam('id');
-
-        $certificate = new Certificate();
-        $data = array();
-        $data['order'] = $certificate->getCertificate($id);
-        if (empty($data['order'])) throw new CException('Wrong id');
-        $data['order']['id'] = $data['order']['id'] = 'c' . $id;;
-
-        $data['number_zakaz'] = $data['order']['id'];
-        $data['ptype'] = (int)$data['order']['payment_type_id'];
-        $data['order']['full_price'] = $data['order']['nominal'];
-        $data['order']['currency_id'] = $data['order']['currency'];
-
-//выводим соответствующий шаблон
-        switch ($data['ptype']) {
-//            case 27: $this->render('applepay', $data); break;
-//            case 26: $this->render('alipay', $data); break;
-            case 25: $data['payName'] = 'PayTrailWidget'; break;
-//            case 8: $data['payName'] = 'PayPalPayment'; break;
-        }
-        if (!empty($data['payName'])) $this->render('certificate_pay', $data);
-    }
-
 
 }

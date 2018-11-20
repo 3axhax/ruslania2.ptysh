@@ -2,7 +2,7 @@
 
 <div class="container cartorder">
     
-        <?php if ($ptype == 1) { $ptype_1 = 0; } else { $ptype_1 = $ptype; } ?>
+        <?php if ($ptype == 1) { $ptype_1 = 999; } else { $ptype_1 = $ptype; } ?>
     
 	<h1><?= Yii::app()->ui->item('HEADER_PAYTYPE' . $ptype_1) ?></h1>
         Спасибо за заказ! Номер заказа <?= $number_zakaz . $dop ?><br /><br />
