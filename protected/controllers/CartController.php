@@ -276,6 +276,7 @@ class CartController extends MyController {
         $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
         $this->breadcrumbs[] = 'Оформление заказа';
         $data['number_zakaz'] = $id;
+
         $data['ptype'] = $ptype;
         //меняем в базе тип оплаты
         $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
