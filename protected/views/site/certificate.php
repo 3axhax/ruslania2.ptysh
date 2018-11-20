@@ -43,7 +43,7 @@ KnockoutForm::RegisterScripts();
 						<div class="row_value"><?= CHtml::activeTextField($model, 'fio_source', array('style'=>'width: 240px;', 'required'=>1)); ?></div>
 					</div>
 					<div class="form_row">
-						<div class="row_name"><span>*</span><?= Yii::app()->ui->item('CERTIFICATE_SOURCE_NAME') ?></div>
+						<div class="row_name"><span>*</span><?= Yii::app()->ui->item('CERTIFICATE_SOURCE_EMAIL') ?></div>
 						<div class="row_value"><?= CHtml::activeTextField($model, 'email_source', array('style'=>'width: 240px;', 'required'=>1)); ?></div>
 					</div>
 					<div class="form_row">
