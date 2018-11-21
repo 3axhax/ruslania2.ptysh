@@ -2,6 +2,7 @@
 /*Created by Кирилл (27.07.2018 21:10)*/
 
 class Similar extends CWidget {
+	private $_paramsHeight = 0;
 	/**
 	 * @var array здесь массив начальных значений
 	 */
@@ -23,7 +24,7 @@ class Similar extends CWidget {
 		$products = $this->_getProducts();
 		if (empty($products)) return;
 
-		$this->render('similar', array('items'=>$products));
+		$this->render('similar', array('items'=>$products, 'paramsHeight'=>$this->_paramsHeight));
 	}
 
 	private function _getProducts() {
@@ -41,6 +42,14 @@ class Similar extends CWidget {
 		foreach($items as $entity=>$ids) {
 			if (!empty($ids)) {
 				foreach ($p->GetProductsV2($entity, $ids) as $item) {
+					$paramsHeight = 0;
+					if (!empty($item['Authors'])) $paramsHeight += 20;//высота одного параметра
+					if (!empty($item['isbn'])&&!in_array($item['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))) $paramsHeight += 20;
+					if (!empty($item['eancode'])&&in_array($item['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))) $paramsHeight += 20;
+					if ($item['year']) $paramsHeight += 20;
+					if ($item['binding_id']) $paramsHeight += 20;
+					if ($paramsHeight > $this->_paramsHeight) $this->_paramsHeight = $paramsHeight;
+
 					$item['status'] = $p->GetStatusProduct($entity, $item['id']);
 					$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 					$item['priceData']['unit'] = '';
@@ -117,6 +126,7 @@ class Similar extends CWidget {
 			$request->setFreePath($referer);
 			//$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
 			$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+			Debug::staticRun(array($refererRoute, $referer));
 			switch ($refererRoute) {
 				case 'entity/categorylist':case 'entity/list': $sql = $this->_sqlByCategory($request, $limit); break;
 				case 'entity/serieslist':case 'entity/byseries': $sql = $this->_sqlBySeries($request, $limit); break;

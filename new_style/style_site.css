@@ -1466,6 +1466,8 @@ div.poht {margin-top: 0; margin-bottom: 20px; font-weight: bold; line-height: 40
     width: 132px;
     margin-top: 18px;
 }
+.more_goods ul.books li .params {margin-bottom: 10px;}
+.more_goods ul.books li .params div { height: 20px; overflow: hidden; white-space: nowrap; }
 
 .you_view {position: relative; min-height: 261px;}
 

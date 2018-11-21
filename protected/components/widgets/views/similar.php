@@ -24,7 +24,7 @@
 				</div>
 
 				<div class="title_book"<?php if (!empty($product['Authors'])): ?> style="height:29px;min-height:auto;margin-bottom:0;" <?php endif; ?>><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
-
+<div class="params"<?php if ($paramsHeight): ?> style="height: <?= $paramsHeight ?>px;" <?php endif; ?>>
 				<?php if (!empty($product['Authors'])):
 					$author = array_shift($product['Authors']);
 					?>
@@ -43,34 +43,37 @@
 				<?php endif; ?>
 
 				<?php if ($product['binding_id']): ?>
-				<?= ProductHelper::GetTitle($product['Binding']) ?>
+				<div title="<?= htmlspecialchars(ProductHelper::GetTitle($product['Binding'])) ?>"><?= ProductHelper::GetTitle($product['Binding']) ?></div>
 				<?php endif; ?>
+</div>
 
 				<?php //$price = DiscountManager::GetPrice(Yii::app()->user->id, $product); ?>
-				<div class="cost">
-					<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
-						<span class="without_discount">
-                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
-                </span>
-						<span class="price with_discount" style="font-size: 15px;">
-                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
-                </span>
-					<?php else : ?>
-						<span class="price" style="font-size: 15px;">
-                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
-                </span>
-					<?php endif; ?>
+				<div style="height: 40px;">
+					<div class="cost">
+						<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
+							<span class="without_discount">
+	                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
+	                </span>
+							<span class="price with_discount" style="font-size: 15px;">
+	                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
+	                </span>
+						<?php else : ?>
+							<span class="price" style="font-size: 15px;">
+	                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
+	                </span>
+						<?php endif; ?>
 
-					<?php /*if (!empty($price[DiscountManager::DISCOUNT])): ?>
-			<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?>
-            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
-                <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
-            </span>
-					<?php else: ?>
-			<span class="price"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
-					<?php endif*/ ?>
+						<?php /*if (!empty($price[DiscountManager::DISCOUNT])): ?>
+				<span style="font-size: 90%; color: #ed1d24; text-decoration: line-through;"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?>
+	            </span>&nbsp;<span class="price" style="color: #301c53;font-size: 18px; font-weight: bold;">
+	                <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
+	            </span>
+						<?php else: ?>
+				<span class="price"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
+						<?php endif*/ ?>
+					</div>
+					<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 				</div>
-				<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 				<?php /*<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div> */ ?>
 				<?php if ($product['entity'] == Entity::PERIODIC): ?>
 					<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>

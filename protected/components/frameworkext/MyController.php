@@ -336,10 +336,10 @@ class MyController extends CController
     protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
 //        $this->redirect($realPage . $query, true, 301);
 //        return;
-
+        $m = [];
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
+        elseif (preg_match("/\/(\d+)\/?$/", $oldPage, $m)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
-        elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
 
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
 
@@ -349,10 +349,12 @@ class MyController extends CController
             if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
             else $entity = Entity::ParseFromString($entity);
             $idName = HrefTitles::get()->getIdName($entity, $route);
-            Debug::staticRun(array($idName, $data));
             if (!empty($idName)&&!empty($data[$idName])) {
                 $data['__useTitleParams'] = true;
-                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], Yii::app()->language) as $oldTitle) {
+                $language = Yii::app()->getRequest()->getParam('language', Yii::app()->language);
+                /*if ($language <> Yii::app()->language) */$data['__langForUrl'] = $language;
+                Debug::staticRun(array($language, Yii::app()->getRequest()->getParam('language'), $_GET));
+                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], $language) as $oldTitle) {
                     $data['title'] = $oldTitle;
                     $path = Yii::app()->createUrl($route, $data);
                     if ($path === $oldPage) $this->redirect($realPage . $query, true, 301);

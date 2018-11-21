@@ -109,6 +109,15 @@ class OldPagesCommand extends CConsoleCommand {
 						':lang'=>$lang,
 					);
 					$pdo->getPdoStatement()->execute($insertParams);
+
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'product/view',
+						':id'=>$item['id'],
+						':path'=>'/' . Entity::GetUrlKey($entity) . '/' . $item['id'],
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
 				}
 			}
 			unset($items);
