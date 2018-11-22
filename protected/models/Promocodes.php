@@ -6,6 +6,12 @@ class Promocodes extends CActiveRecord {
 
 	const CODE_CERTIFICATE = 1;
 
+	function rules() {
+		return array(
+			array('type_id, settings', 'safe'),
+		);
+	}
+
 	function beforeSave() {
 		if ($this->isNewRecord) {
 			$this->setAttribute('date_add', date('Y-m-d H:i:s'));

@@ -35,7 +35,6 @@ class Certificate extends CActiveRecord {
 	}
 
 	function paid($certificate) {
-		$promocodeId = 0;
 		$model = new Promocodes();
 		$model->setAttributes(array(
 			'type_id'=>$model::CODE_CERTIFICATE,
@@ -43,12 +42,6 @@ class Certificate extends CActiveRecord {
 		));
 		$promocodeId = 0;
 		if ($model->save()) $promocodeId = (int) $model->id;
-
-		/** @var $promocode Promocodes */
-/*		$promocode = Promocodes::model();
-//		$promocode->setAttribute('type_id', $promocode::CODE_CERTIFICATE);
-//		$promocode->setAttribute('settings', serialize($certificate));
-		if ($promocode->save(false)) $promocodeId = (int) $promocode->id;*/
 
 		$sql = ''.
 			'update ' . $this->tableName() . ' set '.
@@ -66,8 +59,25 @@ class Certificate extends CActiveRecord {
 
 	function getPrice($id, $currencyId) {
 		$certificate = $this->getCertificate($id);
+		Debug::staticRun(array($certificate));
 		if (empty($certificate['promocode_id'])) return 0;
 
+		/** @var $promocode Promocodes */
+		$promocode = Promocodes::model();
+		$code = $promocode->getPromocode($certificate['promocode_id']);
+		Debug::staticRun(array($code));
+
+		if (empty($code)) return 0;
+		if (!empty($code['is_used'])) return 0;
+
+		if (!empty($code['date_end'])) {
+			$date = new DateTime($code['date_end']);
+			$dateEnd = $date->getTimestamp();
+			if ($dateEnd < time()) return 0;
+		}
+
+
+//		if ($code['date_end'])
 
 	}
 
