@@ -22,7 +22,7 @@ class SiteController extends MyController {
     }
 
     function actionCertificate() {
-        $model = new Certificate();
+        $model = Certificate::model();
         if (Yii::app()->request->isPostRequest) {
             $model->setAttributes(Yii::app()->getRequest()->getPost('Certificate'));
             $model->setAttribute('payment_type_id', Yii::app()->getRequest()->getPost('payment_type_id'));

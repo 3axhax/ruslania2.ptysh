@@ -2,6 +2,7 @@
 
 class Promocodes extends CActiveRecord {
 	private $_secret = 'ainalsur';
+	static private $_promocodes = array(); // для кеша промокодов
 
 	const CODE_CERTIFICATE = 1;
 
@@ -19,6 +20,13 @@ class Promocodes extends CActiveRecord {
 
 	static function model($className = __CLASS__) {
 		return parent::model($className);
+	}
+
+	function getPromocode($id) {
+		if (!isset(self::$_promocodes[$id])) {
+			self::$_promocodes[$id] = $this->findByPk($id)->attributes?:array();
+		}
+		return self::$_promocodes[$id];
 	}
 
 	/** здесь получение промокода

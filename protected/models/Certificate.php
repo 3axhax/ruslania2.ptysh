@@ -1,5 +1,6 @@
 <?php /*Created by Кирилл (16.11.2018 17:55)*/
 class Certificate extends CActiveRecord {
+	static private $_certificates = array();//для кеша сертификатов
 
 	function rules() {
 		return array(
@@ -27,16 +28,14 @@ class Certificate extends CActiveRecord {
 	}
 
 	function getCertificate($id) {
-		$criteria = new CDbCriteria;
-		$criteria->condition = 't.id=:id';
-		$criteria->params = array(':id' => $id);
-		$list = Certificate::model()->findAll($criteria);
-
-		if (!empty($list)) return $list[0]->attributes;
-		return array();
+		if (!isset(self::$_certificates[$id])) {
+			self::$_certificates[$id] = $this->findByPk($id)->attributes?:array();
+		}
+		return self::$_certificates[$id];
 	}
 
 	function paid($certificate) {
+		$promocodeId = 0;
 		$model = new Promocodes();
 		$model->setAttributes(array(
 			'type_id'=>$model::CODE_CERTIFICATE,
@@ -45,14 +44,31 @@ class Certificate extends CActiveRecord {
 		$promocodeId = 0;
 		if ($model->save()) $promocodeId = (int) $model->id;
 
+		/** @var $promocode Promocodes */
+/*		$promocode = Promocodes::model();
+//		$promocode->setAttribute('type_id', $promocode::CODE_CERTIFICATE);
+//		$promocode->setAttribute('settings', serialize($certificate));
+		if ($promocode->save(false)) $promocodeId = (int) $promocode->id;*/
+
 		$sql = ''.
 			'update ' . $this->tableName() . ' set '.
 			'date_pay = CURRENT_TIMESTAMP, '.
 			'promocode_id = ' . $promocodeId . ' '.
 			'where (id = ' . (int) $certificate['id'] . ') '.
-			'';
+		'';
 		Yii::app()->db->createCommand($sql)->execute();
+		if (isset(self::$_certificates[$certificate['id']])) {
+			self::$_certificates[$certificate['id']]['promocode_id'] = $promocodeId;
+			self::$_certificates[$certificate['id']]['date_pay'] = date('Y-m-d H:i:s');
+		}
 		//TODO:: добавить отправку писем
+	}
+
+	function getPrice($id, $currencyId) {
+		$certificate = $this->getCertificate($id);
+		if (empty($certificate['promocode_id'])) return 0;
+
+
 	}
 
 }
