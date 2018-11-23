@@ -27,11 +27,19 @@ class Certificate extends CActiveRecord {
 		return parent::model($className);
 	}
 
+	/**
+	 * @param $id int ид сертификата
+	 * @return array сертификат
+	 */
 	function getCertificate($id) {
 		if (!isset(self::$_certificates[$id])) {
 			self::$_certificates[$id] = $this->findByPk($id)->attributes?:array();
 		}
 		return self::$_certificates[$id];
+	}
+
+	function getCertificateByPromocde($promocodeId) {
+
 	}
 
 	function paid($certificate) {
@@ -57,10 +65,16 @@ class Certificate extends CActiveRecord {
 		//TODO:: добавить отправку писем
 	}
 
+	/**
+	 * @param $id int ид сертификата
+	 * @param $currencyId int ид валюты, в которой нужно вернуть номинал
+	 * @return int|float номинал сертификата
+	 */
 	function getPrice($id, $currencyId) {
 		$certificate = $this->getCertificate($id);
 		Debug::staticRun(array($certificate));
 		if (empty($certificate['promocode_id'])) return 0;
+		if ($certificate['nominal'] <= 0) return 0;
 
 		/** @var $promocode Promocodes */
 		$promocode = Promocodes::model();
@@ -75,10 +89,7 @@ class Certificate extends CActiveRecord {
 			$dateEnd = $date->getTimestamp();
 			if ($dateEnd < time()) return 0;
 		}
-
-
-//		if ($code['date_end'])
-
+		return Currency::convertToCurrency($certificate['nominal'], $certificate['currency'], $currencyId);
 	}
 
 }
