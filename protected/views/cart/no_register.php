@@ -197,12 +197,78 @@
 
     }
 
+    /* Скрываем реальный чекбокс */
+    .checkbox_custom {
+        display: none;
+    }
+
+    .checkbox-custom {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        padding: 3px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .checkbox-custom {
+        display: inline-block;
+        vertical-align: middle;
+        margin-top: -3px;
+    }
+
+    .checkbox_custom:checked + .checkbox-custom::before {
+        content: "";
+        display: block;
+        position: absolute;
+
+        top: 3px;
+        right: 3px;
+        bottom: 3px;
+        left: 3px;
+        background: #413548;
+        border-radius: 2px;
+
+        background: #ed1d24;
+        width: 8px;
+        height: 8px;
+        display: inline-block;
+        font-size: 0;
+
+    }
 
 </style>
 
 <script src="/js/jquery.cookie.js"></script>
 
 <script>
+
+    function check_desc_address(cont) {
+
+        if (cont.prop('checked')) {
+
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').hide();
+			
+			$('.seld2').addClass('disabled');
+			
+			$('.seld1').click();
+			
+			checked_sogl();
+			
+        } else {
+
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').show();
+			
+			$('.seld2').removeClass('disabled');
+			
+			$('.seld2').click();
+			
+			checked_sogl();
+        }
+		
+		
+
+    }
 
     function checkForm() {
 
@@ -412,12 +478,6 @@
                 $('.selt1').click();
             });
 
-
-
-
-
-
-
             //if ($('#Address_contact_phone').val() == '') {
 
             $.post('<?= Yii::app()->createUrl('cart') ?>getcodecity', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
@@ -580,19 +640,58 @@
 
 
         //alert($('#confirm').prop('checked'));
-
-
-        if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
+		
+		if ( !$('.check_addressa').prop('checked') ) {
+			
+			if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
+			
+			
+				$('.box_opacity .op').show();
+			
+						
+			} else {
+			
+				$('.box_opacity .op').hide();
+			
+			}
+			
+			
+		} else {
+			
+			if (!$('#confirm').prop('checked')) {
+			
+			
+				$('.box_opacity .op').show();
+			
+						
+			} else {
+			
+				$('.box_opacity .op').hide();
+			
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
+        if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
 
             // $('.order_start').addClass('disabled');
             $('.box_opacity .op').show();
-
-        } else if ($('#Address_country').val() && $('#confirm').prop('checked')) {
+        } else if ($('#Address_country').val() && $('#confirm').prop('checked') ) {
 
             $('.box_opacity .op').hide();
             // $('.order_start').removeClass('disabled');
-
-        }
+        } else if ( $('.check_addressa').prop('checked') && $('#confirm').prop('checked') ) {
+            $('.box_opacity .op').hide();
+		} else if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
+			$('.box_opacity .op').show();
+			
+			
+		}
 
 
     }
@@ -765,7 +864,7 @@
             $('.texterror', $('#Address_receiver_first_name').parent()).html('');
         }
 
-        if (!$('#Address_country').val()) {
+        if (!$('#Address_country').val()  && !$('.check_addressa').prop('checked')) {
             $('#Address_country').addClass('error');
             error = error + 1;
             $('.texterror', $('#Address_country').parent()).html('Заполните это поле');
@@ -774,7 +873,7 @@
             $('.texterror', $('#Address_country').parent()).html('');
         }
 
-        if (!$('#Address_city').val()) {
+        if (!$('#Address_city').val() && !$('.check_addressa').prop('checked')) {
             $('#Address_city').addClass('error');
             error = error + 1;
             $('.texterror', $('#Address_city').parent()).html('Заполните это поле');
@@ -782,14 +881,14 @@
             $('#Address_city').removeClass('error');
             $('.texterror', $('#Address_city').parent()).html('');
         }
-        if (!$('#Address_postindex').val()) {
+        if (!$('#Address_postindex').val() && !$('.check_addressa').prop('checked')) {
                 $('#Address_postindex').addClass('error');
                 error = error + 1;
             } else {
                 $('#Address_postindex').removeClass('error');
                 $('.texterror', $('#Address_postindex').parent()).html('');
             }
-            if (!$('#Address_streetaddress').val()) {
+            if (!$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked')) {
                 $('#Address_streetaddress').addClass('error');
                 $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
                 error = error + 1;
@@ -818,7 +917,7 @@
 
 
 
-        if (!$('#Address_contact_phone').val()) {
+        if (!$('#Address_contact_phone').val() && !$('.check_addressa').prop('checked')) {
             $('#Address_contact_phone').addClass('error');
             error = error + 1;
             $('.texterror', $('#Address_contact_phone').parent()).html('Заполните это поле');
@@ -1066,8 +1165,10 @@
         Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: <?= $cartInfo['fullInfo']['weight'] ?> кг
     </div>
     <div class="clearfix"></div>
+
     <div class="cart_footer footer3" style="width: 553px;">
-        Итоговая стоимость: <span class="itogo_cost"><?= $PH->FormatPrice($fullprice); ?></span>
+        <?php //$this->renderPartial('/cart/_promocode', array('priceId'=>'itogo_cost')); ?>
+        Итоговая стоимость: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($fullprice); ?></span>
     </div>
     <div class="clearfix"></div>
 

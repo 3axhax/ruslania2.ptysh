@@ -1274,4 +1274,6 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'CERTIFICATE_NOMINAL' => 'Номинал',
     'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
+    'PROMOCODE'=>'Промокод',
+
 );

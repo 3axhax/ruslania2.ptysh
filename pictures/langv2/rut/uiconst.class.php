@@ -1278,4 +1278,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'CERTIFICATE_NOMINAL' => 'Номинал',
     'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
+    'PROMOCODE'=>'Промокод',
+
 );

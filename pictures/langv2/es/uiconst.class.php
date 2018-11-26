@@ -1273,4 +1273,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'CERTIFICATE_NOMINAL' => 'Номинал',
     'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
+    'PROMOCODE'=>'Промокод',
+
 );
