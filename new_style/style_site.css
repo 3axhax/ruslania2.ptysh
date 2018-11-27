@@ -3263,3 +3263,22 @@ div.detail-prop .prop-value li { list-style-type: none; }
 
 .in_desc span { font-weight: bold; }
 .cke_editable_inline { border: inset 1px yellowgreen; }
+
+
+.cart_promocode label { position: relative; }
+.cart_promocode input.checkbox_icon::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    padding: 0 0 5px 5px;
+    content: '';
+    border: 2px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+}
+.cart_promocode input.checkbox_icon:checked::before { border-color: #42b455; background: #42b455; }
+.cart_promocode input.checkbox_icon:checked::after { content: "\2714"; position: absolute; top: -1px; left: 4px; color: #fff; }
+.cart_promocode label span { margin-left: 15px; }
+.cart_promocode input[type=button] { margin-left: 15px; margin-top: -10px; }

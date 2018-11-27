@@ -3,7 +3,7 @@ class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
             'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'getaddress',
-                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay',),
+                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay', 'checkpromocode'),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
                 'users' => array('@')),
@@ -37,10 +37,10 @@ class CartController extends MyController {
                 . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
             $idAddr2 = Yii::app()->db->getLastInsertID();
-            $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
+            $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "0")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
             $items = Address::GetAddresses($this->uid);
-            $this->renderPartial('address_get_list', array('items' => $items));
+            $this->renderPartial('address_get_list', array('items' => $items, 'ida'=>$idAddr2));
         }
     }
     public function actionGetAddress() {
@@ -314,11 +314,20 @@ class CartController extends MyController {
         //var_dump($post);
         if (!Yii::app()->user->isGuest) {
             $adr1 = Address::GetAddress($this->uid, $post['id_address']);
-            $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);
+            $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);			
+			
             $idAddr2 = '';
             if (!$post['dtype']) {
                 $post['dtype'] = 1;
             }
+			
+			if ( $post['dtype'] == 1 ) {
+				
+				$adr1['address_id'] = 0;
+				$adr2['address_id'] = 0;
+				
+			}
+			
             $s['DeliveryAddressID'] = $adr1['address_id'];
             $s['DeliveryTypeID'] = $post['dtype'];
             $s['DeliveryMode'] = 0;
@@ -390,7 +399,29 @@ class CartController extends MyController {
                 echo '9';
                 exit();
             } else {
-                if ($fam AND $name AND $country AND $city AND $post_index AND $address AND $email AND $phone) {
+
+                $next = false;
+
+                if ($post['check_addressa']) {
+
+                    if ($fam AND $name AND $email) {
+
+                        $next = true;
+
+                    }
+
+                } else {
+
+                    if ($fam AND $name AND $email AND $country AND $city AND $post_index AND $address  AND $phone) {
+
+                        $next = true;
+
+                    }
+
+                }
+
+
+                if ($next) {
                     /*
                      *
                      * 1. Для начала создаем покупателя и получаем его ID
@@ -464,6 +495,9 @@ class CartController extends MyController {
                      * 2. Добавляем адрес в базу с привязкой покупателя к этому
                      * адресу
                      */
+					 
+					 if (!$post['check_addressa']) {
+					 
                     $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
                         . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
                     $ret = Yii::app()->db->createCommand($sql)->execute();
@@ -471,6 +505,14 @@ class CartController extends MyController {
                     $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
                     $ret = Yii::app()->db->createCommand($sql)->execute();
                     $idAddr = Yii::app()->db->getLastInsertID();
+					
+					} else {
+						
+						$idAddr2 = 0;
+						
+					}
+					
+					
                     if (!$post['dtid']) {
                         $post['dtid'] = 0;
                     }
@@ -962,4 +1004,15 @@ class CartController extends MyController {
         }
         if (!empty($data['payName'])) $this->render('certificate_pay', $data);
     }
+
+    function actionCheckPromocode() {
+        $ret = array();
+        if (Yii::app()->request->isPostRequest) {
+            $cart = new Cart();
+            $items = $cart->GetCart($this->uid, $this->sid);
+            $ret = Order::model()->getOrderPrice($this->uid, $this->sid, $items, 0, 0, 0);
+        }
+        $this->ResponseJson($ret);
+    }
+
 }

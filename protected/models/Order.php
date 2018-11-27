@@ -56,7 +56,9 @@ class Order extends CMyActiveRecord
         $list = Order::model()->with('items', 'states',
             'billingAddress', 'billingAddress.billingCountry',
             'deliveryAddress', 'deliveryAddress.deliveryCountry')->findAll($criteria);
-
+		
+		//var_dump($list);
+		
         $list = $this->FlatOrderList($list);
 
         return $list;
@@ -77,10 +79,14 @@ class Order extends CMyActiveRecord
             }
 
         $p = new Product;
+		
+		
 
         foreach ($items as $entity => $ids)
         {
-            $result = $p->GetProducts($entity, $ids);
+			
+			$result = $p->getProducts3($entity, $ids);
+			
             foreach ($result as $item)
                 $itemsData[$entity][$item['id']] = $item;
         }
@@ -147,17 +153,52 @@ class Order extends CMyActiveRecord
         return false;
     }
 
+    function getOrderPrice($uid, $sid, $items, $countryID, $deliveryMode, $deliveryTypeID) {
+        $country = Country::GetCountryById($countryID);
+        $withVAT = Address::UseVAT($country);
+        $itemsPrice = 0;
+        $pricesValues = array();
+        foreach ($items as $idx=>$item) {
+            $values = DiscountManager::GetPrice($uid, $item);
+            $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
+            $itemKey = $item['entity'].'_'.$item['id'];
+            $price = $values[$key];
+            if($item['entity'] == Entity::PERIODIC) {
+                if($country['code'] == 'FI') $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
+                else $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
+                $price = $values[$key];
+                $price /= 12;
+            }
+            $pricesValues[$itemKey] = $price;
+            $itemsPrice += $item['quantity'] * $price;
+
+            if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
+            {
+                $items[$idx]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
+            }
+        }
+
+        if ($deliveryMode == 0) {
+            $p = new PostCalculator();
+            $list = $p->GetRates(0, $uid, $sid, $countryID);
+            $deliveryPrice = false;
+            foreach ($list as $l)
+                if ($l['id'] == $deliveryTypeID) $deliveryPrice = $l['value'];
+        }
+        else $deliveryPrice = 0;
+        return [$itemsPrice, $deliveryPrice, $pricesValues];
+    }
+
     public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
     {
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
+//        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da['country'], $order->DeliveryMode, $order->DeliveryTypeID);
+
+
         $withVAT = Address::UseVAT($da);
             
-        
-        //var_dump($order);
-        
-        
         $itemsPrice = 0;
         $pricesValues = array();
         foreach ($items as $idx=>$item)
