@@ -104,7 +104,7 @@
 
     .footer3 { margin-bottom: 25px; border-bottom: 1px solid #ececec; }
 
-    .footer1, .footer3 {
+    .footer1, .footer3, .footer_promocode {
         background: #f8f8f8;
         padding: 8px 10px;
         font-weight: bold;
@@ -1166,7 +1166,7 @@
     </div>
     <div class="clearfix"></div>
 
-    <div class="cart_footer" style="width: 553px;">
+    <div class="cart_footer footer_promocode" style="width: 553px;">
         <?php $this->renderPartial('/cart/_promocode', array('priceId'=>'itogo_cost')); ?>
     </div>
     <div class="clearfix"></div>

@@ -39,7 +39,7 @@ function decline_goods($num) {
 
 
 
-<div class="span7">
+<div class="span7" style="margin-left: 0;">
 <div class="p3">1. Укажите ваши личные данные</div>
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
@@ -63,9 +63,9 @@ function decline_goods($num) {
     <tr>
         <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
+            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
+            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
     <tr data-bind="visible: type()==1">
@@ -114,7 +114,7 @@ function decline_goods($num) {
         <td class="smalltxt1"></td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt">
+        <td nowrap="" class="maintxt country_lbl">
             <span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_country"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
@@ -139,7 +139,7 @@ function decline_goods($num) {
     
     
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
+        <td nowrap="" class="maintxt city_lbl"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
@@ -147,7 +147,7 @@ function decline_goods($num) {
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
+        <td nowrap="" class="maintxt postindex_lbl"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
         <td colspan="2" class="maintxt-vat">
             <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
@@ -155,7 +155,7 @@ function decline_goods($num) {
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
+        <td nowrap="" class="maintxt streetaddress_lbl"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_streetaddress"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('streetaddress',array('placeholder'=>$ui->item("MSG_PERSONAL_ADDRESS_COMMENT_2"))); ?>
@@ -173,7 +173,7 @@ function decline_goods($num) {
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt"
+        <td nowrap="" class="maintxt contact_phone_lbl"><span style="width: 5pt"
                                             class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textField('contact_phone', array('oninput'=>'save_form()')); ?>
@@ -200,10 +200,10 @@ function decline_goods($num) {
         </td>
         <td class="smalltxt1"></td>
     </tr>
-   
-    
+
+
     <tr>
-   
+        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" name="check_addressa" value="1" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> Отметьте чекбокс если придете в магазин, в этом случай адрес и телефон не обязательны</label></td>
     </tr>
     
     </tbody>
@@ -256,7 +256,7 @@ function decline_goods($num) {
  <div class="clearfix"></div>
  
  <label for="confirm" onclick=" checked_sogl();">
-     <input type="checkbox" value="1" name="confirm" id="confirm">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
+     <input type="checkbox" class="checkbox_custom" value="1" name="confirm" id="confirm"><span class="checkbox-custom"></span>     Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
 <span style="color: #ff0000; font-size: 12px;" class="err_confirm"></span>
 <div style="height: 20px;"></div>
  

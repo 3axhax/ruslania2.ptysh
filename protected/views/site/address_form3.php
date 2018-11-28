@@ -137,9 +137,9 @@ echo '</div>';
     <tr>
         <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
+            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()')); ?>
+            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
     <tr data-bind="visible: type()==1">
@@ -277,7 +277,7 @@ echo '</div>';
    
     
     <tr>
-        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa"/> Отметьте чекбокс если придете в магазин, в этом случай адрес и телефон не обязательны</label></td>
+        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> Отметьте чекбокс если придете в магазин, в этом случай адрес и телефон не обязательны</label></td>
     </tr>
     
     </tbody>
@@ -332,7 +332,7 @@ echo '</div>';
  
  <label for="confirm" onclick=" checked_sogl();" style="margin-top: 12px;">
      
-     <input type="checkbox" value="1" name="confirm" id="confirm" required="required">        Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
+     <input type="checkbox" class="checkbox_custom" value="1" name="confirm" id="confirm" required="required"> <span class="checkbox-custom"></span>       Отметьте, что Вы согласны с <a href="http://www.ruslania.com/language-2/context-2120.html" target="_blank">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
      <span style="color: #ff0000; font-size: 12px;" class="err_confirm"></span>
 
 <div style="height: 20px;"></div>
@@ -355,22 +355,22 @@ echo '</div>';
             //if ($country == 'FI' or $country == 'fi') {
         ?>
         
-        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); sbros_delev()">
+        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('Забрать в магазине'); $('.type_delivery').val('Забрать в магазине'); sbros_delev()">
             <span class="zabr_market">Забрать в магазине</span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
             
-            <input type="radio" id="dtype1" value="1" name="dtype" style="display: none;" />
+            <input type="radio" id="dtype1" value="0" name="dtype" style="display: none;" />
         </label>
         
          <?//php  } ?>
-        <label class="seld span3 seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); sbros_delev();">
+        <label class="seld span3 seld2" onclick="check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); $('.type_delivery').val('Доставка почтой'); sbros_delev(); $('.selt1').click();">
             Доставка почтой
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
-            <input type="radio" id="dtype2" value="0" name="dtype" style="display: none;" />
+            <input type="radio" id="dtype2" value="1" name="dtype" style="display: none;" />
         </label>
 </div>        
         <div class="clearfix"></div>
