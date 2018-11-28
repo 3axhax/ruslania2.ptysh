@@ -1023,7 +1023,8 @@ class CartController extends MyController {
             if (empty($countryId)) $countryId = (int) Yii::app()->getRequest()->getParam('cid');
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            $ret = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $countryId, $dMode, $dtid);
+            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $countryId, $dMode, $dtid);
+
         }
         $this->ResponseJson($ret);
     }

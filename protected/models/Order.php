@@ -153,6 +153,15 @@ class Order extends CMyActiveRecord
         return false;
     }
 
+    /** для подсчета стоимости заказа, без учета промокодов
+     * @param $uid
+     * @param $sid
+     * @param $items array товары
+     * @param $countryID int страна
+     * @param $deliveryMode int 0 - считаю стоимость доставки, 1 - несчитаю стоимость доставки
+     * @param $deliveryTypeID int - тип доставки
+     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара]]
+     */
     function getOrderPrice($uid, $sid, $items, $countryID, $deliveryMode, $deliveryTypeID) {
         $country = Country::GetCountryById($countryID);
         $withVAT = Address::UseVAT($country);
@@ -194,10 +203,10 @@ class Order extends CMyActiveRecord
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-//        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da['country'], $order->DeliveryMode, $order->DeliveryTypeID);
+        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da['country'], $order->DeliveryMode, $order->DeliveryTypeID);
 
 
-        $withVAT = Address::UseVAT($da);
+/*        $withVAT = Address::UseVAT($da);
             
         $itemsPrice = 0;
         $pricesValues = array();
@@ -239,7 +248,7 @@ class Order extends CMyActiveRecord
         else
         {
             $deliveryPrice = 0;
-        }
+        }*/
 
         $rates = Currency::GetRates();
         $rate = $rates[$order->CurrencyID];
