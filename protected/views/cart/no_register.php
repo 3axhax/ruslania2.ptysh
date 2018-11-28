@@ -1166,8 +1166,11 @@
     </div>
     <div class="clearfix"></div>
 
-    <div class="cart_footer footer3" style="width: 553px;">
+    <div class="cart_footer" style="width: 553px;">
         <?php $this->renderPartial('/cart/_promocode', array('priceId'=>'itogo_cost')); ?>
+    </div>
+    <div class="clearfix"></div>
+    <div class="cart_footer footer3" style="width: 553px;">
         Итоговая стоимость: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($fullprice); ?></span>
     </div>
     <div class="clearfix"></div>

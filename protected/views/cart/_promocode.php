@@ -50,9 +50,23 @@
 		getValue: function() { return this.$input.val(); },
 		_recount: function(value) {
 			var csrf = $('meta[name=csrf]').attr('content').split('=');
+			var $form = $('form.address.text');
+			var dtid = $form.find('input[name=dtid]:checked').val();
+			var dtype = $form.find('input[name=dtype]:checked').val();
+			var aid = 0;
+			var $address = $form.find('select[name=id_address]');
+			if ($address.length > 0) aid = $address.val();
+			var cid = 0;
+			var $country = $form.find('#Address_country');
+			if ($country.length > 0) cid = $country.val();
 			$.ajax({
 				url: '<?= Yii::app()->createUrl('cart/checkPromocode') ?>',
-				data: 'promocode=' + encodeURIComponent(value) + '&' + csrf[0] + '=' + csrf[1],
+				data: 'promocode=' + encodeURIComponent(value) +
+					'&dtid=' + dtid +
+					'&dtype=' + dtype +
+					'&aid=' + aid +
+					'&cid=' + cid +
+					'&' + csrf[0] + '=' + csrf[1],
 				type: 'post',
 				success: function (r) {
 					console.log(r);

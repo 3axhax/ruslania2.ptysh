@@ -1007,10 +1007,20 @@ class CartController extends MyController {
 
     function actionCheckPromocode() {
         $ret = array();
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::app()->getRequest()->isPostRequest) {
+            $aid = (int) Yii::app()->getRequest()->getParam('aid');
+            $dtid = (int) Yii::app()->getRequest()->getParam('dtid');
+            if (empty($dtid)) $dtid = (int) Yii::app()->getRequest()->getParam('dtype');
+            $countryId = 0;
+            if ($aid > 0) {
+                $a = new Address();
+                $da = $a->GetAddress($this->uid, $aid);
+                if (!empty($da['country'])) $countryId = $da['country'];
+            }
+            if (empty($countryId)) $countryId = (int) Yii::app()->getRequest()->getParam('cid');
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            $ret = Order::model()->getOrderPrice($this->uid, $this->sid, $items, 0, 0, 0);
+            $ret = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $countryId, 0, $dtid);
         }
         $this->ResponseJson($ret);
     }
