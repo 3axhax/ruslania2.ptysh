@@ -1025,6 +1025,8 @@ class CartController extends MyController {
             $items = $cart->GetCart($this->uid, $this->sid);
             list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $countryId, $dMode, $dtid);
 
+            $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']);
+            $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'));
         }
         $this->ResponseJson($ret);
     }

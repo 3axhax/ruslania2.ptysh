@@ -79,6 +79,6 @@ class Currency
         $rates = self::GetRates();
         $rate = $rates[$priceCurrency];
         $toRate = $rates[$toCurrency];
-        return round($priceCurrency / $rate * $toRate, 1);
+        return round(($price / $rate) * $toRate, 1);
     }
 }

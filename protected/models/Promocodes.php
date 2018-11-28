@@ -34,7 +34,41 @@ class Promocodes extends CActiveRecord {
 	}
 
 	function getPromocodeByCode($code) {
+		if (empty($code)) return null;
 		return $this->_cachePromocode(null, $code);
+	}
+
+	/**
+	 * @param $code string промокод
+	 * @param $itemsPrice float цена товаров
+	 * @param $deliveryPrice float цена доставки
+	 * @return mixed конечная цена с учетом промокода
+	 */
+	function getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues) {
+		$promocode = $this->getPromocodeByCode($code);
+		if (empty($promocode)) return $itemsPrice + $deliveryPrice;
+
+		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
+		if (empty($saleHandler)) return $itemsPrice + $deliveryPrice;
+
+		$sale = $saleHandler->getByPromocode($promocode['id']);
+		if (empty($sale)) return $itemsPrice + $deliveryPrice;
+
+		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues);
+	}
+
+	function briefly($code) {
+		$promocode = $this->getPromocodeByCode($code);
+		if (empty($promocode)) return ['value'=>0, 'unit'=>''];
+
+		/** @var $saleHandler SaleHandler */
+		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
+		if (empty($saleHandler)) return ['value'=>0, 'unit'=>''];
+
+		$sale = $saleHandler->getByPromocode($promocode['id']);
+		if (empty($sale)) return ['value'=>0, 'unit'=>''];
+
+		return $saleHandler->briefly($sale['id']);
 	}
 
 	/** здесь получение промокода
@@ -72,6 +106,11 @@ class Promocodes extends CActiveRecord {
 	}
 
 	private function _getSaleHandler($typeId) {
+		//все возвращаемые классы должны иметь методы:
+		//function getByPromocode();
+		//function getTotalPrice();
+		//function briefly();
+
 		switch ((int) $typeId) {
 			case self::CODE_CERTIFICATE: return Certificate::model(); break;
 		}
