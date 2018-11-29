@@ -1020,11 +1020,14 @@ class CartController extends MyController {
                 $da = $a->GetAddress($this->uid, $aid);
                 if (!empty($da['country'])) $countryId = $da['country'];
             }
-            if (empty($countryId)) $countryId = (int) Yii::app()->getRequest()->getParam('cid');
+            if (empty($countryId)) {
+                $countryId = (int) Yii::app()->getRequest()->getParam('cid');
+                $da = Country::GetCountryById($countryId);
+            }
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $countryId, $dMode, $dtid);
-
+            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
+            $ret['currency'] = Currency::ToSign(Yii::app()->currency);
             $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']);
             $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'));
         }

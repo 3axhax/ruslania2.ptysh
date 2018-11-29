@@ -1275,5 +1275,8 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
 
     'PROMOCODE'=>'Промокод',
+    'PROMOCODE_ERROR_1'=>'Промокод не найден',
+    'PROMOCODE_ERROR_2'=>'Промокод использован',
+    'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
 );

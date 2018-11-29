@@ -7,6 +7,14 @@ class Promocodes extends CActiveRecord {
 
 	const CODE_CERTIFICATE = 1;
 
+	private $_messages = array(
+		1 => 'PROMOCODE_ERROR_1',
+		2 => 'PROMOCODE_ERROR_2',
+		3 => 'PROMOCODE_ERROR_3',
+		4 => 'PROMOCODE_ERROR_1',
+		5 => 'PROMOCODE_ERROR_1',
+	);
+
 	function rules() {
 		return array(
 			array('type_id, settings', 'safe'),
@@ -58,17 +66,30 @@ class Promocodes extends CActiveRecord {
 	}
 
 	function briefly($code) {
+		if (empty($code)) return ['message'=>''];
 		$promocode = $this->getPromocodeByCode($code);
-		if (empty($promocode)) return ['value'=>0, 'unit'=>''];
+		if (($check = $this->check($promocode)) > 0) return ['message'=>Yii::app()->ui->item($this->_messages[$check])];
 
-		/** @var $saleHandler SaleHandler */
 		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
-		if (empty($saleHandler)) return ['value'=>0, 'unit'=>''];
-
 		$sale = $saleHandler->getByPromocode($promocode['id']);
-		if (empty($sale)) return ['value'=>0, 'unit'=>''];
+		return $saleHandler->briefly($sale['id'], Yii::app()->currency);
+	}
 
-		return $saleHandler->briefly($sale['id']);
+	function check($promocode, $checkHandler = true) {
+		if (empty($promocode)) return 1;//не найден
+		if (!empty($promocode['is_used'])) return 2;//использован
+		if (!empty($promocode['date_end'])) {
+			$date = new DateTime($promocode['date_end']);
+			$dateEnd = $date->getTimestamp();
+			if ($dateEnd < time()) return 3;//закончился срок действия
+		}
+		if ($checkHandler) {
+			$saleHandler = $this->_getSaleHandler($promocode['type_id']);
+			if (empty($saleHandler)) return 4;//не найден обработчик промокода
+			$sale = $saleHandler->getByPromocode($promocode['id']);
+			if (empty($sale)) return 5;//нет информации о скидке
+		}
+		return 0;//все ок
 	}
 
 	/** здесь получение промокода

@@ -157,14 +157,13 @@ class Order extends CMyActiveRecord
      * @param $uid
      * @param $sid
      * @param $items array товары
-     * @param $countryID int страна
+     * @param $address array -это адрес доставки с данными пользователя (Address::GetAddress), но можно просто передать страну (если пользователь не авторизирован). Адрес нужен потому, что ндс зависит от кода предприятия
      * @param $deliveryMode int 0 - считаю стоимость доставки, 1 - несчитаю стоимость доставки
      * @param $deliveryTypeID int - тип доставки
      * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара]]
      */
-    function getOrderPrice($uid, $sid, $items, $countryID, $deliveryMode, $deliveryTypeID) {
-        $country = Country::GetCountryById($countryID);
-        $withVAT = Address::UseVAT($country);
+    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID) {
+        $withVAT = Address::UseVAT($address);
         $itemsPrice = 0;
         $pricesValues = array();
         foreach ($items as $idx=>$item) {
@@ -173,7 +172,7 @@ class Order extends CMyActiveRecord
             $itemKey = $item['entity'].'_'.$item['id'];
             $price = $values[$key];
             if($item['entity'] == Entity::PERIODIC) {
-                if($country['code'] == 'FI') $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
+                if($address['code'] == 'FI') $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
                 else $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
                 $price = $values[$key];
                 $price /= 12;
@@ -189,7 +188,7 @@ class Order extends CMyActiveRecord
 
         if ($deliveryMode == 0) {
             $p = new PostCalculator();
-            $list = $p->GetRates(0, $uid, $sid, $countryID);
+            $list = $p->GetRates(0, $uid, $sid, isset($address['country'])?$address['country']:$address['id']);
             $deliveryPrice = false;
             foreach ($list as $l)
                 if ($l['id'] == $deliveryTypeID) $deliveryPrice = $l['value'];
@@ -203,7 +202,7 @@ class Order extends CMyActiveRecord
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da['country'], $order->DeliveryMode, $order->DeliveryTypeID);
+        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID);
 
 
 /*        $withVAT = Address::UseVAT($da);

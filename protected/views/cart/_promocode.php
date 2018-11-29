@@ -1,12 +1,16 @@
 <?php /*Created by Кирилл (26.11.2018 21:33)*/ ?>
 <div id="js_promocode" class="cart_promocode">
-	<div>
+	<div><?php /*
 		<label>
 			<input class="checkbox_icon" type="checkbox">
 			<span><?= Yii::app()->ui->item('PROMOCODE') ?></span>
 		</label>
 		<div style="display: none;">
 			<input type="text" value="">
+			<input type="button" value="<?= Yii::app()->ui->item('A_NEW_APPLY') ?>">
+		</div>*/ ?>
+		<div>
+			<input type="text" id="promocode" value="">
 			<input type="button" value="<?= Yii::app()->ui->item('A_NEW_APPLY') ?>">
 		</div>
 	</div>
@@ -25,6 +29,7 @@
 		init: function(){
 			this.setConst();
 			this.setEvents();
+			return this;
 		},
 		setConst: function() {
 			var $promocodeBlock = $('#js_promocode');
@@ -36,7 +41,7 @@
 			var self = this;
 			self.$use.on('change', function(){
 				if (this.checked) {
-					if (self.$input.val() != '') self._recount(self.$input.val());
+					if (self.$input.val() != '') self._recount(self.$input.val().trim());
 					self.$input.closest('div').show();
 				}
 				else {
@@ -45,10 +50,11 @@
 				}
 
 			});
-			self.$submit.on('click', function() { self._recount(self.$input.val()); });
+			self.$submit.on('click', function() { self._recount(self.$input.val().trim()); });
 		},
 		getValue: function() { return this.$input.val(); },
 		_recount: function(value) {
+			var self = this;
 			var csrf = $('meta[name=csrf]').attr('content').split('=');
 			var $form = $('form.address.text');
 			var dtid = $form.find('input[name=dtid]:checked').val();
@@ -68,8 +74,23 @@
 					'&cid=' + cid +
 					'&' + csrf[0] + '=' + csrf[1],
 				type: 'post',
+				dataType : 'json',
 				success: function (r) {
-					console.log(r);
+					$('.itogo_cost').html(r.totalPrice + r.currency);
+					self.$input.closest('div').siblings().remove();
+					if (value != '') {
+						var $buf = self.$input.closest('div');
+						var $elem = $('<div style="font-weight: normal;"></div>');
+						if ('promocodeValue' in r.briefly) {
+							$elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>')
+						}
+						else if ('message' in r.briefly) {
+							$elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>')
+						}
+						$('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elem).click(function(){ self._recount(''); });
+						$buf.after($elem);
+					}
+					else self.$input.val('');
 				}
 			});
 		}

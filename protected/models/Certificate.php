@@ -76,15 +76,8 @@ class Certificate extends CActiveRecord {
 		/** @var $promocode Promocodes */
 		$promocode = Promocodes::model();
 		$code = $promocode->getPromocode($certificate['promocode_id']);
+		if (($check = $promocode->check($code, false)) > 0) return 0;
 
-		if (empty($code)) return 0;
-		if (!empty($code['is_used'])) return 0;
-
-		if (!empty($code['date_end'])) {
-			$date = new DateTime($code['date_end']);
-			$dateEnd = $date->getTimestamp();
-			if ($dateEnd < time()) return 0;
-		}
 		return Currency::convertToCurrency($certificate['nominal'], $certificate['currency'], $currencyId);
 	}
 
@@ -103,11 +96,16 @@ class Certificate extends CActiveRecord {
 		return $total;
 	}
 
-	function briefly($id) {
+	function briefly($id, $currencyId) {
 		$certificate = $this->getCertificate($id);
-		if (empty($certificate['promocode_id'])) return ['value'=>0, 'unit'=>''];
-		if ($certificate['nominal'] <= 0) return ['value'=>0, 'unit'=>''];
-		return ['value'=>$certificate['nominal'], 'unit'=>Currency::ToSign($certificate['currency'])];
+		if (empty($certificate['promocode_id'])) return null;//['promocodeValue'=>0, 'promocodeUnit'=>'', 'realValue'=>0, 'realUnit'=>''];
+		if ($certificate['nominal'] <= 0) return null;//['promocodeValue'=>0, 'promocodeUnit'=>'', 'realValue'=>0, 'realUnit'=>''];
+		return [
+			'promocodeValue'=>$certificate['nominal'],
+			'promocodeUnit'=>Currency::ToSign($certificate['currency']),
+			'realValue'=>$this->getNominal($id, $currencyId),
+			'realUnit'=>Currency::ToSign(Yii::app()->currency),
+		];
 	}
 
 	private function _cacheCertificate($id = null, $promocodeId = null) {
