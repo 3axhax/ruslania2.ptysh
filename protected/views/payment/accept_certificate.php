@@ -13,6 +13,7 @@
 					<?=$ui->item('MSG_PAYMENT_RESULTS_ACCEPTED_2'); ?><br/>
 					<?=$ui->item('MSG_PAYMENT_RESULTS_ACCEPTED_3'); ?><br/>
 				</div>
+				<div><?= $ui->item('PROMOCODE') ?>: <?= $code ?></div>
 			<!-- /content -->
 			<div class="clearBoth"></div>
 		</td>

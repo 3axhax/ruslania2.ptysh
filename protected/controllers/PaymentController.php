@@ -91,20 +91,25 @@ class PaymentController extends MyController
         if(empty($order)) throw new CHttpException(404);
 
         $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+        $code = '';
         if (empty($order['promocode_id'])) {
             $view = 'cancel_certificate';
             if($check) {
                 $view = 'accept_certificate';
-                $o->paid($order);
+                $code = $o->paid($order);
             }
         }
-        else $view = 'accept_certificate';
+        else {
+            $promocode = Promocodes::model()->getPromocode($order['promocode_id']);
+            if (!empty($promocode['code'])) $code = $promocode['code'];
+            $view = 'accept_certificate';
+        }
 
         $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
         $this->breadcrumbs[] = $check
             ? Yii::app()->ui->item('A_SAMPO_PAYMENT_ACCEPTED')
             : Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
-        $this->render($view, array('checkResult' => $check, 'order' => $order));
+        $this->render($view, array('checkResult' => $check, 'order' => $order, 'code'=>$code));
     }
 
 }

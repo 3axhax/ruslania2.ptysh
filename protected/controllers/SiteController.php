@@ -22,7 +22,6 @@ class SiteController extends MyController {
     }
 
     function actionCertificate() {
-        Certificate::model()->getPrice(17, 2);
         $model = new Certificate();
         if (Yii::app()->request->isPostRequest) {
             $model->setAttributes(Yii::app()->getRequest()->getPost('Certificate'));

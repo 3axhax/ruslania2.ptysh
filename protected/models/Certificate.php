@@ -47,7 +47,11 @@ class Certificate extends CActiveRecord {
 			'settings'=>serialize(array($certificate)),
 		));
 		$promocodeId = 0;
-		if ($model->save()) $promocodeId = (int) $model->id;
+		$code = '';
+		if ($model->save()) {
+			$promocodeId = (int) $model->id;
+			$code = $model->getAttribute('code');
+		}
 
 		$sql = ''.
 			'update ' . $this->tableName() . ' set '.
@@ -61,6 +65,7 @@ class Certificate extends CActiveRecord {
 			self::$_certificates[$certificate['id']]['date_pay'] = date('Y-m-d H:i:s');
 		}
 		//TODO:: добавить отправку писем
+		return $code;
 	}
 
 	/**
