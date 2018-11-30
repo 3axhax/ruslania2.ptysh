@@ -3,6 +3,7 @@
 class Order extends CMyActiveRecord
 {
     public $check;
+    private $_promocode = null; //здесь должно быть ид промокода
 
     public static function HavePaidState($states)
     {
@@ -162,7 +163,8 @@ class Order extends CMyActiveRecord
      * @param $deliveryTypeID int - тип доставки
      * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара]]
      */
-    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID) {
+    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null) {
+        if ($currencyId === null) $currencyId = Yii::app()->currency;
         $withVAT = Address::UseVAT($address);
         $itemsPrice = 0;
         $pricesValues = array();
@@ -194,6 +196,12 @@ class Order extends CMyActiveRecord
                 if ($l['id'] == $deliveryTypeID) $deliveryPrice = $l['value'];
         }
         else $deliveryPrice = 0;
+
+        $rates = Currency::GetRates();
+        $rate = $rates[$currencyId];
+        $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
+        if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
+
         return [$itemsPrice, $deliveryPrice, $pricesValues];
     }
 
@@ -202,7 +210,7 @@ class Order extends CMyActiveRecord
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID);
+        list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
 
 
 /*        $withVAT = Address::UseVAT($da);
@@ -247,20 +255,29 @@ class Order extends CMyActiveRecord
         else
         {
             $deliveryPrice = 0;
-        }*/
+        }
 
         $rates = Currency::GetRates();
         $rate = $rates[$order->CurrencyID];
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
+        $fullPrice = $itemsPrice + $deliveryPrice;*/
 
-        $fullPrice = $itemsPrice + $deliveryPrice;
+
+        $promocodeId = 0;
+        if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
+        else {
+            $promocode = Promocodes::model();
+            $code = $promocode->getPromocode($this->_promocode)['code'];
+            $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues);
+            $promocodeId = $this->_promocode;
+        }
 
         try
         {
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
-                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate) VALUES '
-                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate)';
+                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id) VALUES '
+                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId)';
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
@@ -275,9 +292,17 @@ class Order extends CMyActiveRecord
                       ':delivery' => $deliveryPrice,
                       ':notes' => $order->Notes,
                       ':mandate' => $order->Mandate,
+                      ':promocodeId' => $promocodeId,
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;
+
+            if (($orderID > 0)&&!empty($this->_promocode)) {
+                if ($fullPrice == 0) $this->AddStatus($orderID, OrderState::AutomaticPaymentConfirmation);
+                $promocode = Promocodes::model();
+                $promocode->used($this->_promocode);
+            }
+
             // NOTE: calculate order invoice reference number
             // Что такое refnumber историкам выяснить не удалось
             // Код ниже тупо скопипащен со старой версии сайта "создание заказа"
@@ -421,5 +446,10 @@ class Order extends CMyActiveRecord
         Yii::app()->db->createCommand($sql)->execute();
         $transaction->commit();
         return $newOid;
+    }
+
+    function setPromocode($code) {
+        $promocode = Promocodes::model()->getPromocodeByCode($code);
+        if ($promocode->check($promocode) === 0) $this->_promocode = $promocode['id'];
     }
 }

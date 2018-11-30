@@ -113,6 +113,10 @@ class Certificate extends CActiveRecord {
 		];
 	}
 
+	function used($id, $promocodeId) {
+		return Promocodes::model()->updateByPk($promocodeId, array('is_used'=>1));
+	}
+
 	private function _cacheCertificate($id = null, $promocodeId = null) {
 		if ($id !== null) {
 			if (!isset(self::$_certificates[$id])) {

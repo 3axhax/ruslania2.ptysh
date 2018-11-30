@@ -534,6 +534,7 @@ class CartController extends MyController {
                             $items[] = $item;
                     }
                     $o = new Order;
+                    $o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
                     $id = $o->CreateNewOrder($userID, $this->sid, $order, $items, $post['ptype']);
                     $o = new Order;
                     $order = $o->GetOrder($id);
@@ -542,6 +543,7 @@ class CartController extends MyController {
                     // $this->breadcrumbs[] = 'Оформление заказа';
                     $data['number_zakaz'] = $id;
                     $data['ptype'] = $post['ptype'];
+
                     if (Yii::app()->request->isAjaxRequest) {
                         echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
                         exit();

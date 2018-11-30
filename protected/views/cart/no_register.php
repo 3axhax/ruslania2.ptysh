@@ -837,7 +837,6 @@
 
         var frmall = frm1 + '&' + frm2;
         if (typeof(promocodes) != 'undefined') frmall += '&promocode=' + $('#promocode').val();
-        console.log(frmall);
 
         var error = 0;
 

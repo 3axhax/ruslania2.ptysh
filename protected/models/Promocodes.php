@@ -21,6 +21,7 @@ class Promocodes extends CActiveRecord {
 		);
 	}
 
+
 	function beforeSave() {
 		if ($this->isNewRecord) {
 			$this->setAttribute('date_add', date('Y-m-d H:i:s'));
@@ -54,14 +55,10 @@ class Promocodes extends CActiveRecord {
 	 */
 	function getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues) {
 		$promocode = $this->getPromocodeByCode($code);
-		if (empty($promocode)) return $itemsPrice + $deliveryPrice;
+		if (($check = $this->check($promocode)) > 0) return $itemsPrice + $deliveryPrice;
 
 		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
-		if (empty($saleHandler)) return $itemsPrice + $deliveryPrice;
-
 		$sale = $saleHandler->getByPromocode($promocode['id']);
-		if (empty($sale)) return $itemsPrice + $deliveryPrice;
-
 		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues);
 	}
 
@@ -90,6 +87,18 @@ class Promocodes extends CActiveRecord {
 			if (empty($sale)) return 5;//нет информации о скидке
 		}
 		return 0;//все ок
+	}
+
+	/** В зависимости от обработчика промокода нужно установить или неустановить, что промокод использован
+	 * потому нужно этот признак устанавливать в обработчтке
+	 * @param $id
+	 * @return bool
+	 */
+	function used($id) {
+		$promocode = $this->getPromocode($id);
+		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
+		$sale = $saleHandler->getByPromocode($id);
+		return $saleHandler->used($sale['id'], $id);
 	}
 
 	/** здесь получение промокода
@@ -131,6 +140,7 @@ class Promocodes extends CActiveRecord {
 		//function getByPromocode();
 		//function getTotalPrice();
 		//function briefly();
+		//function used();
 
 		switch ((int) $typeId) {
 			case self::CODE_CERTIFICATE: return Certificate::model(); break;
