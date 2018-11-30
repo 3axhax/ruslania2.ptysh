@@ -546,7 +546,8 @@ class CartController extends MyController {
                     $data['ptype'] = $post['ptype'];
 
                     if (Yii::app()->request->isAjaxRequest) {
-                        if (empty($order['full_price'])) {
+                        $fullPrice = (float) $order['full_price'];
+                        if (empty($fullPrice)) {
                             echo Yii::app()->createUrl('client/me');
                         }
                         else {

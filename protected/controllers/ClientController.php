@@ -40,6 +40,8 @@ class ClientController extends MyController
 
     public function actionMe()
     {
+		//echo $this->uid;
+		
         $o = new Order;
         $orders = $o->GetOrders($this->uid);
         $user = Yii::app()->user->GetModel();
