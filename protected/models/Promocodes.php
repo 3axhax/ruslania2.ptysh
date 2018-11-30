@@ -62,23 +62,25 @@ class Promocodes extends CActiveRecord {
 		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues);
 	}
 
-	function briefly($code) {
+	function briefly($code, $checkUsed = true) {
 		if (empty($code)) return ['message'=>''];
 		$promocode = $this->getPromocodeByCode($code);
-		if (($check = $this->check($promocode)) > 0) return ['message'=>Yii::app()->ui->item($this->_messages[$check])];
+		if (($check = $this->check($promocode, true, $checkUsed)) > 0) return ['message'=>Yii::app()->ui->item($this->_messages[$check])];
 
 		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
 		$sale = $saleHandler->getByPromocode($promocode['id']);
 		return $saleHandler->briefly($sale['id'], Yii::app()->currency);
 	}
 
-	function check($promocode, $checkHandler = true) {
+	function check($promocode, $checkHandler = true, $checkUsed = true) {
 		if (empty($promocode)) return 1;//не найден
-		if (!empty($promocode['is_used'])) return 2;//использован
-		if (!empty($promocode['date_end'])) {
-			$date = new DateTime($promocode['date_end']);
-			$dateEnd = $date->getTimestamp();
-			if ($dateEnd < time()) return 3;//закончился срок действия
+		if ($checkUsed) {
+			if (!empty($promocode['is_used'])) return 2;//использован
+			if (!empty($promocode['date_end'])) {
+				$date = new DateTime($promocode['date_end']);
+				$dateEnd = $date->getTimestamp();
+				if ($dateEnd < time()) return 3;//закончился срок действия
+			}
 		}
 		if ($checkHandler) {
 			$saleHandler = $this->_getSaleHandler($promocode['type_id']);

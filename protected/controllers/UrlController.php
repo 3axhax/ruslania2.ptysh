@@ -91,4 +91,10 @@ class UrlController extends MyController {
 		$this->ResponseJson(array('href'=>$href));
 	}
 
+	function actionPromocodeBriefly() {
+		$code = (string) Yii::app()->getRequest()->getParam('code');
+		$promocode = Promocodes::model();
+		$this->ResponseJson($promocode->briefly($code, false));
+	}
+
 }

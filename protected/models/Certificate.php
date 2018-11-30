@@ -103,8 +103,8 @@ class Certificate extends CActiveRecord {
 
 	function briefly($id, $currencyId) {
 		$certificate = $this->getCertificate($id);
-		if (empty($certificate['promocode_id'])) return null;//['promocodeValue'=>0, 'promocodeUnit'=>'', 'realValue'=>0, 'realUnit'=>''];
-		if ($certificate['nominal'] <= 0) return null;//['promocodeValue'=>0, 'promocodeUnit'=>'', 'realValue'=>0, 'realUnit'=>''];
+		if (empty($certificate['promocode_id'])) return null;
+		if ($certificate['nominal'] <= 0) return null;
 		return [
 			'promocodeValue'=>$certificate['nominal'],
 			'promocodeUnit'=>Currency::ToSign($certificate['currency']),
