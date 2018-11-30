@@ -449,7 +449,7 @@ class Order extends CMyActiveRecord
     }
 
     function setPromocode($code) {
-        $promocode = Promocodes::model()->getPromocodeByCode($code);
-        if ($promocode->check($promocode) === 0) $this->_promocode = $promocode['id'];
+        $promocode = Promocodes::model();
+        if ($promocode->check($promocode->getPromocodeByCode($code)) === 0) $this->_promocode = $promocode->getPromocodeByCode($code)['id'];
     }
 }

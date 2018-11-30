@@ -521,7 +521,7 @@ class CartController extends MyController {
                     $s['DeliveryMode'] = 0;
                     $s['CurrencyID'] = Yii::app()->currency;
                     $s['BillingAddressID'] = $idAddr2;
-                    $s['Notes'] = 0;
+                    $s['Notes'] = $comment;
                     $s['Mandate'] = 0;
                     //$s['payment'] = $post['ptype'];
                     $order = new OrderForm($this->sid);
@@ -538,6 +538,7 @@ class CartController extends MyController {
                     $id = $o->CreateNewOrder($userID, $this->sid, $order, $items, $post['ptype']);
                     $o = new Order;
                     $order = $o->GetOrder($id);
+
                     $data['order'] = $order;
                     //$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
                     // $this->breadcrumbs[] = 'Оформление заказа';
@@ -545,7 +546,12 @@ class CartController extends MyController {
                     $data['ptype'] = $post['ptype'];
 
                     if (Yii::app()->request->isAjaxRequest) {
-                        echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                        if (empty($order['full_price'])) {
+                            echo Yii::app()->createUrl('client/me');
+                        }
+                        else {
+                            echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                        }
                         exit();
                     }
                     if ($post['ptype'] == '27') {
