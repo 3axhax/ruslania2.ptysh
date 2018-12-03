@@ -97,4 +97,18 @@ class UrlController extends MyController {
 		$this->ResponseJson($promocode->briefly($code, false));
 	}
 
+	function actionPromocodesBriefly() {
+		$ids = explode(',',(string) Yii::app()->getRequest()->getParam('ids'));
+		$codes = array();
+		$p = Promocodes::model();
+		foreach($ids as $id) {
+			$promocode = $p->getPromocode($id);
+			$code = '';
+			if (!empty($promocode['code'])) $code = $promocode['code'];
+			$codes[$id] = $p->briefly($code, false);
+		}
+
+		$this->ResponseJson($codes);
+	}
+
 }

@@ -6,6 +6,7 @@ class Promocodes extends CActiveRecord {
 	static private $_codes = array(); // для кеша только кодов
 
 	const CODE_CERTIFICATE = 1;
+	const CODE_CATEGORY = 2;
 
 	private $_messages = array(
 		1 => 'PROMOCODE_ERROR_1',

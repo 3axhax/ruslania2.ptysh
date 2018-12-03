@@ -110,6 +110,7 @@ class Certificate extends CActiveRecord {
 			'promocodeUnit'=>Currency::ToSign($certificate['currency']),
 			'realValue'=>$this->getNominal($id, $currencyId),
 			'realUnit'=>Currency::ToSign(Yii::app()->currency),
+			'name'=>Yii::app()->ui->item('GIFT_CERTIFICATE'),
 		];
 	}
 
