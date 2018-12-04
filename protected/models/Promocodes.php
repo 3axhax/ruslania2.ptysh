@@ -147,6 +147,7 @@ class Promocodes extends CActiveRecord {
 
 		switch ((int) $typeId) {
 			case self::CODE_CERTIFICATE: return Certificate::model(); break;
+			case self::CODE_CATEGORY: return Promocodes_category::model(); break;
 		}
 		return null;
 	}
