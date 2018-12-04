@@ -1277,6 +1277,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'CERTIFICATE_SOURCE_EMAIL' => 'E-mail отправителя',
     'CERTIFICATE_NOMINAL' => 'Номинал',
     'YOU_MUST_FILL_THE_FIELD' => 'You must fill the field',
+    'YOU_WRONG_FILLED_OUT' => 'Неверно заполнено поле',
 
     'PROMOCODE'=>'Промокод',
     'PROMOCODE_ERROR_1'=>'Промокод не найден',

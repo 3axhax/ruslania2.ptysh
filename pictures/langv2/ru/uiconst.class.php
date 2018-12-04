@@ -1296,6 +1296,7 @@ IBAN DE79514303006474790001 <br>
     'CERTIFICATE_SOURCE_EMAIL' => 'E-mail отправителя',
     'CERTIFICATE_NOMINAL' => 'Номинал',
     'YOU_MUST_FILL_THE_FIELD' => 'Необходимо заполнить поле',
+    'YOU_WRONG_FILLED_OUT' => 'Неверно заполнено поле',
 
     'PROMOCODE'=>'Промокод',
     'PROMOCODE_ERROR_1'=>'Промокод не найден',
