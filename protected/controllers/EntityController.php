@@ -1390,11 +1390,20 @@ class EntityController extends MyController {
         }
         $title_cat = ProductHelper::GetTitle($selectedCategory);
 
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage('podpiska-v-podarok');
+        $giftText = '';
+        if (!empty($item)) $giftText = $item['description_' . Yii::app()->language];
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
+
         $this->render('gift', array('entity' => $entity,
             'group' => current($group)['items'],
             'popular' => $popular,
             'title_cat' => $title_cat,
-            'cid' => $cid));
+            'cid' => $cid,
+            'giftText' => $giftText,
+            'isWordpanel' => $isWordpanel,
+        ));
     }
 
     private function _checkTagByEntity($tag, $entity) {
