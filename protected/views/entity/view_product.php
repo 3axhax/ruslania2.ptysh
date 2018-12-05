@@ -428,13 +428,13 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
             }
             if (!empty($langs)):
-            ?>
-            <div class="authors" style="margin-bottom:5px;">
-                <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_THEME")) : str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_LANGUAGE")); ?></div>
-                <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
-                <div class="clearBoth"></div>
-            </div>
-        <?php endif; endif; ?>
+                ?>
+                <div class="authors" style="margin-bottom:5px;">
+                    <div style="float: left;" class="nameprop"><?= ($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_THEME")) : str_replace(':', '', $ui->item("CATALOGINDEX_CHANGE_LANGUAGE")); ?></div>
+                    <div style="padding-left: 253px;"><?= implode(', ', $langs) ?></div>
+                    <div class="clearBoth"></div>
+                </div>
+            <?php endif; endif; ?>
 
         <?php if (!empty($item['format'])) : ?>
             <div class="authors" style="margin-bottom:5px;">
@@ -955,7 +955,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <? endif; ?>
 
         <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"<? if (!$lookinside AND $item['entity'] == 30) : echo ' style="margin-left: 20px;" '; endif; ?>
-           data-id="<?= $item['id']; ?>" class="addmark cart-action">&nbsp;<span class="tooltip"><span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span></a>
+           data-id="<?= $item['id']; ?>" class="addmark cart-action"><i class="fa fa-heart" aria-hidden="true"></i><span class="tooltip"><span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span></a>
 
 
     </div>
@@ -1122,15 +1122,15 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     $name = 'ISMN/ISBN';
                     $isbnNum = null;
                 }
-            if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::MUSIC, Entity::SHEETMUSIC)))): ?>
+                if (!empty($item['eancode'])&&(!in_array($entity, array(Entity::MUSIC, Entity::SHEETMUSIC)))): ?>
                     <div class="detail-prop">
                         <div class="prop-name">EAN</div>
                         <div class="prop-value"><?= $item['eancode']; ?></div>
                         <div class="clearBoth"></div>
                     </div>
-            <?php endif; ?>
+                <?php endif; ?>
 
-            <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>
+                <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>
                 <div class="detail-prop">
                     <div class="prop-name"><?= $name ?></div>
                     <div class="prop-value"><?= $item['isbn']; ?></div>
@@ -1138,14 +1138,14 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 </div>
             <?php endif ?>
 
-            <?php $name = $ui->item("ALTERNATIVE") . ' ' . $name;
+                <?php $name = $ui->item("ALTERNATIVE") . ' ' . $name;
                 if (!empty($item['isbn2'])) : ?>
-                <div class="detail-prop">
-                    <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':((++$isbnNum < 2)?'':$isbnNum) ?></div>
-                    <div class="prop-value"><?= $item['isbn2']; ?></div>
-                    <div class="clearBoth"></div>
-                </div>
-            <?php endif; ?>
+                    <div class="detail-prop">
+                        <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':((++$isbnNum < 2)?'':$isbnNum) ?></div>
+                        <div class="prop-value"><?= $item['isbn2']; ?></div>
+                        <div class="clearBoth"></div>
+                    </div>
+                <?php endif; ?>
                 <?php if (!empty($item['isbn3'])) : ?>
                 <div class="detail-prop">
                     <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':((++$isbnNum < 2)?'':$isbnNum) ?></div>
@@ -1202,7 +1202,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
-            <?php if (!empty($item['isbn_wrong'])) : ?>
+                <?php if (!empty($item['isbn_wrong'])) : ?>
                 <div class="detail-prop">
                     <div class="prop-name"><?= $name ?><?= ($isbnNum === null)?'':((++$isbnNum < 2)?'':$isbnNum) ?></div>
                     <div class="prop-value"><?= $item['isbn_wrong']; ?></div>
