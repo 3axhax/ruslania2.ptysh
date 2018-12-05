@@ -1302,6 +1302,7 @@ form.filter .form-row input.inp.inp_max {
 .view_product .desc .nameprop { width: 200px; display: inline-block; }
 
 a.add_cart {
+
     border-radius: 2px;
     background: #ed1d24 url(../new_img/addcart37.png) right center no-repeat;
     height: 37px;
@@ -1314,6 +1315,73 @@ a.add_cart {
     width: 91px;
     font-size: 13px;
 
+}
+
+a.add_cart_plus {
+    position: relative;
+    font: normal normal normal 14px/1 FontAwesome;
+    height: auto;
+    line-height: 37px;
+    background: none;
+    background: #D50B12;
+}
+
+.add_cart_plus:after {
+
+    content: "\f218";
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    font-size: 17px;
+}
+
+.add_cart_plus span, .add_cart_plus button {
+    display: block;
+    width: 100%;
+    height: 37px;
+    background: #ed1d24 !important;
+}
+
+.news_box ul.books li .addcart a.add_cart_plus {
+    border-radius: 2px;
+    background: #D50B12;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding-right: 39px;
+    text-align: center;
+    width: 91px;
+    margin-top: 18px;
+}
+
+.news_box ul.books li .addcart a.add_cart_plus span, .news_box ul.books li .addcart a.add_cart_plus button {
+    display: block;
+    width: 100%;
+    height: 30px;
+    background: #ed1d24 !important;
+}
+
+.more_goods ul.books li .addcart a.add_cart_plus {
+    border-radius: 2px;
+    background: #D50B12;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    padding-right: 39px;
+    text-align: center;
+    width: 132px;
+    margin-top: 18px;
+}
+
+.more_goods ul.books li .addcart a.add_cart_plus span, .more_goods ul.books li .addcart a.add_cart_plus button {
+    display: block;
+    width: 100%;
+    height: 30px;
+    background: #ed1d24 !important;
 }
 
 a.list_cart { width: 162px;font-size: 13px; }
@@ -1415,6 +1483,10 @@ a.addmark span.tooltip span.arrow {
     clear: both;
 
 }
+
+
+
+
 
 .tabs_container ul.tabs li { float: left; border-radius: 4px 4px 0 0; border: 1px solid rgb(246, 246, 246); margin-left: 11px; /* background-color: rgb(246, 246, 246); */ }
 
