@@ -46,7 +46,6 @@ class Promocodes_category extends CActiveRecord {
 		switch((int) $certificate['unit']) {
 			case 1: //проценты
 				$price = $this->_getPrice($certificate['categorys'], $pricesValues, $discountKeys, $certificate['nominal']);
-				var_dump($itemsPrice, $price);
 				if ($price['withDiscount'] > $itemsPrice) return 0;
 				return ($itemsPrice - $price['withDiscount']);
 				break;
