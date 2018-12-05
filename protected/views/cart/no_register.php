@@ -1,5 +1,14 @@
 <hr />
 
+<div class="lang_yesno_box alerthtml" style="display: none;margin-left: -192px; width: 300px; padding: 34px 42px;">
+
+    <div style="text-align: center;" class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
+    <div class="box_btns">
+        <a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_yes">Ок</a>
+    </div>
+
+</div>
+
 <style>
     label.seld {
         padding: 1.8rem 2rem 2.2rem;
@@ -238,10 +247,18 @@
     }
 
 </style>
-
+<div class="opacity alerthtml" onclick="$('.alerthtml').hide();"></div>
 <script src="/js/jquery.cookie.js"></script>
 
 <script>
+
+    function alert_html(text) {
+
+        $('.alerthtml .title').html(text);
+
+        $('.alerthtml').show();
+
+    }
 
     function check_desc_address(cont) {
 
@@ -990,7 +1007,7 @@
                 if (data != '') {
 
                     if (data == '9') {
-                        alert('Такой e-mail уже есть зарегистрирован!');
+                        alert_html('Такой e-mail уже зарегистрирован!');
                     } else {
 
                         clear_cook();

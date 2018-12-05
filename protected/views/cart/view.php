@@ -14,7 +14,7 @@ $ctrl = Yii::app()->getController()->id;
 ?>
 <hr />
 
-<div class="opacity" onclick="$('.opacity, .lang_yesno_box').hide();"></div>
+<div class="opacity alerthtml" onclick="$('.alerthtml').hide();"></div>
 
 
 
@@ -138,15 +138,21 @@ $ctrl = Yii::app()->getController()->id;
                                         <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
                                         <?=Currency::ToSign(Yii::app()->currency); ?>
                                     </td>
+
+
+
                                     <!-- <td valign="middle" align="center" class="cart1contents1">
                                          <a href="javascript:;" data-bind="click: $root.ToMark"><img src="/new_img/add_mark.png" /></a>
                                      </td> -->
                                     <td valign="middle" align="center" class="cart1contents1">
-                                        <a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"><img src="/new_img/del_cart.png" /></a>
+                                        <a href="javascript:;" onclick="$('.alerthtml',$(this).parent()).show(); $('.opacity.alerthtml').show();"><img src="/new_img/del_cart.png" /></a>
 
-                                        <div class="lang_yesno_box lang_yesno_box<?=$cart['ID']?>" style="display: none;">
+                                        <div class="lang_yesno_box alerthtml" style="display: none;margin-left: -181px;width: 220px;">
 
                                             <div style="text-align: center;"><?=$ui->item('ARE_YOU_SURE'); ?></div>
+                                            <div class="box_btns">
+                                                <a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }" class="btn_yes">Да</a> <a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_no">Нет</a>
+                                            </div>
 
                                         </div>
 
@@ -444,39 +450,41 @@ $ctrl = Yii::app()->getController()->id;
         self.RemoveFromCart = function(item, type)
         {
 
-            $('.opacity, .lang_yesno_box').show();
+            //$('.opacity, .lang_yesno_box').show();
 
 
-            return 0;
+            //return 0;
 
-            if(confirm('<?=$ui->item('ARE_YOU_SURE'); ?>'))
-            {
-                var obj =
-                    {
-                        entity : item.Entity(),
-                        iid : item.ID(),
-                        type : type
-                    };
-                obj[csrf[0]] = csrf[1];
 
-                $.when
-                (
-                    $.ajax({
-                        type: "POST",
-                        url: '<?=Yii::app()->createUrl('cart/')?>remove',
-                        data: obj,
-                        dataType: 'json'
-                    })
-                ).then(function(json)
+            var obj =
                 {
-                    if(!json.hasError)
-                    {
-                        if(type == <?=Cart::TYPE_ORDER; ?>)  self.CartItems.remove(item);
-                        else self.RequestItems.remove(item);
-                        // update_header_cart();
-                    }
-                });
-            }
+                    entity : item.Entity(),
+                    iid : item.ID(),
+                    type : type
+                };
+            obj[csrf[0]] = csrf[1];
+
+            $.when
+            (
+                $.ajax({
+                    type: "POST",
+                    url: '<?=Yii::app()->createUrl('cart/')?>remove',
+                    data: obj,
+                    dataType: 'json'
+                })
+            ).then(function(json)
+            {
+                if(!json.hasError)
+                {
+                    if(type == <?=Cart::TYPE_ORDER; ?>)  self.CartItems.remove(item);
+                    else self.RequestItems.remove(item);
+                    // update_header_cart();
+                }
+            });
+
+
+            $('.alerthtml').hide();
+
         };
 
         self.UsingMinPrice = ko.observable(false);
@@ -554,7 +562,7 @@ $ctrl = Yii::app()->getController()->id;
 
             $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
             {
-                if(jsged)
+                if(json.changed)
                     data.InfoField(json.changedStr);
                 else
                     data.InfoField('');
