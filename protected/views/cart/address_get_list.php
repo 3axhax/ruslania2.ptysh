@@ -1,14 +1,23 @@
 <?php
 
 $ch = new CommonHelper();
+$array = array();
 
-echo '<option value="">Выберите адрес доставки</option>';
+if (count($items) > 1) {
 
+    $array['items'][] =  '<option value="">Выберите адрес доставки</option>';
+
+}
 //var_dump($items);
 
+
+
 foreach($items as $item){
-    
-    echo '<option value="'.$item['id'].'">'.$ch->FormatAddress($item).'</option>';
-   
+
+    $array['items'][] = '<option value="'.$item['id'].'">'.$ch->FormatAddress($item).'</option>';
+
 }
 
+$array['ida'] = $ida;
+
+echo json_encode($array);

@@ -94,7 +94,7 @@ class PostCalculator
      */
     public function GetRates2($country, $uid, $sid)
     {
-        
+
         $country = Country::GetCountryById($country);
         if (empty($country)) return array();
         $isFinland = $country['code'] == 'FI';

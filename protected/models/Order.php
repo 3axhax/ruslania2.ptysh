@@ -32,7 +32,7 @@ class Order extends CMyActiveRecord
         return array(
 
             array('uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
-                  . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet'),
+                . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet'),
             array('notes', 'safe', 'on' => 'newinternet')
         );
     }
@@ -57,9 +57,9 @@ class Order extends CMyActiveRecord
         $list = Order::model()->with('items', 'states',
             'billingAddress', 'billingAddress.billingCountry',
             'deliveryAddress', 'deliveryAddress.deliveryCountry')->findAll($criteria);
-		
-		//var_dump($list);
-		
+
+        //var_dump($list);
+
         $list = $this->FlatOrderList($list);
 
         return $list;
@@ -80,14 +80,14 @@ class Order extends CMyActiveRecord
             }
 
         $p = new Product;
-		
-		
+
+
 
         foreach ($items as $entity => $ids)
         {
-			
-			$result = $p->getProducts3($entity, $ids);
-			
+
+            $result = $p->getProducts3($entity, $ids);
+
             foreach ($result as $item)
                 $itemsData[$entity][$item['id']] = $item;
         }
@@ -213,55 +213,55 @@ class Order extends CMyActiveRecord
         list($itemsPrice, $deliveryPrice, $pricesValues) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
 
 
-/*        $withVAT = Address::UseVAT($da);
-            
-        $itemsPrice = 0;
-        $pricesValues = array();
-        foreach ($items as $idx=>$item)
-        {
-            $values = DiscountManager::GetPrice($uid, $item);
-            $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
-            $itemKey = $item['entity'].'_'.$item['id'];
-            $price = $values[$key];
-            if($item['entity'] == Entity::PERIODIC)
-            {
-                if($da['is_finland'])
-                    $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
+        /*        $withVAT = Address::UseVAT($da);
+
+                $itemsPrice = 0;
+                $pricesValues = array();
+                foreach ($items as $idx=>$item)
+                {
+                    $values = DiscountManager::GetPrice($uid, $item);
+                    $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
+                    $itemKey = $item['entity'].'_'.$item['id'];
+                    $price = $values[$key];
+                    if($item['entity'] == Entity::PERIODIC)
+                    {
+                        if($da['is_finland'])
+                            $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
+                        else
+                            $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
+                        $price = $values[$key];
+                        $price /= 12;
+                    }
+                    $pricesValues[$itemKey] = $price;
+                    $itemsPrice += $item['quantity'] * $price;
+
+                    if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
+                    {
+                        $items[$idx]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
+                    }
+                }
+
+                if ($order->DeliveryMode == 0)
+                {
+                    $p = new PostCalculator();
+                    $list = $p->GetRates($order->DeliveryAddressID, $uid, $sid);
+
+                    //var_dump($list);
+
+                    $deliveryPrice = false;
+                    foreach ($list as $l)
+                        if ($l['id'] == $order->DeliveryTypeID) $deliveryPrice = $l['value'];
+                }
                 else
-                    $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
-                $price = $values[$key];
-                $price /= 12;
-            }
-            $pricesValues[$itemKey] = $price;
-            $itemsPrice += $item['quantity'] * $price;
+                {
+                    $deliveryPrice = 0;
+                }
 
-            if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
-            {
-                $items[$idx]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
-            }
-        }
-
-        if ($order->DeliveryMode == 0)
-        {
-            $p = new PostCalculator();
-            $list = $p->GetRates($order->DeliveryAddressID, $uid, $sid);
-            
-            //var_dump($list);
-            
-            $deliveryPrice = false;
-            foreach ($list as $l)
-                if ($l['id'] == $order->DeliveryTypeID) $deliveryPrice = $l['value'];
-        }
-        else
-        {
-            $deliveryPrice = 0;
-        }
-
-        $rates = Currency::GetRates();
-        $rate = $rates[$order->CurrencyID];
-        $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
-        if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
-        $fullPrice = $itemsPrice + $deliveryPrice;*/
+                $rates = Currency::GetRates();
+                $rate = $rates[$order->CurrencyID];
+                $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
+                if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
+                $fullPrice = $itemsPrice + $deliveryPrice;*/
 
 
         $promocodeId = 0;
@@ -281,18 +281,18 @@ class Order extends CMyActiveRecord
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
-                      ':daid' => $order->DeliveryAddressID,
-                      ':baid' => $order->BillingAddressID,
-                      ':dtid' => $order->DeliveryTypeID,
-                      ':ptid' => $ptype, // payment in next step
-                      ':cur' => $order->CurrencyID,
-                      ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
-                      ':full' => $fullPrice,
-                      ':items' => $itemsPrice,
-                      ':delivery' => $deliveryPrice,
-                      ':notes' => $order->Notes,
-                      ':mandate' => $order->Mandate,
-                      ':promocodeId' => $promocodeId,
+                    ':daid' => $order->DeliveryAddressID,
+                    ':baid' => $order->BillingAddressID,
+                    ':dtid' => $order->DeliveryTypeID,
+                    ':ptid' => $ptype, // payment in next step
+                    ':cur' => $order->CurrencyID,
+                    ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
+                    ':full' => $fullPrice,
+                    ':items' => $itemsPrice,
+                    ':delivery' => $deliveryPrice,
+                    ':notes' => $order->Notes,
+                    ':mandate' => $order->Mandate,
+                    ':promocodeId' => $promocodeId,
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;
@@ -327,7 +327,7 @@ class Order extends CMyActiveRecord
             // Добавить статус
             $sql = 'INSERT INTO users_orders_states (oid, state, `timestamp`) VALUES (:oid, :state, CURRENT_TIMESTAMP())';
             Yii::app()->db->createCommand($sql)->execute(array(':oid' => $orderID,
-                                                               ':state' => OrderState::SavedInSystem));
+                ':state' => OrderState::SavedInSystem));
 
             // Добавить товары
             $sql = 'INSERT INTO users_orders_items (oid, entity, iid, quantity, items_price, price, info) VALUES '
@@ -340,13 +340,13 @@ class Order extends CMyActiveRecord
 
                 Yii::app()->db->createCommand($sql)->execute(
                     array(
-                         ':oid' => $orderID,
-                         ':entity' => Entity::ConvertToSite($item['entity']),
-                         ':iid' => $item['id'],
-                         ':quantity' => $item['quantity'],
-                         ':subtotal' => $item['quantity'] * $price,
-                         ':price' => $price,
-                         ':info' => empty($item['info']) ? null : $item['info']
+                        ':oid' => $orderID,
+                        ':entity' => Entity::ConvertToSite($item['entity']),
+                        ':iid' => $item['id'],
+                        ':quantity' => $item['quantity'],
+                        ':subtotal' => $item['quantity'] * $price,
+                        ':price' => $price,
+                        ':info' => empty($item['info']) ? null : $item['info']
                     ));
             }
 
@@ -361,9 +361,9 @@ class Order extends CMyActiveRecord
         {
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
-            
-          // var_dump($ex);
-            
+
+            // var_dump($ex);
+
             return 0;
         }
     }

@@ -248,25 +248,25 @@
         if (cont.prop('checked')) {
 
             $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').hide();
-			
-			$('.seld2').addClass('disabled');
-			
-			$('.seld1').click();
-			
-			checked_sogl();
-			
+
+            $('.seld2').addClass('disabled');
+
+            $('.seld1').click();
+
+            checked_sogl();
+
         } else {
 
             $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').show();
-			
-			$('.seld2').removeClass('disabled');
-			
-			$('.seld2').click();
-			
-			checked_sogl();
+
+            $('.seld2').removeClass('disabled');
+
+            $('.seld2').click();
+
+            checked_sogl();
         }
-		
-		
+
+
 
     }
 
@@ -609,7 +609,7 @@
             if ($(event.target).closest(".qbtn, .info_box_smart").length)
                 return;
             $('.info_box_smart').hide();
-        event.stopPropagation();
+            event.stopPropagation();
         });
 
         $(document).click(function (event) {
@@ -640,43 +640,43 @@
 
 
         //alert($('#confirm').prop('checked'));
-		
-		if ( !$('.check_addressa').prop('checked') ) {
-			
-			if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
-			
-			
-				$('.box_opacity .op').show();
-			
-						
-			} else {
-			
-				$('.box_opacity .op').hide();
-			
-			}
-			
-			
-		} else {
-			
-			if (!$('#confirm').prop('checked')) {
-			
-			
-				$('.box_opacity .op').show();
-			
-						
-			} else {
-			
-				$('.box_opacity .op').hide();
-			
-			}
-			
-			
-		}
-		
-		
-		
-		
-		
+
+        if ( !$('.check_addressa').prop('checked') ) {
+
+            if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
+
+
+                $('.box_opacity .op').show();
+
+
+            } else {
+
+                $('.box_opacity .op').hide();
+
+            }
+
+
+        } else {
+
+            if (!$('#confirm').prop('checked')) {
+
+
+                $('.box_opacity .op').show();
+
+
+            } else {
+
+                $('.box_opacity .op').hide();
+
+            }
+
+
+        }
+
+
+
+
+
         if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
 
             // $('.order_start').addClass('disabled');
@@ -687,11 +687,11 @@
             // $('.order_start').removeClass('disabled');
         } else if ( $('.check_addressa').prop('checked') && $('#confirm').prop('checked') ) {
             $('.box_opacity .op').hide();
-		} else if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
-			$('.box_opacity .op').show();
-			
-			
-		}
+        } else if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
+            $('.box_opacity .op').show();
+
+
+        }
 
 
     }
@@ -883,20 +883,20 @@
             $('.texterror', $('#Address_city').parent()).html('');
         }
         if (!$('#Address_postindex').val() && !$('.check_addressa').prop('checked')) {
-                $('#Address_postindex').addClass('error');
-                error = error + 1;
-            } else {
-                $('#Address_postindex').removeClass('error');
-                $('.texterror', $('#Address_postindex').parent()).html('');
-            }
-            if (!$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked')) {
-                $('#Address_streetaddress').addClass('error');
-                $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
-                error = error + 1;
-                $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
-            } else {
-                $('#Address_streetaddress').removeClass('error');
-                $('.texterror', $('#Address_streetaddress').parent()).html('');
+            $('#Address_postindex').addClass('error');
+            error = error + 1;
+        } else {
+            $('#Address_postindex').removeClass('error');
+            $('.texterror', $('#Address_postindex').parent()).html('');
+        }
+        if (!$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked')) {
+            $('#Address_streetaddress').addClass('error');
+            $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
+            error = error + 1;
+            $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
+        } else {
+            $('#Address_streetaddress').removeClass('error');
+            $('.texterror', $('#Address_streetaddress').parent()).html('');
         }
 
         var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
@@ -1057,7 +1057,9 @@
 
     $PH = new ProductHelper();
 
-    $cart = $cart->GetCart($this->uid, $this->sid);
+    $cart = CartController::actionGetAll(0);
+
+    $cart = $cart['CartItems'];
 
 
 
@@ -1076,57 +1078,55 @@
 
     foreach ($cart as $item) {
 
-        $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-
-
-        //var_dump($price);
-
-        //echo ;
-        
-        $cartInfo['items'][$item['id']]['title'] = $PH->GetTitle($item);
-        $cartInfo['items'][$item['id']]['weight'] = $item['InCartUnitWeight'];
-
-
-        if ($item['entity'] == 30) {
-
+        $cartInfo['items'][$item['ID']]['title'] =
+            $item['Title'];
+        $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
+        if ($item['Entity'] == 30) {
             if ($item['type'] == '1') { //фины
-                $price = $item['quantity'] * $item['sub_fin_month'];
+                $price = $item['PriceVATFin'] * $item['Quantity'];
             } else {
-
-                $price = $item['quantity'] * $item['sub_world_month'];
+                $price = $item['PriceVATWorld'] * $item['Quantity'];
             }
         } else {
-
-            $price = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]);
+            $price = $item['PriceVAT'];
         }
+        if (!$withVat) {
 
-        $fullweight += $item['InCartUnitWeight'];
+            if ($item['Entity'] == 30) {
 
-        if ($item['InCartUnitWeight'] == '0') {
-            $t1 = true;
+                if ($item['type'] == '1') { //фины
+                    $price = $item['PriceVAT0Fin'] * $item['Quantity'];
+                } else {
+                    $price = $item['PriceVAT0World'] * $item['Quantity'];
+                }
+            } else {
+                $price = $item['PriceVAT0'];
+            }
+
         }
-        if ($item['InCartUnitWeight'] != '0') {
-            $t2 = true;
-        }
+        $fullweight += $item['UnitWeight'];
 
-        $cartInfo['items'][$item['id']]['entity'] = $item['entity'];
-        $cartInfo['items'][$item['id']]['price'] = $price;
-        if ($item['entity'] == 30) {
+        $cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
 
-            $item['quantity'] = $item['quantity'];
+        if ($item['Entity'] == 30) {
+
+            $item['Quantity'] = 1;
             $fullprice += $price;
-            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
+            $cartInfo['items'][$item['ID']]['price'] = $price;
+            $cartInfo['items'][$item['ID']]['quantity'] = 1;
         } else {
-            $fullprice += $price * $item['quantity'];
-            $cartInfo['items'][$item['id']]['quantity'] = $item['quantity'];
-        }
+            $fullprice += $price * $item['Quantity'];
+            $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
 
-        $full_count += $item['quantity'];
+            $cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
+        }
+        $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
+        $full_count += $item['Quantity'];
     }
 
     $cartInfo['fullInfo']['count'] = $full_count;
     $cartInfo['fullInfo']['cost'] = $fullprice;
-    $cartInfo['fullInfo']['weight'] = $fullweight / 1000;
+    $cartInfo['fullInfo']['weight'] = $fullweight;
 
 
     echo '<input type="hidden" value="' . $cartInfo['fullInfo']['cost'] . '" name="costall" class="costall">';

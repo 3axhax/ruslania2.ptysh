@@ -73,34 +73,34 @@ class Cart extends CActiveRecord
         $sql = 'SELECT SUM(quantity) FROM shopcarts '
             . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
 
-        list($where, $p2) = $this->GetFilter($uid, $sid);        
-		$sql .= $where;
+        list($where, $p2) = $this->GetFilter($uid, $sid);
+        $sql .= $where;
 
-        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array_merge($params, $p2));        
-		
-		$sql2 = 'DELETE FROM shopcarts '
+        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array_merge($params, $p2));
+
+        $sql2 = 'DELETE FROM shopcarts '
             . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
 
-        list($where, $p2) = $this->GetFilter($uid, $sid);        
-		$sql2 .= $where;
-		
-		//удаляем товар с корзины и добавляем заново
+        list($where, $p2) = $this->GetFilter($uid, $sid);
+        $sql2 .= $where;
+
+        //удаляем товар с корзины и добавляем заново
         Yii::app()->db->createCommand($sql2)->query(array_merge($params, $p2));
-			
-		//static::deleteAll(['iid'=>$id, 'uid'=>$uid, 'sidv2'=>$sid]);
-		
-		//if (!$cart) { $cart = new Cart; }
-		
-		//file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/1.log', print_r($cnt, 1));
-		
-		$cart = new Cart;
+
+        //static::deleteAll(['iid'=>$id, 'uid'=>$uid, 'sidv2'=>$sid]);
+
+        //if (!$cart) { $cart = new Cart; }
+
+        //file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/1.log', print_r($cnt, 1));
+
+        $cart = new Cart;
         $cart->entity = Entity::ConvertToSite($entity);
         $cart->iid = $id;
         $cart->uid = $uid;
         $cart->sidv2 = $sid;
         $cart->quantity = $cnt + $quantity;
         $cart->type = $finOrWorldPrice;
-		
+
         switch($type)
         {
             case self::TYPE_ORDER :
@@ -144,6 +144,8 @@ class Cart extends CActiveRecord
         $defaultAddress = Address::GetDefaultAddress($uid);
         $useVAT = Address::UseVAT($defaultAddress);
 
+        //var_dump($useVAT);
+
         $ret = array();
         $entities = new Entity();
         foreach ($cart as $c)
@@ -177,9 +179,9 @@ class Cart extends CActiveRecord
                 }
             }
 
-			$tmp['Title'] = ProductHelper::GetTitle($c);
+            $tmp['Title'] = ProductHelper::GetTitle($c);
             if ($isMiniCart == 1) { $tmp['Title'] = ProductHelper::GetTitle($c, 'title', 38); }
-			$tmp['PriceVAT'] = $priceVAT;
+            $tmp['PriceVAT'] = $priceVAT;
             $tmp['PriceVATStr'] = ProductHelper::FormatPrice($priceVAT);
             $tmp['PriceVAT0'] = $priceVAT0;
             $tmp['PriceVAT0Str'] = ProductHelper::FormatPrice($priceVAT0);
@@ -227,46 +229,46 @@ class Cart extends CActiveRecord
 
     public function ChangeQuantity($entity, $id, $quantity, $type, $uid, $sid, $finOrWorldPrice)
     {
-/*
-        $params = array(':entity' =>  Entity::ConvertToSite($entity),
-                        ':iid' => $id,
-                        ':sid' => $sid,
-                        ':quantity' => $quantity);
-*/
+        /*
+                $params = array(':entity' =>  Entity::ConvertToSite($entity),
+                                ':iid' => $id,
+                                ':sid' => $sid,
+                                ':quantity' => $quantity);
+        */
 
         $this->Remove($entity, $id, $type, $uid, $sid);
         $this->AddToCart($entity, $id, $quantity, $type, $uid, $sid, $finOrWorldPrice);
 
         return $quantity;
 
-/*
-        list($where, $p) = $this->GetFilter($uid, $sid);
+        /*
+                list($where, $p) = $this->GetFilter($uid, $sid);
 
-        $sql = 'UPDATE shopcarts SET quantity=:quantity '
-            . 'WHERE (entity=:entity AND iid=:iid AND '.self::CartType($type).') AND '
-            .$where;
+                $sql = 'UPDATE shopcarts SET quantity=:quantity '
+                    . 'WHERE (entity=:entity AND iid=:iid AND '.self::CartType($type).') AND '
+                    .$where;
 
-        $params = array_merge($params, $p);
+                $params = array_merge($params, $p);
 
-        $cnt = Yii::app()->db->createCommand($sql)->execute($params);
-        if ($cnt > 0) return $quantity;
+                $cnt = Yii::app()->db->createCommand($sql)->execute($params);
+                if ($cnt > 0) return $quantity;
 
-        $sql = 'SELECT quantity FROM shopcarts '
-            . 'WHERE (entity=:entity AND iid=:iid AND '.self::CartType($type).') AND '
-            .$where;
+                $sql = 'SELECT quantity FROM shopcarts '
+                    . 'WHERE (entity=:entity AND iid=:iid AND '.self::CartType($type).') AND '
+                    .$where;
 
-        unset($params[':quantity']);
-        return Yii::app()->db->createCommand($sql)->queryScalar($params);
-*/
+                unset($params[':quantity']);
+                return Yii::app()->db->createCommand($sql)->queryScalar($params);
+        */
     }
 
     public function GetShopcartData($uid, $sid, $type, $isMiniCart = 0)
     {
         $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2idx, uid ) '
-              .'WHERE '.self::CartType($type).' AND ';
+            .'WHERE '.self::CartType($type).' AND ';
         list($where, $params) = $this->GetFilter($uid, $sid);
         $sql .= $where;
-        if ($isMiniCart) 
+        if ($isMiniCart)
             $sql .= ' ORDER BY last_date DESC';
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
         $ret = array();
@@ -285,7 +287,7 @@ class Cart extends CActiveRecord
                     $data[$entity][$iid] = array('id' => $iid, 'quantity' => $row['quantity'], 'type' => $row['type']);
                 else
                     $data[$entity][$iid]['quantity'] += $row['quantity'];
-    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
+                //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
                 $ids[$row['entity']][] = $row['iid'];
             }
             $p = new Product;
@@ -298,11 +300,11 @@ class Cart extends CActiveRecord
                 {
                     $product = array_merge($r, $data[$entity][$iid]);
                     // UnitWeight
-    
+
                     $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
                     $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
                     $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
-    
+
                     $ret[] = $product;
                 }
             }
@@ -322,35 +324,35 @@ class Cart extends CActiveRecord
                 }
                 else
                     $data[$entity][$iid]['quantity'] += $row['quantity'];
-    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
+                //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
                 $ids[$row['entity']][] = $row['iid'];
                 $tmp_data[0] = $row['iid'];
-            
+
                 $p = new Product;
                 //CVarDumper::dump($data, 10, true);
                 if ($flag)
                 {
-                    
-                        $result = $p->GetProducts($entity, $tmp_data, $isMiniCart);
-                        //CVarDumper::dump($ids[$entity], 10, true);
-                        foreach ($result as $iid => $r)
-                        {
-                            $product = array_merge($r, $data[$entity][$iid]);
-                            // UnitWeight
-            
-                            $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
-                            $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
-                            $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
-            
-                            $ret[] = $product;
-                        }
-                    
+
+                    $result = $p->GetProducts($entity, $tmp_data, $isMiniCart);
+                    //CVarDumper::dump($ids[$entity], 10, true);
+                    foreach ($result as $iid => $r)
+                    {
+                        $product = array_merge($r, $data[$entity][$iid]);
+                        // UnitWeight
+
+                        $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
+                        $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+                        $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
+
+                        $ret[] = $product;
+                    }
+
                     $flag = 0;
                 }
             }
         }
-        
-        
+
+
         return $ret;
     }
 
@@ -388,8 +390,8 @@ class Cart extends CActiveRecord
         foreach($items as $item)
         {
             Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
-                                                               ':entity' => Entity::ConvertToSite($item['entity']),
-                                                               ':iid' => $item['id']));
+                ':entity' => Entity::ConvertToSite($item['entity']),
+                ':iid' => $item['id']));
         }
     }
 
@@ -399,7 +401,7 @@ class Cart extends CActiveRecord
         {
             list($where, $params) = $this->GetFilter($uid, $sid);
             $sql = 'DELETE FROM shopcarts WHERE '.$where.' AND '.$this->CartType(Cart::TYPE_MARK).' '
-                  .'AND entity=:entity AND iid=:iid';
+                .'AND entity=:entity AND iid=:iid';
             $params[':entity'] = Entity::ConvertToSite($entity);
             $params[':iid'] = $iid;
             $cnt = Yii::app()->db->createCommand($sql)->execute($params);
@@ -423,8 +425,8 @@ class Cart extends CActiveRecord
             {
                 $items = array(
                     array('entity' => $entity,
-                          'id' => $iid,
-                          'quantity' => 1
+                        'id' => $iid,
+                        'quantity' => 1
                     )
                 );
                 $r = new Request;
@@ -462,11 +464,11 @@ class Cart extends CActiveRecord
         $cnt = Yii::app()->db->createCommand($sql)->execute($params);
         return $cnt;
     }
-    
+
     function getPriceSum($uid, $sid, $type) {
-        
+
         $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2, uid ) '
-              .'WHERE ' . $this->CartType(self::TYPE_ORDER) .' AND ';
+            .'WHERE ' . $this->CartType(self::TYPE_ORDER) .' AND ';
         list($where, $params) = $this->GetFilter($uid, $sid);
         $sql .= $where;
 
@@ -474,32 +476,32 @@ class Cart extends CActiveRecord
 
         $defaultAddress = Address::GetDefaultAddress(Yii::app()->user->id);
         $useVAT = Address::UseVAT($defaultAddress);
-                // var_dump($rows);
-        
+        // var_dump($rows);
+
         $priceSum = 0;
-        $summa = 0; 
-		
-		//var_dump($uid);
-		//var_dump($sid);
+        $summa = 0;
+
+        //var_dump($uid);
+        //var_dump($sid);
 
         foreach ($rows as $row) {
-            
+
             $item = Product::GetProduct($row['entity'], $row['iid']);
-            
-			$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-			
-			if (!empty($price[DiscountManager::DISCOUNT])) :
-			$summa = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) * $row['quantity'];
-			else :
-			$summa = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) * $row['quantity'];
-			endif;
-			
-			if ($item['entity'] == 30) {
+
+            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+
+            if (!empty($price[DiscountManager::DISCOUNT])) :
+                $summa = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) * $row['quantity'];
+            else :
+                $summa = ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) * $row['quantity'];
+            endif;
+
+            if ($item['entity'] == 30) {
 
 
 
-			    file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
-			    //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/2.log', print_r($price,1));
+                file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.log', print_r($item,1));
+                //file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/2.log', print_r($price,1));
 
                 $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 
@@ -523,37 +525,37 @@ class Cart extends CActiveRecord
 
                 }
 
-			    if ($item['type'] == 2) {
-			        $s_one = $s_one2 / 12;
+                if ($item['type'] == 2) {
+                    $s_one = $s_one2 / 12;
                 } else {
                     $s_one = $s_one1 / 12;
                 }
-			    
-				//$s_one = $price[DiscountManager::WITH_VAT] / 12;
-				
-				if (!empty($price[DiscountManager::DISCOUNT])) :
-				$summa = $s_one * $row['quantity'];
-				else :
-				$summa = $s_one * $row['quantity'];
-				endif;
-			}
-			
+
+                //$s_one = $price[DiscountManager::WITH_VAT] / 12;
+
+                if (!empty($price[DiscountManager::DISCOUNT])) :
+                    $summa = $s_one * $row['quantity'];
+                else :
+                    $summa = $s_one * $row['quantity'];
+                endif;
+            }
+
             //$ui = Yii::app()->ui;
             $priceSum += $summa;
-            
-            
+
+
         }
-		
+
         return ($priceSum == 0) ? '0 '.Currency::ToSign(Yii::app()->currency) : ProductHelper::FormatPrice($priceSum);
     }
-    
+
     public function cart_getpoints_smartpost($index = 0, $country = 'FI') {
         $file = file_get_contents('https://locationservice.posti.com/location?types=SMARTPOST&types=PICKUPPOINT&countryCode='.$country.'&locationZipCode='.$index.'&top=10');
-    
+
         $arr = json_decode($file, true);
-        
+
         return $arr['locations'];
     }
-    
-    
+
+
 }
