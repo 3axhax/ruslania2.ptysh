@@ -54,13 +54,13 @@ class Promocodes extends CActiveRecord {
 	 * @param $deliveryPrice float цена доставки
 	 * @return mixed конечная цена с учетом промокода
 	 */
-	function getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues) {
+	function getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
 		$promocode = $this->getPromocodeByCode($code);
 		if (($check = $this->check($promocode)) > 0) return $itemsPrice + $deliveryPrice;
 
 		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
 		$sale = $saleHandler->getByPromocode($promocode['id']);
-		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues);
+		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
 	}
 
 	function briefly($code, $checkUsed = true) {

@@ -29,8 +29,11 @@ class Promocodes_category extends CActiveRecord {
 	 * @param $currencyId int ид валюты, в которой нужно вернуть номинал
 	 * @return int|float номинал сертификата
 	 */
-	function getNominal($id, $currencyId) {
+	function getNominal($id, $currencyId, $itemsPrice = 0, $pricesValues = array(), $discountKeys = array()) {
 		$certificate = $this->getCertificate($id);
+		if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return 0;
+		if ($itemsPrice < (float) $certificate['min_price']) return 0;
+
 		if (empty($certificate['promocode_id'])) return 0;
 		if ($certificate['nominal'] <= 0) return 0;
 
@@ -39,7 +42,21 @@ class Promocodes_category extends CActiveRecord {
 		$code = $promocode->getPromocode($certificate['promocode_id']);
 		if (($check = $promocode->check($code, false)) > 0) return 0;
 
-		return Currency::convertToCurrency($certificate['nominal'], $certificate['currency'], $currencyId);
+
+		switch((int) $certificate['unit']) {
+			case 1: //проценты
+				$price = $this->_getPrice($certificate['categorys'], $pricesValues, $discountKeys, $certificate['nominal']);
+				var_dump($itemsPrice, $price);
+				if ($price['withDiscount'] > $itemsPrice) return 0;
+				return ($itemsPrice - $price['withDiscount']);
+				break;
+			case 2: //евро
+				$price = $this->_getPrice($certificate['categorys'], $pricesValues, $discountKeys, 0);
+				//пока не знаю как считать
+				break;
+		}
+
+		return 0;
 	}
 
 	/**
@@ -50,8 +67,8 @@ class Promocodes_category extends CActiveRecord {
 	 * @param $deliveryPrice array [товар=>цена]
 	 * @return mixed конечная цена с учетом промокода
 	 */
-	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues) {
-		$nominal = $this->getNominal($id, $currencyId);
+	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
+		$nominal = $this->getNominal($id, $currencyId, $itemsPrice, $pricesValues);
 		$total = $itemsPrice + $deliveryPrice - $nominal;
 		if ($total < 0) $total = 0;
 		return $total;
@@ -79,6 +96,10 @@ class Promocodes_category extends CActiveRecord {
 			if (!isset(self::$_certificates[$id])) {
 				self::$_certificates[$id] = $this->findByPk($id)->attributes?:array();
 				if (!empty(self::$_certificates[$id]['promocode_id'])) self::$_codeIds[self::$_certificates[$id]['promocode_id']] = $id;
+				if (!empty(self::$_certificates[$id]['categorys'])) {
+					self::$_certificates[$id]['categorys'] = $this->_getCategorys(unserialize(self::$_certificates[$id]['categorys']));
+				}
+				else self::$_certificates[$id]['categorys'] = array();
 			}
 			return self::$_certificates[$id];
 		}
@@ -97,5 +118,70 @@ class Promocodes_category extends CActiveRecord {
 		return null;
 	}
 
+	private function _getCategorys($categorys) {
+		$result = array();
+		$modelCategory = new Category();
+		foreach ($categorys as $cat) {
+			$cat = explode('-', $cat);
+			$eid = array_shift($cat);
+			if (!isset($result[$eid])) $result[$eid] = array();
+			$cid = array_shift($cat);
+			if (!empty($cid)) {
+				$result[$eid][] = $cid;
+				foreach ($modelCategory->GetChildren($eid, $cid) as $childId) $result[$eid][] = $childId;
+			}
+		}
+		foreach ($result as $entity=>$catIds) {
+			$result[$entity] = array_unique($catIds);
+		}
+		return $result;
+	}
 
+	/** цена с учетом промокода
+	 * @param $categorys array категории из сертификата, по которым начисляется скидка
+	 * @param $pricesValues array товар->цена
+	 * @param $discountKeys array товар->ключи для DiscountManager::GetPrice
+	 * @return array
+	 */
+	private function _getPrice($categorys, $pricesValues, $discountKeys, $percent) {
+		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
+		$product = new Product();
+		if (!empty($categorys)&&is_array($categorys)) {
+			foreach ($pricesValues as $itemKey=>$price) {
+				list($eid, $itemId) = explode('_', $itemKey);
+				$item = $product->GetBaseProductInfo($eid, $itemId);
+				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+				if (isset($categorys[$eid])) {
+					if (empty($categorys[$eid])) {
+						$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
+						$priceForSale['onlyPromocode'] += $discount[$discountKeys['originalPrice']];
+					}
+					else {
+						$itemCategorys = array();
+						if (!empty($item['code'])) $itemCategorys[] = $item['code'];
+						if (!empty($item['subcode '])) $itemCategorys[] = $item['subcode '];
+						foreach ($itemCategorys as $catId) {
+							if (in_array($catId, $categorys[$eid])) {
+								$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
+								$priceForSale['onlyPromocode'] += $discount[$discountKeys['originalPrice']];
+								break;
+							}
+						}
+					}
+				}
+				$priceForSale['withDiscount'] += $discount[$discountKeys['discountPrice']];
+				$priceForSale['withoutDiscount'] += $discount[$discountKeys['originalPrice']];
+			}
+		}
+		else {
+			foreach ($pricesValues as $itemKey=>$price) {
+				list($eid, $itemId) = explode('_', $itemKey);
+				$item = $product->GetBaseProductInfo($eid, $itemId);
+				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
+				$priceForSale['withDiscount'] += $discount[$discountKeys['discountPrice']];
+				$priceForSale['withoutDiscount'] += $discount[$discountKeys['originalPrice']];
+			}
+		}
+		return $priceForSale;
+	}
 }

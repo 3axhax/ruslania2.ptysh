@@ -94,7 +94,7 @@ class Certificate extends CActiveRecord {
 	 * @param $deliveryPrice array [товар=>цена]
 	 * @return mixed конечная цена с учетом промокода
 	 */
-	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues) {
+	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
 		$nominal = $this->getNominal($id, $currencyId);
 		$total = $itemsPrice + $deliveryPrice - $nominal;
 		if ($total < 0) $total = 0;

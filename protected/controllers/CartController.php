@@ -200,19 +200,19 @@ class CartController extends MyController {
         }
     }
     function actionGetCostIzmena() {
-
-        $cart = $this->actionGetAll(0);
-
-        $cart = $cart['CartItems'];
-
-        //var_dump($cart);
-
-        //exit();
-
-        $country = Country::GetCountryById($_POST['id_country']);
+		
+		$cart = $this->actionGetAll(0);
+		
+		$cart = $cart['CartItems'];
+        
+		//var_dump($cart);
+		
+		//exit();
+		
+		$country = Country::GetCountryById($_POST['id_country']);
         $withVat = Address::UseVAT($country);
-
-        $PH = new ProductHelper();
+		
+		$PH = new ProductHelper();		
         $cartInfo = '';
         $fullprice = 0;
         $fullweight = 0;
@@ -220,22 +220,22 @@ class CartController extends MyController {
         $full_count = 0;
         $cartInfo['items'] = array();
         //var_dump($cart);
-        //return '';
+		//return '';
         foreach ($cart as $item) {
-
-            if ($country['id'] == '68' OR $country['id'] == '246') {
-
-                $item['type'] = 1;
-
-            } else {
-
-                $item['type'] = 2;
-
-            }
-
-            $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-            $cartInfo['items'][$item['ID']]['title'] =
-                $item['Title'];
+            
+			if ($country['id'] == '68' OR $country['id'] == '246') {
+			
+				$item['type'] = 1;
+			
+			} else {
+				
+				$item['type'] = 2;
+				
+			}
+			
+			$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            $cartInfo['items'][$item['ID']]['title'] = 
+			$item['Title'];
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
                 if ($item['type'] == '1') { //фины
@@ -247,33 +247,33 @@ class CartController extends MyController {
                 $price = $item['PriceVAT'];
             }
             if (!$withVat) {
-
-                if ($item['Entity'] == 30) {
-
-                    if ($item['type'] == '1') { //фины
-                        $price = $item['PriceVAT0Fin'] * $item['Quantity'];
-                    } else {
-                        $price = $item['PriceVAT0World'] * $item['Quantity'];
-                    }
+                
+				if ($item['Entity'] == 30) {
+				
+				if ($item['type'] == '1') { //фины
+                    $price = $item['PriceVAT0Fin'] * $item['Quantity'];
                 } else {
-                    $price = $item['PriceVAT0'];
+                    $price = $item['PriceVAT0World'] * $item['Quantity'];
                 }
-
+				} else {
+					$price = $item['PriceVAT0'];
+				}
+				
             }
             $fullweight += $item['UnitWeight'];
-
-            $cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
-
+            
+			$cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
+			
             if ($item['Entity'] == 30) {
                 $item['Quantity'] = 1;
                 $fullprice += $price;
-                $cartInfo['items'][$item['ID']]['price'] = $price;
+				$cartInfo['items'][$item['ID']]['price'] = $price;
                 $cartInfo['items'][$item['ID']]['Quantity'] = 1;
             } else {
                 $fullprice += $price * $item['Quantity'];
                 $cartInfo['items'][$item['ID']]['Quantity'] = $item['Quantity'];
-
-                $cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
+				
+				$cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
             }
             $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
             $full_count += $item['Quantity'];
@@ -349,20 +349,20 @@ class CartController extends MyController {
         //var_dump($post);
         if (!Yii::app()->user->isGuest) {
             $adr1 = Address::GetAddress($this->uid, $post['id_address']);
-            $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);
-
+            $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);			
+			
             $idAddr2 = '';
             if (!$post['dtype']) {
                 $post['dtype'] = 1;
             }
-
-            if ( $post['dtype'] == 1 ) {
-
-                $adr1['address_id'] = 0;
-                $adr2['address_id'] = 0;
-
-            }
-
+			
+			if ( $post['dtype'] == 1 ) {
+				
+				$adr1['address_id'] = 0;
+				$adr2['address_id'] = 0;
+				
+			}
+			
             $s['DeliveryAddressID'] = $adr1['address_id'];
             $s['DeliveryTypeID'] = $post['dtype'];
             $s['DeliveryMode'] = 0;
@@ -530,24 +530,24 @@ class CartController extends MyController {
                      * 2. Добавляем адрес в базу с привязкой покупателя к этому
                      * адресу
                      */
-
-                    if (!$post['check_addressa']) {
-
-                        $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
-                            . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
-                        $ret = Yii::app()->db->createCommand($sql)->execute();
-                        $idAddr2 = Yii::app()->db->getLastInsertID();
-                        $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
-                        $ret = Yii::app()->db->createCommand($sql)->execute();
-                        $idAddr = Yii::app()->db->getLastInsertID();
-
-                    } else {
-
-                        $idAddr2 = 0;
-
-                    }
-
-
+					 
+					 if (!$post['check_addressa']) {
+					 
+                    $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
+                        . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
+                    $ret = Yii::app()->db->createCommand($sql)->execute();
+                    $idAddr2 = Yii::app()->db->getLastInsertID();
+                    $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "1")';
+                    $ret = Yii::app()->db->createCommand($sql)->execute();
+                    $idAddr = Yii::app()->db->getLastInsertID();
+					
+					} else {
+						
+						$idAddr2 = 0;
+						
+					}
+					
+					
                     if (!$post['dtid']) {
                         $post['dtid'] = 0;
                     }
@@ -738,18 +738,18 @@ class CartController extends MyController {
         $tmp = $cart->BeautifyCart($cart->GetCart($this->uid, $this->sid), $this->uid); //var_dump($tmp);
         $inCart = array();
         $endedItems = array();
-        $tt=0;
+		$tt=0;
         foreach ($tmp as $item) {
             if ($item['IsAvailable']) {
                 $inCart[] = $item;
-
-                if ($item['Entity'] == 30) {
-
-                    $item['Quantity'] = 1;
-
-                }
-
-                $tt += $item['Quantity'];
+				
+				if ($item['Entity'] == 30) {
+					
+					$item['Quantity'] = 1;
+					
+				}
+				
+				$tt += $item['Quantity'];
             }
         }
         $this->ResponseJson(array('countcart' => $tt, 'totalPrice' => $total_price));
@@ -1079,9 +1079,9 @@ class CartController extends MyController {
             }
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
+            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
             $ret['currency'] = Currency::ToSign(Yii::app()->currency);
-            $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues']);
+            $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
             $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'));
         }
         $this->ResponseJson($ret);

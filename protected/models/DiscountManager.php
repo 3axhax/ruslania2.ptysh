@@ -32,6 +32,7 @@ class DiscountManager
     const TYPE_NO_DISCOUNT = 8;
     const TYPE_YEAR = 9;
     const TYPE_PART = 10; // скидка на раздел
+    const TYPE_PROMOCODE = 11;
 
     private static $rusDays = null;
     private static $personalDiscount = null;
@@ -55,7 +56,7 @@ class DiscountManager
         return self::$_offerDay;
     }
 
-    public static function GetPrice($uid, $item)
+    public static function GetPrice($uid, $item, $promocodesPrecent = 0)
     {
         $discountType = null;
         $priceFin = 0;
@@ -86,6 +87,8 @@ class DiscountManager
 
         if(!empty(self::$personalDiscount) && self::$personalDiscount > 0)
             $allDiscounts[] = array('Type' => self::TYPE_PERSONAL, 'Value' => self::$personalDiscount);
+
+        if ($promocodesPrecent > 0) $allDiscounts[] = array('Type' => self::TYPE_PROMOCODE, 'Value' => $promocodesPrecent);
 
         $itemDiscount = 0;
 
