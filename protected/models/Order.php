@@ -168,7 +168,7 @@ class Order extends CMyActiveRecord
         $withVAT = Address::UseVAT($address);
         $itemsPrice = 0;
         $pricesValues = array();
-        $discountKeys = array();//нужно для получения цены по промокоду
+        $discountKeys = array();//нужно для получения цены по промокоду, сюда же положил количество товара, что бы не создавать новую переменную
         foreach ($items as $idx=>$item) {
             $values = DiscountManager::GetPrice($uid, $item);
             $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
@@ -189,7 +189,7 @@ class Order extends CMyActiveRecord
                 $price /= 12;
             }
             $pricesValues[$itemKey] = $price;
-            $discountKeys[$itemKey] = ['discountPrice'=>$key, 'originalPrice'=>$keyWithoutDiscount];
+            $discountKeys[$itemKey] = ['discountPrice'=>$key, 'originalPrice'=>$keyWithoutDiscount, 'quantity'=>$item['quantity']];
             $itemsPrice += $item['quantity'] * $price;
 
             if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)

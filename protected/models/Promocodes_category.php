@@ -186,7 +186,7 @@ class Promocodes_category extends CActiveRecord {
 				if (isset($categorys[$eid])) {
 					if (empty($categorys[$eid])) {
 						$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-						$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']];
+						$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
 					}
 					else {
 						$itemCategorys = array();
@@ -195,14 +195,14 @@ class Promocodes_category extends CActiveRecord {
 						foreach ($itemCategorys as $catId) {
 							if (in_array($catId, $categorys[$eid])) {
 								$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-								$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']];
+								$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
 								break;
 							}
 						}
 					}
 				}
-				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']];
-				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']];
+				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']]*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
 			}
 		}
 		else {
@@ -210,8 +210,8 @@ class Promocodes_category extends CActiveRecord {
 				list($eid, $itemId) = explode('_', $itemKey);
 				$item = $product->GetBaseProductInfo($eid, $itemId);
 				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']];
-				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']];
+				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']]*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
 			}
 		}
 		return $priceForSale;

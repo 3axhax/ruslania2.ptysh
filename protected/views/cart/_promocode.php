@@ -10,7 +10,7 @@
 			<input type="button" value="<?= Yii::app()->ui->item('A_NEW_APPLY') ?>">
 		</div>*/ ?>
 		<div>
-			<input type="text" id="promocode" value="">
+			<input placeholder="<?= Yii::app()->ui->item('PROMOCODE'); ?>" type="text" id="promocode" value="">
 			<input type="button" value="<?= Yii::app()->ui->item('A_NEW_APPLY') ?>">
 		</div>
 	</div>
@@ -76,7 +76,7 @@
 				type: 'post',
 				dataType : 'json',
 				success: function (r) {
-					$('.itogo_cost').html(r.totalPrice + r.currency);
+					$('.<?= $priceId ?>').html(r.totalPrice + r.currency);
 					self.$input.closest('div').siblings().remove();
 					if (value != '') {
 						var $buf = self.$input.closest('div');
