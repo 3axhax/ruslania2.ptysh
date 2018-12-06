@@ -352,11 +352,7 @@ class CartController extends MyController {
             $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);			
 			
             $idAddr2 = '';
-            if (!$post['dtype']) {
-                $post['dtype'] = 1;
-            }
-			
-			if ( $post['dtype'] == 1 ) {
+            if ( $post['dtype'] == 1 ) {
 				
 				$adr1['address_id'] = 0;
 				$adr2['address_id'] = 0;
@@ -1082,7 +1078,7 @@ class CartController extends MyController {
             list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
             $ret['currency'] = Currency::ToSign(Yii::app()->currency);
             $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
-            $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'));
+            $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'), true, $ret['itemsPrice']);
         }
         $this->ResponseJson($ret);
     }

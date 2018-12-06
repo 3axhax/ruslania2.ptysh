@@ -14,6 +14,7 @@ class Promocodes extends CActiveRecord {
 		3 => 'PROMOCODE_ERROR_3',
 		4 => 'PROMOCODE_ERROR_1',
 		5 => 'PROMOCODE_ERROR_1',
+		6 => 'PROMOCODE_ERROR_1',
 	);
 
 	function rules() {
@@ -63,17 +64,17 @@ class Promocodes extends CActiveRecord {
 		return $saleHandler->getTotalPrice($sale['id'], Yii::app()->currency, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
 	}
 
-	function briefly($code, $checkUsed = true) {
+	function briefly($code, $checkUsed = true, $itemsPrice = null) {
 		if (empty($code)) return ['message'=>''];
 		$promocode = $this->getPromocodeByCode($code);
-		if (($check = $this->check($promocode, true, $checkUsed)) > 0) return ['message'=>Yii::app()->ui->item($this->_messages[$check])];
+		if (($check = $this->check($promocode, true, $checkUsed, $itemsPrice)) > 0) return ['message'=>Yii::app()->ui->item($this->_messages[$check])];
 
 		$saleHandler = $this->_getSaleHandler($promocode['type_id']);
 		$sale = $saleHandler->getByPromocode($promocode['id']);
-		return $saleHandler->briefly($sale['id'], Yii::app()->currency);
+		return $saleHandler->briefly($sale['id'], Yii::app()->currency, $itemsPrice);
 	}
 
-	function check($promocode, $checkHandler = true, $checkUsed = true) {
+	function check($promocode, $checkHandler = true, $checkUsed = true, $itemsPrice = null) {
 		if (empty($promocode)) return 1;//не найден
 		if ($checkUsed) {
 			if (!empty($promocode['is_used'])) return 2;//использован
@@ -88,6 +89,7 @@ class Promocodes extends CActiveRecord {
 			if (empty($saleHandler)) return 4;//не найден обработчик промокода
 			$sale = $saleHandler->getByPromocode($promocode['id']);
 			if (empty($sale)) return 5;//нет информации о скидке
+			if (!$saleHandler->check($sale['id'], Yii::app()->currency, $itemsPrice)) return 6;//не проходит по условиям промокода
 		}
 		return 0;//все ок
 	}

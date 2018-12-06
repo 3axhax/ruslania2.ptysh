@@ -1280,4 +1280,5 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'PROMOCODE_ERROR_2'=>'Промокод использован',
     'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
+    'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
 );

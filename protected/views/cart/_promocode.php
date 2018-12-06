@@ -82,12 +82,13 @@
 						var $buf = self.$input.closest('div');
 						var $elem = $('<div style="font-weight: normal;"></div>');
 						if ('promocodeValue' in r.briefly) {
-							$elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>')
+							$elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>');
 						}
 						else if ('message' in r.briefly) {
-							$elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>')
+							$elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>');
 						}
 						$('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elem).click(function(){ self._recount(''); });
+						if ('name' in r.briefly) $elem.append(r.briefly['name']);
 						$buf.after($elem);
 					}
 					else self.$input.val('');

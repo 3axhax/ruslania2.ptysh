@@ -1282,4 +1282,5 @@ By clicking on a category you are interested in, you can see all the products wi
     'PROMOCODE_ERROR_2'=>'Промокод использован',
     'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
+    'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
 );

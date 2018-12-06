@@ -1286,4 +1286,5 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
     'PROMOCODE_ERROR_2'=>'Промокод использован',
     'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
+    'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
 );

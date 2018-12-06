@@ -74,9 +74,8 @@ class Certificate extends CActiveRecord {
 	 * @return int|float номинал сертификата
 	 */
 	function getNominal($id, $currencyId) {
+		if (!$this->check($id, $currencyId)) return 0;
 		$certificate = $this->getCertificate($id);
-		if (empty($certificate['promocode_id'])) return 0;
-		if ($certificate['nominal'] <= 0) return 0;
 
 		/** @var $promocode Promocodes */
 		$promocode = Promocodes::model();
@@ -84,6 +83,13 @@ class Certificate extends CActiveRecord {
 		if (($check = $promocode->check($code, false)) > 0) return 0;
 
 		return Currency::convertToCurrency($certificate['nominal'], $certificate['currency'], $currencyId);
+	}
+
+	function check($id, $currencyId, $itemsPrice = null) {
+		$certificate = $this->getCertificate($id);
+		if (empty($certificate['promocode_id'])) return false;
+		if ($certificate['nominal'] <= 0) return false;
+		return true;
 	}
 
 	/**
@@ -102,13 +108,12 @@ class Certificate extends CActiveRecord {
 	}
 
 	function briefly($id, $currencyId) {
+		if (!$this->check($id, $currencyId)) return null;
 		$certificate = $this->getCertificate($id);
-		if (empty($certificate['promocode_id'])) return null;
-		if ($certificate['nominal'] <= 0) return null;
 		return [
 			'promocodeValue'=>$certificate['nominal'],
 			'promocodeUnit'=>Currency::ToSign($certificate['currency']),
-			'realValue'=>$this->getNominal($id, $currencyId),
+			'realValue'=>$this->getNominal($id, $currencyId, 0),
 			'realUnit'=>Currency::ToSign(Yii::app()->currency),
 			'name'=>Yii::app()->ui->item('GIFT_CERTIFICATE'),
 		];
