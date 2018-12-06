@@ -27,7 +27,7 @@ class Promocodes_category extends CActiveRecord {
 	function check($id, $currencyId, $itemsPrice) {
 		$certificate = $this->getCertificate($id);
 
-//		if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
+		if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
 		if ($itemsPrice !== null) {
 			$itemsPrice = Currency::ConvertToEUR($itemsPrice, $currencyId);
 			if ($itemsPrice < (float) $certificate['min_price']) return false;
@@ -115,7 +115,9 @@ class Promocodes_category extends CActiveRecord {
 	}
 
 	function used($id, $promocodeId) {
-		return Promocodes::model()->updateByPk($promocodeId, array('is_used'=>1));
+		$certificate = $this->getCertificate($id);
+		if (!empty($certificate['single_use'])) return Promocodes::model()->updateByPk($promocodeId, array('is_used'=>1));
+		return true;
 	}
 
 	private function _cacheCertificate($id = null, $promocodeId = null) {
@@ -181,12 +183,15 @@ class Promocodes_category extends CActiveRecord {
 		if (!empty($categorys)&&is_array($categorys)) {
 			foreach ($pricesValues as $itemKey=>$price) {
 				list($eid, $itemId) = explode('_', $itemKey);
+				$corrector = 1;
+				if ($eid == Entity::PERIODIC) $corrector = 12;
+
 				$item = $product->GetBaseProductInfo($eid, $itemId);
 				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 				if (isset($categorys[$eid])) {
 					if (empty($categorys[$eid])) {
 						$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-						$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
+						$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 					}
 					else {
 						$itemCategorys = array();
@@ -195,23 +200,26 @@ class Promocodes_category extends CActiveRecord {
 						foreach ($itemCategorys as $catId) {
 							if (in_array($catId, $categorys[$eid])) {
 								$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-								$priceForSale['onlyPromocode'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
+								$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 								break;
 							}
 						}
 					}
 				}
-				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']]*$discountKeys[$itemKey]['quantity'];
-				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 			}
 		}
 		else {
 			foreach ($pricesValues as $itemKey=>$price) {
 				list($eid, $itemId) = explode('_', $itemKey);
+				$corrector = 1;
+				if ($eid == Entity::PERIODIC) $corrector = 12;
+
 				$item = $product->GetBaseProductInfo($eid, $itemId);
 				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-				$priceForSale['withDiscount'] += $discount[$discountKeys[$itemKey]['discountPrice']]*$discountKeys[$itemKey]['quantity'];
-				$priceForSale['withoutDiscount'] += $discount[$discountKeys[$itemKey]['originalPrice']]*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 			}
 		}
 		return $priceForSale;

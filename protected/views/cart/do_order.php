@@ -848,7 +848,8 @@
         var frm2 = $('form.address.text').serialize();
          var csrf = $('meta[name=csrf]').attr('content').split('=');
         var frmall = frm1+'&'+frm2+'&YII_CSRF_TOKEN='+csrf[1];
-       
+        if (typeof(promocodes) != 'undefined') frmall += '&promocode=' + $('#promocode').val();
+
         var error = 0;
         
         if ($('select[name=id_address]').val() == '' || $('select[name=id_address_b]').val() == '') {
@@ -1039,9 +1040,9 @@
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
                 if ($item['type'] == '1') { //фины
-                    $price = $item['PriceVATFin'] * $item['Quantity'];
+                    $price = $item['PriceVATFin'];
                 } else {
-                    $price = $item['PriceVATWorld'] * $item['Quantity'];
+                    $price = $item['PriceVATWorld'];
                 }
             } else {
                 $price = $item['PriceVAT'];
@@ -1051,9 +1052,9 @@
 				if ($item['Entity'] == 30) {
 				
 				if ($item['type'] == '1') { //фины
-                    $price = $item['PriceVAT0Fin'] * $item['Quantity'];
+                    $price = $item['PriceVAT0Fin'];
                 } else {
-                    $price = $item['PriceVAT0World'] * $item['Quantity'];
+                    $price = $item['PriceVAT0World'];
                 }
 				} else {
 					$price = $item['PriceVAT0'];
@@ -1065,15 +1066,14 @@
 			$cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
 			
             if ($item['Entity'] == 30) {
-                $item['Quantity'] = 1;
-                $fullprice += $price;
+                $fullprice += $price * $item['Quantity'];
 				$cartInfo['items'][$item['ID']]['price'] = $price;
                 $cartInfo['items'][$item['ID']]['quantity'] = 1;
             } else {
                 $fullprice += $price * $item['Quantity'];
                 $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
 				
-				$cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
+				$cartInfo['items'][$item['ID']]['price'] = $price;
             }
             $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
             $full_count += $item['Quantity'];

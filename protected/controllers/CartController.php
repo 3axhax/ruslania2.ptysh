@@ -210,7 +210,7 @@ class CartController extends MyController {
 		//exit();
 		
 		$country = Country::GetCountryById($_POST['id_country']);
-        $withVat = Address::UseVAT($country);
+        //$withVat = Address::UseVAT($country);
 		
 		$PH = new ProductHelper();		
         $cartInfo = '';
@@ -223,6 +223,8 @@ class CartController extends MyController {
 		//return '';
         foreach ($cart as $item) {
             
+			$withVat = $item['UseVAT'];
+			
 			if ($country['id'] == '68' OR $country['id'] == '246') {
 			
 				$item['type'] = 1;
@@ -239,9 +241,9 @@ class CartController extends MyController {
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
                 if ($item['type'] == '1') { //фины
-                    $price = $item['PriceVATFin'] * $item['Quantity'];
+                    $price = $item['PriceVATFin'];
                 } else {
-                    $price = $item['PriceVATWorld'] * $item['Quantity'];
+                    $price = $item['PriceVATWorld'];
                 }
             } else {
                 $price = $item['PriceVAT'];
@@ -251,9 +253,9 @@ class CartController extends MyController {
 				if ($item['Entity'] == 30) {
 				
 				if ($item['type'] == '1') { //фины
-                    $price = $item['PriceVAT0Fin'] * $item['Quantity'];
+                    $price = $item['PriceVAT0Fin'];
                 } else {
-                    $price = $item['PriceVAT0World'] * $item['Quantity'];
+                    $price = $item['PriceVAT0World'];
                 }
 				} else {
 					$price = $item['PriceVAT0'];
@@ -265,15 +267,15 @@ class CartController extends MyController {
 			$cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
 			
             if ($item['Entity'] == 30) {
-                $item['Quantity'] = 1;
-                $fullprice += $price;
+                //$item['Quantity'] = 1;
+                $fullprice += $price * $item['Quantity'];
 				$cartInfo['items'][$item['ID']]['price'] = $price;
                 $cartInfo['items'][$item['ID']]['Quantity'] = 1;
             } else {
                 $fullprice += $price * $item['Quantity'];
                 $cartInfo['items'][$item['ID']]['Quantity'] = $item['Quantity'];
 				
-				$cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
+				$cartInfo['items'][$item['ID']]['price'] = $price;
             }
             $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
             $full_count += $item['Quantity'];
@@ -364,7 +366,7 @@ class CartController extends MyController {
             $s['DeliveryMode'] = 0;
             $s['CurrencyID'] = Yii::app()->currency;
             $s['BillingAddressID'] = $adr2['address_id'];
-            $s['Notes'] = 0;
+            $s['Notes'] = '';
             $s['Mandate'] = 0;
             //$s['payment'] = $post['ptype'];
             $order = new OrderForm($this->sid);
@@ -377,6 +379,7 @@ class CartController extends MyController {
                     $items[] = $item;
             }
             $o = new Order;
+            $o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
             $id = $o->CreateNewOrder($this->uid, $this->sid, $order, $items, $post['ptype']);
             $o = new Order;
             $order = $o->GetOrder($id);

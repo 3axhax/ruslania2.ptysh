@@ -26,7 +26,7 @@
 
 					$product['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $product);
 					$product['priceData']['unit'] = '';
-					if ($entity == Entity::PERIODIC) {
+					if ($product['entity'] == Entity::PERIODIC) {
 						$issues = Periodic::getCountIssues($product['issues_year']);
 						if (!empty($issues['show3Months'])) {
 							$product['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
@@ -89,7 +89,12 @@
 									<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
 								<?php else: ?>
 									<div class="addcart" style="margin-top: 10px;">
-										<a class="cart-action add_cart" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 103px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
+									
+									
+										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 103px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+										
+										
+										
 									</div>
 								<?php endif; ?>
 							</div>
