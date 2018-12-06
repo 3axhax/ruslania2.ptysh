@@ -27,8 +27,8 @@ class Promocodes_category extends CActiveRecord {
 	function check($id, $currencyId, $itemsPrice) {
 		$certificate = $this->getCertificate($id);
 
-		if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
 		if ($itemsPrice !== null) {
+			if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
 			$itemsPrice = Currency::ConvertToEUR($itemsPrice, $currencyId);
 			if ($itemsPrice < (float) $certificate['min_price']) return false;
 		}
@@ -103,7 +103,7 @@ class Promocodes_category extends CActiveRecord {
 			$names[] = '<div>' . $name . '</div>';
 		}
 		if (!empty($certificate['min_price'])) $names[] = '<div>' . Yii::app()->ui->item('MSG_ORDER_FROM_SUMM', $certificate['min_price'] . Currency::ToSign(Currency::EUR)) . '</div>';
-		if (!empty($certificate['uid'])&&($itemsPrice === null)) $names[] = '<div>Только для ' . $certificate['uid'] . '</div>';
+		if (!empty($certificate['uid'])&&($itemsPrice === null)) $names[] = '<div>Только для ' . $certificate['uid'] . ' (ID клиента на новом сайте)</div>';
 //		$names = implode('', $names);
 		return [
 			'promocodeValue'=>$certificate['nominal'],
