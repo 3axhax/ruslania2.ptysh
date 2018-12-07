@@ -76,7 +76,7 @@
 				type: 'post',
 				dataType : 'json',
 				success: function (r) {
-					$('.<?= $priceId ?>').html(r.totalPrice + r.currency);
+					$('.<?= $priceId ?>').html(r.totalPrice + ' ' + r.currency);
 					self.$input.closest('div').siblings().remove();
 					if (value != '') {
 						var $buf = self.$input.closest('div');

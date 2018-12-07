@@ -354,16 +354,23 @@ class CartController extends MyController {
             $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);			
 			
             $idAddr2 = '';
-            if ( $post['dtype'] == 1 ) {
+			
+			if (!$adr1['address_id']) { $adr1['address_id'] = 0; }
+			if (!$adr2['address_id']) { $adr2['address_id'] = 0; }
+			
+            if ( $post['dtype'] == 0 ) {
 				
 				$adr1['address_id'] = 0;
 				$adr2['address_id'] = 0;
 				
 			}
 			
+			$DeliveryMode = 0;
+			if ($post['dtype'] == '0') { $DeliveryMode = 1; }
+			
             $s['DeliveryAddressID'] = $adr1['address_id'];
             $s['DeliveryTypeID'] = $post['dtype'];
-            $s['DeliveryMode'] = 0;
+            $s['DeliveryMode'] = $DeliveryMode;
             $s['CurrencyID'] = Yii::app()->currency;
             $s['BillingAddressID'] = $adr2['address_id'];
             $s['Notes'] = '';
@@ -824,9 +831,29 @@ class CartController extends MyController {
         $cart = new Cart;
         if ($quantity == 0)
             $quantity = 1;
-        $message = Yii::app()->ui->item('ADDED_TO_MARK');
-        $ret = $cart->AddToCart($entity, $id, $quantity, Cart::TYPE_MARK, $this->uid, $this->sid, Cart::FIN_PRICE);
-        $this->ResponseJson(array('hasError' => false, 'msg' => $message));
+        
+		
+		if ($_POST['mark'] == '1') {
+			
+			//добавить
+			
+			$ret = $cart->AddToCart($entity, $id, $quantity, Cart::TYPE_MARK, $this->uid, $this->sid, Cart::FIN_PRICE);
+        
+			$message = Yii::app()->ui->item('ADDED_TO_MARK');
+			
+		} else {
+			
+			//убрать
+			
+			$ret = $cart->Remove($entity, $id, Cart::TYPE_MARK, $this->uid, $this->sid);
+			
+			
+			$message = Yii::app()->ui->item('DELETED_FROM_MARK');
+			
+		}
+		
+		$this->ResponseJson(array('hasError' => false, 'msg' => $message));
+        
         //$this->ResponseJsonOk($ret);
     }
     public function actionChangeQuantity($data = false) {
@@ -1067,6 +1094,7 @@ class CartController extends MyController {
             $aid = (int) Yii::app()->getRequest()->getParam('aid');
             $dtid = (int) Yii::app()->getRequest()->getParam('dtid');
             $countryId = 0;
+            $da = array();
             if ($aid > 0) {
                 $a = new Address();
                 $da = $a->GetAddress($this->uid, $aid);
@@ -1079,9 +1107,18 @@ class CartController extends MyController {
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
             list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
-            $ret['currency'] = Currency::ToSign(Yii::app()->currency);
-            $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
-            $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'), true, $ret['itemsPrice']);
+            $promocode = (string) Yii::app()->getRequest()->getParam('promocode');
+            if ($promocode === '') {
+                $ret['currency'] = Currency::ToSign(Yii::app()->currency);
+                $ret['totalPrice'] = ProductHelper::FormatPrice($ret['itemsPrice'] + $ret['deliveryPrice'], false);
+                $ret['briefly'] = '';
+            }
+            else {
+                $ret['currency'] = Currency::ToSign(Yii::app()->currency);
+                $ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
+                $ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'), true, $ret['itemsPrice']);
+                if (!empty($ret['totalPrice'])) $ret['totalPrice'] = ProductHelper::FormatPrice($ret['totalPrice'], false);
+            }
         }
         $this->ResponseJson($ret);
     }

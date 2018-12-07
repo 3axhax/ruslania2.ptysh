@@ -164,6 +164,7 @@ class Order extends CMyActiveRecord
      * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice]]
      */
     function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null) {
+        if (empty($address)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
         if ($currencyId === null) $currencyId = Yii::app()->currency;
         $withVAT = Address::UseVAT($address);
         $itemsPrice = 0;
@@ -372,7 +373,7 @@ class Order extends CMyActiveRecord
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
             
-          // var_dump($ex);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/21212.txt', print_r($ex,1));
             
             return 0;
         }
