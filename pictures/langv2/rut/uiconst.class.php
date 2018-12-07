@@ -1285,4 +1285,5 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
     'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
+    'MSG_FAIL_PAY' => '<p>Если у вас не прошла оплата или вам неудобен этот вариант оплаты свяжитесь с нами по телефону 09 27270737, (+358) 927270737 или по E-mail: periodicals@ruslania.com.</p>',
 );

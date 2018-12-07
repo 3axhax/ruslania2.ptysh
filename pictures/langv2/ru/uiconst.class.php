@@ -157,6 +157,7 @@ return array(
     'BTN_SEARCH_ALT' => 'Найти',
     'BTN_SEARCH_PICTURE' => 'search_ru.png',
     'BTN_SHOPCART_ADD_SUSPEND_ALT' => 'Взять на заметку',
+    'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'Убрать из заметок',
     'BTN_SHOPCART_ADD_SUSPEND_PICTURE' => 'as_s_ru.png',
     'BTN_SHOPCART_LEAVE_ORDER_ALT' => 'В лист ожидания',
     'BTN_SHOPCART_LEAVE_ORDER_PICTURE' => 'as_lo_ru.png',
@@ -329,6 +330,7 @@ return array(
     'MSG_CHOOSE_PAYMENT_TYPE_COMMENT' => '(для организаций - только счет-фактура)',
     'MSG_CONDITIONS_OF_USE' => 'Условия использования',
     'MSG_CONTACTS_MAP_TITLE' => 'Книжный магазин Руслания расположен в самом центре Хельсинки, недалеко от метро Kamppi.',
+    'MSG_DELIVERY_TYPE_0' => 'Забрать в магазине',
     'MSG_DELIVERY_TYPE_1' => 'Express',
     'MSG_DELIVERY_TYPE_2' => 'Priority',
     'MSG_DELIVERY_TYPE_3' => 'Economy',
@@ -998,6 +1000,7 @@ IBAN DE79514303006474790001 <br>
     'AUDIO_STREAMS' => 'Звуковые дорожки',
     'ADVENT_CALENDAR' => 'Рождественский календарь',
     'ADDED_TO_MARK' => 'Товар взят на заметку',
+    'DELETED_FROM_MARK' => 'Товар убран из Ваших заметок',
     'WE_RECOMMEND' => 'Мы рекомендуем ',
     'MOVED_TO_WAITING_LIST' => 'В Вашей корзине были товары, тираж которых закончился.<br/>
 Этих товаров больше нет в нашем ассортименте. <br/>
@@ -1304,5 +1307,6 @@ IBAN DE79514303006474790001 <br>
     'PROMOCODE_ERROR_3'=>'Закончился срок действия промокода',
 
     'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
+    'MSG_FAIL_PAY' => '<p>Если у вас не прошла оплата или вам неудобен этот вариант оплаты свяжитесь с нами по телефону 09 27270737, (+358) 927270737 или по E-mail: periodicals@ruslania.com.</p>',
 
 );

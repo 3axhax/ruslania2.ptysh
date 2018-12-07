@@ -66,8 +66,8 @@ KnockoutForm::RegisterScripts();
 								<input type="hidden" value="1" class="worldmonthpriceoriginal"/>
 								<input type="hidden" value="<?= round($price[DiscountManager::WITH_VAT_WORLD] / $price[DiscountManager::BRUTTO_WORLD], 2); ?>" class="worldmonthpricevat"/>
 								<input type="hidden" value="<?= round($price[DiscountManager::WITHOUT_VAT_WORLD] / $price[DiscountManager::BRUTTO_WORLD], 2); ?>" class="worldmonthpricevat0"/>
-							</div>
-						</div> */ ?>
+							</div> */ ?>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -76,6 +76,7 @@ KnockoutForm::RegisterScripts();
 			<?= CHtml::endForm(); ?>
 		</div>
 	</div>
+	<div style="margin-top:30px;"><?= Yii::app()->ui->item('MSG_FAIL_PAY'); ?></div>
 </div>
 
 <script type="text/javascript">
