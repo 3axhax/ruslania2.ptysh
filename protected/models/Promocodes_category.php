@@ -211,6 +211,7 @@ class Promocodes_category extends CActiveRecord {
 			}
 		}
 		else {
+			//если не выбран раздел/категория, то промокод только на все товары
 			foreach ($pricesValues as $itemKey=>$price) {
 				list($eid, $itemId) = explode('_', $itemKey);
 				$corrector = 1;
@@ -220,6 +221,7 @@ class Promocodes_category extends CActiveRecord {
 				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
 				$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 				$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+				$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 			}
 		}
 		return $priceForSale;
