@@ -8,6 +8,8 @@ class Promocodes extends CActiveRecord {
 	const CODE_CERTIFICATE = 1;
 	const CODE_CATEGORY = 2;
 	const CODE_WITHOUTPOST = 3;
+	const CODE_ITEM = 4;
+	const CODE_GIFT = 5;
 
 	private $_messages = array(
 		1 => 'PROMOCODE_ERROR_1',
@@ -153,6 +155,8 @@ class Promocodes extends CActiveRecord {
 			case self::CODE_CERTIFICATE: return Certificate::model(); break;
 			case self::CODE_CATEGORY: return Promocodes_category::model(); break;
 			case self::CODE_WITHOUTPOST: return Promocodes_withoutpost::model(); break;
+			case self::CODE_ITEM: return Promocodes_item::model(); break;
+			case self::CODE_GIFT: return Promocodes_gift::model(); break;
 		}
 		return null;
 	}

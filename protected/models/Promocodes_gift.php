@@ -1,12 +1,12 @@
 <?php
-/*Created by Кирилл (07.12.2018 17:50)*/
-class Promocodes_withoutpost extends CActiveRecord {
+/*Created by Кирилл (10.12.2018 20:40)*/
+class Promocodes_gift extends CActiveRecord {
 
 	static private $_certificates = array();//для кеша промокодов
 	static private $_codeIds = array(); // для кеша только ид промокодов
 
 	function tableName() {
-		return 'promocodes_withoutpost';
+		return 'promocodes_gift';
 	}
 
 	static function model($className = __CLASS__) {
@@ -30,8 +30,6 @@ class Promocodes_withoutpost extends CActiveRecord {
 
 		if ($itemsPrice !== null) {
 			if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
-			$itemsPrice = Currency::ConvertToEUR($itemsPrice, $currencyId);
-			if ($itemsPrice < (float) $certificate['min_price']) return false;
 		}
 
 		if (empty($certificate['promocode_id'])) return false;
@@ -44,7 +42,16 @@ class Promocodes_withoutpost extends CActiveRecord {
 	 * @return int|float номинал сертификата
 	 */
 	function getNominal($id, $currencyId, $itemsPrice = 0, $pricesValues = array(), $discountKeys = array()) {
-		return 0;
+		if (!$this->check($id, $currencyId, $itemsPrice)) return 0;
+		$certificate = $this->getCertificate($id);
+
+		/** @var $promocode Promocodes */
+		$promocode = Promocodes::model();
+		$code = $promocode->getPromocode($certificate['promocode_id']);
+		if (($check = $promocode->check($code, false)) > 0) return 0;
+
+		$price = $this->_getPrice($pricesValues, $discountKeys);
+		return $price['onlyPromocode'];
 	}
 
 	/**
@@ -56,7 +63,11 @@ class Promocodes_withoutpost extends CActiveRecord {
 	 * @return mixed конечная цена с учетом промокода
 	 */
 	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
-		return $itemsPrice;
+		$nominal = $this->getNominal($id, $currencyId, $itemsPrice, $pricesValues, $discountKeys);
+		$total = $itemsPrice - $nominal;
+		if ($total < 0) $total = 0;
+		$total += $deliveryPrice;
+		return $total;
 	}
 
 	function briefly($id, $currencyId, $itemsPrice = null) {
@@ -67,7 +78,7 @@ class Promocodes_withoutpost extends CActiveRecord {
 		if (!empty($certificate['uid'])&&($itemsPrice === null)) $names[] = '<div>Только для ' . $certificate['uid'] . ' (ID клиента на новом сайте)</div>';
 //		$names = implode('', $names);
 		return [
-			'promocodeValue'=>Yii::app()->ui->item('FREE_SHIPPING_OFFER'),
+			'promocodeValue'=>Yii::app()->ui->item('3_FOR_PRICE_2'),
 			'promocodeUnit'=>'',
 //			'realValue'=>$this->getNominal($id, $currencyId),
 //			'realUnit'=>Currency::ToSign(Yii::app()->currency),
@@ -103,6 +114,31 @@ class Promocodes_withoutpost extends CActiveRecord {
 			return array();
 		}
 		return null;
+	}
+
+	/** цена с учетом промокода
+	 * @param $pricesValues array товар->цена
+	 * @param $discountKeys array товар->ключи для DiscountManager::GetPrice
+	 * @return array
+	 */
+	private function _getPrice($pricesValues, $discountKeys) {
+		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
+		$product = new Product();
+		foreach ($pricesValues as $itemKey=>$price) {
+			list($eid, $itemId) = explode('_', $itemKey);
+
+			$item = $product->GetBaseProductInfo($eid, $itemId);
+			$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+
+			$corrector = 1;
+			if ($eid == Entity::PERIODIC) $corrector = 12;
+			elseif ($discountKeys[$itemKey]['quantity'] > 2) {
+				$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector);
+			}
+			$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+			$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+		}
+		return $priceForSale;
 	}
 
 }
