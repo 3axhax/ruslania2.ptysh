@@ -25,6 +25,7 @@
 	function _Promocodes() {}
 	_Promocodes.prototype = {
 //		$input, $use, $submit,
+		active: false,
 
 		init: function(){
 			this.setConst();
@@ -41,19 +42,22 @@
 			var self = this;
 			self.$use.on('change', function(){
 				if (this.checked) {
-					if (self.$input.val() != '') self._recount(self.$input.val().trim());
+					if (self.$input.val() != '') self.recount(self.$input.val().trim());
 					self.$input.closest('div').show();
 				}
 				else {
 					self.$input.closest('div').hide();
-					self._recount('');
+					self.recount('');
 				}
 
 			});
-			self.$submit.on('click', function() { self._recount(self.$input.val().trim()); });
+			self.$submit.on('click', function() { self.recount(self.$input.val().trim()); });
 		},
-		getValue: function() { return this.$input.val(); },
-		_recount: function(value) {
+		getValue: function() {
+			if (this.active) return this.$input.val();
+			return '';
+		},
+		recount: function(value) {
 			var self = this;
 			var csrf = $('meta[name=csrf]').attr('content').split('=');
 			var $form = $('form.address.text');
@@ -83,21 +87,26 @@
 						var $elem = $('<div style="font-weight: normal;"></div>');
 						if ('promocodeValue' in r.briefly) {
 							$elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>');
+							self.active = true;
 						}
 						else if ('message' in r.briefly) {
 							$elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>');
+							self.active = false;
 						}
-						$('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elem).click(function(){ self._recount(''); });
+						$('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elem).click(function(){ self.recount(''); });
 						if ('name' in r.briefly) $elem.append(r.briefly['name']);
 						$buf.after($elem);
 					}
-					else self.$input.val('');
+					else {
+						self.active = false;
+						self.$input.val('');
+					}
 				}
 			});
 		}
 	}
 }());
 $(document).ready(function() {
-	promocodes().init();
+	promocodeHandler = promocodes().init();
 });
 </script>

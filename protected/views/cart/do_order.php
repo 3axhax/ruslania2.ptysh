@@ -243,7 +243,7 @@
 <? $addr = new Address(); $addr_list = $addr->GetAddresses($this->uid); ?>
 
 <script>
-
+    var promocodeHandler = null;
     function hide_dostavka(cont) {
 
         if (cont.html() == 'Доставка не нужна') {
@@ -632,8 +632,8 @@
                         
                     if ($('input.country_id').val()=='68' || $('input.country_id').val()=='62' || $('input.country_id').val()=='') {
                 
-					$('.seld1').removeClass('act_city');  
-                
+					$('.seld1').removeClass('act_city');
+
             } else {
                 $('.seld1').addClass('act_city');  
             }
@@ -848,7 +848,7 @@
         var frm2 = $('form.address.text').serialize();
          var csrf = $('meta[name=csrf]').attr('content').split('=');
         var frmall = frm1+'&'+frm2+'&YII_CSRF_TOKEN='+csrf[1];
-        if (typeof(promocodes) != 'undefined') frmall += '&promocode=' + $('#promocode').val();
+        if (promocodeHandler) frmall += '&promocode=' + promocodeHandler.getValue();
 
         var error = 0;
         
@@ -955,8 +955,9 @@
      $('span.delivery_cost').html(cont.attr('rel') + '' + cont.attr('valute'));
      
      $('.itogo_cost').html((parseFloat($('input.costall').val()) + parseFloat(cont.attr('rel'))).toFixed(2) + '' + cont.attr('valute'));
-     
-     
+
+        if (promocodeHandler&&promocodeHandler.active) promocodeHandler.recount(promocodeHandler.getValue());
+
     }
     
     function sbros_delev() {
@@ -977,8 +978,9 @@
      
      
       $('.delivery_box .texterror').css('display', 'none');
-     
-     
+
+        if (promocodeHandler&&promocodeHandler.active) promocodeHandler.recount(promocodeHandler.getValue());
+
     }
     
     

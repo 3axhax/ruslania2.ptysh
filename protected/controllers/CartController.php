@@ -210,7 +210,7 @@ class CartController extends MyController {
 		//exit();
 		
 		$country = Country::GetCountryById($_POST['id_country']);
-        //$withVat = Address::UseVAT($country);
+        $withVat = Address::UseVAT($country);
 		
 		$PH = new ProductHelper();		
         $cartInfo = '';
@@ -223,7 +223,7 @@ class CartController extends MyController {
 		//return '';
         foreach ($cart as $item) {
             
-			$withVat = $item['UseVAT'];
+			//$withVat = $item['UseVAT'];
 			
 			if ($country['id'] == '68' OR $country['id'] == '246') {
 			

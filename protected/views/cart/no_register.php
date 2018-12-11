@@ -2,10 +2,10 @@
 
 <div class="lang_yesno_box alerthtml" style="display: none;margin-left: -192px; width: 300px; padding: 34px 42px;">
 
-    <div style="text-align: center;" class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
-    <div class="box_btns">
-        <a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_yes">Ок</a>
-    </div>
+	<div style="text-align: center;" class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
+	<div class="box_btns">
+		<a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_yes">Ок</a>
+	</div>
 
 </div>
 
@@ -247,43 +247,43 @@
     }
 
 </style>
-<div class="opacity alerthtml" onclick="$('.alerthtml').hide();"></div>
+<div class="opacity alerthtml" onclick="$('.alerthtml').hide();"></div>	
 <script src="/js/jquery.cookie.js"></script>
 
 <script>
-
-    function alert_html(text) {
-
-        $('.alerthtml .title').html(text);
-
-        $('.alerthtml').show();
-
-    }
-
+    var promocodeHandler = null;
+	function alert_html(text) {
+		
+		$('.alerthtml .title').html(text);
+		
+		$('.alerthtml').show();
+		
+	}
+	
     function check_desc_address(cont) {
 
         if (cont.prop('checked')) {
 
             $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').hide();
-
-            $('.seld2').addClass('disabled');
-
-            $('.seld1').click();
-
-            checked_sogl();
-
+			
+			$('.seld2').addClass('disabled');
+			
+			$('.seld1').click();
+			
+			checked_sogl();
+			
         } else {
 
             $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').show();
-
-            $('.seld2').removeClass('disabled');
-
-            $('.seld2').click();
-
-            checked_sogl();
+			
+			$('.seld2').removeClass('disabled');
+			
+			$('.seld2').click();
+			
+			checked_sogl();
         }
-
-
+		
+		
 
     }
 
@@ -330,7 +330,7 @@
     }
 
     function forgotPassword(email) {
-        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пароль отправлен на email: ' + email + '</div><div style="font-weight: bold;">Товары в корзине сохранены</div>';
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold; z-index: 9999999;background: #fff;">Пароль отправлен на email: ' + email + '</div><div style="font-weight: bold;">Товары в корзине сохранены</div>';
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
             url: '<?= Yii::app()->createUrl('site/forgot') ?>',
@@ -626,7 +626,7 @@
             if ($(event.target).closest(".qbtn, .info_box_smart").length)
                 return;
             $('.info_box_smart').hide();
-            event.stopPropagation();
+        event.stopPropagation();
         });
 
         $(document).click(function (event) {
@@ -657,43 +657,43 @@
 
 
         //alert($('#confirm').prop('checked'));
-
-        if ( !$('.check_addressa').prop('checked') ) {
-
-            if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
-
-
-                $('.box_opacity .op').show();
-
-
-            } else {
-
-                $('.box_opacity .op').hide();
-
-            }
-
-
-        } else {
-
-            if (!$('#confirm').prop('checked')) {
-
-
-                $('.box_opacity .op').show();
-
-
-            } else {
-
-                $('.box_opacity .op').hide();
-
-            }
-
-
-        }
-
-
-
-
-
+		
+		if ( !$('.check_addressa').prop('checked') ) {
+			
+			if (!$('#Address_country').val() || !$('#confirm').prop('checked')) {
+			
+			
+				$('.box_opacity .op').show();
+			
+						
+			} else {
+			
+				$('.box_opacity .op').hide();
+			
+			}
+			
+			
+		} else {
+			
+			if (!$('#confirm').prop('checked')) {
+			
+			
+				$('.box_opacity .op').show();
+			
+						
+			} else {
+			
+				$('.box_opacity .op').hide();
+			
+			}
+			
+			
+		}
+		
+		
+		
+		
+		
         if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
 
             // $('.order_start').addClass('disabled');
@@ -704,11 +704,11 @@
             // $('.order_start').removeClass('disabled');
         } else if ( $('.check_addressa').prop('checked') && $('#confirm').prop('checked') ) {
             $('.box_opacity .op').hide();
-        } else if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
-            $('.box_opacity .op').show();
-
-
-        }
+		} else if ((!$('#Address_country').val() || !$('#confirm').prop('checked'))  && !$('.check_addressa').prop('checked')) {
+			$('.box_opacity .op').show();
+			
+			
+		}
 
 
     }
@@ -853,7 +853,7 @@
         var frm2 = $('form.address.text').serialize();
 
         var frmall = frm1 + '&' + frm2;
-        if (typeof(promocodes) != 'undefined') frmall += '&promocode=' + $('#promocode').val();
+        if (promocodeHandler) frmall += '&promocode=' + promocodeHandler.getValue();
 
         var error = 0;
 
@@ -900,20 +900,20 @@
             $('.texterror', $('#Address_city').parent()).html('');
         }
         if (!$('#Address_postindex').val() && !$('.check_addressa').prop('checked')) {
-            $('#Address_postindex').addClass('error');
-            error = error + 1;
-        } else {
-            $('#Address_postindex').removeClass('error');
-            $('.texterror', $('#Address_postindex').parent()).html('');
-        }
-        if (!$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked')) {
-            $('#Address_streetaddress').addClass('error');
-            $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
-            error = error + 1;
-            $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
-        } else {
-            $('#Address_streetaddress').removeClass('error');
-            $('.texterror', $('#Address_streetaddress').parent()).html('');
+                $('#Address_postindex').addClass('error');
+                error = error + 1;
+            } else {
+                $('#Address_postindex').removeClass('error');
+                $('.texterror', $('#Address_postindex').parent()).html('');
+            }
+            if (!$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked')) {
+                $('#Address_streetaddress').addClass('error');
+                $('.texterror', $('#Address_postindex').parent()).html('Заполните это поле');
+                error = error + 1;
+                $('.texterror', $('#Address_streetaddress').parent()).html('Заполните это поле');
+            } else {
+                $('#Address_streetaddress').removeClass('error');
+                $('.texterror', $('#Address_streetaddress').parent()).html('');
         }
 
         var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
@@ -1031,6 +1031,7 @@
 
         $('.itogo_cost').html((parseFloat($('input.costall').val()) + parseFloat(cont.attr('rel'))).toFixed(2) + '' + cont.attr('valute'));
 
+        if (promocodeHandler&&promocodeHandler.active) promocodeHandler.recount(promocodeHandler.getValue());
 
     }
 
@@ -1050,6 +1051,7 @@
         $('.box_smartpost').html('');
 
 
+        if (promocodeHandler&&promocodeHandler.active) promocodeHandler.recount(promocodeHandler.getValue());
 
 
     }
@@ -1075,8 +1077,8 @@
     $PH = new ProductHelper();
 
     $cart = CartController::actionGetAll(0);
-
-    $cart = $cart['CartItems'];
+		
+	$cart = $cart['CartItems'];
 
 
 
@@ -1091,55 +1093,55 @@
     $cartInfo['items'] = array();
     $t1 = false;
     $t2 = false;
-    //var_dump($cart);
+    
 
     foreach ($cart as $item) {
-
-        $cartInfo['items'][$item['ID']]['title'] =
-            $item['Title'];
-        $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
-        if ($item['Entity'] == 30) {
-            if ($item['type'] == '1') { //фины
-                $price = $item['PriceVATFin'] * $item['Quantity'];
-            } else {
-                $price = $item['PriceVATWorld'] * $item['Quantity'];
-            }
-        } else {
-            $price = $item['PriceVAT'];
-        }
-        if (!$withVat) {
-
+			
+			$withVat = $item['UseVAT'];
+			
+            $cartInfo['items'][$item['ID']]['title'] = 
+			$item['Title'];
+            $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
-
                 if ($item['type'] == '1') { //фины
-                    $price = $item['PriceVAT0Fin'] * $item['Quantity'];
+                    $price = $item['PriceVATFin'];
                 } else {
-                    $price = $item['PriceVAT0World'] * $item['Quantity'];
+                    $price = $item['PriceVATWorld'];
                 }
             } else {
-                $price = $item['PriceVAT0'];
+                $price = $item['PriceVAT'];
             }
-
+            if (!$withVat) {
+                
+				if ($item['Entity'] == 30) {
+				
+				if ($item['type'] == '1') { //фины
+                    $price = $item['PriceVAT0Fin'];
+                } else {
+                    $price = $item['PriceVAT0World'];
+                }
+				} else {
+					$price = $item['PriceVAT0'];
+				}
+				
+            }
+            $fullweight += $item['UnitWeight'];
+            
+			$cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
+			
+            if ($item['Entity'] == 30) {
+                $fullprice += $price * $item['Quantity'];
+				$cartInfo['items'][$item['ID']]['price'] = $price;
+                $cartInfo['items'][$item['ID']]['quantity'] = 1;
+            } else {
+                $fullprice += $price * $item['Quantity'];
+                $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
+				
+				$cartInfo['items'][$item['ID']]['price'] = $price;
+            }
+            $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
+            $full_count += $item['Quantity'];
         }
-        $fullweight += $item['UnitWeight'];
-
-        $cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
-
-        if ($item['Entity'] == 30) {
-
-            $item['Quantity'] = 1;
-            $fullprice += $price;
-            $cartInfo['items'][$item['ID']]['price'] = $price;
-            $cartInfo['items'][$item['ID']]['quantity'] = 1;
-        } else {
-            $fullprice += $price * $item['Quantity'];
-            $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
-
-            $cartInfo['items'][$item['ID']]['price'] = $price * $item['Quantity'];
-        }
-        $cartInfo['items'][$item['ID']]['entity'] = $item['Entity'];
-        $full_count += $item['Quantity'];
-    }
 
     $cartInfo['fullInfo']['count'] = $full_count;
     $cartInfo['fullInfo']['cost'] = $fullprice;
