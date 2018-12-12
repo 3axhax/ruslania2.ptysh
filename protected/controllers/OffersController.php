@@ -4,6 +4,7 @@ class OffersController extends MyController
 {
     public function actionSpecial($mode)
     {
+        $this->_checkUrl(['mode'=>$mode]);
         $o = new Offer;
         switch($mode)
         {
@@ -182,4 +183,63 @@ class OffersController extends MyController
         $exporter->finalize();
         exit;
    }
+
+
+    /** функция сравнивает адрес страниц (которая должна быть и с которой реально зашли)
+     * если совпадают, то возвращаю false
+     * иначе редирект или 404
+     * @param array $data параметры для формирования пути
+     */
+    private function _checkUrl($data, $langTitles = array()) {
+        $path = getenv('REQUEST_URI');
+        $ind = mb_strpos($path, "?", null, 'utf-8');
+        $query = '';
+        if ($ind !== false) {
+            $query = mb_substr($path, $ind, null, 'utf-8');
+            $query = preg_replace("/\blang=\d+\b/ui", '', $query);
+            $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+            if ($query === '?') $query = '';
+
+            $path = mb_substr($path, 0, $ind, 'utf-8');
+        }
+        $typePage = $this->action->id;
+        $this->_canonicalPath = Yii::app()->createUrl('offers/' . $typePage, $data);
+        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
+
+        foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+            if ($lang !== 'rut') {
+                if ($lang === Yii::app()->language) $this->_otherLangPaths[$lang] = $this->_canonicalPath;
+                else {
+                    $_data = $data;
+                    if (isset($data['title'])&&isset($langTitles[$lang])) $_data['title'] = $langTitles[$lang];
+                    $_data['__langForUrl'] = $lang;
+                    $this->_otherLangPaths[$lang] = Yii::app()->createUrl('offers/' . $typePage, $_data);
+                }
+            }
+        }
+
+        $canonicalPath = $this->_canonicalPath;
+        $ind = mb_strpos($canonicalPath, "?", null, 'utf-8');
+        if ($ind !== false) {
+            $canonicalPath = mb_substr($canonicalPath, 0, $ind, 'utf-8');
+        }
+
+        if ($canonicalPath === $path) {
+            //редирект с page=1
+            $countPage1 = 0;
+            $query = preg_replace("/\bpage=1\b/ui", '', $query, -1, $countPage1);
+            if ($countPage1 > 0) {
+                $query = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $query);
+                if ($query === '?') $query = '';
+                $this->redirect($this->_canonicalPath . $query, true, 301);
+            }
+            //редирект с page=1
+            return;
+        }
+
+        $this->_redirectOldPages($path, $this->_canonicalPath, $query, $data);
+        throw new CHttpException(404);
+
+    }
+
 }

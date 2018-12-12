@@ -119,7 +119,7 @@ return array(
 	'for-lib'=>'specialerbjudanden-for-bibliotek',
 	'for-uni'=>'specialerbjudanden-for-larare',
 	'for-fs'=>'specialerbjudanden-utan-porto',
-	'for-alle2'=>'specialerbjudanden-for-2-€',
+	'for-alle2'=>'specialerbjudanden-for-2-euro',
 
 	'bookshelf'=>'bokhylla',
 );
