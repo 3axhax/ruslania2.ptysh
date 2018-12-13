@@ -23,10 +23,9 @@ class SitemapXMLCommand extends CConsoleCommand {
 		$xml->addAttribute('xsi:schemaLocation', 'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd');
 
 		$smapHtml = new Sitemap();
-
+		$lang = 'ru';
 		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
 			if ($lang !== 'rut') {
-				//TODO:: надо будет цикл по языкам запускать после выполненного запроса
 				Yii::app()->setLanguage($lang);
 				echo "StaticPages ".date('d.m.Y H:i:s')."\r\n";
 				list($file, $lastmod) = $this->_staticXml($smapHtml);
@@ -177,18 +176,22 @@ class SitemapXMLCommand extends CConsoleCommand {
 		if ($this->_isPriority) $urlXml->addChild('priority', '0.9');
 
 		foreach ($pages as $page=>$name) {
-			$staticFile = $staticDir . $page . '_ru.html.php';
-			if (file_exists($staticFile)) {
-				$save = true;
-				$url = Yii::app()->createUrl('site/static', array('page' => $page));
-				$urlXml = $xml->addChild('url');
-				$urlXml->addChild('loc', $url);
-				$fileTime = filemtime($staticFile);
-				$lastmod = max($lastmod, $fileTime);
-				if ($this->_isLastmod) $urlXml->addChild('lastmod', date('c', $fileTime));
-				if ($this->_isChangefreq) $urlXml->addChild('changefreq', 'monthly');
-				if ($this->_isPriority) $urlXml->addChild('priority', '0.9');
-			}
+			$save = true;
+			$url = Yii::app()->createUrl('site/static', array('page' => $page));
+			$urlXml = $xml->addChild('url');
+			$urlXml->addChild('loc', $url);
+			if ($this->_isChangefreq) $urlXml->addChild('changefreq', 'monthly');
+			if ($this->_isPriority) $urlXml->addChild('priority', '0.9');
+		}
+
+		$sql = 'select id, name from static_pages';
+		$pages = $this->_query($sql);
+		foreach ($pages as $page) {
+			$url = Yii::app()->createUrl('site/static', array('page' => $page['name']));
+			$urlXml = $xml->addChild('url');
+			$urlXml->addChild('loc', $url);
+			if ($this->_isChangefreq) $urlXml->addChild('changefreq', 'monthly');
+			if ($this->_isPriority) $urlXml->addChild('priority', '0.9');
 		}
 
 		list($tags, $tagsAll, $tagsHand) = $smapHtml->getTags();
@@ -216,8 +219,15 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$xml = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" ?><urlset></urlset>');
 				$xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
 				foreach ($items as $item) {
-					$item['entity'] = $entity;
-					$url = ProductHelper::CreateUrl($item);
+					$title = ProductHelper::ToAscii($item['title']);
+					$urlParams = array(
+						'entity' => $entity,
+						'id' => $item['id'],
+						'title' => $title,
+						'__useTitleParams'=>true,
+					);
+					if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $urlParams['__langForUrl'] = $lang;
+					$url = Yii::app()->createUrl('product/view', $urlParams);
 					$urlXml = $xml->addChild('url');
 					$urlXml->addChild('loc', $url);
 					$lastmod = max($lastmod, (int)$item['dateAdd']);
@@ -226,7 +236,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 					if ($this->_isPriority) $urlXml->addChild('priority', '0.8');
 				}
 				unset($items);
-				$files[$this->_saveFile($xml, 'sitemap-' . $params['entity'] . '-' . $step . '.xml')] = $lastmod;
+				$files[$this->_saveFile($xml, 'sitemap-' . $entity . '-' . $step . '.xml')] = $lastmod;
 			}
 		}
 		return $files;
@@ -243,7 +253,12 @@ class SitemapXMLCommand extends CConsoleCommand {
 			$items = $this->_query($this->_sqlCategorys($params['site_table'], $params['site_category_table']));
 			if ($items->count() > 0) {
 				foreach ($items as $item) {
-					$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $item['id'], 'title'=>ProductHelper::ToAscii($item['title'])));
+					$url = Yii::app()->createUrl('entity/list', array(
+						'entity' => Entity::GetUrlKey($entity),
+						'cid' => $item['id'],
+						'title'=>ProductHelper::ToAscii($item['title']),
+						'__useTitleParams'=>true,
+					));
 					$urlXml = $xml->addChild('url');
 					$urlXml->addChild('loc', $url);
 					$rootLastmod = max($rootLastmod, (int)$item['dateAdd']);
@@ -322,6 +337,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bypublisher', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'pid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -350,6 +366,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/byseries', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'sid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -378,6 +395,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/byauthor', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'aid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -406,6 +424,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/byactor', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'aid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -435,6 +454,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/byperformer', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'pid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -463,6 +483,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bydirector', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'did' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -491,6 +512,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bybinding', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'bid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -519,6 +541,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/byaudiostream', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'sid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -547,6 +570,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bysubtitle', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'sid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -575,6 +599,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bymedia', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'mid' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -603,6 +628,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				$url = Yii::app()->createUrl('entity/bytype', array(
 					'entity' => Entity::GetUrlKey($entity),
 					'type' => $item['id'],
+					'__useTitleParams'=>true,
 					'title' => ProductHelper::ToAscii($item['title']))
 				);
 				$urlXml = $xml->addChild('url');
@@ -645,21 +671,23 @@ class SitemapXMLCommand extends CConsoleCommand {
 		return $fields;
 	}
 
-
-
-
-
 	private function _sqlItems($table, $step) {
+		$langs = HrefTitles::get()->getLangs('', 'product/view');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		return ''.
-			'select t.id, t.title_ru, UNIX_TIMESTAMP(t.last_modification_date) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(t.last_modification_date) dateAdd '.
 			'from `' . $table . '` t ' .
 				'join (select id from `' . $table . '` order by id limit ' . $this->_counts*$step . ', ' . $this->_counts . ') tId using (id) '.
 		'';
 	}
 
 	private function _sqlCategorys($table, $eTable) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/list');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_en title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `' . $eTable . '` t ' .
 				'join `' . $table . '` tI on (tI.code = t.id) '.
 			'group by t.id '.
@@ -668,10 +696,13 @@ class SitemapXMLCommand extends CConsoleCommand {
 	}
 
 	private function _sqlPublisher($table, $step) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/bypublisher');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		//на что только не пойдешь ради быстрого запроса
 		//запрос странный, но работает быстро
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `all_publishers` t '.
 				'join (select publisher_id id '.
 					'from `' . $table . '` '.
@@ -691,8 +722,11 @@ $sql = 'SELECT tc.series_id, st.title_'.$lang.' as title FROM ' . $tbl . ' as tc
 WHERE tc.avail_for_order=1  AND (tc.series_id > 0 AND tc.series_id <> "") AND tc.series_id=st.id' .$sql.'
 GROUP BY st.title_'.Yii::app()->language. (($page != 0) ? (' LIMIT ' . $limit) : '');
  */
+		$langs = HrefTitles::get()->getLangs('', 'entity/byseries');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `' . $tagTable . '` t '.
 				'join (select series_id id '.
 					'from `' . $table . '` '.
@@ -715,8 +749,11 @@ WHERE avail_for_order=1  AND bc.avail_for_order=1 AND ba.' . $field . '=bc.id'.$
 AND ba.author_id=aa.id
 GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $limit) : '');
 */
+		$langs = HrefTitles::get()->getLangs('', 'entity/byauthor');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `all_authorslist` t '.
 				'join (select author_id id '.
 					'from `' . $tagTable . '` '.
@@ -733,8 +770,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlActors($table, $step) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/byauthor');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `all_authorslist` t '.
 				'join (select person_id id '.
 					'from `video_actors` '.
@@ -751,8 +791,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlPerformers($table, $tableList, $tableJoin, $tagField, $step) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/byauthor');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `all_authorslist` t '.
 				'join (select person_id id '.
 					'from `' . $tableJoin . '` '.
@@ -769,8 +812,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlDirectors($table, $step) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/byauthor');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `all_authorslist` t '.
 				'join (select person_id id '.
 					'from `video_directors` '.
@@ -787,8 +833,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlBindings($table, $tableList) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/bybinding');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(tI.last_modification_date) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(tI.last_modification_date) dateAdd '.
 			'from `' . $tableList . '` t '.
 				'join ('.
 					'select binding_id id, max(last_modification_date) last_modification_date '.
@@ -802,8 +851,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlAudiostreams($table) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/byaudiostream');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `video_audiostreamlist` t '.
 				'join (select stream_id id '.
 					'from `video_audiostreams` '.
@@ -819,8 +871,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlSubtitles($table) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/bysubtitle');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(max(tI.last_modification_date)) dateAdd '.
 			'from `video_creditslist` t '.
 				'join (select credits_id id '.
 					'from `video_credits` '.
@@ -852,8 +907,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlMagazinetype($table) {
+		$langs = HrefTitles::get()->getLangs('', 'entity/bymagazinetype');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select t.id, t.title_ru title, UNIX_TIMESTAMP(tI.last_modification_date) dateAdd '.
+			'select t.id, t.title_' . $lang . ' title, UNIX_TIMESTAMP(tI.last_modification_date) dateAdd '.
 			'from `pereodics_types` t '.
 				'join ('.
 					'select type id, max(last_modification_date) last_modification_date '.
@@ -893,8 +951,11 @@ GROUP BY ba.author_id ORDER BY aa.title_'.$lang. (($page != 0) ? (' LIMIT ' . $l
 	}
 
 	private function _sqlOffers() {
+		$langs = array('ru', 'rut', 'en', 'fi');
+		$lang = Yii::app()->language;
+		if (!in_array($lang, $langs)) $lang = 'en';
 		$sql = ''.
-			'select id, title_ru title, creation_date dateAdd '.
+			'select id, title_' . $lang . ' title, creation_date dateAdd '.
 			'from offers '.
 			'where (is_active > 0) '.
 			'order by id '.
