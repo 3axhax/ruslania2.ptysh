@@ -7,6 +7,7 @@ ini_set('max_execution_time', 3600);
  * Class BeforeSphinxCommand
  */
 
+define('cronAction', 1);
 class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {

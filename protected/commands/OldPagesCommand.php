@@ -14,6 +14,7 @@ ini_set('max_execution_time', 3600);
  * Class OldPagesCommand
  */
 define('OLD_PAGES', 1);
+define('cronAction', 1);
 
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class OldPagesCommand extends CConsoleCommand {

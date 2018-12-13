@@ -35,6 +35,7 @@ class OffersController extends MyController
 
     public function actionList()
     {
+        $this->_checkUrl([]);
         $o = new Offer;
         $list = $o->GetList();
         $this->breadcrumbs[] = Yii::app()->ui->item('RUSLANIA_RECOMMENDS');

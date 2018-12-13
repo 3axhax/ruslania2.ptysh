@@ -7,6 +7,7 @@ ini_set('max_execution_time', 3600);
  * Class LanguageItemsCommand
  */
 
+define('cronAction', 1);
 class LanguageItemsCommand extends CConsoleCommand {
 
 	public function actionIndex() {

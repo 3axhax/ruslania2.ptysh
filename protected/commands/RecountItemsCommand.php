@@ -7,6 +7,7 @@ ini_set('max_execution_time', 3600);
  * Class RecountItemsCommand
  */
 
+define('cronAction', 1);
 class RecountItemsCommand extends CConsoleCommand {
 
 	function __destruct() {

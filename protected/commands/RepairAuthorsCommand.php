@@ -7,6 +7,7 @@ ini_set('max_execution_time', 3600);
  * таблица all_roles
  * Class RepairAuthorsCommand
  */
+define('cronAction', 1);
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class RepairAuthorsCommand extends CConsoleCommand {
 	private $_table = 'all_authorslist';
