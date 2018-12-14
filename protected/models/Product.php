@@ -28,8 +28,8 @@ class Product
     {
         $entities = Entity::GetEntitiesList();
         $fields = array('firms' => 'offer_firms',
-                        'lib' => 'offer_libraries',
-                        'uni' => 'offer_univercity',
+            'lib' => 'offer_libraries',
+            'uni' => 'offer_univercity',
         );
 
         if (!array_key_exists($mode, $fields)) return array();
@@ -68,9 +68,9 @@ class Product
         }
 
         $related = array('binding' => 'Binding',
-                         'category' => 'Category',
-                         'subcategory' => 'SubCategory',
-                         'publisher' => 'Publisher',
+            'category' => 'Category',
+            'subcategory' => 'SubCategory',
+            'publisher' => 'Publisher',
         );
 
         $forHref = array();
@@ -237,20 +237,24 @@ class Product
 
     public function GetProducts($entity, $ids, $isMiniCart = 0)
     {
-        $entity = Entity::ConvertToHuman($entity); 
-        $entities = Entity::GetEntitiesList(); 
-        $table = $entities[$entity]['site_table']; 
+        $entity = Entity::ConvertToHuman($entity);
+        $entities = Entity::GetEntitiesList();
+        $table = $entities[$entity]['site_table'];
 
         $ids = array_unique($ids);
-        
+		
+		
+		//echo (implode(',', $ids) . '<br />');
+		
+
         $sql = 'SELECT *, ' . $entity . ' AS entity  ';
         if ($entity == Entity::PERIODIC)
         {
             $sql .= ', null AS ean_code, 1 AS in_shop, 0 AS unitweight, 1 AS unitweight_skip, '
-                    . 'sub_fin_year AS brutto, discount ';
-    
-            } 
-        
+                . 'sub_fin_year AS brutto, discount ';
+
+        }
+
         if ($isMiniCart)
         {
             $cart_sql = $sql;
@@ -258,7 +262,7 @@ class Product
             foreach ($ids as $id_miniCart)
             {
                 $sql .= ' FROM ' . $table
-                . ' WHERE id = (' . $id_miniCart . ') ';
+                    . ' WHERE id = (' . $id_miniCart . ') ';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll();
                 foreach ($rows as $row)
                     $ret[$row['id']] = $row;
@@ -268,17 +272,20 @@ class Product
         }
         else
         {
+			
+			//echo $entity . ',';
+			
 //            if (isset($_GET['ha'])) {
-                $dp = Entity::CreateDataProvider($entity);
-                $criteria = $dp->getCriteria();
-                $criteria->alias = 't';
-                $criteria->addCondition('t.id in (' . implode(',', $ids) . ')');
-                $criteria->order = 'field(t.id, ' . implode(',', $ids) . ')';
-                $dp->setCriteria($criteria);
-                $dp->pagination = false;
+            $dp = Entity::CreateDataProvider($entity);
+            $criteria = $dp->getCriteria();
+            $criteria->alias = 't';
+            $criteria->addCondition('t.id in (' . implode(',', $ids) . ')');
+            $criteria->order = '';
+            $dp->setCriteria($criteria);
+            $dp->pagination = false;
 
-                $data = $dp->getData();
-                $rows = Product::FlatResult($data);
+            $data = $dp->getData();
+            $rows = Product::FlatResult($data);
 //            }
 //            else {
 //                $sql .= ' FROM ' . $table
@@ -286,7 +293,7 @@ class Product
 //
 //                $rows = Yii::app()->db->createCommand($sql)->queryAll();
 //            }
-            
+
             $ret = array();
             foreach ($rows as $row) {
                 $row['entity'] = $entity;
@@ -295,7 +302,32 @@ class Product
         }
         return $ret;
     }
+	
+	public function getProducts3($entity, $ids)
+    {
+        $entity = Entity::ConvertToHuman($entity);
+        $entities = Entity::GetEntitiesList();
+        $table = $entities[$entity]['site_table'];
 
+        $ids = array_unique($ids);
+
+        $sql = 'SELECT *, ' . $entity . ' AS entity  ';
+        if ($entity == Entity::PERIODIC)
+        {
+            $sql .= ', null AS ean_code, 1 AS in_shop, 0 AS unitweight, 1 AS unitweight_skip, '
+                . 'sub_fin_year AS brutto, discount ';
+
+        }
+        $sql .= ' FROM ' . $table
+            . ' WHERE id IN (' . implode(', ', $ids) . ') ';
+
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        $ret = array();
+        foreach ($rows as $row)
+            $ret[$row['id']] = $row;
+        return $ret;
+    }
+	
     public function GetProductsV2($entity, $ids, $indexByPK=false)
     {
         $dp = Entity::CreateDataProvider($entity);
@@ -341,6 +373,16 @@ class Product
         $data = $data[0];
         $data['entity'] = $entity;
         $data['status'] = Product::GetStatusProduct($entity, $id);
+        if (!empty($data['presale'])) {
+            $sql = ''.
+                'select message_' . Yii::app()->getLanguage() . ' message '.
+                'from presales '.
+                'where (item_id = ' . (int) $id . ') and (entity_id = ' . (int) $entity . ') '.
+                'limit 1 ' .
+            '';
+            $data['presaleMessage'] = Yii::app()->db->createCommand($sql)->queryScalar($sql);
+            if (empty($data['presaleMessage'])) $data['presaleMessage'] = 'Доступно для предварительного заказа.';
+        }
         return $data;
     }
 
@@ -406,7 +448,7 @@ class Product
                         FROM `offer_items` as oi
                         JOIN (select id from offers where is_active = 1) as of ON of.id = oi.offer_id
                         WHERE `item_id` = %d AND `entity_id` = %d",
-                        $id, $entity);
+                $id, $entity);
             $row = Yii::app()->db->createCommand($sql)->queryAll();
         }
         $status = false;
@@ -445,41 +487,41 @@ class Product
         }
         else return 0;
     }
-	
-	public function related_goods($cid, $entity, $id, $title, $series_id, $author_id) {
-		
-		$title = addslashes($title);
-		
-		$arrLang = array('ru', 'en', 'fi', 'rut');
-		
-		$ln = Yii::app()->language;
-		
-		if (!in_array(Yii::app()->language, $arrLang)) {
-			
-			$ln = en;
-			
-		}
-		
-		if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
-		$entities = Entity::GetEntitiesList();
+    public function related_goods($cid, $entity, $id, $title, $series_id, $author_id) {
+
+        $title = addslashes($title);
+
+        $arrLang = array('ru', 'en', 'fi', 'rut');
+
+        $ln = Yii::app()->language;
+
+        if (!in_array(Yii::app()->language, $arrLang)) {
+
+            $ln = en;
+
+        }
+
+        if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+        $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];
         $tbl_author = $entities[$entity]['author_table'];
         $field = $entities[$entity]['author_entity_field'];
-        
-		if ($series_id) {
-			$arr[] = '(series_id = '.$series_id.')';
-		}
-		
-		$arr[] = '( id IN (SELECT ' . $field . ' FROM ' . $tbl_author . ' WHERE '. $author_id .') AND title_'.$ln.' LIKE \'%'.$title.'%\')';
-		$arr[] = '( id IN (SELECT ' . $field . ' FROM ' . $tbl_author . ' WHERE '. $author_id .'))';
-		if ($cid) {
-			$arr[] = '(`code` = '.$cid.')';
-		}
-		
-		
-		
-           $sql = 'SELECT
+
+        if ($series_id) {
+            $arr[] = '(series_id = '.$series_id.')';
+        }
+
+        $arr[] = '( id IN (SELECT ' . $field . ' FROM ' . $tbl_author . ' WHERE '. $author_id .') AND title_'.$ln.' LIKE \'%'.$title.'%\')';
+        $arr[] = '( id IN (SELECT ' . $field . ' FROM ' . $tbl_author . ' WHERE '. $author_id .'))';
+        if ($cid) {
+            $arr[] = '(`code` = '.$cid.')';
+        }
+
+
+
+        $sql = 'SELECT
 					id
 					FROM
 					' . $tbl . '
@@ -488,31 +530,31 @@ class Product
 					id <> '.$id.' AND ( 
 					'.implode(' OR ', $arr).')
 					ORDER BY `year` DESC, `add_date` DESC LIMIT 10';
-			if ($entity == 30) {
-				 $sql = 'SELECT
+        if ($entity == 30) {
+            $sql = 'SELECT
 					id
 					FROM
 					' . $tbl . '
 					WHERE 
 					id <> '.$id.' AND (title_'.$ln.' LIKE \'%'.$title.'%\' OR `code` = '.$cid.')
 					ORDER BY `add_date` DESC LIMIT 10';
-			}
-			
-			if ($entity == 40) {
-				
-				$arr = array();
-				
-				if ($series_id) {
-					$arr[] = '(series_id = '.$series_id.')';
-				}
-				
-				$author_id = str_replace('author_id','actor_id', $author_id);
-				
-				$arr[] = '( id IN (SELECT `video_id` FROM `video_actors` WHERE '. $author_id .') AND title_'.$ln.' LIKE \'%'.$title.'%\')';
-				//$arr[] = '';
-				$arr[] = '(`code` = '.$cid.')';
-				
-				$sql = 'SELECT
+        }
+
+        if ($entity == 40) {
+
+            $arr = array();
+
+            if ($series_id) {
+                $arr[] = '(series_id = '.$series_id.')';
+            }
+
+            $author_id = str_replace('author_id','actor_id', $author_id);
+
+            $arr[] = '( id IN (SELECT `video_id` FROM `video_actors` WHERE '. $author_id .') AND title_'.$ln.' LIKE \'%'.$title.'%\')';
+            //$arr[] = '';
+            $arr[] = '(`code` = '.$cid.')';
+
+            $sql = 'SELECT
 					id
 					FROM
 					' . $tbl . '
@@ -520,54 +562,54 @@ class Product
 					id <> '.$id.' AND ( 
 					'.implode(' OR ', $arr).')
 					ORDER BY `year` DESC, `add_date` DESC LIMIT 10';
-				
-			}
-			
-			 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array());
-			
-			$sql2 = 'SELECT * FROM `similar_items` WHERE `item_id` = '.$id.' AND `item_entity` = '.$entity.' LIMIT 10';
-			
-			$rows2 = Yii::app()->db->createCommand($sql2)->queryAll(true, array());
-			
-			$arrItemsManager = [];
-			$rows4 = array();
-			foreach ($rows2 as $item) {
-				
-				$tbl = $entities[$item['similar_entity']]['site_table'];
-			
-				$sql_items = 'SELECT
+
+        }
+
+        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array());
+
+        $sql2 = 'SELECT * FROM `similar_items` WHERE `item_id` = '.$id.' AND `item_entity` = '.$entity.' LIMIT 10';
+
+        $rows2 = Yii::app()->db->createCommand($sql2)->queryAll(true, array());
+
+        $arrItemsManager = [];
+        $rows4 = array();
+        foreach ($rows2 as $item) {
+
+            $tbl = $entities[$item['similar_entity']]['site_table'];
+
+            $sql_items = 'SELECT
 					id
 					FROM
 					' . $tbl . '
 					WHERE 
 					id <> '.$id.' AND id = '.$item['similar_id'].' LIMIT 1';
-					
-					$rows3 = Yii::app()->db->createCommand($sql_items)->queryAll(true, array());
-					
-					
-					
-					foreach ($rows3 as $it) {
-						$rows4[] = array(
-						'entity'=>$item['similar_entity'],
-						'id'=>$it['id']
-						);
-					}
-					
-					//$arrItemsManager = array_merge($arrItemsManager, $rows4);
-					
-			}
-			
-			//file_put_contents($_SERVER['DOCUMENT_ROOT']. '/1.log', print_r($rows4,1));
-	   
+
+            $rows3 = Yii::app()->db->createCommand($sql_items)->queryAll(true, array());
+
+
+
+            foreach ($rows3 as $it) {
+                $rows4[] = array(
+                    'entity'=>$item['similar_entity'],
+                    'id'=>$it['id']
+                );
+            }
+
+            //$arrItemsManager = array_merge($arrItemsManager, $rows4);
+
+        }
+
+        //file_put_contents($_SERVER['DOCUMENT_ROOT']. '/1.log', print_r($rows4,1));
+
 
         return array_merge($rows4,$rows);
-	
-	}
-	
-	public function is_lang($lang, $cat_id = '', $entity) {
-		
-		$entities = Entity::GetEntitiesList();
-					$tbl = $entities[$entity]['site_table'];
+
+    }
+
+    public function is_lang($lang, $cat_id = '', $entity) {
+
+        $entities = Entity::GetEntitiesList();
+        $tbl = $entities[$entity]['site_table'];
 
         //совсем не правильный запрос
 //					$sql = 'SELECT ln.id FROM `all_items_languages` AS ail, `languages` AS ln, `'.$tbl.'` AS t WHERE ail.language_id = '.$lang.' AND
@@ -594,16 +636,16 @@ class Product
             'from all_items_languages tL '.
             implode(' ', $join) . ' '.
             'where ' . implode(' and ', $condition) . ' '.
-        '';
+            '';
 
 
 //					$rows = Yii::app()->db->createCommand($sql)->queryScalar(array());
-					
-					//var_dump($sql);
-					
+
+        //var_dump($sql);
+
         return (int) Yii::app()->db->createCommand($sql)->queryScalar(array());
-		
-	}
+
+    }
 
 }
 

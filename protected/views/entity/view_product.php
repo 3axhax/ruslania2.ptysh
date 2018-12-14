@@ -711,7 +711,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if ($item['entity'] != Entity::PERIODIC) : ?>
                 <div style="float: left; margin-top: -7px; margin-left: 10px;">
                     <?= $ui->item('CART_COL_QUANTITY'); ?>:
-                    <select class="selquantity" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
+                    <select class="select2_periodic_no_float selquantity" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
                             style="display: inline-block; margin-bottom: 5px; width: 85px;">
                         <?php
                         for ($i = 1; $i <= 100; $i++) {
@@ -901,7 +901,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
             </div>
             <div style="height: 23px; clear: both"></div>
-            <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;">
+			
+			<div class="periodics">
+			
+            <select class="select2_periodic periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;">
                 <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
                     <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                 <?php endif; ?>
@@ -925,7 +928,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 ?>
                 <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
                     12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $labelForIssues12 ?></option>
-            </select>
+            </select> </div>
             <?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
 
 
@@ -997,6 +1000,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php else : ?>
             <?php //var_dump($item['description_ru']); ?>
+            <?php if(!empty($item['presaleMessage'])): ?>
+                <div class="presale" style="padding: 10px;"><?= $item['presaleMessage'] ?></div>
+            <?php endif; ?>
             <?= nl2br(ProductHelper::GetDescription($item)); ?>
 
         <?php endif; ?>
