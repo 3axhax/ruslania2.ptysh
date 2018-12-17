@@ -624,8 +624,8 @@ class SearchHelper
             'from ' . $dp->model->tableName() . ' t '.
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
-            'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e) . ' '.
             (!empty($lang)?'group by t.id ':'').
+            'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e) . ' '.
             'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
         '';
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
