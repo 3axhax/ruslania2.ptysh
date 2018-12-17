@@ -373,7 +373,7 @@ class CartController extends MyController {
             $s['DeliveryMode'] = $DeliveryMode;
             $s['CurrencyID'] = Yii::app()->currency;
             $s['BillingAddressID'] = $adr2['address_id'];
-            $s['Notes'] = '';
+            $s['Notes'] = $_POST['Notes'];
             $s['Mandate'] = 0;
             //$s['payment'] = $post['ptype'];
             $order = new OrderForm($this->sid);
@@ -557,8 +557,10 @@ class CartController extends MyController {
                     if (!$post['dtid']) {
                         $post['dtid'] = 0;
                     }
+					
+					
                     $s['DeliveryAddressID'] = $idAddr2;
-                    $s['DeliveryTypeID'] = $post['dtid'];
+                    $s['DeliveryTypeID'] = $post['dtype'];
                     $s['DeliveryMode'] = 0;
                     $s['CurrencyID'] = Yii::app()->currency;
                     $s['BillingAddressID'] = $idAddr2;
@@ -943,7 +945,7 @@ class CartController extends MyController {
         if ($data === false)
             throw CHttpException('Please do AJAX request');
         list($entity, $id, $quantity, $product) = $data;
-        if (empty($pronewduct)) {
+        if (empty($product)) {
             if (Yii::app()->request->isAjaxRequest)
                 $this->ResponseJsonError('EmptyProduct');
             else

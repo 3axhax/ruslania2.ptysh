@@ -811,7 +811,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <a href="<?=
                 Yii::app()->createUrl('cart/dorequest', array('entity' => Entity::GetUrlKey($item['entity']),
                     'iid' => $item['id']));
-                ?>" class="cart-action request"><?=$ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
+                ?>" class="ca request"><?=$ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
 
             <?php else : ?>
                 <a class="cart-action request" data-action="request" data-entity="<?= $item['entity']; ?>"
