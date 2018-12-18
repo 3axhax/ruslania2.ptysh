@@ -375,13 +375,17 @@ class Product
         $data['status'] = Product::GetStatusProduct($entity, $id);
         if (!empty($data['presale'])) {
             $sql = ''.
-                'select message_' . Yii::app()->getLanguage() . ' message '.
+                'select date_release '.
                 'from presales '.
                 'where (item_id = ' . (int) $id . ') and (entity_id = ' . (int) $entity . ') '.
                 'limit 1 ' .
             '';
-            $data['presaleMessage'] = Yii::app()->db->createCommand($sql)->queryScalar($sql);
-            if (empty($data['presaleMessage'])) $data['presaleMessage'] = 'Доступно для предварительного заказа.';
+            $dateRelease = Yii::app()->db->createCommand($sql)->queryScalar($sql);
+            $data['presaleMessage'] = Yii::app()->ui->item('PRESALE_MSG');
+            if (!empty($dateRelease)) {
+                $dt = new DateTime($dateRelease);
+                $data['presaleMessage'] .= ' ' . $dt->format('m/Y') . '.';
+            }
         }
         return $data;
     }

@@ -1288,4 +1288,5 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
 
     'MSG_ORDER_FROM_SUMM' => 'при заказе от %s',
     'MSG_FAIL_PAY' => '<p>Если у вас не прошла оплата или вам неудобен этот вариант оплаты свяжитесь с нами по телефону 09 27270737, (+358) 927270737 или по E-mail: periodicals@ruslania.com.</p>',
+    'PRESALE_MSG'=>'Ennakkomyynnissä. Voit tehdä tilauksen heti ja toimitamme tuotteen kun saamme sen varastoomme. Saatavuusarvio: Tuote ilmestyy',
 );
