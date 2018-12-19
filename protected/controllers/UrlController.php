@@ -70,13 +70,34 @@ class UrlController extends MyController {
 		foreach ($langs as $lang) {
 			$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
 			$data = require_once($file);
-			echo '<b>' . $lang . '</b><br><br>';
+			$dataCom = require_once(Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'langv2_com/'.$lang.'/uiconst.class.php');
+			echo '<b>' . $lang . '</b><br><br><table>';
 			foreach ($dataSource as $k=>$v) {
-				if (!isset($data[$k])) {
-					echo "'" . $k . "' => '" . htmlspecialchars($v) . "',<br>";
+//				для добавления в в файлы недостающих ключей
+//				if (!isset($data[$k])) {
+//					echo "<tr><td style='width: 1px'>'" . $k . "</td><td>' => '</td><td style='width: 100%'>" . htmlspecialchars($v) . "',</td></tr>";
+//				}
+
+//				для excel
+				if ($k <> 'A_LANG_RUSSIAN') {
+					if (!isset($data[$k])) {
+						echo '<tr><td>' . $k . '</td><td>' . htmlspecialchars($v) . '</td></tr>';
+					}
+					elseif (preg_match("/[а-я]/ui", $data[$k])) {
+						echo '<tr><td style="width: 1px">' . $k . '</td><td style="width: 100%">' . htmlspecialchars($v) . '</td></tr>';
+					}
 				}
+
+
+//				для сравнения со старым
+//				if (!isset($data[$k])&&isset($dataCom[$k])) {
+//					echo "<tr><td>'" . $k . "'</td><td> => </td><td>'" . htmlspecialchars($dataCom[$k]) . "',</td></tr>";
+//				}
+//				elseif (isset($dataCom[$k])&&preg_match("/[а-я]/ui", $data[$k], $m)) {
+//					echo "<tr><td style='width: 1px'>'" . $k . "'</td><td style='width: 1px'> => </td><td style='width: 1px'>'" . htmlspecialchars($dataCom[$k]) . "',</td><td style='width: 100%'>" . print_r($m, true) . "</td></tr>";
+//				}
 			}
-			echo '<br>';
+			echo '</table><br>';
 		}
 
 	}

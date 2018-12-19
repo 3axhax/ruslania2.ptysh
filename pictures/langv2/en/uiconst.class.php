@@ -1294,4 +1294,11 @@ By clicking on a category you are interested in, you can see all the products wi
     'MSG_FAIL_PAY' => '<p>Если у вас не прошла оплата или вам неудобен этот вариант оплаты свяжитесь с нами по телефону 09 27270737, (+358) 927270737 или по E-mail: periodicals@ruslania.com.</p>',
     'PRESALE_MSG'=>'In pre-release sale. The pre-orderers will be the first ones to receive the new book: Out on',
 
+    'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'Убрать из заметок',
+    'MSG_DELIVERY_TYPE_0' => 'Забрать в магазине',
+    'DELETED_FROM_MARK' => 'Товар убран из Ваших заметок',
+    'DELIVERY_ECONOMY_OTHER_YES' => 'Доставка на дом или на адрес доставки транспортной компанией, c отслеживанием (with tracking number), мы также отправим по электронной почте возможность перенаправить пакет на пункт выдачи, услуга GLS Flex delivery service',
+    'DELIVERY_PRIORITY_OTHER_YES' => 'Доставка на дом или на адрес доставки транспортной компанией, c отслеживанием (with tracking number), мы также отправим по электронной почте возможность перенаправить пакет на пункт выдачи, услуга GLS Flex delivery service, обслуживание Priority',
+    'DELIVERY_EXPRESS_OTHER_YES' => 'Доставка на дом или на адрес доставки почтовым срочным письмом или срочный пакет EMS финской почты, c отслеживанием (with tracking number), обслуживание Express',
+    '3_FOR_PRICE_2' => '3 по цене 2',
 );
