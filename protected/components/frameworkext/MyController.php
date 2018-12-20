@@ -353,7 +353,6 @@ class MyController extends CController
                 $data['__useTitleParams'] = true;
                 $language = Yii::app()->getRequest()->getParam('language', Yii::app()->language);
                 /*if ($language <> Yii::app()->language) */$data['__langForUrl'] = $language;
-                Debug::staticRun(array($language, Yii::app()->getRequest()->getParam('language'), $_GET));
                 foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], $language) as $oldTitle) {
                     $data['title'] = $oldTitle;
                     $path = Yii::app()->createUrl($route, $data);
