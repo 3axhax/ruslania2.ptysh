@@ -64,10 +64,40 @@ class UrlController extends MyController {
 	 */
 	function actionLables() {
 
+		$translite = array();
 		$fileSource = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'ru/uiconst.class.php';
 		$dataSource = require_once($fileSource);
-		$langs = array('de', 'en', 'es', 'fi', 'fr', 'rut', 'se');
+		$langs = array('de', 'en', 'es', 'fi', 'fr', 'se');
 		foreach ($langs as $lang) {
+			$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
+			$data = require_once($file);
+			foreach ($dataSource as $k=>$v) {
+				if ($k <> 'A_LANG_RUSSIAN') {
+					if (!isset($data[$k])) {
+						if (empty($translite[$k])) {
+							$translite[$k] = array('ru'=>$v);
+							foreach ($langs as $_l) $translite[$k][$_l] = '';
+						}
+					}
+					elseif (preg_match("/[а-я]/ui", $data[$k])) {
+						if (empty($translite[$k])) {
+							$translite[$k] = array('ru'=>$v);
+							foreach ($langs as $_l) $translite[$k][$_l] = '';
+						}
+					}
+				}
+			}
+		}
+		echo '<table><tr><th>key</th><th>ru</th>';
+		foreach ($langs as $lang) echo '<th>' . $lang . '</th>';
+		echo '</tr>';
+		foreach ($translite as $key=>$lines) {
+			echo '<tr><td>' . $key . '</td><td>' . htmlspecialchars($lines['ru']) . '</td>';
+			foreach ($langs as $lang) echo '<td></td>';
+			echo '</tr>';
+		}
+		echo '</table>';
+/*		foreach ($langs as $lang) {
 			$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
 			$data = require_once($file);
 			$dataCom = require_once(Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'langv2_com/'.$lang.'/uiconst.class.php');
@@ -98,7 +128,7 @@ class UrlController extends MyController {
 //				}
 			}
 			echo '</table><br>';
-		}
+		}*/
 
 	}
 

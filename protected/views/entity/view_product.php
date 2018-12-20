@@ -660,7 +660,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <? if ($item['entity'] != Entity::PERIODIC) :  ?>
 
-            <div class="already-in-cart" style="margin-top: 30px; float: left; margin-left: 10px;">
+            <div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin-top: 30px; float: left; margin-left: 10px;">
                 <?php if (isset($item['AlreadyInCart'])) : ?>
 
 
@@ -948,14 +948,14 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
          
 			
-			<a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="3" href="javascript:;">
+			<a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="3" data-hidecount="1" href="javascript:;">
 			<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
 
         <?php endif;?>
 
         <?php if ($isAvail AND $entity != Entity::PERIODIC) : ?>
 			
-            <a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;">
+            <a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
 			<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
 
 
@@ -1150,6 +1150,21 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                         <div class="prop-value"><?= $item['eancode']; ?></div>
                         <div class="clearBoth"></div>
                     </div>
+            <?php endif; ?>
+
+            <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['fin_codes'])): ?>
+                <div class="detail-prop">
+                    <div class="prop-name">Kirjastoluokka</div>
+                    <div class="prop-value"><?= $item['Category']['fin_codes'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
+            <?php endif; ?>
+            <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
+                <div class="detail-prop">
+                    <div class="prop-name">BIC-code(s)</div>
+                    <div class="prop-value"><?= $item['Category']['BIC_categories'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 
             <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>
