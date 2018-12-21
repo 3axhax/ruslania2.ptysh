@@ -1027,7 +1027,6 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
     'A_NEW_RECOMMENDATIONS_CATEGORY' => 'Рекомендации раздела',
     'A_NEW_OURPREDL' => 'Наши предложения',
     'A_NEW_USERS' => 'Пользователям',
-    'A_NEW_MY_FAVORITE' => 'Моё избранное',
     'A_NEW_MORE_ABOUTUS' => 'Подробнее о нас.',
     'A_NEW_DESC_FOOTER' => 'Книжная Корпорация Руслания была основана в 1986 году в Хельсинки, Финляндия. Это 100% финский семейный бизнес.<br /> В настоящее время наша компания является ведущим поставщиком товаров из России в странах Евросоюза. <br />',
     'A_NEW_VIEW_ALL_CATEGORY' => 'Показать все категории',

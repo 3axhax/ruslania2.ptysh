@@ -1152,7 +1152,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                     </div>
             <?php endif; ?>
 
-            <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['fin_codes'])): ?>
+            <?php if ((Yii::app()->getLanguage() == 'fi')&&($entity == Entity::BOOKS)&&!empty($item['Category']['fin_codes'])): ?>
                 <div class="detail-prop">
                     <div class="prop-name">Kirjastoluokka</div>
                     <div class="prop-value"><?= $item['Category']['fin_codes'] ?></div>

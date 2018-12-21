@@ -361,6 +361,48 @@ $ui = Yii::app()->ui;
                 else
                     clearTimeout(TimerId);
             })
+			
+			
+			$(window).scroll(function() {
+				
+				var minicart = $('.header_logo_search_cart .span1.cart');
+				
+				if ($(window).scrollTop() > 310) {
+					
+					minicart.css('position', 'fixed');
+					minicart.css('background', '#fff');
+					minicart.css('top', '-37px');
+					//$('.span1', minicart).css('display', 'none');
+					minicart.css('width', 'auto');
+					minicart.css('right', '0');
+					minicart.css('z-index', '999999');
+					minicart.css('border-radius', '4px 0 0 4px');
+					minicart.css('box-shadow', '0 0 10px rgba(0,0,0,0.3)');
+					minicart.css('padding-left', '20px');
+					
+					
+					
+					
+				} else {
+					
+					minicart.css('position', '');
+					minicart.css('background', '');
+					minicart.css('top', '');
+					$('.span1', minicart).css('display', '');
+					minicart.css('width', '');
+					minicart.css('right', '');
+					minicart.css('z-index', '');
+					minicart.css('border-radius', '');
+					minicart.css('box-shadow', '');
+					minicart.css('padding-left', '');
+				}
+				
+				
+				
+			})
+			
+			
+			
         })
 
         function show_sc(cont, c, lvl) {
@@ -393,16 +435,45 @@ $ui = Yii::app()->ui;
 
         function add2Cart(action, eid, iid, qty, type, $el)
         {
-
+			
+			
+			
             var csrf = $('meta[name=csrf]').attr('content').split('=');
-            var post =
+            
+			var post_mark = 0;
+			
+			if (action == 'mark ') {
+				
+				if ($el.hasClass('active')) {
+					
+					post_mark = 0;
+					
+					$('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span>')
+					
+					
+					
+				} else {
+					
+					post_mark = 1;
+					
+					$('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_DELETE_SUSPEND_ALT')?></span>')
+					
+				}
+				
+			}
+			
+			
+			
+			var post =
                 {
                     entity: eid,
                     id: iid,
                     quantity: qty,
-                    type: type
+                    type: type,
+					mark : post_mark 
                 };
             post[csrf[0]] = csrf[1];
+            post['hidecount'] = $el.data('hidecount');
 
             var seconds_to_wait = 10;
 
@@ -416,7 +487,7 @@ $ui = Yii::app()->ui;
 
                 var json = JSON.parse(json);
                 var opentip = new Opentip($el, '<div style="padding-right: 17px;">' + json.msg +
-                    '</div><div style="height: 6px;"></div><span class="timer_popup"></span> <span class="countdown">00: 10</span><a href="javascript:;" class="close_popup" onclick="$(this).parent().parent().parent().remove()"><img src="/new_img/close_popup.png" alt="" /></a>', {target: true, tipJoint: "bottom", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
+                    '</div><div style="height: 6px;"></div><a href="javascript:;" class="close_popup" onclick="$(this).parent().parent().parent().remove()"><img src="/new_img/close_popup.png" alt="" /></a>', {target: true, tipJoint: "top", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
 
 
                 opentip.show();
@@ -429,16 +500,7 @@ $ui = Yii::app()->ui;
                     var timer = setTimeout(function ()
                     {
                         seconds_to_wait--;
-
-                        if (seconds_to_wait < 10) {
-                            str = '00:0' + seconds_to_wait;
-                        } else {
-                            str = '00:' + seconds_to_wait;
-                        }
-
-                        if ($('#opentip-' + opentip.id + ' span.countdown').length > 0)
-                            $('#opentip-' + opentip.id + ' span.countdown').html(str);
-                        if (seconds_to_wait > 0)
+						if (seconds_to_wait > 0)
                             doCountdown();
                         else
                             opentip.deactivate();
@@ -450,7 +512,15 @@ $ui = Yii::app()->ui;
                     $('div.already-in-cart', $el.parent()).html(json.already);
                 }
 
-
+				
+				
+				
+				if (action == 'mark ') {
+					
+					$el.toggleClass('active');
+					
+				}
+				
 
                 doCountdown();
 
@@ -729,7 +799,7 @@ $ui = Yii::app()->ui;
 
                 var entity = $el.attr('data-entity');
 
-                if (entity == <?= Entity::PERIODIC; ?>) {
+                if (entity == <?= Entity::PERIODIC; ?> && $el.attr('data-action') != 'mark ') {
                     var $finPrice = $('#finPrice');
                     var $worldPrice = $('#worldPrice');
 
@@ -881,12 +951,30 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             if (($ctrl == 'cart' AND (!in_array('orderPay',$url))) AND count($url) > 2) : ?>
 
-                <a href="/cart/" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+                <a href="<?= Yii::app()->createUrl('cart/view') ?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
 
-            <? elseif ($ctrl == 'cart') : ?>
-
-                <a href="/" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
-
+            <? elseif ($ctrl == 'cart' AND (!in_array('doorder',$url))) : ?>
+				
+				<? 
+				
+				$url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
+				
+				$arr_cart_url = array('variants', 'noregister', 'doorder');
+				
+				if (in_array($url_ref, $arr_cart_url)) {
+					
+					$_SERVER['HTTP_REFERER'] = '/';
+					
+				}
+				
+				?>
+				
+                <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
+			
+			<? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
+			
+			 <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+			
             <? endif; ?>
 
             <? if ($ctrl != 'cart') : ?>
@@ -1005,16 +1093,16 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         </div>
                     </form>
                 </div>
-                <div class="span1 cart" >
+                <div class="span1 cart">
 
 
-                    <div class="span1">
+                    <div class="span1 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart">
 
                         <?= $ui->item('A_NEW_CART'); ?>:
                         <div class="cost"></div>
 
                     </div>
-                    <div class="span2 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart" >
+                    <div class="span2 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart">
 
                         <div class="cart_box" ><img src="/new_img/cart.png" alt=""/></div>
                         <div class="cart_count"></div>
@@ -1120,7 +1208,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             <?php else : ?>
                                 <li><a href="<?= Yii::app()->createUrl('client/me'); ?>"><?= $ui->item('YM_CONTEXT_PERSONAL_MAIN'); ?></a></li>
                                 <li><a href="<?= Yii::app()->createUrl('cart/view'); ?>"><?= $ui->item('A_SHOPCART'); ?></a></li>
-                                <li><a href="/my/memo"><?= $ui->item('A_NEW_MY_FAVORITE'); ?></a></li>
+                                <li><a href="/my/memo"><?= $ui->item('MSG_SHOPCART_SUSPENDED_ITEMS'); ?></a></li>
                                 <li><a href="<?= Yii::app()->createUrl('site/logout'); ?>"><?= $ui->item('YM_CONTEXT_PERSONAL_LOGOUT'); ?></a></li>
                             <?endif;?>
                         </ul>
