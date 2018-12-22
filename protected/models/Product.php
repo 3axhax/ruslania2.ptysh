@@ -379,7 +379,7 @@ class Product
             if ($datePresale > time()) {
 
                 $data['presaleMessage'] = Yii::app()->ui->item('PRESALE_MSG');
-                $data['presaleMessage'] .= ' ' . Yii::app()->item('A_NEW_SUBS_MONTH1' . date('n', $datePresale)) . ' ' . date('Y', $datePresale);
+                $data['presaleMessage'] .= ' ' . Yii::app()->ui->item('A_NEW_SUBS_MONTH' . date('n', $datePresale)) . ' ' . date('Y', $datePresale);
             }
 /*            $sql = ''.
                 'select date_release '.
