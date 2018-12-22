@@ -374,7 +374,14 @@ class Product
         $data['entity'] = $entity;
         $data['status'] = Product::GetStatusProduct($entity, $id);
         if (!empty($data['presale'])) {
-            $sql = ''.
+            //последний день месяца предзаказа 23:59:59
+            $datePresale = mktime(23, 59, 59, date('m', $data['presale'])+1, -1, date('Y', $data['presale']));
+            if ($datePresale > time()) {
+
+                $data['presaleMessage'] = Yii::app()->ui->item('PRESALE_MSG');
+                $data['presaleMessage'] .= ' ' . Yii::app()->item('A_NEW_SUBS_MONTH1' . date('n', $datePresale)) . ' ' . date('Y', $datePresale);
+            }
+/*            $sql = ''.
                 'select date_release '.
                 'from presales '.
                 'where (item_id = ' . (int) $id . ') and (entity_id = ' . (int) $entity . ') '.
@@ -385,7 +392,7 @@ class Product
             if (!empty($dateRelease)) {
                 $dt = new DateTime($dateRelease);
                 $data['presaleMessage'] .= ' ' . $dt->format('m/Y') . '.';
-            }
+            }*/
         }
         return $data;
     }
