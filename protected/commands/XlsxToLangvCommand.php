@@ -33,7 +33,7 @@ class XlsxToLangvCommand extends CConsoleCommand {
 					$lang = $langs[$langPos];
 					if ($lang == 'ru') {
 						$lang = 'rut';
-						$v = ProductHelper::ToAscii($v);
+						//$v = ProductHelper::ToAscii($v); //TODO:: транслит переделать
 					}
 					$result[$lang][$key] = $v;
 				}
