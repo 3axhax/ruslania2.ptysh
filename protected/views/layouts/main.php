@@ -41,6 +41,11 @@ $url = $ex;
 $ctrl = Yii::app()->getController()->id;
 
 $ui = Yii::app()->ui;
+$act = array(1, ' active');
+if (isset($_GET['avail'])) {
+    if ($_GET['avail'] == '1') $act = array(1, ' active');
+    else $act = array('', '');
+}
 ?><!DOCTYPE html><html>
 <head>
     <title><?= $this->pageTitle; ?></title>
@@ -97,761 +102,6 @@ $ui = Yii::app()->ui;
     <script src="libs/respond/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="/js/magnific-popup.js"></script>
-    <script>
-
-        function show_subs(uid, sid, subsid) {
-            var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-            $.post('<?=Yii::app()->createUrl('site/loadhistorysubs')?>', {uid: uid, sid: sid, YII_CSRF_TOKEN: csrf[1], subsid: subsid}, function (data) {
-
-                            $('.history_subs_box').css('top', $(window).scrollTop() + 50);
-
-                            $('.history_subs_box .table_box').html(data);
-
-                            $('.history_subs_box, .opacity').show();
-
-                        });
-
-                    }
-
-                    $(document).ready(function () {
-
-                        $('li.dd_box .click_arrow').click(function () {
-
-                            if ($(this).closest('li').hasClass('show_dd')) {
-
-                                $('.dd_box').removeClass('show_dd');
-                                if ($(this).parents().is('li.more_menu') && !$(this).parent().is('li.more_menu')) {
-                                    $(this).parents('li.more_menu').addClass('show_dd');
-                                }
-
-                            } else {
-
-                                $('.dd_box').removeClass('show_dd');
-
-                                $(this).closest('li').addClass('show_dd');
-                                $(this).closest('li.more_menu').addClass('show_dd');
-
-                            }
-
-                            return false;
-                        })
-
-
-                        $('li.dd_box.more_menu').click(function () {
-
-                            if ($(this).hasClass('show_dd')) {
-
-                                $('.dd_box').removeClass('show_dd');
-
-                            } else {
-
-                                $('.dd_box').removeClass('show_dd');
-
-                                $(this).addClass('show_dd');
-
-                            }
-
-
-                        })
-
-                        $(document).click(function (event) {
-                            if ($(event.target).closest("li.dd_box").length)
-                                return;
-                            $('li.dd_box').removeClass('show_dd');
-                            event.stopPropagation();
-                        });
-
-
-                        $(document).ready(function ()
-                        {
-                            $('.search_text').on('keydown', function (a)
-                            {
-                                if (a.keyCode == 13)
-                                {
-                                    $('#srch').submit();
-                                }
-                            });
-
-                            function decline_days(num) {
-                                var count = num;
-
-                                num = num % 100;
-
-                                if (num > 19) {
-                                    num = num % 10;
-                                }
-
-                                switch (num) {
-
-                                    case 1:
-                                    {
-                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT3'); ?>';
-                                    }
-
-                                    case 2:
-                                    case 3:
-                                    case 4:
-                                    {
-                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT2'); ?>';
-                                    }
-
-                                    default:
-                                    {
-                                        return count + ' <?= $ui->item('A_NEW_SEARCH_RES_COUNT1'); ?>';
-                                    }
-                                }
-                            }
-
-                            <?php
-                            $act = array();
-                            $act = array(1, ' active');
-                            if (isset($_GET['avail'])) {
-                                if ($_GET['avail'] == '1') $act = array(1, ' active');
-                                else $act = array('', '');
-                            }
-                            ?>
-                $('#Search').marcoPolo({
-                    url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
-                    cache: false,
-                    minChars: 3,
-                    formatMinChars: function (minChars, $item) {
-                        return '<em><?= $ui->item('SEARCH_TIP2') ?></em>';
-                    },
-                    formatNoResults: function (q, $item) {
-                        return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
-                    },
-                    hideOnSelect: false,
-                    dynamicData: {avail: function () {
-                            return $('#js_avail').val();
-                        }},
-                    formatItem: function (data, $item, q)
-                    {
-                        var ret = '';
-                        ret += data;
-                        return ret;
-                    }
-
-                });
-            });
-
-
-
-            $.ajax({
-                url: '/cart/getcount',
-                data: 'id=1',
-                type: 'GET',
-                success: function (data) {
-                    var d = JSON.parse(data);
-                    //alert(data);
-                    $('div.cart_count').html(d.countcart)
-                    $('div.span1.cart .cost').html(d.totalPrice)
-                }
-            });
-            initPeriodicPriceSelect();
-            //initAAddCart();
-        });
-
-        $(document).ready(function () {
-
-            $(document).click(function (event) {
-                if ($(event.target).closest(".dd_box_select").length)
-                    return;
-                $('.dd_box_select .list_dd').hide();
-                event.stopPropagation();
-            })
-
-            var blockScroll1 = false;
-            var blockScroll2 = false;
-            var blockScroll3 = false;
-            var page_authors = 1;
-            var page_izda = 1;
-            var page_seria = 1;
-            $('.dd_box_select .list_dd.authors_dd').scroll(function () {
-
-                if (($(this).height() + $(this).scrollTop()) >= $('.items', $(this)).height() && !blockScroll1) {
-
-                    blockScroll1 = true;
-                    page_authors++;
-                    var tthis = $(this);
-                    $('.load_items', $(this)).show();
-                    $('.load_items', $(this)).html('<?= $ui->item('A_NEW_LOAD'); ?>');
-                    var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-                    var url = '/site/loaditemsauthors/page/' + page_authors + '/entity/' + $('.entity_val').val() + '/cid/' + $('.cid_val').val();
-
-                    $.post(url, {YII_CSRF_TOKEN: csrf[1]}, function (data) {
-                        //alert(data);
-                        $('.items .rows', tthis).append(data);
-                        blockScroll1 = false;
-                        $('.load_items', tthis).html('');
-                        $('.load_items', tthis).hide();
-                    })
-
-                }
-
-            })
-            $('.dd_box_select .list_dd.izda_dd').scroll(function () {
-
-                if (($(this).height() + $(this).scrollTop()) >= $('.items', $(this)).height() && !blockScroll2) {
-
-                    blockScroll2 = true;
-                    page_izda++;
-                    var tthis = $(this);
-                    $('.load_items', $(this)).show();
-                    $('.load_items', $(this)).html('<?= $ui->item('A_NEW_LOAD'); ?>');
-                    var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-                    var url = '/site/loaditemsizda/page/' + page_izda + '/entity/' + $('.entity_val').val() + '/cid/' + $('.cid_val').val();
-
-                    $.post(url, {YII_CSRF_TOKEN: csrf[1]}, function (data) {
-                        //alert(data);
-                        $('.items .rows', tthis).append(data);
-                        blockScroll2 = false;
-                        $('.load_items', tthis).html('');
-                        $('.load_items', tthis).hide();
-                    })
-
-                }
-
-            })
-            $('.dd_box_select .list_dd.seria_dd').scroll(function () {
-
-                if (($(this).height() + $(this).scrollTop()) >= $('.items', $(this)).height() && !blockScroll3) {
-
-                    blockScroll3 = true;
-                    page_seria++;
-                    var tthis = $(this);
-                    $('.load_items', $(this)).show();
-                    $('.load_items', $(this)).html('<?= $ui->item('A_NEW_LOAD'); ?>');
-                    var csrf = $('meta[name=csrf]').attr('content').split('=');
-
-                    var url = '/site/loaditemsseria/page/' + page_seria + '/entity/' + $('.entity_val').val() + '/cid/' + $('.cid_val').val();
-
-                    $.post(url, {YII_CSRF_TOKEN: csrf[1]}, function (data) {
-                        //alert(data);
-                        $('.items .rows', tthis).append(data);
-                        blockScroll3 = false;
-                        $('.load_items', tthis).html('');
-                        $('.load_items', tthis).hide();
-                    })
-
-                }
-
-            })
-
-        })
-
-        var mini_map_isOn = 0;
-        var TimerId;
-
-        function mini_cart_off() {
-            if (mini_map_isOn == 1)
-            {
-                $('#cart_renderpartial').toggle(100);
-            }
-            mini_map_isOn = 0;
-        }
-        $(document).ready(function () {
-            $('.cart_box').click(function () {
-                $('#cart_renderpartial').toggle(100);
-                mini_map_isOn = 1 - mini_map_isOn;
-                if (mini_map_isOn)
-                    TimerId = setTimeout(mini_cart_off, 10000);
-                else
-                    clearTimeout(TimerId);
-            })
-			
-			
-			$(window).scroll(function() {
-				
-				var minicart = $('.header_logo_search_cart .span1.cart');
-				
-				if ($(window).scrollTop() > 310) {
-					
-					minicart.css('position', 'fixed');
-					minicart.css('background', '#fff');
-					minicart.css('top', '-37px');
-					//$('.span1', minicart).css('display', 'none');
-					minicart.css('width', 'auto');
-					minicart.css('right', '0');
-					minicart.css('z-index', '999999');
-					minicart.css('border-radius', '4px 0 0 4px');
-					minicart.css('box-shadow', '0 0 10px rgba(0,0,0,0.3)');
-					minicart.css('padding-left', '20px');
-					
-					
-					
-					
-				} else {
-					
-					minicart.css('position', '');
-					minicart.css('background', '');
-					minicart.css('top', '');
-					$('.span1', minicart).css('display', '');
-					minicart.css('width', '');
-					minicart.css('right', '');
-					minicart.css('z-index', '');
-					minicart.css('border-radius', '');
-					minicart.css('box-shadow', '');
-					minicart.css('padding-left', '');
-				}
-				
-				
-				
-			})
-			
-			
-			
-        })
-
-        function show_sc(cont, c, lvl) {
-
-            if (cont.css('display') == 'none') {
-                $('ul.lvlcat' + lvl).hide();
-                $('a.subcatlvl' + lvl).removeClass('open');
-                cont.show();
-                c.addClass('open');
-            } else {
-                $('ul.lvlcat' + lvl + ' ul').hide();
-                $('ul.lvlcat' + lvl + ' a.open_subcat').removeClass('open');
-                cont.hide();
-                c.removeClass('open');
-            }
-
-            var liW = c.parent().width();
-
-            cont.css('position', 'absolute');
-            cont.css('left', (liW + 20) + 'px');
-            cont.css('top', '0');
-            cont.css('z-index', '999999');
-            cont.css('background', '#fff');
-            cont.css('width', '249px');
-            cont.css('box-shadow', '0px 3px 10px 3px rgba(0, 0, 0, 0.15)');
-            cont.css('padding', '0px 10px');
-
-
-        }
-
-        function add2Cart(action, eid, iid, qty, type, $el)
-        {
-			
-			
-			
-            var csrf = $('meta[name=csrf]').attr('content').split('=');
-            
-			var post_mark = 0;
-			
-			if (action == 'mark ') {
-				
-				if ($el.hasClass('active')) {
-					
-					post_mark = 0;
-					
-					$('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span>')
-					
-					
-					
-				} else {
-					
-					post_mark = 1;
-					
-					$('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_DELETE_SUSPEND_ALT')?></span>')
-					
-				}
-				
-			}
-			
-			
-			
-			var post =
-                {
-                    entity: eid,
-                    id: iid,
-                    quantity: qty,
-                    type: type,
-					mark : post_mark 
-                };
-            post[csrf[0]] = csrf[1];
-            post['hidecount'] = $el.data('hidecount');
-
-            var seconds_to_wait = 10;
-
-
-            var opentip = new Opentip($el, '', {target: true, tipJoint: "bottom", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
-
-            opentip.deactivate();
-
-            $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
-            {
-
-                var json = JSON.parse(json);
-                var opentip = new Opentip($el, '<div style="padding-right: 17px;">' + json.msg +
-                    '</div><div style="height: 6px;"></div><a href="javascript:;" class="close_popup" onclick="$(this).parent().parent().parent().remove()"><img src="/new_img/close_popup.png" alt="" /></a>', {target: true, tipJoint: "top", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
-
-
-                opentip.show();
-
-                function doCountdown()
-                {
-
-                    var str = '';
-
-                    var timer = setTimeout(function ()
-                    {
-                        seconds_to_wait--;
-						if (seconds_to_wait > 0)
-                            doCountdown();
-                        else
-                            opentip.deactivate();
-                    }, 1000);
-                }
-
-                if (json.already)
-                {
-                    $('div.already-in-cart', $el.parent()).html(json.already);
-                }
-
-				
-				
-				
-				if (action == 'mark ') {
-					
-					$el.toggleClass('active');
-					
-				}
-				
-
-                doCountdown();
-
-                <?php if ($ctrl != 'cart') : ?>
-
-                update_header_cart();
-
-                <? endif; ?>
-
-                <?php if ($ctrl == 'cart') : ?>
-
-                // var cvm = new cartVM();
-
-                //ko.applyBindings(cvm, $('#cart')[0]);
-
-                //cvm.AjaxCall(true);
-
-                location.href = location.href;
-
-                <?php endif; ?>
-
-            })
-        }
-
-
-        $(document).ready(function () {
-//                sortCategoryMenu('#books_menu', '#books_category', '#books_sale', true);
-//                sortCategoryMenu('#sheet_music_menu', '#sheet_music_category', '#sheet_music_sale', true);
-//                sortCategoryMenu('#music_menu', '#music_category', '#music_sale', true);
-            //sortCategoryMenu('#periodic_menu', '#periodic_category', '#periodic_sale', false);
-            $(document).click(function (event) {
-                if ($(event.target).closest(".select_lang").length)
-                    return;
-                $('.select_lang .dd_select_lang').hide();
-                $('.select_lang').removeClass('act');
-                $('.select_lang .label_lang').removeClass('act');
-                event.stopPropagation();
-            });
-
-            $.fn.prettyPhoto({social_tools: false});
-
-            $('a.read_book').click(function ()
-            {
-
-
-                var $this = $(this);
-                var images = [];
-                if ($this.attr('data-images') != '')
-                {
-                    images = $this.attr('data-images').split('|');
-                    if (images.length > 0)
-                        $.prettyPhoto.open(images, [], []);
-                }
-
-                //            var pdf = $this.attr('data-pdf').split('|');
-                //            if(pdf.length > 0)
-                //            {
-                //                var iid = $this.attr('data-iid');
-                //                $('#staticfiles'+iid).fadeIn();
-                //            }
-            });
-
-            /* $('.tabs_container .tabs li').click(function() {
-
-             var $clas = $(this).attr('class').split(' ')[0];
-
-             //alert($clas);
-
-             $('.tabs_container .tabcontent, .tabs_container .tabs li').removeClass('active');
-
-             $('.tabs_container .tabcontent.'+$clas).addClass('active');
-             $('.tabs_container .tabs li.'+$clas).addClass('active');
-
-             }) */
-
-
-            $(document).click(function (event) {
-                if ($(event.target).closest(".span1.cart, .b-basket-list").length)
-                    return;
-                $('.b-basket-list').fadeOut();
-                event.stopPropagation();
-            });
-
-            $(document).click(function (event) {
-                if ($(event.target).closest(".select_valut").length)
-                    return;
-                $('.select_valut .dd_select_valut').hide();
-                $('.label_valut').removeClass('act');
-                event.stopPropagation();
-            });
-
-
-        })
-
-        function check_search(cont, inputId) {
-            if ($('.check', cont).hasClass('active')) {
-                $('.check', cont).removeClass('active');
-                if (inputId == undefined)
-                    $('.avail', cont).val('');
-                else
-                    $('#' + inputId).val('');
-            } else {
-                $('.check', cont).addClass('active');
-                if (inputId == undefined)
-                    $('.avail', cont).val('1');
-                else
-                    $('#' + inputId).val('1');
-            }
-
-        }
-
-        function show_tab(cont, url) {
-
-            if (cont.parent().hasClass('active')) {
-
-                location.href = cont.attr('href');
-
-
-            } else {
-
-                $('.dd_box_bg .tabs li').removeClass('active');
-                cont.parent().addClass('active');
-                var csrf = $('meta[name=csrf]').attr('content').split('=');
-                $('.dd_box_bg .content .list').html('');
-
-                $.post('/site/mload' + cont.attr('href'), {YII_CSRF_TOKEN: csrf[1], id: 1}, function (data) {
-                    $('.dd_box_bg .content .list').html(data);
-                })
-
-            }
-        }
-
-        function update_header_cart() {
-            $.ajax({
-                url: '/cart/getcount',
-                data: 'id=1',
-                type: 'GET',
-                success: function (data) {
-                    var d = JSON.parse(data);
-
-                    var data = {language: '<?= Yii::app()->language; ?>', is_MiniCart: 1};
-                    $.getJSON('/cart/getall', data, function (json)
-                    {
-                        ko.mapping.fromJS(json, {}, cvm_1);
-
-                        cvm_1.FirstLoad(false);
-
-                    });
-
-                    $('div.cart_count').html(d.countcart)
-                    $('div.span1.cart .cost').html(d.totalPrice)
-                }
-            });
-        }
-
-        function addComment() {
-            var csrf = $('meta[name=csrf]').attr('content').split('=');
-            var ser = $('form.addcomment').serialize() + '&' + csrf[0] + '=' + csrf[1];
-
-
-
-            $.post('/site/addcomments/', ser, function (data) {
-
-                if (data) {
-                    //$('.comments_block').html(data);
-                    $('form span.info').html('<?= $ui->item('A_NEW_REVIEW_SENT1'); ?>');
-                    $('form span.info').delay(1).show(0);
-
-                    $('form span.info').delay(2000).hide(0);
-
-                    $('.review form textarea').val('');
-                } else {
-                    $('form span.info').html('<span style="color: #ff0000;"><?= $ui->item('A_NEW_REVIEW_SENT2'); ?></span>');
-                    $('form span.info').delay(1).show(0);
-
-                    $('form span.info').delay(2000).hide(0);
-
-                    $('.review form textarea').val('');
-                }
-            })
-
-        }
-
-        /*function sortCategoryMenu(id_category, id_category_item = false, id_sale_item = false, clearfix) {
-            clearfix = clearfix || false;
-            var mylist = $(id_category);
-            var listitems = mylist.children().get();
-            var category_item;
-            var sale_item;
-            listitems.sort(function (a, b) {
-                var compA = $(a).children('a').text().toUpperCase();
-                var compB = $(b).children('a').text().toUpperCase();
-                return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-            });
-            $.each(listitems, function (idx, itm) {
-                if (('#' + itm.id) == id_category_item)
-                    category_item = itm;
-                else if (('#' + itm.id) == id_sale_item)
-                    sale_item = itm;
-                else {
-                    mylist.append(itm);
-                    if (clearfix) mylist.append('<div class="clearfix"></div>');
-                }
-            });
-            mylist.append(sale_item);
-            if (clearfix) mylist.append('<div class="clearfix"></div>');
-            mylist.append(category_item);
-        }*/
-
-        function initPeriodicPriceSelect() {
-            $('select.periodic').change(function ()
-            {
-
-                var $el = $(this);
-                var cart = $el.closest('.span11, .span1.cart');
-
-                var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
-                var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
-                var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
-                var finpmonthVat = cart.find('input.finmonthpricevat').val();
-
-                var worldpmonthOrig = cart.find('input.worldmonthpriceoriginal').val();
-                var finpmonthOrig = cart.find('input.finmonthpriceoriginal').val();
-
-                var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
-                var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
-
-                var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
-                var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
-
-                var nPriceOrigW = (worldpmonthOrig * $el.val()).toFixed(2);
-                var nPriceOrigF = (finpmonthOrig * $el.val()).toFixed(2);
-
-                cart.find('.periodic_world .price .pwvat').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
-                cart.find('.periodic_world .price .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
-
-                cart.find('.periodic_fin .price .pwvat').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
-                cart.find('.periodic_fin .price .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
-
-                cart.find('.periodic_world .without_discount').html(nPriceOrigW + ' <?= Currency::ToSign(); ?>');
-                cart.find('.periodic_fin .without_discount').html(nPriceOrigF + ' <?= Currency::ToSign(); ?>');
-
-                cart.find('a.add').attr('data-quantity', $el.val());
-            });
-        }
-
-        function initAAddCart() {
-
-            var elems = $('a.cart-action');
-            var $finSubButton = $('#finSubscription');
-            var $worldSubButton = $('#worldSubscription');
-            var $formDiv = $('#periodic-price-form');
-            var $formEid = $formDiv.find('input[name="eid"]');
-            var $formIid = $formDiv.find('input[name="iid"]');
-            var $formQty = $formDiv.find('input[name="qty"]');
-
-
-            $finSubButton.click(function ()
-            {
-                $.magnificPopup.close();
-                add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
-            });
-
-            $worldSubButton.click(function ()
-            {
-                $.magnificPopup.close();
-                add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
-            });
-
-            $(elems).click(function () {
-                //alert(1);
-
-
-                var $el = $(this);
-                var $parent = $el.closest('.to_cart');
-
-                var entity = $el.attr('data-entity');
-
-                if (entity == <?= Entity::PERIODIC; ?> && $el.attr('data-action') != 'mark ') {
-                    var $finPrice = $('#finPrice');
-                    var $worldPrice = $('#worldPrice');
-
-                    var $itemFinBlock = $parent.find('.periodic_fin');
-                    var $itemWorldBlock = $parent.find('.periodic_world');
-
-                    if ($itemWorldBlock.length && $itemFinBlock.length) {
-                        $formEid.val($el.attr('data-entity'));
-                        $formIid.val($el.attr('data-id'));
-                        $formQty.val($el.attr('data-quantity'));
-                        $finSubButton.data($el);
-                        $worldSubButton.data($el);
-
-                        // show dialog only if we have different prices
-                        var $formTitle = $('#formTitle');
-                        var $formMonths = $('#formMonths');
-                        var $title = $parent.closest('.to_cart').find('h1.title');
-                        $formTitle.html($title.html());
-
-                        var $select = $parent.find('select.periodic');
-                        $formMonths.html($(':selected', $select).text());
-
-                        var finHtml = $itemFinBlock.html();
-                        $finPrice.html(finHtml);
-                        var worldHtml = $itemWorldBlock.html();
-                        $worldPrice.html(worldHtml);
-                        $.magnificPopup.open({
-                            items: {
-                                src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
-                                type: 'inline'
-                            }
-                        });
-                        return false;
-                    }
-                }
-
-                add2Cart($el.attr('data-action'),
-                    $el.attr('data-entity'),
-                    $el.attr('data-id'),
-                    $el.attr('data-quantity'),
-                    null,
-                    $el
-                );
-
-
-
-                return false;
-            });
-        }
-
-
-    </script>
 
 </head>
 
@@ -997,32 +247,6 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             <ul>
                                 <li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
                                 <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
-                                <?php /*
-                                      <li class="chb">
-                                      <div class="checkbox_box" onclick="check_search($(this))">
-                                      <?
-
-                                      $act = array();
-
-                                      $act = array(1, ' active');
-
-                                      if (isset($_GET['avail'])) {
-
-                                      if ($_GET['avail'] == '1') {
-                                      $act = array(1, ' active');
-                                      } else {
-                                      $act = array('', '');
-                                      }
-
-                                      }
-                                      ?>
-
-                                      <span class="checkbox">
-                                      <span class="check<?=$act[1]?>"></span>
-                                      </span> <input type="hidden" name="avail" value="<?=$act[0]?>" class="avail"><?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>
-                                      </div>
-                                      </li>
-                                     */ ?>
                                 <li class="langs">
                                     <div class="select_lang">
                                         <?
@@ -1267,5 +491,307 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 </div>
 <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
 <div id="virtual_keyboard" style="display: none"></div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#Search').marcoPolo({
+            url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
+            cache: false,
+            minChars: 3,
+            formatMinChars: function (minChars, $item) {
+                return '<em><?= $ui->item('SEARCH_TIP2') ?></em>';
+            },
+            formatNoResults: function (q, $item) {
+                return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
+            },
+            hideOnSelect: false,
+            dynamicData: {avail: function () {
+                return $('#js_avail').val();
+            }},
+            formatItem: function (data, $item, q) {
+                var ret = '';
+                ret += data;
+                return ret;
+            }
+
+        });
+
+    });
+
+    function add2Cart(action, eid, iid, qty, type, $el) {
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+        var post_mark = 0;
+
+        if (action == 'mark ') {
+
+            if ($el.hasClass('active')) {
+
+                post_mark = 0;
+
+                $('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span>')
+
+
+
+            } else {
+
+                post_mark = 1;
+
+                $('span.tooltip').html('<span class="arrow"></span><?=$ui->item('BTN_SHOPCART_DELETE_SUSPEND_ALT')?></span>')
+
+            }
+
+        }
+
+
+
+        var post =
+        {
+            entity: eid,
+            id: iid,
+            quantity: qty,
+            type: type,
+            mark : post_mark
+        };
+        post[csrf[0]] = csrf[1];
+        post['hidecount'] = $el.data('hidecount');
+
+        var seconds_to_wait = 10;
+
+
+        var opentip = new Opentip($el, '', {target: true, tipJoint: "bottom", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
+
+        opentip.deactivate();
+
+        $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
+        {
+
+            var json = JSON.parse(json);
+            var opentip = new Opentip($el, '<div style="padding-right: 17px;">' + json.msg +
+                '</div><div style="height: 6px;"></div><a href="javascript:;" class="close_popup" onclick="$(this).parent().parent().parent().remove()"><img src="/new_img/close_popup.png" alt="" /></a>', {target: true, tipJoint: "top", group: "group-example", showOn: "click", hideOn: 'ondblclick', background: '#fff', borderColor: '#fff'});
+
+
+            opentip.show();
+
+            function doCountdown()
+            {
+
+                var str = '';
+
+                var timer = setTimeout(function ()
+                {
+                    seconds_to_wait--;
+                    if (seconds_to_wait > 0)
+                        doCountdown();
+                    else
+                        opentip.deactivate();
+                }, 1000);
+            }
+
+            if (json.already)
+            {
+                $('div.already-in-cart', $el.parent()).html(json.already);
+            }
+
+
+
+
+            if (action == 'mark ') {
+
+                $el.toggleClass('active');
+
+            }
+
+
+            doCountdown();
+
+            <?php if ($ctrl != 'cart') : ?>
+
+            update_header_cart();
+
+            <?php else: ?>
+            location.href = location.href;
+            <?php endif; ?>
+        })
+    }
+
+    function show_tab(cont, url) {
+        if (cont.parent().hasClass('active')) {
+            location.href = cont.attr('href');
+        } else {
+
+            $('.dd_box_bg .tabs li').removeClass('active');
+            cont.parent().addClass('active');
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            $('.dd_box_bg .content .list').html('');
+
+            $.post('<?= Yii::app()->createUrl('site/mload') ?>' + cont.attr('href'), {YII_CSRF_TOKEN: csrf[1], id: 1}, function (data) {
+                $('.dd_box_bg .content .list').html(data);
+            })
+
+        }
+    }
+
+    function update_header_cart() {
+        $.ajax({
+            url: '<?=Yii::app()->createUrl('cart/getcount') ?>',
+            data: 'id=1',
+            type: 'GET',
+            success: function (data) {
+                var d = JSON.parse(data);
+                $.getJSON('<?=Yii::app()->createUrl('cart/getall') ?>', {is_MiniCart: 1}, function (json) {
+                    ko.mapping.fromJS(json, {}, cvm_1);
+                    cvm_1.FirstLoad(false);
+                });
+                $('div.cart_count').html(d.countcart);
+                $('div.span1.cart .cost').html(d.totalPrice);
+            }
+        });
+    }
+
+    function addComment() {
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        var ser = $('form.addcomment').serialize() + '&' + csrf[0] + '=' + csrf[1];
+        $.post('<?=Yii::app()->createUrl('site/addcomments') ?>', ser, function (data) {
+            var $form = $('form span.info');
+            if (data) {
+                //$('.comments_block').html(data);
+                $form.html('<?= $ui->item('A_NEW_REVIEW_SENT1'); ?>');
+                $form.delay(1).show(0);
+                $form.delay(2000).hide(0);
+                $('.review form textarea').val('');
+            } else {
+                $form.html('<span style="color: #ff0000;"><?= $ui->item('A_NEW_REVIEW_SENT2'); ?></span>');
+                $form.delay(1).show(0);
+                $form.delay(2000).hide(0);
+                $('.review form textarea').val('');
+            }
+        })
+
+    }
+
+    function initPeriodicPriceSelect() {
+        $('select.periodic').change(function () {
+
+            var $el = $(this);
+            var cart = $el.closest('.span11, .span1.cart');
+
+            var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
+            var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
+            var finpmonthVat0 = cart.find('input.finmonthpricevat0').val();
+            var finpmonthVat = cart.find('input.finmonthpricevat').val();
+
+            var worldpmonthOrig = cart.find('input.worldmonthpriceoriginal').val();
+            var finpmonthOrig = cart.find('input.finmonthpriceoriginal').val();
+
+            var nPriceVat = (worldpmonthVat * $el.val()).toFixed(2);
+            var nPriceVat0 = (worldpmonthVat0 * $el.val()).toFixed(2);
+
+            var nPriceFinVat = (finpmonthVat * $el.val()).toFixed(2);
+            var nPriceFinVat0 = (finpmonthVat0 * $el.val()).toFixed(2);
+
+            var nPriceOrigW = (worldpmonthOrig * $el.val()).toFixed(2);
+            var nPriceOrigF = (finpmonthOrig * $el.val()).toFixed(2);
+
+            cart.find('.periodic_world .price .pwvat').html(nPriceVat + ' <?= Currency::ToSign(); ?>');
+            cart.find('.periodic_world .price .pwovat span').html(nPriceVat0 + ' <?= Currency::ToSign(); ?>');
+
+            cart.find('.periodic_fin .price .pwvat').html(nPriceFinVat + ' <?= Currency::ToSign(); ?>');
+            cart.find('.periodic_fin .price .pwovat span').html(nPriceFinVat0 + ' <?= Currency::ToSign(); ?>');
+
+            cart.find('.periodic_world .without_discount').html(nPriceOrigW + ' <?= Currency::ToSign(); ?>');
+            cart.find('.periodic_fin .without_discount').html(nPriceOrigF + ' <?= Currency::ToSign(); ?>');
+
+            cart.find('a.add').attr('data-quantity', $el.val());
+        });
+    }
+
+    function initAAddCart() {
+
+        var elems = $('a.cart-action');
+        var $finSubButton = $('#finSubscription');
+        var $worldSubButton = $('#worldSubscription');
+        var $formDiv = $('#periodic-price-form');
+        var $formEid = $formDiv.find('input[name="eid"]');
+        var $formIid = $formDiv.find('input[name="iid"]');
+        var $formQty = $formDiv.find('input[name="qty"]');
+
+
+        $finSubButton.click(function ()
+        {
+            $.magnificPopup.close();
+            add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
+        });
+
+        $worldSubButton.click(function ()
+        {
+            $.magnificPopup.close();
+            add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
+        });
+
+        $(elems).click(function () {
+            //alert(1);
+
+
+            var $el = $(this);
+            var $parent = $el.closest('.to_cart');
+
+            var entity = $el.attr('data-entity');
+
+            if (entity == <?= Entity::PERIODIC; ?> && $el.attr('data-action') != 'mark ') {
+                var $finPrice = $('#finPrice');
+                var $worldPrice = $('#worldPrice');
+
+                var $itemFinBlock = $parent.find('.periodic_fin');
+                var $itemWorldBlock = $parent.find('.periodic_world');
+
+                if ($itemWorldBlock.length && $itemFinBlock.length) {
+                    $formEid.val($el.attr('data-entity'));
+                    $formIid.val($el.attr('data-id'));
+                    $formQty.val($el.attr('data-quantity'));
+                    $finSubButton.data($el);
+                    $worldSubButton.data($el);
+
+                    // show dialog only if we have different prices
+                    var $formTitle = $('#formTitle');
+                    var $formMonths = $('#formMonths');
+                    var $title = $parent.closest('.to_cart').find('h1.title');
+                    $formTitle.html($title.html());
+
+                    var $select = $parent.find('select.periodic');
+                    $formMonths.html($(':selected', $select).text());
+
+                    var finHtml = $itemFinBlock.html();
+                    $finPrice.html(finHtml);
+                    var worldHtml = $itemWorldBlock.html();
+                    $worldPrice.html(worldHtml);
+                    $.magnificPopup.open({
+                        items: {
+                            src: '#periodic-price-form', // can be a HTML string, jQuery object, or CSS selector
+                            type: 'inline'
+                        }
+                    });
+                    return false;
+                }
+            }
+
+            add2Cart($el.attr('data-action'),
+                $el.attr('data-entity'),
+                $el.attr('data-id'),
+                $el.attr('data-quantity'),
+                null,
+                $el
+            );
+
+
+
+            return false;
+        });
+    }
+
+
+</script>
+
 </body>
 </html>

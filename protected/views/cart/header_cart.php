@@ -12,7 +12,7 @@
                            <!-- ko if: $index() < 3 -->                     
 						<div class="b-basket-list__item">
 						
-									<div class="alert" data-bind="attr: { class: 'alert alert'+ID()}" >
+									<!--<div class="alert" data-bind="attr: { class: 'alert alert'+ID()}" >
 										<div style="margin: 5px;">
 											<div class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
 											
@@ -22,7 +22,7 @@
 											</div>
 											
 										</div>
-									</div>
+									</div>-->
 						
 						
                                     <div class="b-basket-list__img-wrapper">
@@ -179,11 +179,11 @@
             //if(confirm('<?=$ui->item('ARE_YOU_SURE'); ?>'))
             //{
 				
-				$('.b-basket-list .alert.alert'+item.ID()).fadeIn(240);
+				//$('.b-basket-list .alert.alert'+item.ID()).fadeIn(240);
 				
-				$('.b-basket-list .alert.alert'+item.ID()+' .btn_no').on('click', function() { $('.b-basket-list .alert.alert'+item.ID()).fadeOut(240); })
+				//$('.b-basket-list .alert.alert'+item.ID()+' .btn_no').on('click', function() { $('.b-basket-list .alert.alert'+item.ID()).fadeOut(240); })
 				
-				$('.b-basket-list .alert.alert'+item.ID()+' .btn_yes').on('click', function() { 
+				
 				
 					var obj =
                 {
@@ -217,8 +217,6 @@
                         }
                     });
 				
-
-				})
 				
                 
                   
@@ -272,10 +270,12 @@
 
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
             {
-                if(json.changed)
+                if(json.changed){
                     data.InfoField(json.changedStr);
-                else
+					alert(json.changedStr);
+                }else{
                     data.InfoField('');
+				}
 //                console.log(json);
                 data.Quantity(json.quantity);
 				update_header_cart();
@@ -365,15 +365,15 @@
     
     $(document).ready(function ()
     {
-        
-        var data = { language: '<?=Yii::app()->language; ?>', is_MiniCart: 1};
-        $.getJSON('<?=Yii::app()->createUrl('cart/getall')?>', data, function (json)
-        {
-            ko.mapping.fromJS(json, {}, cvm_1);
-           
-            cvm_1.FirstLoad(false);
-            
-        });
+        update_header_cart();
+//        var data = {is_MiniCart: 1};
+//        $.getJSON('<?//=Yii::app()->createUrl('cart/getall')?>//', {is_MiniCart: 1}, function (json)
+//        {
+//            ko.mapping.fromJS(json, {}, cvm_1);
+//
+//            cvm_1.FirstLoad(false);
+//
+//        });
     });
 
     $(document).ajaxStart(function ()

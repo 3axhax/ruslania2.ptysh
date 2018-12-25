@@ -53,3 +53,5 @@ $ui = Yii::app()->ui;
 	</div>
 
 </div>
+<script type="text/javascript">
+</script>
