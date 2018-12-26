@@ -3,7 +3,7 @@
 <?php foreach ($categories as $cat) : ?>
 	<li>
 	<?php if (!empty($cat['childs'])): ?>
-		<a class="open_subcat subcatlvl<?= ($lvl+1) ?>" onclick="show_sc($('ul.sc<?= $cat['id'] ?>'), $(this), <?= ($lvl+1) ?>); return false;"></a>
+		<a data-lvl="<?= ($lvl+1) ?>" class="open_subcat subcatlvl<?= ($lvl+1) ?>"></a>
 	<?php endif; ?>
 		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)))) ?>"><?= ProductHelper::GetTitle($cat) ?></a>
 		<?php $this->widget('LeftCategories', array('entity'=>$entity, 'cid'=>$cat['id'], 'catTitle'=>ProductHelper::GetTitle($cat), 'categories'=>$cat['childs'], 'tpl'=>'sub_left_categories', 'lvl'=>($lvl+1))); ?>

@@ -32,6 +32,7 @@
             <td><select name="cid"
                         data-bind="options: Categories, optionsText: 'Name',
                          optionsCaption: '---',
+						 select2 : {},
                         optionsValue: 'ID', value: CID"></select>
             </td>
         </tr>
@@ -50,7 +51,7 @@
 		<? echo '
 		<tr data-bind="visible: Entity()=='.$id.'">
             <td>'.$ui->item('A_NEW_PEREP') .':</td>
-            <td>'.CHtml::dropDownList('binding_id'.$id, $binding_id, ${'bindingList'.$id}, array('empty' => '---')) .'</td>
+            <td>'.CHtml::dropDownList('binding_id'.$id, $binding_id, ${'bindingList'.$id}, array('empty' => '---', 'class'=>'select2_series')) .'</td>
         </tr>';
 		
 		}?>
@@ -80,7 +81,7 @@
         <tr>
             <td><?=$ui->item('CATALOGINDEX_CHANGE_LANGUAGE'); ?>:</td>
             <?php $langList = CHtml::listData(Language::GetItemsLanguageList(), 'id', 'title_'.Yii::app()->language); ?>
-            <td id="language_select"><?=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---')); ?></td>
+            <td id="language_select"><?=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---', 'class'=>'select2_series')); ?></td>
         </tr>
         <tr>
             <td><?=trim(sprintf($ui->item('PUBLISHED_IN_YEAR'), '')); ?>:</td>
@@ -88,7 +89,7 @@
         </tr>
         <tr>
             <td><?= $ui->item('SEARCH_IN_STOCK'); ?>:</td>
-            <td class="red_checkbox" onclick="check_search($(this));">
+            <td class="red_checkbox">
                 <span class="checkbox">
                     <span class="check<?= $only?' active':'' ?>"></span>
                 </span>
@@ -106,6 +107,38 @@
 <script type="text/javascript">
 
     var firstTime = true;
+	
+	ko.utils.setValue = function (property, newValue) {
+    if (ko.isObservable(property))
+        property(newValue);
+    else
+        property = newValue;
+};
+
+ko.bindingHandlers.select2 = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        var obj = valueAccessor(),
+            allBindings = allBindingsAccessor(),
+            lookupKey = allBindings.lookupKey;
+
+        $(element).select2(obj);
+      
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $(element).select2('destroy');
+        });
+    },
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var options = allBindingsAccessor().select2Options || {};
+
+        for (var property in options) {
+            $(element).select2(property, ko.utils.unwrapObservable(options[property]));
+        }
+
+        $(element).trigger('change');
+    }
+};
+	
+	
     var VM = function ()
     {
         var self = this;
