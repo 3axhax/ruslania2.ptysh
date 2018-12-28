@@ -47,7 +47,7 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
             <b class="pwvat"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></b>
             <span class="notes">
                 <span class="fa notes-circle"></span>
-                <span class="notes-block"><?= $price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL?$ui->item('MSG_PERSNAL_DISCOUNT') . ' -':$ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?></span>
+                <span class="notes-block"<?php if ($price[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_PERSONAL):?> style="width: 90px;" <?php endif; ?>><?= $price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL?$ui->item('MSG_PERSNAL_DISCOUNT') . ' -':$ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?></span>
             </span>
         </span>
         <div class="price">
