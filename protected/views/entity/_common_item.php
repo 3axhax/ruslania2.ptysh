@@ -338,7 +338,7 @@ $hideButtons = isset($hideButtons) && $hideButtons;
                     <span
                         class="price"><?= $ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?>
                         :
-                <b class="pwvat"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]); ?></b><br/>
+                <b class="pwvat"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]); ?></b><br/>
                 (<span class="pwovat"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?>
                         )
             </span>

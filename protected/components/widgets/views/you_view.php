@@ -19,7 +19,7 @@
 				<span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>
-				<span class="price with_discount" style="font-size: 15px;">
+				<span class="price with_discount" style="font-size: 15px;<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> color: #42b455;<?php endif; ?>">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
 	<?php else : ?>

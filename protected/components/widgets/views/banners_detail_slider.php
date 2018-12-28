@@ -20,7 +20,7 @@
 							<div class="cost">
 								<?php if (!empty($price[DiscountManager::DISCOUNT])): ?>
 									<span class="without_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?></span>&nbsp;
-									<span class="price with_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
+									<span class="price with_discount"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
 								<?php else: ?>
 									<?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
 								<?php endif; ?>

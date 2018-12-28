@@ -95,7 +95,7 @@ $i++;
 		<div class="span2 text">
 			<div class="title"><a href="<?=$url; ?>"><?=ProductHelper::GetTitle($igoods, 'title', 30); ?></a></div>
 			<div class="cost"><?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
-     <span class="without_discount">
+     <span class="without_discount"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
          <?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]); ?>
      </span>&nbsp;<span class="price with_discount">
          <?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]); ?>

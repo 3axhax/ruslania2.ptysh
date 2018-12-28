@@ -23,7 +23,7 @@
 					</a>
 				</div>
 
-				<div class="title_book"<?php if (!empty($product['Authors'])): ?> style="height:29px;min-height:auto;margin-bottom:0;" <?php endif; ?>><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
+				<div class="title_book" style="height:29px;min-height:auto;margin-bottom:0;"><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
 <div class="params"<?php if ($paramsHeight): ?> style="height: <?= $paramsHeight ?>px;" <?php endif; ?>>
 				<?php if (!empty($product['Authors'])):
 					$author = array_shift($product['Authors']);
@@ -54,7 +54,7 @@
 							<span class="without_discount">
 	                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
 	                </span>
-							<span class="price with_discount" style="font-size: 15px;">
+							<span class="price with_discount" style="font-size: 15px;<?php if ($product['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> color: #42b455;<?php endif; ?>">
 	                    <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
 	                </span>
 						<?php else : ?>
@@ -79,8 +79,10 @@
 					<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
 				<?php else: ?>
 				<div class="addcart">
-					<a class="cart-action" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1" href="javascript:;">
-	<?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART') ?>
+				
+				
+					<a class="cart-action add_cart_plus" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1" href="javascript:;"><span>
+	<?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART') ?></span>
 					</a>
 				</div>
 				<?php endif; ?>
