@@ -262,7 +262,7 @@ class SearchController extends MyController {
 	}
 
 	function fillDataTable($query) {
-		$query = preg_replace("/[^a-zа-я0-9]/ui", ' ', $query);
+		$query = preg_replace("/[^\w]/ui", ' ', $query);
 		$resultTable = '_tmp_products';
 		$filters = array(
 			'query'=>$query,
@@ -290,6 +290,7 @@ class SearchController extends MyController {
 			'FROM ' . $table . ' t '.
 			'WHERE (t.query=:q); '.
 			'';
+
 		//Война и мир;filter=avail,1;mode=phrase;limit=10000;maxmatches=10000
 		$rows = Yii::app()->db->createCommand()->setText($sql)->execute(array(':q'=>implode(';', $filters)));
 
