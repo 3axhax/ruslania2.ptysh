@@ -6,14 +6,14 @@
 	$productPicture = Picture::Get($offerDay, Picture::SMALL);
 	$productTitle = ProductHelper::GetTitle($offerDay, 'title');
 	?>
-		<div class="span6 main-banner-content" style="background-color: rgb(117, 132, 149);">
+		<div class="span6 main-banner-content" style="background: url(<?= (isset($_GET['ha'])?'/new_img/day_banner.jpg':'/new_img/day_fon.jpg') ?>) 100% 100% no-repeat; background-size: contain;">
 			<div class="photo">
-				<a href="<?= $url ?>"><img src="<?= $productPicture ?>" alt=""/></a>
+				<div><a href="<?= $url ?>"><img src="<?= $productPicture ?>" alt=""/></a></div>
 			</div>
 	<?php if (!empty($offerDay['priceData'][DiscountManager::DISCOUNT])) : ?>
 			<div class="discount"><?= Yii::app()->ui->item('PRODUCT_OF_DAY_INFO', $offerDay['priceData'][DiscountManager::DISCOUNT]) ?></div>
 	<?php endif; ?>
-			<div class="title"<?php if (!empty($offerDay['extraTxt'])):?> style="height: 65px;" <?php endif; ?>><div<?php if (!empty($offerDay['extraTxt'])):?> style="height: 65px;" <?php endif; ?>><a href="<?= $url ?>"><?= $productTitle ?><span class="gradient_link"></span></a></div></div>
+			<div class="title"><div><a href="<?= $url ?>"><?= $productTitle ?><?php /*<span class="gradient_link"></span>*/ ?></a></div></div>
 <?php /*
 			<div class="cost">
                 <?= Yii::app()->ui->item('CART_COL_PRICE') ?>
@@ -27,9 +27,8 @@
 			</div>
 */ ?>
 			<div class="cost_nds">
-<?= Yii::app()->ui->item('CART_COL_PRICE') ?> <?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITH_VAT]); ?> <?= $offerDay['priceData']['unit'] ?>
-<?php /*(<?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITHOUT_VAT]); ?> <?= $offerDay['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?>)*/ ?>
-				(<?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::BRUTTO]); ?> <?= $offerDay['priceData']['unit'] ?>)
+<?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITH_VAT]); ?> <?= $offerDay['priceData']['unit'] ?>
+				<span>(<span><?= trim(ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::BRUTTO]) . ' ' . $offerDay['priceData']['unit']) ?></span>)</span>
 			</div>
 			<?php if (!empty($offerDay['extraTxt'])): ?>
 				<div class="extra-txt"><span><?= $offerDay['extraTxt'] ?></span></div>
