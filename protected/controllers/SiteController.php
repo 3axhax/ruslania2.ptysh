@@ -426,9 +426,18 @@ class SiteController extends MyController {
 
         $this->_checkUrl(array());
 
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage('register');
+        $registerText = '';
+        if (!empty($item)) $registerText = $item['description_' . Yii::app()->language];
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
+
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
-        $this->render('register', array('model' => $user));
-        ;
+        $this->render('register', array(
+            'model' => $user,
+            'registerText' => $registerText,
+            'isWordpanel' => $isWordpanel,
+        ));
     }
 
     public function actionLogout() {
