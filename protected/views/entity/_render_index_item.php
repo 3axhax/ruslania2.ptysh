@@ -75,7 +75,7 @@
             <span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-            <span class="price with_discount">
+            <span class="price with_discount"<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
         <?php else : ?>
@@ -88,9 +88,16 @@
 <?php endif; ?>
     <?php if ($entity != Entity::PERIODIC):?>
                     <div class="addcart">
-                        <a class="cart-action" data-action="add" data-entity="<?= $item['entity']; ?>"
+					
+					
+					
+                        <a class="cart-action add_cart_plus" data-action="add" data-entity="<?= $item['entity']; ?>"
                data-id="<?= $item['id']; ?>" data-quantity="1"
-               href="javascript:;" style="width: 132px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
+               href="javascript:;" style="width: 132px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+			   
+			   
+			   
+			   
                     </div>
     <?php else:?>
         <div class="more">
