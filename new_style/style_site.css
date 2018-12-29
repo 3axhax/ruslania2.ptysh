@@ -3345,7 +3345,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .main-banner-content .discount { padding-left: 2px; font-weight: bold; margin: 13px 0 7px 160px;}
 .main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; padding-right: 20px;}
 .main-banner-content .cost_nds {font-weight: bold; float: left; height: 40px; font-size: 18px; margin-right: 13px; margin-left: 1px;letter-spacing: -0.2px;}
-.main-banner-content .cost_nds span {font-weight: normal; font-size: 15px;letter-spacing: -0.7px;}
+.main-banner-content .cost_nds span {font-weight: normal; font-size: 15px;letter-spacing: -0.7px;white-space: nowrap;}
 .main-banner-content .cost_nds span span {text-decoration: line-through;}
 .main-banner-content .cost span { font-weight: bold; }
 .main-banner-content .extra-txt {position: relative; top: 1px;line-height: 16px; letter-spacing: -0.7px;}
