@@ -1201,21 +1201,11 @@ class SiteController extends MyController {
             return $this->_keyPrefix = md5('Yii.' . get_class($this) . '.' . Yii::app()->getId());
     }
 
-    function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
-                            $izda = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
-                            $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
-
-        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
-
-        $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : SortOptions::GetDefaultSort());
-        if (isset($_GET['entity'])) $entity = $_GET['entity'];
-        if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
-
-        $data = FilterHelper::getFiltersData($entity, $cid);
+    function actionGGfilter() {
+        $entity = $_POST['entity_val'];
+        $cid = $_POST['cid_val'];
+        $data = $_POST;
         FilterHelper::setFiltersData($entity, $cid, $data);
-
-        $entity = $data['entity'];
-        $cid = $data['cid'];
 
         $cat = new Category();
 
@@ -1224,8 +1214,8 @@ class SiteController extends MyController {
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
         $paginator->itemCount = $totalItems;
 
-        $entity = $data['entity'];
-        $cid = $data['cid'];
+//        $entity = $data['entity'];
+//        $cid = $data['cid'];
 
         $sort = 0;
         if (isset($_GET['sort'])) $sort = $_GET['sort'];

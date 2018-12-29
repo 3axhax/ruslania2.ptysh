@@ -1,6 +1,7 @@
 <?php $filterData = FilterHelper::getFiltersData($entity, $cid);
 $urls = array();
 $urls['result'] = Yii::app()->createUrl('site/ggfilter');
+$urls['recount'] = Yii::app()->createUrl('site/gtfilter');
 ?>
 <form id="js_filter" class="prod-filter filter" method="get" action="">
 
@@ -24,9 +25,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                        placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_author"
                        <?= ($author) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['author'], Yii::app()->language).'"' : '' ?>/>
             </div>
-            <script>
-                liveFindAuthorMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_authors')?>', <?=$cid?>);
-            </script>
         </div>
         <?php endif;?>
 
@@ -42,9 +40,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                            placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_directors"
                         <?= ($directors) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['directors'], Yii::app()->language).'"' : '' ?>/>
                 </div>
-                <script>
-                    liveFindDirectorsMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_directors')?>', <?=$cid?>);
-                </script>
             </div>
         <?php endif;?>
 
@@ -60,14 +55,10 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                            placeholder="<?=$ui->item('A_NEW_FILTER_ALL'); ?>" autocomplete="off" name="new_actors"
                         <?= ($actors) ? 'value="'.ProductHelper::GetAuthorTitle($filter_data['actors'], Yii::app()->language).'"' : '' ?>/>
                 </div>
-                <script>
-                    liveFindActorsMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_actors')?>', <?=$cid?>);
-                </script>
             </div>
         <?php endif;?>
 
         <?php if (isset($filters['avail']) && $filters['avail'] == true):
-            $urls['avail'] = Yii::app()->createUrl('site/gtfilter');
             ?>
         <!--Фильтр по наличию-->
         <div class="prod-filter__col">
@@ -80,7 +71,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if ($entity != Entity::VIDEO && isset($filters['price']) && $filters['price'] == true):
-            $urls['price'] = Yii::app()->createUrl('site/gtfilter');
             ?>
         <!--Фильтр по цене-->
         <div class="prod-filter__col">
@@ -100,7 +90,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['years']) && $filters['years'] == true):
-            $urls['years'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по году/году выхода-->
             <div class="prod-filter__col">
@@ -120,7 +109,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['release_years']) && $filters['release_years'] == true):
-            $urls['release_years'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по году издания-->
             <div class="prod-filter__col">
@@ -140,7 +128,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['country']) && $filters['country'] == true):
-            $urls['country'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по стране-->
             <div class="prod-filter__col">
@@ -160,8 +147,7 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php if ($entity != Entity::VIDEO):
             ?>
         <!--Кнопки управления-->
-        <button class="prod-filter__button" type="button" id="filter_apply"
-                onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
+        <button class="prod-filter__button" type="button" id="filter_apply">
             <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
         <?php endif;?>
@@ -171,7 +157,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
     <div class="prod-filter__row" id="more-filter-block">
 
         <?php if ($entity == Entity::VIDEO):
-            $urls['price'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по цене-->
             <div class="prod-filter__col">
@@ -191,7 +176,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['pre_sale']) && $filters['pre_sale'] == true):
-            $urls['pre_sale'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по предпродажам-->
             <?php
@@ -208,7 +192,7 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['performers']) && $filters['performers'] == true):
-            $urls['performers'] = Yii::app()->createUrl('liveSearch/filter_performers');
+            $urls['performer'] = Yii::app()->createUrl('liveSearch/filter_performers');
             ?>
             <!--Фильтр по исполнителю-->
             <div class="prod-filter__col">
@@ -220,9 +204,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                         <?= ($performer) ? 'value="'.ProductHelper::GetPerformerTitle($filter_data['performer'], Yii::app()->language).'"' : '' ?>/>
                 </div>
                 <ul class="search_result search_result_performer"></ul>
-                <script>
-                    liveFindPerformerMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_performers')?>', <?=$cid?>);
-                </script>
             </div>
         <?php endif;?>
 
@@ -246,12 +227,8 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                            <?= ($publisher) ? 'value="'.ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language).'"' : '' ?>/>
                 </div>
                 <ul class="search_result search_result_publisher"></ul>
-                <script>
-                    liveFindPublisherMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_publishers')?>', <?=$cid?>);
-                </script>
             <?php else:
-            $urls['publisher'] = Yii::app()->createUrl('site/gtfilter');
-            $urls['publisher_all'] = Yii::app()->createUrl('liveSearch/select_filter_publishers');
+            $urls['publisher'] = Yii::app()->createUrl('liveSearch/select_filter_publishers');
             ?>
                 <select class="select2_publishers prod-filter__input prod-filter__input prod-filter__input__select--m" name="publisher"
                         onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
@@ -277,7 +254,7 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
                 <?php if ($entity == Entity::BOOKS && $cid == 0):
-                    $urls['series'] = Yii::app()->createUrl('liveSearch/filter_series');
+                    $urls['seria'] = Yii::app()->createUrl('liveSearch/filter_series');
                     ?>
                     <div class="text">
                         <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
@@ -286,12 +263,8 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
                             <?= ($seria) ? 'value="'.htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)).'"' : '' ?> />
                     </div>
                     <ul class="search_result search_result_series"></ul>
-                    <script>
-                        liveFindSeriesMP(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/filter_series')?>', <?=$cid?>);
-                    </script>
                 <?php else:
-                $urls['series'] = Yii::app()->createUrl('site/gtfilter');
-                $urls['series_all'] = Yii::app()->createUrl('liveSearch/select_filter_series');
+                $urls['series'] = Yii::app()->createUrl('liveSearch/select_filter_series');
                 ?>
                     <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria"
                         onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
@@ -308,7 +281,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif;?>
 
         <?php if (isset($filters['langVideo']) && $filters['langVideo'] == true):
-            $urls['langVideo'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по языку звуковой дорожки-->
         <div class="prod-filter__col">
@@ -326,7 +298,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif; ?>
 
         <?php if (isset($filters['langSubtitles']) && $filters['langSubtitles'] == true):
-            $urls['langSubtitles'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по языку субтитров-->
             <div class="prod-filter__col">
@@ -344,7 +315,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif; ?>
 
         <?php if (isset($filters['formatVideo']) && $filters['formatVideo'] == true):
-            $urls['formatVideo'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по формату видео-->
             <div class="prod-filter__col">
@@ -362,7 +332,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
         <?php endif; ?>
 
         <?php if (isset($filters['binding']) && !empty($filters['binding'])):
-            $urls['binding'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <!--Фильтр по типу/переплету-->
         <div class="prod-filter__col--grow" id="binding_div">
@@ -416,7 +385,7 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
 
         <?php if ($entity == Entity::VIDEO):?>
             <!--Кнопки управления-->
-            <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items('<?=Yii::app()->createUrl('/site/ggfilter/')?>', <?= ($_GET['page'])?>)">
+            <button class="prod-filter__button" type="button" id="filter_apply">
                 <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
             </button>
         <?php endif;?>
@@ -424,7 +393,6 @@ $urls['result'] = Yii::app()->createUrl('site/ggfilter');
     </div>
 </form>
 <script>
-    show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>');
     $(function(){
         $.cachedScript("/new_js/modules/filter.js").done(function() {
             filters().init({

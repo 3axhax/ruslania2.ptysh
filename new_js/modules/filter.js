@@ -14,6 +14,7 @@
         init: function(options){
             this.setConst(options);
             this.setEvents();
+            return this;
         },
         setConst: function(options) {
             this.urls = options.urls;
@@ -22,51 +23,62 @@
             this.fields = $('form.filter').find('input[name], select[name]').get();
         },
         setEvents: function() {
-            console.log(this.urls, this.entity, this.cid);
-            this.show_items();
+            var self = this;
+            $('#filter_apply').on('click', function(){ self.show_items(); });
+
+            for (var i = 0, len = self.fields.length; i < len; i++) {
+                var f = self.fields[i];
+                if ((f.tagName.toLowerCase() == 'input')&&(f.type == 'hidden')&&(f.name in self.urls)) {
+                    self.liveSearch(f.name, self.urls[f.name]);
+                }
+
+                //switch (f.tagName.toLowerCase()) {
+                //    case 'input':
+                //        switch (f.type) {
+                //            case 'text':
+                //                break;
+                //        }
+                //        break;
+                //}
+
+                //switch (f.name) {
+                //    case 'cost_min': data['min_cost'] = f.value; break;
+                //    case 'cost_max': data['max_cost'] = f.value; break;
+                //    case 'year_min': data['ymin'] = f.value; break;
+                //    case 'year_max': data['ymax'] = f.value; break;
+                //    case 'binding[]':
+                //        for (var j = 0, optionsLen = f.length; j < optionsLen; j++) {
+                //            if (f.options[j].selected) data['binding[' + j + ']'] = f.options[j].value;
+                //        }
+                //        break;
+                //    default:
+                //        data[f.name] = f.value;
+                //        break;
+                //}
+            }
+
+            //console.log(this.urls, this.entity, this.cid);
+            //this.show_items();
         },
-
-
 
         show_items: function() {
             var self = this;
             var csrf = $('meta[name=csrf]').attr('content').split('=');
-            var data = {
-                entity_val: self.entity,
-                cid_val: self.cid,
-                page: self.page
-            };
-            data[csrf[0]] = csrf[1];
-            for (var i = 0, len = self.fields.length; i < len; i++) {
-                var f = self.fields[i];
-                switch (f.name) {
-                    case 'cost_min': data['min_cost'] = f.value; break;
-                    case 'cost_max': data['max_cost'] = f.value; break;
-                    case 'year_min': data['ymin'] = f.value; break;
-                    case 'year_max': data['ymax'] = f.value; break;
-                    case 'binding[]':
-                        for (var j = 0, optionsLen = f.length; j < optionsLen; j++) {
-                            if (f.options[j].selected) data['binding[' + j + ']'] = f.options[j].value;
-                        }
-                        break;
-                    default:
-                        data[f.name] = f.value;
-                        break;
-                }
-            }
+            var frm = $('form.filter').serialize();
+            frm = frm + '&' + csrf[0] + '=' + csrf[1];
 
-            items_content = $('.span10 .items');
+            var items_content = $('.span10 .items');
 
             $.ajax({
                 url: self.urls['result'],
                 type: "POST",
-                data: data,
+                data: frm,
                 beforeSend: function(){
-                    //items_content.html(self.loadMsg);
+                    items_content.html(self.loadMsg);
                 },
                 success: function (r) {
-                    //items_content.html(r);
-                    //$('.box_select_result_count').hide(1);
+                    items_content.html(r);
+                    $('.box_select_result_count').hide(1);
                     //$(window).scrollTop(0);
                 },
                 error: function (msg) {
@@ -75,21 +87,76 @@
             });
         },
 
-        liveFindAuthorMP: function(entity, url, cid) {
+        show_result_count: function() {
+            var self = this;
+            var frm = $('form.filter').serialize();
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            frm = frm + '&' + csrf[0] + '=' + csrf[1];
+            $.ajax({
+                url: self.urls['recount'],
+                type: "POST",
+                data: frm,
+                beforeSend: function(){
+                    $('#loader-filter').html('&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)');
+                },
+                success: function (r) {
+                    $('#loader-filter').html('&nbsp;(' + r + ')');
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        },
+
+        liveSearch: function(field, url) {
+            var self = this;
+            $.cachedScript("/js/marcopolo.js").done(function() {
+                var _field = field; //это поле надо потому, что для серий как-то хитро названия сделаны
+                if (field == 'seria') _field = 'series';
+                var find = $('.find_' + _field);
+                var dataPost = {entity: self.entity, cid: self.cid};
+                find.marcoPolo({
+                    minChars:3,
+                    cache : false,
+                    hideOnSelect: true,
+                    delay: 50,
+                    url: self.urls['author'],
+                    data:dataPost,
+                    formatMinChars: false,
+                    formatItem:function (data, $item, q) {
+                        var $li = $('<li class="mp_list_item">' + data.title + '</li>');
+                        $li.on('click', function(){select_item_mp(data.id, field, data.title, 'new_' + _field);});
+                        return $li.get(0);
+                    }
+                });
+            });
+        },
+
+        liveFindAuthorMP: function() {
+            var self = this;
             find_author = $('.find_author');
-            var dataPost = {entity: entity, cid: cid};
+            var dataPost = {entity: this.entity, cid: this.cid};
             find_author.marcoPolo({
                 minChars:3,
                 cache : false,
                 hideOnSelect: true,
                 delay: 50,
-                url: url,
+                url: self.urls['author'],
                 data:dataPost,
                 formatMinChars: false,
                 formatItem:function (data, $item, q) {
-                    return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'author\', \'' + data.title + '\', \'new_author\')">' + data.title + '</li>';
-                },
+                    var $li = $('<li class="mp_list_item">' + data.title + '</li>');
+                    $li.on('click', function(){select_item_mp(data.id, 'author', data.title, 'new_author');});
+                    return $li.get(0);
+                }
             });
+        },
+
+//Выбор элемента MP
+        select_item_mp: function(id, inp_name, title, show_inp_name) {
+            $('input[name=' + inp_name + ']').val(id);
+            $('input[name=' + show_inp_name + ']').val(title);
+            this.show_result_count();
         },
 
         liveFindPublisherMP: function(entity, url, cid) {
@@ -265,5 +332,5 @@
             });
         });
     }
-}
+    }
 }());
