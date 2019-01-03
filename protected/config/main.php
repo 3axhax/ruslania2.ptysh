@@ -170,19 +170,6 @@ return array(
             'schemaCachingDuration' => 3600,
             'schemaCacheID' => 'schemaCache',
         ),
-        'oldDb' => array(
-            'class' => 'CDbConnection',
-            'pdoClass' => 'NestedPDO',
-            'connectionString' => 'mysql:host=ruslania.com;port=3306;dbname=ruslania_unicode',
-            'username' => 'ruslania_www',
-            'password' => 'qXsDa',
-            'charset' => 'utf8',
-            'enableProfiling' => false,
-            'enableParamLogging' => true,
-            'emulatePrepare' => true,
-            'schemaCachingDuration' => 0,
-        ),
-
 
         'spx' => array(
             'class' => 'CDbConnection',

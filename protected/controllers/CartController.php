@@ -331,8 +331,8 @@ class CartController extends MyController {
         $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
         Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
         //меняем в базе старого сайта тип оплаты
-        $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE beta_id=:id LIMIT 1';
-        Yii::app()->oldDb->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
+        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':id' => $id));
         //выводим соответствующий шаблон
         if ($ptype == '27') {
             $this->render('applepay', $data);
