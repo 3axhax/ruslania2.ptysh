@@ -10,6 +10,7 @@ class Promocodes extends CActiveRecord {
 	const CODE_WITHOUTPOST = 3;
 	const CODE_ITEM = 4;
 	const CODE_GIFT = 5;
+	const CODE_GOOD = 6;
 
 	private $_messages = array(
 		1 => 'PROMOCODE_ERROR_1',

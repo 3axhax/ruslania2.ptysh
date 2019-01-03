@@ -1,11 +1,12 @@
 <?php
-/*Created by Кирилл (10.12.2018 20:18)*/
-class Promocodes_item extends CActiveRecord {
+/*Created by Кирилл (03.01.2019 21:21)*/
+
+class Promocodes_good extends CActiveRecord {
 	static private $_certificates = array();//для кеша промокодов
 	static private $_codeIds = array(); // для кеша только ид промокодов
 
 	function tableName() {
-		return 'promocodes_item';
+		return 'promocodes_good';
 	}
 
 	static function model($className = __CLASS__) {
@@ -26,6 +27,7 @@ class Promocodes_item extends CActiveRecord {
 
 	function check($id, $currencyId, $itemsPrice) {
 		$certificate = $this->getCertificate($id);
+		if (empty($certificate['items'])) return false;
 
 		if ($itemsPrice !== null) {
 			if (($certificate['uid'] > 0)&&($certificate['uid'] <> (int)Yii::app()->user->id)) return false;
@@ -52,21 +54,16 @@ class Promocodes_item extends CActiveRecord {
 		$code = $promocode->getPromocode($certificate['promocode_id']);
 		if (($check = $promocode->check($code, false)) > 0) return 0;
 
-
-		switch((int) $certificate['unit']) {
-			case 1: //проценты
-				$price = $this->_getPrice($certificate['items'], $pricesValues, $discountKeys, $certificate['nominal']);
-				if ($price['withDiscount'] > $itemsPrice) return 0;
-				return ($itemsPrice - $price['withDiscount']);
-				break;
-			case 2: //евро
-				$price = $this->_getPrice($certificate['items'], $pricesValues, $discountKeys, 0);
-				$nominal = Currency::convertToCurrency($certificate['nominal'], Currency::EUR, $currencyId);
-				if (!empty($certificate['items'])&&($price['onlyPromocode'] > $nominal)) return $nominal;
-				return $price['onlyPromocode'];
-				break;
+		//что бы промокод сработал все товары из промокода должны быть в заказе
+		foreach ($certificate['items'] as $eid=>$ids) {
+			foreach ($ids as $itemId) {
+				if (!isset($pricesValues[$eid . '_' . $itemId])) return 0;
+			}
 		}
 
+		$price = $this->_getPrice($certificate['items'], $pricesValues, $discountKeys, 0);
+		$nominal = Currency::convertToCurrency($certificate['nominal'], Currency::EUR, $currencyId);
+		if ($price['onlyPromocode'] > $nominal) return ($price['onlyPromocode'] - $nominal);
 		return 0;
 	}
 
@@ -107,7 +104,7 @@ class Promocodes_item extends CActiveRecord {
 //		$names = implode('', $names);
 		return [
 			'promocodeValue'=>$certificate['nominal'],
-			'promocodeUnit'=>($certificate['unit'] == 1)?'%':Currency::ToSign(Currency::EUR),
+			'promocodeUnit'=>Currency::ToSign(Currency::EUR),
 //			'realValue'=>$this->getNominal($id, $currencyId),
 //			'realUnit'=>Currency::ToSign(Yii::app()->currency),
 			'name'=>implode('', $names),
@@ -176,39 +173,34 @@ class Promocodes_item extends CActiveRecord {
 	 * @return array
 	 */
 	private function _getPrice($items, $pricesValues, $discountKeys, $percent) {
-		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
-		$product = new Product();
-		if (!empty($items)&&is_array($items)) {
-			foreach ($pricesValues as $itemKey=>$price) {
-				list($eid, $itemId) = explode('_', $itemKey);
-				$corrector = 1;
-				if ($eid == Entity::PERIODIC) $corrector = 12;
-
-				$item = $product->GetBaseProductInfo($eid, $itemId);
-				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-				if (!empty($items[$eid])) {
-					if (in_array($itemId, $items[$eid])) {
-						$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-						$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
-					}
-				}
-				$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
-				$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+		//на случай если в заказе товары из промокода указаны по несколько шт., я нахожу мин кол-во и по этому кол-ву будет приминен промокод
+		// в функции check уже есть проверка, что все товары из промокода есть в заказе
+		$quantityForPromocode = 0;
+		foreach ($items as $eid=>$ids) {
+			foreach ($ids as $itemId) {
+				$itemKey = $eid . '_' . $itemId;
+				if (empty($quantityForPromocode)) $quantityForPromocode = $discountKeys[$itemKey]['quantity'];
+				else $quantityForPromocode = min($quantityForPromocode, $discountKeys[$itemKey]['quantity']);
 			}
 		}
-		else {
-			//если как то получилось, что не выбраны товары в сертификате
-			foreach ($pricesValues as $itemKey=>$price) {
-				list($eid, $itemId) = explode('_', $itemKey);
-				$corrector = 1;
-				if ($eid == Entity::PERIODIC) $corrector = 12;
 
-				$item = $product->GetBaseProductInfo($eid, $itemId);
-				$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-				$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
-				$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
-				$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
+		$product = new Product();
+		foreach ($pricesValues as $itemKey=>$price) {
+			list($eid, $itemId) = explode('_', $itemKey);
+			$corrector = 1;
+			if ($eid == Entity::PERIODIC) $corrector = 12;
+
+			$item = $product->GetBaseProductInfo($eid, $itemId);
+			$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+			if (!empty($items[$eid])) {
+				if (in_array($itemId, $items[$eid])) {
+					$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
+					$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$quantityForPromocode;
+				}
 			}
+			$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+			$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 		}
 		return $priceForSale;
 	}
