@@ -267,10 +267,11 @@ class CartController extends MyController {
 			$cartInfo['items'][$item['ID']]['month_count'] = $item['Quantity'];
 			
             if ($item['Entity'] == 30) {
-                //$item['Quantity'] = 1;
+                
                 $fullprice += $price * $item['Quantity'];
 				$cartInfo['items'][$item['ID']]['price'] = $price;
                 $cartInfo['items'][$item['ID']]['Quantity'] = 1;
+				$item['Quantity'] = 1;
             } else {
                 $fullprice += $price * $item['Quantity'];
                 $cartInfo['items'][$item['ID']]['Quantity'] = $item['Quantity'];
@@ -283,9 +284,20 @@ class CartController extends MyController {
         $cartInfo['fullInfo']['count'] = $full_count;
         $cartInfo['fullInfo']['cost'] = $fullprice;
         $cartInfo['fullInfo']['weight'] = $fullweight;
-        $input['fullpricehidden'] = $cartInfo['fullInfo']['cost'];
+        
         $input['footer2'] = 'Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: ' . $cartInfo['fullInfo']['weight'] .' кг';
-        $input['footer3'] = 'Итоговая стоимость: <span class="itogo_cost">'. $PH->FormatPrice($cartInfo['fullInfo']['cost']) .'</span>';
+		
+		
+		if ($fullprice < 5){
+			$fullprice = 5.0;
+		}
+		$input['fullpricehidden'] = $fullprice;
+		
+		
+        $input['footer3'] = 'Итоговая стоимость: <span class="itogo_cost">'. $PH->FormatPrice($fullprice) .'</span>';
+		
+		
+		
         $input['cart_header'] = 'В корзине '.self::decline_goods($cartInfo['fullInfo']['count']).' на сумму '.$PH->FormatPrice($cartInfo['fullInfo']['cost']);
         //$input['cart'] = array();
         foreach ($cartInfo['items'] as $id => $item) :
@@ -318,6 +330,9 @@ class CartController extends MyController {
         //меняем в базе тип оплаты
         $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
         Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
+        //меняем в базе старого сайта тип оплаты
+        $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE beta_id=:id LIMIT 1';
+        Yii::app()->oldDb->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
         //выводим соответствующий шаблон
         if ($ptype == '27') {
             $this->render('applepay', $data);
@@ -348,6 +363,14 @@ class CartController extends MyController {
             if (!is_string($v)) continue;
             $post['Address'][$k] = addslashes(htmlspecialchars($v));
         }
+		
+		$cart = new Cart();
+                    $tmp = $cart->GetCart($this->uid, $this->sid);
+                    $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
+		
+            			
+					
+		
         //var_dump($post);
         if (!Yii::app()->user->isGuest) {
             $adr1 = Address::GetAddress($this->uid, $post['id_address']);
@@ -395,6 +418,23 @@ class CartController extends MyController {
             $this->breadcrumbs[] = 'Оформление заказа';
             $data['number_zakaz'] = $id;
             $data['ptype'] = $post['ptype'];
+			
+			$user = User::model()->findByPk(Yii::app()->user->id);
+                $order = Order::model()->findByPk($id);
+                $message = new YiiMailMessage(sprintf(Yii::app()->ui->item('MSG_ORDER_PRINT_PAGE_TITLE'), $id));
+                $message->view = 'thanks_for_order';
+                $message->setBody(array(
+                    'items' => $beautyItems,
+                    'user' => $user->attributes,
+                    'order' => $order->attributes,
+                ), 'text/html');
+                $message->addTo($user['login']);
+                $message->from = 'noreply@ruslania.com';
+                @Yii::app()->mail->send($message);
+
+                Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
+			
+			
             if (Yii::app()->request->isAjaxRequest) {
                 echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
                 exit();
@@ -419,6 +459,9 @@ class CartController extends MyController {
                 $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
                 $this->render('result', $data);
             }
+			
+			
+			
         }
         if (Yii::app()->request->isPostRequest) {
             $type = $post['Address']['type'];
@@ -478,9 +521,7 @@ class CartController extends MyController {
                     /*
                      *  1. Для начала создаем покупателя и получаем его ID
                      */
-                    $cart = new Cart();
-                    $tmp = $cart->GetCart($this->uid, $this->sid);
-                    $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
+                    
                     $m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
                     $razds = array();
                     foreach ($beautyItems as $p) {
@@ -587,17 +628,27 @@ class CartController extends MyController {
                     // $this->breadcrumbs[] = 'Оформление заказа';
                     $data['number_zakaz'] = $id;
                     $data['ptype'] = $post['ptype'];
+					
+					$user = User::model()->findByPk(Yii::app()->user->id);
+					$order = Order::model()->findByPk($id);
+					$message = new YiiMailMessage(sprintf(Yii::app()->ui->item('MSG_ORDER_PRINT_PAGE_TITLE'), $id));
+					$message->view = 'thanks_for_order';
+					$message->setBody(array(
+						'items' => $beautyItems,
+						'user' => $user->attributes,
+						'order' => $order->attributes,
+					), 'text/html');
+					$message->addTo($user['login']);
+					$message->from = 'noreply@ruslania.com';
+					@Yii::app()->mail->send($message);
 
-                    if (Yii::app()->request->isAjaxRequest) {
-                        $fullPrice = (float) $order['full_price'];
-                        if (empty($fullPrice)) {
-                            echo Yii::app()->createUrl('client/me');
-                        }
-                        else {
-                            echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
-                        }
-                        exit();
-                    }
+					Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
+					
+					if (Yii::app()->request->isAjaxRequest) {
+                       echo Yii::app()->createUrl('cart/orderPay') . '?id=' . $data['number_zakaz'] . '&ptype='.$data['ptype'];
+                       exit();
+					}
+                    
                     if ($post['ptype'] == '27') {
                         $this->render('applepay', $data);
                     } elseif ($post['ptype'] == '26') {
@@ -621,6 +672,10 @@ class CartController extends MyController {
                     //echo '1';
                 }
             }
+			
+			
+			
+			
         }
     }
     public function actionValid() {
@@ -760,7 +815,64 @@ class CartController extends MyController {
 				$tt += $item['Quantity'];
             }
         }
-        $this->ResponseJson(array('countcart' => $tt, 'totalPrice' => $total_price));
+		
+		$cart = $this->actionGetAll(0);
+		
+		$cart = $cart['CartItems'];
+		
+		
+        $withVat = false;
+        $fullprice = 0;
+        $fullweight = 0;
+        $price = 0;
+		//var_dump($cart);
+		//return '';
+        foreach ($cart as $item) {
+            
+			$withVat = $item['UseVAT'];
+			
+			$item['type'] = $item['Price2Use'];
+			
+            if ($item['Entity'] == 30) {
+                if ($item['type'] == '1') { //фины
+                    $price = $item['PriceVATFin'];
+                } else {
+                    $price = $item['PriceVATWorld'];
+                }
+            } else {
+                $price = $item['PriceVAT'];
+            }
+            if (!$withVat) {
+                
+				if ($item['Entity'] == 30) {
+				
+				if ($item['type'] == '1') { //фины
+                    $price = $item['PriceVAT0Fin'];
+                } else {
+                    $price = $item['PriceVATWorld'];
+                }
+				} else {
+					$price = $item['PriceVAT0'];
+				}
+				
+            }
+           
+			
+            if ($item['Entity'] == 30) {
+                
+                $fullprice += $price * $item['Quantity'];
+				
+            } else {
+                $fullprice += $price * $item['Quantity'];
+                
+            }
+        }
+		
+		$total_price = (string) ProductHelper::FormatPrice($fullprice);
+		
+		
+		
+        $this->ResponseJson(array('countcart' => $tt, 'totalPrice' => (string) $total_price));
     }
     public function actionGetAll($ajax = true) {
         $cart = new Cart;
@@ -818,6 +930,14 @@ class CartController extends MyController {
             $alreadyInCart = $cart->AddToCart($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorld);
             $message = $entity == Entity::PERIODIC ? Yii::app()->ui->item('ADDED_TO_CART') : sprintf(Yii::app()->ui->item('ADDED_TO_CART_ALREADY'), $alreadyInCart);
             $already = $entity == Entity::PERIODIC ? Yii::app()->ui->item('PERIODIC_ALREADY_IN_CART') : sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $alreadyInCart);
+			
+			if ($_POST['hidecount'] == '1') {
+				
+				$message = str_replace($already, '', $message);
+				
+			}
+			
+			
             if (Yii::app()->request->isAjaxRequest)
                 $this->ResponseJson(array('hasError' => false, 'msg' => $message, 'already' => $already));
             else

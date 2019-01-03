@@ -73,7 +73,7 @@ return array(
             'allowAutoLogin' => true,
             'autoRenewCookie' => true,
             'class' => 'WebUser',
-            'loginUrl' => '/site/login',
+            'loginUrl' => '/login',
             'identityCookie' => array('httpOnly' => true),
         ),
 
@@ -170,6 +170,18 @@ return array(
             'schemaCachingDuration' => 3600,
             'schemaCacheID' => 'schemaCache',
         ),
+        'oldDb' => array(
+            'class' => 'CDbConnection',
+            'pdoClass' => 'NestedPDO',
+            'connectionString' => 'mysql:host=ruslania.com;port=3306;dbname=ruslania_unicode',
+            'username' => 'ruslania_www',
+            'password' => 'qXsDa',
+            'charset' => 'utf8',
+            'enableProfiling' => false,
+            'enableParamLogging' => true,
+            'emulatePrepare' => true,
+            'schemaCachingDuration' => 0,
+        ),
 
 
         'spx' => array(
@@ -202,7 +214,7 @@ return array(
         'LangDir' => '',
         'DbCacheTime' => (60 * 60 * 4), // 4 hours,
         'OrderMinPrice' => 5, // min order 5,-
-        'PicDomain' => 'http://ruslania2.ptysh.ru',//'https://ruslania.com',
+        'PicDomain' => 'http://ruslania2.ptysh.ru',///'https://ruslania.com',
         'Base' => 'ruslania2.ptysh.ru',
         'DataProviderCacheID' => 'queryCache', // cacheQuery
         'DataProviderCacheTimeout' => (60 * 60 * 4), // 4 hours
