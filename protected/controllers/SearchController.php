@@ -322,7 +322,10 @@ class SearchController extends MyController {
 		$result = array();
 		foreach ($find as $data) {
 			$key = $data['entity'] . '-' . $data['real_id'];
-			if (!empty($prepareData[$key])) $result[$key] = $prepareData[$key];
+			if (!empty($prepareData[$key])) {
+				$prepareData[$key]['dictionary_position'] = $data['dictionary_position'];
+				$result[$key] = $prepareData[$key];
+			}
 		}
 
 		return $result;
@@ -491,6 +494,7 @@ class SearchController extends MyController {
 	function inDescription($list, $query, $countChars = 100) {
 		foreach ($list as $k=>$item) {
 			$isTitle = false;
+			if (in_array($item['dictionary_position'], array(1, 3))) continue;//найдено по названию
 
 			foreach (Yii::app()->params['ValidLanguages'] as $lang) {
 				if (empty($item['title_' . $lang])) continue;
