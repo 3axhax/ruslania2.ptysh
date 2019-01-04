@@ -70,7 +70,7 @@
 			var $country = $form.find('#Address_country');
 			if ($country.length > 0) cid = $country.val();
 			$.ajax({
-				url: '<?= Yii::app()->createUrl('cart/checkPromocode') ?>?ha',
+				url: '<?= Yii::app()->createUrl('cart/checkPromocode') ?>',
 				data: 'promocode=' + encodeURIComponent(value) +
 //					'&dtid=' + dtid +
 					'&dtype=' + dtype +
