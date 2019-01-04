@@ -1214,7 +1214,7 @@ class CartController extends MyController {
             if ($dtype <= 0) $dMode = 1;
 
             $aid = (int) Yii::app()->getRequest()->getParam('aid');
-            $dtid = (int) Yii::app()->getRequest()->getParam('dtid');
+//            $dtid = (int) Yii::app()->getRequest()->getParam('dtid');
             $countryId = 0;
             $da = array();
             if ($aid > 0) {
@@ -1228,7 +1228,7 @@ class CartController extends MyController {
             }
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtid);
+            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
             $promocode = (string) Yii::app()->getRequest()->getParam('promocode');
             if ($promocode === '') {
                 $ret['currency'] = Currency::ToSign(Yii::app()->currency);

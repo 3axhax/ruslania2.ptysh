@@ -158,6 +158,7 @@ class Promocodes extends CActiveRecord {
 			case self::CODE_WITHOUTPOST: return Promocodes_withoutpost::model(); break;
 			case self::CODE_ITEM: return Promocodes_item::model(); break;
 			case self::CODE_GIFT: return Promocodes_gift::model(); break;
+			case self::CODE_GOOD: return Promocodes_good::model(); break;
 		}
 		return null;
 	}

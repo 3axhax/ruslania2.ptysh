@@ -61,10 +61,9 @@ class Promocodes_good extends CActiveRecord {
 			}
 		}
 
-		$price = $this->_getPrice($certificate['items'], $pricesValues, $discountKeys, 0);
 		$nominal = Currency::convertToCurrency($certificate['nominal'], Currency::EUR, $currencyId);
-		if ($price['onlyPromocode'] > $nominal) return ($price['onlyPromocode'] - $nominal);
-		return 0;
+		$price = $this->_getPrice($certificate['items'], $pricesValues, $discountKeys, $nominal);
+		return $price['onlyPromocode'];
 	}
 
 	/**
@@ -72,7 +71,7 @@ class Promocodes_good extends CActiveRecord {
 	 * @param $currencyId
 	 * @param $itemsPrice float цена товаров
 	 * @param $deliveryPrice float цена доставки
-	 * @param $deliveryPrice array [товар=>цена]
+	 * @param $pricesValues array [товар=>цена]
 	 * @return mixed конечная цена с учетом промокода
 	 */
 	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
@@ -172,7 +171,7 @@ class Promocodes_good extends CActiveRecord {
 	 * @param $discountKeys array товар->ключи для DiscountManager::GetPrice
 	 * @return array
 	 */
-	private function _getPrice($items, $pricesValues, $discountKeys, $percent) {
+	private function _getPrice($items, $pricesValues, $discountKeys, $certificateNominal) {
 		//на случай если в заказе товары из промокода указаны по несколько шт., я нахожу мин кол-во и по этому кол-ву будет приминен промокод
 		// в функции check уже есть проверка, что все товары из промокода есть в заказе
 		$quantityForPromocode = 0;
@@ -185,6 +184,7 @@ class Promocodes_good extends CActiveRecord {
 		}
 
 		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
+		$pricePromocode = 0;
 		$product = new Product();
 		foreach ($pricesValues as $itemKey=>$price) {
 			list($eid, $itemId) = explode('_', $itemKey);
@@ -195,13 +195,15 @@ class Promocodes_good extends CActiveRecord {
 			$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 			if (!empty($items[$eid])) {
 				if (in_array($itemId, $items[$eid])) {
-					$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, $percent);
-					$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$quantityForPromocode;
+//					$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+					$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$quantityForPromocode;
+					$pricePromocode += ($certificateNominal/$corrector)*$quantityForPromocode;
 				}
 			}
 			$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 			$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 		}
+		$priceForSale['onlyPromocode'] -= $pricePromocode;
 		return $priceForSale;
 	}
 }

@@ -61,7 +61,7 @@
 			var self = this;
 			var csrf = $('meta[name=csrf]').attr('content').split('=');
 			var $form = $('form.address.text');
-			var dtid = $form.find('input[name=dtid]:checked').val();
+//			var dtid = $form.find('input[name=dtid]:checked').val();
 			var dtype = $form.find('input[name=dtype]:checked').val();
 			var aid = 0;
 			var $address = $form.find('select[name=id_address]');
@@ -70,9 +70,9 @@
 			var $country = $form.find('#Address_country');
 			if ($country.length > 0) cid = $country.val();
 			$.ajax({
-				url: '<?= Yii::app()->createUrl('cart/checkPromocode') ?>',
+				url: '<?= Yii::app()->createUrl('cart/checkPromocode') ?>?ha',
 				data: 'promocode=' + encodeURIComponent(value) +
-					'&dtid=' + dtid +
+//					'&dtid=' + dtid +
 					'&dtype=' + dtype +
 					'&aid=' + aid +
 					'&cid=' + cid +
