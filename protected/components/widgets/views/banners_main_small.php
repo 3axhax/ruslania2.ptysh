@@ -6,7 +6,7 @@
 	$productPicture = Picture::Get($offerDay, Picture::SMALL);
 	$productTitle = ProductHelper::GetTitle($offerDay, 'title');
 	?>
-		<div class="span6 main-banner-content" style="background: url(<?= (isset($_GET['ha'])?'/new_img/day_banner.jpg':'/new_img/day_fon.jpg') ?>) 100% 100% no-repeat; background-size: contain;">
+		<div onclick="window.location.href = '<?= $url ?>'" class="span6 main-banner-content" style="background: url(/new_img/day_fon.jpg) 100% 100% no-repeat; background-size: contain; cursor: pointer;">
 			<div class="photo">
 				<div><a href="<?= $url ?>"><img src="<?= $productPicture ?>" alt=""/></a></div>
 			</div>
