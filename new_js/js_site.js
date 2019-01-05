@@ -185,11 +185,13 @@ $(document).ready(function(){
         show_result_count();
     });
 
+/*
     $('.red_checkbox').on('click', function(){
         var cont = $(this);
         var inputId = cont.data('connect');
         check_search(cont, inputId);
     });
+*/
 
     $('.open_subcat').on('click', function(){
         var c = $(this);
@@ -326,7 +328,7 @@ function show_items(url, page) {
     });
 }
 
-function liveFindAuthorMP(entity, url, cid) {
+/*function liveFindAuthorMP(entity, url, cid) {
     find_author = $('.find_author');
     var dataPost = {entity: entity, cid: cid};
     find_author.marcoPolo({
@@ -426,7 +428,7 @@ function liveFindActorsMP(entity, url, cid) {
             return '<li class="mp_list_item" onclick="select_item_mp(' + data.id + ', \'actors\', \'' + data.title + '\', \'new_actors\')">' + data.title + '</li>';
         },
     });
-}
+}*/
 
 function getSeries(entity, url, cid, selected_item) {
     $(document).ready(function () {

@@ -394,7 +394,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
 </form>
 <script>
     $(function(){
-        $.cachedScript("/new_js/modules/filter.js").done(function() {
+        scriptLoader('/new_js/modules/filter.js').callFunction(function() {
             filters().init({
                 urls: <?= json_encode($urls, JSON_NUMERIC_CHECK) ?>,
                 entity: <?= (int) $entity ?>,

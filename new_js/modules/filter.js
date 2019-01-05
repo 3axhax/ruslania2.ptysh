@@ -88,7 +88,7 @@
 
         liveSearch: function(field) {
             var self = this;
-            $.cachedScript("/js/marcopolo.js").done(function() {
+            scriptLoader('/js/marcopolo.js').callFunction(function(){
                 var _field = field; //это поле надо потому, что для серий как-то хитро названия сделаны
                 if (field == 'seria') _field = 'series';
                 var find = $('.find_' + _field);

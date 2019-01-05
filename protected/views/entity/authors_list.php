@@ -110,19 +110,6 @@
 				</form>
                 <script type="text/javascript">
                     $(document).ready(function() {
-                        var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
-//                        var csrf = $('meta[name=csrf]').attr('content').split('=');
-//                        dataPost[csrf[0]] = csrf[1];
-                        $('#js_search_authors').marcoPolo({
-                            minChars:1,
-                            cache : false,
-                            hideOnSelect: false,
-                            url:'/liveSearch/<?= $liveAction ?>',
-                            data:dataPost,
-                            formatItem:function (data, $item, q) {
-                                return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
-                            }
-                        });
                     });
                 </script>
 
@@ -186,9 +173,21 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         $('#al').autocolumnlist({ columns: 3});
+        scriptLoader('/js/marcopolo.js').callFunction(function(){
+            var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
+            $('#js_search_authors').marcoPolo({
+                minChars:1,
+                cache : false,
+                hideOnSelect: false,
+                url:'/liveSearch/<?= $liveAction ?>',
+                data:dataPost,
+                formatItem:function (data, $item, q) {
+                    return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
+                }
+            });
+        });
     });
 
 </script>

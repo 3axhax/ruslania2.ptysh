@@ -10,10 +10,8 @@
 
 	function loadOneScript(name){
 		if (!loadedScripts[name]) {
-			var src = ((name.substr(0, 7) == 'http://')||(name.substr(0, 8) == 'https://')) ? name : ('/new_js/' + name);
-
-			var loaded = scriptLoaded(src);
-			loadedScripts[name] = new oneScript({'src': src, '_loadStarted': loaded, '_loaded': loaded});
+			var loaded = scriptLoaded(name);
+			loadedScripts[name] = new oneScript({'src': name, '_loadStarted': loaded, '_loaded': loaded});
 		}
 		return loadedScripts[name];
 	}

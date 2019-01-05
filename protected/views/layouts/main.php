@@ -92,9 +92,9 @@ if (isset($_GET['avail'])) {
     <script src="/js/common.js"></script>
     <script src="/new_js/jquery.bootstrap-touchspin.min.js"></script>
     <script src="/js/opentip.js"></script>
-    <script type="text/javascript" src="/js/marcopolo.js"></script>
     <script type="text/javascript" src="/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js"></script>
     <script type="text/javascript" src="/new_js/modules/select2.full.js"></script>
+    <script type="text/javascript" src="/new_js/modules/scriptLoader.js"></script>
     <!--[if lt IE 9]>
     <script src="libs/html5shiv/es5-shim.min.js"></script>
     <script src="libs/html5shiv/html5shiv.min.js"></script>
@@ -495,28 +495,29 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <script>
 
     $(document).ready(function () {
-        $('#Search').marcoPolo({
-            url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
-            cache: false,
-            minChars: 3,
-            formatMinChars: function (minChars, $item) {
-                return '<em><?= $ui->item('SEARCH_TIP2') ?></em>';
-            },
-            formatNoResults: function (q, $item) {
-                return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
-            },
-            hideOnSelect: false,
-            dynamicData: {avail: function () {
-                return $('#js_avail').val();
-            }},
-            formatItem: function (data, $item, q) {
-                var ret = '';
-                ret += data;
-                return ret;
-            }
+        scriptLoader('/js/marcopolo.js').callFunction(function(){
+            $('#Search').marcoPolo({
+                url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
+                cache: false,
+                minChars: 3,
+                formatMinChars: function (minChars, $item) {
+                    return '<em><?= $ui->item('SEARCH_TIP2') ?></em>';
+                },
+                formatNoResults: function (q, $item) {
+                    return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
+                },
+                hideOnSelect: false,
+                dynamicData: {avail: function () {
+                    return $('#js_avail').val();
+                }},
+                formatItem: function (data, $item, q) {
+                    var ret = '';
+                    ret += data;
+                    return ret;
+                }
 
+            });
         });
-
     });
 
     function add2Cart(action, eid, iid, qty, type, $el) {
