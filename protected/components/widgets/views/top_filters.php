@@ -63,7 +63,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <!--Фильтр по наличию-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
-            <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="avail" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+            <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="avail">
                 <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
             </select>
@@ -79,12 +79,12 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
                        placeholder="<?= (isset($filters['max-min']['cost_min']) && $filters['max-min']['cost_min'] != '') ? round($filters['max-min']['cost_min'], 2) : ''?>"
-                       name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       name="cost_min"/>
                 <span class="prod-filter__inp-separator">&ndash;</span>
                 <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                        class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
                        placeholder="<?= (isset($filters['max-min']['cost_max']) && $filters['max-min']['cost_max'] != '') ? round($filters['max-min']['cost_max'], 2) : ''?>"
-                       name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                       name="cost_max"/>
             </div>
         </div>
         <?php endif;?>
@@ -97,13 +97,11 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['year_min']) && $filter_data['year_min'] != '')) ? $filter_data['year_min'] : '' ?>"
                            name="year_min" class="prod-filter__input prod-filter__input--s year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min']['year_min']) && $filters['max-min']['year_min'] != '') ? $filters['max-min']['year_min'] : ''?>"
-                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min']['year_min']) && $filters['max-min']['year_min'] != '') ? $filters['max-min']['year_min'] : ''?>"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_y = (isset($filter_data['year_max']) && $filter_data['year_max'] != '')) ? $filter_data['year_max'] : '' ?>"
                            name="year_max" class="prod-filter__input prod-filter__input--s year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min']['year_max']) && $filters['max-min']['year_max'] != '') ? $filters['max-min']['year_max'] : ''?>"
-                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min']['year_max']) && $filters['max-min']['year_max'] != '') ? $filters['max-min']['year_max'] : ''?>"/>
                 </div>
             </div>
         <?php endif;?>
@@ -116,13 +114,11 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 <div class="prod-filter__row">
                     <input type="text" value="<?= ($min_y = (isset($filter_data['release_year_min']) && $filter_data['release_year_min'] != '')) ? $filter_data['release_year_min'] : '' ?>"
                            name="release_year_min" class="prod-filter__input prod-filter__input--s release_year_inp_mini clearable <?= ($min_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min']['rel_year_min']) && $filters['max-min']['rel_year_min'] != '') ? $filters['max-min']['rel_year_min'] : ''?>"
-                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min']['rel_year_min']) && $filters['max-min']['rel_year_min'] != '') ? $filters['max-min']['rel_year_min'] : ''?>"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_y = (isset($filter_data['release_year_max']) && $filter_data['release_year_max'] != '')) ? $filter_data['release_year_max'] : '' ?>"
                            name="release_year_max" class="prod-filter__input prod-filter__input--s release_year_inp_max clearable <?= ($max_y) ? 'x' : ''?>"
-                           placeholder="<?= (isset($filters['max-min']['rel_year_max']) && $filters['max-min']['rel_year_max'] != '') ? $filters['max-min']['rel_year_max'] : ''?>"
-                           onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           placeholder="<?= (isset($filters['max-min']['rel_year_max']) && $filters['max-min']['rel_year_max'] != '') ? $filters['max-min']['rel_year_max'] : ''?>"/>
                 </div>
             </div>
         <?php endif;?>
@@ -132,8 +128,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <!--Фильтр по стране-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PERIODIC_COUNTRY')?>:</label>
-                <select class="select2_series prod-filter__input prod-filter__input__select--m"
-                        name="country" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="country">
+                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="country id="country">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['country'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['country'])) && ($lang['id'] == (int)$filter_data['country'])) ? 'selected' : ''?>>
@@ -148,7 +143,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             ?>
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply">
-            <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
+            <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= $total ?>)</span>
         </button>
         <?php endif;?>
     </div>
@@ -165,12 +160,12 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                     <input type="text" value="<?= ($min_p = (isset($filter_data['cost_min']) && $filter_data['cost_min'] != '')) ? $filter_data['cost_min'] : '' ?>"
                            class="prod-filter__input prod-filter__input--s cost_inp_mini clearable <?= ($min_p) ? 'x' : '' ?>"
                            placeholder="<?= (isset($filters['max-min']['cost_min']) && $filters['max-min']['cost_min'] != '') ? round($filters['max-min']['cost_min'], 2) : ''?>"
-                           name="cost_min" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           name="cost_min"/>
                     <span class="prod-filter__inp-separator">&ndash;</span>
                     <input type="text" value="<?= ($max_p = (isset($filter_data['cost_max']) && $filter_data['cost_max'] != '')) ? $filter_data['cost_max'] : '' ?>"
                            class="prod-filter__input prod-filter__input--s cost_inp_max clearable <?= ($max_p) ? 'x' : '' ?>"
                            placeholder="<?= (isset($filters['max-min']['cost_max']) && $filters['max-min']['cost_max'] != '') ? round($filters['max-min']['cost_max'], 2) : ''?>"
-                           name="cost_max" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')"/>
+                           name="cost_max"/>
                 </div>
             </div>
         <?php endif;?>
@@ -183,7 +178,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             ?>
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PRE_SALE_LABLE')?>:</label>
-                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="pre_sale" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="pre_sale">
                     <option value="0" ><?=$ui->item('A_NEW_FILTER_PRE_SALE_1')?></option>
                     <option value="1" <?= ($pre_sale == 1) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_PRE_SALE_2')?></option>
                     <option value="2" <?= ($pre_sale == 2) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_PRE_SALE_3')?></option>
@@ -230,15 +225,9 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <?php else:
             $urls['publisher'] = Yii::app()->createUrl('liveSearch/select_filter_publishers');
             ?>
-                <select class="select2_publishers prod-filter__input prod-filter__input prod-filter__input__select--m" name="publisher"
-                        onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                <select class="select2_publishers prod-filter__input prod-filter__input prod-filter__input__select--m" name="publisher">
                     <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 </select>
-                <script>
-                    getPublishers(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/select_filter_publishers')?>', <?=$cid?>,
-                        '<?= (isset($filter_data['publisher']) && $filter_data['publisher'] != 0) ?
-                            htmlspecialchars(ProductHelper::GetPublisherTitle($filter_data['publisher'], Yii::app()->language)) : ''?>');
-                </script>
             <?php endif;?>
             <?php if ($entity == Entity::MAPS || $entity == Entity::SOFT || $entity == Entity::PRINTED):?>
                 <script>
@@ -266,16 +255,9 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 <?php else:
                 $urls['series'] = Yii::app()->createUrl('liveSearch/select_filter_series');
                 ?>
-                    <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria"
-                        onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')">
+                    <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria">
                         <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     </select>
-                    <script>
-                        getSeries(<?=$entity?>, '<?=Yii::app()->createUrl('/liveSearch/select_filter_series')?>', <?=$cid?>,
-                            '<?= (isset($filter_data['series']) && $filter_data['series'] != 0) ?
-                                htmlspecialchars(ProductHelper::GetSeriesTitle($filter_data['series'], $entity, Yii::app()->language)) : ''?>');
-                    </script>
-
                 <?php endif;?>
             </div>
         <?php endif;?>
@@ -285,8 +267,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <!--Фильтр по языку звуковой дорожки-->
         <div class="prod-filter__col">
             <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_VIDEO')?>:</label>
-            <select class="select2_series prod-filter__input prod-filter__input__select--m"
-                    name="lang_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="lang_video">
+            <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="lang_video" id="lang_video">
                 <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                 <?php foreach ($filters['langVideo'] as $k => $lang) :?>
                     <option value="<?=$lang['id']?>" <?= (isset($filter_data['lang_video']) && ($lang['id'] == (int)$filter_data['lang_video'])) ? 'selected' : ''?>>
@@ -302,8 +283,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <!--Фильтр по языку субтитров-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_LANG_SUBTITLES')?>:</label>
-                <select class="select2_series prod-filter__input prod-filter__input__select--m"
-                        name="subtitles_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="subtitles_video">
+                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="subtitles_video" id="subtitles_video">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['langSubtitles'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['subtitles_video'])) && ($lang['id'] == (int)$filter_data['subtitles_video'])) ? 'selected' : ''?>>
@@ -319,8 +299,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <!--Фильтр по формату видео-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_FORMAT_VIDEO')?>:</label>
-                <select class="select2_periodic prod-filter__input prod-filter__input__select--m"
-                        name="format_video" onchange="show_result_count('<?=Yii::app()->createUrl('/site/gtfilter/')?>')" id="format_video">
+                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="format_video" id="format_video">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['formatVideo'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['format_video'])) && ($lang['id'] == (int)$filter_data['format_video'])) ? 'selected' : ''?>>
@@ -342,38 +321,32 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 else $label_binding = $ui->item('A_NEW_FILTER_TYPE2'); ?>
                 <?=$label_binding?>:</label>
 
-            <select id="binding_select" multiple="multiple" name="binding[]" onchange="show_result_count()">
+            <select id="binding_select" data-multiple="multiple" name="binding[]" data-alltext="<?= $ui->item('A_NEW_FILTER_ALL')?>" data-placeholder="<?= $label_binding ?>">
+                <option value="0"><?= $ui->item('A_NEW_FILTER_ALL')?></option>
                 <?php
-                foreach ($filters['binding'] as $bg => $binfo) {
-                if ($entity == Entity::MUSIC OR $entity == Entity::SOFT) {
-                    $row = Media::GetMedia($entity, $binfo['media_id']);
-                    $title = 'title';
-                }
-                elseif ($entity == Entity::PERIODIC) {
-                    $row = TypeRetriever::GetType($entity, $binfo['type']);
-                    $title = 'title_' . Yii::app()->language;
-                }
-                else {
-                    $row = Binding::GetBinding($entity, $binfo['binding_id']);
-                    $title = 'title_' . Yii::app()->language;
-                }
-                if (!$row['id'])
-                    continue;
-                $sel = '';
-                if (isset($filter_data['binding']) && !empty($filter_data['binding']) && in_array($row['id'], $filter_data['binding'])) {
-                    $sel = 'selected="selected"';
-                }
+                foreach ($filters['binding'] as $bg => $binfo):
+                    if ($entity == Entity::MUSIC OR $entity == Entity::SOFT) {
+                        $row = Media::model()->GetMedia($entity, $binfo['media_id']);
+                        $title = 'title';
+                    }
+                    elseif ($entity == Entity::PERIODIC) {
+                        $row = TypeRetriever::GetType($entity, $binfo['type']);
+                        $title = 'title_' . Yii::app()->language;
+                    }
+                    else {
+                        $row = Binding::GetBinding($entity, $binfo['binding_id']);
+                        $title = 'title_' . Yii::app()->language;
+                    }
+                    if (!$row['id'])
+                        continue;
+                    $sel = '';
+                    if (isset($filter_data['binding']) && !empty($filter_data['binding']) && in_array($row['id'], $filter_data['binding'])) {
+                        $sel = 'selected="selected"';
+                    }
                 ?>
                 <option value="<?=$row['id']?>" <?=$sel?>><?= str_replace('/', ' / ', $row[$title])?></option>
-                <?php } ?>
+                <?php endforeach; ?>
             </select>
-            <script>
-                $('#binding_select').multipleSelect({
-                    selectAllText: '<?= $ui->item('A_NEW_FILTER_ALL')?>',
-                    placeholder: '<?= $label_binding ?>',
-                    width: '161px',
-                });
-            </script>
             <?php if ($entity == Entity::PERIODIC || $entity == Entity::SOFT):?>
                 <script>
                     typeDiv = $('#binding_div').detach();
@@ -386,7 +359,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php if ($entity == Entity::VIDEO):?>
             <!--Кнопки управления-->
             <button class="prod-filter__button" type="button" id="filter_apply">
-                <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
+                <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= $total ?>)</span>
             </button>
         <?php endif;?>
 
@@ -396,7 +369,9 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
     $(function(){
         scriptLoader('/new_js/modules/filter.js').callFunction(function() {
             filters().init({
-                urls: <?= json_encode($urls, JSON_NUMERIC_CHECK) ?>,
+                urls: <?= json_encode($urls) ?>,
+                filterData: <?= json_encode($filterData) ?>,
+                lang: '<?= Yii::app()->getLanguage() ?>',
                 entity: <?= (int) $entity ?>,
                 cid: <?= (int) $cid ?>,
                 page: <?= empty($_GET['page'])?0:(int)$_GET['page'] ?>,

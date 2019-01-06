@@ -19,6 +19,7 @@ $lang = Yii::app()->language;
                         'entity' => $entity,
                         'title_cat' => $title_cat,
                         'filter_data' => $filter_data,
+                        'total' => $total,
                         'cid' => $cid)); ?>
             </div>
 

@@ -8,6 +8,7 @@ class TopFilters extends CWidget
     public $filters;
     public $title_cat;
     public $filter_data;
+    public $total;
 
     public function run() {
         $ui = Yii::app()->ui;
@@ -21,6 +22,7 @@ class TopFilters extends CWidget
             'ui' => $ui,
             'title_search' => $title_search,
             'filter_data' => $this->filter_data,
+            'total' => $this->total,
             'cid' => $this->cid));
     }
 }

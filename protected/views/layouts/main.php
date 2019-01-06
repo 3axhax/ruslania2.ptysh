@@ -80,8 +80,6 @@ if (isset($_GET['avail'])) {
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
     <script src="/new_js/jquery.js" type="text/javascript"></script>
     <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
-    <script src="/new_js/js_site.js" type="text/javascript"></script>
-    <script src="/new_js/multiple-select.js" type="text/javascript"></script>
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
     <script src="/new_js/jScrollPane.js" type="text/javascript"></script>
@@ -93,7 +91,6 @@ if (isset($_GET['avail'])) {
     <script src="/new_js/jquery.bootstrap-touchspin.min.js"></script>
     <script src="/js/opentip.js"></script>
     <script type="text/javascript" src="/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js"></script>
-    <script type="text/javascript" src="/new_js/modules/select2.full.js"></script>
     <script type="text/javascript" src="/new_js/modules/scriptLoader.js"></script>
     <!--[if lt IE 9]>
     <script src="libs/html5shiv/es5-shim.min.js"></script>
@@ -492,6 +489,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
 <div id="virtual_keyboard" style="display: none"></div>
 
+<script src="/new_js/js_site.js" type="text/javascript"></script>
 <script>
 
     $(document).ready(function () {
