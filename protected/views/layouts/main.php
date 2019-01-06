@@ -86,8 +86,6 @@ if (isset($_GET['avail'])) {
     <script src="/new_js/nouislider.js" type="text/javascript" charset="utf-8"></script>
     <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/>*/?>
     <script src="/js/common.js"></script>
-    <script src="/js/opentip.js"></script>
-    <script type="text/javascript" src="/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js"></script>
     <script type="text/javascript" src="/new_js/modules/scriptLoader.js"></script>
     <!--[if lt IE 9]>
     <script src="libs/html5shiv/es5-shim.min.js"></script>
@@ -486,8 +484,9 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
 <div id="virtual_keyboard" style="display: none"></div>
 
-<script src="/new_js/jScrollPane.js" type="text/javascript"></script>
-<script src="/new_js/js_site.js" type="text/javascript"></script>
+<script type="text/javascript" src="/new_js/jScrollPane.js"></script>
+<script type="text/javascript" src="/new_js/js_site.js"></script>
+<script type="text/javascript" src="/js/opentip.js"></script>
 <script>
 
     $(document).ready(function () {

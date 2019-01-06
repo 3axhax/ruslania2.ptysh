@@ -4,47 +4,50 @@ var TimerId;
 $(document).ready(function(){
     initAAddCart();
     initPeriodicPriceSelect();
-    $(".trigger_keyboard").click(function (event) {
-        $(".keyboard_on").toggle();
-        $(".keyboard_off").toggle();
-        $(".trigger_keyboard img").toggleClass('keyboard_off_img');
-        if ($(".keyboard_off").is(':visible')) {
-            $("#virtual_keyboard").hide();
-        }
-        else {
-            input_search = $("input.search_text");
-            keyboard = $("#virtual_keyboard");
-            temp_keyboard = keyboard.remove();
-            input_search.after(temp_keyboard);
-            temp_keyboard.show();
-            temp_keyboard.jkeyboard({
-                layout: "russian",
-                input: input_search,
-            });
-        }
-    });
-    $("input.enable_virtual_keyboard").on('focus', function (event) {
-        var keyboard_visible = false;
-        if ($(".keyboard_on").is(':visible')) {
-            keyboard_visible = true;
-        }
-        if (keyboard_visible) {
-            if (window.old_target === undefined || window.old_target !== event.target || !$("#virtual_keyboard").is(':visible')) {
+    scriptLoader('/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js').callFunction(function(){
+        $(".trigger_keyboard").click(function (event) {
+            $(".keyboard_on").toggle();
+            $(".keyboard_off").toggle();
+            $(".trigger_keyboard img").toggleClass('keyboard_off_img');
+            if ($(".keyboard_off").is(':visible')) {
+                $("#virtual_keyboard").hide();
+            }
+            else {
+                input_search = $("input.search_text");
                 keyboard = $("#virtual_keyboard");
                 temp_keyboard = keyboard.remove();
-                $(event.target).after(temp_keyboard);
+                input_search.after(temp_keyboard);
                 temp_keyboard.show();
                 temp_keyboard.jkeyboard({
                     layout: "russian",
-                    input: $(event.target),
+                    input: input_search,
                 });
-                window.old_target = event.target;
-                /*$(".close_keyboard").click(function (event) {
-                    keyboard.hide();
-                });*/
             }
-        }
+        });
+        $("input.enable_virtual_keyboard").on('focus', function (event) {
+            var keyboard_visible = false;
+            if ($(".keyboard_on").is(':visible')) {
+                keyboard_visible = true;
+            }
+            if (keyboard_visible) {
+                if (window.old_target === undefined || window.old_target !== event.target || !$("#virtual_keyboard").is(':visible')) {
+                    keyboard = $("#virtual_keyboard");
+                    temp_keyboard = keyboard.remove();
+                    $(event.target).after(temp_keyboard);
+                    temp_keyboard.show();
+                    temp_keyboard.jkeyboard({
+                        layout: "russian",
+                        input: $(event.target),
+                    });
+                    window.old_target = event.target;
+                    /*$(".close_keyboard").click(function (event) {
+                     keyboard.hide();
+                     });*/
+                }
+            }
+        });
     });
+
     $(document).click(function (event) {
         if ($(event.target).closest('.subcat').length) return;
         if ($(event.target).closest('.open_subcat').length) return;
