@@ -82,8 +82,9 @@ if (isset($_GET['avail'])) {
     <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
+    <?php /*
     <script src="/new_js/nouislider.js" type="text/javascript" charset="utf-8"></script>
-    <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/>
+    <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/> */?>
     <script type="text/javascript" src="/js/jquery.prettyPhoto.js"></script>
     <script src="/js/common.js"></script>
     <script src="/new_js/jquery.bootstrap-touchspin.min.js"></script>
