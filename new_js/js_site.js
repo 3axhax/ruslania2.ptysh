@@ -146,16 +146,20 @@ $(document).ready(function(){
         event.stopPropagation();
     });
 
-    $.fn.prettyPhoto({social_tools: false});
-    $('a.read_book').click(function () {
-        var $this = $(this);
-        var images = [];
-        if ($this.attr('data-images') != '')
-        {
-            images = $this.attr('data-images').split('|');
-            if (images.length > 0)
-                $.prettyPhoto.open(images, [], []);
-        }
+    scriptLoader('/js/jquery.prettyPhoto.js').callFunction(function() {
+        $.fn.prettyPhoto({social_tools: false});
+        $('a.read_book').click(function () {
+            var $this = $(this);
+            var images = [];
+            if ($this.attr('data-images') != '') {
+                images = $this.attr('data-images').split('|');
+                if (images.length > 0)
+                    $.prettyPhoto.open(images, [], []);
+            }
+        });
+        $("a[id^='img']").each(function (i, el) {
+            $(el).prettyPhoto({social_tools: false});
+        });
     });
     $(document).click(function (event) {
         if ($(event.target).closest(".span1.cart, .b-basket-list").length)

@@ -17,9 +17,6 @@ $entityKey = Entity::GetUrlKey($entity);
 
                      src="<?= Picture::Get($item, Picture::SMALL); ?>">
             </a>
-            <script type="text/javascript">
-                $('#img<?= $item['id']; ?>').prettyPhoto({social_tools: false});
-            </script>
         <?php endif; ?>
     </div>
     <div class="span11">
