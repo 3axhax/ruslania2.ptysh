@@ -14,10 +14,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.cnt<?= $entity ?> ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
+            scriptLoader('/new_js/slick.js').callFunction(function() {
+                $('.cnt<?= $entity ?> ul').slick({
+                    lazyLoad: 'ondemand',
+                    slidesToShow: 4,
+                    slidesToScroll: 4
+                });
             });
         });
     </script>

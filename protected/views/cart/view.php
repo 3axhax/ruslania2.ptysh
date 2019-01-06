@@ -270,16 +270,6 @@ $ctrl = Yii::app()->getController()->id;
     //echo var_dump($groups);
     ?>
     
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.more_goods ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
-            });
-        });
-    </script>
-
 <div class="news_box" style="margin-top: 60px;">
 
 
@@ -665,8 +655,16 @@ $ctrl = Yii::app()->getController()->id;
     //        });
  
     //}
-	
 
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.more_goods ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 4,
+                slidesToScroll: 4
+            });
+        });
+    });
 
 </script>
 

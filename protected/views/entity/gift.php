@@ -22,15 +22,6 @@
                 </div>
             </div>
 
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $('.cnt<?= $entity ?> ul').slick({
-                        lazyLoad: 'ondemand',
-                        slidesToShow: 5,
-                        slidesToScroll: 5
-                    });
-                });
-            </script>
 
             <div class="container cnt<?= $entity ?>">
                 <ul class="books">
@@ -85,16 +76,6 @@
                 </div>
             </div>
 
-            <script type="text/javascript">
-                $(document).ready(function () {
-                    $('.cnt67 ul').slick({
-                        lazyLoad: 'ondemand',
-                        slidesToShow: 5,
-                        slidesToScroll: 5
-                    });
-                });
-            </script>
-
             <div class="container cnt67">
                 <ul class="books">
                     <?php
@@ -134,6 +115,23 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.cnt<?= $entity ?> ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 5,
+                slidesToScroll: 5
+            });
+            $('.cnt67 ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 5,
+                slidesToScroll: 5
+            });
+        });
+    });
+</script>
 
 <?php if(!empty($isWordpanel)): ?>
     <div class="buttonCKEDITOR"><a onclick="runCKEDITOR(); $('.buttonCKEDITOR').toggle(); return false;">Редактировать</a></div>

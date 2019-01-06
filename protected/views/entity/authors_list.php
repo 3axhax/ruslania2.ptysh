@@ -1,13 +1,15 @@
 <script src='/js/jquery.autocolumnlist.js'></script>			
-			<script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function() {
-        $('.container_slides ul').slick({
-            lazyLoad: 'ondemand',
-            slidesToShow: 3,
-            slidesToScroll: 1
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.container_slides ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 3,
+                slidesToScroll: 1
+            });
         });
     });
-    </script>
+</script>
 
 	<!--<div class="slider_bg" style="margin-bottom: 40px;">
         

@@ -1,6 +1,6 @@
 <?php $eUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity))); ?>
 
-<div class="news_box nb<?= $entity ?>">
+<div class="news_box news_box_index nb<?= $entity ?>">
     <div class="container">
         <div class="title">
             <?=$ui->item("A_NEW_RECOMMENDATIONS_CATEGORY")?> <a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= Entity::GetTitle($entity); ?></span></a>
@@ -14,10 +14,12 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            $('.cnt<?= $entity ?> ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 5,
-                slidesToScroll: 5
+            scriptLoader('/new_js/slick.js').callFunction(function(){
+                $('.cnt<?= $entity ?> ul').slick({
+                    lazyLoad: 'ondemand',
+                    slidesToShow: 5,
+                    slidesToScroll: 5
+                });
             });
         });
     </script>

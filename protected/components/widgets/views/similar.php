@@ -94,10 +94,12 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
-		$('.more_goods ul').slick({
-			lazyLoad: 'ondemand',
-			slidesToShow: 4,
-			slidesToScroll: 4
+		scriptLoader('/new_js/slick.js').callFunction(function() {
+			$('.more_goods ul').slick({
+				lazyLoad: 'ondemand',
+				slidesToShow: 4,
+				slidesToScroll: 4
+			});
 		});
 	});
 </script>

@@ -1,10 +1,12 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        $('.container_slides ul').slick({
-            lazyLoad: 'ondemand',
-            slidesToShow: 3,
-            slidesToScroll: 1
-        });
+	    scriptLoader('/new_js/slick.js').callFunction(function(){
+	        $('.container_slides ul').slick({
+	            lazyLoad: 'ondemand',
+	            slidesToShow: 3,
+	            slidesToScroll: 1
+	        });
+	    });
     });
 </script>
 	

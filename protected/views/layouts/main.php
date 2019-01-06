@@ -82,8 +82,6 @@ if (isset($_GET['avail'])) {
     <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
-    <script src="/new_js/jScrollPane.js" type="text/javascript"></script>
-    <script src="/new_js/slick.js" type="text/javascript" charset="utf-8"></script>
     <script src="/new_js/nouislider.js" type="text/javascript" charset="utf-8"></script>
     <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/>
     <script type="text/javascript" src="/js/jquery.prettyPhoto.js"></script>
@@ -489,6 +487,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
 <div id="virtual_keyboard" style="display: none"></div>
 
+<script src="/new_js/jScrollPane.js" type="text/javascript"></script>
 <script src="/new_js/js_site.js" type="text/javascript"></script>
 <script>
 
