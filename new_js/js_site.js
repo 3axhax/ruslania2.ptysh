@@ -198,6 +198,7 @@ $(document).ready(function(){
         return false;
     });
 
+    lazyImageLoader.onDomReady();
 });
 
 function check_search(cont, inputId) {
@@ -261,7 +262,7 @@ lazyImageLoader = function(){
     }
 
     function onScroll(){
-        var countScroll = functions.getScrollTop() + getWindowHeight();
+        var countScroll = getScrollTop() + getWindowHeight();
         data = data.filter(function(elemData){
             if (countScroll > elemData.offsetTop){
                 startLoad(elemData.elem);
@@ -280,7 +281,7 @@ lazyImageLoader = function(){
         if (img.getAttribute('lazyClass')) className += (className ? ' ' : '') + img.getAttribute('lazyClass');
 
         if (className != '') newImg.className = className;
-        newImg.onload = function() {element.replace(newImg, img);};
+        newImg.onload = function() {replace(newImg, img);};
         newImg.onerror = function() {
             img.src = '/pic1/nophoto.gif';
         };
@@ -299,10 +300,10 @@ lazyImageLoader = function(){
     }
 
     function addToImgList(imgs){
-        var countScroll = functions.getScrollTop() + getWindowHeight();
+        var countScroll = getScrollTop() + getWindowHeight();
         for (var len = imgs.length, offset; len--;) {
             if (imgs[len].getAttribute('lazySrc')){
-                offset = element.getOffsetTop(imgs[len]);
+                offset = getOffsetTop(imgs[len]);
                 if (countScroll + 100 > offset) startLoad(imgs[len]);
                 else data.push({
                     offsetTop: offset,
@@ -310,6 +311,36 @@ lazyImageLoader = function(){
                 });
             }
         }
+    }
+
+    /**@returns {Number|number} количество Y прокрутки страницы*/
+    function getScrollTop() {
+        return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    }
+
+    /**@returns {Number|number} позиция Y верхнего левого угла относительно верхнеей угла страницы*/
+    function getOffsetTop(elem) {
+        if (elem.getBoundingClientRect) {
+            return Math.round(elem.getBoundingClientRect().top + getScrollTop() - (document.documentElement.clientTop || document.body.clientTop || 0));
+        } else {
+            var top = 0;
+            while (elem) {
+                top += parseFloat(elem.offsetTop);
+                elem = elem.offsetParent;
+            }
+            return top;
+        }
+    }
+
+    /**
+     * @param newElem что заменяем
+     * @param oldElem на что заменяем
+     */
+    function replace(newElem, oldElem){
+        if (oldElem) {
+            if (oldElem.parentNode) oldElem.parentNode.insertBefore(newElem, oldElem);
+        }
+        if (oldElem.parentNode) oldElem.parentNode.removeChild(oldElem);
     }
 
     return {
