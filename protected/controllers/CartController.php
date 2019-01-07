@@ -5,7 +5,7 @@ class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
             'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'getaddress',
-                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay', 'checkpromocode'),
+                'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay', 'checkpromocode','loadheader'),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
                 'users' => array('@')),
@@ -16,6 +16,11 @@ class CartController extends MyController {
         $states = Country::GetStatesList((int) $_POST['id']);
         $this->renderPartial('load_states', array('items' => $states));
     }
+
+    function actionLoadHeader() {
+        $this->renderPartial('header_cart', array());
+    }
+
     public function actionAddAddress() {
         if (Yii::app()->request->isPostRequest) {
             $p = $_POST;

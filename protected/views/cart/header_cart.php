@@ -1,9 +1,8 @@
-<? if ($_SERVER['REQUEST_URI'] != '/cart' AND $_SERVER['REQUEST_URI'] != '/cart/doorder') {  ?>
-<?php KnockoutForm::RegisterScripts(); ?>
-
-                <div class="b-basket-list">
-							
-								<div class="b-basket-list__empty" data-bind="visible: CartItems().length < 1"><span><?=$ui->item('A_NEW_CART_INFO')?></span>
+<?php //KnockoutForm::RegisterScripts(); ?>
+<?php /*
+<div class="b-basket-list">
+ */?>
+								<div class="b-basket-list__empty" data-bind="visible: CartItems().length < 1"><span><?=Yii::app()->ui->item('A_NEW_CART_INFO')?></span>
 							</div>
                             <div class="b-basket-list__center" data-bind="foreach: CartItems">
 							
@@ -14,11 +13,11 @@
 						
 									<!--<div class="alert" data-bind="attr: { class: 'alert alert'+ID()}" >
 										<div style="margin: 5px;">
-											<div class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
+											<div class="title"><?=Yii::app()->ui->item('ARE_YOU_SURE'); ?></div>
 											
 											<div style="text-align: center; margin-top: 5px;">
-												<a href="javascript:;" class="btn_yes" style="margin-right: 20px;"><?=$ui->item('A_NEW_BTN_YES')?></a>
-												<a href="javascript:;" onclick="javascript:;" class="btn_no"><?=$ui->item('A_NEW_BTN_NO')?></a>
+												<a href="javascript:;" class="btn_yes" style="margin-right: 20px;"><?=Yii::app()->ui->item('A_NEW_BTN_YES')?></a>
+												<a href="javascript:;" onclick="javascript:;" class="btn_no"><?=Yii::app()->ui->item('A_NEW_BTN_NO')?></a>
 											</div>
 											
 										</div>
@@ -65,14 +64,20 @@
                     </div>
 					
 					<div class="b-basket-list__bottom">
-                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=$ui->item('A_NEW_CART_MORE_ORDER1')?> '+priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
-                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=$ui->item('CONFIRM_ORDER');?></a></div>
+                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=Yii::app()->ui->item('A_NEW_CART_MORE_ORDER1')?> '+priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
+                                <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=Yii::app()->ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
-                            </div>
-
-				
+<?php /*
+</div>
+*/ ?>
+<?php
+    $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
+    $baseUrl = Yii::app()->assetManager->publish($assets);
+?>
+<script type="text/javascript" src="<?= $baseUrl . '/knockout.js' ?>"></script>
+<script type="text/javascript" src="<?= $baseUrl . '/knockout.mapping.js' ?>"></script>
+<script type="text/javascript" src="<?= $baseUrl . '/knockoutPostObject.js' ?>"></script>
 <script type="text/javascript">
-
     var csrf_1 = $('meta[name=csrf]').attr('content').split('=');
 
     var cartVM_1 = function ()
@@ -94,8 +99,8 @@
             });
 
             return usingVAT
-                ? '<?=$ui->item('WITH_VAT'); ?>'
-                : '<?=$ui->item('WITHOUT_VAT'); ?>';
+                ? '<?=Yii::app()->ui->item('WITH_VAT'); ?>'
+                : '<?=Yii::app()->ui->item('WITHOUT_VAT'); ?>';
         };
 
         self.ReadyPrice = function(item)
@@ -176,7 +181,7 @@
 
         self.RemoveFromCart = function(item, type)
         {
-            //if(confirm('<?=$ui->item('ARE_YOU_SURE'); ?>'))
+            //if(confirm('<?=Yii::app()->ui->item('ARE_YOU_SURE'); ?>'))
             //{
 				
 				//$('.b-basket-list .alert.alert'+item.ID()).fadeIn(240);
@@ -366,14 +371,6 @@
     $(document).ready(function ()
     {
         update_header_cart();
-//        var data = {is_MiniCart: 1};
-//        $.getJSON('<?//=Yii::app()->createUrl('cart/getall')?>//', {is_MiniCart: 1}, function (json)
-//        {
-//            ko.mapping.fromJS(json, {}, cvm_1);
-//
-//            cvm_1.FirstLoad(false);
-//
-//        });
     });
 
     $(document).ajaxStart(function ()
@@ -389,4 +386,4 @@
 
     
 
-</script>		<? } ?>		
+</script>

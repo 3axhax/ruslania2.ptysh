@@ -190,14 +190,6 @@ $(document).ready(function(){
         show_result_count();
     });
 
-/*
-    $('.red_checkbox').on('click', function(){
-        var cont = $(this);
-        var inputId = cont.data('connect');
-        check_search(cont, inputId);
-    });
-*/
-
     $('.open_subcat').on('click', function(){
         var c = $(this);
         var lvl = c.data('lvl');
@@ -228,19 +220,6 @@ function check_search(cont, inputId) {
 
 // "X" в input-ах фильтра
 function tog(v){return v?'addClass':'removeClass';}
-
-// Выбор фильтра
-/*
-function select_item(item, inp_name) {
-    var id = item.attr('rel');
-
-    if (!$(item).parent().parent().is('div.interactive_search')) $('.text span', item.parent().parent().parent().parent()).html(item.html());
-    $('.list_dd', item.parent().parent().parent().parent()).hide();
-    $('input[name=' + inp_name + ']', item.parent().parent().parent().parent()).val(id);
-
-    show_result_count();
-}
-*/
 
 function mini_cart_off() {
     if (mini_map_isOn == 1) $('#cart_renderpartial').toggle(100);
@@ -273,3 +252,69 @@ function show_sc(cont, c, lvl) {
     cont.css('padding', '0px 10px');
 }
 
+lazyImageLoader = function(){
+    var data;
+
+    function onDomReady(){
+        refreshImgList();
+        $(window).on('scroll', onScroll);
+    }
+
+    function onScroll(){
+        var countScroll = functions.getScrollTop() + getWindowHeight();
+        data = data.filter(function(elemData){
+            if (countScroll > elemData.offsetTop){
+                startLoad(elemData.elem);
+                return false;
+            }
+            return true;
+        });
+    }
+
+    function startLoad(img){
+        var newImg = document.createElement('img');
+        newImg.alt = img.alt;
+        //newImg.title = img.title;
+
+        var className = img.className;
+        if (img.getAttribute('lazyClass')) className += (className ? ' ' : '') + img.getAttribute('lazyClass');
+
+        if (className != '') newImg.className = className;
+        newImg.onload = function() {element.replace(newImg, img);};
+        newImg.onerror = function() {
+            img.src = '/pic1/nophoto.gif';
+        };
+        newImg.src = img.getAttribute('lazySrc');
+    }
+
+    function getWindowHeight(){
+        if (self.innerHeight) return self.innerHeight;
+        if (document.documentElement && document.documentElement.clientHeight) return document.documentElement.clientHeight;
+        if (document.body) return document.body.clientHeight;
+    }
+
+    function refreshImgList(){
+        data = [];
+        addToImgList($('img[lazySrc]'));
+    }
+
+    function addToImgList(imgs){
+        var countScroll = functions.getScrollTop() + getWindowHeight();
+        for (var len = imgs.length, offset; len--;) {
+            if (imgs[len].getAttribute('lazySrc')){
+                offset = element.getOffsetTop(imgs[len]);
+                if (countScroll + 100 > offset) startLoad(imgs[len]);
+                else data.push({
+                    offsetTop: offset,
+                    elem: imgs[len]
+                });
+            }
+        }
+    }
+
+    return {
+        onDomReady: onDomReady,
+        refreshImgList: refreshImgList,
+        addToImgList: addToImgList
+    };
+}();

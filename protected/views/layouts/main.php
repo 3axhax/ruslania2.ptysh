@@ -85,7 +85,6 @@ if (isset($_GET['avail'])) {
     <?php /*
     <script src="/new_js/nouislider.js" type="text/javascript" charset="utf-8"></script>
     <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/>*/?>
-    <script src="/js/common.js"></script>
     <script type="text/javascript" src="/new_js/modules/scriptLoader.js"></script>
     <!--[if lt IE 9]>
     <script src="libs/html5shiv/es5-shim.min.js"></script>
@@ -325,8 +324,8 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     </div>
 
-
-                    <?php $this->renderPartial('/cart/header_cart'); ?>
+                    <div class="b-basket-list"></div>
+                    <?php //$this->renderPartial('/cart/header_cart'); ?>
 
 
 
@@ -484,6 +483,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <?php $this->widget('InfoText', array('isFrame'=>0)); ?>
 <div id="virtual_keyboard" style="display: none"></div>
 
+<script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/new_js/jScrollPane.js"></script>
 <script type="text/javascript" src="/new_js/js_site.js"></script>
 <script type="text/javascript" src="/js/opentip.js"></script>
@@ -513,6 +513,15 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             });
         });
+<?php if ($ctrl != 'cart'): ?>
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        $.ajax({
+            url: '<?= Yii::app()->createUrl('cart/loadheader') ?>',
+            type: "POST",
+            data: csrf[0] + '=' + csrf[1],
+            success: function (r) { $('.b-basket-list').html(r); }
+        });
+<?php endif; ?>
     });
 
     function add2Cart(action, eid, iid, qty, type, $el) {
