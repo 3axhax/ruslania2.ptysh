@@ -1304,17 +1304,26 @@ form.filter .form-row input.inp.inp_max {
 a.add_cart {
 	
     border-radius: 4px;
-    background: #ed1d24 url(../new_img/addcart37.png) right center no-repeat;
     height: 37px;
     line-height: 37px;
     display: inline-block;
     color: #fff;
     text-decoration: none;
-	padding-left: 39px;
-    text-align: center;
-    width: 91px;
-	font-size: 13px;
 
+    text-align: center;
+
+	font-size: 13px;
+	background: #D50B12 !important;
+	position: relative;
+}
+
+a.add_cart:before {
+	
+	content: "\f218";
+	position: absolute;
+	left: 10px;
+	top: 0px;
+	font-size: 17px;
 }
 
 a.add_cart_plus {
@@ -1337,10 +1346,11 @@ a.add_cart_plus {
 
 .add_cart_plus span, .add_cart_plus button {
 	display: block;
-	width: 100%;
+	/*width: 100%;*/
 	height: 37px;
 	border-radius: 4px;
 	background: #ed1d24 !important;
+    margin-left: 39px;
 }
 
 .news_box ul.books li .addcart a.add_cart_plus,

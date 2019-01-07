@@ -419,8 +419,8 @@ $entityKey = Entity::GetUrlKey($entity);
                     <input type="hidden" name="entity[<?= (int) $item['id'] ?>]" value="<?= (int) $item['entity'] ?>">
 
 
-                    <a class="cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;">
-                        <button type="submit" onclick="return false;" style="border: none; background: none; padding: 0; color:#fff;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></button>
+                    <a class="cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;">
+                        <span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span>
                     </a>
 
                     <?php $style = '10px'; if ($item['entity'] == Entity::VIDEO) { $style = '0'; echo '<div style="height: 20px;"></div>'; } ?>
