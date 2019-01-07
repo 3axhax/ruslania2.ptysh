@@ -1362,7 +1362,7 @@ a.add_cart_plus {
     display: block;
     color: #fff;
     text-decoration: none;
-    padding-left: 39px;
+    /*padding-left: 39px;*/
     text-align: center;
     width: 91px;
     margin-top: 18px;
