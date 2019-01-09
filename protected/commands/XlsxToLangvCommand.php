@@ -13,7 +13,7 @@ class XlsxToLangvCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		require_once dirname(dirname(__FILE__)) . '/extensions/excel/xlsx/simplexlsx.class.php';
-		$file = dirname(dirname(__FILE__)) . '/doc/langs.xlsx';
+		$file = dirname(dirname(__FILE__)) . '/doc/langs_2019_01_09.xlsx';
 
 		//первая строка - заголовки ОБЯЗАТЕЛЬНО с обозначение языков
 		if ( $xlsx = SimpleXLSX::parse($file)) {
