@@ -1,5 +1,3 @@
-
-
 <div class="news_box nb<?= $entity ?> sale_item">
     <div class="container">
         <div class="title">
@@ -11,19 +9,6 @@
 
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            scriptLoader('/new_js/slick.js').callFunction(function() {
-                $('.cnt<?= $entity ?> ul').slick({
-                    lazyLoad: 'ondemand',
-                    slidesToShow: 4,
-                    slidesToScroll: 4
-                });
-            });
-        });
-    </script>
-
     <div class="container cnt<?= $entity ?>">
         <ul class="books">
             <?php
@@ -68,3 +53,14 @@
         width: 199px !important;
     }
 </style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.cnt<?= $entity ?> ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 4,
+                slidesToScroll: 4
+            });
+        });
+    });
+</script>

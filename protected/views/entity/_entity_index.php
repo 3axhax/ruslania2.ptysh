@@ -11,19 +11,6 @@
 
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            scriptLoader('/new_js/slick.js').callFunction(function(){
-                $('.cnt<?= $entity ?> ul').slick({
-                    lazyLoad: 'ondemand',
-                    slidesToShow: 5,
-                    slidesToScroll: 5
-                });
-            });
-        });
-    </script>
-
     <div class="container cnt<?= $entity ?>">
         <ul class="books">
             <?php
@@ -60,3 +47,14 @@
         </ul>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function(){
+            $('.cnt<?= $entity ?> ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 5,
+                slidesToScroll: 5
+            });
+        });
+    });
+</script>

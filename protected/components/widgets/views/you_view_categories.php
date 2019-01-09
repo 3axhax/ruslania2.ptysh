@@ -12,7 +12,7 @@
 	<li>
 		<div class="span1 photo new">
 			<?php $url = ProductHelper::CreateUrl($item); ?>
-			<a href="<?=$url; ?>" title="<?= htmlspecialchars($title) ?>"><img alt="<?= htmlspecialchars($title) ?>" src="<?=Picture::Get($item, Picture::SMALL); ?>" /></a>
+			<a href="<?=$url; ?>" title="<?= htmlspecialchars($title) ?>"><img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" lazySrc="<?=Picture::Get($item, Picture::SMALL); ?>" /></a>
 		</div>
 		<div class="span2 text">
 			<div class="title"><a href="<?= $url; ?>" title="<?=htmlspecialchars($title); ?>"><?= $title; ?></a></div>

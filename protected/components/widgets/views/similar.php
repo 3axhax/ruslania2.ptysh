@@ -19,7 +19,7 @@
 				<div class="img" style="min-height: 130px; position: relative">
 					<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
 					<a href="<?= $url ?>" title="<?= $title ?>">
-						<img title="<?= $title ?>" alt="<?= $title ?>" src="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
 					</a>
 				</div>
 

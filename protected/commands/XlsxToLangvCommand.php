@@ -22,7 +22,7 @@ class XlsxToLangvCommand extends CConsoleCommand {
 			array_shift($langs);
 			$result = array();
 			foreach ($langs as $lang) {
-				if ($lang == 'ru') $lang = 'rut';
+//				if ($lang == 'ru') $lang = 'rut';
 				$fileLang = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
 				$result[$lang] = require_once($fileLang);
 			}
@@ -30,18 +30,21 @@ class XlsxToLangvCommand extends CConsoleCommand {
 			foreach ($rows as $i=>$str) {
 				$key = array_shift($str);
 				foreach ($str as $langPos=>$v) {
-					$lang = $langs[$langPos];
-					if ($lang == 'ru') {
-						$lang = 'rut';
-						//$v = ProductHelper::ToAscii($v); //TODO:: транслит переделать
+					$v = trim($v);
+					if (!empty($v)) {
+						$lang = $langs[$langPos];
+//					if ($lang == 'ru') {
+//						$lang = 'rut';
+//						$v = ProductHelper::ToAscii($v); //TODO:: транслит переделать
+//					}
+						$result[$lang][$key] = $v;
 					}
-					$result[$lang][$key] = $v;
 				}
 			}
 			foreach ($result as $lang=>$translite) {
 				$fileLang = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/' . date('dmYHis') . '_uiconst.class.php';
 				file_put_contents($fileLang, '<?php // FILE: language constants, generated at ' . date('d.m.Y H:i:s') . '
-				return ' . var_export($translite, true) . ';');
+return ' . var_export($translite, true) . ';');
 			}
 		} else {
 			echo SimpleXLSX::parse_error();

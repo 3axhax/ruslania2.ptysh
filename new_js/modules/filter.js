@@ -64,6 +64,7 @@
                 success: function (r) {
                     items_content.html(r);
                     $('.box_select_result_count').hide(1);
+                    lazyImageLoader.refreshImgList();
                     //$(window).scrollTop(0);
                 },
                 error: function (msg) {

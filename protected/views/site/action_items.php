@@ -1,16 +1,4 @@
-<script type="text/javascript">
-    $(document).ready(function() {
-	    scriptLoader('/new_js/slick.js').callFunction(function(){
-	        $('.container_slides ul').slick({
-	            lazyLoad: 'ondemand',
-	            slidesToShow: 3,
-	            slidesToScroll: 1
-	        });
-	    });
-    });
-</script>
-	
-<div class="slider_bg">                        
+<div class="slider_bg">
 	<div class="container slider_container">
 		<div class="btn_left"><img src="/new_img/btn_left.png" /></div>
 		<div class="btn_right"><img src="/new_img/btn_right.png" /></div>
@@ -67,7 +55,7 @@
 						<li>
 							<div class="span1 photo<?=$actionTitleClass;?>">
 								<?=$actionTitle;?>
-								<a href="<?=$url;?>"><img src="<?=$productPicture;?>" alt=""  style="max-height: 130px;"/></a>
+								<a href="<?=$url;?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="" style="max-height: 130px;"/></a>
 							</div>
 							<div class="span2 text">
 								
@@ -109,3 +97,14 @@
 		</div>            
 	</div>						        
 </div>
+<script type="text/javascript">
+	$(document).ready(function() {
+		scriptLoader('/new_js/slick.js').callFunction(function(){
+			$('.container_slides ul').slick({
+				lazyLoad: 'ondemand',
+				slidesToShow: 3,
+				slidesToScroll: 1
+			});
+		});
+	});
+</script>
