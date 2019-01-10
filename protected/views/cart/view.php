@@ -268,6 +268,9 @@ $ctrl = Yii::app()->getController()->id;
     $groups = $o->GetItemsAll(999);
     
     //echo var_dump($groups);
+	
+	if ( $groups ) {
+	
     ?>
     
 <div class="news_box" style="margin-top: 60px;">
@@ -662,6 +665,8 @@ $ctrl = Yii::app()->getController()->id;
                 lazyLoad: 'ondemand',
                 slidesToShow: 4,
                 slidesToScroll: 4
+            }).on('lazyLoadError', function(event, slick, image, imageSource){
+                image.attr('src', '<?= Picture::srcNoPhoto() ?>');
             });
         });
     });
@@ -670,3 +675,4 @@ $ctrl = Yii::app()->getController()->id;
 
 
 <div style="height: 20px;"></div>
+	<? } ?>

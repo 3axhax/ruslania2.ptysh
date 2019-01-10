@@ -14,5 +14,6 @@ class Picture
     }
 
     static function srcLoad() { return '/new_img/source.gif'; }
+    static function srcNoPhoto() { return '/pic1/nophoto.gif'; }
 
 }

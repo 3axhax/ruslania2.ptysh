@@ -54,6 +54,8 @@
                 lazyLoad: 'ondemand',
                 slidesToShow: 5,
                 slidesToScroll: 5
+            }).on('lazyLoadError', function(event, slick, image, imageSource){
+                image.attr('src', '<?= Picture::srcNoPhoto() ?>');
             });
         });
     });

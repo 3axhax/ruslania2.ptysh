@@ -13,7 +13,7 @@
 	?>
 					<li>
 						<div class="span1 photo">
-							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt="<?= htmlspecialchars($productTitle) ?>"  style="max-height: 130px;"/></a>
+							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt=""  style="max-height: 130px;"/></a>
 						</div>
 						<div class="span2 text">
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
@@ -48,6 +48,8 @@
 				lazyLoad: 'ondemand',
 				slidesToShow: 3,
 				slidesToScroll: 1
+			}).on('lazyLoadError', function(event, slick, image, imageSource){
+				image.attr('src', '<?= Picture::srcNoPhoto() ?>');
 			});
 		});
 	});

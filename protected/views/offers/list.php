@@ -11,7 +11,7 @@
 				$h1 = array_pop($breadcrumbs);
 				unset($breadcrumbs) ;
 				$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
-				if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . $ui->item('PAGES_N', $page);
+				if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . $ui->item('PAGES_N', $page); 
 				?><?= $h1 ?></h1>
             <ul class="left_list entity text recomends">
                 <?php $i = 1;  foreach($list as $item): ?>
@@ -55,14 +55,15 @@
                                     foreach ($offer_entity['items'] as $of) {
 
                                         //if ($s < 7) {
-                                        if (true) {
-                                            echo '<div class="item slider_recomend__item">';
-                                            echo '<a href="' . ProductHelper::createUrl($of) . '" class="slider__img-block">
-										<div class="img slider__img" style="background: url(\'' . Picture::Get($of, Picture::SMALL) . '\') center center no-repeat; background-size: 100%; position: relative">';
-                                            $this->renderStatusLables(Product::GetStatusProduct($of['entity'], $of['id']), '', true);
-                                            echo '</div></a>';
-                                            echo '</div>';
-                                        }
+                                        if (true): ?>
+                                        <div class="item slider_recomend__item">
+                                            <a href="<?= ProductHelper::createUrl($of) ?>" class="slider__img-block">
+												<div class="img slider__img" style="background: url('<?= Picture::Get($of, Picture::SMALL) ?>') center center no-repeat; background-size: 100%; position: relative">
+                                            <?php $this->renderStatusLables(Product::GetStatusProduct($of['entity'], $of['id']), '', true) ?>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <?php endif;
                                         $s++;
                                     }
                                 }
@@ -87,3 +88,30 @@
 				</div>
         </div>
         </div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		scriptLoader('/new_js/slick.js').callFunction(function() {
+			$('.slider_recomend').slick({
+				lazyLoad: 'ondemand',
+				infinite: true,
+				slidesToShow: 5,
+				slidesToScroll: 5,
+				speed: 800,
+				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_left_news.png\"></div>",
+				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_right_news.png\"></div>"
+			}).on('lazyLoadError', function(event, slick, image, imageSource){
+				image.attr('src', '<?= Picture::srcNoPhoto() ?>');
+			});
+		});
+	});
+</script>
+
+<?php /* верстка блока с товаром с img
+<div class="item slider_recomend__item" style="position: relative; text-align: right; width: 111px;">
+	<div class="img slider__img" style="width: 111px; height: 171px; overflow: hidden; display: table-cell; vertical-align: middle;">
+		<a href="<?= ProductHelper::createUrl($of) ?>">
+			<img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($of, Picture::SMALL) ?>" style="max-height: 171px; max-width: 111px;">
+		</a>
+	</div>
+</div>*/ ?>
