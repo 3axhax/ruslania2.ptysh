@@ -172,10 +172,15 @@ class EntityUrlRule extends CBaseUrlRule {
 					break;
 				case 2:
 					$res = $this->_parseLevel3($urlParam, $urlParamPrev, '', $request);
-					if ($res === false) return false;
+					if ($res === false) {
+						$this->_redirect($urlParam, $rawPathInfo);
+						return false;
+					}
 					list($route['id'], $route['actionId']) = $res;
 					break;
-				default; return false; break;
+				default;
+					return false;
+					break;
 			}
 			$urlParamPrev = $urlParam;
 		} while (!empty($pathInfo));
@@ -273,6 +278,17 @@ class EntityUrlRule extends CBaseUrlRule {
 			return explode('/', $route);
 		}
 		return false;
+	}
+
+	private function _redirect($urlParam, $path) {
+		switch ($urlParam) {
+			case 'download':
+				$newPath = explode('/download/', $path);
+				array_shift($newPath);
+				$newPath = implode('/download/', $newPath);
+				if (!empty($newPath)) Yii::app()->getRequest()->redirect('/pictures/download/' . $newPath, true, 301);
+				break;
+		}
 	}
 
 }
