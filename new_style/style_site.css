@@ -3451,3 +3451,12 @@ span.notes span.notes-circle:before /*{ content: '\f05a'; position: relative; co
 .social_icons a.icons span.twitter:before { content: '\f099'; color: #676767; font-size: 20px; font-weight: bold; }
 .social_icons a.icons span.vk { position:absolute; top: 6px; left: 5px }
 .social_icons a.icons span.vk:before { content: '\f189'; color: #676767; font-size: 20px; font-weight: bold; }
+
+.telephone2 a.icons { opacity: 0.8; position: relative; width: 20px; height: 15px; display: inline-block; border-color: #676767;}
+.telephone2 a.icons span.whatsapp { position:absolute; top: 2px; left: 5px }
+.telephone2 a.icons span.whatsapp:before { content: '\f232'; color: #676767; font-size: 17px; font-weight: bold; }
+.telephone-circle a.icons { top:3px; opacity: 0.8; position: relative; width: 15px; height: 15px; border-radius: 32px; display: inline-block; background-color: #676767;}
+.telephone-circle a.icons span.phone { position:absolute; top: 0; left: 4px }
+.telephone-circle a.icons span.phone:before { content: '\f095'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
+.telephone-circle a.icons span.location { position:absolute; top: 0; left: 5px }
+.telephone-circle a.icons span.location:before { content: '\f041'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
