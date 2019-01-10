@@ -231,25 +231,35 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 			
             <? endif; ?>
 
-            <? if ($ctrl != 'cart') : ?>
-
-                <div class="span10">
+            <div class="span10"<? if ($ctrl == 'cart') : echo 'style="margin-top: 40px;"'; else : echo ''; endif; ?>>
                     <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
+					
+						<? if ($ctrl != 'cart') : ?>
+					
                         <div class="search_box">
                             <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                             <input type="text" name="q" class="search_text enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
-                            <input type="submit" class="search_run" value=""><!--<img src="/new_img/btn_search.png" class="search_run" alt="" onclick="$('#srch').submit()"/>-->
+                            <input type="submit" class="search_run" value="&#128269;">
                             <div class="trigger_keyboard">
                                 <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
                                 <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
                                 <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
                             </div>
                         </div>
-
+						
+						<? endif; ?>
+						
                         <div class="pult">
 
                             <ul>
-                                <li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+                                
+								<? if ($ctrl != 'cart') : ?>
+								
+								<li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+								
+								<? endif; ?>
+								
+								
                                 <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
                                 <li class="langs">
                                     <div class="select_lang">
@@ -319,9 +329,15 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             </ul>
 
                         </div>
-                    </form>
+                    
+						<? //endif; ?>
+					
+					</form>
                 </div>
-                <div class="span1 cart">
+                
+			 <? if ($ctrl != 'cart') : ?>	
+				
+				<div class="span1 cart">
 
 
                     <div class="span1 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart">
@@ -383,10 +399,14 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                     </div>
                     <div class="contacts">
 
+                        <div class="ico-circle"><span class="icons"><span class="fa location"></span></span><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
+                        <div class="ico-circle"><span class="icons"><span class="fa phone"></span></span><a href="tel:+35892727070">+358 9 2727070</a></div>
+                        <div class="ico-circle"><span class="icons"><span class="fa email"></span></span>generalsupports@ruslania.com</div>
+<?php /*
                         <div class="maps_ico"><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="phone_ico"><a href="tel:+35892727070">+358 9 2727070</a></div>
                         <div class="mail_ico">generalsupports@ruslania.com</div>
-
+*/ ?>
                     </div>
                     <div class="social_icons">
 

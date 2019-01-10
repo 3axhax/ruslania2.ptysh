@@ -192,10 +192,12 @@ a:hover {
     height: 50px;
     cursor: pointer;
     border-radius: 0 4px 4px 0;
-    background: url(../new_img/btn_search.png) #ed2024 50% 50%;
-    background-size: 72px;
+    /*background: url(../new_img/btn_search.png) #ed2024 50% 50%;*/
+    /*background-size: 72px;*/
     width: 72px;
     border-width: 0;
+    color: #fff;
+    font-size: 24px;
 }
 
 
@@ -3460,3 +3462,12 @@ span.notes span.notes-circle:before /*{ content: '\f05a'; position: relative; co
 .telephone-circle a.icons span.phone:before { content: '\f095'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
 .telephone-circle a.icons span.location { position:absolute; top: 0; left: 5px }
 .telephone-circle a.icons span.location:before { content: '\f041'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
+
+.ico-circle {font-size: 13px; margin: 10px 0; min-height: 20px;}
+.ico-circle span.icons { margin-right: 10px; top:5px; opacity: 0.8; position: relative; width: 20px; height: 20px; border-radius: 32px; display: inline-block; background-color: #ed1d24;}
+.ico-circle span.icons span.phone { position:absolute; top: 4px; left: 4px }
+.ico-circle span.icons span.phone:before { content: '\f095'; color: #fff; font-size: 14px; font-weight: bold; }
+.ico-circle span.icons span.location { position:absolute; top: 4px; left: 6px }
+.ico-circle span.icons span.location:before { content: '\f041'; color: #fff; font-size: 14px; font-weight: bold; }
+.ico-circle span.icons span.email { position:absolute; top: 2px; left: 5px }
+.ico-circle span.icons span.email:before { content: '\f003'; color: #fff; font-size: 10px; font-weight: bold; }
