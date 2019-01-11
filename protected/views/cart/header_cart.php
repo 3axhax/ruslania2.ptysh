@@ -74,14 +74,12 @@
     $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
     $baseUrl = Yii::app()->assetManager->publish($assets);
 ?>
-<script type="text/javascript" src="<?= $baseUrl . '/knockout.js' ?>"></script>
-<script type="text/javascript" src="<?= $baseUrl . '/knockout.mapping.js' ?>"></script>
-<script type="text/javascript" src="<?= $baseUrl . '/knockoutPostObject.js' ?>"></script>
+<script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
+<script type="text/javascript" src="<?= $baseUrl ?>/knockout.mapping.js"></script>
+<script type="text/javascript" src="<?= $baseUrl ?>/knockoutPostObject.js"></script>
 <script type="text/javascript">
     var csrf_1 = $('meta[name=csrf]').attr('content').split('=');
-
-    var cartVM_1 = function ()
-    {
+    var cartVM_1 = function () {
         var self = this;
         self.FirstLoad = ko.observable(true);
         self.CartItems = ko.observableArray([]);
@@ -89,12 +87,10 @@
         self.RequestItems = ko.observableArray([]);
         self.AjaxCall = ko.observable(false);
 
-        self.IsVATInPrice = function()
-        {
+        self.IsVATInPrice = function() {
             var usingVAT = true;
             var items = self.CartItems();
-            $.each(items, function (idx, item)
-            {
+            $.each(items, function (idx, item) {
                 usingVAT = item.UseVAT();
             });
 
@@ -103,8 +99,7 @@
                 : '<?=Yii::app()->ui->item('WITHOUT_VAT'); ?>';
         };
 
-        self.ReadyPrice = function(item)
-        {
+        self.ReadyPrice = function(item) {
             if(item.Entity() != <?=Entity::PERIODIC; ?>)
                 return item.UseVAT() ? item.PriceVAT() : item.PriceVAT0();
             else
@@ -116,15 +111,10 @@
             }
         };
 
-        self.priceStrToPrice = function(count)
-        {
-
+        self.priceStrToPrice = function(count) {
             var num, out;
-
             num = count % 100;
-            if (num > 19) {
-                num = num % 10;
-            }
+            if (num > 19) num = num % 10;
 
             //$out = (show) ?  $value . ' ' : '';
             switch (num) {
@@ -142,112 +132,59 @@
             }
             return out;
 
-        }
+        };
 
-        self.ReadyPriceStr = function(item)
-        {
-			
-			//return item.PriceVATStr();
-
-            //alert(item.Quantity());
-
+        self.ReadyPriceStr = function(item) {
             if(item.Entity() != <?=Entity::PERIODIC; ?>)
                 return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str() + '<?=Currency::ToSign()?>';
-            else
-            {
+            else {
                 if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>) {
-
                     return item.UseVAT() ? (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
-
                 } else {
-
                     return item.UseVAT() ? ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : ((item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
-
-
                 }
-                   /*  return item.UseVAT() ? (parseInt(item.Quantity()) * item.PriceVATFinStr()) : (parseInt(item.Quantity()) * item.PriceVAT0FinStr());
-
-                } else {
-                    alert(item.PriceVAT0WorldStr());
-                    return item.UseVAT() ? ((item.Quantity()) * item.PriceVATWorldStr()) : ((item.Quantity()) * item.PriceVAT0WorldStr());
-                } */
             }
         };
 
-        self.LineTotalVAT = function (item)
-        {
+        self.LineTotalVAT = function (item) {
             return Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2);
         };
 
-        self.RemoveFromCart = function(item, type)
-        {
-            //if(confirm('<?=Yii::app()->ui->item('ARE_YOU_SURE'); ?>'))
-            //{
-				
-				//$('.b-basket-list .alert.alert'+item.ID()).fadeIn(240);
-				
-				//$('.b-basket-list .alert.alert'+item.ID()+' .btn_no').on('click', function() { $('.b-basket-list .alert.alert'+item.ID()).fadeOut(240); })
-				
-				
-				
-					var obj =
-                {
-                    entity : item.Entity(),
-                    iid : item.ID(),
-                    type : type
-                };
-				
+        self.RemoveFromCart = function(item, type) {
+            var obj = {
+                entity : item.Entity(),
+                iid : item.ID(),
+                type : type
+            };
+
                 obj[csrf_1[0]] = csrf_1[1];
-                $.when
-                    (
-                        $.ajax({
-                            type: "POST",
-                            url: '<?=Yii::app()->createUrl('cart/remove')?>',
-                            data: obj,
-                            dataType: 'json',
-							success: function() {
-								update_header_cart();
-							}
-                        })
-                    ).then(function(json)
-                    {
-                        if(!json.hasError)
-                        {
-                            //if(type == <?=Cart::TYPE_ORDER; ?>)  self.CartItems.remove(item);
-                            //else self.RequestItems.remove(item);
-							
-							
-							$('.b-basket-list').show();
-							
-                        }
-                    });
-				
-				
-                
-                  
-				  
-                
-           // }
+                $.when($.ajax({
+                    type: "POST",
+                    url: '<?=Yii::app()->createUrl('cart/remove')?>',
+                    data: obj,
+                    dataType: 'json',
+                    success: function() {
+                        update_header_cart();
+                    }
+                })).then(function(json) {
+                    if(!json.hasError) $('.b-basket-list').show();
+                });
         };
 
         self.UsingMinPrice = ko.observable(false);
 
-        self.TotalVAT = ko.computed(function ()
-        {
+        self.TotalVAT = ko.computed(function () {
             var ret = 0;
             var items = self.CartItems();
-
             var sumEur = 0;
             var rate = 1;
-            $.each(items, function (idx, item)
-            {
+            $.each(items, function (idx, item) {
                 sumEur += Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item));
                 ret +=  Math.abs(parseInt(item.Quantity()) * self.ReadyPrice(item));
                 rate = parseFloat(item.Rate());
             });
 
-            if(sumEur < <?=Yii::app()->params['OrderMinPrice']; ?>)
-            {
+            if(sumEur < <?=Yii::app()->params['OrderMinPrice']; ?>) {
                 ret = <?=Yii::app()->params['OrderMinPrice']; ?> * rate;
                 self.UsingMinPrice(true);
             }
@@ -255,49 +192,33 @@
 
             return ret.toFixed(2);
         });
-		
-		self.QuantityChangedMinus = function (data, event)
-        {
-			
-			//alert(event.value);
-			
-			if (data.Quantity() != '1') {
-			
-            var post =
-            {
-                entity: data.Entity(),
-                id: data.ID(),
-                quantity: parseInt(data.Quantity()) - 1,
-                decrement: 1,
-                type : data.Price2Use()
-            };
-            post[csrf_1[0]] = csrf_1[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
-            {
-                if(json.changed){
-                    data.InfoField(json.changedStr);
-					alert(json.changedStr);
-                }else{
-                    data.InfoField('');
-				}
-//                console.log(json);
-                data.Quantity(json.quantity);
-				update_header_cart();
-            }, 'json');
-			
+		self.QuantityChangedMinus = function (data, event) {
+			if (data.Quantity() != '1') {
+                var post = {
+                    entity: data.Entity(),
+                    id: data.ID(),
+                    quantity: parseInt(data.Quantity()) - 1,
+                    decrement: 1,
+                    type : data.Price2Use()
+                };
+                post[csrf_1[0]] = csrf_1[1];
+
+                $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+                    if(json.changed){
+                        data.InfoField(json.changedStr);
+                        alert(json.changedStr);
+                    }
+                    else data.InfoField('');
+                    data.Quantity(json.quantity);
+                    update_header_cart();
+                }, 'json');
 			}
         };
-		
-		self.QuantityChangedPlus = function (data, event)
-        {
-			
-			//alert(event.value);
-			
-			$('input', $(self).parent().parent()).val(parseInt($('input',$(self).parent().parent()).val()) + 1); 
-			
-            var post =
-            {
+
+		self.QuantityChangedPlus = function (data, event) {
+			$('input', $(self).parent().parent()).val(parseInt($('input',$(self).parent().parent()).val()) + 1);
+            var post = {
                 entity: data.Entity(),
                 id: data.ID(),
                 quantity: parseInt(data.Quantity()) + 1,
@@ -305,22 +226,16 @@
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
-            {
-                if(json.changed)
-                    data.InfoField(json.changedStr);
-                else
-                    data.InfoField('');
-//                console.log(json);
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+                if(json.changed) data.InfoField(json.changedStr);
+                else data.InfoField('');
                 data.Quantity(json.quantity);
 				update_header_cart();
             }, 'json');
         };
 
-        self.QuantityChanged = function (data, event)
-        {
-            var post =
-            {
+        self.QuantityChanged = function (data, event) {
+            var post = {
                 entity: data.Entity(),
                 id: data.ID(),
                 quantity: data.Quantity(),
@@ -328,62 +243,37 @@
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
-            {
-                if(json.changed)
-                    data.InfoField(json.changedStr);
-                else
-                    data.InfoField('');
-//                console.log(json);
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+                if(json.changed) data.InfoField(json.changedStr);
+                else data.InfoField('');
                 data.Quantity(json.quantity);
 				update_header_cart();
             }, 'json');
         };
 
-        self.RequestQuantityChanged = function (data, event)
-        {
-            var post =
-            {
+        self.RequestQuantityChanged = function (data, event) {
+            var post = {
                 entity: data.Entity(),
                 id: data.ID(),
                 quantity: data.Quantity()
             };
             post[csrf_1[0]] = csrf_1[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json)
-            {
-//                console.log(json);
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
                 data.Quantity(json.quantity);
             }, 'json');
         };
     };
-    
-    
     var cvm_1 = new cartVM_1();
-    
-    var first_cvm = cvm_1;
 
-    firstState = $('#cart_renderpartial').clone();        
-    
-    ko.applyBindings(cvm_1, $('#cart_renderpartial')[0]);
-    
-    
-    $(document).ready(function ()
-    {
+    $(document).ready(function() {
         update_header_cart();
+        ko.applyBindings(cvm_1, document.getElementById('cart_renderpartial'));
     });
 
-    $(document).ajaxStart(function ()
-    {
+    $(document).ajaxStart(function() {
         cvm_1.AjaxCall(true)
-    }).ajaxComplete(function ()
-        {
-            cvm_1.AjaxCall(false);
-			
-        });
-        
-        
-
-    
-
+    }).ajaxComplete(function() {
+        cvm_1.AjaxCall(false);
+    });
 </script>

@@ -79,6 +79,10 @@ if (isset($_GET['avail'])) {
     <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
     <script src="/new_js/jquery.js" type="text/javascript"></script>
+	
+	
+	
+	
     <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
@@ -239,7 +243,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <div class="search_box">
                             <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                             <input type="text" name="q" class="search_text enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
-                            <input type="submit" class="search_run" value="&#128269;">
+                            <span class="search_run fa"><input type="submit" value=""></span>
                             <div class="trigger_keyboard">
                                 <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
                                 <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
@@ -353,7 +357,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     </div>
 
-                    <div class="b-basket-list"></div>
+                    <div class="b-basket-list" id="cart_renderpartial"></div>
                     <?php //$this->renderPartial('/cart/header_cart'); ?>
 
 

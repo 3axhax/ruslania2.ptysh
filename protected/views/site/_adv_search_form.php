@@ -2,6 +2,8 @@
 
     <?php KnockoutForm::RegisterScripts(); ?>
     <?= CHtml::beginForm(Yii::app()->createUrl('site/advsearch'), 'get'); ?>
+
+	
     <?php
     $e = intVal(@$_GET['e']);
     $cid = intVal(@$_GET['cid']);
@@ -32,7 +34,6 @@
             <td><select name="cid"
                         data-bind="options: Categories, optionsText: 'Name',
                          optionsCaption: '---',
-						 select2 : {},
                         optionsValue: 'ID', value: CID"></select>
             </td>
         </tr>
@@ -107,38 +108,6 @@
 <script type="text/javascript">
 
     var firstTime = true;
-	
-	ko.utils.setValue = function (property, newValue) {
-    if (ko.isObservable(property))
-        property(newValue);
-    else
-        property = newValue;
-};
-
-ko.bindingHandlers.select2 = {
-    init: function (element, valueAccessor, allBindingsAccessor) {
-        var obj = valueAccessor(),
-            allBindings = allBindingsAccessor(),
-            lookupKey = allBindings.lookupKey;
-
-        $(element).select2(obj);
-      
-        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            $(element).select2('destroy');
-        });
-    },
-    update: function (element, valueAccessor, allBindingsAccessor) {
-        var options = allBindingsAccessor().select2Options || {};
-
-        for (var property in options) {
-            $(element).select2(property, ko.utils.unwrapObservable(options[property]));
-        }
-
-        $(element).trigger('change');
-    }
-};
-	
-	
     var VM = function ()
     {
         var self = this;

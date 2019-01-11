@@ -174,7 +174,6 @@ a:hover {
     position: relative;
     margin-bottom: 15px;
 }
-
 .header_logo_search_cart .search_box .search_run {
     position: absolute;
     right: 0;
@@ -183,21 +182,26 @@ a:hover {
     cursor: pointer;
     border-radius: 0 4px 4px 0;
     background-color: #ed2024;
-
-}
-.header_logo_search_cart .search_box input.search_run {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 50px;
-    cursor: pointer;
-    border-radius: 0 4px 4px 0;
-    /*background: url(../new_img/btn_search.png) #ed2024 50% 50%;*/
-    /*background-size: 72px;*/
     width: 72px;
     border-width: 0;
     color: #fff;
     font-size: 24px;
+}
+
+.header_logo_search_cart .search_box .search_run:before {
+    color: #fff;
+    content: '\f002';
+    top: 13px;
+    left: -25px;
+    position: relative;
+    float: right;
+    font-size: 22px;
+}
+.header_logo_search_cart .search_box .search_run input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
 }
 
 
