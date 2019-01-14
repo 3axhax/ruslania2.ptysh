@@ -151,9 +151,22 @@ class Condition {
 	private function _author() {
 		if (Entity::checkEntityParam($this->_entity, 'authors')) {
 			$aid = (int) $this->g('author');
+			$entityParams = Entity::GetEntitiesList()[$this->_entity];
 			if ($aid > 0) {
-				$entityParams = Entity::GetEntitiesList()[$this->_entity];
 				$this->_join['tA'] = 'join ' . $entityParams['author_table'] . ' tA on (tA.' . $entityParams['author_entity_field'] . ' = t.id) and (tA.author_id = ' . $aid . ')';
+			}
+			else {
+				$str = trim((string) $this->g('authorStr'));
+				if (!empty($str)) {
+					$authorIds = SearchAuthors::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+					if (empty($authorIds)) {
+						//TODO::надо что то придумать, что б запрос не выполнять
+						$this->_condition['empty_result'] = 0;
+					}
+					else {
+						$this->_join['tA'] = 'join ' . $entityParams['author_table'] . ' tA on (tA.' . $entityParams['author_entity_field'] . ' = t.id) and (tA.author_id in (' . implode(',',$authorIds) . '))';
+					}
+				}
 			}
 		}
 	}
@@ -162,6 +175,19 @@ class Condition {
 		if (Entity::checkEntityParam($this->_entity, 'series')) {
 			$sid = (int) $this->g('series');
 			if ($sid > 0) $this->_condition['seria_id'] = '(t.series_id = ' . $sid . ')';
+			else {
+				$str = trim((string) $this->g('seriesStr'));
+				if (!empty($str)) {
+					$seriesIds = SearchSeries::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+					if (empty($seriesIds)) {
+						//TODO::надо что то придумать, что б запрос не выполнять
+						$this->_condition['empty_result'] = 0;
+					}
+					else {
+						$this->_condition['seria_id'] = '(t.series_id in (' . implode(',',$seriesIds) . '))';
+					}
+				}
+			}
 		}
 	}
 
@@ -169,6 +195,19 @@ class Condition {
 		if (Entity::checkEntityParam($this->_entity, 'publisher')) {
 			$pid = (int) $this->g('publisher');
 			if ($pid > 0) $this->_condition['publisher_id'] = '(t.publisher_id = ' . $pid . ')';
+			else {
+				$str = trim((string) $this->g('publishersStr'));
+				if (!empty($str)) {
+					$seriesIds = SearchPublishers::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+					if (empty($seriesIds)) {
+						//TODO::надо что то придумать, что б запрос не выполнять
+						$this->_condition['empty_result'] = 0;
+					}
+					else {
+						$this->_condition['seria_id'] = '(t.series_id in (' . implode(',',$seriesIds) . '))';
+					}
+				}
+			}
 		}
 	}
 
@@ -247,10 +286,23 @@ class Condition {
     private function _performer() {
         if (Entity::checkEntityParam($this->_entity, 'performers')) {
             $perid = (int) $this->g('performer');
-            if ($perid > 0) {
-                $entityParams = Entity::GetEntitiesList()[$this->_entity];
-                $this->_join['tPER'] = 'join ' . $entityParams['performer_table'] . ' tPER 
-                on (tPER.music_id = t.id) and (tPER.person_id = ' . $perid . ')';
+	        $entityParams = Entity::GetEntitiesList()[$this->_entity];
+	        if ($perid > 0) {
+                $this->_join['tPER'] = 'join ' . $entityParams['performer_table'] . ' tPER on (tPER.music_id = t.id) and (tPER.person_id = ' . $perid . ')';
+            }
+            else {
+	            $str = trim((string) $this->g('performersStr'));
+	            if (!empty($str)) {
+		            $authorIds = SearchPerformers::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+		            Debug::staticRun(array($authorIds));
+		            if (empty($authorIds)) {
+			            //TODO::надо что то придумать, что б запрос не выполнять
+			            $this->_condition['empty_result'] = 0;
+		            }
+		            else {
+			            $this->_join['tPER'] = 'join ' . $entityParams['performer_table'] . ' tPER on (tPER.music_id = t.id) and (tPER.person_id in (' . implode(',',$authorIds) . '))';
+		            }
+	            }
             }
         }
     }
@@ -267,9 +319,22 @@ class Condition {
     private function _director() {
         if (Entity::checkEntityParam($this->_entity, 'directors')) {
             $did = (int) $this->g('directors');
-            if ($did > 0) {
-                $entityParams = Entity::GetEntitiesList()[$this->_entity];
+	        $entityParams = Entity::GetEntitiesList()[$this->_entity];
+	        if ($did > 0) {
                 $this->_join['tDir'] = 'join ' . $entityParams['directors_table'] . ' tDir on (tDir.video_id = t.id) and (tDir.person_id = ' . $did . ')';
+            }
+            else {
+	            $str = trim((string) $this->g('directorsStr'));
+	            if (!empty($str)) {
+		            $authorIds = SearchDirectors::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+		            if (empty($authorIds)) {
+			            //TODO::надо что то придумать, что б запрос не выполнять
+			            $this->_condition['empty_result'] = 0;
+		            }
+		            else {
+			            $this->_join['tDir'] = 'join ' . $entityParams['directors_table'] . ' tDir on (tDir.video_id = t.id) and (tDir.person_id in (' . implode(',',$authorIds) . '))';
+		            }
+	            }
             }
         }
     }
@@ -277,9 +342,22 @@ class Condition {
     private function _actor() {
         if (Entity::checkEntityParam($this->_entity, 'actors')) {
             $aid = (int) $this->g('actors');
+	        $entityParams = Entity::GetEntitiesList()[$this->_entity];
             if ($aid > 0) {
-                $entityParams = Entity::GetEntitiesList()[$this->_entity];
                 $this->_join['tAct'] = 'join ' . $entityParams['actors_table'] . ' tAct on (tAct.video_id = t.id) and (tAct.person_id = ' . $aid . ')';
+            }
+            else {
+	            $str = trim((string) $this->g('actorsStr'));
+	            if (!empty($str)) {
+		            $authorIds = SearchActors::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
+		            if (empty($authorIds)) {
+			            //TODO::надо что то придумать, что б запрос не выполнять
+			            $this->_condition['empty_result'] = 0;
+		            }
+		            else {
+			            $this->_join['tAct'] = 'join ' . $entityParams['actors_table'] . ' tAct on (tAct.video_id = t.id) and (tAct.person_id in (' . implode(',',$authorIds) . '))';
+		            }
+	            }
             }
         }
     }

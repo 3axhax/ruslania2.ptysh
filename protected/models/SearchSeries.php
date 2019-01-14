@@ -128,4 +128,18 @@ class SearchSeries
         }
         return $series;
     }
+
+    function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
+        $condition = array($q, 'mode=boolean', 'filter=entity,' . $entity);
+        $condition['limit'] = 'limit=' . $limit;
+        $condition['maxmatches'] = 'maxmatches=' . $limit;
+        $sql = ''.
+            'select real_id '.
+            'from _se_series '.
+            'where (query=:condition)'.
+            '';
+        return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+    }
+
+
 }

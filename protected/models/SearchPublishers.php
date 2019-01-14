@@ -269,4 +269,17 @@ class SearchPublishers {
         return $publishers;
     }
 
+	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
+		$condition = array($q, 'mode=boolean');
+		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . ',1';
+		$condition['limit'] = 'limit=' . $limit;
+		$condition['maxmatches'] = 'maxmatches=' . $limit;
+		$sql = ''.
+			'select id '.
+			'from _se_publishers '.
+			'where (query=:condition)'.
+			'';
+		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+	}
+
 }

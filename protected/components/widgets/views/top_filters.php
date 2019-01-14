@@ -65,7 +65,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <label class="prod-filter__label" for=""><?=$ui->item('CART_COL_ITEM_AVAIBILITY')?>:</label>
             <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="avail">
                 <option value="0" <?= ($avail = (isset($filter_data['avail']) && $filter_data['avail'] == 0)) ? 'selected' : ''?>><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
-                <option value="1" <?= (!$avail) ? 'selected' : ''?>>В наличии</option>
+                <option value="1" <?= (!$avail) ? 'selected' : ''?>><?= Yii::app()->ui->item('A_NEW_FILTER_AVAIL') ?></option>
             </select>
         </div>
         <?php endif;?>

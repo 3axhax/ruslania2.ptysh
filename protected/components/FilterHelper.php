@@ -105,7 +105,13 @@ class FilterHelper
         if ($filtersData->isSetKey($key)) {
             self::$sessionData = $filtersData->getFiltersData($key);
         }
+
+        $data = self::$data;
         self::$data = [];
+        foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
+            if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
+        }
+        unset($data);
         self::getEntity();
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
             self::$data = [];
@@ -155,7 +161,7 @@ class FilterHelper
         self::getEntity();
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
             self::$data = [];
-            return false;
+            return;
         }
         self::$data['cid'] = $data['cid'] ?: $data['cid_val'] ?: 0;
         self::$data['avail'] = $data['avail'] ?: 0;
@@ -179,6 +185,15 @@ class FilterHelper
         self::$data['actors'] = $data['actors'] ?: false;
         self::$data['release_year_min'] = $data['release_year_min'] ?: false;
         self::$data['release_year_max'] = $data['release_year_max'] ?: false;
+
+        //далее строковые значения из фильтра для живого поиска, сохраняю только с длиной строки > 2
+        if (!empty($data['new_author'])&&(mb_strlen($data['new_author'], 'utf-8') > 2)) self::$data['authorStr'] = $data['new_author'];
+        if (!empty($data['new_actors'])&&(mb_strlen($data['new_actors'], 'utf-8') > 2)) self::$data['actorsStr'] = $data['new_actors'];
+        if (!empty($data['new_directors'])&&(mb_strlen($data['new_directors'], 'utf-8') > 2)) self::$data['directorsStr'] = $data['new_directors'];
+        if (!empty($data['new_performer'])&&(mb_strlen($data['new_performer'], 'utf-8') > 2)) self::$data['performersStr'] = $data['new_performer'];
+
+        if (!empty($data['new_series'])&&(mb_strlen($data['new_series'], 'utf-8') > 2)) self::$data['seriesStr'] = $data['new_series'];
+        if (!empty($data['new_publisher'])&&(mb_strlen($data['new_publisher'], 'utf-8') > 2)) self::$data['publishersStr'] = $data['new_publisher'];
     }
 
     static private function getEntity(){
