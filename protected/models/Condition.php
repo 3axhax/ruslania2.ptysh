@@ -204,7 +204,7 @@ class Condition {
 						$this->_condition['empty_result'] = 0;
 					}
 					else {
-						$this->_condition['seria_id'] = '(t.series_id in (' . implode(',',$seriesIds) . '))';
+						$this->_condition['publisher'] = '(t.publisher_id in (' . implode(',',$seriesIds) . '))';
 					}
 				}
 			}
