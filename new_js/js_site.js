@@ -168,7 +168,7 @@ $(document).ready(function(){
         event.stopPropagation();
     });
 
-    $(document).on('input', '.clearable', function(){
+    /*$(document).on('input', '.clearable', function(){
         $(this)[tog(this.value)]('x');
     }).on('mousemove', '.x', function( e ){
         $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');
@@ -176,8 +176,8 @@ $(document).ready(function(){
         ev.preventDefault();
         $(this).removeClass('x onX').val('').change();
         $(this).prev().val('');
-        show_result_count();
-    });
+        //show_result_count();
+    });*/
 
     $('.open_subcat').on('click', function(){
         var c = $(this);

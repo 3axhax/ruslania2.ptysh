@@ -69,7 +69,7 @@ else
 {$input.val(q);}
 this._request($input.val());},select:function(data,$item)
 {var self=this,$input=self.$input,hideOnSelect=self.options.hideOnSelect;self.selected=data;if(hideOnSelect)
-{}
+{self._hideList();}
 if(data)
 {self._trigger('select',[data,$item]);}
 else

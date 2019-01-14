@@ -44,6 +44,17 @@
                     self.similarSelect(f);
                 }
             }
+
+            $(document).on('input', '.clearable', function(){
+                $(this)[tog(this.value)]('x');
+            }).on('mousemove', '.x', function( e ){
+                $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');
+            }).on('touchstart click', '.onX', function( ev ){
+                ev.preventDefault();
+                $(this).removeClass('x onX').val('').change();
+                //$(this).prev().val('');
+                self.show_result_count();
+            });
         },
 
         show_items: function() {
@@ -110,10 +121,19 @@
                     data:dataPost,
                     formatMinChars: false,
                     formatItem:function (data, $item, q) {
+                        var mSelf = this;
                         var $li = $('<li class="mp_list_item">' + data.title + '</li>');
-                        $li.on('click', function(){self.select_item_mp(data.id, field, data.title, 'new_' + _field);});
+                        $li.on('click', function(){
+                            self.select_item_mp(data.id, field, data.title, 'new_' + _field);
+                        });
                         return $li.get(0);
                     }
+                    //onSelect: function (data, $item) {
+                    //    console.log(111);
+                    //    console.trace();
+                    //    self.select_item_mp(data.id, field, data.title, 'new_' + _field);
+                    //    this._hideList();
+                    //}
                 });
             });
         },
@@ -121,7 +141,9 @@
         similarSelect: function (f) {
             var $f = $(f);
             var self = this;
-            if (f.name in self.urls) {
+            var fieldName = f.name;
+            if (fieldName == 'seria') fieldName = 'series';
+            if (fieldName in self.urls) {
                 scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
                     $f.select2();
                     select_series_visible = $f.next("span").children("span").children("span");
@@ -129,7 +151,7 @@
                     var csrf = $('meta[name=csrf]').attr('content').split('=');
                     dataPost[csrf[0]] = csrf[1];
                     $.ajax({
-                        url: self.urls[f.name],
+                        url: self.urls[fieldName],
                         type: "POST",
                         data: dataPost,
                         beforeSend: function(){
@@ -140,7 +162,7 @@
                             var selectId = 0;
                             var $option;
                             var selectLangTitle;
-                            if (f.name in self.filterData) selectId = self.filterData[f.name];
+                            if (fieldName in self.filterData) selectId = self.filterData[fieldName];
                             for (id in titles) {
                                 selectLangTitle = '';
                                 if (self.lang in titles[id]) selectLangTitle = self.lang;
