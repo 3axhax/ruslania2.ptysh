@@ -52,7 +52,7 @@
             }).on('touchstart click', '.onX', function( ev ){
                 ev.preventDefault();
                 $(this).removeClass('x onX').val('').change();
-                //$(this).prev().val('');
+                $(this).prev().val('');
                 self.show_result_count();
             });
         },
