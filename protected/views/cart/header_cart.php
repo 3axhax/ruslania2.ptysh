@@ -46,10 +46,10 @@
                                 </p></div>
                                     </div>
                                     <div class="b-basket-list__calc" style="    max-width: 125px;">
-                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
+                                        <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"/> */?></a>
                                         <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 50px;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
                                         <div style="display:none;width:25px;float:left;" data-bind="visible: noUseChangeQuantity() > 0">&nbsp;</div>
-                                        <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"/></a>
+                                        <a href="javascript:;" style="margin-left: 9px;" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_plus.png"/>*/ ?></a>
                                     </div>
                                     <div class="b-basket-list__cross js-close-item" data-bind="click: function(data, event) { cvm_1.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"></div>
 									
@@ -156,7 +156,11 @@
                 iid : item.ID(),
                 type : type
             };
-
+				
+				//alert(item.ID());
+				
+				
+				
                 obj[csrf_1[0]] = csrf_1[1];
                 $.when($.ajax({
                     type: "POST",
@@ -165,6 +169,12 @@
                     dataType: 'json',
                     success: function() {
                         update_header_cart();
+						
+						$('a.cart'+item.ID()).removeClass('green_cart');
+						$('a.cart'+item.ID()+' span').html('<?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?>');
+						
+						$('div.already-in-cart'+item.ID()).html('&nbsp;');
+						
                     }
                 })).then(function(json) {
                     if(!json.hasError) $('.b-basket-list').show();
@@ -203,8 +213,13 @@
                     type : data.Price2Use()
                 };
                 post[csrf_1[0]] = csrf_1[1];
-
+			
                 $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+					
+					$('a.cart'+data.ID()+' span').html('В корзине '+post['quantity']+' шт.');
+					
+					$('div.already-in-cart'+data.ID()).html('<?=$ui->item('ALREADY_IN_CART')?>')
+					
                     if(json.changed){
                         data.InfoField(json.changedStr);
                         alert(json.changedStr);
@@ -225,9 +240,12 @@
                 type : data.Price2Use()
             };
             post[csrf_1[0]] = csrf_1[1];
-
+			
+			
+			
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
-                if(json.changed) data.InfoField(json.changedStr);
+                $('a.cart'+data.ID()+' span').html('В корзине '+post['quantity']+' шт.');
+				if(json.changed) data.InfoField(json.changedStr);
                 else data.InfoField('');
                 data.Quantity(json.quantity);
 				update_header_cart();

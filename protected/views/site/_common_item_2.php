@@ -267,7 +267,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 <?php if ($item['entity'] != Entity::PERIODIC) : ?>
                     
 					<div class="minus_plus">
-					 <a href="javascript:;" onclick="minus_plus($(this), 'minus')" style="margin-right: 9px;"><img src="/new_img/cart_minus.png"></a> <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 36px;" value="1" onfocus="change_input_plus_minus($(this))" onkeydown="change_input_plus_minus($(this))" onblur="change_input_plus_minus($(this))"> <a href="javascript:;" style="margin-left: 9px;" onclick="minus_plus($(this), 'plus')"><img src="/new_img/cart_plus.png"></a>
+					 <a href="javascript:;" onclick="minus_plus($(this), 'minus')" style="margin-right: 9px;"><?php /*<img src="/new_img/cart_minus.png">*/ ?></a> <input type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 36px;" value="1" onfocus="change_input_plus_minus($(this))" onkeydown="change_input_plus_minus($(this))" onblur="change_input_plus_minus($(this))"> <a href="javascript:;" style="margin-left: 9px;" onclick="minus_plus($(this), 'plus')"><?php /*<img src="/new_img/cart_plus.png">*/ ?></a>
 					 </div>
                 <?php endif; ?>
 				

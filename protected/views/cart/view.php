@@ -44,7 +44,7 @@ $ctrl = Yii::app()->getController()->id;
                     <?php if (Yii::app()->user->isGuest) { ?>
 
                         <a href="<?= Yii::app()->createUrl('/cart/variants')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить</span>
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                         </a>
 
                         <?php
@@ -52,7 +52,7 @@ $ctrl = Yii::app()->getController()->id;
                     } else {
                         ?>
                         <a href="<?= Yii::app()->createUrl('/cart/doorder')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить</span>
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                         </a>
                         <?
                     }
@@ -69,7 +69,7 @@ $ctrl = Yii::app()->getController()->id;
                         <tr>
                             <th valign="middle"
                                 class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
-								<th valign="middle" align="center" class="cart1header1">Наличие<?//=$ui->item('SHIPPING'); ?></th>
+								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('TITLE_TABLE_AVAILABILITY')?><?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
@@ -126,11 +126,11 @@ $ctrl = Yii::app()->getController()->id;
 <!--                            <td align="center" class="center cart1contents1">-->
 <!--                                <span data-bind="text: VAT"></span>%-->
 <!--                            </td>-->
-                            <td valign="middle" align="center" class="cart1contents1" nowrap>
-                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
+                            <td valign="middle" align="center" class="cart1contents1 minus_plus" nowrap>
+                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"/> */?></a>
                                 <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
                                 <div style="width:12px;float:left;" data-bind="visible: noUseChangeQuantity() > 0">&nbsp;</div>
-                                <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"/></a>
+                                <a href="javascript:;" style="margin-left: 9px;" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_plus.png"/>*/ ?></a>
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="entity[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Entity'] ?>">
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="type[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Price2Use'] ?>">
                             </td>
@@ -197,13 +197,13 @@ $ctrl = Yii::app()->getController()->id;
 				
 				?>
 						
-                            <td style="padding-left: 0;"> <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: left; color: #ff0000; font-size: 14px;">Продолжить покупки</a></td>
+                            <td style="padding-left: 0;"> <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: left; color: #ff0000; font-size: 14px;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
                             <td colspan="7" class="order_start_box" class="cart1header2" align="right">
 
                                 <?php if (Yii::app()->user->isGuest) { ?>
 
                                     <a href="<?= Yii::app()->createUrl('/cart/variants')?>" class="order_start" style="background-color: #5bb75b;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить</span>
+                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                                     </a>
 
                                     <?php
@@ -211,7 +211,7 @@ $ctrl = Yii::app()->getController()->id;
                                 } else {
                                     ?>
                                     <a href="<?= Yii::app()->createUrl('/cart/doorder')?>" class="order_start" style="background-color: #5bb75b; " data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить</span>
+                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                                     </a>
                                     <?
                                 }
@@ -278,7 +278,7 @@ $ctrl = Yii::app()->getController()->id;
 
 		<div class="">
 			<div class="title">
-				Добавьте выгодные предложения в корзину      
+				<?=$ui->item('CARTNEW_ADD_CART_2EURO_TITLE')?>      
 				<div class="pult">
 					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
 					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>

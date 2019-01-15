@@ -13,7 +13,11 @@ class Picture
         return Yii::app()->params['PicDomain'].$ret;
     }
 
-    static function srcLoad() { return '/new_img/source.gif'; }
-    static function srcNoPhoto() { return '/pic1/nophoto.gif'; }
+    static function srcLoad() {
+        return '/new_img/flower.gif';// return '/new_img/source.gif';
+    }
+    static function srcNoPhoto() {
+        return '/pic1/nophoto.gif';
+    }
 
 }

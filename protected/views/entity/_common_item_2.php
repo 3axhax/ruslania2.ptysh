@@ -390,7 +390,11 @@ $entityKey = Entity::GetUrlKey($entity);
             <?php endif;?>
 
             <?php if ($isAvail) : ?>
-                <div class="already-in-cart" style="margin: 9px 0;">
+                
+
+                <form method="get" action="<?= Yii::app()->createUrl('cart/view') ?>" onsubmit="return false;">
+				
+					<!--<div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin: 9px 0;">
                     <?php if (isset($item['AlreadyInCart'])) : ?>
 
                         <?php if ($item['entity'] != Entity::PERIODIC) : ?>
@@ -401,13 +405,12 @@ $entityKey = Entity::GetUrlKey($entity);
 
                     <?php else : ?>&nbsp;
                     <?php endif; ?>
-                </div>
-
-                <form method="get" action="<?= Yii::app()->createUrl('cart/view') ?>" onsubmit="return false;">
+                </div>-->
+				
                     <?php if ($item['entity'] != Entity::PERIODIC) : ?>
 
                         <div class="minus_plus">
-                            <a href="javascript:;" onclick="minus_plus($(this), 'minus')" style="margin-right: 9px;"><img src="/new_img/cart_minus.png" class="grayscale"></a> <input name="quantity[<?= (int) $item['id'] ?>]" type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 36px;" value="1" onfocus="change_input_plus_minus($(this))" onkeydown="change_input_plus_minus($(this))" onblur="change_input_plus_minus($(this))"> <a href="javascript:;" style="margin-left: 9px;" onclick="minus_plus($(this), 'plus')"><img src="/new_img/cart_plus.png"></a>
+                            <a href="javascript:;" onclick="minus_plus($(this), 'minus')" style="margin-right: 9px;"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"> */?></a> <input name="quantity[<?= (int) $item['id'] ?>]" type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 36px;" value="1" onfocus="change_input_plus_minus($(this))" onkeydown="change_input_plus_minus($(this))" onblur="change_input_plus_minus($(this))"> <a href="javascript:;" style="margin-left: 9px;" onclick="minus_plus($(this), 'plus')"><?php /*<img src="/new_img/cart_plus.png"> */?></a>
                         </div>
                     <?php endif; ?>
 
@@ -420,10 +423,19 @@ $entityKey = Entity::GetUrlKey($entity);
                     ?>
                     <input type="hidden" name="entity[<?= (int) $item['id'] ?>]" value="<?= (int) $item['entity'] ?>">
 
+					<?php if (isset($item['AlreadyInCart'])) : ?>
 
-                    <a class="cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;">
+                    <a class="cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;">
+                        <span>В корзине <?=$item['AlreadyInCart']?> шт.</span>
+                    </a>
+					
+					<? else : ?>
+					<a class="cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;">
                         <span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span>
                     </a>
+					
+					<? endif; ?>
+					
 
                     <?php $style = '10px'; if ($item['entity'] == Entity::VIDEO) { $style = '0'; echo '<div style="height: 20px;"></div>'; } ?>
                     <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"

@@ -26,6 +26,10 @@
 .minus_plus {
 	margin: 10px 0;
 }
+.minus_plus a:first-child::before,
+.b-basket-list__calc a:first-child::before { content: '\f056'; color: #000; position: relative; font: normal normal normal 17px FontAwesome; top: 2px; opacity: 0.7; }
+.minus_plus a:last-child::before,
+.b-basket-list__calc a:last-child::before { content: '\f055'; color: #72c63f; position: relative; font: normal normal normal 17px FontAwesome; top: 2px; }
 
 input[type=radio], input[type=checkbox] { margin: 0; padding: 0; }
 
@@ -43,7 +47,7 @@ textarea:focus, input:focus, button:focus{
 .alert_bg {
 
     background-color: #3c3c3c;
-    padding: 9px 0 10px 0;
+    padding-bottom: 10px;
     color: #fff;
     text-align: center;
     min-width: 1262px;
@@ -61,19 +65,22 @@ a:hover {
 
 .alert_bg .container span.text {
     font-size: 13px;
-    background: url('../new_img/alert.png') left center no-repeat;
+    /*background: url('../new_img/alert.png') left center no-repeat;*/
     padding-left: 33px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.alert_bg .container span.text span:first-child {width: 0; height: 0}
+.alert_bg .container span.text span:first-child::before { content: '\f129'; color: #fff; font-size: 15px; position: relative; top: 1px; left: -24px; /*opacity: 0.8;*/}
+.alert_bg .container span.text span:first-child::after { content: '\f1db'; color: #fff; font-size: 28px; position: relative; top: 5px; left: -39px; /*opacity: 0.8;*/}
 
 .alert_bg .container span.close_alert {
-
     padding-top: 0;
     padding-bottom: 5px;
     float: right;
     cursor: pointer;
 }
+.alert_bg .container span.close_alert::before { content: '\f057'; color: #fff; font-size: 18px; position: relative; top: 10px; /*opacity: 0.8;*/}
 
 .light_gray_menu ul {
 
@@ -296,19 +303,22 @@ margin-top: -5px;
 li.valuts {
     margin-left: 18px;
 }
+div.label_valut.select span.valut::before { content: '\f111'; color: #ed1d24; position: relative; font: normal normal normal 20px FontAwesome; left: -10px; top: 2px; }
+div.label_valut.select span.valut::after { color: #fff; position: relative; font-size: 12px; }
 
-li.valuts .euro {
-
-    background: url('../new_img/euro.png') left center no-repeat;
-    padding-left: 27px;
+li.valuts .euro, li.valuts .usd, li.valuts .gbp  {
+    /*background: url('../new_img/euro.png') left center no-repeat;
+    padding-left: 27px;*/
+    padding-left: 10px;
 
 }
-
-li.valuts .usd {
+li.valuts .euro::after { content: '\20AC'; left: -50px; }
+li.valuts .usd::after { content: '\0024'; left: -48px; }
+li.valuts .gbp::after { content: '\FFE1'; left: -50px; }
+/*li.valuts .usd {
 
     background: url('../new_img/usd.png') left center no-repeat;
     padding-left: 27px;
-
 }
 
 li.valuts .gbp {
@@ -316,7 +326,7 @@ li.valuts .gbp {
     background: url('../new_img/gbp.png') left center no-repeat;
     padding-left: 27px;
 
-}
+}*/
 
 li.valuts .label_valut a { text-decoration: none; color: #676767; font-size: 13px; }
 li.valuts .label_valut span.dd { background: url('../new_img/dd.png') left center no-repeat; width: 9px; height: 10px; display: inline-block; margin-left: 10px; position: absolute; right: 10px;
@@ -400,12 +410,15 @@ margin-top: -5px;}
     border-left: 1px solid #e11c20;
 }
 
-.index_menu ul > li > a.home {
+.index_menu ul > li > a.home::after {
+    content: '\f015'; color: #fff; position: relative; font: normal normal normal 18px FontAwesome; left: 10px; top: 2px;
+}
+/*.index_menu ul > li > a.home {
 
     background: url('../new_img/home.png') right center no-repeat;
     padding-right: 27px;
 
-}
+}*/
 
 div.footer {
 
@@ -3435,10 +3448,10 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .entity_icons i.e60:before { content: '\f278'; top: 8px; left: 6px; }    /*maps*/
 .entity_icons i.e24:before { content: '\f108'; top: 9px; left: 7px; }    /*soft*/
 
-span.notes { position: relative; width: 11px; height: 11px; top: -10px; border: solid 1px; border-radius: 14px; display: inline-block; border-color: #edb421;}
-span.notes span.notes-circle { position:absolute; top: -7px; left: 4px }
-span.notes span.notes-circle:before /*{ content: '\f05a'; position: relative; color: #fff; font-size: 10px; background-color: #edb421; border-radius: 6px; padding: 0 1px 0 1px; }*/
-{ content: '\f129'; color: #edb421; font-size: 8px; font-weight: 100; }    /*notes*/
+span.notes { position: relative; }
+span.notes span.notes-circle { position:absolute; top: -9px; left: 8px }
+span.notes span.notes-circle:before { content: '\f129'; color: #edb421; font-size: 8px; font-weight: 100; }    /*notes*/
+span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size: 15px; font-weight: 100; position: relative; top:2px; left: -8px; }    /*notes*/
 .notes .notes-block{
     display:none;
     width: 120px;
@@ -3505,17 +3518,19 @@ span.notes span.notes-circle:before /*{ content: '\f05a'; position: relative; co
 .telephone2 a.icons { opacity: 0.8; position: relative; width: 20px; height: 15px; display: inline-block; border-color: #676767;}
 .telephone2 a.icons span.whatsapp { position:absolute; top: 2px; left: 5px }
 .telephone2 a.icons span.whatsapp:before { content: '\f232'; color: #676767; font-size: 17px; font-weight: bold; }
-.telephone-circle a.icons { top:3px; opacity: 0.8; position: relative; width: 15px; height: 15px; border-radius: 32px; display: inline-block; background-color: #676767;}
-.telephone-circle a.icons span.phone { position:absolute; top: 0; left: 4px }
-.telephone-circle a.icons span.phone:before { content: '\f095'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
-.telephone-circle a.icons span.location { position:absolute; top: 0; left: 5px }
-.telephone-circle a.icons span.location:before { content: '\f041'; color: #f8f8f8; font-size: 10px; font-weight: bold; }
+/*.telephone-circle a.icons { top:3px; opacity: 0.8; position: relative; width: 15px; height: 15px; border-radius: 32px; display: inline-block; background-color: #676767;}*/
+.telephone-circle a.icons span.phone { width: 15px; }
+.telephone-circle a.icons span.phone:before { content: '\f111'; color: #676767; font-size: 18px; position: relative; top: 2px}
+.telephone-circle a.icons span.phone:after { content: '\f095'; color: #f8f8f8; font-size: 10px; font-weight: bold; position: relative; top: -1px; left:-11px; }
+.telephone-circle a.icons span.location { width: 15px; }
+.telephone-circle a.icons span.location:before { content: '\f111'; color: #676767; font-size: 18px; position: relative; top: 2px}
+.telephone-circle a.icons span.location:after { content: '\f041'; color: #f8f8f8; font-size: 10px; font-weight: bold; position: relative; top:-1px; left: -10px;}
 
 .ico-circle {font-size: 13px; margin: 10px 0; min-height: 20px;}
-.ico-circle span.icons { margin-right: 10px; top:5px; opacity: 0.8; position: relative; width: 20px; height: 20px; border-radius: 32px; display: inline-block; background-color: #ed1d24;}
+.ico-circle span.icons { margin-right: 10px; top:5px; opacity: 0.8; position: relative; width: 20px; height: 20px; border-radius: 50%; display: inline-block; background-color: #ed1d24;}
 .ico-circle span.icons span.phone { position:absolute; top: 3px; left: 5px }
 .ico-circle span.icons span.phone:before { content: '\f095'; color: #fff; font-size: 12px; font-weight: bold; }
 .ico-circle span.icons span.location { position:absolute; top: 4px; left: 6px }
 .ico-circle span.icons span.location:before { content: '\f041'; color: #fff; font-size: 14px; font-weight: bold; }
 .ico-circle span.icons span.email { position:absolute; top: 2px; left: 5px }
-.ico-circle span.icons span.email:before { content: '\f003'; color: #fff; font-size: 10px; font-weight: bold; }
+.ico-circle span.icons span.email:before { content: '\f003'; color: #fff; font-size: 10px; font-weight: bold;}
