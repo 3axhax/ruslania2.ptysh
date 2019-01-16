@@ -411,7 +411,7 @@ margin-top: -5px;}
 }
 
 .index_menu ul > li > a.home::after {
-    content: '\f015'; color: #fff; position: relative; font: normal normal normal 18px FontAwesome; left: 10px; top: 2px;
+    content: '\f015'; color: #fff; position: relative; font: normal normal normal 18px/0 FontAwesome; left: 10px; top: 2px;
 }
 /*.index_menu ul > li > a.home {
 

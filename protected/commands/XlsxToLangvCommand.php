@@ -13,7 +13,7 @@ class XlsxToLangvCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		require_once dirname(dirname(__FILE__)) . '/extensions/excel/xlsx/simplexlsx.class.php';
-		$file = dirname(dirname(__FILE__)) . '/doc/langs_2019_01_09.xlsx';
+		$file = dirname(dirname(__FILE__)) . '/doc/langs_2019_01_16.xlsx';
 
 		//первая строка - заголовки ОБЯЗАТЕЛЬНО с обозначение языков
 		if ( $xlsx = SimpleXLSX::parse($file)) {
@@ -45,6 +45,9 @@ class XlsxToLangvCommand extends CConsoleCommand {
 				$fileLang = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/' . date('dmYHis') . '_uiconst.class.php';
 				file_put_contents($fileLang, '<?php // FILE: language constants, generated at ' . date('d.m.Y H:i:s') . '
 return ' . var_export($translite, true) . ';');
+				chown($fileLang, 'www-root');
+				chgrp($fileLang, 'www-root');
+				echo $lang . ' complite' . "\n";
 			}
 		} else {
 			echo SimpleXLSX::parse_error();

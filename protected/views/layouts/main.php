@@ -724,12 +724,12 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
             var $form = $('form span.info');
             if (data) {
                 //$('.comments_block').html(data);
-                $form.html('<?= $ui->item('A_NEW_REVIEW_SENT1'); ?>');
+                $form.html('<?= str_replace("'", "\'", $ui->item('A_NEW_REVIEW_SENT1')); ?>');
                 $form.delay(1).show(0);
                 $form.delay(2000).hide(0);
                 $('.review form textarea').val('');
             } else {
-                $form.html('<span style="color: #ff0000;"><?= $ui->item('A_NEW_REVIEW_SENT2'); ?></span>');
+                $form.html('<span style="color: #ff0000;"><?= str_replace("'", "\'", $ui->item('A_NEW_REVIEW_SENT2')); ?></span>');
                 $form.delay(1).show(0);
                 $form.delay(2000).hide(0);
                 $('.review form textarea').val('');
