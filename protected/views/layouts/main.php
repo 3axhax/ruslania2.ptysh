@@ -79,10 +79,10 @@ if (isset($_GET['avail'])) {
     <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
     <script src="/new_js/jquery.js" type="text/javascript"></script>
-	
-	
-	
-	
+
+
+
+
     <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
@@ -166,7 +166,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                     <!--<li style="padding-right: 0px;"><img src="/new_img/flag.png" /></li>-->
                     <li style="border: 0;padding-left: 10px;"><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'aboutus')); ?>" class=""><?= $ui->item('A_NEW_ABOUTUS'); ?></a></li>
                     <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'contact')); ?>"><?= $ui->item('YM_CONTEXT_CONTACTUS') ?></a></li>
-<?php /*
+                    <?php /*
                     <li><span class="telephone2"><a href="whatsapp://send?phone=+358503889439"><img src="/new_img/telephone2.png" alt="" /></a></span><a href="tel:+35892727070"><span class="telephone">+358 92727070</span></a></li>
 */ ?>
                     <li>
@@ -174,7 +174,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <span class="telephone-circle"><a href="tel:+35892727070" class="icons"><span class="fa phone"></span></a></span>
                         <a href="tel:+35892727070"><span>+358 92727070</span></a>
                     </li>
-<?php /*
+                    <?php /*
                     <li><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank"><span class="adrs">Bulevardi 7, FI-00120 Helsinki, Finland</span></a></li>
 */ ?>
                     <li>
@@ -212,34 +212,34 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                 <a href="<?= Yii::app()->createUrl('cart/view') ?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
 
             <? elseif ($ctrl == 'cart' AND (!in_array('doorder',$url))) : ?>
-				
-				<? 
-				
-				$url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
-				
-				$arr_cart_url = array('variants', 'noregister', 'doorder');
-				
-				if (in_array($url_ref, $arr_cart_url)) {
-					
-					$_SERVER['HTTP_REFERER'] = '/';
-					
-				}
-				
-				?>
-				
+
+                <?
+
+                $url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
+
+                $arr_cart_url = array('variants', 'noregister', 'doorder');
+
+                if (in_array($url_ref, $arr_cart_url)) {
+
+                    $_SERVER['HTTP_REFERER'] = '/';
+
+                }
+
+                ?>
+
                 <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
-			
-			<? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
-			
-			 <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
-			
+
+            <? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
+
+                <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+
             <? endif; ?>
 
             <div class="span10"<? if ($ctrl == 'cart') : echo 'style="margin-top: 40px;"'; else : echo ''; endif; ?>>
-                    <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
-					
-						<? if ($ctrl != 'cart') : ?>
-					
+                <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
+
+                    <? if ($ctrl != 'cart') : ?>
+
                         <div class="search_box">
                             <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                             <input type="text" name="q" class="search_text enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= $_GET['q'] ?>"/>
@@ -250,98 +250,98 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                                 <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
                             </div>
                         </div>
-						
-						<? endif; ?>
-						
-                        <div class="pult">
 
-                            <ul>
-                                
-								<? if ($ctrl != 'cart') : ?>
-								
-								<li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
-								
-								<? endif; ?>
-								
-								
-                                <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
-                                <li class="langs">
-                                    <div class="select_lang">
-                                        <?
-                                        $arrLangsTitle = array(
-                                            'ru' => $ui->item('A_LANG_RUSSIAN'),
-                                            'rut' => $ui->item('A_LANG_TRANSLIT'),
-                                            'fi' => $ui->item('A_LANG_FINNISH'),
-                                            'en' => $ui->item('A_LANG_ENGLISH'),
-                                            'de' => $ui->item('A_LANG_GERMAN'),
-                                            'fr' => $ui->item('A_LANG_FRENCH'),
-                                            'es' => $ui->item('A_LANG_ESPANIOL'),
-                                            'se' => $ui->item('A_LANG_SWEDISH')
-                                        );
-                                        ?>
-                                        <div class="dd_select_lang">
-                                            <div class="lable_empty" onclick="$('.dd_select_lang').toggle(); $('.label_lang.view_lang').toggleClass('act').parent().toggleClass('act')"></div>
-                                            <?php foreach ($arrLangsTitle as $k => $v): ?>
-                                                <div class="label_lang">
-                                                    <span class="lang <?= $k ?>"><a href="<?= MyUrlManager::RewriteCurrent($this, $k); ?>"><?= $v ?></a></span>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        </div>
+                    <? endif; ?>
 
-                                        <div class="label_lang view_lang" onclick="$('.dd_select_lang').toggle(); $(this).toggleClass('act'); $(this).parent().toggleClass('act')">
-                                            <span class="lang <?= Yii::app()->language; ?>"><a href="javascript:;"><?= $arrLangsTitle[Yii::app()->language]; ?></a> <span class="dd"></span></span>
-                                        </div>
+                    <div class="pult">
 
+                        <ul>
+
+                            <? if ($ctrl != 'cart') : ?>
+
+                                <li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+
+                            <? endif; ?>
+
+
+                            <input type="hidden" name="avail" id="js_avail" value="<?= $act[0] ?>" class="avail">
+                            <li class="langs">
+                                <div class="select_lang">
+                                    <?
+                                    $arrLangsTitle = array(
+                                        'ru' => $ui->item('A_LANG_RUSSIAN'),
+                                        'rut' => $ui->item('A_LANG_TRANSLIT'),
+                                        'fi' => $ui->item('A_LANG_FINNISH'),
+                                        'en' => $ui->item('A_LANG_ENGLISH'),
+                                        'de' => $ui->item('A_LANG_GERMAN'),
+                                        'fr' => $ui->item('A_LANG_FRENCH'),
+                                        'es' => $ui->item('A_LANG_ESPANIOL'),
+                                        'se' => $ui->item('A_LANG_SWEDISH')
+                                    );
+                                    ?>
+                                    <div class="dd_select_lang">
+                                        <div class="lable_empty" onclick="$('.dd_select_lang').toggle(); $('.label_lang.view_lang').toggleClass('act').parent().toggleClass('act')"></div>
+                                        <?php foreach ($arrLangsTitle as $k => $v): ?>
+                                            <div class="label_lang">
+                                                <span class="lang <?= $k ?>"><a href="<?= MyUrlManager::RewriteCurrent($this, $k); ?>"><?= $v ?></a></span>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
-                                </li>
-                                <li class="valuts">
 
-                                    <div class="select_valut">
-                                        <? $arrVCalut = array(
+                                    <div class="label_lang view_lang" onclick="$('.dd_select_lang').toggle(); $(this).toggleClass('act'); $(this).parent().toggleClass('act')">
+                                        <span class="lang <?= Yii::app()->language; ?>"><a href="javascript:;"><?= $arrLangsTitle[Yii::app()->language]; ?></a> <span class="dd"></span></span>
+                                    </div>
 
-                                            '1' => array('euro','Euro'),
-                                            '2' => array('usd','USD'),
-                                            '3' => array('gbp','GBP'),
+                                </div>
+                            </li>
+                            <li class="valuts">
 
-                                        ); ?>
-                                        <div class="dd_select_valut">
-                                            <div class="lable_empty" onclick="$('.dd_select_valut').toggle(); $('.label_valut.select').toggleClass('act')"></div>
-                                            <div class="label_valut">
-                                                <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::EUR); ?>"><span style="width: 17px; display: inline-block; text-align: center">&euro;</span><span class="valut" style="margin-left: 10px;">Euro</span></a>
-                                            </div>
-                                            <div class="label_valut">
-                                                <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::USD); ?>"><span style="width: 17px; display: inline-block; text-align: center">$</span><span class="valut" style="margin-left: 10px;">USD</span></a>
-                                            </div>
-                                            <div class="label_valut">
-                                                <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::GBP); ?>"><span style="width: 17px; display: inline-block; text-align: center">£</span><span class="valut" style="margin-left: 10px;">GBP</span></a>
-                                            </div>
+                                <div class="select_valut">
+                                    <? $arrVCalut = array(
+
+                                        '1' => array('euro','Euro'),
+                                        '2' => array('usd','USD'),
+                                        '3' => array('gbp','GBP'),
+
+                                    ); ?>
+                                    <div class="dd_select_valut">
+                                        <div class="lable_empty" onclick="$('.dd_select_valut').toggle(); $('.label_valut.select').toggleClass('act')"></div>
+                                        <div class="label_valut">
+                                            <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::EUR); ?>"><span style="width: 17px; display: inline-block; text-align: center">&euro;</span><span class="valut" style="margin-left: 10px;">Euro</span></a>
                                         </div>
-                                        <div class="label_valut select" onclick="$('.dd_select_valut').toggle();
+                                        <div class="label_valut">
+                                            <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::USD); ?>"><span style="width: 17px; display: inline-block; text-align: center">$</span><span class="valut" style="margin-left: 10px;">USD</span></a>
+                                        </div>
+                                        <div class="label_valut">
+                                            <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::GBP); ?>"><span style="width: 17px; display: inline-block; text-align: center">£</span><span class="valut" style="margin-left: 10px;">GBP</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="label_valut select" onclick="$('.dd_select_valut').toggle();
                                                     $(this).toggleClass('act')">
-                                            <a href="javascript:;"><span class="valut <?= $arrVCalut[(string) Yii::app()->currency][0] ?>"><?= $arrVCalut[(string) Yii::app()->currency][1] ?><span class="dd"></span></span></a>
-                                        </div>
+                                        <a href="javascript:;"><span class="valut <?= $arrVCalut[(string) Yii::app()->currency][0] ?>"><?= $arrVCalut[(string) Yii::app()->currency][1] ?><span class="dd"></span></span></a>
                                     </div>
+                                </div>
 
-                                </li>
-                                <!--<li class="keyboard">
+                            </li>
+                            <!--<li class="keyboard">
                                         <div class="trigger_keyboard" style="margin-left: 30px; cursor: pointer">
                                             <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
                                             <span class="keyboard_on" hidden><?/*= $ui->item('A_NEW_KEYBOARD_ON')*/?></span>
                                             <span class="keyboard_off"><?/*= $ui->item('A_NEW_KEYBOARD_OFF')*/?></span>
                                         </div>
                                     </li>-->
-                            </ul>
+                        </ul>
 
-                        </div>
-                    
-						<? //endif; ?>
-					
-					</form>
-                </div>
-                
-			 <? if ($ctrl != 'cart') : ?>	
-				
-				<div class="span1 cart">
+                    </div>
+
+                    <? //endif; ?>
+
+                </form>
+            </div>
+
+            <? if ($ctrl != 'cart') : ?>
+
+                <div class="span1 cart">
 
 
                     <div class="span1 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart">
@@ -406,7 +406,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <div class="ico-circle"><span class="icons"><span class="fa location"></span></span><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="ico-circle"><span class="icons"><span class="fa phone"></span></span><a href="tel:+35892727070">+358 9 2727070</a></div>
                         <div class="ico-circle"><span class="icons"><span class="fa email"></span></span>generalsupports@ruslania.com</div>
-<?php /*
+                        <?php /*
                         <div class="maps_ico"><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="phone_ico"><a href="tel:+35892727070">+358 9 2727070</a></div>
                         <div class="mail_ico">generalsupports@ruslania.com</div>
@@ -417,7 +417,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <a href="https://vk.com/ruslaniabooks" class="icons"><span class="fa vk"></a>
                         <a href="https://www.facebook.com/RuslaniaBooks/" class="icons"><span class="fa facebook"></span></a>
                         <a href="https://www.twitter.com/RuslaniaKnigi/" class="icons"><span class="fa twitter"></span></a>
-<?php /*
+                        <?php /*
                         <a href="https://vk.com/ruslaniabooks"><img src="/new_img/vk.png" alt="" /></a>
                         <a href="https://www.facebook.com/RuslaniaBooks/"><img src="/new_img/fb.png" alt="" /></a>
                         <a href="https://twitter.com/RuslaniaKnigi"><img src="/new_img/tw.png" alt="" /></a>
@@ -544,8 +544,8 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                 },
                 hideOnSelect: false,
                 dynamicData: {avail: function () {
-                    return $('#js_avail').val();
-                }},
+                        return $('#js_avail').val();
+                    }},
                 formatItem: function (data, $item, q) {
                     var ret = '';
                     ret += data;
@@ -554,7 +554,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             });
         });
-<?php if ($ctrl != 'cart'): ?>
+        <?php if ($ctrl != 'cart'): ?>
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
             url: '<?= Yii::app()->createUrl('cart/loadheader') ?>',
@@ -562,7 +562,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
             data: csrf[0] + '=' + csrf[1],
             success: function (r) { $('.b-basket-list').html(r); }
         });
-<?php endif; ?>
+        <?php endif; ?>
     });
 
     function add2Cart(action, eid, iid, qty, type, $el) {
@@ -593,13 +593,13 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
 
         var post =
-        {
-            entity: eid,
-            id: iid,
-            quantity: qty,
-            type: type,
-            mark : post_mark
-        };
+            {
+                entity: eid,
+                id: iid,
+                quantity: qty,
+                type: type,
+                mark : post_mark
+            };
         post[csrf[0]] = csrf[1];
         post['hidecount'] = $el.data('hidecount');
 
@@ -612,6 +612,13 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
         $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
         {
+
+            if ($el.hasClass('add_cart_view')) {
+
+                $el.addClass('green_cart');
+
+            }
+
 
             var json = JSON.parse(json);
             var opentip = new Opentip($el, '<div style="padding-right: 17px;">' + json.msg +
@@ -637,7 +644,21 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             if (json.already)
             {
-                $('div.already-in-cart', $el.parent()).html(json.already);
+
+
+                if ($el.hasClass('add_cart_view')) {
+
+                    $('span', $el).html(json.already2);
+
+                } else {
+
+
+
+                    //$('div.already-in-cart', $el.parent()).html(json.already);
+
+                }
+
+
             }
 
 
