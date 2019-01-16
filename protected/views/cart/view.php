@@ -280,8 +280,8 @@ $ctrl = Yii::app()->getController()->id;
 			<div class="title">
 				<?=$ui->item('CARTNEW_ADD_CART_2EURO_TITLE')?>      
 				<div class="pult">
-					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
-					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
+					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
+					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
 				</div>
 			</div>
 		</div>

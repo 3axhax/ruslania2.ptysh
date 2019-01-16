@@ -4,8 +4,8 @@
 		<div class="title">
 			<?= Yii::app()->ui->item('A_NEW_RELATION_ITEMS') ?>
 			<div class="pult">
-				<a onclick="$('.news_box .btn_left.slick-arrow').click(); return false;" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
-				<a onclick="$('.news_box .btn_right.slick-arrow').click(); return false;" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
+				<a onclick="$('.news_box .btn_left.slick-arrow').click(); return false;" class="btn_left"><span class="fa"></span></a>
+				<a onclick="$('.news_box .btn_right.slick-arrow').click(); return false;" class="btn_right"><span class="fa"></span></a>
 			</div>
 		</div>
 	</div>

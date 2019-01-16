@@ -1,8 +1,8 @@
 <div class="slider_bg">
-	<div class="container slider_container">
+	<div class="container slider_container"><?php /*
 		<div class="btn_left"><img src="/new_img/btn_left.png" /></div>
 		<div class="btn_right"><img src="/new_img/btn_right.png" /></div>
-		<div class="overflow_box">
+		*/?><div class="overflow_box">
 			<div class="container_slides" style="width: 1170px;">
 				<ul>
 				<?

@@ -3534,3 +3534,18 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .ico-circle span.icons span.location:before { content: '\f041'; color: #fff; font-size: 14px; font-weight: bold; }
 .ico-circle span.icons span.email { position:absolute; top: 2px; left: 5px }
 .ico-circle span.icons span.email:before { content: '\f003'; color: #fff; font-size: 10px; font-weight: bold;}
+
+.slider_recomend .btn_left span.fa,
+.slider_recomend .btn_right span.fa,
+.pult a.btn_left span.fa,
+.pult a.btn_right span.fa { display: inline-block; border: solid 1px #000; width: 31px; height: 31px; position: relative; top: 9px; border-radius: 3px; opacity: 0.2;}
+.slider_recomend .btn_left span.fa::before,
+.pult a.btn_left span.fa::before { content: '\f104'; color: #000; position: absolute; left: 10px; top: 15px; font-size: 23px; line-height: 0; }
+.slider_recomend .btn_right span.fa::before,
+.pult a.btn_right span.fa::before { content: '\f105'; color: #000; position: absolute; left: 13px; top: 15px; font-size: 23px; line-height: 0; }
+
+.slider_bg .slider_container .btn_left span.fa, .slider_bg .slider_container .btn_right span.fa {height: 35px;}
+.slider_bg .slider_container .btn_left span.fa::before,
+.slider_bg .slider_container .btn_right span.fa::before {content: '\f0c8'; color: #fff; position: relative; font-size: 41px; line-height: 0; top: 17px;}
+.slider_bg .slider_container .btn_left span.fa::after { content: '\f104'; color: #000; position: absolute; left: 13px; top: 17px; font-size: 23px; line-height: 0; opacity: 0.3; }
+.slider_bg .slider_container .btn_right span.fa::after { content: '\f105'; color: #000; position: absolute; left: 15px; top: 17px; font-size: 23px; line-height: 0; opacity: 0.3; }

@@ -1,9 +1,9 @@
 <?php /*Created by Кирилл (05.07.2018 19:21)*/ ?>
 <div class="slider_bg" style="background-image: none; background-color: #ccc; margin-top: 35px;">
-	<div class="container slider_container">
-		<div class="btn_left"><img src="/new_img/btn_left.png" /></div>
-		<div class="btn_right"><img src="/new_img/btn_right.png" /></div>
-		<div class="overflow_box">
+	<div class="container slider_container"><?php /*
+		<div class="btn_left"><span class="fa"></span></div>
+		<div class="btn_right"><span class="fa"></span></div>
+		*/ ?><div class="overflow_box">
 			<div class="container_slides" style="width: 1170px;">
 				<ul>
 <?php foreach ($items as $item):

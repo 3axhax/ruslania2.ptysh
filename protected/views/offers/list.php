@@ -98,8 +98,8 @@
 				slidesToShow: 5,
 				slidesToScroll: 5,
 				speed: 800,
-				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_left_news.png\"></div>",
-				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><img src=\"/new_img/btn_right_news.png\"></div>"
+				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>",
+				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>"
 			}).on('lazyLoadError', function(event, slick, image, imageSource){
 				image.attr('src', '<?= Picture::srcNoPhoto() ?>');
 			});
