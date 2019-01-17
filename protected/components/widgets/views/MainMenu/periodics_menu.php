@@ -1,7 +1,6 @@
 <?php /*Created by Кирилл (02.10.2018 23:30)*/ ?>
-<div class="click_arrow"></div>
 <a class="dd"  href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item("A_GOTOPEREODICALS"); ?></a>
-
+<div class="click_arrow"></div>
 <div class="dd_box_bg list_subcategs" style="left: -280px;">
 
     <div class="span10 mainmenu-periodics">

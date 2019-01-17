@@ -259,7 +259,11 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                             <? if ($ctrl != 'cart') : ?>
 
-                                <li class="sm"><a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more"> <?= $ui->item('Advanced search') ?></a></li>
+                                <li class="sm">
+                                    <a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more">
+                                        <span class="fa fa-rotate-90"></span>
+                                        <?= $ui->item('Advanced search') ?>
+                                    </a></li>
 
                             <? endif; ?>
 
@@ -289,7 +293,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                                     </div>
 
                                     <div class="label_lang view_lang" onclick="$('.dd_select_lang').toggle(); $(this).toggleClass('act'); $(this).parent().toggleClass('act')">
-                                        <span class="lang <?= Yii::app()->language; ?>"><a href="javascript:;"><?= $arrLangsTitle[Yii::app()->language]; ?></a> <span class="dd"></span></span>
+                                        <span class="lang <?= Yii::app()->language; ?>"><a href="javascript:;"><?= $arrLangsTitle[Yii::app()->language]; ?></a> <span class="fa fa-angle-down"></span></span>
                                     </div>
 
                                 </div>
@@ -316,9 +320,9 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                                             <a href="<?= MyUrlManager::RewriteCurrency($this, Currency::GBP); ?>"><span style="width: 17px; display: inline-block; text-align: center">£</span><span class="valut" style="margin-left: 10px;">GBP</span></a>
                                         </div>
                                     </div>
-                                    <div class="label_valut select" onclick="$('.dd_select_valut').toggle();
+                                    <div style="padding-top: 10px;" class="label_valut select" onclick="$('.dd_select_valut').toggle();
                                                     $(this).toggleClass('act')">
-                                        <a href="javascript:;"><span class="valut <?= $arrVCalut[(string) Yii::app()->currency][0] ?>"><?= $arrVCalut[(string) Yii::app()->currency][1] ?><span class="dd"></span></span></a>
+                                        <a href="javascript:;"><span class="valut <?= $arrVCalut[(string) Yii::app()->currency][0] ?>"><?= $arrVCalut[(string) Yii::app()->currency][1] ?><span class="fa fa-angle-down"></span></span></a>
                                     </div>
                                 </div>
 

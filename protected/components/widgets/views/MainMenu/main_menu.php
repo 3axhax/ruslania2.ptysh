@@ -19,8 +19,9 @@ $ui = Yii::app()->ui;
 			<li class="dd_box"><?php $widget->viewPeriodics(); ?></li>
 
 			<!--Ещё-->
-			<li class="dd_box more_menu"><div class="click_arrow"></div>
+			<li class="dd_box more_menu">
 				<a href="javascript:;" class="dd"><?= $ui->item('A_NEW_MORE'); ?></a>
+				<div class="click_arrow"></div>
 				<div class="dd_box_bg dd_box_horizontal">
 
 					<div class="tabs">

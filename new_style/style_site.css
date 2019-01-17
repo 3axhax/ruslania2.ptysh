@@ -231,10 +231,13 @@ a:hover {
     text-decoration: none;
     display: block;
     font-size: 13px;
+    /*
     background: url('../new_img/search_more.png') left center no-repeat;
     padding-left: 32px;
-
+    */
 }
+.header_logo_search_cart .pult ul a.search_more span.fa {margin-right: 7px; }
+.header_logo_search_cart .pult ul a.search_more span.fa::before {content: '\f1de'; color: #000; font-size: 23px; line-height: 0; opacity: 0.3;}
 
 .header_logo_search_cart .pult ul li {
     float: left;
@@ -312,9 +315,9 @@ li.valuts .euro, li.valuts .usd, li.valuts .gbp  {
     padding-left: 10px;
 
 }
-li.valuts .euro::after { content: '\20AC'; left: -50px; }
-li.valuts .usd::after { content: '\0024'; left: -48px; }
-li.valuts .gbp::after { content: '\FFE1'; left: -50px; }
+li.valuts .euro::after { content: '\20AC'; left: 4px; top: -22px; }
+li.valuts .usd::after { content: '\0024'; left: 5px; top: -22px; }
+li.valuts .gbp::after { content: '\FFE1'; left: 3px; top: -22px; }
 /*li.valuts .usd {
 
     background: url('../new_img/usd.png') left center no-repeat;
@@ -392,12 +395,15 @@ margin-top: -5px;}
 
 .index_menu ul > li a.dd {
 
-	background: url(../new_img/dd_white.png) right center no-repeat;
+	/*background: url(../new_img/dd_white.png) right center no-repeat;*/
     padding-right: 15px;
     margin-right: 15px;
 
 }
-
+.index_menu ul > li a.dd::before,
+li.dd_box div.tabs ul li a.dd::before
+{ font-family: 'FontAwesome'; float: right; content: '\f107'; position: relative; font-size: 16px; }
+.index_menu ul > li a.dd::before {color: #fff; opacity: 0.8; left: 16px; }
 .index_menu ul > li.yellow_item {
 
     background-color: #edb421;
@@ -653,8 +659,9 @@ li.dd_box div.tabs ul li a {
 	color: #58626e;
 }
 li.dd_box div.tabs ul li a.dd {
-    background: url(../new_img/dd.png) right center no-repeat;
+    /*background: url(../new_img/dd.png) right center no-repeat;*/
 }
+li.dd_box div.tabs ul li a.dd::before {color: #000; opacity: 0.2; left: 12px; }
 
 
 .index_menu div.tabs ul li ul li:first-child a {
@@ -667,7 +674,7 @@ li.dd_box div.tabs ul li a.dd {
 
 .index_menu div.tabs ul li a:hover {
     
-    background-color: #dee5ec;   
+    /*background-color: #dee5ec;   */
 }
 
 li.dd_box .tabs { padding-bottom: 10px; border-bottom: 1px solid #e5e5e5; }
@@ -810,7 +817,7 @@ li.dd_box ul li:nth-child(6n) {
 
 .content_books .span2 ul li a.open_subcat {
     margin: 0;
-    background: url('/new_img/plus.png') right center no-repeat;
+    /*background: url('/new_img/plus.png') right center no-repeat;*/
     display: inline-block;
     width: 10px;
     height: 10px;
@@ -820,12 +827,13 @@ li.dd_box ul li:nth-child(6n) {
     top: 50%;
     margin-top: -5px;
     right: 0;
-
 }
+.content_books .span2 ul li a.open_subcat::before {font-family: FontAwesome; content: '\f067'; color: #758495;}
+.content_books .span2 ul li a.open_subcat.open::before {font-family: FontAwesome; content: '\f068'; color: #758495;}
 
 .content_books .span2 ul li a.open_subcat.open {
 
-    background: url('/new_img/minus.png') right center no-repeat;
+    /*background: url('/new_img/minus.png') right center no-repeat;*/
 
 }
 
@@ -3549,3 +3557,5 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .slider_bg .slider_container .btn_right span.fa::before {content: '\f0c8'; color: #fff; position: relative; font-size: 41px; line-height: 0; top: 17px;}
 .slider_bg .slider_container .btn_left span.fa::after { content: '\f104'; color: #000; position: absolute; left: 13px; top: 17px; font-size: 23px; line-height: 0; opacity: 0.3; }
 .slider_bg .slider_container .btn_right span.fa::after { content: '\f105'; color: #000; position: absolute; left: 15px; top: 17px; font-size: 23px; line-height: 0; opacity: 0.3; }
+
+.fa-angle-down { opacity: 0.2; margin-left: 8px; font-size: 15px; }
