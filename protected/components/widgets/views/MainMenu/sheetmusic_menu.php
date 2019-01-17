@@ -1,5 +1,11 @@
-<?php /*Created by Кирилл (02.10.2018 23:15)*/ ?>
-<a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC))); ?>"><?= (Yii::app()->getLanguage() == 'fr')?'Partitions':Yii::app()->ui->item("A_GOTOMUSICSHEETS"); ?></a>
+<?php /*Created by Кирилл (02.10.2018 23:15)*/
+$name = Yii::app()->ui->item("A_GOTOMUSICSHEETS");
+switch (Yii::app()->getLanguage()) {
+	case 'fr': $name = 'Partitions'; break;
+	case 'en': $name = 'Sheet music'; break;
+}
+?>
+<a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC))); ?>"><?= $name ?></a>
 <div class="click_arrow"></div>
 <div class="dd_box_bg list_subcategs" style="left: -80px;">
 	<div class="span10">

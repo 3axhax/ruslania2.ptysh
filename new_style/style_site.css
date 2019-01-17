@@ -3515,13 +3515,13 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .header_logo_search_cart .span1.cart { cursor: pointer; }
 .header_logo_search_cart .span1.cart .b-basket-list { cursor: default; }
 
-.social_icons a.icons { opacity: 0.8; top: 14px; position: relative; width: 31px; height: 31px; border: solid 2px; border-radius: 32px; display: inline-block; border-color: #676767;}
+.social_icons a.icons { opacity: 0.8; top: 14px; position: relative; width: 31px; height: 31px; border: solid 2px; border-radius: 32px; display: inline-block; border-color: #cecece;}
 .social_icons a.icons span.facebook { position:absolute; top: 6px; left: 9px }
-.social_icons a.icons span.facebook:before { content: '\f09a'; color: #676767; font-size: 20px; font-weight: bold; }
+.social_icons a.icons span.facebook:before { content: '\f09a'; color: #cecece; font-size: 20px; font-weight: bold; }
 .social_icons a.icons span.twitter { position:absolute; top: 6px; left: 7px }
-.social_icons a.icons span.twitter:before { content: '\f099'; color: #676767; font-size: 20px; font-weight: bold; }
+.social_icons a.icons span.twitter:before { content: '\f099'; color: #cecece; font-size: 20px; font-weight: bold; }
 .social_icons a.icons span.vk { position:absolute; top: 6px; left: 5px }
-.social_icons a.icons span.vk:before { content: '\f189'; color: #676767; font-size: 20px; font-weight: bold; }
+.social_icons a.icons span.vk:before { content: '\f189'; color: #cecece; font-size: 20px; font-weight: bold; }
 
 .telephone2 a.icons { opacity: 0.8; position: relative; width: 20px; height: 15px; display: inline-block; border-color: #676767;}
 .telephone2 a.icons span.whatsapp { position:absolute; top: 2px; left: 5px }
