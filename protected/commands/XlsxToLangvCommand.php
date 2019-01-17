@@ -25,6 +25,10 @@ class XlsxToLangvCommand extends CConsoleCommand {
 //				if ($lang == 'ru') $lang = 'rut';
 				$fileLang = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
 				$result[$lang] = require_once($fileLang);
+				if ($lang == 'ru') {
+					$fileLang = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'rut/uiconst.class.php';
+					$result['rut'] = require_once($fileLang);
+				}
 			}
 
 			foreach ($rows as $i=>$str) {
@@ -33,11 +37,10 @@ class XlsxToLangvCommand extends CConsoleCommand {
 					$v = trim($v);
 					if (!empty($v)) {
 						$lang = $langs[$langPos];
-//					if ($lang == 'ru') {
-//						$lang = 'rut';
-//						$v = ProductHelper::ToAscii($v); //TODO:: транслит переделать
-//					}
 						$result[$lang][$key] = $v;
+						if ($lang == 'ru') {
+							$result['rut'][$key] = ProductHelper::ToAscii($v, array('onlyTranslite'=>true));
+						}
 					}
 				}
 			}

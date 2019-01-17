@@ -152,9 +152,9 @@ class ProductHelper
 
     public static function FormatPrice($price, $includeCurrency = true, $currency = null)
     {
-        if (empty($price))
+        if ($price == '')
         {
-            return '<b>EMPTY PRICE '.$price.'</b>';
+            //return '<b>EMPTY PRICE '.$price.'</b>';
         }
 
         $ret = number_format($price, 2, '.', ' ');
@@ -348,17 +348,19 @@ class ProductHelper
             $str = str_replace(array_keys($char_map), $char_map, $str);
         }
 
-        // Replace non-alphanumeric characters with our delimiter
-        $str = preg_replace('/[^\p{L}\p{Nd}]+/u', $options['delimiter'], $str);
+        if (empty($options['onlyTranslite'])) {
+            // Replace non-alphanumeric characters with our delimiter
+            $str = preg_replace('/[^\p{L}\p{Nd}]+/u', $options['delimiter'], $str);
 
-        // Remove duplicate delimiters
-        $str = preg_replace('/(' . preg_quote($options['delimiter'], '/') . '){2,}/', '$1', $str);
+            // Remove duplicate delimiters
+            $str = preg_replace('/(' . preg_quote($options['delimiter'], '/') . '){2,}/', '$1', $str);
 
-        // Truncate slug to max. characters
-        $str = mb_substr($str, 0, ($options['limit'] ? $options['limit'] : mb_strlen($str, 'UTF-8')), 'UTF-8');
+            // Truncate slug to max. characters
+            $str = mb_substr($str, 0, ($options['limit'] ? $options['limit'] : mb_strlen($str, 'UTF-8')), 'UTF-8');
 
-        // Remove delimiter from ends
-        $str = trim($str, $options['delimiter']);
+            // Remove delimiter from ends
+            $str = trim($str, $options['delimiter']);
+        }
 
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
     }
