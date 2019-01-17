@@ -40,8 +40,16 @@ class BeforeSphinxCommand extends CConsoleCommand {
 					'insert ignore into all_series (entity, id, title_ru, title_en, title_fi, title_rut) '.
 					'select ' . $entity . ', id, title_ru, title_en, title_fi, title_rut '.
 					'from ' . $params['site_series_table'] . ' '.
-					'';
+				'';
 				Yii::app()->db->createCommand()->setText($sql)->execute();
+
+				$sql = ''.
+					'update all_series t '.
+					'left join ' . $params['site_table'] . ' tI on (tI.series_id = t.id) AND (tI.avail_for_order = 1) '.
+					'set is_' . $entity . ' = if(tI.id is null, 0, 1) '.
+				'';
+				Yii::app()->db->createCommand()->setText($sql)->execute();;
+
 			}
 		}
 

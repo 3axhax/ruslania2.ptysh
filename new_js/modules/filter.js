@@ -146,44 +146,7 @@
             if (fieldName in self.urls) {
                 scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
                     $f.select2();
-                    select_series_visible = $f.next("span").children("span").children("span");
-                    var dataPost = {entity: self.entity, cid: self.cid};
-                    var csrf = $('meta[name=csrf]').attr('content').split('=');
-                    dataPost[csrf[0]] = csrf[1];
-                    $.ajax({
-                        url: self.urls[fieldName],
-                        type: "POST",
-                        data: dataPost,
-                        beforeSend: function(){
-                            select_series_visible.addClass('disabled');
-                        },
-                        success: function (data) {
-                            titles = JSON.parse(data);
-                            var selectId = 0;
-                            var $option;
-                            var selectLangTitle;
-                            if (fieldName in self.filterData) selectId = self.filterData[fieldName];
-                            for (id in titles) {
-                                selectLangTitle = '';
-                                if (self.lang in titles[id]) selectLangTitle = self.lang;
-                                else if ((selectLangTitle!='en') && ('en' in titles[id])) selectLangTitle = 'en';
-                                for (titleLang in titles[id]) {
-                                    $option = $('<option value="' + id + '">' + titles[id][titleLang] + '</option>');
-                                    if (selectId == id) {
-                                        if (selectLangTitle == '') selectLangTitle = titleLang;
-                                        if (titleLang == selectLangTitle) $option.prop('selected', true);
-                                    }
-                                    $f.append($option);
-                                }
-                            }
-                            select_series_visible.removeClass('disabled');
-                            $f.on('change', function(){ self.show_result_count(); });
-                            //if (selectId > 0) self.show_result_count();
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
+                    self.fillSelectOptions(fieldName, $f);
                 });
             }
             else if ($f.hasClass('select2_periodic')) {
@@ -216,6 +179,47 @@
             $('input[name=' + inp_name + ']').val(id);
             $('input[name=' + show_inp_name + ']').val(title);
             this.show_result_count();
+        },
+
+        fillSelectOptions: function(fieldName, $f) {
+            var self = this;
+            var select_series_visible = $f.next("span").children("span").children("span");
+            var dataPost = {entity: self.entity, cid: self.cid};
+            var csrf = $('meta[name=csrf]').attr('content').split('=');
+            dataPost[csrf[0]] = csrf[1];
+            $.ajax({
+                url: self.urls[fieldName],
+                type: "POST",
+                data: dataPost,
+                beforeSend: function(){
+                    select_series_visible.addClass('disabled');
+                },
+                success: function (data) {
+                    var titles = JSON.parse(data);
+                    var selectId = 0;
+                    var $option;
+                    var selectLangTitle;
+                    if (fieldName in self.filterData) selectId = self.filterData[fieldName];
+                    for (id in titles) {
+                        selectLangTitle = '';
+                        if (self.lang in titles[id]) selectLangTitle = self.lang;
+                        else if ((selectLangTitle!='en') && ('en' in titles[id])) selectLangTitle = 'en';
+                        for (titleLang in titles[id]) {
+                            $option = $('<option value="' + id + '">' + titles[id][titleLang] + '</option>');
+                            if (selectId == id) {
+                                if (selectLangTitle == '') selectLangTitle = titleLang;
+                                if (titleLang == selectLangTitle) $option.prop('selected', true);
+                            }
+                            $f.append($option);
+                        }
+                    }
+                    select_series_visible.removeClass('disabled');
+                    $f.on('change', function(){ self.show_result_count(); });
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
         }
     }
 }());

@@ -186,7 +186,7 @@ class SearchPublishers {
 			        'group by t.id '.
 		            'limit ' . $limit.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;limit=1000;maxmatches=1000;'));
         }
         else {
 	        if (empty($filter_data['avail'])) {
@@ -204,7 +204,7 @@ class SearchPublishers {
 			        'group by t.id '.
 			        'limit ' . $limit.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;limit=1000;maxmatches=1000;'));
 	        }
 	        else {
 		        $sql = ''.
@@ -212,7 +212,7 @@ class SearchPublishers {
 			        'from all_publishers t '.
 			            'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
 	        }
         }
         $publishers = [];

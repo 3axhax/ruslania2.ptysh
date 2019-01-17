@@ -370,7 +370,7 @@ class EntityController extends MyController {
             'paginatorInfo' => $paginatorInfo,
             'items' => $items,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -420,7 +420,7 @@ class EntityController extends MyController {
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
             'items' => $items,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -471,7 +471,7 @@ class EntityController extends MyController {
             'paginatorInfo' => $paginatorInfo,
             'items' => $items,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -559,6 +559,7 @@ class EntityController extends MyController {
 
         // Получить статик-файл инфы категории
         $authorInfo = null;
+        $file = '';
         if (!empty($author) && !empty($author['description_file_' . Yii::app()->language])) {
             $file = $author['description_file_' . Yii::app()->language];
             /*$path = Yii::getPathOfAlias('webroot') . '/templates-html/' . Entity::GetUrlKey($entity) . '-authors/' . $file;
@@ -579,7 +580,7 @@ class EntityController extends MyController {
             'items' => $items,
             'presentation' => $file,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -881,7 +882,7 @@ class EntityController extends MyController {
         $this->render('list', array('entity' => $entity, 'paginatorInfo' => $paginatorInfo,
             'items' => $items, 'authorInfo' => $performerInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -934,7 +935,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -987,7 +988,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -1040,7 +1041,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -1093,7 +1094,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
         ));
     }
 
@@ -1133,7 +1134,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 	
@@ -1186,7 +1187,7 @@ class EntityController extends MyController {
         $this->render('list', array('entity' => $entity,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
-            'filters' => $filters,
+            'filters' => $filters, 'total'=>$totalItems,
             ));
     }
 	
@@ -1226,7 +1227,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -1278,7 +1279,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
             ));
     }
 
@@ -1327,7 +1328,7 @@ class EntityController extends MyController {
         $this->render('list', array('entity' => Entity::PERIODIC,
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
-            'filters' => $filters,
+            'filters' => $filters, 'total'=>$totalItems,
             ));
     }
 
@@ -1540,7 +1541,7 @@ class EntityController extends MyController {
             'items' => $items,
             'paginatorInfo' => $paginatorInfo,
             'filters' => $filters,
-            'filter_data' => $filter_data,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
         ));
     }
 

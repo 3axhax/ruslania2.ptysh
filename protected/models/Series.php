@@ -25,12 +25,11 @@ class Series extends CMyActiveRecord
         if(!array_key_exists('site_series_table', $data)) return array();
         $table = $data['site_series_table'];
 
-        $sql = 'select sql_calc_found_rows t.* from '.
-            $table.' t '.
-            'left join ' . $data['site_table'] . ' tC on (tC.series_id = t.id) '.
-            'where (tC.avail_for_order = 1) '.
-            'group by t.id '.
-            'order by t.title_'.$lang . ' '.
+        $sql = ''.
+            'select sql_calc_found_rows id, title_' . implode(', title_', $availSortLangs) . ' '.
+            'from all_series '.
+            'where (is_' . $entity . ' = 1) '.
+            'order by title_'.$lang . ' '.
             'limit ' . ($page-1)*$this->_perToPage . ', ' . $this->_perToPage . ' '.
         '';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();

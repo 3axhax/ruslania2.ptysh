@@ -485,7 +485,7 @@
 
 /* rude customization*/
 .select2-dropdown {
-  width: 212px !important;
+  width: 300px !important;
 }
 .select2-container--open .select2-dropdown--above {
   border-bottom: 1px solid #aaa;
