@@ -1284,4 +1284,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'DELIVERY_EXPRESS_OTHER_YES' => 'Delivery to your home address, PO box or delivery address as a Express letter/envelope or Post EMS parcel, with tracking number, Express service',
   '3_FOR_PRICE_2' => '3 for the price of 2',
   'A_NEW_MY_FAVORITE' => 'Interesting items',
+    'NAME_CROSSWORD'=>'Crossword',
+
 );

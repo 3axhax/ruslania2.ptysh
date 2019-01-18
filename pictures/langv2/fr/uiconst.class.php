@@ -1267,4 +1267,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'DELIVERY_EXPRESS_OTHER_YES' => 'Livraison à l\'adresse de votre domicile, à la case postale ou à l\'adresse de livraison sous forme de lettre / enveloppe express ou colis Post EMS, avec numéro de suivi, Service Express',
   '3_FOR_PRICE_2' => '3 pour le prix de 2',
   'A_NEW_MY_FAVORITE' => 'Articles intéressants',
+    'NAME_CROSSWORD'=>'Mots croisés',
+
 );

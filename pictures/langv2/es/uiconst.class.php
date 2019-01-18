@@ -1289,4 +1289,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'DELIVERY_PRIORITY_OTHER_YES' => 'Доставка на дом или на адрес доставки транспортной компанией, c отслеживанием (with tracking number), мы также отправим по электронной почте возможность перенаправить пакет на пункт выдачи, услуга GLS Flex delivery service, обслуживание Priority',
     'DELIVERY_EXPRESS_OTHER_YES' => 'Доставка на дом или на адрес доставки почтовым срочным письмом или срочный пакет EMS финской почты, c отслеживанием (with tracking number), обслуживание Express',
     '3_FOR_PRICE_2' => '3 по цене 2',
+    'NAME_CROSSWORD'=>'Crucigramas',
+
 );

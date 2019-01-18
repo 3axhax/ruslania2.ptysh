@@ -1277,4 +1277,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   'DELIVERY_EXPRESS_OTHER_YES' => 'Leverans till din hemadress, brevlåda eller leveransadress som ett Express brev / kuvert eller Post EMS paket, med spårnummer, Express service',
   '3_FOR_PRICE_2' => '3 till priset av 2',
   'A_NEW_MY_FAVORITE' => 'Intressanta artiklar',
+    'NAME_CROSSWORD'=>'Korsord',
+
 );

@@ -916,7 +916,7 @@ Please retry to pay, or contact us.',
     'FOUND_SOFT_SERIES' => 'Multimediaserie %s',
     'FOUND_SHEETMUSIC_SERIES' => 'Notenserie %s',
     'WITH_VAT' => 'Mit Mehrwertsteuer',
-    'WITHOUT_VAT' => 'Ohne Mehrwertsteuer',
+    'WITHOUT_VAT' => 'MWSt',
     'ORDER_NOT_PAID' => 'nicht bezahlt',
     'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Bitte melden Sie sich an oder registrieren Sie sich neu, um diesen Artikel in den Warenkorb zu legen',
     'ORDER_PAID' => 'bezahlt',
@@ -1292,4 +1292,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'DELIVERY_PRIORITY_OTHER_YES' => 'Доставка на дом или на адрес доставки транспортной компанией, c отслеживанием (with tracking number), мы также отправим по электронной почте возможность перенаправить пакет на пункт выдачи, услуга GLS Flex delivery service, обслуживание Priority',
     'DELIVERY_EXPRESS_OTHER_YES' => 'Доставка на дом или на адрес доставки почтовым срочным письмом или срочный пакет EMS финской почты, c отслеживанием (with tracking number), обслуживание Express',
     '3_FOR_PRICE_2' => '3 по цене 2',
+    'NAME_CROSSWORD'=>'Kreuzwörter',
+
 );

@@ -1270,4 +1270,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'DELETED_FROM_MARK' => 'Tuote poistettu kiinnostavista tuotteista',
   '3_FOR_PRICE_2' => 'Kolme kahden hinnalla',
   'A_NEW_MY_FAVORITE' => 'Kiinnostavat tuotteet',
+    'NAME_CROSSWORD'=>'Ristikot',
+
 );
