@@ -1217,7 +1217,7 @@ IBAN DE79514303006474790001 <br>
   'A_NEW_PRODUCER' => 'Производитель',
   'PERIODIC_TYPE_PLURAL_2' => 'Журналы',
   'PERIODIC_TYPE_PLURAL_1' => 'Газеты',
-  'PERIODIC_TYPE_PLURAL_3' => 'Газеты онлайн',
+  'PERIODIC_TYPE_PLURAL_3' => 'Подписка на онлайн-издания',
   'NAME_POPULAR' => 'Популярные',
   'NAME_SCIENCE' => 'Научные',
   'NAME_FORCHILDS' => 'Для детей',
