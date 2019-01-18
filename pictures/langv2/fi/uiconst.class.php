@@ -21,7 +21,7 @@ return array (
   'A_GOTOMAPS' => 'Kartat',
   'A_GOTOMUSICSHEETS' => 'Nuotit ja musiikkikirjat',
   'A_GOTOPEREODICALS' => 'Lehdet',
-  'A_GOTOPRINTED' => 'Painotuotteet ja matkamuistot',
+  'A_GOTOPRINTED' => 'Muut',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'DVD-elokuvat',
   'A_LANG_ESPANIOL' => 'Español',

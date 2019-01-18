@@ -22,7 +22,7 @@ return array (
   'A_GOTOMAPS' => 'Карты',
   'A_GOTOMUSICSHEETS' => 'Ноты',
   'A_GOTOPEREODICALS' => 'Подписка',
-  'A_GOTOPRINTED' => 'Печатная продукция и сувениры',
+  'A_GOTOPRINTED' => 'Прочее',//'Печатная продукция и сувениры',
   'A_GOTOSOFT' => 'Мультимедиа',
   'A_GOTOVIDEO' => 'Видеопродукция',
   'A_LANG_ESPANIOL' => 'Español',

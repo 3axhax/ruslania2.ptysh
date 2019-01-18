@@ -3476,7 +3476,7 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
     z-index: 1000;
 }
-.notes:hover .notes-block{display:inline-block;}
+.notes:hover .notes-block{display:inline-block; white-space: normal;}
 .notes-block:before {content: url(../new_img/tarrow.png); position: absolute; left: -6px; top: 15px;}
 /*.notes-block{text-align:left;padding:7px 10px;position:absolute;z-index:1000;top:0;left:0;border-radius:3px;display:inline-block;color:#fff;background-color:#ed1d24;}*/
 /*.notes-block:before,.notes-block:after{content:'';position:absolute;left:35px;top:23px;border:5px solid transparent;border-right: 20px solid #525252;/!*border-left: 12px solid #ed1d24;transform: rotate(31deg);*!/}*/

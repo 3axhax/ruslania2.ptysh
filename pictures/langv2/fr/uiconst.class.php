@@ -20,7 +20,7 @@ return array (
   'A_GOTOMAPS' => 'Cartes',
   'A_GOTOMUSICSHEETS' => 'Partitions & livres de musique',
   'A_GOTOPEREODICALS' => 'Magazines',
-  'A_GOTOPRINTED' => 'Imprimés et souvenirs',
+  'A_GOTOPRINTED' => 'Autres',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'Les films en DVD',
   'A_LANG_ESPANIOL' => 'Español',

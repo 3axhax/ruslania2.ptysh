@@ -19,7 +19,7 @@ return array (
   'A_GOTOMAPS' => 'Maps',
   'A_GOTOMUSICSHEETS' => 'Sheet music & music books',
   'A_GOTOPEREODICALS' => 'Periodicals',
-  'A_GOTOPRINTED' => 'Printed and souvenirs',
+  'A_GOTOPRINTED' => 'Other',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'Films on DVD',
   'A_LANG_ESPANIOL' => 'Español',

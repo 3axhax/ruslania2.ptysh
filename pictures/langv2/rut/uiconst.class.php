@@ -20,7 +20,7 @@ return array (
   'A_GOTOMAPS' => 'Karty',
   'A_GOTOMUSICSHEETS' => 'Noty i knigi o muzyke',
   'A_GOTOPEREODICALS' => 'Periodika',
-  'A_GOTOPRINTED' => 'Pechatnaja produktsija i suveniry',
+  'A_GOTOPRINTED' => 'Prochee',
   'A_GOTOSOFT' => 'Multimedija',
   'A_GOTOVIDEO' => 'Videoproduktsija',
   'A_LANG_ESPANIOL' => 'Español',

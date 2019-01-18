@@ -20,7 +20,7 @@ return array (
   'A_GOTOMAPS' => 'Kartor',
   'A_GOTOMUSICSHEETS' => 'Noter & musik böcker',
   'A_GOTOPEREODICALS' => 'Periodika',
-  'A_GOTOPRINTED' => 'Tryck och souvenirer',
+  'A_GOTOPRINTED' => 'Andra',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'DVD-filmer',
   'A_LANG_ESPANIOL' => 'Español',
