@@ -1011,7 +1011,7 @@ class SiteController extends MyController {
         return $result;
     }
 
-    public function actionAdvSearch($e = 0, $cid = 0, $title = '', $author = '', $perf = '', $publisher = '', $l = '', $only = false, $year = '', $page = 0) {
+    public function actionAdvSearch($e = 0, $cid = 0, $title = '', $author = '', $perf = '', $publisher = '', $l = '', $only = false, $year = '', $page = 0, $director = '') {
         $this->_checkUrl(array());
 
         $page = intVal($page);
@@ -1030,7 +1030,7 @@ class SiteController extends MyController {
            }
         }
 
-        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
+        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e], $director);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
     }

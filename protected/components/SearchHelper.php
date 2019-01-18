@@ -497,14 +497,14 @@ class SearchHelper
         return $result;
     }
 
-    public static function AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $lang, $year, $pp, $page, $binding_id) {
+    public static function AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $lang, $year, $pp, $page, $binding_id, $director) {
         $title = trim((string) $title);
         $e = intVal($e);
         $year = intVal($year);
         if(empty($year) || $year <=0 || $year > date('Y')) $year = '';
         if (!Entity::checkEntityParam($e, 'languages')) $lang = '';
 
-        if(empty($title) && empty($author) && empty($perf) && empty($publisher) && empty($only) && empty($cid) && empty($lang)) {
+        if(empty($title) && empty($author) && empty($director) && empty($perf) && empty($publisher) && empty($only) && empty($cid) && empty($lang)) {
             return array('Items' => array(), 'Paginator' => new CPagination(0));
         }
 
@@ -570,6 +570,23 @@ class SearchHelper
             if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
 
             $join['tBA'] = 'join ' . Entity::GetEntitiesList()[$e]['actors_table'] . ' tBA on (tBA.video_id = t.id) and (tBA.person_id in (' . implode(',',$ids) . '))';
+        }
+
+        if (Entity::checkEntityParam($e, 'directors')&&!empty($director)) {
+            $filter = array('query'=>$director, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
+            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_director,1';
+            else unset($filter['filter']);
+            $sql = ''.
+                'select t.id '.
+                'from _se_authors t '.
+                (empty($only)?'join ' . Entity::GetEntitiesList()[$e]['directors_table'] . ' tBA on (tBA.person_id = t.id) ':'').
+                'where (t.query = :q) '.
+                (empty($only)?'group by t.id ':'').
+                '';
+            $ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':q'=>implode(';', $filter)));
+            if (empty($ids)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $join['tBA'] = 'join ' . Entity::GetEntitiesList()[$e]['directors_table'] . ' tBA on (tBA.video_id = t.id) and (tBA.person_id in (' . implode(',',$ids) . '))';
         }
 
         if (Entity::checkEntityParam($e, 'publisher')&&!empty($publisher)) {

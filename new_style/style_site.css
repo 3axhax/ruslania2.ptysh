@@ -1882,7 +1882,7 @@ a:focus {
 	color: rgb(67, 67, 67);
 }
 
-a.order_start {
+a.order_start, input.order_start {
 	display: inline-block;
 	width: 180px;
     border-radius: 4px;

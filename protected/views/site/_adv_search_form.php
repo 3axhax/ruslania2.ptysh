@@ -16,6 +16,7 @@
     $year = intVal(@$_GET['year']);
     if(empty($year) || $year <= 0) $year = '';
 	$binding_id = intVal(@$_GET['binding_id'.$e]);
+    $director = trim(@$_GET['director']);
     ?>
 
     <?php 
@@ -61,9 +62,13 @@
             <td><?= $ui->item('CART_COL_TITLE'); ?>:</td>
             <td><?= CHtml::textField('title', $title); ?></td>
         </tr>
-        <tr>
+        <tr data-bind="visible: Entity()==<?=Entity::BOOKS?> || Entity() == <?=Entity::MUSIC; ?> || Entity() == <?=Entity::SOFT; ?> || Entity() == <?=Entity::SHEETMUSIC; ?>">
             <td><?= $ui->item('Author'); ?>:</td>
             <td><?= CHtml::textField('author', $author); ?></td>
+        </tr>
+        <tr data-bind="visible: Entity()==<?=Entity::VIDEO?>">
+            <td><?= $ui->item('Director'); ?>:</td>
+            <td><?= CHtml::textField('director', $director); ?></td>
         </tr>
         <tr data-bind="visible: Entity()==<?=Entity::AUDIO?> || Entity() == <?=Entity::MUSIC; ?>">
             <td><?= $ui->item('Performer'); ?>:</td>
@@ -90,7 +95,7 @@
         </tr>
         <tr>
             <td><?= $ui->item('SEARCH_IN_STOCK'); ?>:</td>
-            <td class="red_checkbox">
+            <td class="red_checkbox" onclick="check_search($(this));">
                 <span class="checkbox">
                     <span class="check<?= $only?' active':'' ?>"></span>
                 </span>
@@ -100,7 +105,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" class="sort" value="<?= $ui->item('BTN_CATALOG_SEARCH_SUBMIT'); ?>"/></td>
+            <td><input type="submit" class="sort order_start" value="<?= $ui->item('BTN_CATALOG_SEARCH_SUBMIT'); ?>"/></td>
         </tr>
     </table>
     <?= CHtml::endForm(); ?>
