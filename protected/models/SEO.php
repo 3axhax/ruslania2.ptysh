@@ -941,5 +941,86 @@ class SEO extends CActiveRecord
 
     }
 
+    function seo_change_meta_printed_category($entity, $total, $catTitle, $cid, $catInfo = '') {
+
+        switch (Yii::app()->language) {
+            case 'ru' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - купить русскую продукцию в интернет-магазине Руслания';
+                    $this->pageDescription = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - каталог русской продукции в интернет-магазине Руслания с доставкой по всему миру.';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - купить '.mb_strtolower($catTitle).' в интернет-магазине Руслания';
+                    $this->pageDescription = $catTitle . ' - '.$total.' товаров в русском магазине Rusliania.com.';
+                }
+                break;
+            case 'en' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - buy Russian '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online at Ruslania.com';
+                    $this->pageDescription = 'Buy russian ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' with worldwide delivery at Ruslania.com.';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - buy russian '.mb_strtolower($catTitle).' online at Ruslania.com';
+                    $this->pageDescription = $catTitle . ' - more than '.$total.' available online at Ruslania.com with worldwide delivery.';
+                }
+                break;
+            case 'fi' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - osta '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' netistä Ruslania.comista';
+                    $this->pageDescription = 'osta venäläiset ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' suomalaisesta nettikaupasta Ruslania.com: toimitus joka puolelle maailmaa!';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - osta '.mb_strtolower($catTitle).' netistä Ruslania.com-nettikaupasta';
+                    $this->pageDescription = $catTitle . ' - yli '.$total.' tuotetta tässä kategoriassa Ruslania.com-nettikaupassa. Olemme Suomessa.';
+                }
+                break;
+
+            case 'se' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - köp ryska '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online på webshop Ruslania.com';
+                    $this->pageDescription = 'Köp ryska ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' online med leverans över hela världen på webshop Ruslania.com';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - köp ryska '.mb_strtolower($catTitle).' i nätet på webshop Ruslania.com';
+                    $this->pageDescription = $catTitle . ' - mer än '.$total.' i kategorin med leverans över hela världen på webshop Ruslania.com.';
+                }
+                break;
+            case 'de' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - Kaufen Sie russische '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online auf Ruslania.com';
+                    $this->pageDescription = 'Kaufen Sie russische ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' online mit weltweiter Lieferung auf Ruslania.com.';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - Kaufen Sie russische '.mb_strtolower($catTitle).' online auf Ruslania.com';
+                    $this->pageDescription = $catTitle . ' - mehr als '.$total.' Artikel in der Kategorie mit weltweiter Lieferung auf Ruslania.com.';
+                }
+                break;
+
+            case 'fr' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - Achetez de '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' russe avec une livraison dans le monde entier sur Ruslania.com.';
+                    $this->pageDescription = 'Achetez de ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' russe avec une livraison dans le monde entier sur Ruslania.com.';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - Achetez de '.mb_strtolower($catTitle).' russe sur magasin en ligne Ruslania.com';
+                    $this->pageDescription = $catTitle . ' - plus de '.$total.' objets dans la catégorie russe avec une livraison dans le monde entier sur Ruslania.com.';
+                }
+                break;
+
+            case 'es' :
+                if ($cid == 0) { //если начальный раздел
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - compre  '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' rusa en línea en Ruslania.com';
+                    $this->pageDescription = 'Compre ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' rusa con entrega en todo el mundo en Ruslania.com.';
+                    $this->pageKeywords = '';
+                } else {
+                    $this->pageTitle = $catTitle . ' - compre '.mb_strtolower($catTitle).' rusa en línea en tienda web Ruslania.com';
+                    $this->pageDescription = $catTitle . ' - más de '.$total.' disponible en línea en tienda web Ruslania.com con entrega en todo el mundo.';
+                }
+                break;
+
+        }
+
+    }
+
 
 }
