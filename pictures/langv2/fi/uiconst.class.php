@@ -1042,7 +1042,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'A_NEW_FILTER_ACTORS' => 'Näyttelijä',
   'A_NEW_PAGE_NEXT' => 'Seuraava',
   'A_NEW_PAGE_PREV' => 'Edellinen',
-  'A_NEW_TYPE_IZD' => 'Muoto',
+  'A_NEW_TYPE_IZD' => 'Formaatti',
   'A_NEW_COUNT_PAGE' => 'Sivumäärä',
   'A_NEW_VIEW' => 'Katso',
   'A_NEW_COSTS' => 'Hinnat',

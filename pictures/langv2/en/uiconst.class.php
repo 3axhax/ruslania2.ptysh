@@ -1056,7 +1056,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_FILTER_ACTORS' => 'Actor',
   'A_NEW_PAGE_NEXT' => 'Next',
   'A_NEW_PAGE_PREV' => 'Previous',
-  'A_NEW_TYPE_IZD' => 'Type',
+  'A_NEW_TYPE_IZD' => 'Format',
   'A_NEW_COUNT_PAGE' => 'Pages',
   'A_NEW_VIEW' => 'View',
   'A_NEW_COSTS' => 'Prices',
