@@ -50,7 +50,7 @@ return array(
 		'level_1'=>'prenumeration',
 		'level_2'=>array(
 			'categories'=>'kategorier',
-			'types'=>'typ-av-utgåva',
+			'types'=>'typ-av-utgava',
 			'gift'=>'som-gava',
 		),
 	),

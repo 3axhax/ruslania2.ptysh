@@ -13,7 +13,7 @@
 				$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
 				if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . $ui->item('PAGES_N', $page); 
 				?><?= $h1 ?></h1>
-            <ul class="left_list entity text recomends">
+            <ul class="entity text recomends">
                 <?php $i = 1;  foreach($list as $item): ?>
                     <?php $title = ProductHelper::GetTitle($item->attributes);
 					
@@ -45,7 +45,7 @@
 <a class="title_item_recomend" href="<?=Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title))); ?>"><?= CHtml::encode($title) ?></a>
 <span class="date_recomend"><?=Yii::app()->dateFormatter->format('dd MMM yyyy', $item['creation_date']); ?></span>
                         </div>
-<?=CHtml::encode(ProductHelper::GetDescription($item->attributes)); ?>
+<?= ProductHelper::GetDescription($item->attributes); ?>
 							
 							<?
 							if (count($offer[Entity::GetTitle($entity)]['items'])) {

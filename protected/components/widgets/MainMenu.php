@@ -19,7 +19,7 @@ class MainMenu extends CWidget {
 		'books'=>array(181, 16, 206, 211, 189, 65, 67, 202, 213),
 		'sheetmusic'=>array(47, 160, 249, 128, 136, 217),
 		'music'=>array(78, 74, 4, 11, 6, 17, 2, 73, 38, 21),
-		'periodics'=>array(67, 47, 19, 48, 61, 44, 9, 12, 50, 100),
+		'periodics'=>array(51, 67, 47, 19, 48, 61, 44, 9, 12, 50, 100, 108, 118, 111, 109, 103),
 		'printed'=>array(2, 3, 30, 44, 15, 8, 34, 42, 37),
 		'video'=>array(23, 8, 109, 107, 43),
 		'maps'=>array(9, 8),
@@ -334,8 +334,8 @@ class MainMenu extends CWidget {
 	}
 
 	function viewPeriodics() {
-		$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE');
-		$availCategory1 = array(1=>'NAME_POLICY', 44=>'NAME_SPORT', 9=>'NAME_HEALTH', 12=>'NAME_HISTORY', 50=>'NAME_ASTROLOGY');
+		$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE', 51=>'NAME_CROSSWORD');
+		$availCategory1 = array(108=>'NAME_POLICY', 118=>'NAME_SPORT', 111=>'NAME_HEALTH', 109=>'NAME_HISTORY', 103=>'NAME_ASTROLOGY');
 		$availCategorySale = array(100=>'MENU_SALE_PERIODICS');
 		$rows = $this->_categorys['periodics'];
 		$availCategory = array();

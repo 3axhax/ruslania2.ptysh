@@ -3,6 +3,7 @@ $name = Yii::app()->ui->item("A_GOTOMUSICSHEETS");
 switch (Yii::app()->getLanguage()) {
 	case 'fr': $name = 'Partitions'; break;
 	case 'en': $name = 'Sheet music'; break;
+//	case 'ru': $name = 'Ноты и книги о музыке'; break;
 }
 ?>
 <a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC))); ?>"><?= $name ?></a>
