@@ -22,7 +22,7 @@ return array (
   'A_GOTOPEREODICALS' => 'Periodika',
   'A_GOTOPRINTED' => 'Andra',
   'A_GOTOSOFT' => 'Multimedia',
-  'A_GOTOVIDEO' => 'DVD-filmer',
+  'A_GOTOVIDEO' => 'DVD filmer',
   'A_LANG_ESPANIOL' => 'Español',
   'A_LANG_ENGLISH' => 'English',
   'A_LANG_FINNISH' => 'Suomi',

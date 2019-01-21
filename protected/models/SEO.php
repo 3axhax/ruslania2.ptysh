@@ -776,7 +776,7 @@ class SEO extends CActiveRecord
                     $this->pageTitle = $catTitle . ' - köp ryska '.mb_strtolower($catTitle).' i nätet på webshop Ruslania.com';
                     $this->pageDescription = $catTitle . ' - mer än '.$total.' i kategorin med leverans över hela världen på webshop Ruslania.com.';
                 }
-
+                break;
             case 'de' :
                 if ($cid == 0) { //если начальный раздел
                     $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - Kaufen Sie russische '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online auf Ruslania.com';
@@ -956,7 +956,7 @@ class SEO extends CActiveRecord
                 break;
             case 'en' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - buy Russian '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online at Ruslania.com';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - buy Russian products online at Ruslania';
                     $this->pageDescription = 'Buy russian ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' with worldwide delivery at Ruslania.com.';
                     $this->pageKeywords = '';
                 } else {
@@ -966,7 +966,7 @@ class SEO extends CActiveRecord
                 break;
             case 'fi' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - osta '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' netistä Ruslania.comista';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - osta venäläisiä tuotteita Ruslania-nettikaupasta';
                     $this->pageDescription = 'osta venäläiset ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' suomalaisesta nettikaupasta Ruslania.com: toimitus joka puolelle maailmaa!';
                     $this->pageKeywords = '';
                 } else {
@@ -977,7 +977,7 @@ class SEO extends CActiveRecord
 
             case 'se' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - köp ryska '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online på webshop Ruslania.com';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - köpa ryska produkter i nätbutiken Ruslania';
                     $this->pageDescription = 'Köp ryska ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' online med leverans över hela världen på webshop Ruslania.com';
                     $this->pageKeywords = '';
                 } else {
@@ -987,7 +987,7 @@ class SEO extends CActiveRecord
                 break;
             case 'de' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - Kaufen Sie russische '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' online auf Ruslania.com';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - kaufen russische produkte im online-shop Ruslania';
                     $this->pageDescription = 'Kaufen Sie russische ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' online mit weltweiter Lieferung auf Ruslania.com.';
                     $this->pageKeywords = '';
                 } else {
@@ -998,7 +998,7 @@ class SEO extends CActiveRecord
 
             case 'fr' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - Achetez de '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' russe avec une livraison dans le monde entier sur Ruslania.com.';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - acheter des produits russes dans la boutique en ligne Ruslania';
                     $this->pageDescription = 'Achetez de ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' russe avec une livraison dans le monde entier sur Ruslania.com.';
                     $this->pageKeywords = '';
                 } else {
@@ -1009,7 +1009,7 @@ class SEO extends CActiveRecord
 
             case 'es' :
                 if ($cid == 0) { //если начальный раздел
-                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - compre  '.mb_strtolower(Entity::GetTitle(Entity::ConvertToSite($entity))).' rusa en línea en Ruslania.com';
+                    $this->pageTitle = Entity::GetTitle(Entity::ConvertToSite($entity)) . ' - compra productos rusos en la tienda online de Ruslania';
                     $this->pageDescription = 'Compre ' . Entity::GetTitle(Entity::ConvertToSite($entity)) . ' rusa con entrega en todo el mundo en Ruslania.com.';
                     $this->pageKeywords = '';
                 } else {

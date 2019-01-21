@@ -37,12 +37,12 @@
 							
 							$s = 0;
 							//var_dump($item);
-							
+							$href = Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title)));
 						?>
 					
 					
                         <div>
-<a class="title_item_recomend" href="<?=Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title))); ?>"><?= CHtml::encode($title) ?></a>
+<a class="title_item_recomend" href="<?= $href ?>"><?= CHtml::encode($title) ?></a>
 <span class="date_recomend"><?=Yii::app()->dateFormatter->format('dd MMM yyyy', $item['creation_date']); ?></span>
                         </div>
 <?= ProductHelper::GetDescription($item->attributes); ?>
@@ -70,9 +70,13 @@
 								echo '</div><div class="clearfix"></div></div>';
 							}
 							?><div style="margin-top: 15px;"></div>
-							<a title="Download Excel file" rel="nofollow" class="dprice"
-                           href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>"><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?>
-                            <i class="icon-download-alt"></i></a>
+	                    <?php /*<a href="<?= $href ?>" class="order_start" style="background-color: #5bb75b;">
+		                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Смотреть списком</span>
+	                    </a>*/?>
+							<a title="<?=htmlspecialchars($ui->item('DOWNLOAD_EXCEL_FILE')); ?>" rel="nofollow" class="download excel" href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>">
+								<span><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?></span>
+								<span class="fa"></span>
+                            </a>
 					<? if (count($list) > $i) { echo '<hr />'; } $i++;?>
 					</li>
                 <?php

@@ -69,7 +69,7 @@ return array(
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'souvenirer',
+		'level_1'=>'andra',
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'publishers'=>'tillverkare',

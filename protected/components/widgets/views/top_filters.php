@@ -332,10 +332,12 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                     elseif ($entity == Entity::PERIODIC) {
                         $row = TypeRetriever::GetType($entity, $binfo['type']);
                         $title = 'title_' . Yii::app()->language;
+                        if (empty($row[$title])) $title = 'title_en';
                     }
                     else {
                         $row = Binding::GetBinding($entity, $binfo['binding_id']);
                         $title = 'title_' . Yii::app()->language;
+                        if (empty($row[$title])) $title = 'title_en';
                     }
                     if (!$row['id'])
                         continue;

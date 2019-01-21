@@ -604,7 +604,7 @@ class SearchHelper
             $condition['publisher_id'] = '(t.publisher_id in (' . implode(',', $ids) . '))';
         }
 
-        if (empty($title)&&empty($lang)&&!empty($only)&&empty($author)&&empty($perf)&&empty($publisher)) {
+        if (!empty($only)) {
             $condition['avail_for_order'] = '(t.avail_for_order = 1)';
         }
 

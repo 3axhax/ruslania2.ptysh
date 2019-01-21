@@ -21,7 +21,7 @@ return array (
   'A_GOTOPEREODICALS' => 'Periodicals',
   'A_GOTOPRINTED' => 'Other',
   'A_GOTOSOFT' => 'Multimedia',
-  'A_GOTOVIDEO' => 'Films on DVD',
+  'A_GOTOVIDEO' => 'DVD movies',
   'A_LANG_ESPANIOL' => 'Español',
   'A_LANG_ENGLISH' => 'English',
   'A_LANG_FINNISH' => 'Suomi',

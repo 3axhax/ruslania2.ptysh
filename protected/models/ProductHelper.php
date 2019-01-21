@@ -462,7 +462,7 @@ class ProductHelper
 			$res = Yii::app()->db->createCommand($sql)->queryAll();
 			
 			foreach ($res as $row) {
-				$rows[] = array('ID'=>$row['id'], 'Name'=>$row['title_'.Yii::app()->language]);
+				$rows[] = array('ID'=>$row['id'], 'Name'=>empty($row['title_'.Yii::app()->language])?$row['title_en']:$row['title_'.Yii::app()->language]);
 			}
 			
 		}

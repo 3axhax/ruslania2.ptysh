@@ -22,7 +22,7 @@ return array (
   'A_GOTOPEREODICALS' => 'Magazines',
   'A_GOTOPRINTED' => 'Autres',
   'A_GOTOSOFT' => 'Multimedia',
-  'A_GOTOVIDEO' => 'Les films en DVD',
+  'A_GOTOVIDEO' => 'Films en DVD',
   'A_LANG_ESPANIOL' => 'Español',
   'A_LANG_ENGLISH' => 'English',
   'A_LANG_FINNISH' => 'Suomi',
