@@ -209,7 +209,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             if (($ctrl == 'cart' AND (!in_array('orderPay',$url))) AND count($url) > 2) : ?>
 
-                <a href="<?= Yii::app()->createUrl('cart/view') ?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+                <a href="<?= Yii::app()->createUrl('cart/view') ?>" style="float: right; margin-top: 50px;"><?=$ui->item('CARTNEW_BACK_TO_CART')?></a>
 
             <? elseif ($ctrl == 'cart' AND (!in_array('doorder',$url))) : ?>
 
@@ -227,11 +227,11 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                 ?>
 
-                <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: right; margin-top: 50px; color: #ff0000;">Продолжить покупки</a>
+                <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: right; margin-top: 50px; color: #ff0000;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
 
             <? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
 
-                <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;">Вернуться в корзину</a>
+                <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;"><?=$ui->item('CARTNEW_BACK_TO_CART')?></a>
 
             <? endif; ?>
 
@@ -298,7 +298,10 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                                 </div>
                             </li>
-                            <li class="valuts">
+                           
+							
+
+						   <li class="valuts">
 
                                 <div class="select_valut">
                                     <? $arrVCalut = array(
