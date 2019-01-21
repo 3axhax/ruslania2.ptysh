@@ -69,7 +69,7 @@ $ctrl = Yii::app()->getController()->id;
                         <tr>
                             <th valign="middle"
                                 class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
-								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('TITLE_TABLE_AVAILABILITY')?><?//=$ui->item('SHIPPING'); ?></th>
+								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('CARTNEW_TITLE_TABLE_AVAILABILITY')?><?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
