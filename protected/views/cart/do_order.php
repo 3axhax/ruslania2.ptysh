@@ -1,7 +1,10 @@
 <hr />
 
 <style>
-    label.seld {
+    
+	span.itogo_cost { font-size: 16px; }
+	
+	div.seld {
         padding: 1.8rem 2rem 2.2rem;
         border: 1px solid #ccc;
         margin-top: 10px;
@@ -9,6 +12,24 @@
         position: relative;
         width: 212px;
         height: 40px;
+    }
+	
+	div.seld .red_checkbox {
+        position: absolute;
+        right: 5px;
+        top: 20px;
+        
+    }
+	
+	label.seld {
+        padding: 1.8rem 2rem 2.2rem;
+        border: 1px solid #ccc;
+        margin-top: 10px;
+        border-radius: 2px;
+        position: relative;
+        padding-right: 55px;
+		width: 188px;
+        height: 80px;
     }
     
     label.seld .red_checkbox {
@@ -51,6 +72,8 @@
         top: 20px;
     }
     
+	
+	
     .cartorder .p2, .cartorder .p1, .cartorder .p3 { font-size: 22px; }
     
     .cartorder .p1 { margin:0 0 15px 0;}
@@ -94,7 +117,7 @@
     }
     
     .cart tbody tr td .minitext { color: #81807C; }
-    .cart tbody tr td span.a { color: #005580; }
+    .cart tbody tr td span.a {  }
     
     .cart_box {
         overflow: auto;
@@ -182,17 +205,7 @@
         background-color: #eaeaea;
     }
     
-    .seld1.act_city {
-        border: none !important;
-        width: auto !important;
-    }    
-
-    label.seld1.act_city .red_checkbox {
-
-        right: -3px !important;
-        top: 28px !important;
-
-    }
+    
     
 </style>
 <style>
@@ -352,11 +365,11 @@
 
         if (cont.prop('checked')) {
 
-            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').hide();
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span').hide();
 
         } else {
 
-            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span, .contact_phone_lbl span').show();
+            $('.country_lbl span, .city_lbl span, .postindex_lbl span, .streetaddress_lbl span').show();
 
         }
 
@@ -376,28 +389,28 @@
 
 
 
-        $('.texterror', $('#Address_receiver_last_name', cont).parent()).html('Заполните это поле');
+        $('.texterror', $('#Address_receiver_last_name', cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
         
-        if (!$('#Address_receiver_last_name',cont).val()) { $('#Address_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_last_name',cont).parent()).html('Заполните это поле'); } else {  $('#Address_receiver_last_name',cont).removeClass('error'); $('.texterror', $('#Address_receiver_last_name',cont).parent()).html(''); }
+        if (!$('#Address_receiver_last_name',cont).val()) { $('#Address_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_last_name',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>'); } else {  $('#Address_receiver_last_name',cont).removeClass('error'); $('.texterror', $('#Address_receiver_last_name',cont).parent()).html(''); }
         
         if (error < 0) { error = 0; }
         
         
-        if (!$('#Address_receiver_first_name',cont).val()) { $('#Address_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('Заполните это поле');} else {  $('#Address_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('');}
+        if (!$('#Address_receiver_first_name',cont).val()) { $('#Address_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('');}
         
         if (!$('#Address_country',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('Выберите страну');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
         
-        if (!$('#Address_city',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('Заполните это поле');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
-        if (!$('#Address_postindex',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('Заполните это поле');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
-        if (!$('#Address_streetaddress',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_streetad192dress',cont).parent()).html('Заполните это поле');} else {  $('#Address_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address_streetaddress',cont).parent()).html('');}
+        if (!$('#Address_city',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
+        if (!$('#Address_postindex',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
+        if (!$('#Address_streetaddress',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_streetad192dress',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address_streetaddress',cont).parent()).html('');}
          var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
         
-        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Заполните это поле');} else if(pattern.test($('#Address_contact_email').val())){  $('#Address_contact_email').removeClass('error');  $('.texterror', $('#Address_contact_email').parent()).html('');} else {
+        if (!$('#Address_contact_email').val()) { $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else if(pattern.test($('#Address_contact_email').val())){  $('#Address_contact_email').removeClass('error');  $('.texterror', $('#Address_contact_email').parent()).html('');} else {
          
          $('#Address_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_email').parent()).html('Неверно введен E-mail адрес');
             
         }
-        if (!$('#Address_contact_phone',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone',cont).parent()).html('Заполните это поле');} else {  $('#Address_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address_contact_phone',cont).parent()).html('');}
+        if (!$('#Address_contact_phone',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_contact_phone',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address_contact_phone',cont).parent()).html('');}
         
         
         if (error > 0) {
@@ -469,7 +482,7 @@
     }
 
     function forgotPassword(email) {
-        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пароль отправлен на email: ' + email + '</div><div style="font-weight: bold;">Товары в корзине сохранены</div>';
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold; z-index: 9999999;background: #fff;"><?=$ui->item('CARTNEW_SEND_PSW_EMAIL_OK')?>: ' + email + '</div><div style="font-weight: bold;"><?=$ui->item('CARTNEW_ALERT_SAVE_PRODUCTS')?></div>';
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
             url: '<?= Yii::app()->createUrl('site/forgot') ?>',
@@ -485,7 +498,7 @@
     }
 
     function dontClick() {
-        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;">Пожалуйста, введите другой e-mail!</div>';
+        document.getElementById('js_forgot').innerHTML = '<div style="font-weight: bold;"><?=$ui->item('CARTNEW_CHANGE_EMAIL_OTHER')?></div>';
 
         window.setTimeout('$(document).ready(function() { $("#js_forgot").remove() })', 1200);
 
@@ -527,12 +540,15 @@
         $('.select_dd_box input').val(cont.html());
         $('.select_dd_popup').html('');
         $('.select_dd_popup').hide();
+		
+		
+		
     }
 
     
     $(document).ready(function() {
 
-		
+		checked_sogl();
 
         //load_form();
         
@@ -565,12 +581,12 @@
         $('.seld #dtype2').parent().css('border', '1px solid #64717f');
         $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
         $('.check', $('.seld #dtype2').parent()).addClass('active');
-    $('.delivery_box').show();
+		$('.delivery_box').show();
         $('.seld #dtype2').parent().addClass('act');
-        $('.delivery_name').html('Доставка почтой');
+        $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>');
 
         $('.oplata1').hide();
-        $('.oplata3').addClass('act');
+        $('.oplata3').click();
         $('.oplata3').css('border', '1px solid rgb(100, 113, 127)');
         $('.oplata3 span.check').addClass('active');
         $('.oplata3 input').attr('checked', 'checked');
@@ -578,16 +594,16 @@
 		
 		$('.seld2').addClass('disabled');
 			$('.seld1').click();
-			$('.delivery_name').html('Забрать в магазине');
+			$('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0')?>');
 		
 
     })
     
-    function cost_izmena(city_id) {
+    function cost_izmena(city_id, id_addr) {
 
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1] }, function(data) {
+        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1], doorder : 1, id_addr : id_addr }, function(data) {
 
             var al = JSON.parse(data);
 
@@ -608,6 +624,8 @@
     
     function checked_sogl() {
      
+	 //$('.selp.oplata3').click();
+	 
      var csrf = $('meta[name=csrf]').attr('content').split('=');
      
      //alert($('select[name=id_address]').val());
@@ -620,14 +638,51 @@
                 
                 $('input.country_id').val(data);
                 
-                cost_izmena(data);
+                cost_izmena(data, id_addr);
                     
                 $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: $('input.country_id').val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
+					
+					if (data) {
+						
+						data = JSON.parse(data);
+					
+					$('.row_del1').html(data['text1']);
+					$('.row_del2').html(data['text2']);
+					$('.row_del3').html(data['text3']);
+						
+					$('.delivery_box').html(data['smartpost']);	
+						
+					}
+					
+					if (data) {
+						//$('.seld2').hide();
+						$('.seld02').click();
+						$('.seld02, .seld03, .seld04').removeClass('disabled');
+						
+						if ($('input.country_id').val() == '68' || $('input.country_id').val()=='62') {
                 
-                    $('.delivery_box').html(data);
+							$('.zabr_market').html('<?=$ui->item('CARTNEW_PICK_UP_STORE1')?>');
+
+						} else {
+
+							$('.zabr_market').html('<?=$ui->item('CARTNEW_PICK_UP_STORE2')?>');
+
+						}
+						
+					} else {
+						//$('.seld2').show();
+						$('.seld1').click();
+						$('.seld02, .seld03, .seld04').addClass('disabled');
+						$('.zabr_market').html('<?=$ui->item('CARTNEW_PICK_UP_STORE1')?>');
+					}
+					
+					
+					
+					
+                    //$('.delivery_box').html(data);
                         //$('.box_opacity .op').hide();
                         //$('.order_start').removeClass('disabled');
-                    sbros_delev();
+                    //sbros_delev();
                         //checked_sogl();
                         
                     if ($('input.country_id').val()=='68' || $('input.country_id').val()=='62' || $('input.country_id').val()=='') {
@@ -638,46 +693,9 @@
                 $('.seld1').addClass('act_city');  
             }
             
-            if ($('input.country_id').val() == '68' || $('input.country_id').val()=='62') {
-                var b1 = $('.dtypes .seld1');
-                var b2 = $('.dtypes .seld2');
-                //$('.dtypes').html('');
-                if (zamena1) {
-
-
-
-                    b2.replaceWith(b1.clone());
-                    b1.replaceWith(b2);
-
-                    zamena1 = false;
-                    zamena2 = true;
-
-                }
-
-
-
-                $('.zabr_market').html('Забрать в магазине в Хельсинки');
-
-            } else {
-
-                var b1 = $('.dtypes .seld1');
-                var b2 = $('.dtypes .seld2');
-
-                if (zamena2) {
-
-                    b1.replaceWith(b2.clone());
-                    b2.replaceWith(b1);
-
-                    zamena1 = true;
-                    zamena2 = false;
-
-                }
-
-                 $('.zabr_market').html('Будете в Хельсинки? Отметьте, чтобы забрать в магазине');
-
-                }
+           
 					
-					$('.selt1').click();
+					//$('.selt1').click();
 					
 					
                     });
@@ -689,7 +707,13 @@
             
             });
         
-        }
+        } else {
+			$('.seld02, .seld03, .seld04').addClass('disabled');
+			$('.seld1').click();
+			$('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0')?>');
+			$('.zabr_market').html('<?=$ui->item('CARTNEW_PICK_UP_STORE1')?>');
+			$('.seld1').removeClass('act_city'); 
+		}
 		
 		if ($('#confirm').prop('checked')) {
 		
@@ -700,20 +724,20 @@
 		}
 		
 		
-		if ( !$('select[name=id_address]').val() ) {
+		// if ( !$('select[name=id_address]').val() ) {
 			
-			$('.seld2').addClass('disabled');
-			$('.seld1').click();
-			$('.delivery_name').html('Забрать в магазине');
-		} else {
+			// $('.seld02, .seld03, .seld04').addClass('disabled');
+			// $('.seld1').click();
+			// $('.delivery_name').html('Забрать в магазине');
+		// } else {
 			
-			$('.seld2').removeClass('disabled');
-			$('.seld2').click();
-			$('.delivery_name').html('Доставка почтой');
-		}
+			// $('.seld02, .seld03, .seld04').removeClass('disabled');
+			// $('.seld02').click();
+			// $('.delivery_name').html('Доставка почтой');
+		// }
         
 
-
+	
         
         
     }
@@ -761,7 +785,7 @@
         
         
         $('.selp span.check.active').parent().parent().parent().addClass('act');
-
+		
 
         
     }
@@ -810,10 +834,6 @@
         $('input[type=radio]', $('.selp')).removeAttr('checked');
         $('.selp').css('border', '1px solid #ccc');
         
-        
-        
-        
-        
         $('.check',$('.selp #dtype2').parent()).addClass('active');
         $('input[type=radio]', $('.selp #dtype2').parent()).attr('checked','true');
         $('.selp #dtype2').parent().css('border', '1px solid #64717f');
@@ -846,8 +866,9 @@
         
         var frm1 = $('form.no_register1').serialize();
         var frm2 = $('form.address.text').serialize();
+		var Notes_txt = $('#Notes').val();
          var csrf = $('meta[name=csrf]').attr('content').split('=');
-        var frmall = frm1+'&'+frm2+'&YII_CSRF_TOKEN='+csrf[1];
+        var frmall = frm1+'&'+frm2+'&YII_CSRF_TOKEN='+csrf[1] + '&Notes='+Notes_txt;
         if (promocodeHandler) frmall += '&promocode=' + promocodeHandler.getValue();
 
         var error = 0;
@@ -868,7 +889,7 @@
         
          if ($('#confirm').is(':checked') == false) {
             
-            $('.err_confirm').html('Согласитесь с условием');
+            $('.err_confirm').html('<?=$ui->item('CARTNEW_ERROR_AGREE_CONDITION')?>');
 
 
              $('label[for=confirm]').css('padding', '5px');
@@ -910,7 +931,7 @@
                 
             $('.delivery_box .texterror').css('display', 'inline-block');    
                 
-             $('.delivery_box .texterror').html('Выберите тариф доставки');
+             $('.delivery_box .texterror').html('<?=$ui->item('CARTNEW_ERROR_SELECT_DELIVERY')?>');
              error = error + 1;
             } else {
                 $('.delivery_box .texterror').html('');
@@ -931,7 +952,7 @@
                  if (data != '') {
 
                     if (data == '9') {
-                        alert('Такой e-mail уже зарегистрирован!');
+                        alert('<?=$ui->item('CARTNEW_ERROR_MAIL_FIND_OK')?>');
                     } else {
                         
                         clear_cook();
@@ -986,14 +1007,12 @@
     
 </script>
 
-<input type="hidden" class="type_delivery" value="Доставка почтой"/>
+<input type="hidden" class="type_delivery" value="<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>"/>
 <input type="hidden" class="currency_delivery" value="<?=Currency::ToSign()?>"/>
 
 <div class="container cartorder" style="margin-bottom: 20px;">
-    
-    
-        
-        <?php
+		
+		<?php
         
         $delivery = new PostCalculator();
 
@@ -1071,6 +1090,7 @@
                 $fullprice += $price * $item['Quantity'];
 				$cartInfo['items'][$item['ID']]['price'] = $price;
                 $cartInfo['items'][$item['ID']]['quantity'] = 1;
+				$item['Quantity'] = 1;
             } else {
                 $fullprice += $price * $item['Quantity'];
                 $cartInfo['items'][$item['ID']]['quantity'] = $item['Quantity'];
@@ -1086,7 +1106,6 @@
         $cartInfo['fullInfo']['weight'] = $fullweight;
 
         //var_dump($cartInfo);
-        echo '<input type="hidden" value="'.$cartInfo['fullInfo']['cost'].'" name="costall" class="costall">';
         
     $user = Yii::app()->user->GetModel();
     $address = new Address;
@@ -1098,14 +1117,33 @@
     $address->type = 2;
     $this->renderPartial('/site/address_form3', array('model' => $address,
                                                            'mode' => 'new',
-                                                           'afterAjax' => 'addrInserted', 'cart'=>$cartInfo)); ?>
+                                                           'afterAjax' => 'addrInserted', 'cart'=>$cartInfo)); 
+														   
+	if ($fullprice < 5){
+		$fullprice = 5.0;
+	}		
+			
+	echo '<input type="hidden" value="'.$fullprice.'" name="costall" class="costall">';
+        
+
+			
+														   ?>
+   
+   <div class="row" style="margin-left: 0;">
+   
+   <div class="span6" style="width: 49%; margin-left: 0; margin-right: 1%;">
+   
+	<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', $ui->item("address_contact_notes")); ?>" name="Notes"></textarea>
+   
+   </div>
+   <div class="span6" style="width: 50%; margin: 0;">
    
         <div class="cart_footer  footer1" style="width: 553px;">
-            Стоимость доставки <span class="delivery_cost">0 &euro;</span>
+           <?=$ui->item('ORDER_MSG_DELIVERY_COST')?> <span class="delivery_cost">0 &euro;</span> <span class="add_cost" style="font-weight: bold; display: none;"><?=$ui->item('CARTNEW_OTHER_PRODUCTS_CART')?></span>
         </div>
     <div class="clearfix"></div>
         <div class="cart_footer footer2" style="width: 553px;">
-            Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: <?=$cartInfo['fullInfo']['weight']?> кг
+            <?=$ui->item('CART_COL_SUBTOTAL_DELIVERY')?>: <span class="delivery_name"><?=$ui->item('MSG_DELIVERY_TYPE_0')?></span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?=$ui->item('CARTNEW_TOTAL_WEIGHT_LABEL')?>: <?= $cartInfo['fullInfo']['weight'] ?> <?=$ui->item('CARTNEW_WEIGHT_NAME')?>
         </div>
         <div class="clearfix"></div>
 
@@ -1114,20 +1152,25 @@
     </div>
     <div class="clearfix"></div>
         <div class="cart_footer footer3" style="width: 553px;">
-            Итоговая стоимость: <span class="itogo_cost"><?=$PH->FormatPrice($fullprice);?></span>
+            <?=$ui->item('CARTNEW_TOTAL_COST_LABEL')?>: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($fullprice); ?></span>
         </div>
     <div class="clearfix"></div>
     
     <div style="float: right; width: 575px; margin-bottom: 10px;">
-        При нажатие кнопки "Оформить" Вам будет отправлено письмо с учётными данными для входа в личный кабинет Руслании и Вы будете зарегистрированы в нашей системе.
+         <?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
     </div>
     
-    
+    </div>
     
     <div class="clearfix"></div>
-        <a href="javascript:;" class="order_start" style="float: right; margin-left: 320px; display: block" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }">Оформить заказ</a>     
+	
+	<div style="text-align: center">
+	
+        <a href="javascript:;" class="order_start" style="display: block; margin: 20px auto; width: 360px;" onclick="if ($(this).hasClass('disabled') == false) { sendforma(); }"><?=$ui->item('CARTNEW_SEND_ORDER_BTN')?></a>     
     
+	</div>
    
-   
+
+</div>
 </div>
 
