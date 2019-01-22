@@ -1245,9 +1245,10 @@ By clicking on a category you are interested in, you can see all the products wi
 
 //----------------------добавлено скриптом
 
-    'A_NEW_SALE_H1' => 'Большая распродажа в Руслании<br/>Скидки до 80%!',
-    'A_NEW_SALE_PAGE_TITLE' => 'Отличные предложения во всех разделах.<br/>
-            Нажав на интересующую вас категорию, вы сможете увидеть все товары со скидками в этом разделе.',
+    'A_NEW_SALE_H1' => 'Great Sale in Ruslania',
+    'A_NEW_SALE_PAGE_TITLE' => 'Great offers in all categories',
+    'A_NEW_SALE_COUNT' => 'Discounts up to 80%',
+    'A_NEW_SALE_PAGE_DESC' => 'By clicking on a category you are interested in, you can see all the products with discounts from this category',
     'A_NEW_SALE_BOOKS' => 'Распродажа книг',
     'A_NEW_SALE_SHEETMUSIC' => 'Распродажа нот',
     'A_NEW_SALE_MAPS' => 'Распродажа карт',

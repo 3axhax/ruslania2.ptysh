@@ -27,8 +27,8 @@ if ($serGoods) {
     
     <div class="row" style="float: left">
         <div class="span10" style="width: 901px; margin-left: 20px;">
-		<h1><?=$ui->item('A_NEW_SALE_H1')?></h1>
-		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?>
+		<h1><?=$ui->item('A_NEW_SALE_H1')?><br><?=$ui->item('A_NEW_SALE_COUNT')?></h1>
+		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?><br><?=$ui->item('A_NEW_SALE_PAGE_DESC')?>
                 <br /><br />
                 <?php
                 if ($items) {
