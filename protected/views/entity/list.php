@@ -69,16 +69,6 @@ $lang = Yii::app()->language;
 			<?//=sprintf($ui->item('X items here'), $total)?>
 			</div>
 
-            <?php
-                if (isset($presentation)) {
-                    preg_match('/([\w,\s-]+)\.[A-Za-z]{3}/', $presentation, $f);
-                    $fileName = $f[1];
-                    if (file_exists(__DIR__.'/authors/'.$fileName.'.php')) {
-                        $this->renderPartial('/entity/authors/' . $fileName);
-                    }
-                }
-                ?>
-
             <ul class="items">
                 <?php $i=0; foreach ($items as $item) : $i++;?>
                     <?php
@@ -101,7 +91,11 @@ $lang = Yii::app()->language;
             <?php if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
             </ul>
 			<? endif; ?>
-			
+            <?php if (isset($presentation)):
+                $fileText = str_replace('ruslania.com/templates-html/', 'ruslania.com/pictures/templates-html/', file_get_contents($presentation));
+                ?>
+                <div class="description_container"><?= $fileText ?></div>
+            <?php endif; ?>
 		</div>
         <div class="span2">
 <?php $this->widget('LinksToList', array('entity'=>$entity)); ?>

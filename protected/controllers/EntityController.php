@@ -565,10 +565,8 @@ class EntityController extends MyController {
         $authorInfo = null;
         $file = '';
         if (!empty($author) && !empty($author['description_file_' . Yii::app()->language])) {
-            $file = $author['description_file_' . Yii::app()->language];
-            /*$path = Yii::getPathOfAlias('webroot') . '/templates-html/' . Entity::GetUrlKey($entity) . '-authors/' . $file;
-            if (file_exists($path))
-                $authorInfo = file_get_contents($path);*/
+            $file = Yii::getPathOfAlias('webroot') . '/pictures/templates-html/' . Entity::GetUrlKey($entity) . '-authors/' . $author['description_file_' . Yii::app()->language];
+            if (!file_exists($file)) $file = '';
         }
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
