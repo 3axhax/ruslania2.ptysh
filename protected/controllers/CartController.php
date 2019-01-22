@@ -187,24 +187,31 @@ class CartController extends MyController {
         }
     }
     function decline_goods($num) {
-        $count = $num;
+        
+		$ui = new RuslaniaUI;
+		
+		$count = $num;
         $num = $num % 100;
         if ($num > 19) {
             $num = $num % 10;
         }
         switch ($num) {
             case 1: {
-                return $count . ' товар';
-            }
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE2');
+                }
+
             case 2: case 3: case 4: {
-            return $count . ' товара';
-        }
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE1');
+                }
+
             default: {
-                return $count . ' товаров';
-            }
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE3');
+                }
         }
     }
     function actionGetCostIzmena() {
+		
+		$ui = new RuslaniaUI();
 		
 		$cart = $this->actionGetAll(0);
 		
@@ -290,7 +297,7 @@ class CartController extends MyController {
         $cartInfo['fullInfo']['cost'] = $fullprice;
         $cartInfo['fullInfo']['weight'] = $fullweight;
         
-        $input['footer2'] = 'Доставка: <span class="delivery_name">Забрать в магазине</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Общий вес: ' . $cartInfo['fullInfo']['weight'] .' кг';
+        $input['footer2'] = $ui->item('CART_COL_SUBTOTAL_DELIVERY') . ': <span class="delivery_name">' . $ui->item('MSG_DELIVERY_TYPE_0').'</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$ui->item('CARTNEW_TOTAL_WEIGHT_LABEL') . ':' . $cartInfo['fullInfo']['weight'] . ' '. $ui->item('CARTNEW_WEIGHT_NAME');
 		
 		
 		if ($fullprice < 5){
@@ -299,11 +306,13 @@ class CartController extends MyController {
 		$input['fullpricehidden'] = $fullprice;
 		
 		
-        $input['footer3'] = 'Итоговая стоимость: <span class="itogo_cost">'. $PH->FormatPrice($fullprice) .'</span>';
+        $input['footer3'] = $ui->item('CARTNEW_TOTAL_COST_LABEL') . ': <span class="itogo_cost" id="itogo_cost">'. $PH->FormatPrice($fullprice) . '</span>';
 		
 		
 		
-        $input['cart_header'] = 'В корзине '.self::decline_goods($cartInfo['fullInfo']['count']).' на сумму '.$PH->FormatPrice($cartInfo['fullInfo']['cost']);
+		
+		
+        $input['cart_header'] = sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), array(self::decline_goods($cartInfo['fullInfo']['count']), $ui), $PH->FormatPrice($cartInfo['fullInfo']['cost']));
         //$input['cart'] = array();
         foreach ($cartInfo['items'] as $id => $item) :
             $input['cart'][] = '<tr>'.
@@ -311,11 +320,12 @@ class CartController extends MyController {
                 '<td style="width: 35px; height: 35px"> <span class="entity_icons"><i class="fa e' . $item['entity'] . '"></i></span></td>'.
                 '<td>
                     <span class="a">'.$item['title'].'</span>
-                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? 'мес.' : 'шт.' ) . ' x '.$PH->FormatPrice($item['price']).'<br /> Вес: '.($item['weight']).' кг</div>
+                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') ) . ' x '.$PH->FormatPrice($item['price']).'<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME').'</div>
                 </td>
                 
             </tr>';
-        endforeach;
+			
+			endforeach;
         echo json_encode($input);
     }
     function actionOrderPay() {
