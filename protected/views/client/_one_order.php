@@ -22,6 +22,10 @@
                         <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_PAYMENT_TYPE"); ?>:</span> <div class="span11"><?=CommonHelper::FormatPaymentType($order['payment_type_id']); ?></div></div>
                     <?php endif; ?>
                     <div class="row"><span class="span1"><?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?>:</span> <div class="span11"><b><?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?></b></div></div>
+					
+					
+					
+					
                 </div>
 
                 <?php if(!empty($order['notes'])) : ?>
@@ -64,7 +68,7 @@
 
                     <tr class="footer">
 						
-						<td colspan="3">
+						<td colspan="4">
 							<div class="summa">
 								
 								<a style="float: left;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn"
@@ -97,7 +101,8 @@
                         <th class="cart1header1"><?=$ui->item("ORDER_MSG_HISTORY_DATE"); ?></th>
                         <th class="cart1header1"><?=$ui->item("ORDER_MSG_HISTORY_ACTION"); ?></th>
                     </tr>
-                    <?php foreach($order['States'] as $state) : ?>
+                    <?php
+                    foreach($order['States'] as $state) : ?>
                     <tr>
                         <td class="cart1contents1"><?=$state['timestamp']; ?></td>
                         <td class="cart1contents1"><?=$ui->item("ORDER_MSG_STATE_".$state['state']); ?></td>
