@@ -288,6 +288,16 @@
                         </table>
                     </td>
                 </tr>
+
+                <tr>
+                    <td></td>
+                    <td colspan="2" style="padding-bottom: 5px;">
+
+                        <?=$ui->item('addr_desc_file')?>
+
+                    </td>
+                </tr>
+
                 <tr>
                     <td></td>
                     <td colspan="2">
@@ -310,7 +320,7 @@
 
                         </style>
 
-                        <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="Сохранить"/>
+                        <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="<?=$ui->item("BTN_FORM_SAVE"); ?>"/>
 
                     </td>
                 </tr>

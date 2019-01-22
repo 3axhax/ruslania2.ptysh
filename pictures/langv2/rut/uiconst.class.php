@@ -1278,5 +1278,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   '3_FOR_PRICE_2' => '3 po cene 2',
   'A_NEW_MY_FAVORITE' => 'Mojo izbrannoe',
     'NAME_CROSSWORD'=>'Krossvordi',
+    'MENU'=>'Menu',
 
 );

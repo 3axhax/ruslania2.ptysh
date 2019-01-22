@@ -173,7 +173,7 @@
 
             </style>
 
-            <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="Сохранить"/>
+            <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="<?=$ui->item("BTN_FORM_SAVE"); ?>"/>
 
             <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
         </td>

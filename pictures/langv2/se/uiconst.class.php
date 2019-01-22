@@ -144,7 +144,7 @@ return array (
   'BTN_CATALOG_GOSORT' => 'OK',
   'BTN_CATALOG_SEARCH_RESET' => 'Töm',
   'BTN_CATALOG_SEARCH_SUBMIT' => 'Gå',
-  'BTN_FORM_SAVE' => 'Spara ',
+  'BTN_FORM_SAVE' => 'Bevara ',
   'BTN_PROCEED_REQUEST_PHASE_2_PICTURE' => 'request_s_se.png',
   'BTN_SAVEPLACEORDER_ALT' => 'Bekräfta din förfrågning',
   'BTN_SAVEPLACEORDER_PICTURE' => 'order_lo_s_se.png',
@@ -1125,7 +1125,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
   'A_NEW_FILTER_TYPE1' => 'Typ av produkt',
   'A_NEW_FILTER_TYPE2' => 'Mediatyp',
   'A_NEW_FILTER_SORT_FOR' => 'Sortera efter:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Search for books by  Title / Author / ISBN',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Sök efter produkter på titel / författare / ISBN',
   'A_NEW_YEAR_REAL' => 'Publiceringsår',
   'A_NEW_FILTER_TITLE_LANG' => 'Produktspråk -',
   'MONTH_SMALL' => 'mån.',
@@ -1278,5 +1278,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   '3_FOR_PRICE_2' => '3 till priset av 2',
   'A_NEW_MY_FAVORITE' => 'Intressanta artiklar',
     'NAME_CROSSWORD'=>'Korsord',
+    'MENU'=>'Menu',
 
 );

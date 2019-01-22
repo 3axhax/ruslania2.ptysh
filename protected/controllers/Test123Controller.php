@@ -38,5 +38,10 @@ class Test123Controller extends MyController {
             // 'bgs' => $bg, 'pubs' => $pubs, 'series'=>$series, 'authors'=>$authors, 'title_cat'=>$title_cat));	
 	
         // $this->render('items');
-    }	
+    }
+
+	function actionCategory() {
+		$category = new Category();
+		Debug::staticRun(array(ProductHelper::GetTitle($category->GetByIds(50, [30])[0])));
+	}
 }

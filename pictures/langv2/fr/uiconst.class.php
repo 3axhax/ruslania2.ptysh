@@ -1117,7 +1117,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_FILTER_TYPE1' => 'Type de produit',
   'A_NEW_FILTER_TYPE2' => 'Type',
   'A_NEW_FILTER_SORT_FOR' => 'Trier par:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Search for books by  Title / Author / ISBN',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Rechercher des produits par titre   / auteur / ISBN',
   'A_NEW_YEAR_REAL' => 'Année de publication',
   'A_NEW_MENU_REK' => 'Recommandations',
   'A_NEW_FILTER_TITLE_LANG' => 'Langue du produit -',
@@ -1268,5 +1268,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   '3_FOR_PRICE_2' => '3 pour le prix de 2',
   'A_NEW_MY_FAVORITE' => 'Articles intéressants',
     'NAME_CROSSWORD'=>'Mots croisés',
+    'MENU'=>'Menu',
 
 );

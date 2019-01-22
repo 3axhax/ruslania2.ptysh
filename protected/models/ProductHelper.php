@@ -64,21 +64,17 @@ class ProductHelper
         $ret = '';
         $i=0;
         $maxI = count($langs);
-        while (!empty($key)||($i++<=$maxI))
-        {
+        while (!empty($key)||($i++<=$maxI)) {
             //if (isset($item[$key]) && !empty($item[$key])) return trim($item[$key]);
-            if(array_key_exists($key, $item))
-            {
+            if(array_key_exists($key, $item)) {
                 $ret = trim($item[$key]);
                 break;
             }
             $key = $langs[$key];
         }
-        if (empty($ret)&&isset($item[$sKey]))  $ret = trim($item[$sKey]);
+        if (empty($ret)&&isset($item[$sKey])) $ret = trim($item[$sKey]);
 
         if(!empty($ret)) {
-
-
             $tmp = $ret;
             if ($cnt > 0) {
                 $len = mb_strlen(trim($item[$key]), 'utf-8');
@@ -90,17 +86,17 @@ class ProductHelper
                 }
 
             }
-
             return $tmp;
-
         }
 
         // Найти первую непустую колонку
-        foreach($langs as $lang=>$data)
-        {
-            if(array_key_exists($lang, $item))
-            {
+        foreach($langs as $lang=>$data) {
+            if(array_key_exists($lang, $item)) {
                 $val = trim($item[$lang]);
+                if(!empty($val)) return $val;
+            }
+            if(array_key_exists($data, $item)) {
+                $val = trim($item[$data]);
                 if(!empty($val)) return $val;
             }
         }

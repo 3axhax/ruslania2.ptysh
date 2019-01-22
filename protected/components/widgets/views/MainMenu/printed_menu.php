@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (02.10.2018 23:50)*/ ?>
-<a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED))); ?>"><?= Yii::app()->ui->item("A_NEW_OTHER"); ?></a>
+<a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PRINTED))); ?>"><?= Yii::app()->ui->item("A_GOTOPRINTED"); ?></a>
 <div class="click_arrow"></div>
 <div class="dd_box_bg dd_box_bg-slim list_subcategs">
 	<ul class="list_vertical">

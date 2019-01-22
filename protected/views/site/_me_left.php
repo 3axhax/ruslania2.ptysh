@@ -1,4 +1,4 @@
-<h2 class="cattitle me_left" style="margin-bottom: 20px;">Меню</h2>
+<h2 class="cattitle me_left" style="margin-bottom: 20px;"><?=$ui->item('MENU'); ?></h2>
 
 <ul class="left_list divider text">
     <li>

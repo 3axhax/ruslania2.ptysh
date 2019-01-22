@@ -1353,5 +1353,6 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_SMARTPOST_INPUT_INDEX_PLACEHOLDER'=>'Введите свой почтовый индекс',
 'CARTNEW_ERROR_SELECT_DELIVERY'=>'Выберите тариф доставки',
 'CARTNEW_BTN_ADD_ADDRESS'=>'Добавить',
-'CARTNEW_BTN_CANCEL_ADDRESS'=>'Отменить'
+'CARTNEW_BTN_CANCEL_ADDRESS'=>'Отменить',
+    'MENU'=>'Меню',
 );

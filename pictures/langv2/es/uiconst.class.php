@@ -1145,7 +1145,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'MSG_PAYMENT_TYPE_COMMENT_26' => 'Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N XXXXXXX оплачен» на адрес orders@ruslania.com',
     'PROPERTYLIST_FOR_PROD' => 'список производителей от А до Я',
     'MSG_PERSNAL_DISCOUNT' => 'Ваша персональная скидка',
-    'A_NEW_SALE' => 'Распродажа',
+    'A_NEW_SALE' => 'Artículos con descuento',
     'A_NEW_PERIODIC_FOR_GIFT' => 'Подарить подписку',
     'A_NEW_OTHER' => 'Прочее',
     'A_NEW_ALL_CATEGORIES' => 'Все категории',
@@ -1290,5 +1290,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'DELIVERY_EXPRESS_OTHER_YES' => 'Доставка на дом или на адрес доставки почтовым срочным письмом или срочный пакет EMS финской почты, c отслеживанием (with tracking number), обслуживание Express',
     '3_FOR_PRICE_2' => '3 по цене 2',
     'NAME_CROSSWORD'=>'Crucigramas',
+    'MENU'=>'Menu',
 
 );
