@@ -10,11 +10,11 @@ class SlowSqlLogRoute extends CWebLogRoute {
 				$resultTime = $log[3] - $startTime;
 /*				file_put_contents(Yii::getPathOfAlias('webroot') . '/test/check_sql.log', implode("\t", array(
 						date('d.m.Y H:i:s'),
-						$log[3],
-						$startTime,
+						(!defined('cronAction')&&($resultTime > 0)),
+						$resultTime,
 					)) . "\n", FILE_APPEND);*/
 				if (!defined('cronAction')&&($resultTime > 0.5)) {
-					file_put_contents(Yii::getPathOfAlias('webroot') . '/test/slow_sql.log', implode("\t", array(
+					file_put_contents(Yii::getPathOfAlias('webroot') . '/test/slow_query.log', implode("\t", array(
 							date('d.m.Y H:i:s'),
 							$resultTime . 'сек',
 							$log[0],
