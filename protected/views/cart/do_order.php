@@ -398,7 +398,7 @@
         
         if (!$('#Address_receiver_first_name',cont).val()) { $('#Address_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address_receiver_first_name',cont).parent()).html('');}
         
-        if (!$('#Address_country',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('Выберите страну');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
+        if (!$('#Address_country',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_country',cont).parent()).html('<?=$ui->item('CARTNEW_SELECT_COUNTRY_ERROR')?>');} else {  $('#Address_country',cont).removeClass('error');  $('.texterror', $('#Address_country',cont).parent()).html(''); }
         
         if (!$('#Address_city',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_city',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_city',cont).removeClass('error');  $('.texterror', $('#Address_city',cont).parent()).html('');}
         if (!$('#Address_postindex',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address_postindex',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address_postindex',cont).removeClass('error');  $('.texterror', $('#Address_postindex',cont).parent()).html('');}
@@ -1009,7 +1009,6 @@
 
 <input type="hidden" class="type_delivery" value="<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>"/>
 <input type="hidden" class="currency_delivery" value="<?=Currency::ToSign()?>"/>
-
 <div class="container cartorder" style="margin-bottom: 20px;">
 		
 		<?php

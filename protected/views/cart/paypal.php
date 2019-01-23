@@ -1,7 +1,12 @@
 <hr />
 
 <div class="container cartorder">
-    <h1><?= Yii::app()->ui->item('HEADER_PAYPAL') ?></h1>
+    <h1><?=$ui->item('CARTNEW_PAYPAL_H1')?></h1>
+
+
+    <?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?> <br /><br />
+    <div>
+        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYPAL') ?><br /><br />
     
     
     <div class="popup0 popup<?=$p['id']?>" style="background-color: rgba(0,0,0,0.3); position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99999; opacity: 0.3; display: none;" onclick="$('.popup0').hide();"></div>
@@ -13,22 +18,29 @@
         <?php include ($_SERVER['DOCUMENT_ROOT'] . '/pictures/templates-static/paypal_'.Yii::app()->language.'.html.php'); ?>
     
     </div>
-    
-    Произведите оплату нажав на логотип PayPal внизу. Ваш заказ № <?=$number_zakaz?><br /><br />
-    
-    
+	
+    <?=sprintf($ui->item('CARTNEW_PAYPAL_LABEL'), $number_zakaz,ProductHelper::FormatPrice($order['full_price'], $order['currency_id']))?>
+    <br /><br />
     
     <?php $this->widget('PayPalPayment', array('order' => $order)); ?>
     
-    <div><a href="javascript:;" onclick="$('.popup0').show();">Что такое PayPal?</a></div> <br />
+    <div><a href="javascript:;" onclick="$('.popup0').show();"><?=$ui->item('MSG_WHAT_IS_PAYPAL')?></a></div> <br />
     
-    <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype8'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
+    <div><?=sprintf($ui->item('CARTNEW_ORDER_PAY_OTHER_LABEL'), 'dtype8')?></div>
     <div id="pay_systems" class="row spay" style="display: none;">
         <?php $this->renderPartial('/site/pay_systems', array()); ?>
     </div>
     <div style="margin: 15px 0;">
-        Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).
+        <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
+	
+	
+	<div style="height: 20px;"></div>
+    <a href="<?= Yii::app()->createUrl('/view/'.$number_zakaz)?>" class="order_start" style="background-color: #28618E;  margin-top: -65px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
+                        </a>
+    <div style="height: 20px;"></div>
+	
 </div>
 
 

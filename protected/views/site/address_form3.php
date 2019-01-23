@@ -41,7 +41,7 @@ function decline_goods($num) {
 
 
 <div class="span7" style="margin-left: 0;">
-<div class="p3 step1">1. Укажите адрес доставки и плательщика</div>
+<div class="p3 step1"><?=$ui->item('CARTNEW_REG_STEP1_TITLE')?></div>
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
 <style>
@@ -70,7 +70,7 @@ $addr_list = $addr->GetAddresses($this->uid);
 echo ' <span class="err_addr" style="color: #ff0000; font-size: 12px;"></span><div class="clearfix" style="height: 10px;"></div><div class="addr_delivery">';
 if (count($addr_list)) {
     
-    echo '<label style="font-weight: bold;">Адрес  доставки</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">Выберите адрес доставки</option>' : '' );
+    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL').'</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY').'</option>' : '' );
 
     $ch = new CommonHelper();
 
@@ -86,7 +86,7 @@ if (count($addr_list)) {
     
 }else {
 
-    echo '<label style="font-weight: bold;">Адрес доставки</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Добавьте адрес доставки</option>';
+    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL').'</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL2').'</option>';
 
     echo '</select>';
 
@@ -98,7 +98,7 @@ if (count($addr_list)) {
 echo '<div class="addr_buyer" style="margin-top: 10px">';
 if (count($addr_list)) {
     
-    echo '<label style="font-weight: bold;">Адрес плательщика</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">Выберите адрес плательщика</option>' : '' );
+    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER').'</option>' : '' );
 
     $ch = new CommonHelper();
     
@@ -116,7 +116,7 @@ if (count($addr_list)) {
     
 } else {
 
-    echo '<label style="font-weight: bold;">Адрес плательщика</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">Добавьте адрес плательщика</option>';
+    echo '<label style="font-weight: bold;">'.$ui->item('ORDER_MSG_BILLING_ADDRESS').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL2').'</option>';
 
     echo '</select>';
 
@@ -129,7 +129,7 @@ echo '</div>';
     <!--<a href="javascript:;" onclick="hide_dostavka($(this))" class="btn btn-link" style="margin-top: 10px;">Доставка не нужна</a>-->
     <? $user = User::getUserID(Yii::app()->user->id); ?>
 
-<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 10px; float: right; background-color: #28618E;">Добавить адрес</a></div>
+<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 10px; float: right; background-color: #28618E;"><?=$ui->item('CARTNEW_ADD_ADDR_BTN')?></a></div>
 
 <table class="address addr1" style="display: none; margin-top: 10px;">
     <tbody>
@@ -144,7 +144,7 @@ echo '</div>';
     </tr>
 	
 	 <tr>
-        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> Отметьте, если хотите забрать заказ в магазине. В этом случае адрес указывать не обязательно.</label></td>
+        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> <?=$ui->item("CARTNEW_CHECK_NO_ADDR"); ?></label></td>
     </tr>
 	
     <tr data-bind="visible: type()==1">
@@ -286,8 +286,8 @@ echo '</div>';
     </tbody>
 </table>
 
-<a href="javascript:;" class="btn btn-success addr1" style="float: right; display: none; margin-right: 5px;" onclick="add_address(1)">Добавить</a>
-<a href="javascript:;" onclick="$('table.addr1, .btn.btn-success.addr1, .cancel_add_adr').toggle('fade');" class="cancel_add_adr btn btn-link" style="display: none; float: right;">Отменить</a>
+<a href="javascript:;" class="btn btn-success addr1" style="float: right; display: none; margin-right: 5px;" onclick="add_address(1)"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
+<a href="javascript:;" onclick="$('table.addr1, .btn.btn-success.addr1, .cancel_add_adr').toggle('fade');" class="cancel_add_adr btn btn-link" style="display: none; float: right;"><?=$ui->item('CARTNEW_BTN_CANCEL_ADDRESS')?></a>
 <div class="clearfix" style="margin: 5px 0;"></div>
 
 
@@ -335,7 +335,7 @@ echo '</div>';
  
  <label for="confirm" onclick=" checked_sogl();" style="margin-top: 12px;">
      
-     <input type="checkbox" class="checkbox_custom" value="1" name="confirm" id="confirm" required="required"> <span class="checkbox-custom"></span>       Отметьте, что Вы согласны с <a href="javascript:;" onclick="$('.popup0').show(); $('.popup1').css('top', ($(window).scrollTop() + 40) + 'px')">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке) </label>
+     <input type="checkbox" class="checkbox_custom" value="1" name="confirm" id="confirm" required="required"> <span class="checkbox-custom"></span>       <?=$ui->item('CARTNEW_CHECKBOX_TERMS_OF_USE')?> </label>
      <span style="color: #ff0000; font-size: 12px;" class="err_confirm"></span>
 
 	 <div class="popup0 popup<?=$p['id']?>" style="background-color: rgba(0,0,0,0.3); position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99999; opacity: 0.3; display: none;" onclick="$('.popup0').hide();"></div>
@@ -359,25 +359,25 @@ echo '</div>';
      
      <div class="op" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.6; background: #eee; z-index: 999; "></div>
  
-<div class="p1">2. Где и как вы хотите получить заказ?</div>
+<div class="p1"><?=$ui->item('CARTNEW_NOREG_STEP2_TITLE')?></div>
    
     <div class="row dtypes">
         
-			<div style="position: relative; display: inline-block; width: auto; height: 160px;float: left; margin-left: 0;" class="span3 row_del1"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart1').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart1">Доставка на дом или на адрес доставки почтовым письмом/бандеролью, без отслеживания (without tracking number)</div><label class="seld span3 seld02" rel="8.3" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); $('.type_delivery').val('Доставка почтой'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
+			<div style="position: relative; display: inline-block; width: auto; height: 160px;float: left; margin-left: 0;" class="span3 row_del1"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart1').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart1"><?=$ui->item('DELIVERY_ECONOMY_OTHER');?></div><label class="seld span3 seld02" rel="8.3" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2">Доставка почтой<br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
+            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">8.3$</span></label></div>
 			
-			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del2"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart2').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart2">Доставка на дом или на адрес доставки почтовым Priority-письмом/бандеролью, без отслеживания (without tracking number), обслуживание Priority</div><label class="seld span3 seld03" rel="11.8" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype3'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); $('.type_delivery').val('Доставка почтой'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
+			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del2"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart2').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart2"><?=$ui->item('DELIVERY_PRIORITY_OTHER')?></div><label class="seld span3 seld03" rel="11.8" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype3'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3">Доставка почтой<br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
+            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">11.8$</span></label></div>
 			
 			
-			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del3"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart3').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart3">Доставка на дом или на адрес доставки почтовым срочным письмом/бандеролью, c отслеживанием (with tracking number), обслуживание Express</div><label class="seld span3 seld04 act" rel="23.6" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype4'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('Доставка почтой'); $('.type_delivery').val('Доставка почтой'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(100, 113, 127);"><div class="red_checkbox" style="float: right;">
+			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del3"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart3').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart3"><?=$ui->item('DELIVERY_EXPRESS_OTHER');?></div><label class="seld span3 seld04 act" rel="23.6" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype4'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(100, 113, 127);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check active"></span></span> 
-            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked">Доставка почтой<br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
+            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">23.6$</span></label></div>
 		
-        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_name').html('Забрать в магазине'); $('.type_delivery').val('Забрать в магазине'); sbros_delev(); $('.oplata3').click(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>">
-            <span class="zabr_market">Забрать в магазине в Хельсинки</span>
+        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); $('.type_delivery').val('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); sbros_delev(); $('.oplata3').click(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>">
+            <span class="zabr_market"><?=$ui->item('CARTNEW_PICK_UP_STORE1');?></span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -396,12 +396,12 @@ echo '</div>';
         
         
         
-        <div class="p2">3. Как вам будет удобнее оплатить заказ?</div>
+        <div class="p2"><?=$ui->item('CARTNEW_NOREG_STEP3_TITLE');?></div>
         
         <div class="row spay">
         
         <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'ptype0')">
-            Оплата в магазине
+            <?=$ui->item('CARTNEW_PAY_IN_STORE');?>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -411,7 +411,7 @@ echo '</div>';
         <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'ptype2')" style="width: 484px;">
             
             <img src="/images/pt2.png" style="margin-top: -3px;" />
-            <span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
+            <span style="display: block; margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL');?></span>
             
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
@@ -430,7 +430,7 @@ echo '</div>';
         
             
         <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'ptype3')">
-            <div style="margin-top: -8px;"><b>Cчет-фактура</b><br /> Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС </div>
+            <?=$ui->item('CARTNEW_PAY_INVOICE_LABEL')?>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -454,7 +454,7 @@ echo '</div>';
         </label> 
             
         <label class="selp span3 oplata7" onclick="check_cart_sel($(this),'selp', 'ptype6')">
-            Предоплата на банковский счет в Финляндии
+            <?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT1')?>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
@@ -462,7 +462,7 @@ echo '</div>';
         </label>
             
         <label class="selp span3 oplata8" onclick="check_cart_sel($(this),'selp', 'pype7')">
-            Предоплата на банковский счет в России
+            <?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT2')?>
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
             </div>
