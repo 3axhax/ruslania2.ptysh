@@ -1,3 +1,4 @@
+<? $ui = new RuslaniaUI; ?>
 <form method="post" action="<?=PayPalPayment::URL; ?>">
 <INPUT TYPE="hidden" NAME="cmd" VALUE="_ext-enter">
 <INPUT TYPE="hidden" NAME="redirect_cmd" VALUE="_xclick">
@@ -13,5 +14,9 @@
 <input type="hidden" name="return" value="<?=$this->GetAcceptUrl(); ?>">
 <input type="hidden" name="cancel_return" value="<?=$this->GetCancelUrl(); ?>">
 <input type="hidden" name="rm" value="2">
-<INPUT TYPE="image" SRC="/pic1/paypal.jpg" ALT="Make payments with PayPal - it\'s fast, free and secure!"  data-ptid="<?=Payment::PAY_PAL; ?>">
+
+<a href="javascript:;" class="order_start" style="background-color: #5bb75b;  margin-top: -65px;" data-ptid="<?=Payment::PAY_PAL; ?>" onclick="$('form').submit()"><i class="fa fa-paypal"></i> <?=$ui->item('CARTNEW_FINAL_BTN_PAYPAL')?></a>
+
+
+<!--<INPUT TYPE="image" SRC="/pic1/paypal.jpg" ALT="Make payments with PayPal - it\'s fast, free and secure!"  data-ptid="<?=Payment::PAY_PAL; ?>">-->
 </form>

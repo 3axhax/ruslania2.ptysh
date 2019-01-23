@@ -1,26 +1,35 @@
 <hr />
 
 <div class="container cartorder">
-    <h1><?= Yii::app()->ui->item('HEADER_ALIPAY') ?></h1>
-    Спасибо за заказ! Ваш заказ № <?=$number_zakaz?><br /><br />
+    <h1><?=$ui->item('CARTNEW_ALIPAY_H1')?></h1>
+
+
+    <?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?> <br /><br />
+	
+	<?=sprintf($ui->item('CARTNEW_ALIPAY_TEXT1'), $number_zakaz, ProductHelper::FormatPrice($order['full_price'], $order['currency_id']))?><br /><br />
+	
+    <div>
+        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_ALIPAY') ?><br /><br />
     <div><?= Yii::app()->ui->item('DESC_ALIPAY', $number_zakaz) ?></div>
 
     
     <div style="margin: 15px 0;">
-    <div>Выбрать <a style="cursor: pointer;" onclick="openPaySystems('dtype26'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
+    <div><?=sprintf($ui->item('CARTNEW_PAYTRAIL_TEXT2'), 'dtype26')?></div>
     <div id="pay_systems" class="row spay" style="display: none; ">
         <?php $this->renderPartial('/site/pay_systems', array()); ?>
     </div>
     </div>
     
-    <?php /*
-    <b>Оплата через систему Alipay</b><br /><br />
-    Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N XXXXXXX оплачен» на адрес orders@ruslania.com<br /><br />
-    */ ?>
+	<div style="height: 20px;"></div>
+    <a href="<?= Yii::app()->createUrl('/view/'.$number_zakaz)?>" class="order_start" style="background-color: #28618E;  margin-top: -65px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
+                        </a>
+    <div style="height: 20px;"></div>
+	
     <img src="/images/alipay.jpg" />
 
     <div style="margin: 15px 0;">
-        Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).
+        <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
 
 </div>

@@ -1356,5 +1356,23 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_ERROR_SELECT_DELIVERY'=>'Выберите тариф доставки',
 'CARTNEW_BTN_ADD_ADDRESS'=>'Добавить',
 'CARTNEW_BTN_CANCEL_ADDRESS'=>'Отменить',
-    'MENU'=>'Меню',
+'CARTNEW_PAYPAL_LABEL' => 'Произведите оплату нажав на кнопку оплаты внизу. Ваш заказ № %d. Сумма заказа: %s.',
+'CARTNEW_ORDER_PAY_OTHER_LABEL'=>'Или выберите <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">другой способ оплаты</a>',
+'CARTNEW_FINAL_ORDER_TEXT'=>'Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> или WhatsApp (текст или звонок) +358 503889439 по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).',
+'CARTNEW_FINAL_BTN_PAYPAL'=>'Оплатить заказ',
+'CARTNEW_FINAL_BTN_VIEW_ORDER'=>'Посмотреть заказ',
+'CARTNEW_PAYPAL_H1'=>'Оплатить с помощью PayPal',
+'CARTNEW_PAYTRAIL_H1'=>'Оплатить с помощью PayTrail',
+'CARTNEW_ALIPAY_H1'=>'Оплатить с помощью AliPay',
+'CARTNEW_PAYPAL_THANK_ORDER'=>'Спасибо за заказ!',
+'CARTNEW_YOUR_SELECT'=>'Вы выбрали',
+
+'CARTNEW_PAYTRAIL_TEXT1'=>'Ваш заказ № %s. Сумма заказа: %s. Произведите оплату, выбрав чем хотите оплатить',
+'CARTNEW_PAYTRAIL_TEXT2'=>'Выбрать <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">другой способ оплаты</a>',
+
+'CARTNEW_RESULT_TEXT1'=>'Номер заказа %s. Сумма заказа: %s<br />%s',
+'CARTNEW_ALIPAY_TEXT1'=>'Ваш заказ № %s. Сумма заказа: %s.',
+
+
+   'MENU'=>'Меню',
 );

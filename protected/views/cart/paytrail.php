@@ -3,25 +3,39 @@
 
 <div class="container cartorder">
 
-    Спасибо за заказ! Ваш заказ № <?=$number_zakaz?>. Произведите оплату, выбрав чем хотите оплатить<br /><br />
-    <div>Выбранный способ оплаты: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?></div>
+    <h1><?=$ui->item('CARTNEW_PAYTRAIL_H1')?></h1>
+
+
+    <?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?> <br /><br />
+    <div>
+        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br /><br />
+
    
-    
-    <div style="margin: 15px 0;">
-    <div>Выбрать <a style="cursor: pointer;" onclick="openPaySystems('dtype25'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
+   <?=sprintf($ui->item('CARTNEW_PAYTRAIL_TEXT1'), $number_zakaz, ProductHelper::FormatPrice($order['full_price'], $order['currency_id']))?>
+   
+   <br /><br />
+
+	<div style="margin: 15px 0;">
+    <div>
+		<?=sprintf($ui->item('CARTNEW_PAYTRAIL_TEXT2'), 'dtype25')?>
+	</div>
     <div id="pay_systems" class="row spay" style="display: none; ">
         <?php $this->renderPartial('/site/pay_systems', array()); ?>
     </div>
     </div>
 
-
+	<div style="height: 20px;"></div>
+    <a href="<?= Yii::app()->createUrl('/view/'.$number_zakaz)?>" class="order_start" style="background-color: #28618E;  margin-top: -65px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
+                        </a>
+    <div style="height: 20px;"></div>
 
     <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
 
     <div class="clearBoth"></div>
 
     <div style="margin: 15px 0;">
-        Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).
+        <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
    
 </div>

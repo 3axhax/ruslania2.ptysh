@@ -312,7 +312,7 @@ class CartController extends MyController {
 		
 		
 		
-        $input['cart_header'] = sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), array(self::decline_goods($cartInfo['fullInfo']['count']), $ui), $PH->FormatPrice($cartInfo['fullInfo']['cost']));
+        $input['cart_header'] = sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), self::decline_goods($cartInfo['fullInfo']['count']), $PH->FormatPrice($cartInfo['fullInfo']['cost']));
         //$input['cart'] = array();
         foreach ($cartInfo['items'] as $id => $item) :
             $input['cart'][] = '<tr>'.
