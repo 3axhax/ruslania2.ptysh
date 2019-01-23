@@ -4,6 +4,7 @@ switch (Yii::app()->getLanguage()) {
 	case 'fr': $name = 'Partitions'; break;
 	case 'en': $name = 'Sheet music'; break;
 	case 'fi': $name = 'Nuotit'; break;
+	case 'es': $name = 'Partituras'; break;
 //	case 'ru': $name = 'Ноты и книги о музыке'; break;
 }
 ?>
