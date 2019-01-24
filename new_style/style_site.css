@@ -6,9 +6,15 @@
         url(fonts/open-sans_5f14bd2f3cd41e7b13ff8bc4177c9d06.woff) format('woff'),
         url(fonts/open-sans_5f14bd2f3cd41e7b13ff8bc4177c9d06.ttf) format('truetype');
 }
+@font-face {
+    font-family: 'Open Sans Extrabold';
+    src: local('Open Sans Extrabold'), local('OpenSans-Extrabold'),
+    url(fonts/open-sans-extrabold.ttf) format("truetype");
+    font-weight: 900;
+}
 * {
 
-    font-family: 'Open Sans', arial;
+    font-family: 'Open Sans', 'Open Sans Extrabold', arial;
 
 }
 
@@ -3567,3 +3573,74 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .download span { display: block; color: #fff; text-align: center; background-color: #5bb75b; border-radius: 4px 0 0 4px; padding: 8px 12px; float: left; }
 .download.excel span.fa { display: block; background-color: #369f4b; border-radius: 0 4px 4px 0; width: 20px; }
 .download.excel span.fa::after { content: '\f1c3'; color: #fff; font-size: 20px; }
+
+
+.sale_info_block {
+    width: 820px;
+    height: 240px;
+    background: url(/new_img/bacground_sale.jpg);
+}
+
+.sale_info_block .maxcount {
+    float: right;
+    width: 290px;
+    height: 240px;
+    position: relative;
+}
+.sale_info_block .maxcount div {
+    width: 290px;
+    height: 240px;
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+    color: #fff;
+    font-size: 57px;
+    font-weight: bold;
+    line-height: 1.2;
+    font-family: 'Open sans extrabold';
+}
+.sale_info_block .maxcount div span{
+    font-family: 'Open sans extrabold';
+    font-size: 105%;
+    padding-left: 8px;
+    letter-spacing: 3px;
+}
+
+.sale_info_block .header {
+    width: 520px;
+    height: 130px;
+    position: relative;
+}
+.sale_info_block .header div {
+    padding-top: 32px;
+    padding-left: 45px;
+    font-size: 41px;
+    font-weight: bold;
+    line-height: 1.1;
+    letter-spacing: 1.3px;
+    font-family: 'Open sans';
+    color: #1d1856;
+}
+
+.sale_info_block .desc {
+    position: relative;
+    height: 110px;
+    width: 480px;
+}
+
+.sale_info_block .desc div:first-child {
+    padding-left: 46px;
+    font-size: 20px;
+    padding-top: 10px;
+    letter-spacing: -0.9px;
+    color: #1d1856;
+    font-family: 'Open sans';
+}
+.sale_info_block .desc div:last-child {
+    padding-left: 48px;
+    font-size: 14px;
+    padding-top: 1px;
+    letter-spacing: 0.1px;
+    font-family: 'Open sans';
+    color: #1d1856;
+}

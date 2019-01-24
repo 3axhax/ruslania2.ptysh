@@ -1247,7 +1247,7 @@ By clicking on a category you are interested in, you can see all the products wi
 
     'A_NEW_SALE_H1' => 'Great Sale in Ruslania',
     'A_NEW_SALE_PAGE_TITLE' => 'Great offers in all categories',
-    'A_NEW_SALE_COUNT' => 'Discounts up to 80%',
+    'A_NEW_SALE_COUNT' => '<div style="font-size: 50px;">Discounts up to <span>80%</span></div>',
     'A_NEW_SALE_PAGE_DESC' => 'By clicking on a category you are interested in, you can see all the products with discounts from this category',
     'A_NEW_SALE_BOOKS' => 'Распродажа книг',
     'A_NEW_SALE_SHEETMUSIC' => 'Распродажа нот',

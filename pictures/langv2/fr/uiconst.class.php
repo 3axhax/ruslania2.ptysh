@@ -1228,7 +1228,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'A_NEW_PERIODIC_FOR_GIFT_TEXT' => 'пока не переводим',
   'A_NEW_SALE_H1' => 'Grande vente à Ruslania',
   'A_NEW_SALE_PAGE_TITLE' => 'Offres exceptionnelles dans toutes les catégories',
-    'A_NEW_SALE_COUNT' => 'Remises jusqu\'à 80%',
+    'A_NEW_SALE_COUNT' => '<div style="font-size: 40px;">Remises jusqu\'à <span>80%</span></div>',
     'A_NEW_SALE_PAGE_DESC' => 'En cliquant sur une catégorie qui vous intéresse, vous pouvez voir tous les produits avec des remises de cette catégorie',
   'A_NEW_SALE_BOOKS' => 'Les livres en solde',
   'A_NEW_SALE_SHEETMUSIC' => 'Les partitions en solde',
