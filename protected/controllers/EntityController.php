@@ -272,7 +272,8 @@ class EntityController extends MyController {
             $paginatorInfo->setPageSize($a->getPerToPage());
             $paginatorInfo->route = 'publisherlist';
         }
-        $this->_maxPages = ceil($list_count/$paginatorInfo::DEFAULT_PAGE_SIZE);
+		
+		$this->_maxPages = ceil($list_count/$paginatorInfo->DEFAULT_PAGE_SIZE);
 
         $this->render('authors_list', array(
             'entity' => $entity,
