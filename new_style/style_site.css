@@ -3569,10 +3569,16 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .fa-angle-down { opacity: 0.2; margin-left: 8px; font-size: 15px; }
 .red { color: #ed1d24;}
 
-.download { display: inline-block; white-space: nowrap; }
-.download span { display: block; color: #fff; text-align: center; background-color: #5bb75b; border-radius: 4px 0 0 4px; padding: 8px 12px; float: left; }
-.download.excel span.fa { display: block; background-color: #369f4b; border-radius: 0 4px 4px 0; width: 20px; }
-.download.excel span.fa::after { content: '\f1c3'; color: #fff; font-size: 20px; }
+.download, .button_view { display: inline-block; white-space: nowrap; margin-right: 10px;}
+.download span, .button_view span { display: block; color: #fff; text-align: center; border-radius: 4px 0 0 4px; padding: 8px 12px; float: left; }
+.download.excel span.fa, .button_view.list span.fa { display: block; border-radius: 0 4px 4px 0; width: 20px; }
+.download.excel span.fa::after, .button_view.list span.fa::after { color: #fff; font-size: 20px; }
+.download span {  background-color: #5bb75b; }
+.download.excel span.fa { background-color: #369f4b; }
+.button_view span { background-color: #28618E; }
+.button_view.list span.fa { background-color: #132074; }
+.download.excel span.fa::after { content: '\f1c3'; }
+.button_view.list span.fa::after { content: '\f03a'; }
 
 
 .sale_info_block {

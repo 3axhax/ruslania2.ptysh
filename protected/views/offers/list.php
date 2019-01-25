@@ -70,9 +70,11 @@
 								echo '</div><div class="clearfix"></div></div>';
 							}
 							?><div style="margin-top: 15px;"></div>
-	                    <?php /*<a href="<?= $href ?>" class="order_start" style="background-color: #5bb75b;">
-		                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Смотреть списком</span>
-	                    </a>*/?>
+	                    <a href="<?= $href ?>" class="button_view list">
+                            <span><?=$ui->item('VIEW_LIST'); ?></span>
+                            <span class="fa"></span>
+		                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"></span>
+	                    </a>
 							<a title="<?=htmlspecialchars($ui->item('DOWNLOAD_EXCEL_FILE')); ?>" rel="nofollow" class="download excel" href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>">
 								<span><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?></span>
 								<span class="fa"></span>

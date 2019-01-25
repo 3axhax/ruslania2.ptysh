@@ -1292,5 +1292,6 @@ By clicking on a category you are interested in, you can see all the products wi
     '3_FOR_PRICE_2' => '3 по цене 2',
     'NAME_CROSSWORD'=>'Crucigramas',
     'MENU'=>'Menu',
+    'VIEW_LIST'=>'Смотреть списком',
 
 );

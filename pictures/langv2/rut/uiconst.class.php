@@ -1281,5 +1281,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'A_NEW_MY_FAVORITE' => 'Mojo izbrannoe',
     'NAME_CROSSWORD'=>'Krossvordi',
     'MENU'=>'Menu',
+    'VIEW_LIST'=>'Смотреть списком',
 
 );

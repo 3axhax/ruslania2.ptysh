@@ -1288,5 +1288,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'A_NEW_MY_FAVORITE' => 'Interesting items',
     'NAME_CROSSWORD'=>'Crossword',
     'MENU'=>'Menu',
+    'VIEW_LIST'=>'Смотреть списком',
 
 );
