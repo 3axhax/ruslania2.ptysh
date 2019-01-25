@@ -1364,7 +1364,7 @@ class EntityController extends MyController {
         $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $o = new Offer();
-        $group = $o->GetItems(Offer::INDEX_PAGE, $entity);
+        $group = $o->GetItems(1153/*Offer::INDEX_PAGE*/, $entity);
 
 
         $title = Entity::GetTitle($entity);
