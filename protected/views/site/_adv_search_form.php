@@ -94,7 +94,7 @@
             <td><?=CHtml::textField('year', $year); ?></td>
         </tr>
         <tr>
-            <td><?= $ui->item('SEARCH_IN_STOCK'); ?>:</td>
+            <td><?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>:</td>
             <td class="red_checkbox" onclick="check_search($(this));" style="height: 42px;">
                 <span class="checkbox">
                     <span class="check<?= $only?' active':'' ?>"></span>
