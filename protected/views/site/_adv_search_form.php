@@ -95,7 +95,7 @@
         </tr>
         <tr>
             <td><?= $ui->item('SEARCH_IN_STOCK'); ?>:</td>
-            <td class="red_checkbox" onclick="check_search($(this));">
+            <td class="red_checkbox" onclick="check_search($(this));" style="height: 42px;">
                 <span class="checkbox">
                     <span class="check<?= $only?' active':'' ?>"></span>
                 </span>

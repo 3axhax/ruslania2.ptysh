@@ -320,7 +320,7 @@ class CartController extends MyController {
                 '<td style="width: 35px; height: 35px"> <span class="entity_icons"><i class="fa e' . $item['entity'] . '"></i></span></td>'.
                 '<td>
                     <span class="a">'.$item['title'].'</span>
-                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') ) . ' x '.$PH->FormatPrice($item['price']).'<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME').'</div>
+                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') ) . ' x '.$PH->FormatPrice($item['price']).(($item['weight'] > 0) ? '<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME') : '').'</div>
                 </td>
                 
             </tr>';
@@ -953,8 +953,15 @@ class CartController extends MyController {
 			}
 			
 			
-            if (Yii::app()->request->isAjaxRequest)
-                $this->ResponseJson(array('hasError' => false, 'msg' => $message, 'already' => $already));
+            if (Yii::app()->request->isAjaxRequest) {
+                //CARTNEW_IN_CART_BTN
+                $this->ResponseJson(array(
+                    'hasError' => false,
+                    'msg' => $message,
+                    'already' => $already,
+                    'buttonName' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
+                ));
+            }
             else
                 $this->redirect(Yii::app()->createUrl('cart/view'));
         }

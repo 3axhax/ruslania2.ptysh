@@ -633,6 +633,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
 
             opentip.show();
+            if ('buttonName' in json) $el.find('span').html(json['buttonName']);
 
             function doCountdown()
             {
