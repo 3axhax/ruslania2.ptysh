@@ -55,7 +55,7 @@
                                     foreach ($offer_entity['items'] as $of) {
 
                                         //if ($s < 7) {
-                                        if (true): ?>
+                                        if (!empty($of['image'])): ?>
                                         <div class="item slider_recomend__item">
                                             <a href="<?= ProductHelper::createUrl($of) ?>" class="slider__img-block">
 												<div class="img slider__img" style="background: url('<?= Picture::Get($of, Picture::SMALL) ?>') center center no-repeat; background-size: 100%; position: relative">

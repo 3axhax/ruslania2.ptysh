@@ -1145,7 +1145,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_ALL_CATEGORIES' => 'Tous les catégories',
   'A_NEW_APPLY' => 'Appliquer',
   'A_NEW_VIDEO' => 'Video',
-  'A_NEW_MORE3' => 'Information sur le produit',
+  'A_NEW_MORE3' => 'Description',
   'A_NEW_SEARCH_ENT' => 'Rechercher dans le département',
   'A_NEW_FILTER_LANG_VIDEO' => 'Langue audio',
   'A_NEW_FILTER_LANG_SUBTITLES' => 'Sous-titre language',

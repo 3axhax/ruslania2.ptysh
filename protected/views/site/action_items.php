@@ -81,7 +81,7 @@
 									<div class="addcart" style="margin-top: 10px;">
 									
 									
-										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 103px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 125px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
 										
 										
 										
