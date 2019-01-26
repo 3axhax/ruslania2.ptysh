@@ -551,7 +551,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Objazatelno ukazhite nomer zak
   'Published by' => 'Izdatel',
   'PUBLISHED_BY' => 'Izdatel/ Izgotovitel: %s',
   'PUBLISHED_BY_T1' => 'Izdatel/ Izgotovitel: %s',
-  'PUBLISHED_IN_YEAR' => 'god vykhoda %s',
+  'PUBLISHED_IN_YEAR' => 'God vykhoda %s',
   'Publisher' => 'Izdatel',
   'READ_BY' => 'ispolnitel(i): %s',
   'regform_email' => 'El. pochta',

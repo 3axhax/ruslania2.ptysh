@@ -558,7 +558,7 @@ försändelsen eller skickas till faktureringadres. Obs! Endast <br>för kunder 
   'Published by' => 'Förlag',
   'PUBLISHED_BY' => 'publiserad av %s',
   'PUBLISHED_BY_T1' => 'publiserad av %s',
-  'PUBLISHED_IN_YEAR' => 'publiserad i %s',
+  'PUBLISHED_IN_YEAR' => 'Publiserad i %s',
   'Publisher' => 'Förlag',
   'READ_BY' => 'skådespelare eller artist(er):  %s',
   'regform_email' => 'E-post',

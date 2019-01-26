@@ -552,7 +552,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Please mention the order numbe
   'Published by' => 'Publisher',
   'PUBLISHED_BY' => 'Published / Manufactured by: %s',
   'PUBLISHED_BY_T1' => 'Published / Manufactured by: %s',
-  'PUBLISHED_IN_YEAR' => 'published in %s',
+  'PUBLISHED_IN_YEAR' => 'Published in %s',
   'Publisher' => 'Publisher',
   'READ_BY' => 'Performer(s): %s',
   'regform_email' => 'E-mail',

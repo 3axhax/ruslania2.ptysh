@@ -549,7 +549,7 @@ return array (
   'Published by' => 'Éditeur',
   'PUBLISHED_BY' => 'Publié par %s',
   'PUBLISHED_BY_T1' => 'publié par %s',
-  'PUBLISHED_IN_YEAR' => 'publié en %s',
+  'PUBLISHED_IN_YEAR' => 'Publié en %s',
   'Publisher' => 'Éditeur',
   'READ_BY' => 'Interprètes: %s',
   'regform_email' => 'adresse e-mail',
