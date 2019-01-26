@@ -155,6 +155,11 @@ class MyUrlRule extends CUrlRule {
         unset($params['lang']);
 
         if ($language === 'rut') $params['language'] = $language;
+        $currency = 0;
+        if (!empty($params['currency'])) {
+            $currency = (int) $params['currency'];
+            unset($params['currency']);
+        }
         $url = parent::createUrl($manager,$route,$params,$ampersand);
 
         if ($url !== false) {
@@ -168,6 +173,11 @@ class MyUrlRule extends CUrlRule {
             }
 
             if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
+        }
+        if ($currency > 0) {
+            if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?';
+            else $url .= '&';
+            $url .= 'currency=' . $currency;
         }
         return $url;
     }
