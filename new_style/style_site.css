@@ -1399,18 +1399,7 @@ a.add_cart_plus.green_cart {
 }
 
 
-.add_cart_plus.green_cart:before {
-	
-	content: "\f00c";
-	
-}
 
-
-a.add_cart_plus.green_cart span {
-	
-	background: #55B456 !important;
-	
-}
 
 .news_box ul.books li .addcart a.add_cart_plus,
 .container_slides ul li .addcart a.add_cart_plus {
@@ -1447,6 +1436,19 @@ a.add_cart_plus.green_cart span {
     text-align: center;
     width: 132px;
     margin-top: 18px;
+}
+
+.add_cart_plus.green_cart:before {
+	
+	content: "\f00c";
+	
+}
+
+
+a.add_cart_plus.green_cart span, .news_box ul.books li .addcart a.add_cart_plus.green_cart span,.container_slides ul li .addcart a.add_cart_plus.green_cart span {
+	
+	background: #55B456 !important;
+	
 }
 
 .more_goods ul.books li .addcart a.add_cart_plus span,
@@ -2219,12 +2221,8 @@ table.memo_items tbody tr td {
 	font-weight: bold;
 }
 
-.items_goods_recomends div.img {
-	
-	width: 111px;
-	height: 171px;
-	overflow: hidden;
-}
+.items_goods_recomends div.img { width: 111px; height: 171px; overflow: hidden; display: table-cell; vertical-align: middle; }
+.items_goods_recomends div.img img { max-height: 171px; max-width: 111px; }
 
 .items_goods_recomends a {
 	margin-left: 15px;
@@ -2236,7 +2234,7 @@ table.memo_items tbody tr td {
 }
 
 .items_goods_recomends {
-	margin: 17px 0 0 0;
+	/*margin: 17px 0 0 0;*/
 }
 
 .left_list li a.dprice {
@@ -2799,16 +2797,17 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
 /* slider */
 .custom-slider {
     width: 880px;
-    padding-top: 40px;
-    min-height: 261px;
+    padding-top: 57px;
+    height: 261px;
     position: relative;
+    overflow: hidden;
 }
 
 .custom-slider .btn_left,
 .custom-slider .btn_right{
     position: absolute;
     top: 0;
-    margin-top: -17px;
+    /*margin-top: -17px;*/
     cursor: pointer;
 }
 
@@ -2820,8 +2819,7 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
 }
 
 .slider_recomend__item {
-    height: 260px;
-    float: left;
+    height: 260px; float: left; position: relative; text-align: right; width: 176px;
 }
 .custom-slider .slick-list {
     overflow: hidden;

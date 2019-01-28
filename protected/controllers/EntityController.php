@@ -1492,8 +1492,8 @@ class EntityController extends MyController {
             $paginatorInfo = new CPagination($counts);
             $paginatorInfo->setPageSize($vs->getPerToPage());
             $paginatorInfo->route = 'studioslist';
+            $this->_maxPages = ceil($counts/$paginatorInfo::DEFAULT_PAGE_SIZE);
         }
-        $this->_maxPages = ceil($counts/$paginatorInfo::DEFAULT_PAGE_SIZE);
 
         $this->render('studios_list', array('list' => $list, 'paginatorInfo' => $paginatorInfo, 'entity' => $entity));
     }

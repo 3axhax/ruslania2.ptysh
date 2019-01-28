@@ -56,13 +56,20 @@
 
                                         //if ($s < 7) {
                                         if (!empty($of['image'])): ?>
-                                        <div class="item slider_recomend__item">
+	                                        <div class="item slider_recomend__item">
+		                                        <div class="img slider__img">
+			                                        <a href="<?= ProductHelper::createUrl($of) ?>">
+				                                        <img src="<?= Picture::Get($of, Picture::SMALL) ?>" data-lazy="<?= Picture::Get($of, Picture::SMALL) ?>">
+			                                        </a>
+		                                        </div>
+	                                        </div><?php /*
+	                                        <div class="item slider_recomend__item">
                                             <a href="<?= ProductHelper::createUrl($of) ?>" class="slider__img-block">
 												<div class="img slider__img" style="background: url('<?= Picture::Get($of, Picture::SMALL) ?>') center center no-repeat; background-size: 100%; position: relative">
                                             <?php $this->renderStatusLables(Product::GetStatusProduct($of['entity'], $of['id']), '', true) ?>
                                                 </div>
                                             </a>
-                                        </div>
+                                        </div> */ ?>
                                         <?php endif;
                                         $s++;
                                     }
@@ -107,7 +114,7 @@
 				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>",
 				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>"
 			}).on('lazyLoadError', function(event, slick, image, imageSource){
-				image.attr('src', '<?= Picture::srcNoPhoto() ?>');
+				image.closest('div.slider_recomend__item').remove()/*image.attr('src', '<?= Picture::srcNoPhoto() ?>')*/;
 			});
 		});
 	});
