@@ -1289,5 +1289,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'NAME_CROSSWORD'=>'Crossword',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
+    'CARTNEW_IN_CART_BTN' => 'In cart %d item(s)',
 
 );

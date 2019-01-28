@@ -79,9 +79,9 @@
 									<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
 								<?php else: ?>
 									<div class="addcart" style="margin-top: 10px;">
+								<?file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.txt', print_r($product,1))?>	
 									
-									
-										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 125px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
 										
 										
 										

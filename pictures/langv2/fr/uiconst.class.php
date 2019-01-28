@@ -1272,5 +1272,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'NAME_CROSSWORD'=>'Mots croisés',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
+    'CARTNEW_IN_CART_BTN' => 'Quantité au panier: %d',
 
 );

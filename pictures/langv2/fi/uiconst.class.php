@@ -1275,5 +1275,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'NAME_CROSSWORD'=>'Ristikot',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
+    'CARTNEW_IN_CART_BTN' => 'Ostoskorissa %d kpl',
 
 );
