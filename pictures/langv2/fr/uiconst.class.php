@@ -1113,7 +1113,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_SUBS_TD1_1' => 'Date d\'envoi',
   'A_NEW_SUBS_TD2_1' => 'Adresse de livraison',
   'A_NEW_SUBS_TD3_1' => 'Numéro de magazin',
-  'A_NEW_YEAR' => 'Année de publication',
+  'A_NEW_YEAR' => 'Année de sortie',//'Année de publication',
   'A_NEW_FILTER_TYPE1' => 'Type de produit',
   'A_NEW_FILTER_TYPE2' => 'Type',
   'A_NEW_FILTER_SORT_FOR' => 'Trier par:',

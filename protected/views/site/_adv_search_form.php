@@ -90,7 +90,7 @@
             <td id="language_select"><?=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---', 'class'=>'select2_series')); ?></td>
         </tr>
         <tr>
-            <td><?=trim(sprintf($ui->item('PUBLISHED_IN_YEAR'), '')); ?>:</td>
+            <td><?=trim(sprintf($ui->item('A_NEW_YEAR'), '')); ?>:</td>
             <td><?=CHtml::textField('year', $year); ?></td>
         </tr>
         <tr>
