@@ -1247,7 +1247,8 @@ class EntityController extends MyController {
         $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
 
         $o = new Offer();
-        $group = $o->GetItems(1153/*Offer::INDEX_PAGE*/, $entity);
+        $offer = $o->GetOffer(1153, 0, 1);
+        $group = $o->GetItems(1153/*Offer::INDEX_PAGE, $entity*/);
 
 
         $title = Entity::GetTitle($entity);
@@ -1290,6 +1291,7 @@ class EntityController extends MyController {
             'cid' => $cid,
             'giftText' => $giftText,
             'isWordpanel' => $isWordpanel,
+            'offer'=>$offer,
         ));
     }
 

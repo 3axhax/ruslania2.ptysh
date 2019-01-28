@@ -13,7 +13,8 @@
         <div class="news_box nb<?= $entity ?>">
             <div class="container">
                 <div class="title">
-                    <?= $ui->item("A_NEW_RECOMMENDATIONS_CATEGORY") ?> <a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= Entity::GetTitle($entity); ?></span></a>
+                    <?php /*<?= $ui->item("A_NEW_RECOMMENDATIONS_CATEGORY") ?> <a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= Entity::GetTitle($entity); ?></span></a>*/ ?>
+                    <?= ProductHelper::GetTitle($offer); ?>
                     <div class="pult">
                         <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
                         <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
