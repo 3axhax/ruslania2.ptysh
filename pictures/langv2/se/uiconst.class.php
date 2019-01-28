@@ -162,7 +162,7 @@ return array (
   'CART_COL_DELETE' => 'Radera',
   'CART_COL_ITEM_AVAIBILITY' => 'Lagerstatus',
   'CART_COL_ITEM_MOVE_TO_ORDERED' => 'Till mina förfrågningar',
-  'CART_COL_ITEM_MOVE_TO_SHOPCART' => 'Lägg i din kundvagn',
+  'CART_COL_ITEM_MOVE_TO_SHOPCART' => 'Lägg i varukorgen',
   'CART_COL_ITEM_MOVE_TO_SUSPENDED' => 'Bokmärk artikel',
   'CART_COL_PRICE' => 'Pris',
   'CART_COL_QUANTITY' => 'Antal',
@@ -1282,6 +1282,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'NAME_CROSSWORD'=>'Korsord',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
-    'CARTNEW_IN_CART_BTN' => 'Lägt i kundvagn %d st.',
+    'CARTNEW_IN_CART_BTN' => 'Lägg i varukorgen %d st.',
 
 );
