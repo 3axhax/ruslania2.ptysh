@@ -1216,7 +1216,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'A_NEW_PRODUCER' => 'Valmistaja',
   'PERIODIC_TYPE_PLURAL_2' => 'Aikakauslehdet',
   'PERIODIC_TYPE_PLURAL_1' => 'Sanomalehdet',
-  'PERIODIC_TYPE_PLURAL_3' => 'Nettilehdet',
+  'PERIODIC_TYPE_PLURAL_3' => 'Nettilehdet, online-versiot',
   'NAME_POPULAR' => 'Suositut lehdet',
   'NAME_SCIENCE' => 'Tiedelehdet',
   'NAME_FORCHILDS' => 'Lastenlehdet',

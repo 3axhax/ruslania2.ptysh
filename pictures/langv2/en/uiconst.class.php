@@ -1221,7 +1221,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'A_NEW_PRODUCER' => 'Manufacturer',
   'PERIODIC_TYPE_PLURAL_2' => 'Magazines',
   'PERIODIC_TYPE_PLURAL_1' => 'Newspapers',
-  'PERIODIC_TYPE_PLURAL_3' => 'Online newspapers',
+  'PERIODIC_TYPE_PLURAL_3' => 'Online subscription e-magazines',
   'NAME_POPULAR' => 'Popular',
   'NAME_SCIENCE' => 'Science',
   'NAME_FORCHILDS' => 'For children',

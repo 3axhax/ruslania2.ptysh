@@ -1218,7 +1218,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_PRODUCER' => 'Производитель',
     'PERIODIC_TYPE_PLURAL_2' => 'Журналы',
     'PERIODIC_TYPE_PLURAL_1' => 'Газеты',
-    'PERIODIC_TYPE_PLURAL_3' => 'Газеты онлайн',
+    'PERIODIC_TYPE_PLURAL_3' => 'Online subscription e-magazines',
     'NAME_POPULAR' => 'Популярные',
     'NAME_SCIENCE' => 'Научные',
     'NAME_FORCHILDS' => 'Для детей',
