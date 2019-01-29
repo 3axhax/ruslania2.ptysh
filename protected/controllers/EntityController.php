@@ -1260,8 +1260,8 @@ class EntityController extends MyController {
         $cid = 67; //Популярные журналы
 
         $category = new Category();
-        $data = FilterHelper::getFiltersData($entity, $cid);
-        $popular = $category->result_filter($data, $lang);
+        $periodicModel = Periodic::model();
+        $popular = $periodicModel->getByCategory($cid);
         $path = $category->GetCategoryPath($entity, $cid);
 
         $cnt = count($path);
@@ -1288,8 +1288,7 @@ class EntityController extends MyController {
         $cat119 = $category->GetByIds($entity, $cid119);
         $cat119 = array_shift($cat119);
         $titleCat119 = ProductHelper::GetTitle($cat119);
-        $data = FilterHelper::getFiltersData($entity, $cid119);
-        $popular119 = $category->result_filter($data, $lang);
+        $popular119 = $periodicModel->getByCategory($cid119);
 
         $this->render('gift', array('entity' => $entity,
             'group' => current($group)['items'],

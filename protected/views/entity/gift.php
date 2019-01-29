@@ -8,13 +8,14 @@
 <?php if (!empty($isWordpanel)): ?></div><?php endif; ?>
         <?/*= $ui->item('A_NEW_PERIODIC_FOR_GIFT_TEXT');*/ ?>
 <hr>
-<?php $eUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity))); ?>
-<?php $cUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid)); ?>
+<?php $eUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+$hrefOffer = Yii::app()->createUrl('offers/view', array('oid' => $offer['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($offer))));
+$cUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid)); ?>
         <div class="news_box nb<?= $entity ?>">
             <div class="container">
                 <div class="title">
                     <?php /*<?= $ui->item("A_NEW_RECOMMENDATIONS_CATEGORY") ?> <a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= Entity::GetTitle($entity); ?></span></a>*/ ?>
-                    <?= ProductHelper::GetTitle($offer); ?>
+                    <a href="<?= $hrefOffer; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= ProductHelper::GetTitle($offer); ?></span></a>
                     <div class="pult">
                         <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
                         <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
@@ -116,8 +117,8 @@
         </div>
 
 
-        <?php /*$cUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid119)); ?>
-        <div class="news_box nb67">
+        <?php $cUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cid119)); ?>
+        <div class="news_box nb119">
             <div class="container">
                 <div class="title">
                     <?= Entity::GetTitle($entity); ?>:
@@ -127,14 +128,14 @@
                             </span>
                     </a>
                     <div class="pult">
-                        <a href="javascript:;" onclick="$('.nb67 .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
-                        <a href="javascript:;" onclick="$('.nb67 .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
+                        <a href="javascript:;" onclick="$('.nb119 .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
+                        <a href="javascript:;" onclick="$('.nb119 .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
                     </div>
 
                 </div>
             </div>
 
-            <div class="container cnt67">
+            <div class="container cnt119">
                 <ul class="books">
                     <?php
                     foreach ($popular119 as $item) :
@@ -171,7 +172,6 @@
                 </ul>
             </div>
         </div>
-*/?>
 
     </div>
 </div>
@@ -187,6 +187,13 @@
                 image.attr('src', '<?= Picture::srcNoPhoto() ?>');
             });
             $('.cnt67 ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 5,
+                slidesToScroll: 5
+            }).on('lazyLoadError', function(event, slick, image, imageSource){
+                image.attr('src', '<?= Picture::srcNoPhoto() ?>');
+            });
+            $('.cnt119 ul').slick({
                 lazyLoad: 'ondemand',
                 slidesToShow: 5,
                 slidesToScroll: 5

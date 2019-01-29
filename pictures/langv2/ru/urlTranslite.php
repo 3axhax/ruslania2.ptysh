@@ -51,7 +51,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'types'=>'tip-izdanija',
-			'gift'=>'v-podarok',
+			'gift'=>'podarit-podpisku',
 		),
 	),
 	'video'=>array(
