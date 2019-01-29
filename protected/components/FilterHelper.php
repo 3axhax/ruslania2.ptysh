@@ -415,6 +415,19 @@ class FilterHelper
             self::$data['binding'] = self::$sessionData['binding'];
             return true;
         }
+
+        //тип издания
+        $binding = Yii::app()->getRequest()->getParam('type', false);
+        if ($binding !== false) {
+            self::$data['binding'][0] = $binding;
+            return true;
+        }
+        //тип носителя
+        $binding = Yii::app()->getRequest()->getParam('mid', false);
+        if ($binding !== false) {
+            self::$data['binding'][0] = $binding;
+            return true;
+        }
         self::$data['binding'] = false;
         return false;
     }

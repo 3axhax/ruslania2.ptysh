@@ -63,10 +63,11 @@ class Media extends CMyActiveRecord
             'select t.id, t.title '.
             'from `all_media` t '.
                 'join ('.
-                    'select media_id id, max(last_modification_date) last_modification_date '.
+                    'select media_id id, max(last_modification_date) last_modification_date, max(avail_for_order) avail_for_order '.
                     'from ' . $entities[$entity]['site_table'] . ' '.
                     'where (media_id is not null) and (media_id > 0) '.
-                    'group by media_id'.
+                    'group by media_id '.
+                    'having (avail_for_order > 0) '.
                 ') tI using (id) '.
             'where (t.entity = ' . $entity . ') '.
             'order by title '.

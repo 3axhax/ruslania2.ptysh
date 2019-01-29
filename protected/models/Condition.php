@@ -64,7 +64,7 @@ class Condition {
 		$this->_seria();
 		$this->_publisher();
 		$this->_binding();
-		$this->_media();
+//		$this->_media();
 		$this->_type();
 		$this->_stream();
 		$this->_format();
@@ -227,13 +227,13 @@ class Condition {
 			}
 		}
 	}
-
-	private function _media() {
-		if (Entity::checkEntityParam($this->_entity, 'media') && $this->_entity != Entity::SOFT) {
-			$pid = (int) $this->g('binding');
-			if ($pid > 0) $this->_condition['media_id'] = '(t.media_id = ' . $pid . ')';
-		}
-	}
+//  фигня какая-то
+//	private function _media() {
+//		if (Entity::checkEntityParam($this->_entity, 'media') && $this->_entity != Entity::SOFT) {
+//			$pid = (int) $this->g('binding');
+//			if ($pid > 0) $this->_condition['media_id'] = '(t.media_id = ' . $pid . ')';
+//		}
+//	}
 
     private function _type() {
         if (Entity::checkEntityParam($this->_entity, 'magazinetype')) {
@@ -294,7 +294,6 @@ class Condition {
 	            $str = trim((string) $this->g('performersStr'));
 	            if (!empty($str)) {
 		            $authorIds = SearchPerformers::get()->getFromMorphy($this->_entity, $str, 100, !empty($this->_condition['avail']));
-		            Debug::staticRun(array($authorIds));
 		            if (empty($authorIds)) {
 			            //TODO::надо что то придумать, что б запрос не выполнять
 			            $this->_condition['empty_result'] = 0;
