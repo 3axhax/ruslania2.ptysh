@@ -36,7 +36,7 @@
                 filebrowserUploadUrl: '/js/kcfinder/upload.php?type=files',
                 filebrowserImageUploadUrl: '/js/kcfinder/upload.php?type=images',
                 filebrowserFlashUploadUrl: '/js/kcfinder/upload.php?type=flash',
-                extraPlugins: 'oembed,widget,inlinesave,wenzgmap',
+                extraPlugins: 'oembed,widget,inlinesave,wenzgmap,fontawesome,lineheight',
                 image_previewText: " ",
                 toolbar: [
                     { name: 'document', items: [ /*'Save', 'Source', '-', 'inlinesave', 'NewPage', 'Preview', 'Print', '-', */'Templates' ] },
@@ -49,7 +49,7 @@
                     { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
                     { name: 'insert', items: [ 'Image','oembed', 'wenzgmap', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
                     '/',
-                    { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                    { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize', 'FontAwesome', 'lineheight' ] },
                     { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
                     { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
                     { name: 'about', items: [ 'About' ] }
