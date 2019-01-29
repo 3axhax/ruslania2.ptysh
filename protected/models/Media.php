@@ -1,7 +1,8 @@
 <?php
 
-class Media extends CMyActiveRecord
-{
+class Media extends CMyActiveRecord {
+    private $_media = array();
+
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -22,8 +23,12 @@ class Media extends CMyActiveRecord
         return 'all_media';
     }
 
-    public function GetMedia($entity, $mid)
-    {
+    public function GetMedia($entity, $mid) {
+        $media = $this->getAllByEntity($entity);
+        if (isset($media[$mid])) return $media[$mid];
+
+        return array();
+
         $sql = 'SELECT * FROM all_media WHERE entity=:entity AND id=:id LIMIT 1';
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':entity' => $entity, ':id' => $mid));
         return $row;
@@ -63,7 +68,7 @@ class Media extends CMyActiveRecord
             'select t.id, t.title '.
             'from `all_media` t '.
                 'join ('.
-                    'select media_id id, max(last_modification_date) last_modification_date, max(avail_for_order) avail_for_order '.
+                    'select media_id id, max(avail_for_order) avail_for_order '.
                     'from ' . $entities[$entity]['site_table'] . ' '.
                     'where (media_id is not null) and (media_id > 0) '.
                     'group by media_id '.
@@ -75,6 +80,17 @@ class Media extends CMyActiveRecord
         return Yii::app()->db->createCommand($sql)->queryAll();
     }
 
+    function getAllByEntity($eid) {
+        if (!isset($this->_media[$eid])) {
+            $this->_media[$eid] = array();
+            $sql = 'select * from all_media where (entity = :eid)';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':eid'=>$eid));
+            foreach ($rows as $v) {
+                $this->_media[$eid][$v['id']]=$v;
+            }
+         }
+        return $this->_media[$eid];
+    }
 
 }
 
