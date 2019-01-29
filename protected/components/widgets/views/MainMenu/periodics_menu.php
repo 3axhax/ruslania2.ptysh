@@ -17,7 +17,7 @@
                         else $name = Yii::app()->ui->item($name);
                         ?>
                         <li>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(2))); ?>"><?= $name ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), /*'binding' => array(2)*/)); ?>"><?= $name ?></a>
                         </li>
                     <?php endif; endforeach; ?>
                 <li>
@@ -38,7 +38,7 @@
                         else $name = Yii::app()->ui->item($name);
                         ?>
                         <li>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(1))); ?>"><?= $name ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), /*'binding' => array(1)*/)); ?>"><?= $name ?></a>
                         </li>
                     <?php endif; endforeach; ?>
                 <li style="margin-bottom: 10px;margin-top: 15px;">

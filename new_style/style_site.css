@@ -422,9 +422,24 @@ li.dd_box div.tabs ul li a.dd::before
     border-left: 1px solid #e11c20;
 }
 
-.index_menu ul > li > a.home::after {
-    content: '\f015'; color: #fff; position: relative; font: normal normal normal 18px/0 FontAwesome; left: 10px; top: 2px;
+/* .index_menu ul > li > a.home::after { */
+    /* content: '\f015'; color: #fff; position: relative; font: normal normal normal 18px/0 FontAwesome; left: 10px; top: 2px; */
+/* } */
+.index_menu ul > li > a.home { position: relative; padding-left: 40px; }
+.index_menu ul > li > a.home::before {
+	
+	content: " ";
+	background : url("/new_img/address.png") no-repeat;
+	width: 32px;
+	height: 32px;
+	position: absolute;
+	top: 18px;
+    left: 10px;
+	
+	
+	
 }
+
 /*
 .index_menu ul > li > a.home::before {
     content: '\f041'; color: #fff; position: relative; font: normal normal normal 18px/0 FontAwesome; left: 10px; top: 2px;
@@ -524,7 +539,7 @@ div.footer {
 .slider_bg .slider_container .container_slides ul li .span2.text .cost .n { color: #ed1d24; }
 .slider_bg .slider_container .container_slides ul li .span2.text .cost .z { text-decoration: line-through; }
 .slider_bg .slider_container .container_slides ul li .span2.text .nds { font-size: 13px; color: rgb(116, 116, 116); }
-.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow, .slick-slide a.btn_yellow { font-size: 13px; color: #fff; font-weight: bold; display: inline-block; padding: 8px 16px; background-color: #ecad0a; margin-top: 10px; border-radius: 4px; text-decoration: none; }
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow, .slick-slide a.btn_yellow {  color: #fff; display: inline-block; padding: 5px 16px; background-color: #ecad0a; margin-top: 18px; border-radius: 4px; text-decoration: none; width: 144px; text-align: center; }
 
 .banners { margin-top: 35px; margin-bottom: 62px; }
 .banners .span6 { width: 570px; margin-left: 30px; }
@@ -1460,7 +1475,7 @@ a.add_cart_plus.green_cart span, .news_box ul.books li .addcart a.add_cart_plus.
 	background: #ed1d24 !important;
 }
 
-a.list_cart { width: 162px;font-size: 13px; }
+/* a.list_cart { width: 162px;font-size: 13px; } */
 
 a.add_cart.no_img {
 	padding-right: 0;
@@ -1471,19 +1486,114 @@ a.add_cart.no_img {
 
 a.read_book {
     border-radius: 0 0 4px 4px;
-    background: #edb421 url(../new_img/icon_book.png) right center no-repeat;
+    background: #edb421 url(../new_img/icon_book.png) left center no-repeat;
     height: 37px;
     line-height: 37px;
     display: inline-block;
     color: #fff;
     text-decoration: none;
-    padding-right: 39px;
+    padding-left: 39px;
     text-align: center;
     width: 91px;
 }
 .link__read {
     margin-top: 10px;
 }
+
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow {
+	
+	background-color: #ed9321;
+	
+}
+
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow { padding: 0; width: auto; position: relative; }
+
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow:before {
+	
+	content: "\f05a";
+    position: absolute;
+    left: 12px;
+    top: 6px;
+	
+    font-size: 17px;
+	
+}
+
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow span {
+	border-radius: 0 4px 4px 0;
+	background-color: #ecad0a;
+	margin-left: 39px;
+	display: block;
+	height: 30px;
+	padding: 0 16px;
+	line-height: 30px;
+	width: 104px;
+}
+
+
+.news_box ul.books li .more a {
+	
+	background-color: #ed9321;
+	
+}
+
+.news_box ul.books li .more a { padding: 0; width: 93px; position: relative; }
+
+.news_box ul.books li .more a:before {
+	
+	content: "\f05a";
+    position: absolute;
+    left: 12px;
+    top: 0;
+	font-size: 17px;
+	
+}
+
+.news_box ul.books li .more a span {
+	border-radius: 0 4px 4px 0;
+	background-color: #ecad0a;
+	margin-left: 39px;
+	display: block;
+	height: 30px;
+	padding: 0 16px;
+	line-height: 30px;
+	width: 100%;
+}
+
+
+
+
+.slick-slide a.btn_yellow {
+	
+	background-color: #ed9321;
+	
+}
+
+.slick-slide a.btn_yellow { padding: 0; width: auto; position: relative; }
+
+.slick-slide a.btn_yellow:before {
+	
+	content: "\f05a";
+    position: absolute;
+    left: 12px;
+    top: 6px;
+	
+    font-size: 17px;
+	
+}
+
+.slick-slide a.btn_yellow span {
+	border-radius: 0 4px 4px 0;
+	background-color: #ecad0a;
+	margin-left: 39px;
+	display: block;
+	height: 30px;
+	padding: 0 16px;
+	line-height: 30px;
+	width: 104px;
+}
+
+
 
 a.addmark {
     border-radius: 4px;
@@ -2115,7 +2225,7 @@ table.items_orders a.printed_btn {
 	line-height: 31px;
 	position: relative;
 	width: 141px;
-	padding-right: 37px;
+	padding-left: 37px;
 	text-align: center;
 	font-size: 13px;
 	color: rgb(255, 255, 255);
@@ -2124,11 +2234,13 @@ table.items_orders a.printed_btn {
 	
 }
 
+.list_cart {     width: 175px; }
+
 table.items_orders a.printed_btn span {
 	
 	display: block;
     width: 100%;
-	border-radius: 4px 0 0 4px;
+	border-radius: 0 4px 4px 0;
     height: 31px;
     line-height: 31px;
     background: #28618E !important;
@@ -2136,11 +2248,11 @@ table.items_orders a.printed_btn span {
 }
 
 
-table.items_orders a.printed_btn:after {
+table.items_orders a.printed_btn:before {
 	content: "\f02f";
 	position: absolute;
     font-size: 14px;
-    right: 11px;
+    left: 11px;
     top: 8px;
 	font: normal normal normal 14px/1 FontAwesome;
 }
@@ -3574,8 +3686,8 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .red { color: #ed1d24;}
 
 .download, .button_view { display: inline-block; white-space: nowrap; margin-right: 10px;}
-.download span, .button_view span { display: block; color: #fff; text-align: center; border-radius: 4px 0 0 4px; padding: 8px 12px; float: left; }
-.download.excel span.fa, .button_view.list span.fa { display: block; border-radius: 0 4px 4px 0; width: 20px; }
+.download span, .button_view span { display: block; color: #fff; text-align: center; border-radius: 0 4px 4px 0; padding: 8px 12px; float: left; }
+.download.excel span.fa, .button_view.list span.fa { display: block; border-radius: 4px 0 0 4px; width: 20px; }
 .download.excel span.fa::after, .button_view.list span.fa::after { color: #fff; font-size: 20px; }
 .download span {  background-color: #5bb75b; }
 .download.excel span.fa { background-color: #369f4b; }
@@ -3654,3 +3766,5 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     font-family: 'Open sans';
     color: #1d1856;
 }
+
+/*form#js_filter input[type=text] {height: 30px;}*/

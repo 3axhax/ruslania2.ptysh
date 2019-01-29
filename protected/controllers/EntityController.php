@@ -133,7 +133,7 @@ class EntityController extends MyController {
 			$title_cat = ProductHelper::GetTitle($selectedCategory);
 		}
 
-        list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
+        list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, $cid);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
         $paginatorInfo->itemCount = $totalItems;
 
@@ -1255,14 +1255,13 @@ class EntityController extends MyController {
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_PERIODIC_FOR_GIFT');
 
-        $data = FilterHelper::getFiltersData($entity);
         $lang = Yii::app()->getRequest()->getParam('lang');
-        $cat = new Category();
-        $popular = $cat->result_filter($data, $lang);
 
-        $cid = 67; //Популярные издания
+        $cid = 67; //Популярные журналы
 
         $category = new Category();
+        $data = FilterHelper::getFiltersData($entity, $cid);
+        $popular = $category->result_filter($data, $lang);
         $path = $category->GetCategoryPath($entity, $cid);
 
         $cnt = count($path);
@@ -1284,6 +1283,14 @@ class EntityController extends MyController {
         if (!empty($item)) $giftText = $item['description_' . Yii::app()->language];
         $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
 
+
+        $cid119 = 119; //Популярные газеты
+        $cat119 = $category->GetByIds($entity, $cid119);
+        $cat119 = array_shift($cat119);
+        $titleCat119 = ProductHelper::GetTitle($cat119);
+        $data = FilterHelper::getFiltersData($entity, $cid119);
+        $popular119 = $category->result_filter($data, $lang);
+
         $this->render('gift', array('entity' => $entity,
             'group' => current($group)['items'],
             'popular' => $popular,
@@ -1292,6 +1299,9 @@ class EntityController extends MyController {
             'giftText' => $giftText,
             'isWordpanel' => $isWordpanel,
             'offer'=>$offer,
+            'cid119'=>$cid119,
+            'titleCat119'=>$titleCat119,
+            'popular119' => $popular119,
         ));
     }
 

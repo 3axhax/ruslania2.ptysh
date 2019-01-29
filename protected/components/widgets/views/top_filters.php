@@ -310,7 +310,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             </div>
         <?php endif; ?>
 
-        <?php if (isset($filters['binding']) && !empty($filters['binding'])):
+        <?php if (isset($filters['binding']) && !empty($filters['binding']) && (count($filters['binding']) > 1)):
             ?>
             <!--Фильтр по типу/переплету-->
         <div class="prod-filter__col--grow" id="binding_div">

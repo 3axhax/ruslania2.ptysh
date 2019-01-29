@@ -30,6 +30,10 @@ class FilterHelper
      *
      */
 
+    /**
+     * @var array нужно, что бы много раз не получать self::$data;
+     */
+    protected static $_data = array();
     protected static $data = false;
     protected static $sessionData = [];
 
@@ -95,49 +99,52 @@ class FilterHelper
 
     static function getFiltersData ($entity, $cid = 0) {
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
-        if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
-            self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
-        }
-        if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
-            self::$sessionData = unserialize(Yii::app()->session[$key]);
-        }
-        $filtersData = FiltersData::instance();
-        if ($filtersData->isSetKey($key)) {
-            self::$sessionData = $filtersData->getFiltersData($key);
-        }
+        if (!isset(self::$_data[$key])) {
+            if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
+                self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+            }
+            if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
+                self::$sessionData = unserialize(Yii::app()->session[$key]);
+            }
+            $filtersData = FiltersData::instance();
+            if ($filtersData->isSetKey($key)) {
+                self::$sessionData = $filtersData->getFiltersData($key);
+            }
 
-        $data = self::$data;
-        self::$data = [];
-        foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
-            if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
-        }
-        unset($data);
-        self::getEntity();
-        if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
+            $data = self::$data;
             self::$data = [];
-            return self::$data;
+            foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
+                if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
+            }
+            unset($data);
+            self::getEntity();
+            if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
+                self::$data = [];
+                return self::$data;
+            }
+            self::getCid();
+            self::getAvail();
+            self::getLangSel();
+            self::getSort();
+            self::getYears();
+            self::getCost();
+            self::getAuthor();
+            self::getPublisher();
+            self::getSeries();
+            self::getBinding();
+            self::getFormatVideo();
+            self::getLangVideo();
+            self::getSubtitlesVideo();
+            self::getPreSale();
+            self::getPerformer();
+            self::getCountry();
+            self::getDirector();
+            self::getActor();
+            self::getReleaseYears();
+            self::$_data[$key] = self::$data;
         }
-        self::getCid();
-        self::getAvail();
-        self::getLangSel();
-        self::getSort();
-        self::getYears();
-        self::getCost();
-        self::getAuthor();
-        self::getPublisher();
-        self::getSeries();
-        self::getBinding();
-        self::getFormatVideo();
-        self::getLangVideo();
-        self::getSubtitlesVideo();
-        self::getPreSale();
-        self::getPerformer();
-        self::getCountry();
-        self::getDirector();
-        self::getActor();
-        self::getReleaseYears();
 
-        return self::$data;
+        return self::$_data[$key];
     }
 
     static function setOneFiltersData ($entity, $cid = 0, $key, $value) {
