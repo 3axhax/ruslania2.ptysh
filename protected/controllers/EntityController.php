@@ -1249,7 +1249,9 @@ class EntityController extends MyController {
         $o = new Offer();
         $offer = $o->GetOffer(1153, 0, 1);
         $group = $o->GetItems(1153/*Offer::INDEX_PAGE, $entity*/);
-
+        $group = current($group)['items'];
+        $exclude = array();
+        foreach ($group as $item) $exclude[] = $item['id'];
 
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1261,7 +1263,7 @@ class EntityController extends MyController {
 
         $category = new Category();
         $periodicModel = Periodic::model();
-        $popular = $periodicModel->getByCategory($cid);
+        $popular = $periodicModel->getByCategory($cid, $exclude);
         $path = $category->GetCategoryPath($entity, $cid);
 
         $cnt = count($path);
@@ -1288,10 +1290,10 @@ class EntityController extends MyController {
         $cat119 = $category->GetByIds($entity, $cid119);
         $cat119 = array_shift($cat119);
         $titleCat119 = ProductHelper::GetTitle($cat119);
-        $popular119 = $periodicModel->getByCategory($cid119);
+        $popular119 = $periodicModel->getByCategory($cid119, $exclude);
 
         $this->render('gift', array('entity' => $entity,
-            'group' => current($group)['items'],
+            'group' => $group,
             'popular' => $popular,
             'title_cat' => $title_cat,
             'cid' => $cid,
