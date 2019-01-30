@@ -43,7 +43,7 @@ class ProductLang {
             if (empty($langIds)) return array();
 
             $sql = ''.
-                'select tL.id, tL.title_'.Yii::app()->language . ' title '.
+                'select tL.id, tL.title_'.Yii::app()->language . ' title, predl, country '.
                 'from languages tL ' .
                 'where (tL.id in (' . implode(',', $langIds) . ')) '.
                 'order by title '.
@@ -55,14 +55,33 @@ class ProductLang {
 
     static function getLangs($entity, $cat) {
         $rows = self::getLangItems($entity, $cat);
-        $result = array(
-            0=>(($entity == Entity::PRINTED) ? Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') : Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG')) . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
-            7=>false,
-            14=>false,
-            9=>false,
-            8=>false,
-        );
-        foreach ($rows as $row) $result[(int)$row['id']] = (($entity == Entity::PRINTED) ? Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') : Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG')) . $row['title'];
+        if ($entity == Entity::PRINTED) {
+            $result = array(
+                0=>Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
+                7=>false,
+                14=>false,
+                9=>false,
+                8=>false,
+            );
+            foreach ($rows as $row) {
+                $title = $row['title'];
+                if (!empty($row['country'])) {
+                    $row['country'] = unserialize($row['country']);
+                    if (!empty($row['country'][Yii::app()->getLanguage()])) $title = $row['country'][Yii::app()->getLanguage()];
+                }
+                $result[(int)$row['id']] = Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . $title;
+            }
+        }
+        else {
+            $result = array(
+                0=>Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
+                7=>false,
+                14=>false,
+                9=>false,
+                8=>false,
+            );
+            foreach ($rows as $row) $result[(int)$row['id']] = Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG') . $row['title'];
+        }
         return array_filter($result);
     }
 

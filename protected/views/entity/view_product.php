@@ -425,7 +425,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) :
             $langs = array();
             foreach ($item['Languages'] as $lang) {
-                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
+                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span>';
             }
             if (!empty($langs)):
             ?>

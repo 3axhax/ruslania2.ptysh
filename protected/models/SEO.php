@@ -435,6 +435,11 @@ class SEO extends CActiveRecord
                 break;
 
             case 'es' :
+                /*
+Suscripción con descuento en revistas y periódicos rusos en Ruslania.com - для категории подписки по скидочной цене
+/category/ - se suscriben a las revistas y periódicos rusos en ruslania.com - для других категорий
+Suscrípcion a revistas y periódicos rusos - для самого раздела
+*/
                 if ($cid == 0) { //если начальный раздел
                     $this->pageTitle = 'Revista rusa de revistas y periódicos';
                     $this->pageDescription = 'Suscríbete a revistas y periódicos rusos de todo el mundo. Elija una suscripción de 3, 6 o 12 meses.';
