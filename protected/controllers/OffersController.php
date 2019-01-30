@@ -16,7 +16,7 @@ class OffersController extends MyController
             default : $oid = Offer::INDEX_PAGE; break;
         }
 
-        $titles = array('firms' => 'A_OFFERS_FRMS',
+/*        $titles = array('firms' => 'A_OFFERS_FRMS',
                         'lib' => 'A_OFFERS_LIBS',
                         'uni' => 'A_OFFERS_UNIVERCITY',
                         'fs' => 'FREE_SHIPPING_OFFER',
@@ -24,10 +24,12 @@ class OffersController extends MyController
         );
 
 
-        $title = Yii::app()->ui->item('A_OFFERS').Yii::app()->ui->item($titles[$mode]);
+        $title = Yii::app()->ui->item('A_OFFERS').Yii::app()->ui->item($titles[$mode]);*/
 
         $offer = $o->GetOffer($oid, true, true);
+        $title = ProductHelper::GetTitle($offer);
 
+        $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
         $this->breadcrumbs[] = $title;
         $groups = $o->GetItems($oid);
         $this->render('view', array('offer' => $offer, 'groups' => $groups));
