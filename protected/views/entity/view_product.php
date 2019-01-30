@@ -237,7 +237,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <? endif; ?>
 
         <?php if ($item['type'] && $entity != Entity::PRINTED) : ?>
-            <span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
+            <span class="nameprop" style="margin-bottom: 5px;"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
 
             if ($item['entity'] == Entity::PERIODIC) :
 
@@ -494,7 +494,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             $row = (new Binding)->GetBinding($entity, $item['binding_id']);
             ?>
             <div class="authors" style="margin-bottom:5px;">
-                <?php if($entity == 10 || $entity == 15): ?>
+                <?php if($entity == 10 || $entity == 15 || $entity == 60): ?>
                     <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_TYPOGRAPHY")); ?></div>
                 <?php else: ?>
                     <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_PEREP")); ?></div>
@@ -660,28 +660,31 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <? if ($item['entity'] != Entity::PERIODIC) :  ?>
 
-            <div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin-top: 30px; float: left; margin-left: 10px;">
-                <?php if (isset($item['AlreadyInCart'])) : ?>
+            <div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin-top: 30px; float: left; margin-left: 33px; position: relative;">
+                <?php //if (isset($item['AlreadyInCart'])) : ?>
 
-
+					<div class="price_h">&nbsp;</div>
                     <div class="price_h">&nbsp;</div>
-                    <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-                        <?= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
+                    <?php //if ($item['entity'] != Entity::PERIODIC) : ?>
+					
+						<?php if ($item['entity'] != Entity::PERIODIC) : ?>
+            <div class="mb5" style="color:#4e7eb5; width: 200px; font-size: 13px; ">
+                <span style="position: absolute; bottom: 0px; left: 0;"><?= Availability::ToStr($item); ?></span>
+            </div>
+        <?php //endif; ?>
+					
+                        <?//= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
                     <?php else : ?>
                         <?= strip_tags(Yii::app()->ui->item('PERIODIC_ALREADY_IN_CART')); ?>
                     <?php endif; ?>
 
-                <?php endif; ?>
+                <?php //endif; ?>
             </div>
         <?php endif; ?>
 
 
         <div class="clearfix"></div>
-        <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-            <div class="mb5" style="color:#4e7eb5; width: 200px; font-size: 13px; float: left;">
-                <?= Availability::ToStr($item); ?>
-            </div>
-        <?php endif; ?>
+        
 
 
 
@@ -701,29 +704,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         };
         ?>
 
+		<?php if ($isAvail) : ?>
 
-
-        <?php if ($isAvail) : ?>
-
-
-
-
-            <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-                <div style="float: left; margin-top: -7px; margin-left: 10px;">
-                    <?= $ui->item('CART_COL_QUANTITY'); ?>:
-                    <select class="select2_periodic_no_float selquantity" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
-                            style="display: inline-block; margin-bottom: 5px; width: 85px;">
-                        <?php
-                        for ($i = 1; $i <= 100; $i++) {
-                            echo '<option value="' . $i . '">' . $i . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-            <?php endif; ?>
-
-
-            <? if ($item['entity'] != Entity::PERIODIC) { ?>
+			<? if ($item['entity'] != Entity::PERIODIC) { ?>
                 <div class="clearfix"></div>
                 <div style="margin-top: 10px;"></div>
             <?}?>
@@ -955,8 +938,33 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php if ($isAvail AND $entity != Entity::PERIODIC) : ?>
 			
-            <a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
-			<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+			<?php if ($item['entity'] != Entity::PERIODIC) : ?>
+                
+                    
+                    <select class="select2_periodic_no_float selquantity" onchange="$('.add_cart_view').removeClass('green_cart'); $('.add_cart_view span').html('В корзину');" style="height: 30px; height: 38px; margin: 0; margin-top: -1px; width: 73px; margin-right: 19px;" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
+                            style="display: inline-block; margin-bottom: 5px; width: 85px;">
+                        <?php
+                        for ($i = 1; $i <= 100; $i++) {
+                            echo '<option value="' . $i . '">' . $i . '</option>';
+                        }
+                        ?>
+                    </select>
+              
+            <?php endif; ?>
+			
+			<?php if (isset($item['AlreadyInCart'])) : ?>
+			
+				<a class="cart-action add_cart add_cart_plus add_cart_view green_cart cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+			<span style="padding: 0 17px 0 20px;">В корзине <?=$item['AlreadyInCart']?> шт.</span></a>
+			
+			<? else : ?>
+				
+				<a class="cart-action add_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+			<span style="padding: 0 17px 0 20px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+				
+			<? endif; ?>
+			
+            
 
 
         <? endif; 
@@ -973,7 +981,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 		
 		?>
 
-        <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"<? if (!$lookinside AND $item['entity'] == 30) : echo ' style="margin-left: 20px;" '; endif; ?>
+        <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>" style="margin-left: 19px;"
            data-id="<?= $item['id']; ?>" class="addmark cart-action<?=$class_mark?>"><i class="fa fa-heart" aria-hidden="true"></i><span class="tooltip"><span class="arrow"></span><?=$ui->item($key_btn)?></span></a>
 
 
@@ -1041,14 +1049,14 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <div class="detail-prop">
                     <div class="prop-name"><?= str_replace(':', '', $ui->item('Related categories')); ?></div>
                     <div class="prop-value">
-                        <?php foreach ($cat as $c) : ?>
+                        <?php $i = 0; foreach ($cat as $c) : $i++; ?>
                             <?php $catTitle = ProductHelper::GetTitle($c); ?>
                             <a href="<?=
                             Yii::app()->createUrl('entity/list', array('entity' => $entityKey,
                                 'cid' => $c['id'],
                                 'title' => ProductHelper::ToAscii($catTitle)
                             ));
-                            ?>" class="catlist"><?= $catTitle; ?></a>;
+                            ?>" class="catlist"><?= $catTitle; ?></a><?if ($i < count($cat)) { ?><br /><? } ?>
                         <?php endforeach; ?></div>
                     <div class="clearBoth"></div>
                 </div>

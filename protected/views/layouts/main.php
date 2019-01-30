@@ -438,6 +438,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             <li class="title"><?= $ui->item('A_NEW_ABOUTUS'); ?></li>
 
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'aboutus')); ?>"><?= $ui->item("A_ABOUTUS"); ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'news')); ?>"><?= $ui->item("NEWS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'csr')); ?>"><?= $ui->item("A_CSR"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'conditions')); ?>"><?= $ui->item("MSG_CONDITIONS_OF_USE"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'conditions_order')); ?>"><?= $ui->item("YM_CONTEXT_CONDITIONS_ORDER_ALL"); ?></a></li>
@@ -450,12 +451,10 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                     </div><div class="span1">
                         <ul>
                             <li class="title"><?= $ui->item('A_NEW_OURPREDL'); ?></li>
-
-                            <li><a href="<?= Yii::app()->createUrl('site/sale'); ?>"><?= $ui->item("MENU_SALE"); ?></a></li>
+							<li><a href="<?= Yii::app()->createUrl('site/sale'); ?>"><?= $ui->item("MENU_SALE"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('offers/list'); ?>"><?= $ui->item("RUSLANIA_RECOMMENDS"); ?></a></li>
-                            <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>"><?= $ui->item("A_OFFERS"); ?></a></li>
-                            <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>">– <?= $ui->item("A_OFFERS_PARTNERS"); ?></a></li>
-                            <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'uni')); ?>">– <?= $ui->item("A_OFFERS_UNIVERCITY"); ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>"><?= $ui->item("A_OFFERS_PARTNERS"); ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'uni')); ?>"> <?= $ui->item("A_OFFERS_UNIVERCITY"); ?></a></li>
                         </ul>
                     </div><div class="span1">
                         <ul>
@@ -620,11 +619,11 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
         $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
         {
 
-            if ($el.hasClass('add_cart_view')) {
+            //if ($el.hasClass('add_cart_view')) {
 
                 $el.addClass('green_cart');
 
-            }
+            //}
 
 
             var json = JSON.parse(json);
@@ -657,12 +656,6 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                 if ($el.hasClass('add_cart_view')) {
 
                     $('span', $el).html(json.already2);
-
-                } else {
-
-
-
-                    //$('div.already-in-cart', $el.parent()).html(json.already);
 
                 }
 
