@@ -145,7 +145,6 @@
     });
 
     function sortLanguages(priority) {
-        console.log($("#language_select select option[value=7]"));
         var select = $("#language_select select");
         var listOptions = select.children().get();
         listOptions.sort(function(a, b) {

@@ -410,8 +410,10 @@ class Product
         $sql = 'select * from action_items where (entity = ' . (int) $entity . ') and (item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_actionItems[$entity])) self::$_actionItems[$entity] = array();
         foreach ($ids as $id) self::$_actionItems[$entity][$id] = array();
-        foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
-            self::$_actionItems[$entity][$row['item_id']] = $row;
+        if (!empty($ids)) {
+            foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+                self::$_actionItems[$entity][$row['item_id']] = $row;
+            }
         }
     }
 
@@ -421,8 +423,10 @@ class Product
         where (o.is_active = 1) and (oi.entity_id = ' . (int) $entity . ') and (oi.item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_offerItems[$entity])) self::$_offerItems[$entity] = array();
         foreach ($ids as $id) self::$_offerItems[$entity][$id] = array();
-        foreach(Yii::app()->db->createCommand($sql)->queryAll() as $row) {
-            self::$_offerItems[$entity][$row['item_id']] = $row;
+        if (!empty($ids)) {
+            foreach (Yii::app()->db->createCommand($sql)->queryAll() as $row) {
+                self::$_offerItems[$entity][$row['item_id']] = $row;
+            }
         }
     }
 

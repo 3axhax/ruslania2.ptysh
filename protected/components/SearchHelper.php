@@ -647,9 +647,9 @@ class SearchHelper
         '';
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
         $sql = 'select found_rows();';
-        $counts = Yii::app()->db->createCommand($sql)->queryScalar();
+        $counts = (int) Yii::app()->db->createCommand($sql)->queryScalar();
 
-        if (empty($counts)) array('Items' => array(), 'Paginator' => new CPagination(0));
+        if (empty($counts)) return array('Items' => array(), 'Paginator' => new CPagination(0));
 
         HrefTitles::get()->getByIds($e, 'product/view', $itemIds);
 
