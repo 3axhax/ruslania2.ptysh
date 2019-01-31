@@ -29,7 +29,7 @@ class OffersController extends MyController
         $offer = $o->GetOffer($oid, true, true);
         $title = ProductHelper::GetTitle($offer);
 
-        $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
+//        $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
         $this->breadcrumbs[] = $title;
         $groups = $o->GetItems($oid);
         $this->render('view', array('offer' => $offer, 'groups' => $groups));
