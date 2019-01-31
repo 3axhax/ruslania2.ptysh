@@ -151,7 +151,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 <?php
                 $langs = array();
                 foreach ($item['Languages'] as $lang) {
-                    if (!empty($lang['language_id'])) $langs[] = '' . Language::GetTitleByID($lang['language_id']) . '';
+                    if (!empty($lang['language_id'])) $langs[] = (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id']));
                 }
 
                 if (!empty($langs)): ?>

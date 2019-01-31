@@ -14,7 +14,7 @@
     <div class="buttonCKEDITOR" style="display: none;"><a onclick="if (confirm('Не сохраненные данные будут потеряны!!!')) { closeCKEDITOR(); $('.buttonCKEDITOR').toggle(); } return false;">Закрыть</a></div>
     <style>
         .cke_button_label.cke_button__inlinesave_label {display: inline;}
-        .buttonCKEDITOR {position: fixed; top: 30px; right: 10px; padding: 20px; background-color: #000; opacity: 0.4;}
+        .buttonCKEDITOR {position: fixed; top: 70px; right: 10px; padding: 20px; background-color: #000; opacity: 0.4;}
         .buttonCKEDITOR a { color: #fff; cursor: pointer; font-weight: bold;}
     </style>
     <script src="/js/ckeditor/ckeditor.js"></script>
@@ -87,9 +87,11 @@
             })*/.on('instanceReady', function () {
                 var CKEIframes = $('.cke_iframe');
                 var CKEIframesL = CKEIframes.length;
-                for (i = 0; i <CKEIframesL; i ++ )
+                for (i = 0; i <CKEIframesL; i ++ ) {
                     $(CKEIframes[i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
+                }
             });
+            CKEDITOR.dtd.$removeEmpty['span'] = 0;
         }
         function closeCKEDITOR() {
             $('#js_wordpanel').removeAttr('contenteditable');
@@ -99,6 +101,11 @@
                 var CKEIframesL = CKEIframes.length;
                 for (i = 0; i <CKEIframesL; i ++ ) {
                     $(CKEIframes [i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
+                }
+                var ckeRemove = $('.cke_reset');
+                var ckeRemoveL = ckeRemove.length;
+                for (i = 0; i <ckeRemoveL; i ++ ) {
+                    $(ckeRemove[i]).remove();
                 }
             }
         }

@@ -1204,7 +1204,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'A_NEW_PRODUCER' => 'Fabricant',
   'PERIODIC_TYPE_PLURAL_2' => 'Abonnement aux magazines',
   'PERIODIC_TYPE_PLURAL_1' => 'Abonnement aux journaux',
-  'PERIODIC_TYPE_PLURAL_3' => 'Édition en ligne',
+  'PERIODIC_TYPE_PLURAL_3' => 'Éditions en ligne',
   'NAME_POPULAR' => 'Populaire',
   'NAME_SCIENCE' => 'Science',
   'NAME_FORCHILDS' => 'Pour les enfants',

@@ -1214,7 +1214,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   'A_NEW_PRODUCER' => 'Tillverkare',
   'PERIODIC_TYPE_PLURAL_2' => 'Tidskriftsprenumerationer',
   'PERIODIC_TYPE_PLURAL_1' => 'Tidningsprenumerationer',
-  'PERIODIC_TYPE_PLURAL_3' => 'Online-utgåva',
+  'PERIODIC_TYPE_PLURAL_3' => 'Online-utgåvor',
   'NAME_POPULAR' => 'Populära',
   'NAME_SCIENCE' => 'Vetenskap',
   'NAME_FORCHILDS' => 'För barn',

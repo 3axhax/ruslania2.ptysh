@@ -2480,6 +2480,18 @@ div.map {
     opacity: 0.7;
 }
 
+table.address input, table.address select {
+	
+	margin-bottom: 0;
+	
+}
+
+table.address select {
+	
+	width: 100%;
+	
+}
+
 a.order_start_mini_cart {
 	display: inline-block;
 	width: 140px;
@@ -3767,4 +3779,5 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     color: #1d1856;
 }
 
+.cke_reset {display: none;}
 /*form#js_filter input[type=text] {height: 30px;}*/
