@@ -53,11 +53,11 @@ class ProductLang {
         return self::$_langItems;
     }
 
-    static function getLangs($entity, $cat) {
+    static function getLangs($entity, $cat, $prefix = true) {
         $rows = self::getLangItems($entity, $cat);
         if ($entity == Entity::PRINTED) {
             $result = array(
-                0=>Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
+                0=>($prefix?Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME'):'') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
                 7=>false,
                 14=>false,
                 9=>false,
@@ -69,18 +69,18 @@ class ProductLang {
                     $row['country'] = unserialize($row['country']);
                     if (!empty($row['country'][Yii::app()->getLanguage()])) $title = $row['country'][Yii::app()->getLanguage()];
                 }
-                $result[(int)$row['id']] = Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . $title;
+                $result[(int)$row['id']] = ($prefix?Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME'):'') . $title;
             }
         }
         else {
             $result = array(
-                0=>Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
+                0=>($prefix?Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG'):'') . Yii::app()->ui->item('A_NEW_FILTER_ALL'),
                 7=>false,
                 14=>false,
                 9=>false,
                 8=>false,
             );
-            foreach ($rows as $row) $result[(int)$row['id']] = Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG') . $row['title'];
+            foreach ($rows as $row) $result[(int)$row['id']] = ($prefix?Yii::app()->ui->item('A_NEW_FILTER_TITLE_LANG'):'') . $row['title'];
         }
         return array_filter($result);
     }

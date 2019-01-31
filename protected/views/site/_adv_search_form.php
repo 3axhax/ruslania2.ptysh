@@ -12,7 +12,7 @@
     $perf = trim(@$_GET['perf']);
     $publisher = trim(@$_GET['publisher']);
     $only = trim(@$_GET['only']);
-    $lang = trim(@$_GET['l']);
+    $lang = (int)trim(@$_GET['l']);
     $year = intVal(@$_GET['year']);
     if(empty($year) || $year <= 0) $year = '';
 	$binding_id = intVal(@$_GET['binding_id'.$e]);
@@ -32,31 +32,28 @@
 
         <tr>
             <td><?= $ui->item('Related categories'); ?>:</td>
-            <td><select name="cid"
-                        data-bind="options: Categories, optionsText: 'Name',
-                         optionsCaption: '---',
-                        optionsValue: 'ID', value: CID"></select>
+            <td>
+                <select name="cid" data-bind="options: Categories, optionsText: 'Name', optionsCaption: '---', optionsValue: 'ID', value: CID"></select>
             </td>
         </tr>
 		
-		<?
-			foreach (Entity::GetEntitiesList() as $id => $val){
+		<?php
+			foreach (Entity::GetEntitiesList() as $id => $val):
 				//echo $id;
-				
-				eval('$bindingList'.$id.' = CHtml::listData(ProductHelper::GetBindingListForSelect('.$id.'), \'ID\', \'Name\');');
-				
-			
-		
-			if (count(${'bindingList'.$id}) == 0) continue;
-			
+                $bindingList = 'bindingList' . $id;
+                $$bindingList = CHtml::listData(ProductHelper::GetBindingListForSelect($id), 'ID', 'Name');
+                if (count($$bindingList) == 0) continue;
+
+//				eval('$bindingList'.$id.' = CHtml::listData(ProductHelper::GetBindingListForSelect('.$id.'), \'ID\', \'Name\');');
+//			if (count(${'bindingList'.$id}) == 0) continue;
+
 		?>
-		<? echo '
-		<tr data-bind="visible: Entity()=='.$id.'">
-            <td>'.$ui->item('A_NEW_PEREP') .':</td>
-            <td>'.CHtml::dropDownList('binding_id'.$id, $binding_id, ${'bindingList'.$id}, array('empty' => '---', 'class'=>'select2_series')) .'</td>
-        </tr>';
+		<tr data-bind="visible: Entity()==<?= $id ?>">
+            <td><?= $ui->item('A_NEW_PEREP') ?>:</td>
+            <td><?= CHtml::dropDownList('binding_id'.$id, $binding_id, $$bindingList, array('empty' => '---', 'class'=>'select2_series')) ?></td>
+        </tr>
 		
-		}?>
+		<?php endforeach; ?>
 
         <tr>
             <td><?= $ui->item('CART_COL_TITLE'); ?>:</td>
@@ -85,9 +82,12 @@
             <td><?= CHtml::textField('publisher', $publisher); ?></td>
         </tr>
         <tr>
-            <td><?=$ui->item('CATALOGINDEX_CHANGE_LANGUAGE'); ?>:</td>
+            <td data-bind="text: vm.getLangTitle()"><?=$ui->item('CATALOGINDEX_CHANGE_LANGUAGE'); ?>:</td>
             <?php $langList = CHtml::listData(Language::GetItemsLanguageList(), 'id', 'title_'.Yii::app()->language); ?>
-            <td id="language_select"><?=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---', 'class'=>'select2_series')); ?></td>
+            <td id="language_select">
+                <select name="l" data-bind="options: Langs, optionsText: 'Name', optionsCaption: '---', optionsValue: 'ID', value: LANG"></select>
+                <?/*=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---', 'class'=>'select2_series')); */?>
+            </td>
         </tr>
         <tr>
             <td><?=trim(sprintf($ui->item('A_NEW_YEAR'), '')); ?>:</td>
@@ -113,27 +113,48 @@
 <script type="text/javascript">
 
     var firstTime = true;
-    var VM = function ()
-    {
+    var VM = function () {
         var self = this;
         self.Entity = ko.observable();
         self.Categories = ko.observableArray([]);
+        self.Langs = ko.observableArray([]);
         self.CID = ko.observable();
+        self.LANG = ko.observable();
+        self.FirstLoad = ko.observable(false);
 
-        self.Entity.subscribe(function (e)
-        {
-            if (e > 0)
-            {
+        self.Entity.subscribe(function (e) {
+            if (e > 0) {
                 self.Categories.removeAll();
                 self.CID(0);
-                $.getJSON('<?= Yii::app()->createUrl('site/categorylistjson') ?>', { e: e }, function (json)
-                {
+                $.getJSON('<?= Yii::app()->createUrl('site/categorylistjson') ?>', { e: e }, function (json) {
                     ko.mapping.fromJS(json, {}, self.Categories);
                     if (firstTime && <?=$cid; ?> > 0 && e == <?=$e; ?>) self.CID(<?=$cid; ?>);
+                    else self.changeLangs(e, self.CID());
                     firstTime = false;
                 });
             }
         });
+
+        self.getLangTitle = function () {
+            if (self.Entity() == <?= Entity::PRINTED ?>) {
+                return '<?= $ui->item('CATALOGINDEX_CHANGE_THEME') . ':'; ?>';
+            }
+            return '<?= $ui->item('CATALOGINDEX_CHANGE_LANGUAGE') . ':'; ?>';
+        };
+
+        self.CID.subscribe(function (cid) {
+            if (cid > 0) self.changeLangs(self.Entity(), cid);
+        });
+
+        self.changeLangs = function(eid, cid) {
+            self.Langs.removeAll();
+            self.LANG(0);
+            $.getJSON('<?= Yii::app()->createUrl('site/langslistjson') ?>', { eid: eid, cid: cid }, function (json) {
+                ko.mapping.fromJS(json, {}, self.Langs);
+                if (firstTime && <?= $lang; ?> > 0) self.LANG(<?=$lang; ?>);
+            });
+        };
+
     };
 
     var vm = new VM();

@@ -1362,7 +1362,7 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_ORDER_PAY_OTHER_LABEL'=>'Или выберите <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">другой способ оплаты</a>',
 'CARTNEW_FINAL_ORDER_TEXT'=>'Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> или WhatsApp (текст или звонок) +358 503889439 по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).',
 'CARTNEW_FINAL_BTN_PAYPAL'=>'Оплатить заказ',
-'CARTNEW_FINAL_BTN_VIEW_ORDER'=>'Посмотреть заказ',
+'CARTNEW_FINAL_BTN_VIEW_ORDER'=>'Всё понятно',
 'CARTNEW_PAYPAL_H1'=>'Оплатить с помощью PayPal',
 'CARTNEW_PAYTRAIL_H1'=>'Оплатить с помощью PayTrail',
 'CARTNEW_ALIPAY_H1'=>'Оплатить с помощью AliPay',

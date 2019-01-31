@@ -8,7 +8,7 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-            'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
+            'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
                 'certificate'
@@ -1107,6 +1107,19 @@ class SiteController extends MyController {
         $tree = $c->GetCategoriesTree($entity);
         $ret = array();
         $this->formatTree($tree, 0, $ret);
+        $this->ResponseJson($ret);
+    }
+
+    public function actionlangslistjson() {
+        $eid = (int)Yii::app()->getRequest()->getParam('eid');
+        $cid = (int)Yii::app()->getRequest()->getParam('cid');
+        $eid = (Entity::IsValid($eid)) ? $eid : Entity::BOOKS;
+        if ($cid < 0) $cid = 0;
+
+        $langs = ProductLang::getLangs($eid, $cid, false);
+        unset($langs[0]);
+        $ret = [];
+        foreach ($langs as $id=>$title) $ret[] = array('ID'=>$id, 'Name'=>$title);
         $this->ResponseJson($ret);
     }
 
