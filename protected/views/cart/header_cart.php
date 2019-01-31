@@ -1,7 +1,4 @@
 <?php //KnockoutForm::RegisterScripts(); ?>
-<?php /*
-<div class="b-basket-list">
- */?>
 								<div class="b-basket-list__empty" data-bind="visible: CartItems().length < 1"><span><?=Yii::app()->ui->item('A_NEW_CART_INFO')?></span>
 							</div>
                             <div class="b-basket-list__center" data-bind="foreach: CartItems">
@@ -74,9 +71,11 @@
     $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
     $baseUrl = Yii::app()->assetManager->publish($assets);
 ?>
+<?php if ($refererRoute != 'site/advsearch'): ?>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.mapping.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockoutPostObject.js"></script>
+<?php endif; ?>
 <script type="text/javascript">
     var csrf_1 = $('meta[name=csrf]').attr('content').split('=');
     var cartVM_1 = function () {

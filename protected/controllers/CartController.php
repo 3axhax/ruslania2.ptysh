@@ -4,7 +4,7 @@
 class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
-            'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'getaddress',
+            'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress', 'editaddr', 'getaddress',
                 'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay', 'checkpromocode','loadheader'),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
@@ -12,13 +12,42 @@ class CartController extends MyController {
             array('deny',
                 'users' => array('*')));
     }
+	
+	public function actionEditAddr() {
+		
+		// array(4) {
+		// ["text"]=>
+		  // string(7) "Oleynik"
+		  // ["ty"]=>
+		  // string(1) "1"
+		  // ["id"]=>
+		  // string(5) "82960"
+		  // ["YII_CSRF_TOKEN"]=>
+		  // string(40) "e86b8b39ab77ecf2da43f3e32a1950f136a26443"
+		// }
+		
+		switch ($_POST['ty']) {
+			case '1': $sql = 'UPDATE user_address SET receiver_last_name=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '2': $sql = 'UPDATE user_address SET receiver_first_name=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '3': $sql = 'UPDATE user_address SET receiver_middle_name=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '4': $sql = 'UPDATE user_address SET city=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '5': $sql = 'UPDATE user_address SET postindex=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '6': $sql = 'UPDATE user_address SET streetaddress=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+		}
+	}
+	
+	
     public function actionLoadStates() {
         $states = Country::GetStatesList((int) $_POST['id']);
         $this->renderPartial('load_states', array('items' => $states));
     }
 
     function actionLoadHeader() {
-        $this->renderPartial('header_cart', array());
+        $referer = Yii::app()->getRequest()->getUrlReferrer();
+        $request = new MyRefererRequest();
+        $request->setFreePath($referer);
+        $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+        $this->renderPartial('header_cart', array('refererRoute'=>$refererRoute));
     }
 
     public function actionAddAddress() {
@@ -319,6 +348,8 @@ class CartController extends MyController {
                 //'<td style="width: 31px;"><img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif"></td>'.
                 '<td style="width: 35px; height: 35px"> <span class="entity_icons"><i class="fa e' . $item['entity'] . '"></i></span></td>'.
                 '<td>
+					'.(($item['weight'] == 0) ? '<div style="float: right; color: #5BB75B;">Бесплатная доставка</div>' : '').'
+				
                     <span class="a">'.$item['title'].'</span>
                     <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') ) . ' x '.$PH->FormatPrice($item['price']).(($item['weight'] > 0) ? '<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME') : '').'</div>
                 </td>
@@ -335,6 +366,13 @@ class CartController extends MyController {
             $ptype = 0;
         $o = new Order;
         $order = $o->GetOrder($id);
+		
+		if (!$order) {
+			
+			$this->redirect(Yii::app()->createUrl('site/index'));
+			
+		}
+		
         $data = array();
         $data['order'] = $order;
         $this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
@@ -386,9 +424,20 @@ class CartController extends MyController {
             			
 					
 		
-        //var_dump($post);
+        //Обработчик для зарег. 
         if (!Yii::app()->user->isGuest) {
+			
+			
+			
+			
             $adr1 = Address::GetAddress($this->uid, $post['id_address']);
+			
+			if ($post['addr_buyer'] == '1') {
+				
+				$post['id_address_b'] = $post['id_address'];
+				
+			}
+			
             $adr2 = Address::GetAddress($this->uid, $post['id_address_b']);			
 			
             $idAddr2 = '';
@@ -396,22 +445,26 @@ class CartController extends MyController {
 			if (!$adr1['address_id']) { $adr1['address_id'] = 0; }
 			if (!$adr2['address_id']) { $adr2['address_id'] = 0; }
 			
-            if ( $post['dtype'] == 0 ) {
+            if ( $post['dtype'] == 0 AND $post['dtype'] != '' ) {
 				
 				$adr1['address_id'] = 0;
 				$adr2['address_id'] = 0;
 				
 			}
 			
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/2zareg.txt', print_r($post,1));
+			
 			$DeliveryMode = 0;
 			if ($post['dtype'] == '0') { $DeliveryMode = 1; }
+			
+			if (!$post['dtype']) { $post['dtype'] = 3; }
 			
             $s['DeliveryAddressID'] = $adr1['address_id'];
             $s['DeliveryTypeID'] = $post['dtype'];
             $s['DeliveryMode'] = $DeliveryMode;
             $s['CurrencyID'] = Yii::app()->currency;
             $s['BillingAddressID'] = $adr2['address_id'];
-            $s['Notes'] = $_POST['Notes'];
+            $s['Notes'] = ($_POST['Notes']) ? $_POST['Notes'] : '&nbsp;';
             $s['Mandate'] = 0;
             //$s['payment'] = $post['ptype'];
             $order = new OrderForm($this->sid);
@@ -478,7 +531,10 @@ class CartController extends MyController {
 			
 			
         }
-        if (Yii::app()->request->isPostRequest) {
+        
+		
+		//Обработчик для незарег.
+		if (Yii::app()->request->isPostRequest) {
             $type = $post['Address']['type'];
             $business_title = $post['Address']['business_title'];
             $business_number1 = $post['Address']['business_number1'];
@@ -493,7 +549,12 @@ class CartController extends MyController {
             $address = $post['Address']['streetaddress'];
             $email = $post['Address']['contact_email'];
             $phone = $post['Address']['contact_phone'];
-            $comment = $post['Address']['notes'];
+            $comment = $post['notes'];
+			
+			if (!$comment) { $comment = '&nbsp;'; }
+			
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/2.txt', print_r($post,1));
+			
             if (User::checkLogin($email)) {
                 echo '9';
                 exit();
@@ -511,7 +572,7 @@ class CartController extends MyController {
 
                 } else {
 
-                    if ($fam AND $name AND $email AND $country AND $city AND $post_index AND $address  AND $phone) {
+                    if ($fam AND $name AND $email AND $country AND $phone) {
 
                         $next = true;
 
@@ -615,6 +676,9 @@ class CartController extends MyController {
                     }
 					
 					
+					
+					
+					
                     $s['DeliveryAddressID'] = $idAddr2;
                     $s['DeliveryTypeID'] = $post['dtype'];
                     $s['DeliveryMode'] = 0;
@@ -635,7 +699,9 @@ class CartController extends MyController {
                     $o = new Order;
                     $o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
                     $id = $o->CreateNewOrder($userID, $this->sid, $order, $items, $post['ptype']);
-                    $o = new Order;
+                    
+					//file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.txt', $id);
+					
                     $order = $o->GetOrder($id);
 
                     $data['order'] = $order;
@@ -956,7 +1022,7 @@ class CartController extends MyController {
             if (Yii::app()->request->isAjaxRequest) {
                 //CARTNEW_IN_CART_BTN
                 $this->ResponseJson(array(
-                    'hasError' => false,
+                    'hasError' => false, 
                     'msg' => $message,
                     'already' => $already,
                     'buttonName' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
