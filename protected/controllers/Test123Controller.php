@@ -41,7 +41,12 @@ class Test123Controller extends MyController {
     }
 
 	function actionCategory() {
+		Seo_settings::get();
 		$category = new Category();
 		Debug::staticRun(array(ProductHelper::GetTitle($category->GetByIds(50, [30])[0])));
+	}
+
+	function actionVectori() {
+		$this->render('vectori');
 	}
 }
