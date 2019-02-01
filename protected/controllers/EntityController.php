@@ -167,6 +167,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity, $cid);
 
+//        Seo_settings::get();
         $this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
@@ -487,7 +488,7 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
-        $a = new CommonAuthor();
+        $a = CommonAuthor::model();
         $author = $a->GetById($aid);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));

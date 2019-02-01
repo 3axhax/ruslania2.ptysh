@@ -37,7 +37,7 @@ class ModelsSeoEntity extends Seo_settings {
 
 	protected function _fillReplace() {
 		if (empty($this->_cid)) {
-			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE avail_for_order > 0';
+			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE (avail_for_order > 0)';
 			$this->_replace['counts'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
 
 			$this->_replace['name'] = Entity::GetTitle($this->_eid);
@@ -48,7 +48,11 @@ class ModelsSeoEntity extends Seo_settings {
 			$cat = array_shift($cat);
 			$this->_replace['name'] = ProductHelper::GetTitle($cat);
 		}
-		Debug::staticRun(array($this->_replace, FilterHelper::getFiltersData($this->_eid, $this->_cid)));
+		$this->_replace['lang_predl'] = FilterNames::get($this->_eid, $this->_cid)->lang_sel;
+		$params = FilterNames::get($this->_eid, $this->_cid)->getParams();
+		if (!empty($params)) $this->_replace['params'] = implode('; ', $params);
+
+		Debug::staticRun(array($this->_replace));
 
 	}
 
