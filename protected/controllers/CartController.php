@@ -34,6 +34,18 @@ class CartController extends MyController {
 			case '5': $sql = 'UPDATE user_address SET postindex=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
 			case '6': $sql = 'UPDATE user_address SET streetaddress=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
 		}
+		
+		$addr = Address::GetAddress($this->uid, $_POST['id']);
+		
+		$addrs = CommonHelper::FormatAddress($addr);
+		
+		if ($addrs) {
+			
+			echo $addrs;
+			
+		}
+		
+		
 	}
 	
 	
@@ -362,6 +374,13 @@ class CartController extends MyController {
     function actionOrderPay() {
         $id = (int) Yii::app()->getRequest()->getParam('id');
         $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
+		
+		$sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
+        //меняем в базе старого сайта тип оплаты
+        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':id' => $id));
+		
         if ($ptype <= 1)
             $ptype = 0;
         $o = new Order;
@@ -381,11 +400,7 @@ class CartController extends MyController {
 
         $data['ptype'] = $ptype;
         //меняем в базе тип оплаты
-        $sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
-        Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
-        //меняем в базе старого сайта тип оплаты
-        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
-        Yii::app()->db->createCommand($sql)->execute(array(':id' => $id));
+        
         //выводим соответствующий шаблон
         if ($ptype == '27') {
             $this->render('applepay', $data);
@@ -404,7 +419,7 @@ class CartController extends MyController {
                 $namepay = 'Предоплата на банковский счет в России';
             if ($ptype == '0')
                 $namepay = 'Оплата в магазине';
-            $data['dop'] = '.<br />Вы выбрали способ оплаты: ' . $namepay;
+            $data['dop'] = '<br />Вы выбрали способ оплаты: ' . $namepay;
             $this->render('result', $data);
         }
     }
