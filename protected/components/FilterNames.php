@@ -96,7 +96,7 @@ class FilterNames {
 			case Entity::MAPS: case Entity::SOFT: case Entity::PRINTED: $label = Yii::app()->ui->item('A_NEW_PRODUCER'); break;
 		}
 
-		$publisher = Publisher::model()->GetById($this->_data['publisher']);
+		$publisher = Publisher::model()->GetById($this->_eid, $this->_data['publisher']);
 		Debug::staticRun(array($this->_data['publisher'], $publisher));
 		return $label . ': ' . ProductHelper::GetTitle($publisher);
 	}

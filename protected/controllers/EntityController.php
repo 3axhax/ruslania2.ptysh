@@ -167,7 +167,7 @@ class EntityController extends MyController {
 
         $filters = FilterHelper::getEnableFilters($entity, $cid);
 
-//        Seo_settings::get();
+        Seo_settings::get();
         $this->render('list', array('categoryList' => $catList,
             'entity' => $entity, 'items' => $items,
             'paginatorInfo' => $paginatorInfo,
