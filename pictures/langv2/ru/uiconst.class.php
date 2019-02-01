@@ -1304,7 +1304,7 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_COUNT_NAME' => 'шт',
 'CARTNEW_WEIGHT_LABEL' => 'Вес',
 'CARTNEW_WEIGHT_NAME' => 'кг',
-'CARTNEW_CHECKBOX_TERMS_OF_USE' => 'Отметьте, что Вы согласны с <a href="javascript:;" target="_blank" onclick="$(\'.popup0\').show(); $(\'.popup1\').css(\'top\', ($(window).scrollTop() + 40) + \'px\')">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на английском языке)',
+'CARTNEW_CHECKBOX_TERMS_OF_USE' => 'Отметьте, что Вы согласны с <a href="javascript:;" target="_blank" onclick="$(\'.popup0\').show(); $(\'.popup1\').css(\'top\', ($(window).scrollTop() + 40) + \'px\')">условиями пользования</a> виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_rus.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на русском языке)',
 'CARTNEW_DELIVERY_POST_NAME' => 'Доставка почтой',
 'CARTNEW_DAY_NAME' => 'Дней',
 'CARTNEW_PICK_UP_STORE1' => 'Забрать в магазине в Хельсинки',
@@ -1372,7 +1372,7 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_PAYTRAIL_TEXT1'=>'Ваш заказ № %s. Сумма заказа: %s. Произведите оплату, выбрав чем хотите оплатить',
 'CARTNEW_PAYTRAIL_TEXT2'=>'Выбрать <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">другой способ оплаты</a>',
 
-'CARTNEW_RESULT_TEXT1'=>'Номер заказа %s. Сумма заказа: %s<br />%s',
+'CARTNEW_RESULT_TEXT1'=>'Номер заказа %s. Сумма заказа: %s.<br />%s',
 'CARTNEW_ALIPAY_TEXT1'=>'Ваш заказ № %s. Сумма заказа: %s.',
 
 
