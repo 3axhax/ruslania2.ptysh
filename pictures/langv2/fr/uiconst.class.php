@@ -19,7 +19,8 @@ return array (
   'A_GOTOEVERYWHERE' => 'partout',
   'A_GOTOMAPS' => 'Cartes',
   'A_GOTOMUSICSHEETS' => 'Partitions & livres de musique',
-  'A_GOTOPEREODICALS' => 'Magazines',
+  'A_GOTOPEREODICALS' => 'Abonnement aux périodiques',
+    'A_NEW_PERIODIC' => 'Périodiques',
   'A_GOTOPRINTED' => 'Autres',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'Films en DVD',
@@ -1273,5 +1274,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Quantité au panier: %d',
-
+	'CARTNEW_IN_CART_BTN2' => '%d kpl'
 );

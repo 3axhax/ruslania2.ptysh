@@ -19,7 +19,8 @@ return array (
   'A_GOTOEVERYWHERE' => 'överallt',
   'A_GOTOMAPS' => 'Kartor',
   'A_GOTOMUSICSHEETS' => 'Noter & musik böcker',
-  'A_GOTOPEREODICALS' => 'Tidningar',
+  'A_GOTOPEREODICALS' => 'Tidningsprenumerationer',
+    'A_NEW_PERIODIC' => 'Tidningsprenumerationer',
   'A_GOTOPRINTED' => 'Andra',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'DVD filmer',
@@ -1283,5 +1284,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Lägg i varukorgen %d st.',
-
+'CARTNEW_IN_CART_BTN2' => '%d st.'
 );

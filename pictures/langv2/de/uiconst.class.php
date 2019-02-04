@@ -20,7 +20,8 @@ return array(
     'A_GOTOEVERYWHERE' => '&uuml;berall',
     'A_GOTOMAPS' => 'Landkarten',
     'A_GOTOMUSICSHEETS' => 'Noten und Musikbücher',
-    'A_GOTOPEREODICALS' => 'Zeitschriften',
+    'A_GOTOPEREODICALS' => 'Zeitschriften im Abo-Angebot',
+    'A_NEW_PERIODIC' => 'Zeitschriften',
     'A_GOTOPRINTED' => 'Andere',
     'A_GOTOSOFT' => 'Multimedia',
     'A_GOTOVIDEO' => 'DVD filme',
@@ -1296,5 +1297,5 @@ By clicking on a category you are interested in, you can see all the products wi
     'NAME_CROSSWORD'=>'Kreuzwörter',
     'MENU'=>'Menü',
     'VIEW_LIST'=>'Смотреть списком',
-
+	'CARTNEW_IN_CART_BTN2' => '%d stck.'
 );

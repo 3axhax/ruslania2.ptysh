@@ -20,7 +20,8 @@ return array (
   'A_GOTOEVERYWHERE' => 'kaikkialta',
   'A_GOTOMAPS' => 'Kartat',
   'A_GOTOMUSICSHEETS' => 'Nuotit ja musiikkikirjat',
-  'A_GOTOPEREODICALS' => 'Lehdet',
+  'A_GOTOPEREODICALS' => 'Lehtitilaukset',//'Lehdet',
+    'A_NEW_PERIODIC' => 'Lehtitilaukset',
   'A_GOTOPRINTED' => 'Muut',
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'DVD-elokuvat',
@@ -1276,5 +1277,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Ostoskorissa %d kpl',
-
+'CARTNEW_IN_CART_BTN2' => '%d kpl'
 );

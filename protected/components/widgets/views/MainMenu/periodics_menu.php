@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (02.10.2018 23:30)*/ ?>
-<a class="dd"  href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item("A_GOTOPEREODICALS"); ?></a>
+<a class="dd"  href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item("A_NEW_PERIODIC"); ?></a>
 <div class="click_arrow"></div>
 <div class="dd_box_bg list_subcategs" style="left: -280px;">
 
