@@ -214,10 +214,14 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
             <? elseif ($ctrl == 'cart' AND (!in_array('doorder',$url))) : ?>
 
                 <?
+				
+				$ref = explode('?',$_SERVER['HTTP_REFERER']);
+				
+                $url_ref = end(explode('/', trim($ref[0], '/')));
 
-                $url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
-
-                $arr_cart_url = array('variants', 'noregister', 'doorder');
+				
+				
+                $arr_cart_url = array('variants', 'noregister', 'doorder', 'orderPay');
 
                 if (in_array($url_ref, $arr_cart_url)) {
 
@@ -657,6 +661,16 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     $('span', $el).html(json.already2);
 
+                }
+				
+				if ($el.hasClass('cart_add_slider')) {
+
+                    $($el).html('<span>'+json.buttonName2 + '</span>');
+					$('span', $el).css('width', 'auto');
+					$el.css('width', '115px');
+					$el.css('float', 'right');
+					$el.css('margin-top', '8px');
+					$el.css('margin-left', '-36px');
                 }
 
 

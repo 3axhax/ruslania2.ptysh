@@ -5,10 +5,7 @@
                                                       'viewModel' => 'addressVM',
                                                       'afterAjaxSubmit' => $afterAjax,
                                                       'htmlOptions' => array('class' => 'address text'),
-                                                 )); ?>
-
-
-<?php
+                                                 )); ?><?php
 $PH = new ProductHelper();
 function decline_goods($num, $ui) {
     //global $ui;
@@ -38,6 +35,20 @@ function decline_goods($num, $ui) {
         }
     }
 
+	$pickpoint = false;
+	
+	foreach ($cart['items'] as $id => $item) :
+	
+		if ($item['entity'] != 30) {
+			
+			$pickpoint = true;
+			break;
+			
+		}
+	
+	endforeach;
+	
+	
 ?>
 
 
@@ -64,17 +75,22 @@ function decline_goods($num, $ui) {
     <tbody>
         
     <tr>
-        <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
-        <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+		 <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
+        <td>
+            <label style="float: left; margin-right: 20px;"><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
-            <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
+            <label style="float: left;"><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label>
+		</td>
     </tr>
+	
+	<? if ($pickpoint) : ?>
 	
 	 <tr>
         <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" name="check_addressa" value="1" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> <?=$ui->item("CARTNEW_CHECK_NO_ADDR")?></label></td>
     </tr>
+	
+	<? endif; ?>
 	
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_title"); ?>
@@ -91,13 +107,7 @@ function decline_goods($num, $ui) {
         </td>
         <td class="smalltxt1"></td>
     </tr>
-    <tr>
-        <td class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
-        <td class="maintxt-vat">
-            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"),'oninput'=>'save_form()')); ?>
-        </td>
-        
-    </tr>
+    
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
         <td class="maintxt-vat">
@@ -137,37 +147,10 @@ function decline_goods($num, $ui) {
         <td class="smalltxt1"></td>
     </tr>
     
-    <tr>
+    <tr class="states_list" style="display: none">
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
         <td class="maintxt-vat select_states">
-            <select name="Address[state_id]" disabled onclick="save_form();"><option value="">---</option></select>
-        </td>
-        
-    </tr>
-    
-    
-    <tr>
-        <td nowrap="" class="maintxt city_lbl"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
-        </td>
-        <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
-            <span class="texterror"></span>
-        </td>
-    </tr>
-    <tr>
-        <td nowrap="" class="maintxt postindex_lbl"><span style="width: 5pt"
-                                            class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
-        <td colspan="2" class="maintxt-vat">
-            <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
-            <span class="texterror"></span>
-        </td>
-    </tr>
-    <tr>
-        <td nowrap="" class="maintxt streetaddress_lbl"><span style="width: 5pt"
-                                            class="redtext">*</span><?=$ui->item("address_streetaddress"); ?></td>
-        <td class="maintxt-vat">
-            <?=$form->textField('streetaddress',array('placeholder'=>$ui->item("MSG_PERSONAL_ADDRESS_COMMENT_2"))); ?>
-            <span class="texterror"></span>
+            <select name="Address[state_id]" onclick="save_form();"><option value="">---</option></select>
         </td>
         
     </tr>
@@ -219,7 +202,7 @@ function decline_goods($num, $ui) {
 <div class="span7" style="float: right; width: 575px; margin-top: 21px;">
 
         <div class="cart_header" style="width: 553px;">
-            <?=sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), array(decline_goods($cart['fullInfo']['count'], $ui), $PH->FormatPrice($cart['fullInfo']['cost'])))?>
+            <?=sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), decline_goods($cart['fullInfo']['count'], $ui), $PH->FormatPrice($cart['fullInfo']['cost']))?>
             
             
         </div>
@@ -230,8 +213,15 @@ function decline_goods($num, $ui) {
         <tbody>
             
             
-            <?php foreach ($cart['items'] as $id => $item) : ?>
-            
+            <?php 
+		$return = true;
+		$hide_delivery = 'Y';
+		$sum_weight = 0;
+		foreach ($cart['items'] as $id => $item) : ?>
+            <?
+		$sum_weight += $item['weight'];	
+		
+		?>
             <tr>
                 
                 <td style="width: 35px; height: 35px;">
@@ -242,8 +232,11 @@ function decline_goods($num, $ui) {
  */ ?>
                 </td>
                 <td>
+					<?if ($item['weight'] == 0) { ?>
+					<div style="float: right; color: #5BB75B;">Бесплатная доставка</div>
+					<? } ?>
                     <span class="a"><?=$item['title']?></span>
-                    <div class="minitext"><?=$item['month_count']?> <?if ($item['entity'] == 30) { echo $ui->item('MONTH_SMALL'); } else {?><?=$ui->item('CARTNEW_COUNT_NAME')?>.<? } ?> x <?=$PH->FormatPrice($item['price']);?><br /> <?=$ui->item('CARTNEW_WEIGHT_LABEL')?>: <?=($item['weight'])?> <?=$ui->item('CARTNEW_WEIGHT_NAME')?></div>
+                    <div class="minitext"><?=$item['month_count']?> <?if ($item['entity'] == 30) { echo $ui->item('MONTH_SMALL'); } else {?><?=$ui->item('CARTNEW_COUNT_NAME')?>.<? } ?> x <?=$PH->FormatPrice($item['price']);?><?if ($item['weight'] > 0) { ?><br /> <?=$ui->item('CARTNEW_WEIGHT_LABEL')?>: <?=($item['weight'])?> <?=$ui->item('CARTNEW_WEIGHT_NAME')?><? } ?></div>
                 </td>
                 
             </tr>
@@ -255,6 +248,30 @@ function decline_goods($num, $ui) {
     </table>
 </div>
 </div>
+
+<script>
+
+	<? if (!$pickpoint) { ?>
+
+	$(document).ready(function() {
+
+		$('.row_del2, .row_del3, .seld1').hide();
+
+	})
+
+	<? } else { ?>
+		
+		$(document).ready(function() {
+
+			$('.row_del2, .row_del3, .seld1').show();
+
+		})
+
+
+	<? } ?>
+
+</script>
+
  <div class="clearfix"></div>
  
  <label for="confirm" onclick=" checked_sogl();">
@@ -290,16 +307,16 @@ function decline_goods($num, $ui) {
 		
         <div style="position: relative; display: inline-block; width: auto; height: 160px;float: left; margin-left: 0;" class="span3 row_del1"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart1').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart1"><?=$ui->item('DELIVERY_ECONOMY_OTHER');?></div><label class="seld span3 seld02" rel="8.3" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">8.3$</span></label></div>
+            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
 			
 			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del2"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart2').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart2"><?=$ui->item('DELIVERY_PRIORITY_OTHER')?></div><label class="seld span3 seld03" rel="11.8" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype3'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">11.8$</span></label></div>
+            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
 			
 			
 			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del3"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart3').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart3"><?=$ui->item('DELIVERY_EXPRESS_OTHER');?></div><label class="seld span3 seld04 act" rel="23.6" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype4'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(100, 113, 127);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check active"></span></span> 
-            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">23.6$</span></label></div>
+            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
         
         <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype0'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); sbros_delev(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>" style="height: 40px;">
             <span class="zabr_market"><?=$ui->item('CARTNEW_PICK_UP_STORE1');?></span>
