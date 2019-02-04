@@ -1018,7 +1018,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_MORE_ABOUTUS' => 'Plus sur nous.',
   'A_NEW_DESC_FOOTER' => 'Ruslania a été fondée en 1986 à Helsinki, en Finlande. Il s’agit d’une entreprise familiale finlandaise à 100%. <br/>Notre société est un pont culturel entre la Russie et l’Europe.<br/>',
   'A_NEW_VIEW_ALL_CATEGORY' => 'Afficher toutes les catégories',
-  'A_NEW_SETTINGS_FILTER' => 'Les filtres',
+  'A_NEW_SETTINGS_FILTER' => 'Le filtre',
   'A_NEW_SEARCH_CAT' => 'Rechercher dans la catégorie',
   'A_NEW_NAME_ISBN' => 'Rechercher des produits par titre / auteur / ISBN',
   'A_NEW_FILTER_ALL' => 'Tous',

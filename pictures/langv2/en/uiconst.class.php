@@ -1036,7 +1036,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_MORE_ABOUTUS' => 'More about us',
   'A_NEW_DESC_FOOTER' => 'Ruslania bookstore was founded in Helsinki, Finland in 1986. We are a Finnish family owned business.<br />  We are one of the leading distributors of Russian written art Worldwide.<br />',
   'A_NEW_VIEW_ALL_CATEGORY' => 'Show all categories',
-  'A_NEW_SETTINGS_FILTER' => 'Filters',
+  'A_NEW_SETTINGS_FILTER' => 'Filter',
   'A_NEW_SEARCH_CAT' => 'Search within the category',
   'A_NEW_NAME_ISBN' => 'Search for *** by title / author / ISBN',
   'A_NEW_FILTER_ALL' => 'All',

@@ -75,7 +75,7 @@
 
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply" onclick="show_items()">
-            <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
+            <?= $ui->item('A_NEW_SETTINGS_FILTER'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<img class="loader_gif" src="/new_img/source.gif" width="15" height="15">)</span>
         </button>
     </div>
 

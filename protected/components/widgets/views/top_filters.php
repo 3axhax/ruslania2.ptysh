@@ -143,7 +143,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             ?>
         <!--Кнопки управления-->
         <button class="prod-filter__button" type="button" id="filter_apply">
-            <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span>
+            <?= $ui->item('A_NEW_SETTINGS_FILTER'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span>
         </button>
         <?php endif;?>
     </div>
@@ -361,7 +361,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php if ($entity == Entity::VIDEO):?>
             <!--Кнопки управления-->
             <button class="prod-filter__button" type="button" id="filter_apply">
-                <?= $ui->item('A_NEW_APPLY'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span>
+                <?= $ui->item('A_NEW_SETTINGS_FILTER'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span>
             </button>
         <?php endif;?>
 

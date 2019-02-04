@@ -1032,7 +1032,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_MORE_ABOUTUS' => 'Подробнее о нас.',
     'A_NEW_DESC_FOOTER' => 'Книжная Корпорация Руслания была основана в 1986 году в Хельсинки, Финляндия. Это 100% финский семейный бизнес.<br /> В настоящее время наша компания является ведущим поставщиком товаров из России в странах Евросоюза. <br />',
     'A_NEW_VIEW_ALL_CATEGORY' => 'Показать все категории',
-    'A_NEW_SETTINGS_FILTER' => 'Параметры поиска',
+    'A_NEW_SETTINGS_FILTER' => 'Фильтр',
     'A_NEW_SEARCH_CAT' => 'Поиск внутри категории',
     'A_NEW_NAME_ISBN' => 'По названию,ISBN',
     'A_NEW_FILTER_ALL' => 'Все',
