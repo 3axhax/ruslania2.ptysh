@@ -3149,7 +3149,7 @@ input.prod-filter__input:focus,
     height: 30px;
     line-height: 24px;
 }
-.prod-filter__button span.fa::before { content: '\f0b0'; color: #fff; position: relative; top: 6px;}
+.prod-filter__button span.fa::before { content: '\f0b0'; color: #fff; position: relative; top: 7px;}
 .prod-filter__button span.fa {
     display: block;
     float: left;
