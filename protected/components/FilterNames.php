@@ -101,6 +101,31 @@ class FilterNames {
 		return $label . ': ' . ProductHelper::GetTitle($publisher);
 	}
 
+	private function _getSeries() {
+		if (empty($this->_data['series'])) return '';
+		$label = Yii::app()->ui->item('A_NEW_FILTER_SERIES');
+		$serie = Series::model()->findByAttributes(['id'=>$this->_data['series'], 'entity'=>$this->_eid]);
+		return $label . ': ' . ProductHelper::GetTitle($serie->getAttributes());
+	}
+
+	private function _getBinding() {
+		if (empty($this->_data['binding'])) return '';
+		switch ($this->_eid) {
+			case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+			case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+			case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+			default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+		}
+		$bindings = array();
+		$binding = new Binding();
+		foreach ($this->_data['binding'] as $bid) {
+			$b = $binding->GetBinding($this->_eid, $bid);
+			if (!empty($b)) $bindings[] = ProductHelper::GetTitle($b);
+		}
+		if (empty($bindings)) return '';
+		return $label . ': ' . implode(', ', $bindings);
+	}
+
 	private function _getLang_sel() {
 		if (empty($this->_data['lang_sel'])) return '';
 

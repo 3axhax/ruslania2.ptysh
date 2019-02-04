@@ -77,14 +77,18 @@
 								echo '</div><div class="clearfix"></div></div>';
 							}
 							?><div style="margin-top: 15px;"></div>
-	                    <a href="<?= $href ?>" class="button_view list">
-                            <span><?=$ui->item('VIEW_LIST'); ?></span>
-                            <span class="fa"></span>
+	                    
+						
+						
+						<a href="<?= $href ?>" class="button_view list">
+                           <span class="fa"></span> <span><?=$ui->item('VIEW_LIST'); ?></span>
+                            
 		                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"></span>
 	                    </a>
 							<a title="<?=htmlspecialchars($ui->item('DOWNLOAD_EXCEL_FILE')); ?>" rel="nofollow" class="download excel" href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>">
+							<span class="fa"></span>
 								<span><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?></span>
-								<span class="fa"></span>
+								
                             </a>
 					<? if (count($list) > $i) { echo '<hr />'; } $i++;?>
 					</li>
