@@ -22,6 +22,7 @@ class SiteController extends MyController {
     }
 
     function actionCertificate() {
+        $this->_checkUrl(array());
         $model = new Certificate();
         if (Yii::app()->request->isPostRequest) {
             $model->setAttributes(Yii::app()->getRequest()->getPost('Certificate'));
@@ -442,7 +443,6 @@ class SiteController extends MyController {
 
     public function actionLogout() {
         Yii::app()->user->logout();
-        Debug::staticRun(array(Yii::app()->user, 'exit'));
         $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -1026,7 +1026,6 @@ class SiteController extends MyController {
                 $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
                 $refererParams = $request->getParams();
                 if (!empty($refererParams['entity'])) $_GET['e'] = Entity::ParseFromString($refererParams['entity']);
-//                Debug::staticRun(array($e, $_GET['e'], $request->getParams()));
            }
         }
 
