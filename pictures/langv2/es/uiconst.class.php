@@ -1295,5 +1295,5 @@ By clicking on a category you are interested in, you can see all the products wi
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Cantidad a la cesta: %d',
-
+	'CARTNEW_IN_CART_BTN2' => '%d item(s)'
 );

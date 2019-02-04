@@ -1291,5 +1291,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'In cart %d item(s)',
-
+	'CARTNEW_IN_CART_BTN2' => '%d item(s)'
 );
