@@ -13,10 +13,8 @@
 	</div>
 	
 	<div class="span6">
-	
-	
-	
-        <?php if ($ptype == 1 OR $ptype == 0) { $ptype_1 = 999; } else { $ptype_1 = $ptype; } ?>
+		
+		<?php if ($ptype == 1 OR $ptype == 0) { $ptype_1 = 999; } else { $ptype_1 = $ptype; } ?>
 		
 		<? if (trim($dop) AND trim($dop) != '.') $dop = $dop.'.';?>
 	
@@ -37,7 +35,7 @@
     </div>
 
 	<div style="height: 20px;"></div>
-    <a href="<?= Yii::app()->createUrl('client/me')?>" class="order_start" style="background-color: #5bb75b;  margin-top: -65px;">
+    <a href="<?= Yii::app()->createUrl('client/me')?>?order_id=<?=$order['id']?>" class="order_start" style="background-color: #5bb75b;  margin-top: -65px;">
                             <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
                         </a>
 						
