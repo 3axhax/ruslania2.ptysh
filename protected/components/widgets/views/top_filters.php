@@ -362,7 +362,8 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php if ($entity == Entity::VIDEO):?>
             <!--Кнопки управления-->
             <button class="prod-filter__button" type="button" id="filter_apply">
-                <?= $ui->item('A_NEW_SETTINGS_FILTER'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span>
+                <span class="fa"></span>
+            <span class="text"><?= $ui->item('A_NEW_SETTINGS_FILTER'); ?> <span class="prod-filter__button-icon" id="loader-filter">&nbsp;(<?= ($total > 1000)?'>1000':$total ?>)</span></span>
             </button>
         <?php endif;?>
 
