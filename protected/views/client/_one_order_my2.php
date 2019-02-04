@@ -188,8 +188,6 @@
 
 </script>
 
-
-
 <div <?=$class;?>>
     <b><?=sprintf($ui->item("ORDER_MSG_NUMBER"), $order['id']); ?></b>
 
@@ -217,9 +215,9 @@
 					
 					
 					</div></div>
-                    <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_BILLING_ADDRESS"); ?>:</span> <div class="span11"><span class="order_addr_buyer"><?=CommonHelper::FormatAddress($order['BillingAddress']); ?></span> <a href="javascript:;" style="margin-left: 20px;" title="Редактировать адрес плательщика" onclick="editAddr(<?=$order['id']; ?>, $(this));"><i class="fa fa-pencil"></i></a>
-					<?
+                    <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_BILLING_ADDRESS"); ?>:</span> <div class="span11"><span class="order_addr_buyer"><?=CommonHelper::FormatAddress($order['BillingAddress']); ?></span> <? if ($order['hide_edit_order'] != '1') : ?><a href="javascript:;" style="margin-left: 20px;" title="Редактировать адрес плательщика" onclick="editAddr(<?=$order['id']; ?>, $(this));"><i class="fa fa-pencil"></i></a><? endif; ?>
 					
+					<? if ($order['hide_edit_order'] != '1') :
 					$addrGet = CommonHelper::FormatAddress2($order['BillingAddress']);
 					
 					//var_dump($addrGet);
@@ -288,7 +286,7 @@
 					</div>
 					
 					</form>
-					
+					<? endif; ?>
 					
 					</div></div>
                     <?php if(!$onlyContent) : ?>
@@ -335,6 +333,17 @@
                 <?php endif; ?>
 				<div style="height: 5px;"></div>
                 Статус заказа: <br /><b><?php if(!$onlyContent) : ?><?=$ui->item("ORDER_MSG_STATE_".$order['States'][0]['state'])?></b><? endif; ?>
+				
+				
+				
+				<? if ($show_btn == '1' && $order['hide_edit_order'] != '1') : ?>
+				<div style="height: 20px;"></div>
+    <a href="<?= Yii::app()->createUrl('client/me')?>?order_id=<?=$order['id']?>" class="order_start" style="background-color: #5bb75b;  margin-top: -65px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
+                        </a>
+				
+				<? endif; ?>
+				
                 <table cellspacing="1" cellpadding="5" border="0" width="100%" class="cart1 items_orders" id="cnt<?=$order['id']; ?>" style="display: <?=$enableSlide ? 'none' : 'table'; ?>">
                     <tbody>
                     <tr>

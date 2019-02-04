@@ -31,10 +31,12 @@ class Order extends CMyActiveRecord
     {
         return array(
 
-            array('uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
-                  . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet'),
+            array('hide_edit_order, uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
+                  . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet', ),
             array('notes', 'safe', 'on' => 'newinternet')
+			
         );
+		
     }
 
     public function relations()
@@ -290,8 +292,8 @@ class Order extends CMyActiveRecord
         try
         {
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
-                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id) VALUES '
-                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId)';
+                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address) VALUES '
+                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address)';
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
@@ -307,6 +309,7 @@ class Order extends CMyActiveRecord
                       ':notes' => $order->Notes,
                       ':mandate' => $order->Mandate,
                       ':promocodeId' => $promocodeId,
+                      ':smartpost_address' => $_POST['pickpoint_address'],
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;

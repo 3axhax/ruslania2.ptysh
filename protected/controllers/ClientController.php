@@ -42,6 +42,14 @@ class ClientController extends MyController
     {
 		//echo $this->uid;
 		
+		if ($_GET['order_id']) {
+			
+			$sql = 'UPDATE users_orders SET hide_edit_order=:int WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':int' => 1, ':id' => $_GET['order_id']));
+			
+			
+			$this->redirect(Yii::app()->createUrl('client/me'));
+		}
+		
         $o = new Order;
         $orders = $o->GetOrders($this->uid);
         $user = Yii::app()->user->GetModel();

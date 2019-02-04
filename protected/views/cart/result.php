@@ -8,7 +8,7 @@
 	
 	<div class="span8">
 		
-		<?php $this->renderPartial('/client/_one_order_my2', array('order' => $order)); ?>
+		<?php $this->renderPartial('/client/_one_order_my2', array('order' => $order, 'show_btn'=>'1')); ?>
 	
 	</div>
 	
@@ -21,7 +21,7 @@
         <?=sprintf($ui->item('CARTNEW_RESULT_TEXT1'), $number_zakaz, ProductHelper::FormatPrice($order['full_price'], $order['currency_id']), $dop)?>
 		<br /><br />
 	<div><?= Yii::app()->ui->item('DESC_PAYTYPE' . $ptype_1, $number_zakaz) ?></div>
-<br />
+
 
 <div class="clearBoth"></div>
 
@@ -34,10 +34,7 @@
         <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
 
-	<div style="height: 20px;"></div>
-    <a href="<?= Yii::app()->createUrl('client/me')?>?order_id=<?=$order['id']?>" class="order_start" style="background-color: #5bb75b;  margin-top: -65px;">
-                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
-                        </a>
+	
 						
 	</div>
 </div>	
