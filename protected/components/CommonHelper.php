@@ -70,6 +70,39 @@ class CommonHelper
              .$address['country_name'];
         return $ret;
     }
+	
+	public static function FormatAddress2($address)
+    {
+		
+		
+        $ui = Yii::app()->ui;
+		
+		$ret_array = array();
+		
+        if(empty($address)) return $ui->item('NO_DATA');
+
+        if($address['type'] == Address::ORGANIZATION) $ret_array['org'] = $address['business_title'].', ';
+
+       
+            $ret_array['first_name'] = $address['receiver_first_name'];
+            if(!empty($address['receiver_middle_name'])) $ret_array['middle_name'] = $address['receiver_middle_name'];
+            if(!empty($address['receiver_last_name'])) $ret_array['last_name'] = $address['receiver_last_name'];
+			
+		
+	
+		$ret_array['streetaddress'] = $address['streetaddress'];
+		$ret_array['postindex'] = $address['postindex'];
+		$ret_array['city'] = $address['city'];
+		$ret_array['country_name'] = $address['country_name'];
+		
+		$ret_array['contact_phone'] = $address['contact_phone'];
+		
+        $ret = $org.$name.', '
+             .$address['streetaddress'].', '
+             .$address['postindex'].' '.$address['city'].', '
+             .$address['country_name'];
+        return $ret_array;
+    }
 
     public static function FormatDeliveryType($dti)
     {

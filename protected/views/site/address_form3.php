@@ -35,7 +35,20 @@ function decline_goods($num) {
                 }
         }
     }
-
+	
+	$pickpoint = false;
+	
+	foreach ($cart['items'] as $id => $item) :
+	
+		if ($item['entity'] != 30) {
+			
+			$pickpoint = true;
+			break;
+			
+		}
+	
+	endforeach;
+	
 ?>
 
 
@@ -70,7 +83,7 @@ $addr_list = $addr->GetAddresses($this->uid);
 echo ' <span class="err_addr" style="color: #ff0000; font-size: 12px;"></span><div class="clearfix" style="height: 10px;"></div><div class="addr_delivery">';
 if (count($addr_list)) {
     
-    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL').'</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY').'</option>' : '' );
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY').'</option>' : '' );
 
     $ch = new CommonHelper();
 
@@ -86,14 +99,14 @@ if (count($addr_list)) {
     
 }else {
 
-    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL').'</label><select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL2').'</option>';
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">'.$ui->item('CARTNEW_ADDR_DELIVERY_LABEL2').'</option>';
 
     echo '</select>';
 
 }
 
 ?>
-
+<!--
 <?php
 echo '<div class="addr_buyer" style="margin-top: 10px">';
 if (count($addr_list)) {
@@ -125,21 +138,21 @@ if (count($addr_list)) {
 echo '</div>';
 
 ?>
-
+-->
     <!--<a href="javascript:;" onclick="hide_dostavka($(this))" class="btn btn-link" style="margin-top: 10px;">Доставка не нужна</a>-->
     <? $user = User::getUserID(Yii::app()->user->id); ?>
 
-<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 10px; float: right; background-color: #28618E;"><?=$ui->item('CARTNEW_ADD_ADDR_BTN')?></a></div>
-
+<a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 10px; padding: 6px 0; float: right; background-color: #28618E;"><?=$ui->item('CARTNEW_ADD_ADDR_BTN')?></a></div>
+<div style="clear: both"></div>
 <table class="address addr1" style="display: none; margin-top: 10px;">
     <tbody>
         
     <tr>
         <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td class="maintxt">
-            <label><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <label style="float: left; margin-right: 20px;"><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <label style="float: left; "><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
 	
@@ -264,7 +277,7 @@ echo '</div>';
         </td>
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><?=$ui->item("address_contact_notes"); ?></td>
+        <td nowrap="" class="maintxt"><?=$ui->item("address_contact_notes2"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textArea('notes', array('oninput'=>'save_form()')); ?>
         </td>
@@ -304,10 +317,18 @@ echo '</div>';
         <table class="cart" style="width: 100%;">
         <tbody>
             
-            
-            <?php foreach ($cart['items'] as $id => $item) : ?>
+		            
+            <?php
+		$return = true;
+		$hide_delivery = 'Y';
+		$sum_weight = 0;
+		 foreach ($cart['items'] as $id => $item) : ?>
+			
+            <?
+		
+		$sum_weight += $item['weight'];
 
-            <?//var_dump($cart);?>
+		?>
 
             <tr>
                 
@@ -318,8 +339,13 @@ echo '</div>';
  */ ?>
                 </td>
                 <td>
+				
+					<?if ($item['weight'] == 0 AND $item['entity'] == 30) { ?>
+					<div style="float: right; color: #5BB75B;">Бесплатная доставка</div>
+					<? } ?>
+				
                     <span class="a"><?=$item['title']?></span>
-                    <div class="minitext"><?=$item['month_count']?> <?if ($item['entity'] == 30) { echo 'мес.'; } else {?>шт.<? } ?> x <?=$PH->FormatPrice($item['price']);?><br /> Вес: <?=($item['weight'])?> кг</div>
+                    <div class="minitext"><?=$item['month_count']?> <?if ($item['entity'] == 30) { echo 'мес.'; } else {?>шт.<? } ?> x <?=$PH->FormatPrice($item['price']);?><?if ($item['weight'] > 0) { ?><br /> Вес: <?=($item['weight'])?> кг<?}?></div>
                 </td>
                 
             </tr>
@@ -333,6 +359,28 @@ echo '</div>';
 </div>
  <div class="clearfix"></div>
  
+<script>
+
+	<? if ($sum_weight == '0') { ?>
+
+	$(document).ready(function() {
+
+		$('.row_del2, .row_del3, .seld1').hide();
+
+	})
+
+	<? } else { ?>
+		
+		$(document).ready(function() {
+
+			$('.row_del2, .row_del3, .seld1').show();
+
+		})
+
+
+	<? } ?>
+
+</script>
  <label for="confirm" onclick=" checked_sogl();" style="margin-top: 12px;">
      
      <input type="checkbox" class="checkbox_custom" value="1" name="confirm" id="confirm" required="required"> <span class="checkbox-custom"></span>       <?=$ui->item('CARTNEW_CHECKBOX_TERMS_OF_USE')?> </label>
@@ -359,22 +407,29 @@ echo '</div>';
      
      <div class="op" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.6; background: #eee; z-index: 999; "></div>
  
-<div class="p1"><?=$ui->item('CARTNEW_NOREG_STEP2_TITLE')?></div>
-   
-    <div class="row dtypes">
+<div class="p1">
+<? if ($pickpoint) : ?>
+<?=$ui->item('CARTNEW_NOREG_STEP2_TITLE')?>
+<? else : ?>
+2. Доставка включена в стоимость
+<? endif;  ?>
+
+</div>
+<? if ($sum_weight > 0) : ?>   
+   <div class="row dtypes">
         
 			<div style="position: relative; display: inline-block; width: auto; height: 160px;float: left; margin-left: 0;" class="span3 row_del1"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart1').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart1"><?=$ui->item('DELIVERY_ECONOMY_OTHER');?></div><label class="seld span3 seld02" rel="8.3" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype2'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">8.3$</span></label></div>
+            </div><input type="radio" value="3" name="dtype" rel="8.3USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype2"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Economy <br>2-5 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
 			
 			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del2"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart2').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart2"><?=$ui->item('DELIVERY_PRIORITY_OTHER')?></div><label class="seld span3 seld03" rel="11.8" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype3'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(204, 204, 204);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 
-            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">11.8$</span></label></div>
+            </div><input type="radio" value="2" name="dtype" rel="11.8USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype3"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Priority <br>1-3 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
 			
 			
 			<div style="position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;" class="span3 row_del3"><div style="display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;" onclick="$('.info_box').hide(); $('.info_box.info_box_smart3').toggle();" class="qbtn2"> ? </div><div style="background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none" class="info_box info_box_smart3"><?=$ui->item('DELIVERY_EXPRESS_OTHER');?></div><label class="seld span3 seld04 act" rel="23.6" valute="$" onclick="check_delivery($(this)); check_cart_sel($(this),'seld', 'dtype4'); showALL(); hide_oplata(1); $('.delivery_box_sp').hide(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box').show(); $('.delivery_name').html('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.type_delivery').val('<?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?>'); $('.selt1').click();$('.oplata3').click();" style="border: 1px solid rgb(100, 113, 127);"><div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check active"></span></span> 
-            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">23.6$</span></label></div>
+            </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
 		
         <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype1'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); $('.type_delivery').val('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); sbros_delev(); $('.oplata3').click(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>">
             <span class="zabr_market"><?=$ui->item('CARTNEW_PICK_UP_STORE1');?></span>
@@ -389,7 +444,10 @@ echo '</div>';
 		 <div class="delivery_box" style="display: none; margin: 15px 0;"></div>
         
 </div>        
-        <div class="clearfix"></div>
+        
+		<? endif; ?>
+		
+		<div class="clearfix"></div>
         
        
         
@@ -398,6 +456,202 @@ echo '</div>';
         
         <div class="p2"><?=$ui->item('CARTNEW_NOREG_STEP3_TITLE');?></div>
         
+		<div><label><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked="checked" onclick="$('.addr_buyer').toggle();"><span class="checkbox-custom"></span> Данные Плательщика совпадают с Получателем </label>
+   
+   <?php
+echo '<div class="addr_buyer" style="margin-top: 10px; display: none;">';
+if (count($addr_list)) {
+    
+    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px; width: 400px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER').'</option>' : '' );
+
+    $ch = new CommonHelper();
+    
+      
+    
+    foreach ($addr_list as $addr) {
+        
+        $adr_str = $ch->FormatAddress($addr);
+
+        echo '<option value="'.$addr['address_id'].'">'.$adr_str.'</option>';
+
+    }
+
+    echo '</select>';
+    
+} else {
+
+    echo '<label style="font-weight: bold;">'.$ui->item('ORDER_MSG_BILLING_ADDRESS').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px;" onchange="checked_sogl()"><option value="">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL2').'</option>';
+
+    echo '</select>';
+
+}
+
+echo '<a href="javascript:;" onclick="$(\'select, input\').removeClass(\'error\'); $(\'span.texterror\').html(\'\'); $(\'.block_addr_add_2\').toggle(\'fade\'); " class="order_start" style="padding: 6px 0; background-color: #28618E;">'.$ui->item('CARTNEW_ADD_ADDR_BTN').'</a></div>';
+
+?>
+   <div class="block_addr_add_2" style="display: none; width: 582px;">
+   <table class="address addr2" style=" margin-top: 10px;">
+    <tbody>
+        
+    <tr>
+        <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
+        <td class="maintxt">
+            <label style="float: left; margin-right: 20px;"><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
+            <label style="float: left; "><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
+    </tr>
+	
+	 <tr>
+        <td colspan="2"><label><input type="checkbox" onchange="check_desc_address($(this))" class="check_addressa checkbox_custom"/><span class="checkbox-custom"></span> <?=$ui->item("CARTNEW_CHECK_NO_ADDR"); ?></label></td>
+    </tr>
+	
+    <tr data-bind="visible: type()==1">
+        <td nowrap="" class="maintxt"><?=$ui->item("address_business_title"); ?>
+        </td>
+        <td class="maintxt-vat" data-bind="visible: type()==1">
+            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr data-bind="visible: type()==1">
+        <td nowrap="" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('receiver_title_name', array('placeholder'=>$ui->item("MSG_REGFORM_TITLENAME_TIP_1"),'oninput'=>'save_form()')); ?>
+        </td>
+        
+    </tr>
+    <tr>
+        <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
+        <td class="maintxt-vat" style="width: 364px;">
+            <?=$form->textField('receiver_last_name', array('oninput'=>'save_form()')); ?>
+            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_firstname"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('receiver_first_name', array('oninput'=>'save_form()')); ?>
+            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt"><?=$ui->item("regform_middlename"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('receiver_middle_name', array('oninput'=>'save_form()')); ?>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt country_lbl">
+            <span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_country"); ?>
+        </td>
+        <td class="maintxt-vat">
+            <?=$form->dropDownList('country', CHtml::listData(Country::GetCountryList(), 'id', 'title_en'),
+            array(
+                'data-bind' => array('optionsCaption' => "'---'"),
+                'onclick' => 'change_city($(this)); save_form();',
+                'onchange' => 'change_city($(this));'
+                )); ?>
+            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    
+    <tr>
+        <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
+        <td class="maintxt-vat select_states">
+            <select name="Address[state_id]" disabled onclick="save_form();"><option value="">---</option></select>
+        </td>
+        
+    </tr>
+    
+    
+    <tr>
+        <td nowrap="" class="maintxt city_lbl"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
+        </td>
+        <td colspan="2" class="maintxt-vat">
+            <?=$form->textField('city', array('oninput'=>'save_form()')); ?>
+            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt postindex_lbl"><span style="width: 5pt"
+                                            class="redtext">*</span><?=$ui->item("address_postindex"); ?></td>
+        <td colspan="2" class="maintxt-vat">
+            <?=$form->textField('postindex', array('oninput'=>'save_form()')); ?>
+            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt streetaddress_lbl"><span style="width: 5pt"
+                                            class="redtext">*</span><?=$ui->item("address_streetaddress"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('streetaddress',array('placeholder'=>$ui->item("MSG_PERSONAL_ADDRESS_COMMENT_2"))); ?>
+            <span class="texterror"></span>
+        </td>
+        
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>
+            <?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
+        </td>
+        <td class="maintxt-vat" colspan="2" style="position: relative;">
+            <?= $form->textField('contact_email', array('disabled'=>"true")); ?>
+            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt contact_phone_lbl"><span style="width: 5pt"
+                                           class="redtext">*</span><?=$ui->item("address_contact_phone"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('contact_phone', array('oninput'=>'save_form()')); ?>
+            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1">
+            
+            <?//<img width="8" height="7" src="/pic1/arr3.gif">=$ui->item('MSG_PERSONAL_ADDRESS_COMMENT_PHONE'); ?>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt"><?=$ui->item("address_contact_notes2"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textArea('notes', array('oninput'=>'save_form()')); ?>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    
+    <tr>
+        <td nowrap="" class="maintxt">&nbsp;</td>
+        <td class="maintxt-vat">
+            
+            <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+   
+    
+   
+    
+    </tbody>
+</table>
+
+<a href="javascript:;" class="btn btn-success addr2" style="float: right; margin-right: 5px;" onclick="add_address2(2)"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
+<a href="javascript:;" onclick="$('.block_addr_add_2').toggle('fade');" class="cancel_add_adr2 btn btn-link" style=" float: right;"><?=$ui->item('CARTNEW_BTN_CANCEL_ADDRESS')?></a>
+
+</div>
+
+<div class="clearfix" style="margin: 5px 0;"></div>
+		
         <div class="row spay">
         
         <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'ptype0')">

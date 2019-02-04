@@ -1,10 +1,24 @@
 <hr />
 
+<style>
+
+	#pay_systems .selp { width: 100%; text-align: center }
+
+</style>
+
 <div class="container cartorder">
-    <h1><?=$ui->item('CARTNEW_PAYPAL_H1')?></h1>
+    <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+	
+	<div class="row">
+	
+	<div class="span8">
+		
+		<?php $this->renderPartial('/client/_one_order_my2', array('order' => $order)); ?>
+	
+	</div>
+	
+	<div class="span6">
 
-
-    <?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?> <br /><br />
     <div>
         <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYPAL') ?><br /><br />
     
@@ -20,27 +34,31 @@
     </div>
 	
     <?=sprintf($ui->item('CARTNEW_PAYPAL_LABEL'), $number_zakaz,ProductHelper::FormatPrice($order['full_price'], $order['currency_id']))?>
-    <br /><br />
     
+    
+	 <div style="margin-top: 15px"><a href="javascript:;" onclick="$('.popup0').show();"><?=$ui->item('MSG_WHAT_IS_PAYPAL')?></a></div>
+	<br />
     <?php $this->widget('PayPalPayment', array('order' => $order)); ?>
+   
     
-    <div><a href="javascript:;" onclick="$('.popup0').show();"><?=$ui->item('MSG_WHAT_IS_PAYPAL')?></a></div> <br />
+    <div><?//=sprintf($ui->item('CARTNEW_ORDER_PAY_OTHER_LABEL'), 'dtype8')?></div>
     
-    <div><?=sprintf($ui->item('CARTNEW_ORDER_PAY_OTHER_LABEL'), 'dtype8')?></div>
-    <div id="pay_systems" class="row spay" style="display: none;">
-        <?php $this->renderPartial('/site/pay_systems', array()); ?>
-    </div>
     <div style="margin: 15px 0;">
         <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
 	
 	
 	<div style="height: 20px;"></div>
-    <a href="<?= Yii::app()->createUrl('/view/'.$number_zakaz)?>" class="order_start" style="background-color: #28618E;  margin-top: -65px;">
-                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_FINAL_BTN_VIEW_ORDER')?></span>
-                        </a>
+    
+	
+	
+	
+						
+	</div>					
+	</div>					
     <div style="height: 20px;"></div>
 	
+
 </div>
 
 
@@ -51,7 +69,7 @@
         $ptypeP.css('border', '1px solid #64717f').addClass('act');
         $('input[type=radio]', $ptypeP).attr('checked', 'true');
         $('.check', $ptypeP).addClass('active');
-        $('#pay_systems').show();
+        $('#pay_systems').toggle();
     }
     function check_cart_sel(cont,cont2,inputId) {
         document.location.href = '<?= Yii::app()->createUrl('cart/orderPay') ?>?id=<?= $number_zakaz ?>&ptype=' + document.getElementById(inputId).value;

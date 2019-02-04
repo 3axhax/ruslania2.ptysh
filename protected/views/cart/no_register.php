@@ -395,7 +395,7 @@
 
         $('input[type=radio]', $('.seld #dtype2').parent()).attr('checked', 'true');
 
-$('.oplata3').click();
+		$('.oplata3').click();
 
         //show_all();
 
@@ -407,7 +407,9 @@ $('.oplata3').click();
             if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
 
                 $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
-
+					
+					$('.states_list').show();
+					
                     $('.select_states').html(data);
 
                     if ($.cookie('Address_country')) {
@@ -419,7 +421,7 @@ $('.oplata3').click();
                 });
 
             } else {
-
+				$('.states_list').hide();
                 $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
 
             }
@@ -589,7 +591,7 @@ $('.oplata3').click();
 
             // $.cookie('Address_notes');
 
-            $('title').html($.cookie('Address_state_id'));
+            //$('title').html($.cookie('Address_state_id'));
         }
     }
 
@@ -855,6 +857,8 @@ $('.oplata3').click();
         var frmall = frm1 + '&' + frm2;
         if (promocodeHandler) frmall += '&promocode=' + promocodeHandler.getValue();
 
+		frmall = frmall + '&notes=' + $('#Notes').val();
+		
         var error = 0;
 
         $('.texterror', $('#Address_receiver_last_name').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
@@ -893,30 +897,30 @@ $('.oplata3').click();
             $('.texterror', $('#Address_country').parent()).html('');
         }
 
-        if (!$('#Address_city').val() && !$('.check_addressa').prop('checked')) {
-            $('#Address_city').addClass('error');
-            error = error + 1;
-            $('.texterror', $('#Address_city').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
-        } else {
-            $('#Address_city').removeClass('error');
-            $('.texterror', $('#Address_city').parent()).html('');
-        }
-        if (!$('#Address_postindex').val() && !$('.check_addressa').prop('checked')) {
-                $('#Address_postindex').addClass('error');
-                error = error + 1;
-            } else {
-                $('#Address_postindex').removeClass('error');
-                $('.texterror', $('#Address_postindex').parent()).html('');
-            }
-            if ( !$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked') ) {
-                $('#Address_streetaddress').addClass('error');
-                $('.texterror', $('#Address_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
-                error = error + 1;
-                $('.texterror', $('#Address_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
-            } else {
-                $('#Address_streetaddress').removeClass('error');
-                $('.texterror', $('#Address_streetaddress').parent()).html('');
-			}
+        // юif (!$('#Address_city').val() && !$('.check_addressa').prop('checked')) {
+            // $('#Address_city').addClass('error');
+            // error = error + 1;
+            // $('.texterror', $('#Address_city').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        // } else {
+            // $('#Address_city').removeClass('error');
+            // $('.texterror', $('#Address_city').parent()).html('');
+        // }
+        // if (!$('#Address_postindex').val() && !$('.check_addressa').prop('checked')) {
+                // $('#Address_postindex').addClass('error');
+                // error = error + 1;
+            // } else {
+                // $('#Address_postindex').removeClass('error');
+                // $('.texterror', $('#Address_postindex').parent()).html('');
+            // }
+            // if ( !$('#Address_streetaddress').val() && !$('.check_addressa').prop('checked') ) {
+                // $('#Address_streetaddress').addClass('error');
+                // $('.texterror', $('#Address_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+                // error = error + 1;
+                // $('.texterror', $('#Address_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+            // } else {
+                // $('#Address_streetaddress').removeClass('error');
+                // $('.texterror', $('#Address_streetaddress').parent()).html('');
+			// } 
 			
 			
 			
@@ -966,7 +970,7 @@ $('.oplata3').click();
 
             if (error == 0) {
 
-                $('html, body').scrollTop($('#confirm').offset().top);
+                $('html, body').scrollTop($('.checkbox-custom').offset().top);
 
             }
 
