@@ -1029,7 +1029,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'A_NEW_MORE_ABOUTUS' => 'podrobnee o nas.',
   'A_NEW_DESC_FOOTER' => 'knizhnaya korporaciya ruslaniya byla osnovana v 1986 godu v khelsinki, finlyandiya. ehto 100% finskij semejnyj biznes.<br /> v nastoyashhee vremya nasha kompaniya yavlyaetsya vedushhim postavshhikom tovarov iz rossii v stranakh evrosoyuza. <br />',
   'A_NEW_VIEW_ALL_CATEGORY' => 'pokazat vse kategorii',
-  'A_NEW_SETTINGS_FILTER' => 'filtry',
+  'A_NEW_SETTINGS_FILTER' => 'filtr',
   'A_NEW_SEARCH_CAT' => 'poisk vnutri kategorii',
   'A_NEW_NAME_ISBN' => 'po nazvaniyu,isbn',
   'A_NEW_FILTER_ALL' => 'vse',
@@ -1282,5 +1282,5 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'NAME_CROSSWORD'=>'Krossvordi',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
-
+	'CARTNEW_IN_CART_BTN2' => '%d sht.'
 );

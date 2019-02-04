@@ -918,6 +918,7 @@ h1.titlename {
 
     border: 1px solid #ececec;
     margin-top: 10px;
+	border-radius: 4px;
 
 }
 
@@ -1484,6 +1485,10 @@ a.add_cart.no_img {
 	background-color: #ed1d24;
 }
 
+a.add_cart.cart_add_slider.no_img {
+	width: 115px !important;
+}
+
 a.read_book {
     border-radius: 0 0 4px 4px;
     background: #edb421 url(../new_img/icon_book.png) left center no-repeat;
@@ -1695,7 +1700,7 @@ a.addmark span.tooltip span.arrow {
 	cursor: pointer;
 }	
 
-.tabcontent { display: none; padding: 32px 29px; border-bottom: 1px solid #ececec;border-left: 1px solid #ececec;border-right: 1px solid #ececec; } 
+.tabcontent { display: none; padding: 32px 29px; border-bottom: 1px solid #ececec;border-left: 1px solid #ececec;border-right: 1px solid #ececec; border-radius: 0 4px 4px 4px; } 
 .tabcontent.active { display: block; } 
 
 h2.poht, .poht {
@@ -2229,7 +2234,7 @@ table.items_orders a.printed_btn {
 	text-align: center;
 	font-size: 13px;
 	color: rgb(255, 255, 255);
-	background: #132074;
+	background: #0e5abd;
 	border-radius: 4px;
 	
 }
@@ -2243,7 +2248,7 @@ table.items_orders a.printed_btn span {
 	border-radius: 0 4px 4px 0;
     height: 31px;
     line-height: 31px;
-    background: #28618E !important;
+    background: #347bd7 !important;
 	
 }
 
@@ -3703,8 +3708,8 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .download.excel span.fa::after, .button_view.list span.fa::after { color: #fff; font-size: 20px; }
 .download span {  background-color: #5bb75b; }
 .download.excel span.fa { background-color: #369f4b; }
-.button_view span { background-color: #28618E; }
-.button_view.list span.fa { background-color: #132074; }
+.button_view span { background-color: #347bd7 ; }
+.button_view.list span.fa { background-color: #0e5abd ; }
 .download.excel span.fa::after { content: '\f1c3'; }
 .button_view.list span.fa::after { content: '\f03a'; }
 
@@ -3781,3 +3786,5 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 
 .cke_reset {display: none;}
 /*form#js_filter input[type=text] {height: 30px;}*/
+
+button#filter_apply::before { content: '\f0b0'; color: #fff; position: relative; font: normal normal normal 17px FontAwesome; }
