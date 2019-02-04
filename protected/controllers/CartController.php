@@ -33,7 +33,12 @@ class CartController extends MyController {
 			case '4': $sql = 'UPDATE user_address SET city=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
 			case '5': $sql = 'UPDATE user_address SET postindex=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
 			case '6': $sql = 'UPDATE user_address SET streetaddress=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '7': $sql = 'UPDATE user_address SET contact_phone=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text'], ':id' => $_POST['id'])); break;
+			case '80': $sql = 'UPDATE user_address SET country=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text2'], ':id' => $_POST['id'])); break;
+			case '81': $sql = 'UPDATE user_address SET state_id=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['text2'], ':id' => $_POST['id'])); break;
 		}
+		
+		$json = array();
 		
 		$addr = Address::GetAddress($this->uid, $_POST['id']);
 		
@@ -41,11 +46,31 @@ class CartController extends MyController {
 		
 		if ($addrs) {
 			
-			echo $addrs;
+			$json['addr_full'] = $addrs;
 			
 		}
 		
+		if ($_POST['ty'] == '81') {
 		
+		$sql = 'SELECT * FROM address_states_list WHERE id='.$_POST['text2'];
+
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		$json['state'] = $row['title_long'];
+		
+		}
+		
+		if ($_POST['ty'] == '80') {
+		
+		$sql = 'SELECT * FROM country_list WHERE id='.$_POST['text2'];
+
+        $row = Yii::app()->db->createCommand($sql)->queryRow();
+		
+		$json['country'] = $row['title_en'];
+		
+		}
+		
+		echo json_encode($json);
 	}
 	
 	
@@ -386,11 +411,11 @@ class CartController extends MyController {
         $o = new Order;
         $order = $o->GetOrder($id);
 		
-		if (!$order) {
+		//if (!$order) {
 			
-			$this->redirect(Yii::app()->createUrl('site/index'));
+		//	$this->redirect(Yii::app()->createUrl('site/index'));
 			
-		}
+		//}
 		
         $data = array();
         $data['order'] = $order;
@@ -481,6 +506,7 @@ class CartController extends MyController {
             $s['BillingAddressID'] = $adr2['address_id'];
             $s['Notes'] = ($_POST['Notes']) ? $_POST['Notes'] : '&nbsp;';
             $s['Mandate'] = 0;
+            $s['smartpost'] = $_POST['pickpoint_address'];
             //$s['payment'] = $post['ptype'];
             $order = new OrderForm($this->sid);
             $order->attributes = $s;
@@ -691,12 +717,13 @@ class CartController extends MyController {
                     }
 					
 					
-					
+					$DeliveryMode = 0;
+					if ($post['dtype'] == '0') { $DeliveryMode = 1; }
 					
 					
                     $s['DeliveryAddressID'] = $idAddr2;
                     $s['DeliveryTypeID'] = $post['dtype'];
-                    $s['DeliveryMode'] = 0;
+                    $s['DeliveryMode'] = $DeliveryMode;
                     $s['CurrencyID'] = Yii::app()->currency;
                     $s['BillingAddressID'] = $idAddr2;
                     $s['Notes'] = $comment;
@@ -1041,6 +1068,7 @@ class CartController extends MyController {
                     'msg' => $message,
                     'already' => $already,
                     'buttonName' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
+                    'buttonName2' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN2', $alreadyInCart),
                 ));
             }
             else
