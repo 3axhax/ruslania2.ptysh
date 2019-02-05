@@ -54,7 +54,8 @@ class Seo_settings {
 	}
 
 	protected function _fillReplace() {
-
+		$this->_replace['geoip_country'] = geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
+		$this->_replace['domain'] = 'Rusliania.com';
 	}
 
 	/**

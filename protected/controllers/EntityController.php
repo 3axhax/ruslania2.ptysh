@@ -921,12 +921,10 @@ class EntityController extends MyController {
     }
 
     public function actionBySubtitle($entity, $sid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
 
-        $vs = new VideoSubtitle();
         $subtitle = VideoSubtitle::model()->findByPk($sid);
 
         if (empty($subtitle))
@@ -1067,22 +1065,16 @@ class EntityController extends MyController {
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPE_IZD')] = Yii::app()->createUrl('entity/typeslist', array('entity' => Entity::GetUrlKey($entity)));
         
-        $key = Entity::GetUrlKey($entity);
-        
-        $db = $key . '_bindings';
-        
-        if ($entity == Entity::PERIODIC) { $db = 'pereodics_types'; } 
-        
-        $sql = 'SELECT * FROM '.$db.' WHERE id='.$type;
-        $row = Yii::app()->db->createCommand($sql)->queryAll();
+        if ($entity == Entity::PERIODIC) $binding = PereodicsTypes::model();
+        else $binding = new Binding();
 
-        $title = ProductHelper::GetTitle($row[0]);
+        $row = $binding->GetBinding($entity, $type);
+
+        $title = ProductHelper::GetTitle($row);
         
         
         
        $this->breadcrumbs[] = $title;
-
-        $yr = new TypeRetriever;
 
         list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
@@ -1131,12 +1123,10 @@ class EntityController extends MyController {
     }
 
     public function actionByAudioStream($entity, $sid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
 
-        $s = new VideoAudioStream();
         $stream = VideoAudioStream::model()->findByPk($sid);
         if (empty($stream))
             throw new CHttpException(404);

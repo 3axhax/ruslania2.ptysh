@@ -53,7 +53,7 @@ class FilterNames {
 		if (isset($this->_data[$name])) {
 			if (!isset($this->_params[$name])) {
 				$fname = '_get' . mb_strtoupper(mb_substr($name, 0, 1, 'utf-8')) . mb_substr($name, 1, null, 'utf-8');
-				$this->_params[$name] = $this->$fname();
+				if (method_exists($this, $fname)) $this->_params[$name] = $this->$fname();
 			}
 			return $this->_params[$name];
 		}
@@ -76,6 +76,7 @@ class FilterNames {
 	}
 
 	private function _getAvail() {
+		if ($this->_eid == Entity::PERIODIC) return '';
 		if (!isset($this->_data['avail'])) return '';
 		if (!empty($this->_data['avail'])) return '';
 		return Yii::app()->ui->item('CART_COL_ITEM_AVAIBILITY') . ': ' . Yii::app()->ui->item('A_NEW_FILTER_ALL');
@@ -97,7 +98,6 @@ class FilterNames {
 		}
 
 		$publisher = Publisher::model()->GetById($this->_eid, $this->_data['publisher']);
-		Debug::staticRun(array($this->_data['publisher'], $publisher));
 		return $label . ': ' . ProductHelper::GetTitle($publisher);
 	}
 
@@ -111,13 +111,12 @@ class FilterNames {
 	private function _getBinding() {
 		if (empty($this->_data['binding'])) return '';
 		switch ($this->_eid) {
-			case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
-			case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
-			case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
-			default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+			case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); $binding = new Binding(); break;
+			case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); $binding = MusicMedia::model(); break;
+			case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); $binding = PereodicsTypes::model(); break;
+			default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); $binding = new Binding(); break;
 		}
 		$bindings = array();
-		$binding = new Binding();
 		foreach ($this->_data['binding'] as $bid) {
 			$b = $binding->GetBinding($this->_eid, $bid);
 			if (!empty($b)) $bindings[] = ProductHelper::GetTitle($b);
@@ -133,6 +132,73 @@ class FilterNames {
 			case Entity::PRINTED: return Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Language::GetTitleByID_country($this->_data['lang_sel']); break;
 		}
 		return Language::GetTitleByID_predl($this->_data['lang_sel']);
+	}
+
+	private function _getPre_sale() {
+		$this->_data['pre_sale'] = (int) $this->_data['pre_sale'];
+		switch ($this->_data['pre_sale']) {
+			case 1: return Yii::app()->ui->item('A_NEW_FILTER_PRE_SALE_2'); break;
+			case 2: return Yii::app()->ui->item('A_NEW_FILTER_PRE_SALE_3'); break;
+		}
+		return '';
+	}
+
+	private function _getActors() {
+		if (empty($this->_data['actors'])) return '';
+		$actor = CommonAuthor::model()->GetById($this->_data['actors']);
+		return Yii::app()->ui->item('A_NEW_FILTER_ACTORS') . ': ' . ProductHelper::GetTitle($actor);
+	}
+
+	private function _getDirectors() {
+		if (empty($this->_data['directors'])) return '';
+		$item = CommonAuthor::model()->GetById($this->_data['directors']);
+		return Yii::app()->ui->item('A_NEW_FILTER_DIRECTORS') . ': ' . ProductHelper::GetTitle($item);
+	}
+
+	private function _getPerformer() {
+		if (empty($this->_data['performer'])) return '';
+		$item = CommonAuthor::model()->GetById($this->_data['performer']);
+		return Yii::app()->ui->item('A_NEW_FILTER_PERFORMER') . ': ' . ProductHelper::GetTitle($item);
+	}
+
+	private function _getLang_video() {
+//		lang_video
+		$this->_data['lang_video'] = (int) $this->_data['lang_video'];
+		if ($this->_data['lang_video'] <= 0) return '';
+		$stream = VideoAudioStream::model()->findByPk($this->_data['lang_video']);
+		$label = Yii::app()->ui->item('A_NEW_FILTER_LANG_VIDEO');
+		return $label . ': ' . ProductHelper::GetTitle($stream->getAttributes());
+	}
+
+	private function _getSubtitles_video() {
+		$this->_data['subtitles_video'] = (int) $this->_data['subtitles_video'];
+		if ($this->_data['subtitles_video'] <= 0) return '';
+
+		$subtitle = VideoSubtitle::model()->findByPk($this->_data['subtitles_video']);
+		$label = Yii::app()->ui->item('A_NEW_FILTER_LANG_SUBTITLES');
+		return $label . ': ' . ProductHelper::GetTitle($subtitle->getAttributes());
+	}
+
+	private function _getFormat_video() {
+		$this->_data['format_video'] = (int) $this->_data['format_video'];
+		if ($this->_data['format_video'] <= 0) return '';
+
+		$item = Media::model()->GetMedia($this->_eid, $this->_data['format_video']);
+		if (empty($item)) return '';
+
+		$label = Yii::app()->ui->item('A_NEW_FILTER_FORMAT_VIDEO');
+		return $label . ': ' . ProductHelper::GetTitle($item);
+	}
+
+	private function _getCountry() {
+		$this->_data['country'] = (int) $this->_data['country'];
+		if ($this->_data['country'] <= 0) return '';
+
+		$item = PeriodicCountry::model()->findByPk($this->_data['country']);
+		if (empty($item)) return '';
+
+		$label = Yii::app()->ui->item('A_NEW_FILTER_PERIODIC_COUNTRY');
+		return $label . ': ' . ProductHelper::GetTitle($item->getAttributes());
 	}
 
 	/**

@@ -128,7 +128,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <!--Фильтр по стране-->
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PERIODIC_COUNTRY')?>:</label>
-                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="country id="country">
+                <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="country" id="country">
                     <option value="0"><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
                     <?php foreach ($filters['country'] as $k => $lang) :?>
                         <option value="<?=$lang['id']?>" <?= ((isset($filter_data['country'])) && ($lang['id'] == (int)$filter_data['country'])) ? 'selected' : ''?>>
