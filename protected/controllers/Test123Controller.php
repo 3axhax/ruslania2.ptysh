@@ -49,4 +49,8 @@ class Test123Controller extends MyController {
 	function actionVectori() {
 		$this->render('vectori');
 	}
+
+	function actionCurrency() {
+		Debug::staticRun(array(Yii::app()->createUrl('product/view', array('entity'=>'printed', 'id'=>3904, 'currency'=>3))));
+	}
 }

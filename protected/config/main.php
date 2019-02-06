@@ -101,9 +101,9 @@ return array(
 //            'suffix' => '/',
             'urlSuffix'=>'/',
             'rules' => array(
-                '/' => 'site/index',
                 '__entityUrlRule' => array('class' => 'EntityUrlRule'),
                 '__staticUrlRule' => array('class' => 'StaticUrlRule'),
+                '/' => 'site/index',
                 'landingpage' => 'site/landingpage',
                 'login' => 'site/login',
                 'register' => 'site/register',
@@ -201,8 +201,8 @@ return array(
         'LangDir' => '',
         'DbCacheTime' => (60 * 60 * 4), // 4 hours,
         'OrderMinPrice' => 5, // min order 5,-
-        'PicDomain' => 'http://ruslania2.ptysh.ru',///'https://ruslania.com',
-        'Base' => 'ruslania2.ptysh.ru',
+        'PicDomain' => 'https://beta.ruslania.com',///'https://ruslania.com',
+        'Base' => 'beta.ruslania.com',
         'DataProviderCacheID' => 'queryCache', // cacheQuery
         'DataProviderCacheTimeout' => (60 * 60 * 4), // 4 hours
         //'PAYMENT_ENVIRONMENT' => 'prod',
