@@ -285,7 +285,7 @@ return array(
     'MAILTXT_PERSONAL_REMIND_PASS_FROM' => 'Absender',
     'MAILTXT_PERSONAL_REMIND_PASS_TO' => 'Empfänger',
     'Maps catalog' => 'Landkarten',
-    'Media' => 'Media',
+    'Media' => 'Messungen',//'Media',
     'MEDIA_TYPE_OF' => 'Mediatyp: %s',
     'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_1' => 'Ausgabe',
     'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2' => 'Ausgaben',

@@ -285,7 +285,7 @@ return array(
     'MAILTXT_PERSONAL_REMIND_PASS_FROM' => 'Remitente',
     'MAILTXT_PERSONAL_REMIND_PASS_TO' => 'Destinatario',
     'Maps catalog' => 'Mapas',
-    'Media' => 'En formato de audio',
+    'Media' => 'Mediciones',//'En formato de audio',
     'MEDIA_TYPE_OF' => 'Tipo de medio: %s',
     'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_1' => 'número',
     'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2' => 'números',

@@ -283,7 +283,7 @@ return array (
   'MAILTXT_PERSONAL_REMIND_PASS_FROM' => 'Expéditeur',
   'MAILTXT_PERSONAL_REMIND_PASS_TO' => 'Destinataire',
   'Maps catalog' => 'Cartes',
-  'Media' => 'Format du média audio',
+  'Media' => 'Des mesures',//'Format du média audio',
   'MEDIA_TYPE_OF' => 'Type de média audio : %s',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_1' => 'numéro',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2' => 'numéros',

@@ -283,7 +283,7 @@ return array (
   'MAILTXT_PERSONAL_REMIND_PASS_FROM' => 'Avsändare',
   'MAILTXT_PERSONAL_REMIND_PASS_TO' => 'Mottagare',
   'Maps catalog' => 'Kartor',
-  'Media' => 'Medier',
+  'Media' => 'Mätningar',//'Medier',
   'MEDIA_TYPE_OF' => 'Typ av medier: %s',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_1' => 'nummer',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2' => 'nummer',

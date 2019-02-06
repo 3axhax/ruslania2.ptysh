@@ -283,7 +283,7 @@ return array (
   'MAILTXT_PERSONAL_REMIND_PASS_FROM' => 'Sender',
   'MAILTXT_PERSONAL_REMIND_PASS_TO' => 'Recipient',
   'Maps catalog' => 'Maps',
-  'Media' => 'Media',
+  'Media' => 'Measurements',
   'MEDIA_TYPE_OF' => 'Media type: %s',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_1' => ' issue',
   'MIN_FOR_X_MONTHS_Y_ISSUES_ISSUE_2' => ' issues',
