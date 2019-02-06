@@ -51,6 +51,6 @@ class Test123Controller extends MyController {
 	}
 
 	function actionCurrency() {
-		Debug::staticRun(array(Yii::app()->createUrl('product/view', array('entity'=>'printed', 'id'=>3904, 'currency'=>3))));
+		Debug::staticRun(array(Yii::app()->createUrl('cart/orderPay', array('ptype'=>7, 'id'=>7060087, 'currency'=>3))));
 	}
 }

@@ -173,11 +173,11 @@ class MyUrlRule extends CUrlRule {
             }
 
             if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
-        }
-        if ($currency > 0) {
-            if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?';
-            else $url .= '&';
-            $url .= 'currency=' . $currency;
+            if ($currency > 0) {
+                if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?';
+                else $url .= '&';
+                $url .= 'currency=' . $currency;
+            }
         }
         return $url;
     }
