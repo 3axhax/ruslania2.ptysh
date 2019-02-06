@@ -163,6 +163,22 @@ class FilterHelper
         $filtersData->deleteFiltersData();
     }
 
+    /** чистит фильтр в сессии и куках если на страницу попали с какой-то определенной страницы
+     * @param $roure
+     * @param $entity
+     * @param int $cid
+     * @throws CHttpException
+     */
+    static function deleteEntityFilterIfReferer ($roure, $entity, $cid = 0) {
+        $referer = Yii::app()->getRequest()->getUrlReferrer();
+        $request = new MyRefererRequest();
+        $request->setFreePath($referer);
+        //$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
+        $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+
+        if ($roure == $refererRoute) self::deleteEntityFilter ($entity, $cid);
+    }
+
     static private function normalizeData ($data) {
         self::$data = [];
         self::getEntity();

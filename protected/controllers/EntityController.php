@@ -309,6 +309,8 @@ class EntityController extends MyController {
         if ($entity === false)
             $entity = Entity::BOOKS;
 
+        FilterHelper::deleteEntityFilterIfReferer('entity/serieslist', $entity, 0);
+
         $s = new Series;
         $list = $s->GetByIds($entity, array($sid));
 
@@ -349,7 +351,6 @@ class EntityController extends MyController {
     }
 
     public function actionByMedia($entity, $mid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -358,6 +359,8 @@ class EntityController extends MyController {
         $media = $m->GetMedia($entity, $mid);
         if (empty($media))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/medialist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -392,7 +395,6 @@ class EntityController extends MyController {
     }
 
     public function actionByPublisher($entity, $pid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -401,6 +403,8 @@ class EntityController extends MyController {
         $publisher = $p->GetByID($entity, $pid);
         if (empty($publisher))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/publisherlist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -482,11 +486,11 @@ class EntityController extends MyController {
     }
 
     public function actionByAuthor($entity, $aid, $sort = null, $avail = true) {
-
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/authorlist', $entity, 0);
 
         $a = CommonAuthor::model();
         $author = $a->GetById($aid);
@@ -776,7 +780,6 @@ class EntityController extends MyController {
     }
 
     public function actionByPerformer($entity, $pid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -786,6 +789,8 @@ class EntityController extends MyController {
 
         if (empty($performer))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/performerlist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -829,16 +834,16 @@ class EntityController extends MyController {
     }
 
     public function actionByDirector($entity, $did, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
 
-        $vd = new VideoDirector();
         $director = CommonAuthor::model()->findByPk($did);
 
         if (empty($director))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/directorlist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -875,16 +880,15 @@ class EntityController extends MyController {
     }
 
     public function actionByActor($entity, $aid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
 
         if (!Entity::checkEntityParam($entity, 'actors')) throw new CHttpException(404);
 
-        $va = new VideoActor();
-        //$actor = $va->GetById($aid);
         $actor = CommonAuthor::model()->findByPk($aid);
 
         if (empty($actor)) throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/actorlist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -924,6 +928,8 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/subtitleslist', $entity, 0);
 
         $subtitle = VideoSubtitle::model()->findByPk($sid);
 
@@ -965,7 +971,6 @@ class EntityController extends MyController {
     }
 
     public function actionByBinding($entity, $bid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -974,6 +979,8 @@ class EntityController extends MyController {
         $bData = $binding->GetBinding($entity, $bid);
         if (empty($bData))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/bindingslist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -996,12 +1003,6 @@ class EntityController extends MyController {
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_TYPOGRAPHY')] = Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY') . ': ' . ProductHelper::GetTitle($bData);
 
-//        $totalItems = $binding->GetTotalItems($entity, $bid, $avail);
-//        $paginatorInfo = new CPagination($totalItems);
-//        $paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
-//        $this->_maxPages = ceil($totalItems/Yii::app()->params['ItemsPerPage']);
-//        $sort = SortOptions::GetDefaultSort($sort);
-//        $items = $totalItems > 0 ? $this->AppendCartInfo($binding->GetItems($entity, $bid, $paginatorInfo, $sort, Yii::app()->language, $avail), $entity, $this->uid, $this->sid) : array();
         list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
 
@@ -1017,10 +1018,11 @@ class EntityController extends MyController {
     }
 
     public function actionByYear($entity, $year, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/yearslist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -1033,8 +1035,6 @@ class EntityController extends MyController {
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_FILTER_YEAR')] = Yii::app()->createUrl('entity/yearslist', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('IN_YEAR'), $year);
-
-        $yr = new YearRetriever;
 
         list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
@@ -1053,7 +1053,9 @@ class EntityController extends MyController {
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
-		
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/typeslist', $entity, 0);
+
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
         if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
@@ -1090,10 +1092,11 @@ class EntityController extends MyController {
     }
 	
 	public function actionByYearRelease($entity, $year, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/yearreleaseslist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -1106,8 +1109,6 @@ class EntityController extends MyController {
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Yii::app()->ui->item('A_NEW_YEAR_REAL')] = Yii::app()->createUrl('entity/yearreleaseslist', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('IN_YEAR'), $year);
-
-        $yr = new YearRetriever;
 
         list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
@@ -1130,6 +1131,8 @@ class EntityController extends MyController {
         $stream = VideoAudioStream::model()->findByPk($sid);
         if (empty($stream))
             throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/audiostreamslist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
@@ -1166,12 +1169,10 @@ class EntityController extends MyController {
     }
 
     public function actionByMagazineType($entity, $tid, $sort = null, $avail = true) {
-        $avail = $this->GetAvail($avail);
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::PERIODIC)
             throw new CHttpException(404);
 
-        $mt = new MagazineType;
         $type = MagazineType::model()->findByPk($tid);
         if (empty($type))
             throw new CHttpException(404);
@@ -1386,13 +1387,14 @@ class EntityController extends MyController {
     }
 
     public function actionByStudio($entity, $sid, $sort = null) {
-        $avail = $this->GetAvail(1);
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO) throw new CHttpException(404);
 
         $s = new VideoStudio();
         $studio = $s->model()->findByPk($sid);
         if (empty($studio)) throw new CHttpException(404);
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/studioslist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');

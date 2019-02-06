@@ -5,9 +5,11 @@ $lang = Yii::app()->language;
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
         <div class="span10 listgoods" style="float: right;">
-
+<?php /**/?>
             <h1 class="titlename"><?=((!$cid) ? '' . Entity::GetTitle($entity) : $title_cat); ?><?php if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1): ?> &ndash; <?= $ui->item('PAGES_N', $page) ?> <?php endif; ?></h1>
-			
+<?php /*
+            <h1 class="titlename"><?= Seo_settings::get()->getH1() ?></h1>
+*/?>
 			<? if ($entity == 100) : ?>
 			Ведётся оптимизация раздела...
 			<? else : ?>

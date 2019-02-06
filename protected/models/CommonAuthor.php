@@ -22,7 +22,8 @@ class CommonAuthor extends CMyActiveRecord {
         $sql = ''.
             'select `first_'.$lang.'` '.
             'from `all_authorslist` '.
-            'where and (`first_'.$lang.'` != "") '.
+            'where (first_'.$lang.' regexp "[[:alpha:]]") '.
+                'and (`first_'.$lang.'` != "") '.
                 'and (is_' . $entity . '_author > 0) '.
             'group by ord(`first_'.$lang.'`) '.
             'having (first_'.$lang.' regexp "[[:alpha:]]") '.

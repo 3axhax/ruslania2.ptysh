@@ -39,32 +39,32 @@ class ModelsSeoEntity extends Seo_settings {
 
 	protected function _fillReplace() {
 		parent::_fillReplace();
-		$this->_replace['entity_name'] = Entity::GetTitle($this->_eid);
+		$this->_replace['{entity_name}'] = Entity::GetTitle($this->_eid);
 		if (empty($this->_cid)) {
 			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE (avail_for_order > 0)';
-			$this->_replace['counts'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
+			$this->_replace['{counts}'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 		else {
 			$category = new Category();
 			$cat = $category->GetByIds($this->_eid, array($this->_cid));
 			$cat = array_shift($cat);
-			$this->_replace['name'] = ProductHelper::GetTitle($cat);
+			$this->_replace['{name}'] = ProductHelper::GetTitle($cat);
 			if ($this->_eid == Entity::PERIODIC) {
-				$this->_replace['type_publication'] = '';
+				$this->_replace['{type_publication}'] = '';
 				for ($i=1;$i<4;$i++) {
 					if ($cat['avail_items_type_' . $i] > 0) {
-						if (empty($this->_replace['type_publication'])) $this->_replace['type_publication'] = mb_strtolower(Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_' .$i));
+						if (empty($this->_replace['{type_publication}'])) $this->_replace['{type_publication}'] = mb_strtolower(Yii::app()->ui->item('PERIODIC_TYPE_PLURAL_' .$i));
 						else {
-							$this->_replace['type_publication'] = 'издание';
+							$this->_replace['{type_publication}'] = 'издание';
 							break;
 						}
 					}
 				}
 			}
 		}
-		$this->_replace['lang_predl'] = FilterNames::get($this->_eid, $this->_cid)->lang_sel;
+		$this->_replace['{lang_predl}'] = FilterNames::get($this->_eid, $this->_cid)->lang_sel;
 		$params = FilterNames::get($this->_eid, $this->_cid)->getParams();
-		if (!empty($params)) $this->_replace['params'] = implode('; ', $params);
+		if (!empty($params)) $this->_replace['{params}'] = implode('; ', $params);
 
 		Debug::staticRun(array($this->_replace));
 

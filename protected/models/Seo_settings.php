@@ -54,8 +54,12 @@ class Seo_settings {
 	}
 
 	protected function _fillReplace() {
-		$this->_replace['geoip_country'] = geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
-		$this->_replace['domain'] = 'Rusliania.com';
+		$this->_replace['{geoip_country}'] = geoip_country_name_by_name($_SERVER['REMOTE_ADDR']);
+		$this->_replace['{domain}'] = 'Rusliania.com';
+		$this->_replace['{page_n}'] = '';
+		if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) {
+			$this->_replace['{page_n}'] = '&ndash; '. Yii::app()->ui->item('PAGES_N', $page);
+		}
 	}
 
 	/**
