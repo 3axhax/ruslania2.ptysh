@@ -128,18 +128,18 @@ class FilterHelper
             self::getSort();
             self::getYears();
             self::getCost();
-            self::getAuthor();
-            self::getPublisher();
-            self::getSeries();
+            if (Entity::checkEntityParam($entity, 'authors')) self::getAuthor();
+            if (Entity::checkEntityParam($entity, 'publisher')) self::getPublisher();
+            if (Entity::checkEntityParam($entity, 'series')) self::getSeries();
             self::getBinding();
             self::getFormatVideo();
             self::getLangVideo();
-            self::getSubtitlesVideo();
+            if (Entity::checkEntityParam($entity, 'subtitles')) self::getSubtitlesVideo();
             self::getPreSale();
-            self::getPerformer();
+            if (Entity::checkEntityParam($entity, 'performers')) self::getPerformer();
             self::getCountry();
-            self::getDirector();
-            self::getActor();
+            if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
+            if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
             self::getReleaseYears();
             self::$_data[$key] = self::$data;
         }
