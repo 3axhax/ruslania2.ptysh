@@ -2,6 +2,7 @@
 
 class MyUrlManager extends CUrlManager
 {
+    public $appendParams=false;
     public $urlRuleClass = 'MyUrlRule';
 
     public static function RewriteCurrent($controller, $lang, $sel = false) {
