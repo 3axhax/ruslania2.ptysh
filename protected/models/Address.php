@@ -11,7 +11,6 @@ class Address extends CActiveRecord
     }
 
     /**
-     *
      * Никто не платит налог, кроме
     1) все в финляндии, частники и фирмы  (код предприятии не сбрасывает налог)
     2) частники в еврозоне и фирмы в еврозоне, которые не указали код предприятии.
@@ -178,11 +177,12 @@ class Address extends CActiveRecord
                 Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
             }
 
-            $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
-                . '(:uid, :id, :def)';
-
-            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
-                                                               ':id' => $id, ':def' => $isDefault ? 1 : 0));
+            $this->addAddresses($uid, $id, $isDefault);
+//            $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
+//                . '(:uid, :id, :def)';
+//
+//            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
+//                                                               ':id' => $id, ':def' => $isDefault ? 1 : 0));
 
             $transaction->commit();
             $this->RepairDefaultAddress($uid);
@@ -205,7 +205,7 @@ class Address extends CActiveRecord
 
     public function GetAddress($uid, $addressID)
     {
-        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_str, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code '
+        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code '
             . 'FROM users_addresses AS uas '
             . 'JOIN user_address AS ua ON uas.address_id=ua.id '
             . 'JOIN country_list AS cl ON ua.country=cl.id '
@@ -345,5 +345,13 @@ class Address extends CActiveRecord
         $message->addTo('periodicals@ruslania.com');
         $message->from = 'periodicals@ruslania.com';
         $ret = @Yii::app()->mail->send($message);
+    }
+
+    function addAddresses($uid, $id, $isDefault) {
+        $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
+            . '(:uid, :id, :def)';
+
+        Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
+            ':id' => $id, ':def' => $isDefault ? 1 : 0));
     }
 }
