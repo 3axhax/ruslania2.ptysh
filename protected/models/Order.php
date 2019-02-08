@@ -31,7 +31,7 @@ class Order extends CMyActiveRecord
     {
         return array(
 
-            array('hide_edit_order, uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
+            array('hide_edit_order,hide_edit_payment, uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
                   . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet', ),
             array('notes', 'safe', 'on' => 'newinternet')
 			
@@ -469,4 +469,14 @@ class Order extends CMyActiveRecord
         $promocode = Promocodes::model();
         if ($promocode->check($promocode->getPromocodeByCode($code)) === 0) $this->_promocode = $promocode->getPromocodeByCode($code)['id'];
     }
+	
+	function GetCountOrders($uid){
+		
+		$sql = 'SELECT COUNT(*) FROM users_orders WHERE uid=:uid';
+        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array('uid'=>$uid));
+		
+		return $cnt;
+		
+	}
+	
 }

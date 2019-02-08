@@ -5,6 +5,21 @@
 	#pay_systems .selp { width: 100%; text-align: center }
 
 </style>
+
+<?
+
+$addrGet = CommonHelper::FormatAddress2($order['DeliveryAddress']);
+
+//var_dump( $addrGet );
+
+$hide_btn_next = 0;
+
+if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['city'] == '') { $hide_btn_next = 1; }
+
+?>
+
+<input type="hidden" value="<?=$hide_btn_next?>" name="hide_btn_next" />
+
 <div class="container cartorder">
 
     <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
@@ -22,18 +37,36 @@
 
     
     <div>
-        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br /><br />
+        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br />
 
-   
-   <?=sprintf($ui->item('CARTNEW_PAYTRAIL_TEXT1'), $number_zakaz, ProductHelper::FormatPrice($order['full_price'], $order['currency_id']))?>
-   
-   <br />
+   <div style="height: 20px;"></div>
+	
+	<? 
+		$class1 = ' hide';
+		$class2 = '';
+	?>
+	<? if ($hide_btn_next == '1') : ?>
+	
+		<? $class1 = '' ?>
+		<? $class2 = ' display: none' ?>
+	
+	<? endif; ?>
+	
+	
+	<span class="redtext error_pay_pt<?=$class1?>">Для оплаты не заполнен адрес доставки</span>
+	
+	<div style="<?=$class2?>" class="hide_block_pay">
+	
+	
+	
+    <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
+	
+	
+	
+	</div>
+	
 
 	
-    <div style="height: 20px;"></div>
-
-    <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
-
     <div class="clearBoth"></div>
 
     <div style="margin: 15px 0;">

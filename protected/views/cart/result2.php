@@ -16,7 +16,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 
 <div class="container cartorder">
     
-	<h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+	<h1><?=$h1 ?></h1>
 	
 		<div class="row">
 	
@@ -29,7 +29,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	<div class="span6">
 		
 		<div style="background-color: #f8f8f8; padding: 49px 42px;">
-		
+		 <?=$result;?>
 		<?php if ($ptype == 1 OR $ptype == 0) { $ptype_1 = 999; } else { $ptype_1 = $ptype; } ?>
 		
 		<? if (trim($dop) AND trim($dop) != '.') $dop = $dop.'.';?>

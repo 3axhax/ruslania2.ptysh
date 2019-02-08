@@ -155,8 +155,7 @@ function decline_goods($num, $ui) {
         
     </tr>
     <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>
-            <?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
+        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_contact_email", array('oninput'=>'save_form()')); ?>
         </td>
         <td class="maintxt-vat" colspan="2" style="position: relative;">
             <?= $form->textField('contact_email', array('onblur' => 'checkEmail(this)')); ?>
@@ -318,7 +317,7 @@ function decline_goods($num, $ui) {
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check active"></span></span> 
             </div><input type="radio" value="1" name="dtype" rel="23.6USD" onchange="$('.smartpost_index').val(''); $('.box_smartpost').html(''); $('.select_dd_box').hide(); $('.selt .check').removeClass('active'); $('.check', $(this).parent()).addClass('active');" style="display: none;" id="dtype4" checked="checked"><?=$ui->item('CARTNEW_DELIVERY_POST_NAME')?><br>Express <br>1-2 дней <br><span style="color: #70C67C; font-weight: bold;">0<?=Currency::ToSign()?></span></label></div>
         
-        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype0'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false); $('.delivery_box,.delivery_box_sp').hide(); $('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); sbros_delev(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>" style="height: 40px;">
+        <label class="seld span3 seld1" onclick="check_cart_sel($(this),'seld', 'dtype0'); show_all(); $('.rows_checkbox_delivery input').prop('checked', false);  $('.delivery_name').html('<?=$ui->item('MSG_DELIVERY_TYPE_0');?>'); sbros_delev(); hide_oplata(4); hide_oplata(5); hide_oplata(7); <?if (Yii::app()->Language != 'ru' AND Yii::app()->Language != 'rut') : ?>hide_oplata(8)<? endif; ?>; $('.address.addr2, label.addr_buyer').hide()" style="height: 40px;">
             <span class="zabr_market"><?=$ui->item('CARTNEW_PICK_UP_STORE1');?></span>
             <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?=$act[1]?>"></span></span> 
@@ -339,6 +338,135 @@ function decline_goods($num, $ui) {
         
         <div class="p2"><?=$ui->item('CARTNEW_REG_STEP3_TITLE')?></div>
         
+		<div><label class="addr_buyer"><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked="checked" onclick="$('.address.addr2').toggle(); $('.address.addr2 select, .address.addr2 input, .address.addr2 textarea').val(''); $('.states_list2').hide()"><span class="checkbox-custom"></span> Данные Плательщика совпадают с Получателем </label>
+		
+		<table class="address addr2" style=" margin-top: 10px; width: 570px; display: none">
+    <tbody>
+        
+    <tr>
+        <td style="width: 200px;"><b>Плательщик:</b></td>
+        <td class="maintxt">
+            <label style="float: left; margin-right: 20px;"><input value="1" onclick="$('.l1').show()" class="checkbox_custom" name="Address2[type]" id="Address2_type" type="radio"><span class="checkbox-custom"></span>
+            Организация</label>
+            <label style="float: left; "><input value="2" onclick="$('.l1').hide()" class="checkbox_custom"  name="Address2[type]" id="Address2_type" type="radio" checked="checked"><span class="checkbox-custom"></span>
+            Частное лицо</label></td>
+    </tr>
+	<tr class="l1" style="display: none;">
+        <td nowrap="" class="maintxt">Название организации        </td>
+        <td class="maintxt-vat">
+            <input name="Address2[business_title]" id="Address2_business_title" type="text" class="">        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr class="l1" style="display: none;">
+        <td nowrap="" class="maintxt">Номер VAT</td>
+        <td class="maintxt-vat">
+            <input name="Address2[business_number1]" id="Address2_business_number1" type="text" value="" class="">        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt"><span style="width: 5pt" class="redtext">*</span>Фамилия</td>
+        <td class="maintxt-vat">
+            <input name="Address2[receiver_last_name]" id="Address2_receiver_last_name" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt"><span style="width: 5pt" class="redtext">*</span>Имя</td>
+        <td class="maintxt-vat">
+            <input name="Address2[receiver_first_name]" id="Address2_receiver_first_name" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td class="maintxt">Отчество</td>
+        <td class="maintxt-vat">
+            <input oninput="save_form()" name="Address2[receiver_middle_name]" id="Address2_receiver_middle_name" type="text" value="" class="">        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt country_lbl">
+            <span style="width: 5pt" class="redtext">*</span>Cтрана    </td>
+        <td colspan="2" class="maintxt-vat">
+            <select onclick="change_city2($(this)); save_form();" onchange="change_city2($(this));" name="Address2[country]" id="Address2_country" class=""><option value="">---</option>
+			
+			<?
+			
+			$list = CHtml::listData(Country::GetCountryList(), 'id', 'title_en');
+			
+			
+			foreach ($list as $k=>$v) {
+			?>
+			
+			<option value="<?=$k?>"><?=$v?></option>
+			
+			<?
+			}			
+			?>
+			
+			
+			</select>            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+    
+    <tr class="states_list2" style="display: none">
+        <td nowrap="" class="maintxt">Штат</td>
+        <td class="maintxt-vat select_states2"><select name="Address[state_id]" onclick="save_form();"><option value="">---</option></select></td>
+        
+    </tr>
+    
+    
+    <tr>
+        <td nowrap="" class="maintxt city_lbl"><span style="width: 5pt" class="redtext">*</span>Город        </td>
+        <td colspan="2" class="maintxt-vat">
+            <input name="Address2[city]" id="Address2_city" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt postindex_lbl"><span style="width: 5pt" class="redtext">*</span>Почтовый индекс</td>
+        <td colspan="2" class="maintxt-vat">
+            <input name="Address2[postindex]" id="Address2_postindex" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt streetaddress_lbl"><span style="width: 5pt" class="redtext">*</span>Адрес</td>
+        <td class="maintxt-vat">
+            <input placeholder="Улица, дом, квартира, и т.д., в любом порядке" name="Address2[streetaddress]" id="Address2_streetaddress" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+        
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span>Контактный e-mail        </td>
+        <td class="maintxt-vat" colspan="2" style="position: relative;">
+            <input name="Address2[contact_email]" id="Address2_contact_email" type="text" value="" class="">            <span class="texterror"></span>
+        </td>
+    </tr>
+    <tr>
+        <td nowrap="" class="maintxt contact_phone_lbl"><span style="width: 5pt" class="redtext">*</span>Контактный телефон</td>
+        <td class="maintxt-vat">
+            <input name="Address2[contact_phone]" id="Address2_contact_phone" type="text" class="">            <span class="texterror"></span>
+        </td>
+        <td class="smalltxt1">
+            
+                    </td>
+    </tr>
+    
+    
+    <tr>
+        <td nowrap="" class="maintxt">&nbsp;</td>
+        <td class="maintxt-vat">
+            
+            <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" style="display: none;">
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+   
+    
+   
+    
+    </tbody>
+</table>	
+		
         <div class="row spay">
         
         <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'ptype0')">

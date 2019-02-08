@@ -21,7 +21,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 </style>
 
 <div class="container cartorder">
-    <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+    <h1><?=$h1 ?></h1>
 	
 	<div class="row">
 	
@@ -32,7 +32,10 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	</div>
 	
 	<div class="span6">
-
+ <?=$result;?>
+	
+	
+	
     <div>
        
     

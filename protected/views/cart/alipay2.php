@@ -20,7 +20,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 <input type="hidden" value="<?=$hide_btn_next?>" name="hide_btn_next" />
 
 <div class="container cartorder">
-     <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+     <h1><?=$h1 ?></h1>
 	
 		<div class="row">
 	
@@ -33,35 +33,27 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	<div class="span6">
 
 
-    
+    <?=$result;?>
 	
     <div>
         
     <div><?= Yii::app()->ui->item('DESC_ALIPAY', $number_zakaz) ?></div>
 
-   <? 
-		$class1 = ' hide';
-		$class2 = '';
-	?>
-	<? if ($hide_btn_next == '1') : ?>
+    <? if ($hide_btn_next == '1') : ?>
 	
-		<? $class1 = '' ?>
-		<? $class2 = ' display: none' ?>
+	<span class="redtext error_pay">Для оплаты не заполнен адрес доставки</span>
+	
+	<div style="display: none" class="hide_block_pay">
 	
 	<? endif; ?>
-	
-	<span class="redtext error_pay_pt<?=$class1?>">Для оплаты не заполнен адрес доставки</span>
-	
-	<div style="<?=$class2?>" class="hide_block_pay">
-	
-	
 	<div style="height: 20px;"></div>
 		<img src="/images/alipay.jpg" style="max-width: 100%;"/>
 	
-	
+	<? if ($hide_btn_next == '1') : ?>
 	
 	</div>
 	
+	<? endif; ?>
 	
     <div style="margin: 15px 0;">
         <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>

@@ -18,14 +18,14 @@ foreach ($items as $item) {
      $text_placegolder1 = $ui->item('DELIVERY_ECONOMY_FINEST');
 
      $use = true;
-     $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\');  $(\'.select_dd_box\').show(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\');';
+     $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\');  $(\'.select_dd_box\').show(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\'); $(\'.address.addr2, label.addr_buyer, div.addr_buyer\').hide()';
      
     } elseif (($items[0]['value'] == 7 OR $items[0]['value'] == round((7 * $vals[2]), 1) OR $items[0]['value'] == round((7 * $vals[3]), 1) )  AND ($_POST['id_country'] == 68 OR $_POST['id_country'] == 62) AND $i > 1) {
 
         $text_placegolder2 = $ui->item('DELIVERY_PRIORITY_FINEST');
         $text_placegolder3 = $ui->item('DELIVERY_EXPRESS_FINEST');
 
-       $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').hide(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\');';
+       $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').hide(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\'); ';
 
     } else {
         if ($items[0]['value'] < 15) {
@@ -44,7 +44,7 @@ foreach ($items as $item) {
 
 
 
-        $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').hide(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\');';
+        $oncange = ' $(\'.smartpost_index\').val(\'\'); $(\'.box_smartpost\').html(\'\'); $(\'.select_dd_box\').hide(); $(\'.selt .check\').removeClass(\'active\'); $(\'.check\', $(this).parent()).addClass(\'active\'); ';
     
     }
    
@@ -72,7 +72,7 @@ foreach ($items as $item) {
 
  $str .= '</div>';
 
- $str .= '<label class="seld span3 seld0'.($i+1).'" rel="'.$item['value'].'" valute="'.Currency::ToSign($item['currency']).'" onclick="check_delivery($(this)); check_cart_sel($(this),\'seld\', \'dtype'.($i+1).'\'); showALL(); hide_oplata(1); $(\'.rows_checkbox_delivery input\').prop(\'checked\', false); $(\'.delivery_box\').show(); $(\'.delivery_name\').html(\'' . $ui->item('CARTNEW_DELIVERY_POST_NAME').'\'); $(\'.type_delivery\').val(\'' .$ui->item('CARTNEW_DELIVERY_POST_NAME').'\'); $(\'.selt1\').click();$(\'.oplata3\').click();'.$oncange.'">';
+ $str .= '<label class="seld span3 seld0'.($i+1).'" rel="'.$item['value'].'" valute="'.Currency::ToSign($item['currency']).'" onclick="check_delivery($(this)); check_cart_sel($(this),\'seld\', \'dtype'.($i+1).'\'); showALL(); hide_oplata(1); $(\'.rows_checkbox_delivery input\').prop(\'checked\', false); $(\'.delivery_name\').html(\'' . $ui->item('CARTNEW_DELIVERY_POST_NAME').'\'); $(\'.type_delivery\').val(\'' .$ui->item('CARTNEW_DELIVERY_POST_NAME').'\'); $(\' label.addr_buyer\').show(); $(\'label.addr_buyer input\').attr(\'checked\',\'checked\'); $(\'.selt1\').click();$(\'.oplata3\').click();'.$oncange.'">';
 
   $str .= '<div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span> 

@@ -446,6 +446,76 @@
         
     }
     
+	function add_address2(num_cont) {
+        
+        var cont = $('table.addr'+num_cont);
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+        
+        var query = '';
+        
+        query = 'YII_CSRF_TOKEN='+csrf[1]+'&'+$('table.addr2 input, table.addr2 select, table.addr2 textarea').serialize();
+        //query = query + '&s1='.$('select[name=id_address]').val() + '&s2='.$('select[name=id_address_b]').val();
+        
+        var error = 0;
+
+
+
+        $('.texterror', $('#Address_receiver_last_name', cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        
+        if (!$('#Address2_receiver_last_name',cont).val()) { $('#Address2_receiver_last_name').addClass('error'); error = error + 1; $('.texterror', $('#Address2_receiver_last_name',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>'); } else {  $('#Address2_receiver_last_name',cont).removeClass('error'); $('.texterror', $('#Address2_receiver_last_name',cont).parent()).html(''); }
+        
+        if (error < 0) { error = 0; }
+        
+        
+        if (!$('#Address2_receiver_first_name',cont).val()) { $('#Address2_receiver_first_name',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_receiver_first_name',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address2_receiver_first_name',cont).removeClass('error');  $('.texterror', $('#Address2_receiver_first_name',cont).parent()).html('');}
+        
+        if (!$('#Address2_country',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address2_country',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_country',cont).parent()).html('<?=$ui->item('CARTNEW_SELECT_COUNTRY_ERROR')?>');} else {  $('#Address2_country',cont).removeClass('error');  $('.texterror', $('#Address2_country',cont).parent()).html(''); }
+        
+        if (!$('#Address2_city',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address2_city',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_city',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address2_city',cont).removeClass('error');  $('.texterror', $('#Address2_city',cont).parent()).html('');}
+        if (!$('#Address2_postindex',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address2_postindex',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_postindex',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address2_postindex',cont).removeClass('error');  $('.texterror', $('#Address2_postindex',cont).parent()).html('');}
+        if (!$('#Address2_streetaddress',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address2_streetaddress',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_streetaddress',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address2_streetaddress',cont).removeClass('error');  $('.texterror', $('#Address2_streetaddress',cont).parent()).html('');}
+         var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+        
+        if (!$('#Address2_contact_email').val()) { $('#Address2_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address2_contact_email').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else if(pattern.test($('#Address2_contact_email').val())){  $('#Address2_contact_email').removeClass('error');  $('.texterror', $('#Address2_contact_email').parent()).html('');} else {
+         
+         $('#Address2_contact_email').addClass('error'); error = error + 1; $('.texterror', $('#Address2_contact_email').parent()).html('Неверно введен E-mail адрес');
+            
+        }
+        if (!$('#Address2_contact_phone',cont).val() && !$('.check_addressa').prop('checked')) { $('#Address2_contact_phone',cont).addClass('error'); error = error + 1; $('.texterror', $('#Address2_contact_phone',cont).parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');} else {  $('#Address2_contact_phone',cont).removeClass('error');  $('.texterror', $('#Address2_contact_phone',cont).parent()).html('');}
+        
+        
+        if (error > 0) {
+         
+            $('input.error').slice(0,1).focus();
+         
+        }
+        
+        
+        if (error == 0) {
+        
+        var s1 = $('select[name=id_address]').val();
+        var s2 = $('select[name=id_address_b]').val();
+
+        $.post('<?= Yii::app()->createUrl('cart/addaddress2') ?>', query, function(data) {
+
+            //alert(data);
+
+            data = JSON.parse(data);
+
+            $('select[name=id_address]').html(data.items);
+            $('select[name=id_address_b]').html(data.items);
+
+            $('select[name=id_address]').val(s1);
+            $('select[name=id_address_b]').val(data.ida);
+            
+            $('.block_addr_add_2').hide();
+            
+        });
+        
+        }
+        
+        
+    }
     
     function select_smartpost_row(cont) {
 
@@ -873,7 +943,7 @@
 
         var error = 0;
         
-        if ($('select[name=id_address]').val() == '' || $('select[name=id_address_b]').val() == '') {
+        if ($('select[name=id_address]').val() == '' || ($('select[name=id_address_b]').val() == '' && $('#addr_buyer').is(':checked') == false)) {
          
             $('.err_addr').html('Выберите адреса');
          error = error + 1;
@@ -1003,6 +1073,39 @@
         if (promocodeHandler&&promocodeHandler.active) promocodeHandler.recount(promocodeHandler.getValue());
 
     }
+	
+	
+	function change_city2(cont) {
+
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+        if (cont.val() != '') {
+			
+			if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
+
+                $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+					
+					$('.states_list2').show();
+					
+                    $('.select_states2').html(data);
+
+                  
+
+                });
+
+            } else {
+				$('.states_list2').hide();
+                $('.select_states2').html('<select name="Address2[state_id]"><option value="">---</option></select>');
+
+            }
+
+		
+		
+		}
+
+
+
+    }
     
     
 </script>
@@ -1128,11 +1231,11 @@
 			
 														   ?>
    
-   <div class="row" style="margin-left: 0;">
+   <div class="row" style="margin-left: 0; margin-top: 15px;">
    
    <div class="span6" style="width: 49%; margin-left: 0; margin-right: 1%;">
    
-	<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', $ui->item("address_contact_notes")); ?>" name="Notes"></textarea>
+	<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', 'Примечания к адресу'); ?>" name="Notes"></textarea>
    
    </div>
    <div class="span6" style="width: 50%; margin: 0;">

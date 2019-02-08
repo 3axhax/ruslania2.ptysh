@@ -53,7 +53,7 @@ class CommonHelper
         $ui = Yii::app()->ui;
         if(empty($address)) return $ui->item('NO_DATA');
 
-        if($address['type'] == Address::ORGANIZATION) $org = $address['business_title'].', ';
+        if($address['type'] == Address::ORGANIZATION) $org = $address['business_title'];
         else $org = '';
 
         $name = $address['receiver_name'];
@@ -63,11 +63,22 @@ class CommonHelper
             if(!empty($address['receiver_middle_name'])) $name .= ' '.$address['receiver_middle_name'];
             if(!empty($address['receiver_last_name'])) $name .= ' '.$address['receiver_last_name'];
         }
-
+		
+		if ($org) $arr_labels[] = $org;
+		if ($name) $arr_labels[] = $name;
+		if ($address['streetaddress']) $arr_labels[] = $address['streetaddress'];
+		if ($address['postindex']) $arr_labels[] = $address['postindex'];
+		if ($address['city']) $arr_labels[] = $address['city'];
+		if ($address['country_name']) $arr_labels[] = $address['country_name'];
+		
         $ret = $org.$name.', '
              .$address['streetaddress'].', '
              .$address['postindex'].' '.$address['city'].', '
              .$address['country_name'];
+			 
+			 
+		$ret = implode(', ', $arr_labels);	 
+			 
         return $ret;
     }
 	
@@ -82,7 +93,9 @@ class CommonHelper
         if(empty($address)) return $ui->item('NO_DATA');
 
         if($address['type'] == Address::ORGANIZATION) $ret_array['org'] = $address['business_title'].', ';
-
+			
+			
+			
        
             $ret_array['first_name'] = $address['receiver_first_name'];
             if(!empty($address['receiver_middle_name'])) $ret_array['middle_name'] = $address['receiver_middle_name'];
@@ -96,6 +109,10 @@ class CommonHelper
 		$ret_array['country_name'] = $address['country_name'];
 		
 		$ret_array['contact_phone'] = $address['contact_phone'];
+		$ret_array['contact_email'] = $address['contact_email'];
+		$ret_array['type'] = $address['type'];
+		$ret_array['business_title'] = $address['business_title'];
+		$ret_array['business_number1'] = $address['business_number1'];
 		
         $ret = $org.$name.', '
              .$address['streetaddress'].', '
