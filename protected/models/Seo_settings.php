@@ -7,9 +7,10 @@ class Seo_settings {
 	protected $_route = '';
 	protected $_settings = array('h1'=>'', 'title'=>'', 'description'=>'', 'keywords'=>'');
 
-	protected function __construct() {
+	protected function __construct($params = null) {
 		$controller = Yii::app()->getController();
-		$this->_route = $controller->id . '/' . $controller->action->id;
+		if ($params === null) $this->_route = $controller->id . '/' . $controller->action->id;
+		else $this->_route = $params['route'];
 	}
 
 	/**
@@ -29,6 +30,23 @@ class Seo_settings {
 		}
 		return self::$_self;
 	}
+
+	/** метод нужен для получения экземпляра класса без его сохранения
+	 * @param $params array ['route'=>'entity/list', 'entity'=>10, 'id'=>0]
+	 * @return ModelsSeoEntity|Seo_settings
+	 */
+	static function handler($params) {
+		$route = explode('/', $params['route']);
+		switch (mb_strtolower($route[0])) {
+			case 'entity':
+				require_once dirname(__FILE__) . '/Seo/Entity.php';
+				return new ModelsSeoEntity($params);
+				break;
+			default: return new self; break;
+		}
+	}
+
+	function getDefaultSettings($lang) { return array(); }
 
 	function getH1() {
 		return $this->_prepareText($this->_getH1());

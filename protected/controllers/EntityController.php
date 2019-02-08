@@ -1355,7 +1355,7 @@ class EntityController extends MyController {
             //редирект с page=1
             return;
         }
-
+        Debug::staticRun(array($path, $this->_canonicalPath, $query, $data));
         $this->_redirectOldPages($path, $this->_canonicalPath, $query, $data);
         throw new CHttpException(404);
 

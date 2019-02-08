@@ -153,8 +153,9 @@ class EntityUrlRule extends CBaseUrlRule {
 		if ($langId = array_search($pathInfo[0], $langGoods)) {
 			array_shift($pathInfo);
 			if (empty($pathInfo)) return false;
-			$_REQUEST['lang'] = $_GET['lang'] = $langId;
+
 			if (method_exists($request, 'setParam')) $request->setParam('lang', $langId);
+			else $_REQUEST['lang'] = $_GET['lang'] = $langId;
 		}
 		unset($langGoods);
 

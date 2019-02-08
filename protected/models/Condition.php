@@ -278,8 +278,8 @@ class Condition {
             $pre_sale = $this->g('pre_sale');
             if (($pre_sale === 0) || ($pre_sale === '0')) return;
 
-            if ($pre_sale == 1) $this->_condition['pre_sale'] = '(t.presale = 1)';
-            if ($pre_sale == 2) $this->_condition['pre_sale'] = '(t.presale != 1)';
+            if ($pre_sale == 1) $this->_condition['pre_sale'] = '(t.presale > ' . time() . ')';
+            if ($pre_sale == 2) $this->_condition['pre_sale'] = '(t.presale <= ' . time() . ')';
         }
     }
 
