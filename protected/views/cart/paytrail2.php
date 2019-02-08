@@ -1,4 +1,5 @@
 <hr />
+
 <style>
 
 	#pay_systems .selp { width: 100%; text-align: center }
@@ -20,7 +21,8 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 <input type="hidden" value="<?=$hide_btn_next?>" name="hide_btn_next" />
 
 <div class="container cartorder">
-     <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+
+    <h1><?=$h1 ?></h1>
 	
 		<div class="row">
 	
@@ -32,43 +34,41 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	
 	<div class="span6">
 
-
-    
 	
+                <?=$result;?>
+    	<? if ($order['hide_edit_order'] != '1') : ?>
     <div>
-        
-    <div><?= Yii::app()->ui->item('DESC_ALIPAY', $number_zakaz) ?></div>
+        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br />
 
-   <? 
-		$class1 = ' hide';
-		$class2 = '';
-	?>
+   <div style="height: 20px;"></div>
+	
+
+	
 	<? if ($hide_btn_next == '1') : ?>
 	
-		<? $class1 = '' ?>
-		<? $class2 = ' display: none' ?>
+	<span class="redtext error_pay">Для оплаты не заполнен адрес доставки</span>
+	
+	<div style="display: none" class="hide_block_pay">
 	
 	<? endif; ?>
 	
-	<span class="redtext error_pay_pt<?=$class1?>">Для оплаты не заполнен адрес доставки</span>
+    <?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
 	
-	<div style="<?=$class2?>" class="hide_block_pay">
-	
-	
-	<div style="height: 20px;"></div>
-		<img src="/images/alipay.jpg" style="max-width: 100%;"/>
-	
-	
+	<? if ($hide_btn_next == '1') : ?>
 	
 	</div>
 	
+	<? endif; ?>
 	
+	
+    <div class="clearBoth"></div>
+
     <div style="margin: 15px 0;">
         <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
+    </div><? endif; ?>
     </div>
-    </div>
-
+   
 </div>
 <script type="text/javascript">
     function openPaySystems(inputId) {
@@ -80,5 +80,14 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
     }
     function check_cart_sel(cont,cont2,inputId) {
         document.location.href = '<?= Yii::app()->createUrl('cart/orderPay') ?>?id=<?= $number_zakaz ?>&ptype=' + document.getElementById(inputId).value;
-    }
+    
+		
+	
+	}
+	
+	
+	
 </script>
+
+	<br />
+	

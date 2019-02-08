@@ -36,7 +36,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 
 <div class="container cartorder">
 
-	 <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+	 <h1><?=$h1 ?></h1>
 	
 		<div class="row">
 	
@@ -47,38 +47,29 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	</div>
 	
 	<div class="span6">
-
+	
+		<?=$result;?>
 
        <div>
         Вы выбрали: <?= Yii::app()->ui->item('HEADER_APPLEPAY') ?><br /><br />
 		
-		<? 
-		$class1 = ' hide';
-		$class2 = '';
-	?>
-	<? if ($hide_btn_next == '1') : ?>
+		<? if ($hide_btn_next == '1') : ?>
 	
-		<? $class1 = '' ?>
-		<? $class2 = ' display: none' ?>
+	<span class="redtext error_pay">Для оплаты не заполнен адрес доставки</span>
+	
+	<div style="display: none" class="hide_block_pay">
 	
 	<? endif; ?>
-	
-	
-	<span class="redtext error_pay_pt<?=$class1?>">Для оплаты не заполнен адрес доставки</span>
-	
-	<div style="<?=$class2?>" class="hide_block_pay">
-	
-	
 	
 		<div id="apple-pay-text"><b>Ваше устройство не поддерживает ApplePay</b></div>
   
 		<button id="apple-pay-button"></button>
 	
-	
+	<? if ($hide_btn_next == '1') : ?>
 	
 	</div>
 	
-	
+	<? endif; ?>
 		
 		
 		

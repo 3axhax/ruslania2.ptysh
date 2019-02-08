@@ -296,7 +296,9 @@
         $('.row_smartpost').removeClass('act');
         $(cont).parent().addClass('act');
         $(cont).parent().show();
-
+		
+		$('.address.addr2, label.addr_buyer').hide();
+		
         $('.btn.btn-success', $(cont).parent()).html('Выбран');
 
         $('.sel_smartpost').val($('div.addr_name', $(cont).parent()).html());
@@ -537,6 +539,39 @@
 
 
     }
+
+ function change_city2(cont) {
+
+        var csrf = $('meta[name=csrf]').attr('content').split('=');
+
+        if (cont.val() != '') {
+			
+			if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
+
+                $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+					
+					$('.states_list2').show();
+					
+                    $('.select_states2').html(data);
+
+                  
+
+                });
+
+            } else {
+				$('.states_list2').hide();
+                $('.select_states2').html('<select name="Address2[state_id]"><option value="">---</option></select>');
+
+            }
+
+		
+		
+		}
+
+
+
+    }
+
 
     function select_row(cont) {
 
@@ -897,7 +932,7 @@
             $('.texterror', $('#Address_country').parent()).html('');
         }
 
-        // юif (!$('#Address_city').val() && !$('.check_addressa').prop('checked')) {
+        // if (!$('#Address_city').val() && !$('.check_addressa').prop('checked')) {
             // $('#Address_city').addClass('error');
             // error = error + 1;
             // $('.texterror', $('#Address_city').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
@@ -952,6 +987,101 @@
             $('#Address_contact_phone').removeClass('error');
             $('.texterror', $('#Address_contact_phone').parent()).html('');
         }
+		
+		if ( !$('#addr_buyer').is(':checked') ) {
+			
+			if (!$('#Address2_receiver_last_name').val()) {
+            $('#Address2_receiver_last_name').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_receiver_last_name').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else {
+            $('#Address2_receiver_last_name').removeClass('error');
+            $('.texterror', $('#Address2_receiver_last_name').parent()).html('');
+        }
+
+        if (error < 0) {
+            error = 0;
+        }
+
+		
+		
+
+        if (!$('#Address2_receiver_first_name').val()) {
+            $('#Address2_receiver_first_name').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_receiver_first_name').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else {
+            $('#Address2_receiver_first_name').removeClass('error');
+            $('.texterror', $('#Address2_receiver_first_name').parent()).html('');
+        }
+
+        if (!$('#Address2_country').val()  && !$('.check_addressa').prop('checked')) {
+            $('#Address2_country').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_country').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else {
+            $('#Address2_country').removeClass('error');
+            $('.texterror', $('#Address2_country').parent()).html('');
+        }
+
+        if (!$('#Address2_city').val()) {
+            $('#Address2_city').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_city').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else {
+            $('#Address2_city').removeClass('error');
+            $('.texterror', $('#Address2_city').parent()).html('');
+        }
+        if (!$('#Address2_postindex').val()) {
+                $('#Address2_postindex').addClass('error');
+                error = error + 1;
+				$('.texterror', $('#Address2_postindex').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+            } else {
+                $('#Address2_postindex').removeClass('error');
+                $('.texterror', $('#Address2_postindex').parent()).html('');
+            }
+            if ( !$('#Address2_streetaddress').val()) {
+                $('#Address2_streetaddress').addClass('error');
+                $('.texterror', $('#Address2_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+                error = error + 1;
+                $('.texterror', $('#Address2_streetaddress').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+            } else {
+                $('#Address2_streetaddress').removeClass('error');
+                $('.texterror', $('#Address2_streetaddress').parent()).html('');
+			} 
+			
+			
+			
+
+        var pattern = /^([a-z0-9_\.-])+@[a-z0-9-]+\.([a-z]{2,4}\.)?[a-z]{2,4}$/i;
+
+        if (!$('#Address2_contact_email').val()) {
+            $('#Address2_contact_email').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_contact_email').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else if (pattern.test($('#Address2_contact_email').val())) {
+            $('#Address2_contact_email').removeClass('error');
+            $('.texterror', $('#Address2_contact_email').parent()).html('');
+        } else {
+
+            $('#Address2_contact_email').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_contact_email').parent()).html('<?=$ui->item('CARTNEW_ERROR_WRONG_EMAIL')?>');
+
+        }
+
+
+
+        if ( (!$('#Address2_contact_phone').val()) || ($('#Address2_contact_phone').val().length < 6) ) {
+            $('#Address2_contact_phone').addClass('error');
+            error = error + 1;
+            $('.texterror', $('#Address2_contact_phone').parent()).html('<?=$ui->item('CARTNEW_INPUT_ERROR')?>');
+        } else {
+            $('#Address2_contact_phone').removeClass('error');
+            $('.texterror', $('#Address2_contact_phone').parent()).html('');
+        }
+			
+		}
 
 
         if (error > 0) {
@@ -1190,7 +1320,7 @@
         </script>
 
     <?php endif; ?>
-	<div class="row" style="margin-left: 0;">
+	<div class="row" style="margin-left: 0; margin-top: 10px;">
    
    <div class="span6" style="width: 49%; margin-left: 0; margin-right: 1%;">
    

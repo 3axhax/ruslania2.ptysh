@@ -4,7 +4,7 @@
 class CartController extends MyController {
     public function accessRules() {
         return array(array('allow',
-            'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress','addaddress2', 'editaddr', 'getaddress',
+            'actions' => array('view', 'variants', 'doorder', 'doorderjson', 'dorequest', 'register', 'getall', 'getcount', 'add', 'mark', 'noregister', 'result', 'applepay', 'valid', 'loadsp', 'loadsp2', 'orderPay', 'addaddress','addaddress2', 'editaddr', 'getaddress','loadstatesfinal', 'editaddrselect',
                 'changequantity', 'remove', 'getdeliveryinfo', 'getdeliveryinfo2', 'getcodecity', 'getcostizmena','loadstates', 'certificatePay', 'checkpromocode','loadheader'),
             'users' => array('*')),
             array('allow', 'actions' => array('request'),
@@ -13,13 +13,26 @@ class CartController extends MyController {
                 'users' => array('*')));
     }
 	
-	public function actionEditAddr() {
-/*		$sql = 'UPDATE user_address SET '.$_POST['name'].'=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['val'], ':id' => $_POST['id']));
+	public function actionEditAddrSelect() {
 		
+		//if ( $_POST['val'] ) {
+		
+		if ($_POST['tip'] == '1') {
+			
+			$field = 'delivery_address_id';
+			
+		} else {
+			$field = 'billing_address_id';
+		}
+		
+		
+		$sql = 'UPDATE users_orders SET '.$field.'=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['val'], ':id' => $_POST['id']));
+		
+	
 		
 		$json = array();
 		
-		$addr = Address::GetAddress($this->uid, $_POST['id']);
+		$addr = Address::GetAddress($this->uid, $_POST['val']);
 		
 		if ($addr['streetaddress'] == '' OR $addr['postindex'] == '' OR $addr['city'] == '') { $json['hide_btn_next'] = '1'; } else { $json['hide_btn_next'] = '0'; }
 		
@@ -30,7 +43,36 @@ class CartController extends MyController {
 			
 			$json['addr_full'] = $addrs;
 			
-		}*/
+		}
+		
+		$this->ResponseJson($json);
+		
+		
+	}
+	
+	public function actionEditAddr() {
+		$sql = 'UPDATE user_address SET '.$_POST['name'].'=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['val'], ':id' => $_POST['id']));
+		
+		
+		$json = array();
+		
+		$addr = Address::GetAddress($this->uid, $_POST['id']);
+		
+		//var_dump($addr);
+		
+		if ($addr['streetaddress'] == '' OR $addr['postindex'] == '' OR $addr['city'] == '') { $json['hide_btn_next'] = '1'; } else { $json['hide_btn_next'] = '0'; }
+		
+		
+		$addrs = CommonHelper::FormatAddress($addr);
+		
+		if ($addrs) {
+			
+			$json['addr_full'] = $addrs;
+			
+		}
+		
+		$this->ResponseJson($json);
+		
 /*
         функцию переделал, параметры
         name - поле, которое нужно обновить,
@@ -42,52 +84,52 @@ class CartController extends MyController {
         2. если ид адресов одинаковые, то добавляю новый адрес (копия текущего, только поле изменено) и сохраняю его ид в заказ
         3. иначе сохранияю значение в нужном адресе
 */
-        $orderModel = Order::model();
-        $order = $orderModel->findByPk(Yii::app()->getRequest()->getParam('orderId'));
-        $orderData = $order->getAttributes();
-        $json = array();
+        // $orderModel = Order::model();
+        // $order = $orderModel->findByPk(Yii::app()->getRequest()->getParam('orderId'));
+        // $orderData = $order->getAttributes();
+        // $json = array();
 
-        $fieldName = Yii::app()->getRequest()->getParam('name');
-        $fieldValue = trim((string)Yii::app()->getRequest()->getParam('val'));
+        // $fieldName = Yii::app()->getRequest()->getParam('name');
+        // $fieldValue = trim((string)Yii::app()->getRequest()->getParam('val'));
 
-        $fieldAddr = '';
-        switch ((string)Yii::app()->getRequest()->getParam('tip')) {
-            case 'order_addr_buyer': $fieldAddr = 'billing_address_id'; break;
-            case 'deliveryAddress': $fieldAddr = 'delivery_address_id'; break;
-        }
+        // $fieldAddr = '';
+        // switch ((string)Yii::app()->getRequest()->getParam('tip')) {
+            // case 'order_addr_buyer': $fieldAddr = 'billing_address_id'; break;
+            // case 'deliveryAddress': $fieldAddr = 'delivery_address_id'; break;
+        // }
 
-        $addressModel = Address::model();
-        $address = $addressModel->findByPk($orderData[$fieldAddr]);
-        $addressData = $address->getAttributes();
+        // $addressModel = Address::model();
+        // $address = $addressModel->findByPk($orderData[$fieldAddr]);
+        // $addressData = $address->getAttributes();
 
-        if (
-            ((int)$this->uid === (int)$orderData['uid'])
-            &&!empty($orderData[$fieldAddr])
-            &&isset($addressData[$fieldName])
-            &&(trim($addressData[$fieldName]) <> $fieldValue)
-        ) {
-            if (($orderData['delivery_address_id'] == $orderData['billing_address_id'])/*&&($fieldName == 'billing_address_id')*/) {
-                $address->id = null;
-                $address->$fieldName = $fieldValue;
-                $address->setIsNewRecord(true);
-                $address->insert();
-                $addrId = $address->id;
-                $addressModel->addAddresses($this->uid, $addrId, false);
-                $order->$fieldAddr = $addrId;
-                $order->save();
-            }
-            else {
-                $address->$fieldName = $fieldValue;
-                $address->update();
-            }
-        }
-        $addr = $addressModel->GetAddress($this->uid, $address->id);
-        if (($addr['streetaddress'] == '')||($addr['postindex'] == '')||($addr['city'] == '')) $json['hide_btn_next'] = '1';
-        else $json['hide_btn_next'] = '0';
-        $addrs = CommonHelper::FormatAddress($addr);
-        if ($addrs) $json['addr_full'] = $addrs;
+        // if (
+            // ((int)$this->uid === (int)$orderData['uid'])
+            // &&!empty($orderData[$fieldAddr])
+            // &&isset($addressData[$fieldName])
+            // &&(trim($addressData[$fieldName]) <> $fieldValue)
+        // ) {
+            // if (($orderData['delivery_address_id'] == $orderData['billing_address_id'])/*&&($fieldName == 'billing_address_id')*/) {
+                // $address->id = null;
+                // $address->$fieldName = $fieldValue;
+                // $address->setIsNewRecord(true);
+                // $address->insert();
+                // $addrId = $address->id;
+                // $addressModel->addAddresses($this->uid, $addrId, false);
+                // $order->$fieldAddr = $addrId;
+                // $order->save();
+            // }
+            // else {
+                // $address->$fieldName = $fieldValue;
+                // $address->update();
+            // }
+        // }
+        // $addr = $addressModel->GetAddress($this->uid, $address->id);
+        // if (($addr['streetaddress'] == '')||($addr['postindex'] == '')||($addr['city'] == '')) $json['hide_btn_next'] = '1';
+        // else $json['hide_btn_next'] = '0';
+        // $addrs = CommonHelper::FormatAddress($addr);
+        // if ($addrs) $json['addr_full'] = $addrs;
 
-        $this->ResponseJson($json);
+        // $this->ResponseJson($json);
 	}
 	
 	
@@ -152,7 +194,7 @@ class CartController extends MyController {
             $address = $p['Address2']['streetaddress'];
             $email = $p['Address2']['contact_email'];
             $phone = $p['Address2']['contact_phone'];
-            $comment = $p['Address2']['notes'];
+            $comment = ' ';
             $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`, `type_address`) VALUES '
                 . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
@@ -771,7 +813,7 @@ class CartController extends MyController {
                     $idAddr = Yii::app()->db->getLastInsertID();
 					
 					
-					if ($post['addr_buyer'] != '') {
+					if ($post['addr_buyer'] != '1') {
 						
 						$sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
                         . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
@@ -786,30 +828,8 @@ class CartController extends MyController {
 						
 					} else {
 						
-			$type2 = $post['Address2']['type'];
-            $business_title2 = $post['Address2']['business_title'];
-            $business_number12 = $post['Address2']['business_number1'];
-            $titul2 = $post['Address2']['receiver_title_name'];
-            $fam2 = $post['Address2']['receiver_last_name'];
-            $name2 = $post['Address2']['receiver_first_name'];
-            $otch2 = $post['Address2']['receiver_middle_name'];
-            $country2 = $post['Address2']['country'];
-            $stat2 = $post['Address2']['state_id'];
-            $city2 = $post['Address2']['city'];
-            $post_index2 = $post['Address2']['postindex'];
-            $address2 = $post['Address2']['streetaddress'];
-            $email2 = $post['Address2']['contact_email'];
-            $phone2 = $post['Address2']['contact_phone'];
-            $comment3 = $post['Address2']['notes'];
-			
-			$sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
-                        . '("' . $type2 . '", "' . $business_title2 . '", "' . $business_number12 . '", "' . $titul2 . '", "' . $name2 . '", "' . $otch2 . '", "' . $fam2 . '", "' . $country2 . '", "' . $stat2 . '", "' . $city2 . '", "' . $post_index2 . '", "' . $address2 . '", "' . $email2 . '", "' . $phone2 . '", "' . $comment3 . '")';
-						$ret = Yii::app()->db->createCommand($sql)->execute();
-						$idAddr2_1 = Yii::app()->db->getLastInsertID();
-						$sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2_1 . '", "1")';
-						$ret = Yii::app()->db->createCommand($sql)->execute();
-						$idAddr_2 = Yii::app()->db->getLastInsertID();
 						
+						$idAddr2_1 = $idAddr2;
 						
 						
 					}
