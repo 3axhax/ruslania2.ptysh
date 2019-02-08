@@ -171,13 +171,13 @@ class Address extends CActiveRecord
             $this->insert();
             $id = $this->id;
 
-            if ($isDefault)
-            {
-                $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
-                Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
-            }
 
             $this->addAddresses($uid, $id, $isDefault);
+//            if ($isDefault)
+//            {
+//                $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
+//                Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
+//            }
 //            $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
 //                . '(:uid, :id, :def)';
 //
@@ -348,6 +348,12 @@ class Address extends CActiveRecord
     }
 
     function addAddresses($uid, $id, $isDefault) {
+        if ($isDefault)
+        {
+            $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
+            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
+        }
+
         $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
             . '(:uid, :id, :def)';
 
