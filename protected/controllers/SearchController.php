@@ -11,7 +11,7 @@ class SearchController extends MyController {
 	private $_search;
 
 	function actionGeneral() {
-		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
+		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (empty($q)) {
 			$this->_viewEmpty($q);
 			return;

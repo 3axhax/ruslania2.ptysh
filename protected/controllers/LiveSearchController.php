@@ -5,7 +5,7 @@ class LiveSearchController extends MyController {
 
 	function actionGeneral() {
 		$result = array();
-		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
+		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
 			$sController = new SearchController($this->getId(), $this->getModule());
 			$sController->beforeAction($this->getAction());
@@ -66,7 +66,7 @@ class LiveSearchController extends MyController {
 
 	function actionGeneralHa() {
 		$result = array();
-		$q = trim((string) Yii::app()->getRequest()->getParam('q'));
+		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
 			$sController = new SearchController($this->getId(), $this->getModule());
 			$sController->beforeAction($this->getAction());
