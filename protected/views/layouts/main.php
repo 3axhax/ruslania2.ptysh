@@ -158,7 +158,8 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <div class="header_logo_search_cart">
 
     <?php $this->widget('InfoText', array('isFrame'=>1)); ?>
-    <? if ($ctrl != 'cart') : ?>
+    
+	<? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
 
         <div class="light_gray_menu">
             <div class="container">
@@ -211,7 +212,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                 <a href="<?= Yii::app()->createUrl('cart/view') ?>" style="float: right; margin-top: 50px;"><?=$ui->item('CARTNEW_BACK_TO_CART')?></a>
 
-            <? elseif ($ctrl == 'cart' AND (!in_array('doorder',$url))) : ?>
+            <? elseif (($ctrl == 'cart' AND (!in_array('doorder',$url))) OR $ctrl == 'payment') : ?>
 
                 <?
 				
@@ -223,7 +224,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 				
                 $arr_cart_url = array('variants', 'noregister', 'doorder', 'orderPay');
 
-                if (in_array($url_ref, $arr_cart_url)) {
+                if (in_array($url_ref, $arr_cart_url) OR $ctrl == 'payment') {
 
                     $_SERVER['HTTP_REFERER'] = '/';
 
@@ -239,9 +240,9 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             <? endif; ?>
 
-            <div class="span10"<? if ($ctrl == 'cart') : echo 'style="margin-top: 40px;"'; else : echo ''; endif; ?>>
+            <div class="span10"<? if ($ctrl == 'cart' OR $ctrl == 'payment') : echo 'style="margin-top: 40px;"'; else : echo ''; endif; ?>>
 
-                    <? if ($ctrl != 'cart') : ?>
+                    <? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
                 <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
                         <div class="search_box">
                             <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
@@ -260,7 +261,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                         <ul>
 
-                            <? if ($ctrl != 'cart') : ?>
+                            <? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
 
                                 <li class="sm">
                                     <a href="<?= Yii::app()->createUrl('site/advsearch') ?><? if ($entity) { echo '?e='.$entity; } elseif ($_GET['e']) { echo '?e='.$_GET['e']; }?>" class="search_more">
@@ -349,7 +350,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                     <? if ($ctrl != 'cart') : ?></form><? endif; ?>
             </div>
 
-            <? if ($ctrl != 'cart') : ?>
+            <? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
 
                 <div class="span1 cart">
 
@@ -398,7 +399,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <?= $content; ?>
 
 
-<? if ($ctrl != 'cart') : ?>
+<? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
 
     <div class="footer">
 
@@ -459,6 +460,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             <li><a href="<?= Yii::app()->createUrl('offers/list'); ?>"><?= $ui->item("RUSLANIA_RECOMMENDS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>"><?= $ui->item("A_OFFERS_PARTNERS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'uni')); ?>"> <?= $ui->item("A_OFFERS_UNIVERCITY"); ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('site/certificate', array()); ?>"> <?= $ui->item("GIFT_CERTIFICATE"); ?></a></li>
                         </ul>
                     </div><div class="span1">
                         <ul>
