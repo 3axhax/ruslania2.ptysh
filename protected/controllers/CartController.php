@@ -66,7 +66,7 @@ class CartController extends MyController {
             &&isset($addressData[$fieldName])
             &&(trim($addressData[$fieldName]) <> $fieldValue)
         ) {
-            if (($orderData['delivery_address_id'] == $orderData['billing_address_id'])&&($fieldName == 'billing_address_id')) {
+            if (($orderData['delivery_address_id'] == $orderData['billing_address_id'])/*&&($fieldName == 'billing_address_id')*/) {
                 $address->id = null;
                 $address->$fieldName = $fieldValue;
                 $address->setIsNewRecord(true);
