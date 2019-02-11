@@ -48,7 +48,7 @@
 					
 					<?php if(!$isClosed) : ?>
                                         <?php if(array_key_exists($order['id'], $notPay)) : ?>
-                                <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>" class="order_start" style="background-color: #5bb75b; margin-top: 20px;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
+                                <a href="<?=Yii::app()->createUrl('cart/orderPay'); ?>?id=<?=$order['id']?>&ptype=<?=$order['payment_type_id']?>" class="order_start" style="background-color: #5bb75b; margin-top: 20px;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
                                 
                                 <?php endif; ?>
                                 <?php endif; ?>
@@ -56,9 +56,9 @@
 					
                 </div>
 
-                <?php if(!empty($order['notes'])) : ?>
+                <?php if(!empty($order['notes']) AND $order['notes'] != '&nbsp;') : ?>
                     <div class="mbt10">
-                        <?=$ui->item('ORDER_MSG_USER_COMMENTS'); ?>: <?=nl2br(CHtml::encode($order['notes'])); ?>
+                        <?=$ui->item('ORDER_MSG_USER_COMMENTS'); ?>: <?=nl2br($order['notes']); ?>
                     </div>
                 <?php endif; ?>
                 <?php endif; ?>
