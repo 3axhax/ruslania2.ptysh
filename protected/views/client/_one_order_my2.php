@@ -1218,7 +1218,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 			</div>
 		<? elseif ($order['hide_edit_order'] == '1') : ?>
 
-			<div style="margin-top: 22px"><b>Данные подтверждены</b></div>
+			<div style="margin-top: 0"><b>Данные подтверждены</b></div>
 
 		<? endif; ?>
 

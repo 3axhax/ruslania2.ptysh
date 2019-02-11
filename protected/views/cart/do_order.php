@@ -121,7 +121,7 @@
     
     .cart_box {
         overflow: auto;
-        max-height: 565px;
+        max-height: 236px;
     }
     
     .cart_footer { float: right; }
@@ -617,7 +617,13 @@
 
     
     $(document).ready(function() {
-
+		
+		var summ = $('.cart_box table.cart tr').slice(0).height() + $('.cart_box table.cart tr').slice(1).height() + $('.cart_box table.cart tr').slice(2).height() + 3;
+		
+		$('.cart_box').css('max-height', summ + 'px');
+		
+		
+		
 		checked_sogl();
 
         //load_form();
@@ -694,6 +700,8 @@
     
     function checked_sogl() {
      
+	 
+	 
 	 //$('.selp.oplata3').click();
 	 
      var csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -706,6 +714,8 @@
             
             $.post('<?=Yii::app()->createUrl('cart/getaddress')?>', {id_address: id_addr, YII_CSRF_TOKEN: csrf[1]}, function(data) {
                 
+				
+				
                 $('input.country_id').val(data);
                 
                 cost_izmena(data, id_addr);
@@ -713,6 +723,10 @@
                 $.post('<?=Yii::app()->createUrl('cart')?>getdeliveryinfo2', { id_country: $('input.country_id').val(), YII_CSRF_TOKEN: csrf[1] }, function(data) {
 					
 					if (data) {
+						
+						var summ = $('.cart_box table.cart tr').slice(0).height() + $('.cart_box table.cart tr').slice(1).height() + $('.cart_box table.cart tr').slice(2).height() + 3;
+		
+		$('.cart_box').css('max-height', summ + 'px');
 						
 						data = JSON.parse(data);
 					
@@ -758,7 +772,7 @@
                     if ($('input.country_id').val()=='68' || $('input.country_id').val()=='62' || $('input.country_id').val()=='') {
                 
 					$('.seld1').removeClass('act_city');
-
+	
             } else {
                 $('.seld1').addClass('act_city');  
             }

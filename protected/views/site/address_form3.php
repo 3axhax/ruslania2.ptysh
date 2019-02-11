@@ -53,7 +53,7 @@ function decline_goods($num) {
 
 
 
-<div class="span12" style="margin-left: 0;">
+<div class="span7" style="margin-left: 0;">
 <div class="p3 step1"><?=$ui->item('CARTNEW_REG_STEP1_TITLE')?></div>
 <?php if($mode == 'edit')  { echo $form->hiddenField('id'); } ?>
 
@@ -300,21 +300,48 @@ echo '</div>';
 
  </div>
 
- <?php
-		$return = true;
-		$hide_delivery = 'Y';
-		$sum_weight = 0;
-		 foreach ($cart['items'] as $id => $item) : ?>
-			
-            <?
-		
-		$sum_weight += $item['weight'];
+  <div class="span7" style="float: right; width: 575px; margin-top: 21px;">
 
-		?>
+        <div class="cart_header" style="width: 553px;">
+            В корзине <?=decline_goods($cart['fullInfo']['count'])?> на сумму <?=$PH->FormatPrice($cart['fullInfo']['cost']);?>
+        </div>
 
-           
-            
-            <?php endforeach; ?>
+        <div class="cart_box">
+            <?//var_dump($cart);?>
+            <table class="cart" style="width: 100%;">
+                <tbody>
+
+
+                <?php foreach ($cart['items'] as $id => $item) : ?>
+
+                    <?//var_dump($cart);?>
+
+                    <tr>
+
+                        <td style="width: 31px;">
+                            <span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
+                            <?php /*
+                <img width="31" height="31" align="middle" alt="" style="vertical-align: middle" data-bind="attr: { alt: Title}" src="/pic1/cart_ibook.gif">
+ */ ?>
+                        </td>
+                        <td>
+						
+							<?=(($item['weight'] == 0) ? '<div style="float: right; color: #5BB75B;">Бесплатная доставка</div>' : '')?>
+						
+                            <span class="a"><?=$item['title']?></span>
+                            <div class="minitext"><?=$item['month_count']?> <?if ($item['entity'] == 30) { echo 'мес.'; } else {?>шт.<? } ?> x <?=$PH->FormatPrice($item['price']);?><?if ($item['weight'] > 0) {?> <br /> Вес: <?=($item['weight'])?> кг<?}?></div>
+                        </td>
+
+                    </tr>
+
+                <?php endforeach; ?>
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    
  <div class="clearfix"></div>
  
 <script>

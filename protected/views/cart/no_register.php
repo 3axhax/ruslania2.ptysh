@@ -111,7 +111,7 @@
 
     .cart_box {
         overflow: auto;
-        max-height: 724px;
+        max-height: 236px;
     }
 
     .cart_footer { float: right; }
@@ -356,7 +356,9 @@
         $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', {id_country: city_id, YII_CSRF_TOKEN: csrf[1]}, function (data) {
 
             var al = JSON.parse(data);
-
+			
+			
+			
             //alert(al.fullpricehidden);
 
             $('.cart_header').html(al.cart_header);
@@ -364,7 +366,11 @@
             $('.footer2').html(al.footer2);
             $('.footer3').html(al.footer3);
             $('input.costall').val(al.fullpricehidden);
-
+			
+			var summ = $('.cart_box table.cart tr').slice(0).height() + $('.cart_box table.cart tr').slice(1).height() + $('.cart_box table.cart tr').slice(2).height() + 3;
+		
+		$('.cart_box').css('max-height', summ + 'px');
+			
         });
 
     }
@@ -666,7 +672,11 @@
     }
 
     $(document).ready(function () {
-
+		
+		var summ = $('.cart_box table.cart tr').slice(0).height() + $('.cart_box table.cart tr').slice(1).height() + $('.cart_box table.cart tr').slice(2).height() + 3;
+		
+		$('.cart_box').css('max-height', summ + 'px');
+		
         load_form();
 
         $(document).click(function (event) {
