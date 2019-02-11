@@ -83,6 +83,10 @@ class ModelsSeoEntity extends Seo_settings {
 		$params = FilterNames::get($this->_eid, $this->_cid)->getParams();
 		if (!empty($params)) $this->_replace['{params}'] = implode('; ', $params);
 
+		if (!empty($this->_replace['{params}'])) {
+			if (!empty($this->_id)) $this->_settings['h1'] = str_replace('{entity_name} {params}', '{entity_name}, {params}', $this->_settings['h1']);
+		}
+
 //		Debug::staticRun(array($this->_replace));
 
 	}

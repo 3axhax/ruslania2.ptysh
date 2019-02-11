@@ -19,18 +19,21 @@ class FilterNames {
 					$this->_data['year'] = array();
 					if (!empty($filter['year_min'])) $this->_data['year']['min'] = $filter['year_min'];
 					if (!empty($v)) $this->_data['year']['max'] = $v;
+					if (isset($this->_data['year']['max'])&&isset($this->_data['year']['min'])&&($this->_data['year']['max'] == $this->_data['year']['min'])) unset($this->_data['year']['max']);
 					if (empty($this->_data['year'])) unset($this->_data['year']);
 					break;
 				case 'cost_max':
 					$this->_data['cost'] = array();
 					if (!empty($filter['cost_min'])) $this->_data['cost']['min'] = $filter['cost_min'];
 					if (!empty($v)) $this->_data['cost']['max'] = $v;
+					if (isset($this->_data['cost']['max'])&&isset($this->_data['cost']['min'])&&($this->_data['cost']['max'] == $this->_data['cost']['min'])) unset($this->_data['cost']['max']);
 					if (empty($this->_data['cost'])) unset($this->_data['cost']);
 					break;
 				case 'release_year_max':
 					$this->_data['release_year'] = array();
 					if (!empty($filter['release_year_min'])) $this->_data['release_year']['min'] = $filter['release_year_min'];
 					if (!empty($v)) $this->_data['release_year']['max'] = $v;
+					if (isset($this->_data['release_year']['max'])&&isset($this->_data['release_year']['min'])&&($this->_data['release_year']['max'] == $this->_data['release_year']['min'])) unset($this->_data['release_year']['max']);
 					if (empty($this->_data['release_year'])) unset($this->_data['release_year']);
 					break;
 				default: if (!empty($v)) $this->_data[$k] = $v; break;
@@ -62,17 +65,19 @@ class FilterNames {
 
 	private function _getCost() {
 		if (empty($this->_data['cost'])) return '';
-		return mb_strtolower(Yii::app()->ui->item('CART_COL_PRICE'), 'utf-8') . ': ' . implode('-',  $this->_data['cost']) . Currency::ToSign(Yii::app()->currency);
+		return /*mb_strtolower(Yii::app()->ui->item('CART_COL_PRICE'), 'utf-8') . ': ' . */implode('-',  $this->_data['cost']) . Currency::ToSign(Yii::app()->currency);
 	}
 
 	private function _getRelease_year() {
 		if (empty($this->_data['release_year'])) return '';
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_YEAR_FILM'), 'utf-8') . ': ' . implode('-',  $this->_data['release_year']);
+//		return mb_strtolower(Yii::app()->ui->item('A_NEW_YEAR_FILM'), 'utf-8') . ': ' . implode('-',  $this->_data['release_year']);
+		return Yii::app()->ui->item('IN_YEAR', implode('-',  $this->_data['release_year']));
 	}
 
 	private function _getYear() {
 		if (empty($this->_data['year'])) return '';
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_YEAR'), 'utf-8') . ': ' . implode('-',  $this->_data['year']);
+//		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_YEAR'), 'utf-8') . ': ' . implode('-',  $this->_data['year']);
+		return Yii::app()->ui->item('IN_YEAR', implode('-',  $this->_data['year']));
 	}
 
 	private function _getAvail() {
@@ -85,7 +90,7 @@ class FilterNames {
 	private function _getAuthor() {
 		if (empty($this->_data['author'])) return '';
 		$author = CommonAuthor::model()->GetById($this->_data['author']);
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_AUTHOR'), 'utf-8') . ': ' . ProductHelper::GetTitle($author);
+		return /*mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_AUTHOR'), 'utf-8') . ': ' . */ProductHelper::GetTitle($author);
 	}
 
 	private function _getPublisher() {
@@ -98,14 +103,14 @@ class FilterNames {
 		}
 
 		$publisher = Publisher::model()->GetById($this->_eid, $this->_data['publisher']);
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($publisher);
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($publisher);
 	}
 
 	private function _getSeries() {
 		if (empty($this->_data['series'])) return '';
 		$label = Yii::app()->ui->item('A_NEW_FILTER_SERIES');
 		$serie = Series::model()->findByAttributes(['id'=>$this->_data['series'], 'entity'=>$this->_eid]);
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($serie->getAttributes());
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($serie->getAttributes());
 	}
 
 	private function _getBinding() {
@@ -122,7 +127,7 @@ class FilterNames {
 			if (!empty($b)) $bindings[] = ProductHelper::GetTitle($b);
 		}
 		if (empty($bindings)) return '';
-		return mb_strtolower($label, 'utf-8') . ': ' . implode(', ', $bindings);
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */implode(', ', $bindings);
 	}
 
 	private function _getLang_sel() {
@@ -146,19 +151,19 @@ class FilterNames {
 	private function _getActors() {
 		if (empty($this->_data['actors'])) return '';
 		$actor = CommonAuthor::model()->GetById($this->_data['actors']);
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_ACTORS'), 'utf-8') . ': ' . ProductHelper::GetTitle($actor);
+		return /*mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_ACTORS'), 'utf-8') . ': ' . */ProductHelper::GetTitle($actor);
 	}
 
 	private function _getDirectors() {
 		if (empty($this->_data['directors'])) return '';
 		$item = CommonAuthor::model()->GetById($this->_data['directors']);
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_DIRECTORS'), 'utf-8') . ': ' . ProductHelper::GetTitle($item);
+		return /*mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_DIRECTORS'), 'utf-8') . ': ' . */ProductHelper::GetTitle($item);
 	}
 
 	private function _getPerformer() {
 		if (empty($this->_data['performer'])) return '';
 		$item = CommonAuthor::model()->GetById($this->_data['performer']);
-		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_PERFORMER'), 'utf-8') . ': ' . ProductHelper::GetTitle($item);
+		return /*mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_PERFORMER'), 'utf-8') . ': ' . */ProductHelper::GetTitle($item);
 	}
 
 	private function _getLang_video() {
@@ -167,7 +172,7 @@ class FilterNames {
 		if ($this->_data['lang_video'] <= 0) return '';
 		$stream = VideoAudioStream::model()->findByPk($this->_data['lang_video']);
 		$label = Yii::app()->ui->item('A_NEW_FILTER_LANG_VIDEO');
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($stream->getAttributes());
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($stream->getAttributes());
 	}
 
 	private function _getSubtitles_video() {
@@ -176,7 +181,7 @@ class FilterNames {
 
 		$subtitle = VideoSubtitle::model()->findByPk($this->_data['subtitles_video']);
 		$label = Yii::app()->ui->item('A_NEW_FILTER_LANG_SUBTITLES');
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($subtitle->getAttributes());
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($subtitle->getAttributes());
 	}
 
 	private function _getFormat_video() {
@@ -187,7 +192,7 @@ class FilterNames {
 		if (empty($item)) return '';
 
 		$label = Yii::app()->ui->item('A_NEW_FILTER_FORMAT_VIDEO');
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($item);
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($item);
 	}
 
 	private function _getCountry() {
@@ -198,7 +203,7 @@ class FilterNames {
 		if (empty($item)) return '';
 
 		$label = Yii::app()->ui->item('A_NEW_FILTER_PERIODIC_COUNTRY');
-		return mb_strtolower($label, 'utf-8') . ': ' . ProductHelper::GetTitle($item->getAttributes());
+		return /*mb_strtolower($label, 'utf-8') . ': ' . */ProductHelper::GetTitle($item->getAttributes());
 	}
 
 	/**
