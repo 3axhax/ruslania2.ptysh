@@ -15,10 +15,18 @@ class RecountItemsCommand extends CConsoleCommand {
 			$sql = 'drop table if exists _tmp_position_' . $sort;
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
+		$sql = 'drop table if exists items_years';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+		$sql = 'RENAME TABLE `_years` TO `items_years`';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
 	}
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+		$sql = 'drop table if exists _years';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+		$sql = 'create table _years (`year` int, eid int, key(eid)) engine=myisam';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'create temporary table _tmp_least_categorys (id int, primary key(id))';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'create temporary table _tmp_counts (id int, items_count int, avail_items_count int, primary key(id))';
@@ -32,6 +40,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			$this->_years($entity, $params);
 			if ($entity == 20) continue;
 			$sql = 'update ' . $params['site_category_table'] . ' set items_count = 0, avail_items_count = 0';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -348,4 +357,21 @@ class RecountItemsCommand extends CConsoleCommand {
 		}
 	}
 
+	/**
+	 * запрос для получения годов, в которых есть товар очень медленный,
+	 * здесь года сохраняются в таблицу
+	 */
+	private function _years($entity, $params) {
+		if (Entity::checkEntityParam($entity, 'years')) {
+			$sql = ''.
+				'insert into _years (`year`, eid) '.
+				'select t.year, ' . (int) $entity . ' '.
+				'from `' . $params['site_table'] . '` t '.
+				'where (t.year is not null) and (t.year > 0) and (t.avail_for_order > 0) '.
+				'group by t.year '.
+			'';
+			echo $sql . "\n";
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+		}
+	}
 }

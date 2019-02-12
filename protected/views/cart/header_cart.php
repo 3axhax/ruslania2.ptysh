@@ -71,7 +71,7 @@
     $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
     $baseUrl = Yii::app()->assetManager->publish($assets);
 ?>
-<?php if ($refererRoute != 'site/advsearch'): ?>
+<?php if ($refererRoute != 'site/advsearch' AND $refererRoute != 'site/login'): ?>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.mapping.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockoutPostObject.js"></script>
@@ -135,7 +135,7 @@
 
         self.ReadyPriceStr = function(item) {
             if(item.Entity() != <?=Entity::PERIODIC; ?>)
-                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str() + '<?=Currency::ToSign()?>';
+                return item.UseVAT() ? item.PriceVATStr() : item.PriceVAT0Str() + '<?//=Currency::ToSign()?>';
             else {
                 if(item.Price2Use() == <?=Cart::FIN_PRICE; ?>) {
                     return item.UseVAT() ? (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>' : (parseInt(item.Quantity()) * self.ReadyPrice(item)).toFixed(2) + ' <?=Currency::ToSign()?>';
@@ -170,7 +170,10 @@
                         update_header_cart();
 						
 						$('a.cart'+item.ID()).removeClass('green_cart');
-						$('a.cart'+item.ID()+' span').html('<?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?>');
+						
+						$('a.cart'+item.ID()).html('');
+						$('a.cart'+item.ID()).attr('style', 'width: 40px; float: right;  margin-top: 8px;');
+						
 						
 						$('div.already-in-cart'+item.ID()).html('&nbsp;');
 						
@@ -215,7 +218,7 @@
 			
                 $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
 					
-					var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+					var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
 				
 				repltext = repltext.replace('%d', post['quantity']);
 				
@@ -248,7 +251,7 @@
 			
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
 				
-				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
 				
 				repltext = repltext.replace('%d', post['quantity']);
 				
@@ -273,7 +276,7 @@
 			
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
                 
-				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
 				
 				repltext = repltext.replace('%d', post['quantity']);
 				

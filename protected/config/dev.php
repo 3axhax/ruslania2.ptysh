@@ -23,7 +23,7 @@ return CMap::mergeArray(
              ),
 
              'queryCache' => array(
-                 'class' => 'CDummyCache',
+                 'class' => 'CMemCache',
              ),
 
              'log' => array(
