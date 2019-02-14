@@ -77,9 +77,9 @@ function decline_goods($num, $ui) {
     <tr>
 		 <td style="width: 200px;"><b><?=$ui->item("address_type"); ?></b></td>
         <td>
-            <label style="float: left; margin-right: 20px;"><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <label style="float: left; margin-right: 20px;"><?=$form->radioButton('type', array('value' => 1, 'uncheckValue' => null, 'onclick'=>'save_form(); cost_izmena($(\'#Address_country\').val())', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?></label>
-            <label style="float: left;"><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form()', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
+            <label style="float: left;"><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null, 'onclick'=>'save_form(); cost_izmena($(\'#Address_country\').val())', 'class'=>'checkbox_custom')); ?><span class="checkbox-custom"></span>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label>
 		</td>
     </tr>
@@ -103,7 +103,7 @@ function decline_goods($num, $ui) {
     <tr data-bind="visible: type()==1">
         <td nowrap="" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form()')); ?>
+            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'),'oninput'=>'save_form(); cost_izmena($(\'#Address_country\').val())')); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
@@ -140,7 +140,7 @@ function decline_goods($num, $ui) {
             array(
                 'data-bind' => array('optionsCaption' => "'---'"),
                 'onclick' => 'change_city($(this)); save_form();',
-                'onchange' => 'change_city($(this));'
+                'onchange' => ''
                 )); ?>
             <span class="texterror"></span>
         </td>
@@ -210,12 +210,29 @@ function decline_goods($num, $ui) {
     
         <table class="cart" style="width: 100%;">
         <tbody>
-            
+            <?php
+				$pickpoint = false;
+				foreach ($cart['items'] as $id => $item) : ?>
+				
+					<? 
+					
+						if ($item['entity'] != '30') {
+							
+							$pickpoint=true;
+							break;
+						}
+					
+					?>
+				
+				<? endforeach; ?>
             
             <?php 
 		$return = true;
 		$hide_delivery = 'Y';
 		$sum_weight = 0;
+		
+		
+		
 		foreach ($cart['items'] as $id => $item) : ?>
             <?
 		$sum_weight += $item['weight'];	

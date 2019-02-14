@@ -10,8 +10,27 @@
 <input type="hidden" value="" name="country_id" class="country_id" />
 
 <?php
+				$subscribe = true;
+				foreach ($cart['items'] as $id => $item) : ?>
+				
+					<? 
+					
+						if ($item['entity'] != '30') {
+							
+							$subscribe=false;
+							break;
+						}
+					
+					?>
+				
+				<? endforeach; ?>
+
+<?php
 $PH = new ProductHelper();
-function decline_goods($num) {
+function decline_goods($num, $ui) {
+    //global $ui;
+    //var_dump($ui);
+    
         $count = $num;
 
         $num = $num % 100;
@@ -23,15 +42,15 @@ function decline_goods($num) {
         switch ($num) {
 
             case 1: {
-                    return $count . ' товар';
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE2');
                 }
 
             case 2: case 3: case 4: {
-                    return $count . ' товара';
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE1');
                 }
 
             default: {
-                    return $count . ' товаров';
+                    return $count . ' '.$ui->item('CARTNEW_PRODUCTS_TITLE3');
                 }
         }
     }
@@ -83,14 +102,20 @@ $addr_list = $addr->GetAddresses($this->uid);
 echo ' <span class="err_addr" style="color: #ff0000; font-size: 12px;"></span><div class="clearfix" style="height: 10px;"></div><div class="addr_delivery">';
 if (count($addr_list)) {
     
-    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px; width: 60%" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY').'</option>' : '' );
-
+    echo '<select name="id_address" style="margin-bottom: 0;margin-right: 8px; width: 85%" onchange="checked_sogl()">'.((!$pickpoint) ? '' : '<option value="0">Я заберу заказ в магазине</option>');
+	
     $ch = new CommonHelper();
 
     foreach ($addr_list as $addr) {
         
         $adr_str = $ch->FormatAddress($addr);
         
+		$addrGet = CommonHelper::FormatAddress2($addr);
+		
+		if ((trim($addrGet['streetaddress']) != '' AND trim($addrGet['postindex']) != '' AND trim($addrGet['city']) != '') AND !$pickpoint) {
+			//continue;
+		}
+		
         echo '<option value="'.$addr['address_id'].'">'.$adr_str.'</option>';
 
     }
@@ -143,6 +168,8 @@ echo '</div>';
     <? $user = User::getUserID(Yii::app()->user->id); ?>
 
 <a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 0; padding: 6px 0; background-color: #28618E; width: 40px;">+</a></div>
+<div style="clear: both"></div>
+<div style="margin-top: 20px;" class="text_samov">Если вы хотите, чтобы заказ забрал другой человек, то выберите его в списке либо добавьте, нажав на "+"</div>
 <div style="clear: both"></div>
 <table class="address addr1" style="display: none; margin-top: 10px; width: 570px;">
     <tbody>
@@ -214,7 +241,7 @@ echo '</div>';
         <td class="smalltxt1"></td>
     </tr>
     
-    <tr>
+    <tr class="states_list" style="display: none">
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
         <td class="maintxt-vat select_states">
             <select name="Address[state_id]" disabled onclick="save_form();"><option value="">---</option></select>
@@ -303,19 +330,20 @@ echo '</div>';
   <div class="span7" style="float: right; width: 575px; margin-top: 21px;">
 
         <div class="cart_header" style="width: 553px;">
-            В корзине <?=decline_goods($cart['fullInfo']['count'])?> на сумму <?=$PH->FormatPrice($cart['fullInfo']['cost']);?>
+            <?=sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), decline_goods($cart['fullInfo']['count'], $ui), $PH->FormatPrice($cart['fullInfo']['cost']))?>
         </div>
 
         <div class="cart_box">
             <?//var_dump($cart);?>
             <table class="cart" style="width: 100%;">
                 <tbody>
-
+				
+				
 
                 <?php foreach ($cart['items'] as $id => $item) : ?>
 
-                    <?//var_dump($cart);?>
-
+                    <? $sum_weight += $item['weight']; ?>
+						
                     <tr>
 
                         <td style="width: 31px;">
@@ -346,7 +374,7 @@ echo '</div>';
  
 <script>
 
-	<? if ($sum_weight == '0') { ?>
+	<? if ($sum_weight == '0' AND $subscribe) { ?>
 
 	$(document).ready(function() {
 
@@ -450,7 +478,7 @@ echo '</div>';
 echo '<div class="addr_buyer" style="margin-top: 10px; display: none;">';
 if (count($addr_list)) {
     
-    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px; width: 400px;" onchange="checked_sogl()">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER').'</option>' : '' );
+    echo '<label style="font-weight: bold;">'.$ui->item('CARTNEW_ADDR_BUYER_LABEL').'</label><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px; width: 400px;">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER').'</option>' : '' );
 
     $ch = new CommonHelper();
     

@@ -300,7 +300,7 @@ class Order extends CMyActiveRecord
                       ':daid' => $order->DeliveryAddressID,
                       ':baid' => $order->BillingAddressID,
                       ':dtid' => $order->DeliveryTypeID,
-                      ':ptid' => $ptype, // payment in next step
+                      ':ptid' => (int) $ptype, // payment in next step
                       ':cur' => $order->CurrencyID,
                       ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
                       ':full' => $fullPrice,
@@ -474,6 +474,15 @@ class Order extends CMyActiveRecord
 		
 		$sql = 'SELECT COUNT(*) FROM users_orders WHERE uid=:uid';
         $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array('uid'=>$uid));
+		
+		return $cnt;
+		
+	}
+	
+	function isMyOrder($uid, $oid){
+		
+		$sql = 'SELECT COUNT(*) FROM users_orders WHERE uid=:uid AND id=:id';
+        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array('uid'=>$uid, 'id'=>$oid));
 		
 		return $cnt;
 		

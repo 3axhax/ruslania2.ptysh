@@ -209,7 +209,10 @@
     
 </style>
 <style>
-
+	
+	.select_states select { width: 100% !important;  }
+	.select_states2 select { width: 100% !important;  }
+	
     /* Скрываем реальный чекбокс */
     .checkbox_custom {
         display: none;
@@ -253,7 +256,26 @@
 </style>
 <script src="/js/jquery.cookie.js"></script>
 
-<? $addr = new Address(); $addr_list = $addr->GetAddresses($this->uid); ?>
+<? $addr = new Address(); $addr_list = $addr->GetAddresses($this->uid); 
+
+$cart_get = CartController::actionGetAll(0);
+		
+$cart_get = $cart_get['CartItems'];
+
+$pickpoint = false;
+	
+	foreach ($cart_get as $id => $item) :
+	
+		if ($item['Entity'] != 30) {
+			
+			$pickpoint = true;
+			break;
+			
+		}
+	
+	endforeach;
+	
+?>
 
 <script>
     var promocodeHandler = null;
@@ -438,6 +460,13 @@
             $('select[name=id_address_b]').val(s2);
             
             $('table.addr1, .btn.btn-success.addr1, .cancel_add_adr').hide('fade');
+			
+			checked_sogl();
+			
+			$('.states_list').hide();
+			
+			$('#Address_business_title, #Address_business_number1, #Address_receiver_middle_name, #Address_country, #Address_city, #Address_postindex, #Address_streetaddress, #Address_contact_phone, #Address_notes').val('');
+			
             
         });
         
@@ -507,6 +536,10 @@
 
             $('select[name=id_address]').val(s1);
             $('select[name=id_address_b]').val(data.ida);
+			
+			$('#Address2_business_title, #Address2_business_number1, #Address2_receiver_last_name, #Address2_receiver_first_name, #Address2_receiver_middle_name, #Address2_country, #Address_city, #Address2_postindex, #Address2_streetaddress, #Address2_contact_phone, #Address2_notes').val('');
+			
+			$('.states_list2').hide();
             
             $('.block_addr_add_2').hide();
             
@@ -578,28 +611,49 @@
 
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
+		if (cont.val() != '') {
 
-        if (cont.val() != '') {
+			$.post('<?= Yii::app()->createUrl('cart') ?>getcodecity', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+                if (data != '') {
+                    $('#Address_contact_phone').val('+' + data);
+                } else {
 
+                    $('#Address_contact_phone').val('');
 
-            if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
+                }
+
+               
+
+            });
+		
+            //if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
 
                 $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {
                     id: cont.val(),
                     YII_CSRF_TOKEN: csrf[1]
                 }, function (data) {
-
+					
+					if(data != '<select name="Address[state_id]" onclick="" style="width: 220px;"><option value="">---</option></select>') {
+					
+					$('.states_list').show();
+					
                     $('.select_states').html(data);
 
                     $('.select_states select').val($.cookie('Address_state_id2'));
-
+					
+					} else {
+						
+						$('.states_list').hide();
+						$('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
+						
+					}
                 });
 
-            } else {
+            // } else {
+				// $('.states_list').hide();
+                // $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
 
-                $('.select_states').html('<select name="Address[state_id]" disabled><option value="">---</option></select>');
-
-            }
+            // }
 
         }
 
@@ -700,7 +754,15 @@
     
     function checked_sogl() {
      
-	 
+	 if ($('select[name=id_address]').val() == '0') {
+		 
+		 $('.text_samov').show();
+		 
+	 } else {
+		 
+		 $('.text_samov').hide();
+		 
+	 }
 	 
 	 //$('.selp.oplata3').click();
 	 
@@ -755,8 +817,17 @@
 						
 					} else {
 						//$('.seld2').show();
+						
+						
+						<? if ($pickpoint) { ?>
+						
 						$('.seld1').click();
+						$('.oplata3').click();
+						
 						$('.seld02, .seld03, .seld04').addClass('disabled');
+						
+						<? } else { echo '$(\'.seld02\').click();'; }?>
+						
 						$('.zabr_market').html('<?=$ui->item('CARTNEW_PICK_UP_STORE1')?>');
 					}
 					
@@ -959,7 +1030,7 @@
         
         if ($('select[name=id_address]').val() == '' || ($('select[name=id_address_b]').val() == '' && $('#addr_buyer').is(':checked') == false)) {
          
-            $('.err_addr').html('Выберите адреса');
+            $('.err_addr').html('Выберите адрес');
          error = error + 1;
          $('html, body').scrollTop($('.err_addr').offset().top);
         } else {
@@ -1094,6 +1165,19 @@
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
         if (cont.val() != '') {
+			
+			$.post('<?= Yii::app()->createUrl('cart') ?>getcodecity', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+                if (data != '') {
+                    $('#Address2_contact_phone').val('+' + data);
+                } else {
+
+                    $('#Address2_contact_phone').val('');
+
+                }
+
+               
+
+            });
 			
 			if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
 

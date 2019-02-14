@@ -256,7 +256,12 @@
 
 				$('select[name=id_address]').val(s1);
 				$('select[name=id_address_b]').val(data.ida);
-            
+				
+				$('#Address'+num_cont+'_business_title, #Address'+num_cont+'_business_number1, #Address'+num_cont+'_receiver_last_name, #Address'+num_cont+'_receiver_first_name, #Address'+num_cont+'_receiver_middle_name, #Address'+num_cont+'_country, #Address_city, #Address'+num_cont+'_postindex, #Address'+num_cont+'_streetaddress, #Address'+num_cont+'_contact_phone, #Address'+num_cont+'_notes').val('');
+			
+			$('.states_list'+num_cont).hide();
+				
+				
             $('.div_box_tbl'+num_cont).hide('fade');
 			}
         });
@@ -271,6 +276,19 @@
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
         if (cont.val() != '') {
+			
+			$.post('<?= Yii::app()->createUrl('cart') ?>getcodecity', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+                if (data != '') {
+                    $('#Address'+tbl + '_contact_phone').val('+' + data);
+                } else {
+
+                    $('#Address'+tbl + '_contact_phone').val('');
+
+                }
+
+               
+
+            });
 			
 			if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
 
@@ -439,6 +457,13 @@
 	</script>
 
 <?
+
+if (!$_GET['ptype']) {
+	
+	$_GET['ptype'] = $order['payment_type_id'];
+	
+}
+
 $addrGet = CommonHelper::FormatAddress2($order['DeliveryAddress']);
 
 $addr = new Address();
@@ -474,7 +499,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 		<div class="mbt10 info_order">
 			<div class="row">
 
-				<div class="<? if ($hide_btn_next == '1') : ?>address_error<? endif; ?> address_error_box">
+				<div class="<? if ($hide_btn_next == '1' AND $order['delivery_type_id'] != '0') : ?>address_error<? endif; ?> address_error_box">
 
 					<span class="span1"><?= $ui->item("ORDER_MSG_DELIVERY_ADDRESS"); ?>:</span>
 
@@ -492,8 +517,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 								<span
 									class="deliveryAddress"><?= CommonHelper::FormatAddress($order['DeliveryAddress']); ?></span>
 
-								<? if ($order['hide_edit_order'] != '1') : ?><span style="width: 5pt"
-								                                                   class="redtext">*</span> <a
+								<? if ($order['hide_edit_order'] != '1' AND $order['delivery_type_id'] != '0') : ?> <a
 									href="javascript:;" style="margin-left: 20px;" title="Редактировать адрес доставки"
 									onclick="editAddr(<?= $order['id']; ?>, $(this));"><i class="fa fa-pencil"></i>
 									</a><? endif; ?>
@@ -502,7 +526,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 
 					<div class="clearfix"></div>
 
-					<? $class = ' none'; if ($hide_btn_next == '1') : ?>
+					<? $class = ' none'; if ($hide_btn_next == '1' AND $order['delivery_type_id'] != '0') : ?>
 						<? $class = ' block'; ?>
 					<? endif; ?>
 					<span class="redtext error_addr" style="margin-top: 5px; display: <?=$class?>; ">* Заполните адрес полностью</span>
@@ -822,7 +846,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 						   onclick="editAddr2(<?= $order['id']; ?>, $(this));"><i class="fa fa-pencil"></i>
 						</a>
 						
-						<? elseif ( $cnt_orders > 1 ) : ?>
+						<? elseif ( $cnt_orders > 1 AND $order['hide_edit_order'] != '1') : ?>
 						
 						<a href="javascript:;" style="margin-left: 20px;" title="Редактировать адрес плательщика"
 						   onclick="editAddr2(<?= $order['id']; ?>, $(this));"><i class="fa fa-pencil"></i>
@@ -844,7 +868,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 							
 							if ($cnt_orders > 1) {
     
-							echo '<div style="margin-toP: 22px;"><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px; width: 60%" onchange="saveAddrSelect(\''.$order['id'].'\', $(this), \'2\')">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY').'</option>' : '' );
+							echo '<div style="margin-toP: 22px;"><select name="id_address_b" style="margin-bottom: 0;margin-right: 8px; width: 60%" onchange="saveAddrSelect(\''.$order['id'].'\', $(this), \'2\')">'.((count($addr_list) > 1) ? '<option value="">'.$ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER').'</option>' : '' );
 
 							$ch = new CommonHelper();
 
@@ -1205,7 +1229,7 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 		<? if ($show_btn == '1' && $order['hide_edit_order'] != '1') : ?>
 			<div>
 				<a href="<?= Yii::app()->createUrl('cart/orderPay') ?>?<?= Yii::app()->getRequest()->getQueryString() ?>&hide_edit=1"
-				   class="order_start <?= (($hide_btn_next == '1') ? 'disabled ' : '') ?>continuebtn"
+				   class="order_start <?= (($hide_btn_next == '1'AND $order['delivery_type_id'] != '0') ? 'disabled ' : '') ?>continuebtn"
 				   style="background-color: #5bb75b;  padding: 12px; margin: 22px 0 0 0"
 				   onclick="<?= (($hide_btn_next) ? "$('.error_text_btn').removeClass('hide'); setTimeout(function() { $('.error_text_btn').addClass('hide'); }, 3000); return false" : '') ?>">
 					<span

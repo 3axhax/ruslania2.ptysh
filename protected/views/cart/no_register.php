@@ -1,5 +1,6 @@
 <hr />
 
+
 <div class="lang_yesno_box alerthtml" style="display: none;margin-left: -192px; width: 300px; padding: 34px 42px;">
 
 	<div style="text-align: center;" class="title"><?=$ui->item('ARE_YOU_SURE'); ?></div>
@@ -353,7 +354,7 @@
 
         var csrf = $('meta[name=csrf]').attr('content').split('=');
 
-        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', {id_country: city_id, YII_CSRF_TOKEN: csrf[1]}, function (data) {
+        $.post('<?= Yii::app()->createUrl('cart') ?>getcostizmena', { id_country: city_id, YII_CSRF_TOKEN: csrf[1], bnum: $('#Address_business_number1').val(), atype: $('#Address_type:checked').val() }, function (data) {
 
             var al = JSON.parse(data);
 			
@@ -552,6 +553,19 @@
 
         if (cont.val() != '') {
 			
+			$.post('<?= Yii::app()->createUrl('cart') ?>getcodecity', {id_country: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
+                if (data != '') {
+                    $('#Address2_contact_phone').val('+' + data);
+                } else {
+
+                    $('#Address2_contact_phone').val('');
+
+                }
+
+               
+
+            });
+			
 			if (cont.val() == 225 || cont.val() == 37 || cont.val() == 15) {
 
                 $.post('<?= Yii::app()->createUrl('cart') ?>loadstates', {id: cont.val(), YII_CSRF_TOKEN: csrf[1]}, function (data) {
@@ -563,6 +577,9 @@
                   
 
                 });
+				
+				
+				
 
             } else {
 				$('.states_list2').hide();
@@ -611,24 +628,26 @@
     }
 
     function save_form() {
-
+		
+		//alert(s);
+		
+		
         if (s) {
 
-            $.cookie('Address_business_title', $('#Address_business_title').val());
-            $.cookie('Address_business_number1', $('#Address_business_number1').val());
-            $.cookie('Address_type', $('#Address_type:checked').val());
-            $.cookie('Address_receiver_title_name', $('#Address_receiver_title_name').val());
-            $.cookie('Address_receiver_last_name', $('#Address_receiver_last_name').val());
-            $.cookie('Address_receiver_first_name', $('#Address_receiver_first_name').val());
-            $.cookie('Address_receiver_middle_name', $('#Address_receiver_middle_name').val());
-            $.cookie('Address_country', $('#Address_country').val());
-            $.cookie('Address_state_id', $('.select_states select').val());
-            $.cookie('Address_city', $('#Address_city').val());
-            $.cookie('Address_postindex', $('#Address_postindex').val());
-            $.cookie('Address_streetaddress', $('#Address_streetaddress').val());
-            $.cookie('Address_contact_email', $('#Address_contact_email').val());
-            $.cookie('Address_contact_phone', $('#Address_contact_phone').val());
-            $.cookie('Address_notes', $('#Address_notes').val());
+            $.cookie('Address_business_title', $('#Address_business_title').val(),{ path: '/'});
+            $.cookie('Address_business_number1', $('#Address_business_number1').val(),{ path: '/'});
+            $.cookie('Address_type', $('#Address_type:checked').val(),{ path: '/'});
+            $.cookie('Address_receiver_last_name', $('#Address_receiver_last_name').val(),{ path: '/'});
+            $.cookie('Address_receiver_first_name', $('#Address_receiver_first_name').val(),{ path: '/'});
+            $.cookie('Address_receiver_middle_name', $('#Address_receiver_middle_name').val(),{ path: '/'});
+            // $.cookie('Address_country', $('#Address_country').val());
+            // $.cookie('Address_state_id', $('.select_states select').val());
+            $.cookie('Address_city', $('#Address_city').val(),{ path: '/'});
+            $.cookie('Address_postindex', $('#Address_postindex').val(),{ path: '/'});
+            $.cookie('Address_streetaddress', $('#Address_streetaddress').val(),{ path: '/'});
+            $.cookie('Address_contact_email', $('#Address_contact_email').val(),{ path: '/'});
+            $.cookie('Address_contact_phone', $('#Address_contact_phone').val(),{ path: '/'});
+            $.cookie('Address_notes', $('#Address_notes').val(),{ path: '/'});
 
             // $.cookie('Address_notes');
 
@@ -647,9 +666,9 @@
 
 
 
-        $('#Address_country').val($.cookie('Address_country'));
-        $('#Address_country').change();
-        $('.select_states select').val($.cookie('Address_state_id'));
+        // $('#Address_country').val($.cookie('Address_country'));
+        // $('#Address_country').change();
+        // $('.select_states select').val($.cookie('Address_state_id'));
         $('#Address_city').val($.cookie('Address_city'));
         $('#Address_postindex').val($.cookie('Address_postindex'));
         $('#Address_streetaddress').val($.cookie('Address_streetaddress'));
@@ -1247,19 +1266,25 @@
 			$item['Title'];
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
-                if ($item['type'] == '1') { //фины
+				
+				//var_dump($item);
+				
+                if ($item['Price2Use'] == '1') { //фины
                     $price = $item['PriceVATFin'];
                 } else {
                     $price = $item['PriceVATWorld'];
                 }
             } else {
+				
+				
+				
                 $price = $item['PriceVAT'];
             }
             if (!$withVat) {
                 
 				if ($item['Entity'] == 30) {
 				
-				if ($item['type'] == '1') { //фины
+				if ($item['Price2Use'] == '1') { //фины
                     $price = $item['PriceVAT0Fin'];
                 } else {
                     $price = $item['PriceVAT0World'];
