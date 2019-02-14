@@ -506,11 +506,11 @@ class CartController extends MyController {
 		
 		
 		
-		$sql = 'UPDATE users_orders SET payment_type_id=:ptype WHERE id=:id LIMIT 1';
+		$sql = 'UPDATE users_orders SET payment_type_id=:ptype, must_upgrade = 1 WHERE id=:id LIMIT 1';
         Yii::app()->db->createCommand($sql)->execute(array(':ptype' => $ptype, ':id' => $id));
         //меняем в базе старого сайта тип оплаты
-        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
-        Yii::app()->db->createCommand($sql)->execute(array(':id' => $id));
+//        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
+//        Yii::app()->db->createCommand($sql)->execute(array(':id' => $id));
 		
         if ($ptype <= 1)
             $ptype = 0;

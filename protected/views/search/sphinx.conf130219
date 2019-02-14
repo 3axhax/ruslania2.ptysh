@@ -10,46 +10,6 @@ source mysql
 	sql_query_pre 		= SET NAMES utf8
 }
 
-
-
-
-source items : mysql
-{
-	sql_attr_bigint		= isbnnum
-	sql_attr_bigint		= eancode
-	sql_attr_uint		= stock_id
-	sql_attr_uint		= entity
-	sql_attr_uint		= real_id
-	sql_attr_uint		= avail
-	sql_attr_uint       = position
-	sql_attr_uint       = time_position
-}
-
-source videos :items
-{
-}
-
-source videos_in_shop_without_morphy : videos
-{
-    sql_query		= select (400000000 + t.id) id, t.id real_id, t.avail_for_order avail, null isbnnum, t.stock_id, t.eancode, concat(lower(t.title_ru), ' ', lower(t.title_en), ' ', lower(t.title_rut), ' ', lower(t.title_fi)) title, '' description, \
-                    40 AS entity, positionTimeHL time_position, concat(1, case when (tIWL.item_id is not null) then 3 when (t.in_shop between 1 and 5) then 1 when (t.in_shop > 5) then 2 when (t.econet_skip > 0) then 5 else 6 end, 6) position \
-                    from video_catalog t \
-                    left join _items_with_label tIWL on (tIWL.item_id = t.id) and (tIWL.entity_id = 40) \
-                    where (t.avail_for_order > 0)
-}
-
-source videos_not_avail_without_morphy : videos
-{
-    sql_query		= select (400000000 + t.id) id, t.id real_id, t.avail_for_order avail, null isbnnum, t.stock_id, t.eancode, concat(lower(t.title_ru), ' ', lower(t.title_en), ' ', lower(t.title_rut), ' ', lower(t.title_fi)) title, '' description, \
-                    40 AS entity, positionTimeHL time_position, concat(3, case when (tIWL.item_id is not null) then 3 when (t.in_shop between 1 and 5) then 1 when (t.in_shop > 5) then 2 when (t.econet_skip > 0) then 5 else 6 end, 6) position \
-                    from video_catalog t \
-                    left join _items_with_label tIWL on (tIWL.item_id = t.id) and (tIWL.entity_id = 40) \
-                    where (t.avail_for_order = 0)
-}
-
-# spec_position = 4 зарезервировано для товаров автора (актера,режисера и тд)
-
-
 source products : mysql
 {
 #	sql_query		= SELECT *, REPLACE( REPLACE( isbn,  '-',  '' ) ,  'X',  '' ) AS isbnnum, bindingid AS binding  FROM all_products_with_avail
@@ -673,36 +633,6 @@ index products
     local = products_in_shop
     local = products_not_avail
 }
-
-index videos_in_shop_without_morphy : default
-{
-	source			= videos_in_shop_without_morphy
-	path			= /var/lib/sphinxsearch/data/videos_in_shop_without_morphy
-	morphology			= none
-	expand_keywords		= 1
-	index_exact_words   = 0
-	min_word_len		= 1
-	min_infix_len       = 0
-}
-
-index videos_not_avail_without_morphy : default
-{
-	source			= videos_not_avail_without_morphy
-	path			= /var/lib/sphinxsearch/data/videos_not_avail_without_morphy
-	morphology			= none
-	expand_keywords		= 1
-	index_exact_words   = 0
-	min_word_len		= 1
-	min_infix_len       = 0
-}
-
-index items_without_morphy
-{
-    type = distributed
-    local = videos_in_shop_without_morphy
-    local = videos_not_avail_without_morphy
-}
-
 
 
 index authors : default
