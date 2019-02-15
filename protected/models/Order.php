@@ -408,6 +408,10 @@ class Order extends CMyActiveRecord
 
         $sql = 'INSERT INTO users_orders_states (oid, state) VALUES (:oid, :state)';
         $cnt = Yii::app()->db->createCommand($sql)->execute($params);
+
+        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':id' => $oid));
+
         return $cnt;
     }
 
