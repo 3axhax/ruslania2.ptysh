@@ -26,7 +26,7 @@ class CartController extends MyController {
 		}
 		
 		
-		$sql = 'UPDATE users_orders SET '.$field.'=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['val'], ':id' => $_POST['id']));
+		$sql = 'UPDATE users_orders SET '.$field.'=:text, must_upgrade = "1" WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => (int) $_POST['val'], ':id' => $_POST['id']));
 		
 	
 		
@@ -51,6 +51,10 @@ class CartController extends MyController {
 	}
 	
 	public function actionEditAddr() {
+		
+		$sql = 'UPDATE users_orders SET must_upgrade = "1" WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':id' => $_POST['orderId']));
+		
+		
 		$sql = 'UPDATE user_address SET '.$_POST['name'].'=:text WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':text' => $_POST['val'], ':id' => $_POST['id']));
 		
 		
@@ -149,22 +153,22 @@ class CartController extends MyController {
     public function actionAddAddress() {
         if (Yii::app()->request->isPostRequest) {
             $p = $_POST;
-            $type = $p['Address']['type'];
-            $business_title = $p['Address']['business_title'];
-            $business_number1 = $p['Address']['business_number1'];
+            $type = htmlspecialchars($p['Address']['type']);
+            $business_title = htmlspecialchars($p['Address']['business_title']);
+            $business_number1 = htmlspecialchars($p['Address']['business_number1']);
             $userID = $this->uid;
-            $titul = $p['Address']['receiver_title_name'];
-            $fam = $p['Address']['receiver_last_name'];
-            $name = $p['Address']['receiver_first_name'];
-            $otch = $p['Address']['receiver_middle_name'];
-            $country = $p['Address']['country'];
-            $stat = $p['Address']['state_id'];
-            $city = $p['Address']['city'];
-            $post_index = $p['Address']['postindex'];
-            $address = $p['Address']['streetaddress'];
-            $email = $p['Address']['contact_email'];
-            $phone = $p['Address']['contact_phone'];
-            $comment = $p['Address']['notes'];
+            $titul = htmlspecialchars($p['Address']['receiver_title_name']);
+            $fam = htmlspecialchars($p['Address']['receiver_last_name']);
+            $name = htmlspecialchars($p['Address']['receiver_first_name']);
+            $otch = htmlspecialchars($p['Address']['receiver_middle_name']);
+            $country = htmlspecialchars($p['Address']['country']);
+            $stat = htmlspecialchars($p['Address']['state_id']);
+            $city = htmlspecialchars($p['Address']['city']);
+            $post_index = htmlspecialchars($p['Address']['postindex']);
+            $address = htmlspecialchars($p['Address']['streetaddress']);
+            $email = htmlspecialchars($p['Address']['contact_email']);
+            $phone = htmlspecialchars($p['Address']['contact_phone']);
+            $comment = htmlspecialchars($p['Address']['notes']);
             $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
                 . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
@@ -179,24 +183,25 @@ class CartController extends MyController {
 	public function actionAddAddress2() {
         if (Yii::app()->request->isPostRequest) {
             $p = $_POST;
-            $type = $p['Address2']['type'];
-            $business_title = $p['Address2']['business_title'];
-            $business_number1 = $p['Address2']['business_number1'];
+			
+			$type = htmlspecialchars($p['Address2']['type']);
+            $business_title = htmlspecialchars($p['Address2']['business_title']);
+            $business_number1 = htmlspecialchars($p['Address2']['business_number1']);
             $userID = $this->uid;
-            $titul = $p['Address2']['receiver_title_name'];
-            $fam = $p['Address2']['receiver_last_name'];
-            $name = $p['Address2']['receiver_first_name'];
-            $otch = $p['Address2']['receiver_middle_name'];
-            $country = $p['Address2']['country'];
-            $stat = $p['Address2']['state_id'];
-            $city = $p['Address2']['city'];
-            $post_index = $p['Address2']['postindex'];
-            $address = $p['Address2']['streetaddress'];
-            $email = $p['Address2']['contact_email'];
-            $phone = $p['Address2']['contact_phone'];
+            $titul = htmlspecialchars($p['Address2']['receiver_title_name']);
+            $fam = htmlspecialchars($p['Address2']['receiver_last_name']);
+            $name = htmlspecialchars($p['Address2']['receiver_first_name']);
+            $otch = htmlspecialchars($p['Address2']['receiver_middle_name']);
+            $country = htmlspecialchars($p['Address2']['country']);
+            $stat = htmlspecialchars($p['Address2']['state_id']);
+            $city = htmlspecialchars($p['Address2']['city']);
+            $post_index = htmlspecialchars($p['Address2']['postindex']);
+            $address = htmlspecialchars($p['Address2']['streetaddress']);
+            $email = htmlspecialchars($p['Address2']['contact_email']);
+            $phone = htmlspecialchars($p['Address2']['contact_phone']);
             $comment = ' ';
-            $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`, `type_address`) VALUES '
-                . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
+            $sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
+                . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . (int) $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
             $ret = Yii::app()->db->createCommand($sql)->execute();
             $idAddr2 = Yii::app()->db->getLastInsertID();
             $sql = 'INSERT INTO users_addresses (uid,address_id,if_default) VALUES ("' . $userID . '", "' . $idAddr2 . '", "0")';
@@ -260,6 +265,14 @@ class CartController extends MyController {
     }
     // Просмотр корзины
     public function actionView() {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Cart::CreateUrl('cart/view', $lang);
+			}
+		}
+		
+		
         $data = $this->GetFormRequest();
         if (!empty($data)) {
             foreach ($data as $igetalld => $value) {
@@ -372,13 +385,45 @@ class CartController extends MyController {
 		$cart = $this->actionGetAll(0);
 		
 		$cart = $cart['CartItems'];
-        
-		//var_dump($cart);
 		
 		//exit();
 		
-		$country = Country::GetCountryById($_POST['id_country']);
-        $withVat = Address::UseVAT($country);
+		if ($_POST['id_addr']) {
+			
+			$country  =Address::GetAddress($this->uid,$_POST['id_addr']);
+			
+			$_POST['bnum'] = $country['business_number1'];
+			$_POST['atype'] = $country['type'];
+			
+			$country = Country::GetCountryById($country['country']);
+			
+		} else {
+		
+			$country = Country::GetCountryById($_POST['id_country']);
+		
+		}
+		
+		
+		
+		if ($_POST['atype'] == '2') {
+			$_POST['bnum'] = '';
+		}
+		
+		//var_dump($_POST);
+		
+		$arrCountry = array (
+		
+			'code' => $country['code'],
+			'country_str' => $country['title_en'],
+			'country_name' => $country['title_en'],
+			'is_europe' => $country['is_europe'],
+			'business_number1' => $_POST['bnum']
+		
+		);
+		
+		//var_dump($arrCountry);
+		
+        $withVat = Address::UseVAT($arrCountry);
 		
 		$PH = new ProductHelper();		
         $cartInfo = '';
@@ -395,11 +440,11 @@ class CartController extends MyController {
 			
 			if ($country['id'] == '68' OR $country['id'] == '246') {
 			
-				$item['type'] = 1;
+				$item['Price2Use'] = 1;
 			
 			} else {
 				
-				$item['type'] = 2;
+				$item['Price2Use'] = 2;
 				
 			}
 			
@@ -408,7 +453,7 @@ class CartController extends MyController {
 			$item['Title'];
             $cartInfo['items'][$item['ID']]['weight'] = $item['UnitWeight'];
             if ($item['Entity'] == 30) {
-                if ($item['type'] == '1') { //фины
+                if ($item['Price2Use'] == '1') { //фины
                     $price = $item['PriceVATFin'];
                 } else {
                     $price = $item['PriceVATWorld'];
@@ -420,7 +465,7 @@ class CartController extends MyController {
                 
 				if ($item['Entity'] == 30) {
 				
-				if ($item['type'] == '1') { //фины
+				if ($item['Price2Use'] == '1') { //фины
                     $price = $item['PriceVAT0Fin'];
                 } else {
                     $price = $item['PriceVAT0World'];
@@ -455,18 +500,12 @@ class CartController extends MyController {
         
         $input['footer2'] = $ui->item('CART_COL_SUBTOTAL_DELIVERY') . ': <span class="delivery_name">' . $ui->item('MSG_DELIVERY_TYPE_0').'</span><span class="date" style="display: none">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Дата: 05.07.2018 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.$ui->item('CARTNEW_TOTAL_WEIGHT_LABEL') . ': ' . $cartInfo['fullInfo']['weight'] . ' '. $ui->item('CARTNEW_WEIGHT_NAME');
 		
-		
 		if ($fullprice < 5){
 			$fullprice = 5.0;
 		}
 		$input['fullpricehidden'] = $fullprice;
 		
-		
-        $input['footer3'] = $ui->item('CARTNEW_TOTAL_COST_LABEL') . ': <span class="itogo_cost" id="itogo_cost">'. $PH->FormatPrice($fullprice) . '</span>';
-		
-		
-		
-		
+        $input['footer3'] = $ui->item('CARTNEW_TOTAL_COST_LABEL') . ': <span class="itogo_cost" id="itogo_cost">'. $PH->FormatPrice($fullprice) . '</span>';		
 		
         $input['cart_header'] = sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), self::decline_goods($cartInfo['fullInfo']['count']), $PH->FormatPrice($cartInfo['fullInfo']['cost']));
         //$input['cart'] = array();
@@ -478,7 +517,7 @@ class CartController extends MyController {
 					'.(($item['weight'] == 0) ? '<div style="float: right; color: #5BB75B;">Бесплатная доставка</div>' : '').'
 				
                     <span class="a">'.$item['title'].'</span>
-                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') ) . ' x '.$PH->FormatPrice($item['price']).(($item['weight'] > 0) ? '<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME') : '').'</div>
+                    <div class="minitext">'.$item['month_count'].' ' . (($item['entity'] == 30) ? $ui->item('MONTH_SMALL') : $ui->item('CARTNEW_COUNT_NAME') . '.' ) . ' x '.$PH->FormatPrice($item['price']).(($item['weight'] > 0) ? '<br /> '.$ui->item('CARTNEW_WEIGHT_LABEL').': '.($item['weight']).' '.$ui->item('CARTNEW_WEIGHT_NAME') : '').'</div>
                 </td>
                 
             </tr>';
@@ -492,6 +531,11 @@ class CartController extends MyController {
 		
 		
         $id = (int) Yii::app()->getRequest()->getParam('id');
+		
+		$o = new Order;
+		$order = $o->isMyOrder($this->uid,$id);
+        if(!$order) throw new CHttpException(404);
+		
         $ptype = (int) Yii::app()->getRequest()->getParam('ptype');
 		
 		
@@ -563,6 +607,11 @@ class CartController extends MyController {
             $post['Address'][$k] = addslashes(htmlspecialchars($v));
         }
 		
+		foreach ($post['Address2'] as $k=>$v) {
+            if (!is_string($v)) continue;
+            $post['Address2'][$k] = addslashes(htmlspecialchars($v));
+        }
+		
 		$cart = new Cart();
                     $tmp = $cart->GetCart($this->uid, $this->sid);
                     $beautyItems = $cart->BeautifyCart($tmp, $this->uid);
@@ -598,12 +647,12 @@ class CartController extends MyController {
 				
 			}
 			
-			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/2zareg.txt', print_r($post,1));
+			
 			
 			$DeliveryMode = 0;
 			if ($post['dtype'] == '0') { $DeliveryMode = 1; }
 			
-			if (!$post['dtype']) { $post['dtype'] = 3; }
+			if ($post['dtype'] == '') { $post['dtype'] = 3; }
 			
             $s['DeliveryAddressID'] = $adr1['address_id'];
             $s['DeliveryTypeID'] = $post['dtype'];
@@ -815,6 +864,21 @@ class CartController extends MyController {
 					
 					if ($post['addr_buyer'] != '1') {
 						
+						$type = $post['Address2']['type'];
+            $business_title = $post['Address2']['business_title'];
+            $business_number1 = $post['Address2']['business_number1'];
+            $titul = $post['Address2']['receiver_title_name'];
+            $fam = $post['Address2']['receiver_last_name'];
+            $name = $post['Address2']['receiver_first_name'];
+            $otch = $post['Address2']['receiver_middle_name'];
+            $country = $post['Address2']['country'];
+            $stat = $post['Address2']['state_id'];
+            $city = $post['Address2']['city'];
+            $post_index = $post['Address2']['postindex'];
+            $address = $post['Address2']['streetaddress'];
+            $email = $post['Address2']['contact_email'];
+            $phone = $post['Address2']['contact_phone'];
+			$comment = " ";			
 						$sql = 'INSERT INTO user_address (`type`,`business_title`,`business_number1`,`receiver_title_name`,`receiver_first_name`,`receiver_middle_name`,`receiver_last_name`, `country`,`state_id`,`city`,`postindex`,`streetaddress`,`contact_email`,`contact_phone`,`notes`) VALUES '
                         . '("' . $type . '", "' . $business_title . '", "' . $business_number1 . '", "' . $titul . '", "' . $name . '", "' . $otch . '", "' . $fam . '", "' . $country . '", "' . $stat . '", "' . $city . '", "' . $post_index . '", "' . $address . '", "' . $email . '", "' . $phone . '", "' . $comment . '")';
 						$ret = Yii::app()->db->createCommand($sql)->execute();
