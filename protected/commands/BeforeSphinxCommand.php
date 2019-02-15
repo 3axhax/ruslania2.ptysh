@@ -9,9 +9,12 @@ ini_set('max_execution_time', 3600);
 
 define('cronAction', 1);
 class BeforeSphinxCommand extends CConsoleCommand {
+	private $_counts = 10000;
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+
+//		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -55,5 +58,59 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
+
+
+	protected function _fillProductsAuthors() {
+//		$allow = array('authors', 'actors', 'directors', 'performers');
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			switch (true) {
+				case Entity::checkEntityParam($entity, 'authors'):
+					$sqlItems = 'select id, title_ru from ' . $params['site_table'] . ' where (avail_for_order > 0) limit ';
+					$step = 0;
+					var_dump($sqlItems . $this->_counts*$step . ', ' . $this->_counts);
+					while (($items = $this->_query($sqlItems . $this->_counts*$step . ', ' . $this->_counts))&&($items->count() > 0)) {
+						$step++;
+						$i = 0;
+						foreach ($items as $item) {
+							$names = array();
+							$sql = ''.
+								'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
+								'from all_authorslist tA '.
+									'join ' . $params['author_table'] . ' t on (t.author_id = tA.id) '.
+										'and (t.' . $params['author_entity_field'] . ' = ' . (int)$item['id'] . ') '.
+							'';
+							$persons = $this->_query($sql);
+							foreach ($persons as $person) {
+								$names = array_merge($names, preg_split("/\W/ui", $person['title_ru']));
+								$names = array_merge($names, preg_split("/\W/ui", $person['title_rut']));
+								$names = array_merge($names, preg_split("/\W/ui", $person['title_en']));
+								$names = array_merge($names, preg_split("/\W/ui", $person['title_fi']));
+								$sql = 'select xml_value from compliances where (db_id = ' . (int)$person['id'] . ') and (type_id = 4)';
+								foreach ($this->_query($sql) as $compliance) {
+									$names = array_merge($names, preg_split("/\W/ui", $compliance['xml_value']));
+								}
+							}
+							$names = array_unique($names);
+							var_dump($item, $names);
+							if ($i++ > 5) exit;
+						}
+					}
+					break;
+				case Entity::checkEntityParam($entity, 'actors'): break;
+				case Entity::checkEntityParam($entity, 'directors'): break;
+				case Entity::checkEntityParam($entity, 'performers'): break;
+			}
+		}
+
+	}
+
+	private function _query($sql, $params = null) {
+		require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
+		$pdo = Yii::app()->db->createCommand($sql);
+		$pdo->prepare();
+		$pdo->getPdoStatement()->execute($params);
+		return new IteratorsPDO($pdo->getPdoStatement());
+	}
+
 
 }

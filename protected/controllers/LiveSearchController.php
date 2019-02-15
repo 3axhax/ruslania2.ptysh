@@ -67,6 +67,7 @@ class LiveSearchController extends MyController {
 	function actionGeneralHa() {
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
+		$this->_haList($q);
 		if (!empty($q)) {
 			$sController = new SearchController($this->getId(), $this->getModule());
 			$sController->beforeAction($this->getAction());
@@ -76,37 +77,53 @@ class LiveSearchController extends MyController {
 				$list = $sController->getByCode($code, $q);
 				if (!empty($list)) $isCode = true;
 			}
+			else {
+				$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
+				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $sController->isCode($likeCode))) {
+					$list = $sController->getByCode($code, $likeCode);
+					if (!empty($list)) $isCode = true;
+				}
+			}
+
+			if (!$isCode&&($pathParams = $sController->isPath($q))) {
+				$list = $sController->getByPath($pathParams);
+				if (!empty($list)) $isCode = true;
+			}
 
 			if (!$isCode) {
 				/*$list = $sController->getListExactMatch($q, 1, 10);
 				if (empty($list)) */$list = $sController->getList($q, 1, 10);
-			}
-
-			if (!empty($list)) $list = $sController->inDescription($list, $q);
-
-			if (!$isCode) {
-				$abstractInfo = $sController->getEntitys($q);
-				if (!empty($abstractInfo))
-					$result[] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo));
-			}
-
-			if (!empty($list))
-				$result[] = $this->renderPartial('/search/live_header', array('q' => $q));
-
-			if (!$isCode) {
+				$list = $sController->inDescription($list, $q);
 				$didYouMean = $sController->getDidYouMean($q);
+				$abstractInfo = $sController->getEntitys($q);
+			}
+
+			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
+				$this->ResponseJson(array());
+
+			if (!$isCode) {
+				if (!empty($abstractInfo))
+					$result['entitys'] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo));
+			}
+
+//			if (!empty($list)||!empty($abstractInfo)||!empty($didYouMean))
+			$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
+
+			if (!$isCode) {
 				if (!empty($didYouMean))
-					$result[] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean));
+					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean));
 			}
 
 			if (empty($list)&&!empty($didYouMean)) $list = $sController->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
+				$result['list'] = array();
 				foreach ($list as $row) {
-					$result[] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
+					$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
 				}
 			}
 
 		}
+		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result))));
 	}
 
 
@@ -279,4 +296,24 @@ class LiveSearchController extends MyController {
         $items = SearchActors::get()->getActorsForFilters($entity, $q, $cid);
         $this->ResponseJson($items);
     }
+
+
+	protected function _haList($q) {
+		$q = preg_replace("/[\W]/ui", ' ', $q);
+		$condition = $join = [];
+//		$condition['morphy_name'] = 'match(\'' . $q . '\')';
+		$condition['morphy_name'] = 'match(\'@authors ' . $q . '\')';
+//		$condition['morphy_name'] = '(real_id = 768)';
+		$sql = ''.
+//			'select id, real_id, entity, position, time_position '.
+			'select * '.
+			'from items_without_morphy ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by position asc, time_position asc '.
+			'limit 0, 100 '.
+            'option ranker=none, max_matches=10000 '.
+		'';
+		$items = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($q, $sql, $items));
+	}
 }
