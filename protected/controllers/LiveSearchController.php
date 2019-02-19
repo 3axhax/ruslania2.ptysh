@@ -67,7 +67,7 @@ class LiveSearchController extends MyController {
 	function actionGeneralHa() {
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
-		$this->_haList($q);
+//		$this->_haList($q);
 		if (!empty($q)) {
 			$sController = new SearchController($this->getId(), $this->getModule());
 			$sController->beforeAction($this->getAction());
@@ -92,10 +92,10 @@ class LiveSearchController extends MyController {
 
 			if (!$isCode) {
 				/*$list = $sController->getListExactMatch($q, 1, 10);
-				if (empty($list)) */$list = $sController->getList($q, 1, 10);
-				$list = $sController->inDescription($list, $q);
-				$didYouMean = $sController->getDidYouMean($q);
-				$abstractInfo = $sController->getEntitys($q);
+				if (empty($list)) */$list = $this->_haList($q);
+//				$list = $sController->inDescription($list, $q);
+//				$didYouMean = $sController->getDidYouMean($q);
+//				$abstractInfo = $sController->getEntitys($q);
 			}
 
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
@@ -301,19 +301,31 @@ class LiveSearchController extends MyController {
 	protected function _haList($q) {
 		$q = preg_replace("/[\W]/ui", ' ', $q);
 		$condition = $join = [];
-//		$condition['morphy_name'] = 'match(\'' . $q . '\')';
-		$condition['morphy_name'] = 'match(\'@authors ' . $q . '\')';
-//		$condition['morphy_name'] = '(real_id = 768)';
+		$condition['morphy_name'] = 'match(\'' . $q . '\')';
 		$sql = ''.
-//			'select id, real_id, entity, position, time_position '.
-			'select * '.
-			'from items_without_morphy ' .
+			'select id, entity, real_id '.
+			'from avail_items_with_morphy, product_authors, avail_items_without_morphy ' .
 			'where ' . implode(' and ', $condition) . ' '.
 			'order by position asc, time_position asc '.
 			'limit 0, 100 '.
-            'option ranker=none, max_matches=10000 '.
+			'option ranker=sph04, max_matches=100000 '.
 		'';
-		$items = SphinxQL::getDriver()->multiSelect($sql);
-		Debug::staticRun(array($q, $sql, $items));
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		if (empty($find)) return array();
+
+		$product = array();;
+		foreach ($find as $data) $product['e'.$data['entity']][] = $data['real_id'];
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find as $data) {
+			$key = $data['entity'] . '-' . $data['real_id'];
+			if (!empty($prepareData[$key])) {
+				$prepareData[$key]['dictionary_position'] = $data['dictionary_position'];
+				$result[$key] = $prepareData[$key];
+			}
+		}
+
+		return $result;
 	}
+
 }
