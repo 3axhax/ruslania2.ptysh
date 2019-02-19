@@ -1,39 +1,39 @@
 <?php
 /*Created by Кирилл (11.06.2018 20:55)*/
-
+/*ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);*/
 class LiveSearchController extends MyController {
 
 	function actionGeneral() {
+		$model = new SearchProducts($this->GetAvail(1));
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
-			$sController = new SearchController($this->getId(), $this->getModule());
-			$sController->beforeAction($this->getAction());
 
 			$isCode = false;
-			if ($code = $sController->isCode($q)) {
-				$list = $sController->getByCode($code, $q);
+			if ($code = $model->isCode($q)) {
+				$list = $model->getByCode($code, $q);
 				if (!empty($list)) $isCode = true;
 			}
 			else {
 				$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
-				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $sController->isCode($likeCode))) {
-					$list = $sController->getByCode($code, $likeCode);
+				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $model->isCode($likeCode))) {
+					$list = $model->getByCode($code, $likeCode);
 					if (!empty($list)) $isCode = true;
 				}
 			}
 
-			if (!$isCode&&($pathParams = $sController->isPath($q))) {
-				$list = $sController->getByPath($pathParams);
+			if (!$isCode) {
+				$list = $model->getByPath($q);
 				if (!empty($list)) $isCode = true;
 			}
 
 			if (!$isCode) {
-				/*$list = $sController->getListExactMatch($q, 1, 10);
-				if (empty($list)) */$list = $sController->getList($q, 1, 10);
-				$list = $sController->inDescription($list, $q);
-				$didYouMean = $sController->getDidYouMean($q);
-				$abstractInfo = $sController->getEntitys($q);
+				$list = $model->getList($q, 1, 10);
+				$list = $model->inDescription($list, $q);
+				$didYouMean = $model->getDidYouMean($q);
+				$abstractInfo = $model->getEntitys($q);
 			}
 
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
@@ -52,7 +52,7 @@ class LiveSearchController extends MyController {
 					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean), true);
 			}
 
-			if (empty($list)&&!empty($didYouMean)) $list = $sController->getListByDidYouMean($didYouMean);
+			if (empty($list)&&!empty($didYouMean)) $list = $model->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
 				$result['list'] = array();
 				foreach ($list as $row) {
@@ -65,37 +65,34 @@ class LiveSearchController extends MyController {
 	}
 
 	function actionGeneralHa() {
+		$model = new SearchProducts($this->GetAvail(1));
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
-//		$this->_haList($q);
+		$this->_haList($q, $model);
 		if (!empty($q)) {
-			$sController = new SearchController($this->getId(), $this->getModule());
-			$sController->beforeAction($this->getAction());
-
 			$isCode = false;
-			if ($code = $sController->isCode($q)) {
-				$list = $sController->getByCode($code, $q);
+			if ($code = $model->isCode($q)) {
+				$list = $model->getByCode($code, $q);
 				if (!empty($list)) $isCode = true;
 			}
 			else {
 				$likeCode = preg_replace("/[^0-9x]/ui", '', $q);
-				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $sController->isCode($likeCode))) {
-					$list = $sController->getByCode($code, $likeCode);
+				if (((mb_strlen($q, 'utf-8') - mb_strlen($likeCode, 'utf-8')) < 5)&&($code = $model->isCode($likeCode))) {
+					$list = $model->getByCode($code, $likeCode);
 					if (!empty($list)) $isCode = true;
 				}
 			}
 
-			if (!$isCode&&($pathParams = $sController->isPath($q))) {
-				$list = $sController->getByPath($pathParams);
+			if (!$isCode) {
+				$list = $model->getByPath($q);
 				if (!empty($list)) $isCode = true;
 			}
 
 			if (!$isCode) {
-				/*$list = $sController->getListExactMatch($q, 1, 10);
-				if (empty($list)) */$list = $this->_haList($q);
-//				$list = $sController->inDescription($list, $q);
-//				$didYouMean = $sController->getDidYouMean($q);
-//				$abstractInfo = $sController->getEntitys($q);
+				$list = $model->getList($q, 1, 10);
+				$list = $model->inDescription($list, $q);
+				$didYouMean = $model->getDidYouMean($q);
+				$abstractInfo = $model->getEntitys($q);
 			}
 
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
@@ -114,7 +111,7 @@ class LiveSearchController extends MyController {
 					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean));
 			}
 
-			if (empty($list)&&!empty($didYouMean)) $list = $sController->getListByDidYouMean($didYouMean);
+			if (empty($list)&&!empty($didYouMean)) $list = $model->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
 				$result['list'] = array();
 				foreach ($list as $row) {
@@ -298,34 +295,16 @@ class LiveSearchController extends MyController {
     }
 
 
-	protected function _haList($q) {
-		$q = preg_replace("/[\W]/ui", ' ', $q);
-		$condition = $join = [];
-		$condition['morphy_name'] = 'match(\'' . $q . '\')';
-		$sql = ''.
-			'select id, entity, real_id '.
-			'from avail_items_with_morphy, product_authors, avail_items_without_morphy ' .
-			'where ' . implode(' and ', $condition) . ' '.
-			'order by position asc, time_position asc '.
-			'limit 0, 100 '.
-			'option ranker=sph04, max_matches=100000 '.
-		'';
-		$find = SphinxQL::getDriver()->multiSelect($sql);
-		if (empty($find)) return array();
+	protected function _haList($q, $model) {
+		$text = 'вызывает столь громкий звук; есть ли различие между предметом и его отражением и во сколько раз лупа позволяет увеличить следы преступления? А главное, как знание физики помогло знаменитым сыщикам из произведений Артура Конан Дойла, Агаты Кристи, Джона Гришема, Жоржа Сименона, Найо Марш и других распутать десятки преступлений!';
+		Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'forSnippet', 'гришем')));
+		$pre = $model->getWords('гришем');
+		Debug::staticRun(array($pre));
 
-		$product = array();;
-		foreach ($find as $data) $product['e'.$data['entity']][] = $data['real_id'];
-		$prepareData =  SearchHelper::ProcessProducts2($product, false);
-		$result = array();
-		foreach ($find as $data) {
-			$key = $data['entity'] . '-' . $data['real_id'];
-			if (!empty($prepareData[$key])) {
-				$prepareData[$key]['dictionary_position'] = $data['dictionary_position'];
-				$result[$key] = $prepareData[$key];
-			}
+		foreach ($pre['Queries'] as $query) {
+			if (empty($query)) continue;
+			Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'forSnippet', $query)));
 		}
-
-		return $result;
 	}
 
 }
