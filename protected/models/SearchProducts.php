@@ -107,7 +107,7 @@ class SearchProducts {
 
 	function getList($q, $page, $pp, $eid = 0) {
 		$condition = $join = [];
-		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->_getMath($q)) . ')';
+		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
 		if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
 		$sql = ''.
 			'select id, entity, real_id, position '.
@@ -150,11 +150,11 @@ class SearchProducts {
 
 	function getEntitys($query) {
 		$sql = ''.
-			'select entity, count(*) counts '.
+			'select entity, count(distinct real_id) counts '.
 			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
-			'where (match(' . SphinxQL::getDriver()->mest($this->_getMath($query)) . ')) '.
+			'where (match(' . SphinxQL::getDriver()->mest($this->getMath($query)) . ')) '.
 			'group by entity '.
-			'order by position asc '.
+//			'order by position asc '.
 			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
 		'';
 		$result = array();
@@ -654,7 +654,7 @@ class SearchProducts {
 		return $result;
 	}
 
-	private function _getMath($q) {
+	function getMath($q) {
 		$q = mb_strtolower($q, 'utf-8');
 		$query = preg_split("/\W/ui", $q);
 		$query = array_filter($query);

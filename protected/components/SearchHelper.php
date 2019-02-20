@@ -627,11 +627,49 @@ class SearchHelper
             $condition['binding_id'] = '(t.binding_id = ' . (int) $binding_id . ')';
         }
 
+        $order = 'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e);
         if (!empty($title)) {
-            $sController = new SearchController(Yii::app()->getController()->getId(), Yii::app()->getController()->getModule());
-            $sController->beforeAction(Yii::app()->getController()->getAction());
-            $resultTable = $sController->fillDataTable($title);
-            $join['tRes'] = 'join ' . $resultTable . ' tRes on (tRes.real_id = t.id) and (tRes.entity = ' . $e . ')';
+            $searchModel = new SearchProducts($only, $e);
+            $spxCond = array($searchModel->getMath($title));
+            $spxCond['mode'] = 'mode=extended';
+            $spxCond['filter'] = 'filter=entity:' . $e;
+            $spxCond['mode'] = 'mode=extended';
+            $spxCond['ranker'] = 'ranker=sph04';
+            $spxCond['sort'] = 'sort=extended:position asc,time_position asc';
+            $spxCond['limit'] = 'limit=1000';
+            $spxCond['maxmatches'] = 'maxmatches=100000';
+            if ($only) {
+                $spxSql = ''.
+                    'SELECT real_id '.
+                    'FROM `_se_avail_items_without_morphy` '.
+                    'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+                    'union '.
+                    'SELECT real_id '.
+                    'FROM `_se_avail_items_with_morphy` '.
+                    'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+                '';
+            }
+            else {
+                $spxSql = ''.
+                    'SELECT real_id '.
+                    'FROM `_se_all_items_without_morphy` '.
+                    'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+                    'union '.
+                    'SELECT real_id '.
+                    'FROM `_se_all_items_with_morphy` '.
+                    'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+                '';
+            }
+            $spxIds = Yii::app()->db->createCommand($spxSql)->queryColumn();
+            if (empty($spxIds)) return array('Items' => array(), 'Paginator' => new CPagination(0));
+
+            $condition['ids'] = '(t.id in (' . implode(',', $spxIds) . '))';
+            $order = 'order by field(t.id, ' . implode(',', $spxIds) . ')';
+
+//            $sController = new SearchController(Yii::app()->getController()->getId(), Yii::app()->getController()->getModule());
+//            $sController->beforeAction(Yii::app()->getController()->getAction());
+//            $resultTable = $sController->fillDataTable($title);
+//            $join['tRes'] = 'join ' . $resultTable . ' tRes on (tRes.real_id = t.id) and (tRes.entity = ' . $e . ')';
         }
 
         $page = max(1, min(100000, (int)$page));
@@ -642,9 +680,10 @@ class SearchHelper
                 implode(' ', $join) . ' '.
             (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
             (!empty($lang)?'group by t.id ':'').
-            'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e) . ' '.
+            $order . ' '.
             'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
         '';
+        Debug::staticRun(array($sql));
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
         $sql = 'select found_rows();';
         $counts = (int) Yii::app()->db->createCommand($sql)->queryScalar();
@@ -677,96 +716,6 @@ class SearchHelper
         $paginator->setPageSize($pp);
 
         return array('Items' => $ret, 'Paginator' => $paginator);
-
-
-
-
-
-        //var_dump($binding_id);
-		
-
-
-
-
-
-        $cIds = array();
-        if (!empty($cid)) {
-            $category = new Category();
-            $cIds = $category->GetChildren($e, $cid);
-            $cIds[] = $cid;
-        }
-
-        $search = self::Create();
-        $search->ResetFilters();
-        $authorIds = array();
-        if (!empty($author))
-        {
-            $authorResult = self::SearchAuthor($author);
-            foreach ($authorResult as $a) $authorIds[] = $a['orig_data']['id'];
-            if(empty($authorResult)) $authorIds[] = -1;
-        }
-
-
-        $perfIds = array();
-        if(!empty($perf))
-        {
-            $performerResult = self::SearchInPersons($perf, array(/*'aentity' => Person::ROLE_PERFORMER*/));
-            foreach($performerResult as $p) $perfIds[] = $p['orig_data']['id'];
-            if(empty($performerResult)) $perfIds[] = -1;
-        }
-
-        $publisherIds = array();
-        if (!empty($publisher))
-        {
-            $publisherResult = self::SearchPublisher($publisher);
-            foreach ($publisherResult as $p) $publisherIds[] = $p;
-            if(empty($publisherResult)) $publisherIds[] = -1;
-        }
-
-        $query = (empty($title)) ? '' : $search->EscapeString($title);
-        // for paging
-        //if(!empty($binding_id)) $search->SetFilter('binding', array($binding_id));
-        $search->SetLimits(0, 1);
-		if (!empty($e)) $search->SetFilter('entity', array($e));
-        if (!empty($authorIds)) $search->SetFilter('author', $authorIds);
-        //if (!empty($perfIds)) $search->SetFilter('author', $perfIds);
-        if ($only == '1') {
-            $_GET['avail'] = 1;
-            $search->SetFilter('avail', array(1));
-        }
-        if (!empty($publisherIds)) $search->SetFilter('publisher_id', $publisherIds);
-        if (!empty($cIds)) $search->SetFilter('category', $cIds);
-        if(!empty($lang)) $search->SetFilter('language', array(intVal($lang)));
-        if(!empty($year)) $search->SetFilter('year', array($year));
-        if(!empty($binding_id)) $search->SetFilter('binding', array($binding_id));
-        $tmp = $search->query($query, 'products'); // false not to reset filters here
-        $totalFound = $tmp['total_found'];
-
-        if($totalFound == 0) return array('Items' => array(), 'Paginator' => new CPagination(0));
-
-        $paginator = new CPagination($totalFound);
-        $paginator->setPageSize($pp);
-
-        //echo '<li>'.$paginator->currentPage.' / '.$paginator->pageCount.' = '.$paginator->offset.' ['.$paginator->limit.']';
-
-        $search->ResetFilters();
-        // поставить фильтры еще раз TODO: сделать по красивее
-        $search->SetLimits($paginator->offset, $pp);
-        if (!empty($e)) $search->SetFilter('entity', array($e));
-        if (!empty($authorIds)) $search->SetFilter('author', $authorIds);
-        //if (!empty($perfIds)) $search->SetFilter('performer', $perfIds);
-        if ($only == '1') $search->SetFilter('avail', array(1));
-        if (!empty($publisherIds)) $search->SetFilter('publisher_id', $publisherIds);
-        if (!empty($cIds)) $search->SetFilter('category', $cIds);
-        if(!empty($lang)) $search->SetFilter('language', array(intVal($lang)));
-        if(!empty($year)) $search->SetFilter('year', array($year));
-        if(!empty($binding_id)) $search->SetFilter('binding', array($binding_id));
-
-        $res = $search->query($query, 'products');
-        $result = self::ProcessProducts($res);
-        if (!empty($result)) $result = SearchHelper::ProcessProducts2($result, false);
-
-        return array('Items' => $result, 'Paginator' => $paginator);
     }
 
     public static function SearchAuthor($query)

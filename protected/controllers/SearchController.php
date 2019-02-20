@@ -48,6 +48,7 @@ class SearchController extends MyController {
 			$didYouMean = $model->getDidYouMean($q);
 		}
 
+		if (empty($list)&&!empty($didYouMean)) $list = $model->getListByDidYouMean($didYouMean);
 		if (empty($abstractInfo)) $paginatorInfo = new CPagination(count($list));
 		else {
 			$e = (int) Yii::app()->getRequest()->getParam('e');
