@@ -3,7 +3,7 @@
 
 class SearchProducts {
 	private $_maxMatches = 100000;//это количество сфинкс перебирает в индексах
-	private $_avail;
+	private $_avail, $_eid = 0;
 	private $_ranker = 'sph04';
 
 	/**
@@ -11,8 +11,9 @@ class SearchProducts {
 	 */
 	private $_search;
 
-	function __construct($avail) {
+	function __construct($avail, $eid = 0) {
 		$this->_avail = $avail;
+		if (Entity::IsValid($eid)) $this->_eid = $eid;
 		$this->_search = SearchHelper::Create();
 	}
 
@@ -105,9 +106,8 @@ class SearchProducts {
 	}
 
 	function getList($q, $page, $pp, $eid = 0) {
-		$q = preg_replace("/[\W]/ui", ' ', $q);
 		$condition = $join = [];
-		$condition['morphy_name'] = 'match(\'' . $q . '\')';
+		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->_getMath($q)) . ')';
 		if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
 		$sql = ''.
 			'select id, entity, real_id, position '.
@@ -149,20 +149,20 @@ class SearchProducts {
 	}
 
 	function getEntitys($query) {
-		$query = preg_replace("/[\W]/ui", ' ', $query);
 		$sql = ''.
 			'select entity, count(*) counts '.
-			'from ' . implode(',',$this->_getTablesForEntity()) . ' ' .
-			'where (match(\'' . $query . '\')) '.
+			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
+			'where (match(' . SphinxQL::getDriver()->mest($this->_getMath($query)) . ')) '.
 			'group by entity '.
 			'order by position asc '.
-			'option ranker=' . $this->_ranker . ' '.
+			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
 		'';
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
-		Debug::staticRun(array($sql));
-		foreach (SphinxQL::getDriver()->multiSelect($sql) as $data) {
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($sql, $find));
+		foreach ($find as $data) {
 			//audio не показываем
 			if (!empty($data['entity'])&&($data['entity'] != 20)) {
 				$result[$data['entity']] = $data['counts'];
@@ -654,6 +654,23 @@ class SearchProducts {
 		return $result;
 	}
 
-
+	private function _getMath($q) {
+		$q = mb_strtolower($q, 'utf-8');
+		$query = preg_split("/\W/ui", $q);
+		$query = array_filter($query);
+		$math = implode(' ', $query);
+		$countWords = count($query);
+		$i = 0;
+		if ($countWords > 3) {
+			$phrases = array('(' . implode(' ', $query) . ')');
+			while ($i++ < $countWords) {
+				$word = array_pop($query);
+				$phrases[] = '(' . implode(' ', $query) . ')';
+				array_unshift($query, $word);
+			}
+			$math = implode('|', $phrases);
+		}
+		return $math;
+	}
 
 }

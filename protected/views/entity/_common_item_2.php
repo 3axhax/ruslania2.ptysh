@@ -221,7 +221,9 @@ $entityKey = Entity::GetUrlKey($entity);
 
             ?>
 
-            <?php $txt = nl2br(ProductHelper::GetDescription($item, 200, $url));
+            <?php
+            /*if (!empty($item['inDescription'])) $txt = nl2br($item['inDescription']);
+            else */$txt = nl2br(ProductHelper::GetDescription($item, 200, $url));
             if (!empty($txt)): ?>
                 <div class="desc_text" style="margin-bottom: 10px;"><?= $txt ?></div>
             <?php endif; ?>
