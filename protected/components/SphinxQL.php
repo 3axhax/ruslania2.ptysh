@@ -94,7 +94,7 @@ class SphinxQL {
 		if (!empty($around)) $sql .= $around . " as around, ";
 		if (!empty($allow_empty)) $sql .= (int)$allow_empty . " as allow_empty, ";
 		if (!empty($html_strip_mode)) $sql .= $this->mest($html_strip_mode) . ' as html_strip_mode, ';
-		$sql .= "1 as query_mode, 1 use_boundaries)";
+		$sql .= "1 as limit_passages, 1 as query_mode, 1 use_boundaries)";
 		return $this->fieldSelect($sql);
 	}
 
