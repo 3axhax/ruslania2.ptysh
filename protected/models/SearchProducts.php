@@ -281,9 +281,7 @@ class SearchProducts {
 			$text = trim($text);
 			if (empty($text)) continue;
 
-			$list[$k]['inDescription'] = SphinxQL::getDriver()->snippet($text, 'books_in_shop_with_morphy', $query);
-			Debug::staticRun(array($query, $list[$k]['inDescription'], $text));
-
+			$list[$k]['inDescription'] = SphinxQL::getDriver()->snippet($text, $query);
 		}
 		return $list;
 	}

@@ -79,22 +79,26 @@ class SphinxQL {
 		return $result ? array_shift($result) : false;
 	}
 
-	function snippet($text, $index, $q, $before_match = '<span class="title__bold">', $after_match = '</span>', $limit = 100, $around = 3, $allow_empty = true, $html_strip_mode = 'none') {
-		$sql = "".
-			"CALL SNIPPETS(".
-				"'".$this->getMysqli()->real_escape_string($text)."', ".
-				"'".$index."', ".
-				"'".$this->getMysqli()->real_escape_string($q)."', ".
-		"";
-		if (!empty($before_match)) $sql .= "'" . $this->getMysqli()->real_escape_string($before_match) . "' as before_match, ";
-		if (!empty($after_match)) $sql .= "'" . $this->getMysqli()->real_escape_string($after_match) . "' as after_match, ";
+	function snippet($text, $q, $before_match = '<span class="title__bold">', $after_match = '</span>', $limit = 100, $around = 3, $allow_empty = true, $html_strip_mode = 'none') {
+		$index = 'forSnippet';
+		$q .= '*';
+		$sql = ''.
+			'CALL SNIPPETS('.
+				$this->mest($text) . ', '.
+				$this->mest($index) . ', '.
+				$this->mest($q) . ', '.
+		'';
+		if (!empty($before_match)) $sql .= $this->mest($before_match) . ' as before_match, ';
+		if (!empty($after_match)) $sql .= $this->mest($after_match) . ' as after_match, ';
 		if (!empty($limit)) $sql .= $limit . " as limit, ";
 		if (!empty($around)) $sql .= $around . " as around, ";
 		if (!empty($allow_empty)) $sql .= (int)$allow_empty . " as allow_empty, ";
-		if (!empty($html_strip_mode)) $sql .= "'" . $this->getMysqli()->real_escape_string($html_strip_mode) . "' as html_strip_mode, ";
+		if (!empty($html_strip_mode)) $sql .= $this->mest($html_strip_mode) . ' as html_strip_mode, ';
 		$sql .= "1 as query_mode, 1 use_boundaries)";
 		return $this->fieldSelect($sql);
 	}
 
-
+	function mest($s) {
+		return "'" . $this->getMysqli()->real_escape_string($s) . "'";
+	}
 }

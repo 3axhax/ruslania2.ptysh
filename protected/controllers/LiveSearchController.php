@@ -89,7 +89,7 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) {
-				$list = $model->getList($q, 1, 10);
+				$list = $model->getList($q, 1, 100);
 				$list = $model->inDescription($list, $q);
 				$didYouMean = $model->getDidYouMean($q);
 				$abstractInfo = $model->getEntitys($q);
@@ -297,14 +297,8 @@ class LiveSearchController extends MyController {
 
 	protected function _haList($q, $model) {
 		$text = 'вызывает столь громкий звук; есть ли различие между предметом и его отражением и во сколько раз лупа позволяет увеличить следы преступления? А главное, как знание физики помогло знаменитым сыщикам из произведений Артура Конан Дойла, Агаты Кристи, Джона Гришема, Жоржа Сименона, Найо Марш и других распутать десятки преступлений!';
-		Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'forSnippet', 'гришем')));
-		$pre = $model->getWords('гришем');
-		Debug::staticRun(array($pre));
+		Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'гришем')));
 
-		foreach ($pre['Queries'] as $query) {
-			if (empty($query)) continue;
-			Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'forSnippet', $query)));
-		}
 	}
 
 }
