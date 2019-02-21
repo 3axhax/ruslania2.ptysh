@@ -1,5 +1,8 @@
 <?php
 /*Created by Кирилл (08.02.2019 21:58)*/
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 class SeoController extends MyController {
 
 	function actionEdit() {
@@ -11,7 +14,7 @@ class SeoController extends MyController {
 			$params = $seoModel->getParams($path);
 			$seoSettings = $seoModel->findByAttributes($params);
 //			$seoSettings = $seoModel->findByPk(1);
-			Debug::staticRun(array($params, $seoSettings->getAttributes()));
+			Debug::staticRun(array($params));
 			if (empty($seoSettings)) {
 				$settings = $seoModel->getDefaultSettings($params);
 				$seoModel->setAttributes(array_merge($params, $settings), false);
@@ -39,7 +42,7 @@ class SeoController extends MyController {
 			}
 			$seoModel->setAttributes($params, false);
 			if (!empty($params['id_seo_settings'])) {
-				$seoModel->id = $params['id_seo_settings'];
+				$seoModel->id_seo_settings = $params['id_seo_settings'];
 				$seoModel->setIsNewRecord(false);
 			}
 //			Debug::staticRun(array($params, $seoModel->id, $seoModel->getPrimaryKey()));

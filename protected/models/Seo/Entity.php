@@ -21,9 +21,11 @@ class ModelsSeoEntity extends Seo_settings {
 		if ($params === null) {
 			$sql = 'select `' . Yii::app()->getLanguage() . '` from seo_settings where (`route` = :route) and (`entity` = :eid) and (`id` = :id) limit 1';
 			$bdSettings = Yii::app()->db->createCommand($sql)->queryRow(true, array('route'=>$this->_route, 'eid'=>$this->_eid, 'id'=>$this->_id));
-			if (!empty($bdSettings)) {
-				$bdSettings = unserialize($bdSettings);
-				foreach ($bdSettings as $k=>$v) $this->_settings[$k] = $v;
+			if (!empty($bdSettings[Yii::app()->language])) {
+				$bdSettings[Yii::app()->language] = unserialize($bdSettings[Yii::app()->language]);
+				foreach ($bdSettings[Yii::app()->language] as $k=>$v) {
+					$this->_settings[$k] = $v;
+				}
 			}
 		}
 
@@ -60,6 +62,29 @@ class ModelsSeoEntity extends Seo_settings {
 		if (empty($this->_cid)) {
 			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE (avail_for_order > 0)';
 			$this->_replace['{counts}'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
+			switch ($this->_route) {
+				case 'entity/categorylist': $this->_replace['{name}'] = Yii::app()->ui->item('LIST_SOFT_CATTREE'); break;
+				case 'entity/publisherlist':
+					if (in_array($this->_eid, array(Entity::SOFT, Entity::MAPS, Entity::PRINTED))) $this->_replace['{name}'] = Yii::app()->ui->item('PROPERTYLIST_FOR_PROD');
+					else $this->_replace['{name}'] = Yii::app()->ui->item('PROPERTYLIST_FOR_PUBLISHERS');
+					break;
+				case 'entity/serieslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_BOOKS_SERIES_PROPERTYLIST'); break;
+				case 'entity/authorlist': $this->_replace['{name}'] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS'); break;
+				case 'entity/bindingslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY'); break;
+				case 'entity/yearslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_YEAR'); break;
+				case 'entity/yearreleaseslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_YEAR_REAL'); break;
+				case 'entity/performerlist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_AUDIO_AZ_PROPERTYLIST_PERFORMERS'); break;
+				case 'entity/medialist':
+					if ($this->_eid == Entity::MUSIC) $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_TYPE3');
+					else $this->_replace['{name}'] = Yii::app()->ui->item('Media');
+					break;
+				case 'entity/typeslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+				case 'entity/actorlist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_ACTORS'); break;
+				case 'entity/directorlist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_VIDEO_AZ_PROPERTYLIST_DIRECTORS'); break;
+				case 'entity/audiostreamslist': $this->_replace['{name}'] = Yii::app()->ui->item('AUDIO_STREAMS'); break;
+				case 'entity/subtitleslist': $this->_replace['{name}'] = Yii::app()->ui->item('Credits'); break;
+				case 'entity/studioslist': $this->_replace['{name}'] = Yii::app()->ui->item('STUDIOS'); break;
+			}
 		}
 		else {
 			$category = new Category();
@@ -87,7 +112,7 @@ class ModelsSeoEntity extends Seo_settings {
 			if (!empty($this->_id)) $this->_settings['h1'] = str_replace('{entity_name} {params}', '{entity_name}, {params}', $this->_settings['h1']);
 		}
 
-//		Debug::staticRun(array($this->_replace));
+//		Debug::staticRun(array($this->_route, $this->_replace, $this->_settings['h1']));
 
 	}
 

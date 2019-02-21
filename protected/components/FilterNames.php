@@ -39,7 +39,6 @@ class FilterNames {
 				default: if (!empty($v)) $this->_data[$k] = $v; break;
 			}
 		}
-		Debug::staticRun(array($this->_data, $filter));
 	}
 
 	function getParams() {

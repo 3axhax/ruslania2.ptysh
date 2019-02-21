@@ -49,25 +49,25 @@
 								<div class="form_row">
 									<div class="row_name">H1</div>
 									<div class="row_value">
-										<textarea name="SeoEdit[<?= $k ?>][h1]"><?= $seoData[$k]['h1'] ?></textarea>
+										<textarea name="SeoEdit[<?= $k ?>][h1]"><?= empty($seoData[$k]['h1'])?'':$seoData[$k]['h1'] ?></textarea>
 									</div>
 								</div>
 								<div class="form_row">
 									<div class="row_name">TITLE</div>
 									<div class="row_value">
-										<textarea name="SeoEdit[<?= $k ?>][title]"><?= $seoData[$k]['title'] ?></textarea>
+										<textarea name="SeoEdit[<?= $k ?>][title]"><?= empty($seoData[$k]['title'])?'':$seoData[$k]['title'] ?></textarea>
 									</div>
 								</div>
 								<div class="form_row">
 									<div class="row_name">DESCRIPTION</div>
 									<div class="row_value">
-										<textarea name="SeoEdit[<?= $k ?>][description]"><?= $seoData[$k]['description'] ?></textarea>
+										<textarea name="SeoEdit[<?= $k ?>][description]"><?= empty($seoData[$k]['description'])?'':$seoData[$k]['description'] ?></textarea>
 									</div>
 								</div>
 								<div class="form_row">
 									<div class="row_name">KEYWORDS</div>
 									<div class="row_value">
-										<textarea name="SeoEdit[<?= $k ?>][keywords]"><?= $seoData[$k]['keywords'] ?></textarea>
+										<textarea name="SeoEdit[<?= $k ?>][keywords]"><?= empty($seoData[$k]['keywords'])?'':$seoData[$k]['keywords'] ?></textarea>
 									</div>
 								</div>
 							</div>

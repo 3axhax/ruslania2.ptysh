@@ -10,10 +10,13 @@ function printTree($tree, $entity, $parent = false, $lvl = 1, $breadcrumbs = arr
 			<div class="b-category-list__topic">'.Yii::app()->ui->item('A_NEW_CATEGORYES').'</div>
 			*/ ?>
 <h1 class="titlename poht" style="margin-bottom: 20px;"><?php
-	$h1 = array_pop($breadcrumbs);
-	unset($breadcrumbs) ;
-	$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
-	if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+	$h1 = Seo_settings::get()->getH1();
+	if (empty($h1)):
+		$h1 = array_pop($breadcrumbs);
+		unset($breadcrumbs) ;
+		$h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+		if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+	endif;
 	?><?= $h1 ?></h1>
 <ul class="b-category-list__item-outer">
 		<?php else: ?>
