@@ -162,7 +162,7 @@ return array (
   'CANCEL_PICTURE' => 'cn_fr.png',
   'CART_COL_DELETE' => 'Supprimer',
   'CART_COL_ITEM_AVAIBILITY' => 'Disponibilité',
-  'CART_COL_ITEM_MOVE_TO_ORDERED' => 'Vers demandes',
+  'CART_COL_ITEM_MOVE_TO_ORDERED' => 'Écrivez-moi quand disponible',//'Vers demandes',
   'CART_COL_ITEM_MOVE_TO_SHOPCART' => 'Ajouter au panier',
   'CART_COL_ITEM_MOVE_TO_SUSPENDED' => 'Ajouter aux articles intéressants',
   'CART_COL_PRICE' => 'Prix',

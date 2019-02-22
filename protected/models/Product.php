@@ -222,6 +222,8 @@ class Product
 
     public function GetBaseProductInfo($entity, $id)
     {
+        if (!Entity::IsValid($entity)) return array();
+
         $entities = Entity::GetEntitiesList();
         $data = $entities[$entity];
         $model = $data['model'];
@@ -237,6 +239,8 @@ class Product
 
     public function GetProducts($entity, $ids, $isMiniCart = 0)
     {
+        if (!Entity::IsValid($entity)) return array();
+
         $entity = Entity::ConvertToHuman($entity);
         $entities = Entity::GetEntitiesList();
         $table = $entities[$entity]['site_table'];
@@ -305,6 +309,7 @@ class Product
 	
 	public function getProducts3($entity, $ids)
     {
+        if (!Entity::IsValid($entity)) return array();
         $entity = Entity::ConvertToHuman($entity);
         $entities = Entity::GetEntitiesList();
         $table = $entities[$entity]['site_table'];
@@ -330,6 +335,8 @@ class Product
 	
     public function GetProductsV2($entity, $ids, $indexByPK=false)
     {
+        if (!Entity::IsValid($entity)) return false;
+
         $dp = Entity::CreateDataProvider($entity);
         $criteria = $dp->getCriteria();
         $criteria->addInCondition('t.id', $ids);
@@ -357,6 +364,8 @@ class Product
 
     public function GetProduct($entity, $id)
     {
+        if (!Entity::IsValid($entity)) return false;
+
         $dp = Entity::CreateDataProvider($entity);
         $criteria = $dp->getCriteria();
         $criteria->addCondition('t.id=:id');
@@ -400,6 +409,8 @@ class Product
     /* Получаем статус продука ("Новинка", "Акция", "В подборке") */
     public function GetStatusProduct($entity, $id)
     {
+        if (!Entity::IsValid($entity)) return false;
+
         $status = self::GetStatusProductAction($entity, $id);
         if(!$status) $status = self::GetStatusProductOffer($entity, $id);
         //$status = self::GetStatusProductOffer($entity, $id);
@@ -407,6 +418,8 @@ class Product
     }
 
     static function setActionItems($entity, $ids) {
+        if (!Entity::IsValid($entity)) return;
+
         $sql = 'select * from action_items where (entity = ' . (int) $entity . ') and (item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_actionItems[$entity])) self::$_actionItems[$entity] = array();
         foreach ($ids as $id) self::$_actionItems[$entity][$id] = array();
@@ -418,7 +431,9 @@ class Product
     }
 
     static function setOfferItems($entity, $ids) {
-        $sql = 'select oi.* from offer_items as oi 
+        if (!Entity::IsValid($entity)) return;
+
+        $sql = 'select oi.* from offer_items as oi
         join offers as o on (o.id = oi.offer_id)
         where (o.is_active = 1) and (oi.entity_id = ' . (int) $entity . ') and (oi.item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_offerItems[$entity])) self::$_offerItems[$entity] = array();
@@ -433,6 +448,8 @@ class Product
     /* Получаем статус продука из таблицы "action_items" ("Новинка", "Акция") */
     private function GetStatusProductAction($entity, $id)
     {
+        if (!Entity::IsValid($entity)) return false;
+
         if (!empty(self::$_actionItems[$entity])&&isset(self::$_actionItems[$entity][$id])) {
             $row = array(self::$_actionItems[$entity][$id]);
         }
@@ -454,6 +471,8 @@ class Product
     /* Получаем статус продука из таблицы "offer_items" ("В подборке") */
     private function GetStatusProductOffer($entity, $id)
     {
+        if (!Entity::IsValid($entity)) return false;
+
         if (/*false && */!empty(self::$_offerItems[$entity])&&isset(self::$_offerItems[$entity][$id])) {
             $row = array(self::$_offerItems[$entity][$id]);
         }
@@ -473,6 +492,8 @@ class Product
 
     public function IsQuantityAvailForOrder($entity, $id, $quantity)
     {
+        if (!Entity::IsValid($entity)) return 0;
+
         $product = $this->GetProduct($entity, $id);
         if(empty($product)) return 0;
 
@@ -504,6 +525,8 @@ class Product
     }
 
     public function related_goods($cid, $entity, $id, $title, $series_id, $author_id) {
+        if (!Entity::IsValid($entity)) return array();
+
 
         $title = addslashes($title);
 
@@ -622,6 +645,8 @@ class Product
     }
 
     public function is_lang($lang, $cat_id = '', $entity) {
+        if (!Entity::IsValid($entity)) return 0;
+
 
         $entities = Entity::GetEntitiesList();
         $tbl = $entities[$entity]['site_table'];

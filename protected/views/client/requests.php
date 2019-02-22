@@ -5,7 +5,7 @@
 <div class="row">
         <div class="span10">
 			
-			<h1 class="title">Лист ожидания</h1>
+			<h1 class="title"><?=$ui->item('A_LEFT_PERSONAL_NOTAVAIBLE_ORDERS'); ?></h1>
 			
             <?php if(count($list) == 0) : ?>
 
