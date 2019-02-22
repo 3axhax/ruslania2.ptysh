@@ -77,6 +77,8 @@
 				<input type="submit" class="btn btn-success" value="Сохранить"/>
 				<?php $this->endWidget(); ?>
 			</div>
+			<?php elseif (!empty($error)): ?>
+				<h2><?= $error ?></h2>
 			<?php endif; ?>
 		</div>
 	</div>
