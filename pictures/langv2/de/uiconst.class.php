@@ -1297,5 +1297,6 @@ By clicking on a category you are interested in, you can see all the products wi
     'NAME_CROSSWORD'=>'Kreuzwörter',
     'MENU'=>'Menü',
     'VIEW_LIST'=>'Смотреть списком',
-	'CARTNEW_IN_CART_BTN2' => '%d stck.'
+	'CARTNEW_IN_CART_BTN2' => '%d stck.',
+    'CARTNEW_IN_CART_BTN'=>'Im warenkorb: %d',
 );
