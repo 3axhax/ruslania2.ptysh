@@ -87,6 +87,17 @@ class MyUrlManager extends CUrlManager
         $rawPathInfo=$request->getPathInfo();
         $pathInfo=$this->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
         $result = parent::parseUrl($request);
+        $myIp = '78.85.212.36';
+        if ((string)getenv('REMOTE_ADDR') === $myIp) {
+            //что бы пока не сделано не ломать то, что есть
+            $route = preg_replace("/^\/+/ui", '', $result);
+            $route = explode('/', $route);
+            $buyActions = array('noregister');
+            if (($route[0] === 'cart')&&(!empty($route[1]))&&in_array($route[1], $buyActions)) {
+                $route[0] = 'buy';
+                return implode('/', $route);
+            }
+        }
         if ($pathInfo === $result) {
             HrefTitles::get()->redirectOldPage($pathInfo);
         }

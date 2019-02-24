@@ -1,0 +1,229 @@
+label.seld {
+    padding: 1.8rem 2rem 2.2rem;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-radius: 2px;
+    position: relative;
+    padding-right: 55px;
+    width: 188px;
+    height: 80px !important;
+}
+
+label.seld .red_checkbox {
+    position: absolute;
+    right: 5px;
+    top: 20px;
+
+}
+
+label.selt {
+    padding: 1.8rem 2rem 2.2rem;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    border-radius: 2px;
+    position: relative;
+    width: 212px;
+}
+
+label.selt .red_checkbox {
+    position: absolute;
+    right: 5px;
+    top: 20px;
+
+}
+
+
+
+
+label.selp {
+    padding: 1.8rem 2rem 2.2rem;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    height: 70px;
+    position: relative;
+    padding-right: 55px;
+    width: 188px;
+    border-radius: 2px;
+}
+
+label.selp .red_checkbox {
+    position: absolute;
+    right: 5px;
+    top: 20px;
+}
+
+.cartorder .p2, .cartorder .p1, .cartorder .p3 { font-size: 22px; }
+
+.cartorder .p1 { margin:0 0 15px 0;}
+.cartorder .p2 { margin: 15px 0;}
+.cartorder .p3 { margin: 15px 0;}
+
+
+.select_dd { position: relative; }
+.select_dd_popup { position: absolute; top: 29px; background: #fff; max-height: 400px; width: 340px; border: 1px solid #ccc; z-index: 9999; display: none; overflow-y: auto; }
+
+.select_dd_popup .item {
+    padding: 5px 10px;
+}
+
+.select_dd_popup .item:hover {
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.cart_header {
+
+    background: #f8f8f8;
+    padding: 8px 10px;
+    font-weight: bold;
+    border-left: 1px solid #ececec;
+    border-top: 1px solid #ececec;
+    border-right: 1px solid #ececec;
+
+
+}
+
+table.cart {
+    border: 1px solid #ececec;
+}
+
+.cart tbody tr td {
+
+    padding: 10px;
+    border-bottom: 1px solid #ececec;
+
+}
+
+.cart tbody tr td .minitext { color: #81807C; }
+.cart tbody tr td span.a {  }
+
+.cart_box {
+    overflow: auto;
+    max-height: 236px;
+}
+
+.cart_footer { float: right; }
+
+.footer3 { margin-bottom: 25px; border-bottom: 1px solid #ececec; }
+
+.footer1, .footer3, .footer_promocode {
+    background: #f8f8f8;
+    padding: 8px 10px;
+    font-weight: bold;
+    border-left: 1px solid #ececec;
+    border-top: 1px solid #ececec;
+    border-right: 1px solid #ececec;
+}
+
+.footer2 {
+
+    padding: 8px 10px;
+    color: #81807C;
+    border-left: 1px solid #ececec;
+    border-right: 1px solid #ececec;
+
+}
+
+a.order_start { background-color: #5bb75b; }
+
+.order_start.disabled {
+
+    opacity: 0.5;
+    cursor: default;
+
+}
+
+label.selp img {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray; /* IE 6-9 */
+}
+
+label.selp.act img {
+    -webkit-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+    filter: grayscale(0%);
+    filter: none; /* IE 6-9 */
+}
+
+
+input.error {
+    border: 1px solid #ed1d24;
+    margin-bottom: 0;
+}
+
+.texterror { color: #ed1d24; font-size: 11px; display: block; }
+
+td.maintxt-vat { padding: 5px 5px; }
+
+.redtext {
+
+    color: #ed1d24;
+
+}
+
+.box_smartpost {
+    display: none;
+    width: 760px;
+    margin-top: 20px;
+}
+
+.row_smartpost {
+    padding: 15px 5px;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+}
+
+.row_smartpost.act {
+    background-color: #eaeaea;
+}
+
+
+
+
+
+
+/* Скрываем реальный чекбокс */
+.checkbox_custom {
+    display: none;
+}
+
+.checkbox-custom {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.checkbox-custom {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -3px;
+}
+
+.checkbox_custom:checked + .checkbox-custom::before {
+    content: "";
+    /*display: block;*/
+    position: absolute;
+
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    /*background: #413548;*/
+    border-radius: 2px;
+
+    background: #ed1d24;
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    font-size: 0;
+
+}
