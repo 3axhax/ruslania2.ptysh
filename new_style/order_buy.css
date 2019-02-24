@@ -227,3 +227,17 @@ td.maintxt-vat { padding: 5px 5px; }
     font-size: 0;
 
 }
+
+span.delivery_name {margin-right: 15px;}
+
+table.address input[type=text] {
+    width: 350px;
+}
+table.address textarea {
+    width: 350px;
+    height: 100px;
+}
+
+table.address select {
+    width: 360px;
+}

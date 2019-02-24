@@ -1549,7 +1549,7 @@ class CartController extends MyController {
             }
             $cart = new Cart();
             $items = $cart->GetCart($this->uid, $this->sid);
-            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
+            list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
             $promocode = (string) Yii::app()->getRequest()->getParam('promocode');
             if ($promocode === '') {
                 $ret['currency'] = Currency::ToSign(Yii::app()->currency);

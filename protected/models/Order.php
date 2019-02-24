@@ -166,13 +166,13 @@ class Order extends CMyActiveRecord
      * @param $address array -это адрес доставки с данными пользователя (Address::GetAddress), но можно просто передать страну (если пользователь не авторизирован). Адрес нужен потому, что ндс зависит от кода предприятия
      * @param $deliveryMode int 0 - считаю стоимость доставки, 1 - несчитаю стоимость доставки
      * @param $deliveryTypeID int - тип доставки
-     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice]]
+     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки]
      */
     function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null) {
         if (empty($address)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
         if ($currencyId === null) $currencyId = Yii::app()->currency;
         $withVAT = Address::UseVAT($address);
-        $itemsPrice = 0;
+        $itemsPrice = $fullweight = 0;
         $pricesValues = array();
         $discountKeys = array();//нужно для получения цены по промокоду, сюда же положил количество товара, что бы не создавать новую переменную
         foreach ($items as $idx=>$item) {
@@ -197,6 +197,7 @@ class Order extends CMyActiveRecord
             $pricesValues[$itemKey] = $price;
             $discountKeys[$itemKey] = ['discountPrice'=>$key, 'originalPrice'=>$keyWithoutDiscount, 'quantity'=>$item['quantity']];
             $itemsPrice += $item['quantity'] * $price;
+            if (!empty($item['InCartUnitWeight'])) $fullweight += ($item['InCartUnitWeight']/1000);
 
             if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
             {
@@ -218,7 +219,7 @@ class Order extends CMyActiveRecord
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
 
-        return [$itemsPrice, $deliveryPrice, $pricesValues, $discountKeys];
+        return [$itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight];
     }
 
     public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
@@ -226,7 +227,7 @@ class Order extends CMyActiveRecord
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-        list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
+        list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
 
 
 /*        $withVAT = Address::UseVAT($da);

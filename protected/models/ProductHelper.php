@@ -605,6 +605,16 @@ class ProductHelper
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
     }
 
+    function endOfWord($n, $e1 = "", $e234 = "", $e567890 = ""){
+        switch ($n%10){
+            case 1: $r = $e1; break;
+            case 2: case 3: case 4: $r = $e234; break;
+            default: $r = $e567890; break;
+        }
+        if ($n%100 >= 10 && $n%100 <= 20) $r = $e567890;
+        return $r;
+    }
+
 
 
 }
