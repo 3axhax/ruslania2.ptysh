@@ -433,8 +433,10 @@ class ProductHelper
         }
     }
 
-    public static function IsAvailableForOrder($item)
-    {
+    public static function IsAvailableForOrder($item) {
+        if (isset($item['avail_for_order'])) {
+            return !empty($item['avail_for_order']);
+        }
         $code = Availability::GetStatus($item);
 
         return $code == Availability::AVAIL_IN_SHOP ||
@@ -603,6 +605,16 @@ class ProductHelper
         $str = trim($str, $options['delimiter']);
 
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
+    }
+
+    function endOfWord($n, $e1 = "", $e234 = "", $e567890 = ""){
+        switch ($n%10){
+            case 1: $r = $e1; break;
+            case 2: case 3: case 4: $r = $e234; break;
+            default: $r = $e567890; break;
+        }
+        if ($n%100 >= 10 && $n%100 <= 20) $r = $e567890;
+        return $r;
     }
 
 
