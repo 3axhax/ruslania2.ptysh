@@ -132,7 +132,6 @@ class SearchProducts {
 				$result[$key] = $prepareData[$key];
 			}
 		}
-
 		return $result;
 	}
 
@@ -150,7 +149,7 @@ class SearchProducts {
 
 	function getEntitys($query) {
 		$sql = ''.
-			'select entity, count(distinct real_id) counts '.
+			'select entity, count(distinct real_id) counts './/', GROUP_CONCAT(real_id) '.
 			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
 			'where (match(' . SphinxQL::getDriver()->mest($this->getMath($query)) . ')) '.
 			'group by entity '.
