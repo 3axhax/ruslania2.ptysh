@@ -633,7 +633,7 @@ class SearchHelper
             $spxCond = array($searchModel->getMath($title));
             $spxCond['mode'] = 'mode=extended';
             $spxCond['filter'] = 'filter=entity:' . $e;
-            $spxCond['mode'] = 'mode=extended';
+//            $spxCond['mode'] = 'mode=extended';
             $spxCond['ranker'] = 'ranker=sph04';
             $spxCond['sort'] = 'sort=extended:position asc,time_position asc';
             $spxCond['limit'] = 'limit=1000';
