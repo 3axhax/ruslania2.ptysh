@@ -116,27 +116,32 @@ class MyController extends CController
         //if(empty($this->pageTitle))
         if (is_array($this->breadcrumbs)) {
             $title  = array();
-            foreach($this->breadcrumbs as $idx=>$data)
-            {
+            foreach($this->breadcrumbs as $idx=>$data) {
                 if(is_numeric($idx)) $title[] = $data;
                 else $title[] = $idx;
             }
-            if(empty($this->pageTitle))
-            {
-                $this->pageTitle = implode(' &gt; ', $title);
-                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
-                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+            if(empty($this->pageTitle)) {
+                $this->pageTitle = Seo_settings::get()->getTitle();
+                if (empty($this->pageTitle)) {
+                    $this->pageTitle = implode(' &gt; ', $title);
+                    if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                        $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                    }
+                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
                 }
-                $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
             }
             if (empty($this->pageDescription)) {
-                $this->pageDescription = implode(' &gt; ', $title);
-                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
-                    $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                $this->pageDescription = Seo_settings::get()->getDescription();
+                if (empty($this->pageDescription)) {
+                    $this->pageDescription = implode(' &gt; ', $title);
+                    if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                        $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                    }
                 }
             }
             if (empty($this->pageKeywords)) {
-                $this->pageKeywords = implode(' ', $title);
+                $this->pageKeywords = Seo_settings::get()->getKeywords();
+                if (empty($this->pageKeywords)) $this->pageKeywords = implode(' ', $title);
             }
         }
         return true;

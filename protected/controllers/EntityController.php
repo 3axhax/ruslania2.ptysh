@@ -158,13 +158,12 @@ class EntityController extends MyController {
 
         Yii::app()->request->cookies['last_e'] = new CHttpCookie('last_e', 'filter_e' . $entity . '_c_' . $cid);
 
-        if ($entity == 10) { SEO::seo_change_meta_books_category($entity, $totalItems, $title_cat, $cid); }
+/*        if ($entity == 10) { SEO::seo_change_meta_books_category($entity, $totalItems, $title_cat, $cid); }
         elseif ($entity == 15) { SEO::seo_change_meta_sheets_category($entity, $totalItems, $title_cat, $cid); }
         elseif ($entity == 30) { SEO::seo_change_meta_periodic_category($entity, $totalItems, $title_cat, $cid); }
         elseif ($entity==22) { SEO::seo_change_meta_music_category($entity, $totalItems, $title_cat, $cid); }
         elseif ($entity==50) { SEO::seo_change_meta_printed_category($entity, $totalItems, $title_cat, $cid); }
-        else { SEO::seo_change_meta_other_category($entity, $totalItems, $title_cat, $cid); }
-
+        else { SEO::seo_change_meta_other_category($entity, $totalItems, $title_cat, $cid); }*/
         $filters = FilterHelper::getEnableFilters($entity, $cid);
 
         Seo_settings::get();
