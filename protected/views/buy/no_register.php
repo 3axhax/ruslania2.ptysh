@@ -15,7 +15,7 @@ $addrModel = new Address();
 			</div>
 
 			<div class="form">
-				<?php $this->renderPartial('address_form', array('alias'=>'Reg', 'addrModel'=>$addrModel)); ?>
+				<?php $this->renderPartial('address_form', array('alias'=>'Reg', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic)); ?>
 			</div>
 
 			<div class="clearfix"></div>
@@ -27,14 +27,14 @@ $addrModel = new Address();
 			</label>
 		</li>
 		<li>
-			<span class="step_header"><?=$ui->item('CARTNEW_REG_STEP2_TITLE')?></span>
+			<span class="step_header"><?=$ui->item('DELIVERY_METHOD')?></span>
 			<?php $this->renderPartial('delivery_form', array()); ?>
 		</li>
 		<li>
-			<span class="step_header"><?=$ui->item('PAYMENT_METHOD')?></span>
+			<span class="step_header"><?=$ui->item('PAYMENT_METHOD_PAYER')?></span>
 			<div><label class="addr_buyer"><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked="checked" onclick="$('.address.addr2').toggle(); $('.address.addr2 select, .address.addr2 input, .address.addr2 textarea').val(''); $('.states_list2').hide()"><span class="checkbox-custom"></span> Данные Плательщика совпадают с Получателем </label>
 			<div class="form">
-			<?php $this->renderPartial('address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$addrModel)); ?>
+			<?php $this->renderPartial('address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic)); ?>
 			</div>
 			<div class="row spay">
 			<?php $this->renderPartial('payments_form', array()); ?>
@@ -70,6 +70,11 @@ $addrModel = new Address();
 				<?=$ui->item('CARTNEW_TOTAL_COST_LABEL')?>: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($total['itemsPrice'] + $total['deliveryPrice']); ?></span>
 			</div>
 
+			<?php
+//TODO:: название кнопки исправить на "Завершить оформление заказа" или "Оформить заказ и оплатить"
+//	'BUTTON_ORDER_PAY' => 'Оформить заказ и оплатить',
+//  'BUTTON_ORDER_SAVE' => 'Завершить оформление заказа',
+			?>
 			<div class="cart_footer"><a class="order_start"><?=$ui->item('CARTNEW_SEND_ORDER_BTN')?></a></div>
 			<div class="cart_footer">
 				<?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
@@ -79,3 +84,12 @@ $addrModel = new Address();
 		<div class="clearfix"></div>
 	</div>
 </div>
+<script>
+	$(function(){
+		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
+			cart().init({
+				addrFormIds: <?= json_encode(array('Reg', 'Address')) ?>
+			});
+		});
+	});
+</script>

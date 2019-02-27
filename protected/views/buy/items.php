@@ -8,7 +8,7 @@ if (empty($PH)) $PH = new ProductHelper();
 	<table class="cart" style="width: 100%;">
 		<tbody>
 		<?php foreach ($items as $id => $item): ?>
-			<tr>
+			<tr class="js_<?= $item['entity'] ?>_<?= $item['id'] ?>">
 				<td style="width: 35px; height: 35px;">
 					<span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
 				</td>
@@ -23,7 +23,7 @@ if (empty($PH)) $PH = new ProductHelper();
 						<?= $ui->item('MONTH_SMALL'); ?>
 					<?php else: ?>
 						<?= $ui->item('CARTNEW_COUNT_NAME')?>.
-					<?php endif; ?> x <?= $PH->FormatPrice($total['pricesValues'][$item['entity'] . '_' . $item['id']]);?>
+					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($total['pricesValues'][$item['entity'] . '_' . $item['id']]); ?></span>
 					<?php if ($item['InCartUnitWeight'] > 0): ?>
 						<br /> <?= $ui->item('CARTNEW_WEIGHT_LABEL') ?>: <?= ($item['InCartUnitWeight']) ?> <?= $ui->item('CARTNEW_WEIGHT_NAME') ?>
 					<?php endif; ?>

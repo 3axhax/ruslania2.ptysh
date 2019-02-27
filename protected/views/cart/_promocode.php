@@ -106,7 +106,4 @@
 		}
 	}
 }());
-$(document).ready(function() {
-	promocodeHandler = promocodes().init();
-});
 </script>

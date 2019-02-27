@@ -7,7 +7,7 @@ switch ($userType) {
 	case 'destination': $userName = $ui->item("address_type"); break;
 	case 'payer': $userName = $ui->item("payer_type"); break;
 }
-$form = $this->createWidget('CActiveForm', array(
+$form = $this->beginWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl('cart/result'),
 	'id' => $alias,
 ));
@@ -18,32 +18,32 @@ $form = $this->createWidget('CActiveForm', array(
 		<td><b><?= $userName ?>:</b></td>
 		<td>
 			<label style="float: left; margin-right: 20px;">
-				<?= $form->radioButton($addrModel, 'type', array('value' => 1, 'class' => 'checkbox_custom', 'name'=>'' . $alias . '[type]')); ?>
+				<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom">
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?>
 			</label>
 			<label style="float: left;">
-				<?= $form->radioButton($addrModel, 'type', array('value' => 2, 'class' => 'checkbox_custom', 'name'=>'' . $alias . '[type]')); ?>
+				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom" checked>
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?>
 			</label>
 		</td>
 	</tr>
-<?php if ($userType == 'destination'): ?>
+<?php if (($userType == 'destination')&&!$onlyPereodic): ?>
 	<tr><?php //TODO:: если товары только подписка, то строку таблицы убрать?>
 		<td colspan="2"><label>
-				<input type="checkbox" name="check_addressa" value="1" class="check_addressa checkbox_custom"/>
-				<span class="checkbox-custom"></span> <?= $ui->item("TAKE_IN_THE_STORE") ?>
-			</label></td>
+			<input type="checkbox" name="check_addressa" value="1" class="check_addressa checkbox_custom" checked/>
+			<span class="checkbox-custom"></span> <?= $ui->item("TAKE_IN_THE_STORE") ?>
+		</label></td>
 	</tr>
 <?php endif; ?>
-	<tr>
+	<tr class="js_firm">
 		<td nowrap="" class="maintxt"><?= $ui->item("address_business_title"); ?></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'business_title', array('name'=>'' . $alias . '[business_title]')); ?>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_firm">
 		<td nowrap="" class="maintxt"><?= $ui->item("address_business_number1"); ?></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'business_number1', array('name'=>'' . $alias . '[business_number1]')); ?>
@@ -64,13 +64,13 @@ $form = $this->createWidget('CActiveForm', array(
 			<span class="texterror"></span>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_delivery">
 		<td class="maintxt"><?= $ui->item("regform_middlename"); ?></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_middle_name', array('name'=>'' . $alias . '[receiver_middle_name]')); ?>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_delivery">
 		<td nowrap="" class="maintxt country_lbl">
 			<span style="width: 5pt" class="redtext">*</span><?= $ui->item("address_country"); ?>
 		</td>
@@ -79,14 +79,14 @@ $form = $this->createWidget('CActiveForm', array(
 			<span class="texterror"></span>
 		</td>
 	</tr>
-	<tr class="states_list" style="display: none">
+	<tr class="states_list js_delivery" style="display: none">
 		<td nowrap="" class="maintxt"><?= $ui->item("address_state"); ?></td>
 		<td class="maintxt-vat select_states">
 			<?= $form->dropDownList($addrModel, 'state_id', CHtml::listData(array(0=>array('id'=>'','title_en'=>'---')), 'id', 'title_en'), array('name'=>'' . $alias . '[state_id]')) ?>
 		</td>
 	</tr>
 <?php if ($userType == 'payer'): ?>
-	<tr>
+	<tr class="js_firm verkkolasku">
 		<td nowrap="" class="maintxt city_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
 			Verkkolaskuosoite
@@ -96,7 +96,7 @@ $form = $this->createWidget('CActiveForm', array(
 			<span class="texterror"></span>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_firm verkkolasku">
 		<td nowrap="" class="maintxt postindex_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
 			Operaattoritunnus
@@ -107,7 +107,7 @@ $form = $this->createWidget('CActiveForm', array(
 		</td>
 	</tr>
 <?php endif; ?>
-	<tr>
+	<tr class="js_delivery">
 		<td nowrap="" class="maintxt city_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
 			<?= $ui->item('address_city') ?>
@@ -117,7 +117,7 @@ $form = $this->createWidget('CActiveForm', array(
 			<span class="texterror"></span>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_delivery">
 		<td nowrap="" class="maintxt postindex_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
 			<?= $ui->item('address_postindex') ?>
@@ -127,7 +127,7 @@ $form = $this->createWidget('CActiveForm', array(
 			<span class="texterror"></span>
 		</td>
 	</tr>
-	<tr>
+	<tr class="js_delivery">
 		<td nowrap="" class="maintxt streetaddress_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
 			<?= $ui->item('address_streetaddress') ?>
@@ -160,3 +160,4 @@ $form = $this->createWidget('CActiveForm', array(
 	</tr>
 	</tbody>
 </table>
+<?php $this->endWidget();

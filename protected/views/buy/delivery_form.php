@@ -11,7 +11,7 @@
 				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 			</div>
 			<input type="radio" value="3" name="dtype" rel="8.3USD" id="dtype2">
-			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Economy <br>2-5 дней <br>
+			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Economy <br><?= $ui->item('X_DAYS_3', '2-5') ?><br>
 			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
 		</label>
 	</div>
@@ -25,7 +25,7 @@
 				<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 			</div>
 			<input type="radio" value="2" name="dtype" rel="11.8USD" id="dtype3">
-			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Priority <br>1-3 дней <br>
+			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Priority <br><?= $ui->item('X_DAYS_3', '1-3') ?><br>
 			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
 		</label>
 	</div>
@@ -40,7 +40,7 @@
 			</div>
 			<input type="radio" value="1" name="dtype" rel="23.6USD" id="dtype4">
 			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?>
-			<br>Express <br>1-2 дней <br>
+			<br>Express <br><?= $ui->item('X_DAYS_3', '1-2') ?><br>
 			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
 		</label>
 	</div>
