@@ -135,7 +135,8 @@ return array (
   'address_receiver_name' => 'Имя получателя',
   'address_state' => 'Штат',
   'address_streetaddress' => 'Адрес',
-  'address_type' => 'Получатель:',
+  'address_type' => 'Получатель',
+  'payer_type' => 'Плательщик',
   'ADDRESS_USE_AS_DEFAULT' => 'Использовать этот адрес как основной',
   'ADDRESS_USE_AS_DELIVERY' => 'Доставить заказ на этот адрес',
   'Advanced search' => 'Расширенный поиск',
@@ -1338,7 +1339,7 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_LABEL_NO_ACCOUNT' => 'Нет учётной записи?',
 'CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION' => 'Продолжить без авторизации',
 'CARTNEW_LOGIN_SOCIAL' => 'Войти с помощью социальных сетей',
-'CARTNEW_NOREG_STEP1_TITLE' => '1. Укажите ваши личные данные',
+'CARTNEW_NOREG_STEP1_TITLE' => 'Укажите ваши личные данные',
 'CARTNEW_NOREG_STEP2_TITLE' => '2. Где и как вы хотите получить заказ?',
 'CARTNEW_NOREG_STEP3_TITLE' => '3. Как вам будет удобнее оплатить заказ?',
 'CARTNEW_CHECK_NO_ADDR' => 'Отметьте, если хотите забрать заказ в магазине. В этом случае адрес указывать не обязательно.',
@@ -1383,4 +1384,10 @@ IBAN DE79514303006474790001 <br>
 
    'MENU'=>'Меню',
     'VIEW_LIST'=>'Смотреть списком',
+
+
+    'TAKE_IN_THE_STORE' => 'Я заберу заказ в магазине в Хельсинки',
+    'PHONE_WITH_CODE' => 'Введите номер телефона включая код страны',
+    'CHECKBOX_TERMS_OF_USE'=>'Я согласен с условиями пользования виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_rus.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на русском языке)',
+    'PAYMENT_METHOD'=>'Выберите способ оплаты',
 );

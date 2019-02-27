@@ -1,16 +1,21 @@
 <?php /*Created by Кирилл (24.02.2019 20:17)*/
 /**@var $this MyController*/
 /**@var $form CActiveForm */
+if (empty($alias)) $alias = 'Address';
+if (empty($userType)) $userType = 'destination';
+switch ($userType) {
+	case 'destination': $userName = $ui->item("address_type"); break;
+	case 'payer': $userName = $ui->item("payer_type"); break;
+}
 $form = $this->createWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl('cart/result'),
-	'id' => 'reg',
+	'id' => $alias,
 ));
-if (empty($alias)) $alias = 'Address';
 ?>
 <table class="address">
 	<tbody>
 	<tr>
-		<td style="width: 200px;"><b><?= $ui->item("address_type"); ?></b></td>
+		<td><b><?= $userName ?>:</b></td>
 		<td>
 			<label style="float: left; margin-right: 20px;">
 				<?= $form->radioButton($addrModel, 'type', array('value' => 1, 'class' => 'checkbox_custom', 'name'=>'' . $alias . '[type]')); ?>
@@ -24,12 +29,14 @@ if (empty($alias)) $alias = 'Address';
 			</label>
 		</td>
 	</tr>
+<?php if ($userType == 'destination'): ?>
 	<tr><?php //TODO:: если товары только подписка, то строку таблицы убрать?>
 		<td colspan="2"><label>
 				<input type="checkbox" name="check_addressa" value="1" class="check_addressa checkbox_custom"/>
-				<span class="checkbox-custom"></span> <?= $ui->item("CARTNEW_CHECK_NO_ADDR") ?>
+				<span class="checkbox-custom"></span> <?= $ui->item("TAKE_IN_THE_STORE") ?>
 			</label></td>
 	</tr>
+<?php endif; ?>
 	<tr>
 		<td nowrap="" class="maintxt"><?= $ui->item("address_business_title"); ?></td>
 		<td class="maintxt-vat">
@@ -78,6 +85,28 @@ if (empty($alias)) $alias = 'Address';
 			<?= $form->dropDownList($addrModel, 'state_id', CHtml::listData(array(0=>array('id'=>'','title_en'=>'---')), 'id', 'title_en'), array('name'=>'' . $alias . '[state_id]')) ?>
 		</td>
 	</tr>
+<?php if ($userType == 'payer'): ?>
+	<tr>
+		<td nowrap="" class="maintxt city_lbl">
+			<span style="width: 5pt" class="redtext">*</span>
+			Verkkolaskuosoite
+		</td>
+		<td colspan="2" class="maintxt-vat">
+			<?= $form->textField($addrModel, 'verkkolaskuosoite', array('name'=>'' . $alias . '[city]')); ?>
+			<span class="texterror"></span>
+		</td>
+	</tr>
+	<tr>
+		<td nowrap="" class="maintxt postindex_lbl">
+			<span style="width: 5pt" class="redtext">*</span>
+			Operaattoritunnus
+		</td>
+		<td colspan="2" class="maintxt-vat">
+			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[postindex]')); ?>
+			<span class="texterror"></span>
+		</td>
+	</tr>
+<?php endif; ?>
 	<tr>
 		<td nowrap="" class="maintxt city_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
@@ -125,7 +154,7 @@ if (empty($alias)) $alias = 'Address';
 			<?= $ui->item("address_contact_phone"); ?>
 		</td>
 		<td class="maintxt-vat">
-			<?= $form->textField($addrModel, 'contact_phone', array('name'=>'' . $alias . '[contact_phone]')); ?>
+			<?= $form->textField($addrModel, 'contact_phone', array('name'=>'' . $alias . '[contact_phone]', 'placeholder'=>$ui->item('PHONE_WITH_CODE'))); ?>
 			<span class="texterror"></span>
 		</td>
 	</tr>

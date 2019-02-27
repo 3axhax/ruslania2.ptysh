@@ -102,9 +102,9 @@ table.cart {
     max-height: 236px;
 }
 
-.cart_footer { float: right; }
+.cart_footer { float: right; width: 575px; }
 
-.footer3 { margin-bottom: 25px; border-bottom: 1px solid #ececec; }
+.footer3 { margin-bottom: 10px; border-bottom: 1px solid #ececec; width: 553px;}
 
 .footer1, .footer3, .footer_promocode {
     background: #f8f8f8;
@@ -113,10 +113,11 @@ table.cart {
     border-left: 1px solid #ececec;
     border-top: 1px solid #ececec;
     border-right: 1px solid #ececec;
+    width: 553px;
 }
 
 .footer2 {
-
+    width: 553px;
     padding: 8px 10px;
     color: #81807C;
     border-left: 1px solid #ececec;
@@ -124,7 +125,7 @@ table.cart {
 
 }
 
-a.order_start { background-color: #5bb75b; }
+a.order_start { background-color: #5bb75b; cursor: pointer; margin-bottom: 5px; width: 100%; display: block; }
 
 .order_start.disabled {
 
@@ -241,3 +242,16 @@ table.address textarea {
 table.address select {
     width: 360px;
 }
+
+ol {list-style-type: none; counter-reset: num; margin: 0;}
+ol li::before {content: counter(num) '. '; counter-increment: num;}
+ol li::before, ol li span.step_header {font-size: 22px;}
+ol li span.step_header {margin-bottom: 15px; display: inline-block;}
+
+ol li {margin-top: 15px;}
+ol li .items_list {float: right; width: 575px; margin-left: 20px;}
+ol li .form {}
+ol li .dtypes .variant {position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;}
+ol li .dtypes .variant .qbtn2 {display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; float: right;margin-right: 38px; position: absolute;z-index: 99999;left: 195px;top: 40px;}
+ol li .dtypes .variant .info_box {background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none}
+ol li label.selp input[type=radio], ol li label.seld input[type=radio] {display: none;}
