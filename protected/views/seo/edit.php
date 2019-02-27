@@ -7,6 +7,8 @@
 	.tab-content .form .form_row div.row_name { width: 110px; vertical-align: top; text-align: right; padding-right: 15px; }
 	.tab-content .form .form_row div.row_name span { color: #ed1d24; width: 5px }
 	.tab-content .form .form_row div.row_value textarea { width:740px; height:80px }
+	div.span2 div {margin-bottom: 10px;}
+	div.span2 div span {font-weight: bold;}
 </style>
 <div class="container view_product">
 	<div class="row">
@@ -22,7 +24,7 @@
 			<div>
 				<ul class="nav nav-tabs">
 					<?php $i = 0; foreach ($seoModel->getAttributes() as $k=>$v): if (!in_array($k, array('id_seo_settings', 'route', 'entity', 'id'))):?>
-						<li<?php if (empty($i)): ?> class="active"<?php endif; ?>><a href="#<?= $k ?>" data-toggle="tab"><?= $k ?></a></li>
+						<li<?php if (empty($i)): ?> class="active"<?php endif; ?>><a href="#<?= $k ?>" data-toggle="tab" onclick="return false;"><?= $k ?></a></li>
 					<?php $i++; endif; endforeach; ?>
 				</ul>
 				<?php $form = $this->beginWidget('CActiveForm', array(
@@ -80,6 +82,18 @@
 			<?php elseif (!empty($error)): ?>
 				<h2><?= $error ?></h2>
 			<?php endif; ?>
+		</div>
+		<div class="span2">
+			<div class="poht">Для автозамены:</div>
+			<div><span>{geoip_country}</span> - название страныб определяется по IP</div>
+			<div><span>{domain}</span> - Rusliania.com</div>
+			<div><span>{page_n}</span> - Страница N (N > 1)</div>
+			<div><span>{entity_name}</span> - Название раздела</div>
+			<div><span>{counts}</span> - Количество в разделе</div>
+			<div><span>{type_publication}</span> - тип издания (для подписки)</div>
+			<div><span>{lang_predl}</span> - язык товара (предложный падеж)</div>
+			<div><span>{params}</span> - Через ";" перечисляется выбранный фильтр (автор, год, цена и др)</div>
+			<div><span>{name}</span> - Название, зависит от открыртой страницы, может быть названием тега или категории или товара или др.</div>
 		</div>
 	</div>
 </div>

@@ -433,8 +433,10 @@ class ProductHelper
         }
     }
 
-    public static function IsAvailableForOrder($item)
-    {
+    public static function IsAvailableForOrder($item) {
+        if (isset($item['avail_for_order'])) {
+            return !empty($item['avail_for_order']);
+        }
         $code = Availability::GetStatus($item);
 
         return $code == Availability::AVAIL_IN_SHOP ||

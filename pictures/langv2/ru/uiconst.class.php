@@ -58,7 +58,7 @@ return array (
   'A_LEFT_PAY_ATTENTION' => 'Внимание!',
   'A_LEFT_PEREOD_CATTREE_PROPERTYLIST' => 'Список категорий',
   'A_LEFT_PEREOD_SEARCH' => 'Расширенный поиск в разделе',
-  'A_LEFT_PERSONAL_ADDRESSES' => 'Мои адреса доставки',
+  'A_LEFT_PERSONAL_ADDRESSES' => 'Мои адреса',
   'A_LEFT_PERSONAL_LOGIN' => 'Вход для зарегистрированных пользователей',
   'A_LEFT_PERSONAL_LOGOUT' => 'Выход',
   'A_LEFT_PERSONAL_NOTAVAIBLE_ORDERS' => 'Мой лист ожидания',

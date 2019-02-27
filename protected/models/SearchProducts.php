@@ -132,7 +132,6 @@ class SearchProducts {
 				$result[$key] = $prepareData[$key];
 			}
 		}
-
 		return $result;
 	}
 
@@ -149,18 +148,42 @@ class SearchProducts {
 	}
 
 	function getEntitys($query) {
-		$sql = ''.
-			'select entity, count(distinct real_id) counts '.
+/*		$sql = ''.
+			'select entity, count(distinct real_id) counts './/', GROUP_CONCAT(real_id) '.
 			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
 			'where (match(' . SphinxQL::getDriver()->mest($this->getMath($query)) . ')) '.
 			'group by entity '.
 //			'order by position asc '.
 			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
 		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);*/
+
+		$spxCond = array($this->getMath($query));
+		$spxCond['ranker'] = 'ranker=sph04';
+		$spxCond['limit'] = 'limit=100000';
+		$spxCond['maxmatches'] = 'maxmatches=100000';
+		$sql = ''.
+			'select t.entity, count(*) counts '.
+			'from ('.
+				'SELECT entity, real_id '.
+				'FROM `_se_avail_items_without_morphy` '.
+				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+				'union '.
+				'SELECT entity, real_id '.
+				'FROM `_se_product_authors` '.
+				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+				'union '.
+				'SELECT entity, real_id '.
+				'FROM `_se_avail_items_with_morphy`'.
+				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+			') t '.
+			'group by t.entity '.
+		'';
+		$find = Yii::app()->db->createCommand($sql)->queryAll();;
+
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
-		$find = SphinxQL::getDriver()->multiSelect($sql);
 		Debug::staticRun(array($sql, $find));
 		foreach ($find as $data) {
 			//audio не показываем
