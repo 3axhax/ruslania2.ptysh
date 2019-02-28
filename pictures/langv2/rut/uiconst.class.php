@@ -1282,5 +1282,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'NAME_CROSSWORD'=>'Krossvordi',
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
-	'CARTNEW_IN_CART_BTN2' => '%d sht.'
+	'CARTNEW_IN_CART_BTN2' => '%d sht.',
+    'LAST_STATE' => 'Posledniy status',
+
 );

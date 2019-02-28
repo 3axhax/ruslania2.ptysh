@@ -927,7 +927,7 @@ Please retry to pay, or contact us.',
   'ALREADY_IN_CART' => 'Varukorgen innehaller %d stycken av denna produkt.',
   'PERIODIC_ALREADY_IN_CART' => 'Den här produkten är redan i varukorgen.',
   'REQUEST_CREATED' => 'Tack! Produkten är tillsatts till förfrågalistan',
-  'DID_YOU_MEAN' => 'Menar du',
+  'DID_YOU_MEAN' => 'Menar du?',
   'ALREADY_PAID' => 'Du har redan betalat beställningen',
   'AJAX_IN_PROGRESS' => 'Tilläggar produkten till varukorgen',
   'ORDER_PAYMENT' => 'Betala beställningen',
@@ -996,8 +996,8 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
   'THANKS' => 'Tack för din beställning!',
   'ORDER_MSG_DONE_EMAIL' => 'Tack för beställningen! Var så god, välj betalningssättet.',
   'MSG_YAHLIST_INFO_PAYPAL' => 'Information om Paypal',
-  'PERIODIC_DELIVERY_TO_FINLAND' => 'Subscription to Finland',
-  'PERIODIC_DELIVERY_TO_WORLD' => 'Subscription to other countries',
+  'PERIODIC_DELIVERY_TO_FINLAND' => 'Prenumeration till Finland',
+  'PERIODIC_DELIVERY_TO_WORLD' => 'Prenumeration till andra länder',
   'PERIODIC_POPUP_HEADER' => 'Select delivery country for:',
   'PERIODIC_POPUP_FINLAND_BUTTON' => 'Finland',
   'PERIODIC_POPUP_WORLD_BUTTON' => 'Other countries',
@@ -1284,5 +1284,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Lägt i kundvagn %d st.',
-'CARTNEW_IN_CART_BTN2' => '%d st.'
+'CARTNEW_IN_CART_BTN2' => '%d st.',
+    'LAST_STATE' => 'Senaste status',
+
 );

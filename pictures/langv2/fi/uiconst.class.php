@@ -917,7 +917,7 @@ Voit myös ottaa yhteyttä meihin.',
   'ALREADY_IN_CART' => 'Ostoskorissa on nyt %d kpl tätä tuotetta.',
   'PERIODIC_ALREADY_IN_CART' => 'Tämä tuote on jo ostoskorissa.',
   'REQUEST_CREATED' => 'Kiitos! Tuote on nyt lisätty kyselyjen listalle.',
-  'DID_YOU_MEAN' => 'Tarkoititko',
+  'DID_YOU_MEAN' => 'Tarkoititko?',
   'ALREADY_PAID' => 'Tilaus on jo maksettu',
   'AJAX_IN_PROGRESS' => 'Lisätään ostoskoriin',
   'ORDER_PAYMENT' => 'Tilauksen maksaminen',
@@ -1277,5 +1277,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Ostoskorissa %d kpl',
-'CARTNEW_IN_CART_BTN2' => '%d kpl'
+'CARTNEW_IN_CART_BTN2' => '%d kpl',
+    'LAST_STATE' => 'Viimeisin päivitys',
+
 );

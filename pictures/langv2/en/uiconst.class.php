@@ -929,7 +929,7 @@ Please retry to pay, or contact us.',
   'ALREADY_IN_CART' => 'There are %d copy(ies) of the product in the cart.',
   'PERIODIC_ALREADY_IN_CART' => 'This title is already in the cart.',
   'REQUEST_CREATED' => 'Thanks you! The product has now been added to the list of requests.',
-  'DID_YOU_MEAN' => 'Did you mean',
+  'DID_YOU_MEAN' => 'Did you mean?',
   'ALREADY_PAID' => 'The order has already been paid',
   'AJAX_IN_PROGRESS' => 'Adding the product to the shopping cart',
   'ORDER_PAYMENT' => 'Pay for the order',
@@ -1291,5 +1291,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'In cart %d item(s)',
-	'CARTNEW_IN_CART_BTN2' => '%d item(s)'
+	'CARTNEW_IN_CART_BTN2' => '%d item(s)',
+    'LAST_STATE' => 'Latest status',
+
 );
