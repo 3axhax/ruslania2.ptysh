@@ -300,9 +300,15 @@ class Cart extends CActiveRecord
                 {
                     $product = array_merge($r, $data[$entity][$iid]);
                     // UnitWeight
-    
-                    $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
-                    $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+
+                    if (empty($r['unitweight'])) {
+                        $product['FullUnitWeight'] = 0;
+                        $product['InCartUnitWeight'] = 0;
+                    }
+                    else {
+                        $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
+                        $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+                    }
                     $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
     
                     $ret[] = $product;

@@ -9,13 +9,6 @@ label.seld {
     height: 80px !important;
 }
 
-label.seld .red_checkbox {
-    position: absolute;
-    right: 5px;
-    top: 20px;
-
-}
-
 label.selt {
     padding: 1.8rem 2rem 2.2rem;
     border: 1px solid #ccc;
@@ -24,16 +17,6 @@ label.selt {
     position: relative;
     width: 212px;
 }
-
-label.selt .red_checkbox {
-    position: absolute;
-    right: 5px;
-    top: 20px;
-
-}
-
-
-
 
 label.selp {
     padding: 1.8rem 2rem 2.2rem;
@@ -46,9 +29,9 @@ label.selp {
     border-radius: 2px;
 }
 
-label.selp .red_checkbox {
+label.selp .red_checkbox, label.seld .red_checkbox, label.selt .red_checkbox  {
     position: absolute;
-    right: 5px;
+    right: 15px;
     top: 20px;
 }
 
@@ -152,6 +135,9 @@ label.selp.act img {
     filter: none; /* IE 6-9 */
 }
 
+label.selp.act {
+    border: 1px solid #64717f;
+}
 
 input.error {
     border: 1px solid #ed1d24;

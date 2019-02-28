@@ -8,7 +8,7 @@ $addrModel = new Address();
 
 <div class="container cartorder" style="margin-bottom: 20px;">
 	<ol>
-		<li>
+		<li id="deliveryContactData">
 			<span class="step_header"><?=$ui->item('CARTNEW_NOREG_STEP1_TITLE')?></span>
 			<div class="items_list">
 				<?php $this->renderPartial('items', array('PH'=>$PH, 'total'=>$total, 'items'=>$items)); ?>
@@ -26,13 +26,13 @@ $addrModel = new Address();
 				<?= $ui->item('CHECKBOX_TERMS_OF_USE') ?>
 			</label>
 		</li>
-		<li>
+		<li id="deliveryTypeData">
 			<span class="step_header"><?=$ui->item('DELIVERY_METHOD')?></span>
 			<?php $this->renderPartial('delivery_form', array()); ?>
 		</li>
-		<li>
+		<li id="paymentsData">
 			<span class="step_header"><?=$ui->item('PAYMENT_METHOD_PAYER')?></span>
-			<div><label class="addr_buyer"><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked="checked" onclick="$('.address.addr2').toggle(); $('.address.addr2 select, .address.addr2 input, .address.addr2 textarea').val(''); $('.states_list2').hide()"><span class="checkbox-custom"></span> Данные Плательщика совпадают с Получателем </label>
+			<div><label class="addr_buyer"><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked><span class="checkbox-custom"></span> <?= $ui->item('DELIVERY_EQUALLY_PAYER') ?></label>
 			<div class="form">
 			<?php $this->renderPartial('address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic)); ?>
 			</div>
@@ -88,7 +88,7 @@ $addrModel = new Address();
 	$(function(){
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
-				addrFormIds: <?= json_encode(array('Reg', 'Address')) ?>
+				onlyPereodic: <?= (int) $onlyPereodic ?>
 			});
 		});
 	});

@@ -1,6 +1,8 @@
 <?php /*Created by Кирилл (24.02.2019 20:17)*/
 /**@var $this MyController*/
 /**@var $form CActiveForm */
+$countrys = Country::GetCountryList();
+array_unshift($countrys, array('id'=>'','title_en'=>'---'));
 if (empty($alias)) $alias = 'Address';
 if (empty($userType)) $userType = 'destination';
 switch ($userType) {
@@ -32,7 +34,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <?php if (($userType == 'destination')&&!$onlyPereodic): ?>
 	<tr><?php //TODO:: если товары только подписка, то строку таблицы убрать?>
 		<td colspan="2"><label>
-			<input type="checkbox" name="check_addressa" value="1" class="check_addressa checkbox_custom" checked/>
+			<input type="checkbox" name="check_addressa" id="check_addressa" value="1" class="check_addressa checkbox_custom" checked/>
 			<span class="checkbox-custom"></span> <?= $ui->item("TAKE_IN_THE_STORE") ?>
 		</label></td>
 	</tr>
@@ -75,7 +77,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			<span style="width: 5pt" class="redtext">*</span><?= $ui->item("address_country"); ?>
 		</td>
 		<td class="maintxt-vat">
-			<?= $form->dropDownList($addrModel, 'country', CHtml::listData(Country::GetCountryList(), 'id', 'title_en'), array('name'=>'' . $alias . '[country]')) ?>
+			<?= $form->dropDownList($addrModel, 'country', CHtml::listData($countrys, 'id', 'title_en'), array('name'=>'' . $alias . '[country]')) ?>
 			<span class="texterror"></span>
 		</td>
 	</tr>

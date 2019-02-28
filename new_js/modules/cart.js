@@ -5,19 +5,25 @@
 
     function _Cart() {}
     _Cart.prototype = {
-        addrFormIds:[],
+        addrFormIds:['Reg', 'Address'],
+        onlyPereodic: 0,
         init: function(options) {
+            this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
+            this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
+
             this.setConst(options);
             this.setEvents();
             return this;
         },
         setConst: function(options) {
-            this.addrFormIds = options.addrFormIds;
+            this.onlyPereodic = options.onlyPereodic;
         },
         setEvents: function() {
             for (var i = 0, len = this.addrFormIds.length; i < len; i++) {
                 this.showAddressFields(this.addrFormIds[i]);
             }
+            this.deleveryForm();
+            this.paymentsForm();
         },
 
         showAddressFields: function(idForm) {
@@ -55,6 +61,29 @@
                         }
                         else $elem.show();
                     }
+                }
+            });
+        },
+
+        deleveryForm: function() {
+            var $deliveryTypeData = $('#deliveryTypeData');
+            if (this.onlyPereodic) $deliveryTypeData.hide();
+        },
+        paymentsForm: function() {
+            var $paymentsData = $('#paymentsData');
+            if (this.oneAddr.checked) $paymentsData.find('.form').hide();
+            else $paymentsData.find('.form').show();
+            var self = this;
+            $paymentsData.find('input[name=ptype]').each(function(id, el) {
+                switch (el.value) {
+                    case '0':
+                        if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').show();
+                        else $(el).closest('label').hide();
+                        break;
+                    case '14':case '13':case '7':
+                    if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').hide();
+                    else $(el).closest('label').show();
+                        break;
                 }
             });
         }
