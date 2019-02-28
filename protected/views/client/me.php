@@ -24,8 +24,45 @@
                 <?php endif; ?>
                 <br/>
                 <?php if(empty($orders)) : ?>
-                    <div class="info-box information">
-                        <?=$ui->item('ORDER_MSG_NO_ORDERS'); ?>
+                    <div class="info-box information" style="padding-left: 0;">
+                        
+						<?
+							
+							$cart = new Cart;
+							
+							$cartGoods = $cart->GetCart($this->uid, $this->sid, $isMiniCart);
+        $tmp = $cart->BeautifyCart($cartGoods, $this->uid, $isMiniCart);
+        $inCart = array();
+        $endedItems = array();
+        foreach ($tmp as $item) {
+            if ($item['IsAvailable'])
+                $inCart[] = $item;
+            else
+                $endedItems[] = $item;
+        }
+							
+							if ($inCart[0]) {
+								
+								?>
+								
+								<a href="<?=Yii::app()->createUrl('cart/view');?>" class="order_start" style="background-color: #5bb75b;width:  auto;padding: 9px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить оформление заказа</span>
+                        </a>
+								
+								<?
+								
+							} else {
+								
+								?>
+								<?=$ui->item('ORDER_MSG_NO_ORDERS'); ?>
+								<?
+								
+							}
+						
+						?>
+						
+						
+						
                     </div>
 
                 <?php else : ?>
@@ -56,6 +93,7 @@
                             <?php
                             $id = $order['id'];
                             $first = OrderState::GetFirstState($order['States']);
+
                             $isClosed = OrderState::IsClosed($order['States']);
                             $isCancelled = OrderState::IsCancelled($order['States']);
                             $class =  $isClosed ? 'closed' : 'open';

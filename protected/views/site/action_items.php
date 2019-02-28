@@ -8,6 +8,10 @@
 				<?
 				foreach ($actionItems as $actionItem)
 				{
+					
+					$sCount = Cart::getCountCartItem($actionItem['item_id'], $actionItem['entity'], $this->uid, $this->sid);
+					
+					
 					$product = Product::GetProduct($actionItem['entity'], $actionItem['item_id']);
 					
 					$url = ProductHelper::CreateUrl($product);						
@@ -76,12 +80,24 @@
 								</div>
 								<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
-									<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
+									<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a>
 								<?php else: ?>
 									<div class="addcart" style="margin-top: 10px;">
 								<?file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.txt', print_r($product,1))?>	
-									
-										<a class="cart-action add_cart add_cart_plus" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+		
+<? if ($sCount > 0) : ?>
+	
+	<a class="cart-action cart_add_slider add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$product['id']?> green_cart" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 115px; float: right;  margin-top: 8px;">
+                        <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN2'), $sCount)?></span>
+                    </a>
+	
+	
+	
+<? else : ?>
+	<a class="cart-action cart_add_slider add_cart add_cart_plus cartMini<?=$product['id']?>" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 40px; float: right;  margin-top: 8px;"></a>
+<? endif; ?>
+		
+										
 										
 										
 										

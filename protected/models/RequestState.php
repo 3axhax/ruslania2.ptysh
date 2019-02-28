@@ -73,10 +73,18 @@ class RequestState extends CMyActiveRecord
             return $state;
         }
         $state['state_string'] = self::GetTitle($state['state']);
-        $state['date_string'] = Yii::app()->dateFormatter->format('dd MMMM yyyy HH:mm:ss', $state['timestamp']);
-        $state['mail_string'] = $state['mail_date'] == null
-            ? 'никогда'
-            : Yii::app()->dateFormatter->format('dd MMMM yyyy HH:mm:ss', $state['mail_date']);
+        $date = new DateTime($state['timestamp']);
+        $state['date_string'] = $date->format('d') . ' ' . Yii::app()->ui->item('A_NEW_M' . (int)$date->format('m')) . ' ' . $date->format('Y H:i:s');
+//        $state['date_string'] = Yii::app()->dateFormatter->format('dd MMMM yyyy HH:mm:ss', $state['timestamp']);
+
+        if (empty($state['mail_date'])) $state['mail_string'] = 'никогда';
+        else {
+            $date = new DateTime($state['mail_date']);
+            $state['mail_string'] = $date->format('d') . ' ' . Yii::app()->ui->item('A_NEW_M' . (int)$date->format('m')) . ' ' . $date->format('Y H:i:s');
+        }
+//        $state['mail_string'] = $state['mail_date'] == null
+//            ? 'никогда'
+//            : Yii::app()->dateFormatter->format('dd MMMM yyyy HH:mm:ss', $state['mail_date']);
         return $state;
     }
 

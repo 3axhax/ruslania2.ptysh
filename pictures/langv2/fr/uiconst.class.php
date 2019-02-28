@@ -914,7 +914,7 @@ Please retry to pay, or contact us.',
   'ALREADY_IN_CART' => 'Il ya %d copies du produit dans le panier.',
   'PERIODIC_ALREADY_IN_CART' => 'Ce produit est déjà dans le panier. ',
   'REQUEST_CREATED' => 'Merci! Le produit est ajouté à la liste des demandes.',
-  'DID_YOU_MEAN' => 'Did you mean',
+  'DID_YOU_MEAN' => 'Peut-être cherchez-vous cela?',
   'ALREADY_PAID' => 'La commande est déjà payée',
   'AJAX_IN_PROGRESS' => 'Ajoute le produit au panier',
   'ORDER_PAYMENT' => 'Payez pour la commande',
@@ -987,8 +987,8 @@ By clicking on a category you are interested in, you can see all the products wi
   'THANKS' => 'Merci de votre commande!',
   'ORDER_MSG_DONE_EMAIL' => 'Merci pour votre commande ! S\'il vous plaît, choisissez la type de paiement.',
   'MSG_YAHLIST_INFO_PAYPAL' => 'À propos de Paypal',
-  'PERIODIC_DELIVERY_TO_FINLAND' => 'Subscription to Finland',
-  'PERIODIC_DELIVERY_TO_WORLD' => 'Subscription to other countries',
+  'PERIODIC_DELIVERY_TO_FINLAND' => 'Abonnement à la Finlande',
+  'PERIODIC_DELIVERY_TO_WORLD' => 'Abonnement à d\'autres pays',
   'PERIODIC_POPUP_HEADER' => 'Select delivery country for:',
   'PERIODIC_POPUP_FINLAND_BUTTON' => 'Finland',
   'PERIODIC_POPUP_WORLD_BUTTON' => 'Other countries',
@@ -1274,5 +1274,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'MENU'=>'Menu',
     'VIEW_LIST'=>'Смотреть списком',
     'CARTNEW_IN_CART_BTN' => 'Quantité au panier: %d',
-	'CARTNEW_IN_CART_BTN2' => '%d kpl'
+	'CARTNEW_IN_CART_BTN2' => '%d kpl',
+    'LAST_STATE' => 'Dernier statut',
+
 );
