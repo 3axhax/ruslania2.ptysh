@@ -27,6 +27,7 @@ class ModelsSeoEntity extends Seo_settings {
 					$this->_settings[$k] = $v;
 				}
 			}
+			Debug::staticRun(array($sql, $this->_settings, $bdSettings, array('route'=>$this->_route, 'eid'=>$this->_eid, 'id'=>$this->_id)));
 		}
 
 		if (empty($this->_settings['h1'])||empty($this->_settings['title'])||empty($this->_settings['description'])||empty($this->_settings['keywords'])) {
