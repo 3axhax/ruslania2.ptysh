@@ -171,8 +171,15 @@
 						
 						$('a.cart'+item.ID()).removeClass('green_cart');
 						
-						$('a.cart'+item.ID()).html('');
-						$('a.cart'+item.ID()).attr('style', 'width: 40px; float: right;  margin-top: 8px;');
+						$('a.cart'+item.ID()).html('<span style="padding: 0 17px 0 20px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+						$('a.cart'+item.ID()).attr('style', '');
+						
+						
+						$('a.cartMini'+item.ID()).removeClass('green_cart');
+						
+						$('a.cartMini'+item.ID()).html('');
+						$('a.cartMini'+item.ID()).attr('style', 'width: 40px; float: right;  margin-top: 8px;');
+						
 						
 						
 						$('div.already-in-cart'+item.ID()).html('&nbsp;');
@@ -219,12 +226,17 @@
                 $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
 					
 					var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
-				
-				repltext = repltext.replace('%d', post['quantity']);
-				
-                $('a.cart'+data.ID()+' span').html(repltext);
+					var repltext2 = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+					var repltext3 = '<?=$ui->item('ALREADY_IN_CART')?>';
 					
-					$('div.already-in-cart'+data.ID()).html('<?=$ui->item('ALREADY_IN_CART')?>').replace;
+					repltext = repltext.replace('%d', post['quantity']);
+					repltext2 = repltext2.replace('%d', post['quantity']);
+					repltext3 = repltext3.replace('%d', post['quantity']);
+					
+					$('a.cartMini'+data.ID()+' span').html(repltext);
+					$('a.cart'+data.ID()+' span').html(repltext2);
+					
+					$('div.already-in-cart'+data.ID()).html(repltext3).replace;
 					
                     if(json.changed){
                         data.InfoField(json.changedStr);
@@ -252,10 +264,17 @@
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
 				
 				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
-				
-				repltext = repltext.replace('%d', post['quantity']);
-				
-                $('a.cart'+data.ID()+' span').html(repltext);
+					var repltext2 = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+					var repltext3 = '<?=$ui->item('ALREADY_IN_CART')?>';
+					
+					repltext = repltext.replace('%d', post['quantity']);
+					repltext2 = repltext2.replace('%d', post['quantity']);
+					repltext3 = repltext3.replace('%d', post['quantity']);
+					
+					$('a.cartMini'+data.ID()+' span').html(repltext);
+					$('a.cart'+data.ID()+' span').html(repltext2);
+					
+					$('div.already-in-cart'+data.ID()).html(repltext3).replace;
 				if(json.changed) data.InfoField(json.changedStr);
                 else data.InfoField('');
                 data.Quantity(json.quantity);
@@ -277,10 +296,17 @@
             $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
                 
 				var repltext = '<?=$ui->item('CARTNEW_IN_CART_BTN2')?>';
-				
-				repltext = repltext.replace('%d', post['quantity']);
-				
-                $('a.cart'+data.ID()+' span').html(repltext);
+					var repltext2 = '<?=$ui->item('CARTNEW_IN_CART_BTN')?>';
+					var repltext3 = '<?=$ui->item('ALREADY_IN_CART')?>';
+					
+					repltext = repltext.replace('%d', post['quantity']);
+					repltext2 = repltext2.replace('%d', post['quantity']);
+					repltext3 = repltext3.replace('%d', post['quantity']);
+					
+					$('a.cartMini'+data.ID()+' span').html(repltext);
+					$('a.cart'+data.ID()+' span').html(repltext2);
+					
+					$('div.already-in-cart'+data.ID()).html(repltext3).replace;
 				if(json.changed) data.InfoField(json.changedStr);
                 else data.InfoField('');
                 data.Quantity(json.quantity);

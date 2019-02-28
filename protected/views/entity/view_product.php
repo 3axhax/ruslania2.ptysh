@@ -660,7 +660,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <? if ($item['entity'] != Entity::PERIODIC) :  ?>
 
-            <div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin-top: 30px; float: left; margin-left: 33px; position: relative;">
+            <div class="already-in-cart" style="margin-top: 30px; float: left; margin-left: 33px; position: relative;">
                 <?php //if (isset($item['AlreadyInCart'])) : ?>
 
 					<div class="price_h">&nbsp;</div>
@@ -887,7 +887,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			
 			<div class="periodics">
 			
-            <select class="select2_periodic periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;">
+            <select class="select2_periodic periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;" onchange="$('.cart-action.add_cart').attr('data-quantity', $(this).val())">
                 <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
                     <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                 <?php endif; ?>
@@ -931,7 +931,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
          
 			
-			<a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="3" data-hidecount="1" href="javascript:;">
+			<a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" data-hidecount="1" href="javascript:;">
 			<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
 
         <?php endif;?>

@@ -11,7 +11,28 @@
 	$productTitle = ProductHelper::GetTitle($item, 'title', 18);
 	$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 	?>
-					<li>
+					
+					<?
+					
+						$c = new Cart;
+						$cart = $c->GetCart($uid, $sid);
+						$sCount = 0;
+						// foreach ($items as $idx => $item) {
+							foreach ($cart as $cartItem) {
+								if ($cartItem['entity'] == $item['entity'] && $cartItem['id'] == $item['id']) {
+									
+									//var_dump($sid);
+									
+									$sCount = $cartItem['quantity'];
+								}
+							}
+					   // }
+						
+						//echo $sCount;
+					
+					?>
+	
+					<li><?=Yii::app()->user->id?>
 						<div class="span1 photo">
 							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt=""  style="max-height: 130px;"/></a>
 						</div>
@@ -27,10 +48,31 @@
 							</div>
 							<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
 							<?php if ($item['entity'] == Entity::PERIODIC): ?>
-							<a href="<?=$url;?>" class="btn_yellow"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></a>
+							
+							<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;" tabindex="0"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a>
+							
 							<?php else: ?>
 							<div class="addcart" style="margin-top: 10px;">
-								<a class="cart-action add_cart_plus" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+								
+								<?
+								//$sCount = Cart::getCountCartItem($item['id'], $item['entity'], $this->uid, $this->sid);
+								?>
+								
+								
+								<? if ($sCount > 0) : ?>
+	
+	<a class="cart-action cart_add_slider add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 115px; float: right;  margin-top: 8px;">
+                        <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN2'), $sCount)?></span>
+                    </a>
+	
+	
+	
+<? else : ?>
+	<a class="cart-action cart_add_slider add_cart add_cart_plus cartMini<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 40px; float: right;  margin-top: 8px;"></a>
+<? endif; ?>
+								
+								
+								
 							</div>
 							<?php endif; ?>
 						</div>
