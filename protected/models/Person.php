@@ -16,6 +16,16 @@ class Person
     {
         return $id - 100000000;
     }
+	
+	public static function CreateUrl($item, $lang = null)
+    {
+        if ($item === false) return '';
+        
+        if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
+        return Yii::app()->createUrl($item, $params);
+    }
+	
+	
 }
 
 /*
