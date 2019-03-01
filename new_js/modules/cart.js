@@ -7,18 +7,29 @@
     _Cart.prototype = {
         addrFormIds:['Reg', 'Address'],
         onlyPereodic: 0,
+        activePromocode: false,
         init: function(options) {
-            this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
-            this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
-            this.confirm = document.getElementById('confirm'); //согласен с условиями
-            this.country = document.getElementById('Reg_country'); //страна доставки
-
             this.setConst(options);
             this.setEvents();
             return this;
         },
         setConst: function(options) {
+            this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
+            this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
+            this.confirm = document.getElementById('confirm'); //согласен с условиями
+            this.country = document.getElementById('Reg_country'); //страна доставки
+            this.csrf = $('meta[name=csrf]').attr('content').split('=');
+            this.$deliveryTypeData = $('#deliveryTypeData');
+            this.$paymentsData = $('#paymentsData');
+            this.promocode = $('#promocode');
+
+            var $promocodeBlock = $('#js_promocode');
+            this.$inputPromocode = $promocodeBlock.find('input[type=text]');
+            this.$submitPromocode = $promocodeBlock.find('input[type=button]');
+
             this.onlyPereodic = options.onlyPereodic;
+            this.urlRecount = options.urlRecount;
+            this.urlChangeCountry = options.urlChangeCountry;
         },
         setEvents: function() {
             var self = this;
@@ -46,10 +57,15 @@
 
             $(this.country).on('change', function() {
                 self.blockPay();
+                self.changeCountry();
             });
 
             $(this.oneAddr).on('click', function() {
                 self.showPayerForm();
+            });
+
+            self.$submitPromocode.on('click', function() {
+                self.recount(self.$inputPromocode.val().trim());
             });
 
         },
@@ -95,14 +111,12 @@
         },
 
         deleveryForm: function() {
-            var $deliveryTypeData = $('#deliveryTypeData');
-            if (this.onlyPereodic||this.takeInStore.checked) $deliveryTypeData.hide();
-            else $deliveryTypeData.show();
+            if (this.onlyPereodic||this.takeInStore.checked) this.$deliveryTypeData.hide();
+            else this.$deliveryTypeData.show();
         },
         paymentsForm: function() {
-            var $paymentsData = $('#paymentsData');
             var self = this;
-            $paymentsData.find('input[name=ptype]').each(function(id, el) {
+            this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 switch (el.value) {
                     case '0':
                         if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').show();
@@ -132,105 +146,112 @@
             var self = this;
             var $form = $('#' + idForm);
             $form.find('input[type=radio].js_userType').each(function(i, el) {
-                $(el).on('click', function(){ self.showAddressFields(idForm) });
+                $(el).on('click', function(){
+                    self.showAddressFields(idForm);
+                    self.deleveryForm();
+                });
             });
         },
         eventPayments: function () {
-            var $paymentsData = $('#paymentsData');
             var self = this;
-            $paymentsData.find('label').each(function(id, el) {
+            var $orderButton = $('.order_start');
+            var $orderPay = $orderButton.find('.js_orderPay');
+            var $orderSave = $orderButton.find('.js_orderSave');
+            this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 $(el).on('click', function() {
                     var $this = $(this);
-                    $this.siblings().removeClass('act');
-                    $this.addClass('act');
+                    $this.closest('label').siblings().removeClass('act');
+                    $this.closest('label').addClass('act');
+                    switch(this.value) {
+                        case '0': case '14':case '13': case '7':
+                            $orderPay.hide();
+                            $orderSave.show();
+                            break;
+                        default:
+                            $orderSave.hide();
+                            $orderPay.show();
+                            break;
+                    }
                 });
             });
         },
         eventDeliverys: function() {
             var self = this;
-            var $deliveryTypeData = $('#deliveryTypeData');
-            $deliveryTypeData.find('label').each(function(id, el) {
+            this.$deliveryTypeData.find('input[name=dtype]').each(function(id, el) {
                 $(el).on('click', function() {
-                    console.log(1);
                     var $this = $(this);
-                    $this.siblings().removeClass('act');
-                    $this.closest('.variant').siblings().each(function(i, variant) {
-                        $(variant).find('label').removeClass('act');
-                    });
-                    $this.addClass('act');
-                    if ($this.find('input[name=dtype]').val() == '0') console.log(this);
+                    $this.closest('.variant').siblings().find('label').removeClass('act');
+                    $this.closest('label').addClass('act');
+                    if (this.value == '0') {
+                        self.takeInStore.checked = true;
+                        self.paymentsForm();
+                    }
+                    else {
+                        self.takeInStore.checked = false;
+                        self.paymentsForm();
+                    }
                 });
             });
-            $deliveryTypeData.find('.qbtn2').each(function(id, el) {
+            this.$deliveryTypeData.find('.qbtn2').each(function(id, el) {
                 $(el).on('click', function() {
-                    $deliveryTypeData.find('.info_box').hide();
+                    self.$deliveryTypeData.find('.info_box').hide();
                     $(this).siblings('.info_box').toggle();
                 });
             });
-        }
-    };
-
-
-/*
-    var promocodes = function() {
-        return new _Promocodes();
-    };
-
-    function _Promocodes() {}
-
-    _Promocodes.prototype = {
-        active: false,
-        urlCheck: '',
-
-        init: function() {
-            this.setConst();
-            this.setEvents();
-            return this;
         },
-        setConst: function() {
-            var $promocodeBlock = $('#js_promocode');
-            this.$input = $promocodeBlock.find('input[type=text]');
-            this.$use = $promocodeBlock.find('input[type=checkbox]');
-            this.$submit = $promocodeBlock.find('input[type=button]');
-        },
-        setEvents: function() {
-            var self = this;
-            self.$use.on('change', function(){
-                if (this.checked) {
-                    if (self.$input.val() != '') self.recount(self.$input.val().trim());
-                    self.$input.closest('div').show();
-                }
-                else {
-                    self.$input.closest('div').hide();
-                    self.recount('');
-                }
-
-            });
-            self.$submit.on('click', function() { self.recount(self.$input.val().trim()); });
-        },
-        getValue: function() {
-            if (this.active) return this.$input.val();
+        getPromocodeValue: function() {
+            if (this.activePromocode) return this.$inputPromocode.val().trim();
             return '';
         },
-        recount: function(value) {
+
+        changeCountry: function () {
             var self = this;
-            var csrf = $('meta[name=csrf]').attr('content').split('=');
-            var $form = $('form.address.text');
-//			var dtid = $form.find('input[name=dtid]:checked').val();
-            var dtype = $form.find('input[name=dtype]:checked').val();
             var aid = 0;
-            var $address = $form.find('select[name=id_address]');
-            if ($address.length > 0) aid = $address.val();
-            var cid = 0;
-            var $country = $form.find('#Address_country');
-            if ($country.length > 0) cid = $country.val();
+            var cid = this.country.value;
+            var data = {
+                'aid':aid,
+                'cid':cid
+            };
+            data[this.csrf[0]] = this.csrf[1];
             $.ajax({
-                url: self.urlCheck,//Yii::app()->createUrl('cart/checkPromocode')
-                data: 'promocode=' + encodeURIComponent(value) +
-                    '&dtype=' + dtype +
-                    '&aid=' + aid +
-                    '&cid=' + cid +
-                    '&' + csrf[0] + '=' + csrf[1],
+                url: self.urlChangeCountry,
+                data: data,
+                type: 'post',
+                dataType : 'json',
+                success: function (r) {
+                    for (i in r.tarif) {
+                        var $block = self.$deliveryTypeData
+                            .find('input[type=radio][value=' + r.tarif[i]['id'] + ']')
+                            .closest('label');
+                        console.log($block, r.tarif[i]['deliveryTime'], r.tarif[i]['value']);
+                        $block.find('.js_xDays').html(r.tarif[i]['deliveryTime']);
+                        $block.find('.js_price').html(r.tarif[i]['value']);
+                    }
+                }
+            });
+        },
+
+        recount: function(value) {
+            var $regForm = $('#Reg');
+            var self = this;
+            var dtype = this.$deliveryTypeData.find('input[name=dtype]:checked').val();
+            var aid = 0;
+            var cid = this.country.value;
+            var userType = $regForm.find('input[type=radio].js_userType:checked').val();
+            var nVAT = $regForm.find('#Reg_business_number1').val();//
+            if (userType != 1) nVAT = '';
+
+            var data = {
+                'promocode':value,
+                'dtype':dtype,
+                'aid':aid,
+                'cid':cid,
+                'nvat':nVAT
+            };
+            data[this.csrf[0]] = this.csrf[1];
+            $.ajax({
+                url: self.urlRecount,
+                data: data,
                 type: 'post',
                 dataType : 'json',
                 success: function (r) {
@@ -240,33 +261,38 @@
                     //delivery_cost - цена доставки
                     //itogo_cost - общая стоимость
                     $('.itogo_cost').html(r.totalPrice + ' ' + r.currency);
-                    self.$input.closest('div').siblings().remove();
+                    $('.items_cost').html(r.itemsPrice + ' ' + r.currency);
+                    $('.delivery_cost').html(r.deliveryPrice + ' ' + r.currency);
+                    for (itemId in r.pricesValues) {
+                        $('.js_' + itemId).find('.item_cost').html(r.pricesValues[itemId] + ' ' + r.currency);
+                    }
+
+                    self.$inputPromocode.closest('div').siblings().remove();
                     if (value != '') {
-                        var $buf = self.$input.closest('div');
+                        var $buf = self.$inputPromocode.closest('div');
                         var $elem = $('<div style="font-weight: normal;"></div>');
                         if ('promocodeValue' in r.briefly) {
                             $elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>');
-                            self.active = true;
+                            self.activePromocode = true;
                         }
                         else if ('message' in r.briefly) {
                             $elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>');
-                            self.active = false;
+                            self.activePromocode = false;
                         }
                         $('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elem).click(function(){ self.recount(''); });
                         if ('name' in r.briefly) $elem.append(r.briefly['name']);
                         $buf.after($elem);
                     }
                     else {
-                        self.active = false;
-                        self.$input.val('');
+                        self.activePromocode = false;
+                        self.$inputPromocode.val('');
                     }
                 }
             });
 
         }
 
-    }
-*/
+    };
 
 }());
 
@@ -275,7 +301,3 @@ $(document).click(function (event) {
     $('.info_box').hide();
     event.stopPropagation();
 });
-
-//$(document).ready(function() {
-//    promocodeHandler = promocodes().init();
-//});

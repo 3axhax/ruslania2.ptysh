@@ -73,7 +73,7 @@ $addrModel = new Address();
 					//	'BUTTON_ORDER_PAY' => 'Оформить заказ и оплатить',
 					//  'BUTTON_ORDER_SAVE' => 'Завершить оформление заказа',
 					?>
-					<div class="cart_footer"><a class="order_start"><?=$ui->item('CARTNEW_SEND_ORDER_BTN')?></a></div>
+					<div class="cart_footer"><a class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></a></div>
 					<div class="cart_footer">
 						<?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
 					</div>
@@ -89,7 +89,9 @@ $addrModel = new Address();
 	$(function(){
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
-				onlyPereodic: <?= (int) $onlyPereodic ?>
+				onlyPereodic: <?= (int) $onlyPereodic ?>,
+				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
+				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>'
 			});
 		});
 	});

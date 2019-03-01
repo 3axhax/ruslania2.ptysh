@@ -132,7 +132,9 @@ class Promocodes extends CActiveRecord {
 		}
 		if ($code !== null) {
 			if (!isset(self::$_codes[$code])) {
-				$promocode = $this->findByAttributes(array('code'=>$code))->attributes?:array();
+				$row = $this->findByAttributes(array('code'=>$code));
+				if (empty($row)) $promocode = array();
+				else $promocode = $row->attributes?:array();
 				if (!empty($promocode['id'])) {
 					self::$_promocodes[$promocode['id']] = $promocode;
 					self::$_codes[$code] = $promocode['id'];

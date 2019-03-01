@@ -87,7 +87,7 @@ class MyUrlManager extends CUrlManager
         $rawPathInfo=$request->getPathInfo();
         $pathInfo=$this->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
         $result = parent::parseUrl($request);
-        $myIp = '92.55.47.205';
+        $myIp = '217.118.83.137';
         if ((string)getenv('REMOTE_ADDR') === $myIp) {
             //что бы пока не сделано не ломать то, что есть
             $route = preg_replace("/^\/+/ui", '', $result);

@@ -6,16 +6,17 @@ class PostCalculator
 
     public function GetRates($aid, $uid, $sid, $countryId = 0)
     {
+        $a = new Address();
+        $address = $a->GetAddress($uid, $aid);
         if (empty($aid)&&!empty($countryId)) {
             $country = Country::GetCountryById($countryId);
         }
         if (empty($country)) {
-            $a = new Address();
-            $address = $a->GetAddress($uid, $aid);
             if (empty($address)) return array();
             $country = Country::GetCountryById($address['country']);
         }
         if (empty($country)) return array();
+
         $isFinland = $country['code'] == 'FI';
         $isEurope = $country['is_europe'];
         $group = $country['post_group'];
@@ -31,15 +32,14 @@ class PostCalculator
         $notInEnvelope = false;
         $onlySubscription = true;
 
-        foreach ($cart as $c)
-        {
-            $realTotalUW += ($c['unitweight'] * $c['quantity']);
+        foreach ($cart as $c) {
+            if (!empty($c['unitweight'])) $realTotalUW += ($c['unitweight'] * $c['quantity']);
             if ($c['entity'] != Entity::PERIODIC) $onlySubscription = false;
             $price = DiscountManager::GetPrice($uid, $c);
             if ($price[DiscountManager::TYPE_FREE_SHIPPING]) continue;
-            if ($c['unitweight_skip']) continue; // без почтовых - то ничего не считаем
+            if (!empty($c['unitweight_skip'])) continue; // без почтовых - то ничего не считаем
 
-            $totalUW += ($c['unitweight'] * $c['quantity']);
+            if (!empty($c['unitweight'])) $totalUW += ($c['unitweight'] * $c['quantity']);
             if ($c['not_in_envelope']) $notInEnvelope = true;
         }
 
@@ -94,7 +94,7 @@ class PostCalculator
      */
     public function GetRates2($country, $uid, $sid)
     {
-
+        
         $country = Country::GetCountryById($country);
         if (empty($country)) return array();
         $isFinland = $country['code'] == 'FI';

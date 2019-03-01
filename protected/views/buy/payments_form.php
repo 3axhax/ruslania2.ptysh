@@ -6,12 +6,12 @@
 		<span class="checkbox-custom"></span>
 	</div>
 </label>
-<label class="selp span3" style="width: 484px;">
+<label class="selp span3 act" style="width: 484px;">
 	<img src="/images/pt2.png" style="margin-top: -3px;" />
 	<span style="display: block; margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL')?></span>
 
 	<div class="red_checkbox">
-		<input type="radio" value="25" name="ptype" class="checkbox_custom" />
+		<input type="radio" value="25" name="ptype" class="checkbox_custom" checked/>
 		<span class="checkbox-custom"></span>
 	</div>
 </label>

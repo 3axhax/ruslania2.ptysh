@@ -6,13 +6,14 @@
 		<div class="info_box">
 			<?= $ui->item('DELIVERY_ECONOMY_OTHER'); ?>
 		</div>
-		<label class="seld span3" rel="8.3" valute="$">
+		<label class="seld span3 act">
 			<div class="red_checkbox">
-				<input type="radio" value="3" name="dtype" class="checkbox_custom">
+				<input type="radio" value="3" name="dtype" class="checkbox_custom" checked>
 				<span class="checkbox-custom"></span>
 			</div>
-			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Economy <br><?= $ui->item('X_DAYS_3', '2-5') ?><br>
-			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
+			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?>
+			<br>Economy<?= $ui->item('X_DAYS_3', '<span class="js_xDays"><br>2-5</span>') ?><br>
+			<span style="color: #70C67C; font-weight: bold;"><span class="js_price">0</span><?= Currency::ToSign() ?></span>
 		</label>
 	</div>
 	<div class="variant">
@@ -20,13 +21,14 @@
 		<div class="info_box">
 			<?= $ui->item('DELIVERY_PRIORITY_OTHER') ?>
 		</div>
-		<label class="seld span3" rel="11.8" valute="$">
+		<label class="seld span3">
 			<div class="red_checkbox">
 				<input type="radio" value="2" name="dtype" class="checkbox_custom">
 				<span class="checkbox-custom"></span>
 			</div>
-			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?><br>Priority <br><?= $ui->item('X_DAYS_3', '1-3') ?><br>
-			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
+			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?>
+			<br>Priority<?= $ui->item('X_DAYS_3', '<span class="js_xDays"><br>1-3</span>') ?><br>
+			<span style="color: #70C67C; font-weight: bold;"><span class="js_price">0</span><?= Currency::ToSign() ?></span>
 		</label>
 	</div>
 	<div class="variant">
@@ -34,14 +36,14 @@
 		<div class="info_box">
 			<?= $ui->item('DELIVERY_EXPRESS_OTHER'); ?>
 		</div>
-		<label class="seld span3" rel="23.6" valute="$">
+		<label class="seld span3">
 			<div class="red_checkbox">
 				<input type="radio" value="1" name="dtype" class="checkbox_custom">
 				<span class="checkbox-custom"></span>
 			</div>
 			<?= $ui->item('CARTNEW_DELIVERY_POST_NAME') ?>
-			<br>Express <br><?= $ui->item('X_DAYS_3', '1-2') ?><br>
-			<span style="color: #70C67C; font-weight: bold;">0<?= Currency::ToSign() ?></span>
+			<br>Express<?= $ui->item('X_DAYS_3', '<span class="js_xDays"><br>1-2</span>') ?><br>
+			<span style="color: #70C67C; font-weight: bold;"><span class="js_price">0</span><?= Currency::ToSign() ?></span>
 		</label>
 	</div>
 	<div class="variant">
