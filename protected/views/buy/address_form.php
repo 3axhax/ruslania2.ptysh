@@ -20,12 +20,12 @@ $form = $this->beginWidget('CActiveForm', array(
 		<td><b><?= $userName ?>:</b></td>
 		<td>
 			<label style="float: left; margin-right: 20px;">
-				<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom">
+				<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom js_userType">
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?>
 			</label>
 			<label style="float: left;">
-				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom" checked>
+				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" checked>
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?>
 			</label>
@@ -34,13 +34,16 @@ $form = $this->beginWidget('CActiveForm', array(
 <?php if (($userType == 'destination')&&!$onlyPereodic): ?>
 	<tr><?php //TODO:: если товары только подписка, то строку таблицы убрать?>
 		<td colspan="2"><label>
-			<input type="checkbox" name="check_addressa" id="check_addressa" value="1" class="check_addressa checkbox_custom" checked/>
+			<input type="checkbox" name="check_addressa" id="check_addressa" value="1" class="check_addressa checkbox_custom" />
 			<span class="checkbox-custom"></span> <?= $ui->item("TAKE_IN_THE_STORE") ?>
 		</label></td>
 	</tr>
 <?php endif; ?>
 	<tr class="js_firm">
-		<td nowrap="" class="maintxt"><?= $ui->item("address_business_title"); ?></td>
+		<td nowrap="" class="maintxt">
+			<span style="width: 5pt" class="redtext">*</span>
+			<?= $ui->item("address_business_title"); ?>
+		</td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'business_title', array('name'=>'' . $alias . '[business_title]')); ?>
 		</td>
@@ -53,14 +56,18 @@ $form = $this->beginWidget('CActiveForm', array(
 	</tr>
 
 	<tr>
-		<td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?= $ui->item("regform_lastname"); ?></td>
+		<td class="maintxt">
+			<span style="width: 5pt" class="redtext">*</span>
+			<?= $ui->item("regform_lastname"); ?></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_last_name', array('name'=>'' . $alias . '[receiver_last_name]')); ?>
 			<span class="texterror"></span>
 		</td>
 	</tr>
 	<tr>
-		<td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?= $ui->item("regform_firstname"); ?></td>
+		<td class="maintxt">
+			<span style="width: 5pt" class="redtext">*</span>
+			<?= $ui->item("regform_firstname"); ?></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_first_name', array('name'=>'' . $alias . '[receiver_first_name]')); ?>
 			<span class="texterror"></span>
@@ -74,7 +81,8 @@ $form = $this->beginWidget('CActiveForm', array(
 	</tr>
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt country_lbl">
-			<span style="width: 5pt" class="redtext">*</span><?= $ui->item("address_country"); ?>
+			<span style="width: 5pt" class="redtext">*</span>
+			<?= $ui->item("address_country"); ?>
 		</td>
 		<td class="maintxt-vat">
 			<?= $form->dropDownList($addrModel, 'country', CHtml::listData($countrys, 'id', 'title_en'), array('name'=>'' . $alias . '[country]')) ?>

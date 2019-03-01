@@ -2,7 +2,7 @@
 if (empty($PH)) $PH = new ProductHelper();
 ?>
 <div class="cart_header" style="width: 553px;">
-	<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), count($items) . ' ' . $PH->endOfWord(count($items), $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1', $ui->item('CARTNEW_PRODUCTS_TITLE3'))), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
+	<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), $countItems . ' ' . $PH->endOfWord($countItems, $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1', $ui->item('CARTNEW_PRODUCTS_TITLE3'))), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
 </div>
 <div class="cart_box">
 	<table class="cart" style="width: 100%;">

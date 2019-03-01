@@ -22,5 +22,6 @@
     <div style="height: 10px;"></div>
 </div>
 <?= $content; ?>
+<script type="text/javascript" src="/js/common.js"></script>
 </body>
 </html>

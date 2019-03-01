@@ -10,6 +10,8 @@
         init: function(options) {
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
             this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
+            this.confirm = document.getElementById('confirm'); //согласен с условиями
+            this.country = document.getElementById('Reg_country'); //страна доставки
 
             this.setConst(options);
             this.setEvents();
@@ -19,19 +21,46 @@
             this.onlyPereodic = options.onlyPereodic;
         },
         setEvents: function() {
+            var self = this;
             for (var i = 0, len = this.addrFormIds.length; i < len; i++) {
                 this.showAddressFields(this.addrFormIds[i]);
+                this.eventUserType(this.addrFormIds[i]);
             }
             this.deleveryForm();
             this.paymentsForm();
+            this.showPayerForm();
+            this.blockPay();
+            this.eventPayments();
+            this.eventDeliverys();
+
+            $(this.takeInStore).on('click', function() {
+                self.showAddressFields('Reg');
+                self.deleveryForm();
+                self.blockPay();
+                self.paymentsForm();
+            });
+
+            $(this.confirm).on('click', function() {
+                self.blockPay();
+            });
+
+            $(this.country).on('change', function() {
+                self.blockPay();
+            });
+
+            $(this.oneAddr).on('click', function() {
+                self.showPayerForm();
+            });
+
         },
 
         showAddressFields: function(idForm) {
             var $form = $('#' + idForm);
-            var userType = $form.find('input[type=radio].checkbox_custom:checked').val();
+            var userType = $form.find('input[type=radio].js_userType:checked').val();
             if (!userType) userType = 0;
-            var takeInStore = $form.find('input[type=checkbox].checkbox_custom:checked').val();
-            if (!takeInStore) takeInStore = 0;
+            var takeInStore = 0;
+            if ((idForm == 'Reg')&&this.takeInStore.checked) takeInStore = 1;
+
             var self = this;
             $form.find('tr').each(function (id, elem) {
                 var $elem = $(elem);
@@ -67,12 +96,11 @@
 
         deleveryForm: function() {
             var $deliveryTypeData = $('#deliveryTypeData');
-            if (this.onlyPereodic) $deliveryTypeData.hide();
+            if (this.onlyPereodic||this.takeInStore.checked) $deliveryTypeData.hide();
+            else $deliveryTypeData.show();
         },
         paymentsForm: function() {
             var $paymentsData = $('#paymentsData');
-            if (this.oneAddr.checked) $paymentsData.find('.form').hide();
-            else $paymentsData.find('.form').show();
             var self = this;
             $paymentsData.find('input[name=ptype]').each(function(id, el) {
                 switch (el.value) {
@@ -86,10 +114,64 @@
                         break;
                 }
             });
+        },
+        blockPay: function() {
+            var $block = $('ol li .op');
+            if (!this.confirm.checked) $block.show();
+            else {
+                if (this.takeInStore.checked||(this.country.value > 0)) $block.hide();
+                else $block.show();
+            }
+        },
+        showPayerForm: function() {
+            var $form = $('#Address');
+            if (this.oneAddr.checked) $form.hide();
+            else $form.show();
+        },
+        eventUserType: function(idForm) {
+            var self = this;
+            var $form = $('#' + idForm);
+            $form.find('input[type=radio].js_userType').each(function(i, el) {
+                $(el).on('click', function(){ self.showAddressFields(idForm) });
+            });
+        },
+        eventPayments: function () {
+            var $paymentsData = $('#paymentsData');
+            var self = this;
+            $paymentsData.find('label').each(function(id, el) {
+                $(el).on('click', function() {
+                    var $this = $(this);
+                    $this.siblings().removeClass('act');
+                    $this.addClass('act');
+                });
+            });
+        },
+        eventDeliverys: function() {
+            var self = this;
+            var $deliveryTypeData = $('#deliveryTypeData');
+            $deliveryTypeData.find('label').each(function(id, el) {
+                $(el).on('click', function() {
+                    console.log(1);
+                    var $this = $(this);
+                    $this.siblings().removeClass('act');
+                    $this.closest('.variant').siblings().each(function(i, variant) {
+                        $(variant).find('label').removeClass('act');
+                    });
+                    $this.addClass('act');
+                    if ($this.find('input[name=dtype]').val() == '0') console.log(this);
+                });
+            });
+            $deliveryTypeData.find('.qbtn2').each(function(id, el) {
+                $(el).on('click', function() {
+                    $deliveryTypeData.find('.info_box').hide();
+                    $(this).siblings('.info_box').toggle();
+                });
+            });
         }
     };
 
 
+/*
     var promocodes = function() {
         return new _Promocodes();
     };
@@ -184,9 +266,15 @@
         }
 
     }
+*/
 
 }());
 
+$(document).click(function (event) {
+    if ($(event.target).closest(".qbtn2,.info_box").length) return;
+    $('.info_box').hide();
+    event.stopPropagation();
+});
 
 //$(document).ready(function() {
 //    promocodeHandler = promocodes().init();
