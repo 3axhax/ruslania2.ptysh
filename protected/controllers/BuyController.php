@@ -35,7 +35,7 @@ class BuyController extends MyController {
 		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
 		$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
 		$this->breadcrumbs[] = 'Оформление заказа';
-		$this->render('no_register', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'countItems'=>$this->_getCountItems($total)));
+		$this->render('no_register', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'existPereodic'=>$this->_existPereodic($items), 'countItems'=>$this->_getCountItems($total)));
 	}
 
 	function actionCheckPromocode() {
@@ -56,7 +56,7 @@ class BuyController extends MyController {
 			if (empty($countryId)) {
 				$countryId = (int) Yii::app()->getRequest()->getParam('cid');
 				$da = Country::GetCountryById($countryId);
-				$da['business_number1'] = Yii::app()->getRequest()->getParam('nvat');
+				if (!empty($da)) $da['business_number1'] = Yii::app()->getRequest()->getParam('nvat');
 			}
 			$cart = new Cart();
 			$items = $cart->GetCart($this->uid, $this->sid);
@@ -100,6 +100,13 @@ class BuyController extends MyController {
 			if ($item['entity'] != Entity::PERIODIC) return false;
 		}
 		return true;
+	}
+
+	private function _existPereodic($items) {
+		foreach ($items as $id => $item) {
+			if ($item['entity'] == Entity::PERIODIC) return true;
+		}
+		return false;
 	}
 
 	private function _getCountItems($total) {

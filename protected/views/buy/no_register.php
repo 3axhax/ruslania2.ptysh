@@ -15,7 +15,7 @@ $addrModel = new Address();
 			</div>
 
 			<div class="form">
-				<?php $this->renderPartial('address_form', array('alias'=>'Reg', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic)); ?>
+				<?php $this->renderPartial('address_form', array('alias'=>'Reg', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic, 'existPereodic'=>$existPereodic)); ?>
 			</div>
 
 			<div class="clearfix"></div>
@@ -90,6 +90,7 @@ $addrModel = new Address();
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
+				existPereodic: <?= (int) $existPereodic ?>,
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
 				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>'
 			});

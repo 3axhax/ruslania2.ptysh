@@ -18,6 +18,7 @@
             this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
             this.confirm = document.getElementById('confirm'); //согласен с условиями
             this.country = document.getElementById('Reg_country'); //страна доставки
+            this.nVAT = document.getElementById('Reg_business_number1'); //Номер VAT компании
             this.csrf = $('meta[name=csrf]').attr('content').split('=');
             this.$deliveryTypeData = $('#deliveryTypeData');
             this.$paymentsData = $('#paymentsData');
@@ -28,6 +29,7 @@
             this.$submitPromocode = $promocodeBlock.find('input[type=button]');
 
             this.onlyPereodic = options.onlyPereodic;
+            this.existPereodic = options.existPereodic;
             this.urlRecount = options.urlRecount;
             this.urlChangeCountry = options.urlChangeCountry;
         },
@@ -68,6 +70,9 @@
                 self.recount(self.$inputPromocode.val().trim());
             });
 
+            $(this.nVAT).on('blur', function() {
+                self.recount(self.getPromocodeValue());
+            });
         },
 
         showAddressFields: function(idForm) {
@@ -96,13 +101,14 @@
                         break;
                 }
                 if ($elem.hasClass('js_delivery')) {
-                    if (takeInStore) {
+                    if (takeInStore&&!self.existPereodic) {
                         $elem.hide();
                     }
                     else {
                         //проверка для штаты
                         if ($elem.hasClass('states_list')) {
                             if ($elem.find('option').length > 1) $elem.show();
+                            else $elem.hide();
                         }
                         else $elem.show();
                     }
@@ -190,6 +196,7 @@
                         self.takeInStore.checked = false;
                         self.paymentsForm();
                     }
+                    self.recount(self.getPromocodeValue());
                 });
             });
             this.$deliveryTypeData.find('.qbtn2').each(function(id, el) {
@@ -229,6 +236,7 @@
                     }
                 }
             });
+            self.recount(self.getPromocodeValue());
         },
 
         recount: function(value) {
@@ -238,7 +246,7 @@
             var aid = 0;
             var cid = this.country.value;
             var userType = $regForm.find('input[type=radio].js_userType:checked').val();
-            var nVAT = $regForm.find('#Reg_business_number1').val();//
+            var nVAT = this.nVAT.value;//
             if (userType != 1) nVAT = '';
 
             var data = {

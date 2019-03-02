@@ -17,6 +17,8 @@ class PostCalculator
         }
         if (empty($country)) return array();
 
+        if (empty($address)) $address = $country;
+
         $isFinland = $country['code'] == 'FI';
         $isEurope = $country['is_europe'];
         $group = $country['post_group'];
