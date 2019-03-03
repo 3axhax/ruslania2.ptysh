@@ -32,6 +32,8 @@
             this.existPereodic = options.existPereodic;
             this.urlRecount = options.urlRecount;
             this.urlChangeCountry = options.urlChangeCountry;
+            this.urlLoadStates = options.urlLoadStates;
+            this.urlSubmit = options.urlSubmit;
         },
         setEvents: function() {
             var self = this;
@@ -73,6 +75,10 @@
             $(this.nVAT).on('blur', function() {
                 self.recount(self.getPromocodeValue());
             });
+
+            $('#Address_country').on('change', function() {
+                self.showStates(this);
+            })
         },
 
         showAddressFields: function(idForm) {
@@ -161,6 +167,8 @@
         eventPayments: function () {
             var self = this;
             var $orderButton = $('.order_start');
+            $orderButton.on('click', function() { self.sendforma(); return false; });
+
             var $orderPay = $orderButton.find('.js_orderPay');
             var $orderSave = $orderButton.find('.js_orderSave');
             this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
@@ -230,13 +238,13 @@
                         var $block = self.$deliveryTypeData
                             .find('input[type=radio][value=' + r.tarif[i]['id'] + ']')
                             .closest('label');
-                        console.log($block, r.tarif[i]['deliveryTime'], r.tarif[i]['value']);
                         $block.find('.js_xDays').html(r.tarif[i]['deliveryTime']);
                         $block.find('.js_price').html(r.tarif[i]['value']);
                     }
                 }
             });
             self.recount(self.getPromocodeValue());
+            self.showStates(self.country);
         },
 
         recount: function(value) {
@@ -298,6 +306,102 @@
                 }
             });
 
+        },
+
+        showStates: function (t) {
+            var self = this;
+            var cid = t.value;
+            var data = {'cid':cid};
+            data[this.csrf[0]] = this.csrf[1];
+            console.log(data);
+            $.ajax({
+                url: self.urlLoadStates,
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (r) {
+                    var $statesTr = $(t).closest('tr').siblings('.states_list');
+                    var $states = $statesTr.find('select');
+
+                    $states.find('option').each(function(i, el) {
+                        if (el.value > 0) el.remove();
+                    });
+                    console.log($statesTr, $states);
+                    var len = r.length;
+                    if (len == 0) $statesTr.hide();
+                    else {
+                        $statesTr.show();
+                        for (var i = 0; i < len; i++) {
+                            $states.append('<option value="' + r[i]['id'] + '">' + r[i]['title_long'] + '</option>');
+                        }
+                    }
+                }
+            });
+        },
+
+        sendforma: function () {
+            $('.error').removeClass('error');
+            $('.texterror').hide();
+
+            var self = this;
+            var fd = {};
+            var errors = [];
+            if (!this.confirm.checked) errors.push(this.confirm);
+            $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
+                var $f = $(f);
+                fd[f.name] = f.value;
+                if ($f.is(':visible')&&((f.value == "")||(f.value == 0))&&($f.siblings('.texterror').length > 0)) {
+                    errors.push(f);
+                }
+            });
+            fd['promocode'] = this.getPromocodeValue();
+            fd[this.csrf[0]] = this.csrf[1];
+            //if (errors.length) {
+            //    self.viewErrors(errors);
+            //}
+            //else {
+                $.ajax({
+                    url : self.urlSubmit,
+                    data: fd,
+                    type: 'post',
+                    dataType : 'json',
+                    success: function(r) {
+                        console.log(r);
+                        if ('errors' in r) {
+                            errors = [];
+                            for (field in r.errors) {
+                                var t = document.getElementById(field);
+                                if (t) errors.push(t);
+                            }
+
+                            if (errors.length) self.viewErrors(errors);
+                            console.log(errors);
+                        }
+                    }
+                });
+            //}
+        },
+
+        viewErrors: function(errors) {
+            var len = errors.length;
+            var firstErrorPos = 0;
+            for (var i = 0; i < len; i++) {
+                var $f = $(errors[i]);
+                if (errors[i].name == 'confirm') {
+                    var $label = $f.closest('label');
+                    if (firstErrorPos == 0) firstErrorPos = parseInt($label.offset().top) - 10;
+                    else firstErrorPos = Math.min(firstErrorPos, parseInt($label.offset().top) - 10);
+                    $label.addClass('error')
+                        .siblings('.texterror').show();
+                }
+                else {
+                    if (firstErrorPos == 0) firstErrorPos = parseInt($f.offset().top) - 10;
+                    else firstErrorPos = Math.min(firstErrorPos, parseInt($f.offset().top) - 10);
+                    $f.addClass('error')
+                        .siblings('.texterror').show();
+                }
+            }
+            jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: firstErrorPos}, 120);
         }
 
     };

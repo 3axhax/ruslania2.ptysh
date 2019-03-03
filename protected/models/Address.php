@@ -78,18 +78,18 @@ class Address extends CActiveRecord
     public function rules()
     {
         return array(
-            array('receiver_title_name, receiver_first_name, receiver_last_name, receiver_middle_name, '
-                  .'city, postindex, streetaddress', 'checkLatin'),
+            array('contact_email', 'checkLatin'),
+            array('contact_email', 'email'),
 
             array('type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
-                      . 'contact_phone', 'required', 'on' => 'new'),
+                      . 'contact_phone, contact_email', 'required', 'on' => 'new'),
             array('country', 'checkCountry', 'on' => 'new'),
             array('postindex', 'checkPostIndex', 'on' => 'new'),
             array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'new'),
             array('business_title', 'iforg', 'on' => 'new'),
 
-            array('id, type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
-                  . 'contact_phone', 'required', 'on' => 'edit'),
+            array('id, type, receiver_first_name, receiver_last_name, city, streetaddress,'
+                  . 'contact_phone, business_title', 'required', 'on' => 'edit'),
             array('country', 'checkCountry', 'on' => 'edit'),
             array('postindex', 'checkPostIndex', 'on' => 'edit'),
             array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'edit'),
@@ -154,13 +154,16 @@ class Address extends CActiveRecord
     public function checkCountry($attr, $params)
     {
         $country = $this->country;
-        if (empty($country))
-        {
+        if (empty($country)) {
             $labels = $this->attributeLabels();
             $msg = Yii::t('yii','{attribute} cannot be blank.', array('{attribute}' => $labels[$attr]));
             $this->addError($attr, $msg);
         }
-        if ($country == 225 && empty($this->state_id)) $this->addError('state_id', 'Select State');
+        else {
+            $sql = 'select country_id from `address_states_list` group by country_id';
+            $countryStates = Yii::app()->db->createCommand($sql)->queryColumn();
+            if (in_array($country, $countryStates) && empty($this->state_id)) $this->addError('state_id', 'Select State');
+        }
     }
 
     public function InsertNew($uid, $isDefault)

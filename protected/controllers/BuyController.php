@@ -9,7 +9,7 @@ class BuyController extends MyController {
 	public function accessRules() {
 		return array(
 			array('allow',
-				'actions' => array('noregister'),
+				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -95,6 +95,18 @@ class BuyController extends MyController {
 		$this->ResponseJson($ret);
 	}
 
+	function actionOrderAdd() {
+		$ret = array();
+		$ret['errors'] = $this->_checkForm();
+		$this->ResponseJson($ret);
+	}
+
+	public function actionLoadStates() {
+		$states = array();
+		if (Yii::app()->request->isPostRequest) $states = Country::GetStatesList((int) Yii::app()->getRequest()->getParam('cid'));
+		$this->ResponseJson($states);
+	}
+
 	private function _onlyPereodic($items) {
 		foreach ($items as $id => $item) {
 			if ($item['entity'] != Entity::PERIODIC) return false;
@@ -116,6 +128,45 @@ class BuyController extends MyController {
 			else $quantity += $item['quantity'];
 		}
 		return $quantity;
+	}
+
+	private function _checkForm() {
+		$cart = Cart::model();
+		$items = $cart->GetCart($this->uid, $this->sid);
+		$errors = array();
+		if (Yii::app()->user->isGuest) {
+			$requireFields = $this->_requireFieldsAddress($items, 'Reg');
+			if (!empty($requireFields)) {
+				/**@var $addressModel Address*/
+				$addressModel = new Address('edit');
+				$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
+				if (!$addressModel->validate()) {
+					$addrErrors = $addressModel->getErrors();
+					foreach ($requireFields as $field) {
+						if (!empty($addrErrors[$field])) {
+							$errors['Reg_' . $field] = $addrErrors[$field];
+						}
+					}
+				}
+			}
+		}
+		else {
+
+		}
+		return $errors;
+	}
+
+	private function _requireFieldsAddress($items, $formName) {
+		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'city', 'postindex', 'streetaddress', 'contact_email', 'contact_phone');
+		$requireReg = array_flip($requireFields);
+		$regFields = (array) Yii::app()->getRequest()->getParam($formName);
+		if (!empty($regFields)&&($regFields['type'] == 2)) {
+			unset($requireReg['business_title']);
+			if (Yii::app()->getRequest()->getParam('check_addressa')&&!$this->_existPereodic($items)) {
+				unset($requireReg['country'], $requireReg['city'], $requireReg['postindex'], $requireReg['streetaddress']);
+			}
+		}
+		return array_flip($requireReg);
 	}
 
 }

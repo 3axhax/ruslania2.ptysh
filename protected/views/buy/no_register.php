@@ -6,7 +6,7 @@ $addrModel = new Address();
 <link rel="stylesheet" href="/new_style/order_buy.css">
 <hr />
 
-<div class="container cartorder" style="margin-bottom: 20px;">
+<div class="container cartorder" id="js_orderForm" style="margin-bottom: 20px;">
 	<ol>
 		<li id="deliveryContactData">
 			<span class="step_header"><?=$ui->item('CARTNEW_NOREG_STEP1_TITLE')?></span>
@@ -25,6 +25,7 @@ $addrModel = new Address();
 				<span class="checkbox-custom"></span>
 				<?= $ui->item('CHECKBOX_TERMS_OF_USE') ?>
 			</label>
+			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_ERROR_AGREE_CONDITION') ?></span>
 		</li>
 		<li id="deliveryTypeData">
 			<div class="op"></div>
@@ -92,7 +93,9 @@ $addrModel = new Address();
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
 				existPereodic: <?= (int) $existPereodic ?>,
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
-				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>'
+				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
+				urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
+				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>'
 			});
 		});
 	});
