@@ -236,11 +236,12 @@ class CartController extends MyController {
         }
     }
     public function actionGetDeliveryInfo2() {
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::app()->request->isPostRequest||isset($_GET['ha'])) {
             $delivery = new PostCalculator();
-            $id_country = $_POST['id_country'];
+            $id_country = Yii::app()->getRequest()->getParam('id_country');
             $res = Country::GetCountryById($id_country);
             $r = $delivery->GetRates2($id_country, $this->uid, $this->sid);
+            Debug::staticRun(array($r));
             $this->renderPartial('delivery2', array('items' => $r));
         }
     }

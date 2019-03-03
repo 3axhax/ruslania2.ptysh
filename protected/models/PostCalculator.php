@@ -75,7 +75,7 @@ class PostCalculator
                     $found = true;
                 }
             }
-            if (!$found && !$obj->IsOrc())
+            if (!$found && !$obj->calculator->IsOrc())
             {
                 array_push($rates, $free);
             }
@@ -156,7 +156,7 @@ class PostCalculator
                     $found = true;
                 }
             }
-            if (!$found && !$obj->IsOrc())
+            if (!$found && !$obj->calculator->IsOrc())
             {
                 array_push($rates, $free);
             }

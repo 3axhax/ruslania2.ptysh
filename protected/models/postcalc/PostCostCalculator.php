@@ -31,6 +31,9 @@ class PostCostCalculator
         $this->currency = $currency;
     }
 
+    /**
+     * @return BaseShippingType
+     */
     protected function CreateCalculator()
     {
         $class = '';

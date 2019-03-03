@@ -240,7 +240,9 @@
                             .closest('label');
                         $block.find('.js_xDays').html(r.tarif[i]['deliveryTime']);
                         $block.find('.js_price').html(r.tarif[i]['value']);
+                        $block.siblings('.info_box').html(r.tarif[i]['description']);
                     }
+                    $('.delivery_box').html(r.smartpost);
                 }
             });
             self.recount(self.getPromocodeValue());
@@ -349,7 +351,12 @@
             if (!this.confirm.checked) errors.push(this.confirm);
             $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
                 var $f = $(f);
-                fd[f.name] = f.value;
+                switch (f.type) {
+                    case 'radio':case 'checkbox':
+                        if (f.checked) fd[f.name] = f.value;
+                    break;
+                    default: fd[f.name] = f.value; break;
+                }
                 if ($f.is(':visible')&&((f.value == "")||(f.value == 0))&&($f.siblings('.texterror').length > 0)) {
                     errors.push(f);
                 }
@@ -407,6 +414,29 @@
     };
 
 }());
+
+function search_smartpost(loadUrl) {
+    var csrf = $('meta[name=csrf]').attr('content').split('=');
+    $('.start-search-smartpost').html('Поиск...');
+    var country = 'FI';
+    if ($('#Address_country').val() == 62) {
+        country = 'EE';
+    }
+    $('.box_smartpost').html('');
+    $('.sel_smartpost').html('');
+    $('.box_smartpost').hide();
+    $.post(loadUrl, {ind: $('.smartpost_index').val(), YII_CSRF_TOKEN: csrf[1], country: country}, function (data) {
+        if (data) {
+            $('.box_smartpost').show();
+            $('.box_smartpost').html(data);
+        } else {
+            $('.box_smartpost').html('');
+            $('.box_smartpost').hide();
+        }
+        $('.start-search-smartpost').html('Найти');
+    });
+
+}
 
 $(document).click(function (event) {
     if ($(event.target).closest(".qbtn2,.info_box").length) return;

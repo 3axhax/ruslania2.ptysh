@@ -9,7 +9,7 @@ class BuyController extends MyController {
 	public function accessRules() {
 		return array(
 			array('allow',
-				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd'),
+				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -91,6 +91,25 @@ class BuyController extends MyController {
 
 			$delivery = new PostCalculator();
 			$ret['tarif'] = $delivery->GetRates(0, $this->uid, $this->sid, $countryId);
+			$ret['smartpost'] = '';
+
+			$deliveryPriceEur = Currency::ConvertToEUR($ret['tarif'][0]['value'], Yii::app()->currency);
+			if (($deliveryPriceEur == 7)&&(in_array($countryId, array(62, 68)))) {
+				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_FINEST');
+				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_FINEST');
+				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_FINEST');
+				$ret['smartpost'] = $this->renderPartial('smartpost', array(), true);
+			}
+			elseif ($deliveryPriceEur < 15) {
+				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER');
+				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER');
+				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER');
+			}
+			else {
+				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER_YES');
+				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER_YES');
+				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER_YES');
+			}
 		}
 		$this->ResponseJson($ret);
 	}
@@ -105,6 +124,13 @@ class BuyController extends MyController {
 		$states = array();
 		if (Yii::app()->request->isPostRequest) $states = Country::GetStatesList((int) Yii::app()->getRequest()->getParam('cid'));
 		$this->ResponseJson($states);
+	}
+
+	public function actionLoadsp() {
+		if (Yii::app()->request->isPostRequest) {
+			$points = Cart::model()->cart_getpoints_smartpost(addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('ind'))), addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('country'))));
+			$this->renderPartial('points', array('points' => $points));
+		}
 	}
 
 	private function _onlyPereodic($items) {
@@ -134,6 +160,7 @@ class BuyController extends MyController {
 		$cart = Cart::model();
 		$items = $cart->GetCart($this->uid, $this->sid);
 		$errors = array();
+		if (!Yii::app()->getRequest()->getParam('confirm')) $errors['confirm'] = Yii::app()->ui->item('CHECKBOX_TERMS_OF_USE');
 		if (Yii::app()->user->isGuest) {
 			$requireFields = $this->_requireFieldsAddress($items, 'Reg');
 			if (!empty($requireFields)) {
