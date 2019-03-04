@@ -119,11 +119,56 @@ class BuyController extends MyController {
 		if (Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
+				$aid = $bid = 0;
+				$cart = Cart::model();
+				$items = $cart->GetCart($this->uid, $this->sid);
+				if (Yii::app()->user->isGuest) {
+					if ($userId = $this->_regUser()) {
+						if (!Yii::app()->getRequest()->getParam('check_addressa')||$this->_existPereodic($items)) {
+							//не будет забирать в магазине или есть подписка
+							$addressModel = new Address('new');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
+							$aid = $addressModel->InsertNew($userId, 1);
+						}
+						if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
+							$addressModel = new Address('new');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Address'), false);
+							$bid = $addressModel->InsertNew($userId, 1);
+						}
+					}
+				}
+				else {
+					$aid = 0;
+					$bid = 0;
+				}
+				$DeliveryMode = 0;
+				if ((int) Yii::app()->getRequest()->getParam('dtype') === 0) { $DeliveryMode = 1; }
+				$orderData = array(
+					'DeliveryAddressID' => $aid,
+					'DeliveryTypeID' => Yii::app()->getRequest()->getParam('dtype'),
+					'DeliveryMode' => $DeliveryMode,
+					'CurrencyID' => Yii::app()->currency,
+					'BillingAddressID' => $bid,
+					'Notes' => Yii::app()->getRequest()->getParam('notes'),
+					'Mandate' => 0,
+				);
+				$order = new OrderForm($this->sid);
+				$order->attributes = $orderData;
+
+				$orderItems = array();
+				foreach ($items as $item) {
+					if (ProductHelper::IsAvailableForOrder($item))
+						$orderItems[] = $item;
+				}
+				$o = new Order;
+				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
+				$id = $o->CreateNewOrder($this->uid, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
 
 			}
 		}
 		$this->ResponseJson($ret);
 	}
+
 
 	public function actionLoadStates() {
 		$states = array();
@@ -136,6 +181,61 @@ class BuyController extends MyController {
 			$points = Cart::model()->cart_getpoints_smartpost(addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('ind'))), addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('country'))));
 			$this->renderPartial('smartpost_points', array('points' => $points));
 		}
+	}
+
+	private function _regUser() {
+		$cart = new Cart();
+		$tmp = $cart->GetCart($this->uid, $this->sid);
+		$beautyItems = $cart->BeautifyCart($tmp, $this->uid);
+
+		$m20n = $m10n = $m60n = $m22n = $m15n = $m24n = $m40n = 0;
+		$razds = array();
+		foreach ($beautyItems as $p) {
+			$mn = 'm' . $p['Entity'] . 'n';
+			$$mn = 1;
+			$razds[$p['Entity']] = Yii::app()->ui->item(Entity::GetEntitiesList()[$p['Entity']]['uikey']);
+		}
+		$psw = rand(1000000, 9999999) . 'sS';
+		$userModel = new User('register');
+		$userModel->setAttribute('pwd', $psw);
+
+		foreach (Yii::app()->getRequest()->getParam('Reg') as $k=>$v) {
+			switch ($k) {
+				case 'contact_email': $userModel->setAttribute('login', $v); break;
+				case 'receiver_first_name': $userModel->setAttribute('first_name', $v); break;
+				case 'receiver_last_name': $userModel->setAttribute('last_name', $v); break;
+				case 'receiver_middle_name': $userModel->setAttribute('middle_name', $v); break;
+			}
+		}
+		$userID = 0;
+		if ($userModel->RegisterNew(Yii::app()->getLanguage(), Yii::app()->currency, $m20n, $m10n, $m60n, $m22n, $m15n, $m24n, $m40n)) {
+			$email = $userModel->getAttribute('login');
+			$identity = new RuslaniaUserIdentity($email, $userModel->getAttribute('pwd'));
+			if ($identity->authenticate()) {
+				Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
+				$cart->UpdateCartToUid($this->sid, $identity->getId());
+				//echo $this->sid;
+				$message = new YiiMailMessage(Yii::app()->ui->item('A_REGISTER') . '. Ruslania.com');
+				$message->view = 'reg_' . (in_array(Yii::app()->language, array('ru', 'fi', 'en')) ? Yii::app()->language : 'en');
+				$message->setBody(array(
+					'user' => User::model()->findByPk(Yii::app()->user->id)->attributes,
+					'razds' => $razds,
+				), 'text/html');
+				$message->addTo($email);
+				$message->from = 'noreply@ruslania.com';
+				$mailResult = Yii::app()->mail->send($message);
+				file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
+							date('d.m.Y H:i:s'),
+							$email,
+							serialize($mailResult),
+							$message->view,
+							serialize($message->from),
+						)
+					) . "\n", FILE_APPEND);
+			}
+			$userID = $identity->getId();
+		}
+		return $userID;
 	}
 
 	private function _onlyPereodic($items) {

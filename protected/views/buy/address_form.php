@@ -102,7 +102,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			Verkkolaskuosoite
 		</td>
 		<td colspan="2" class="maintxt-vat">
-			<?= $form->textField($addrModel, 'verkkolaskuosoite', array('name'=>'' . $alias . '[city]')); ?>
+			<?= $form->textField($addrModel, 'verkkolaskuosoite', array('name'=>'' . $alias . '[verkkolaskuosoite]')); ?>
 		</td>
 	</tr>
 	<tr class="js_firm verkkolasku">
@@ -110,7 +110,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			Operaattoritunnus
 		</td>
 		<td colspan="2" class="maintxt-vat">
-			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[postindex]')); ?>
+			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[operaattoritunnus]')); ?>
 		</td>
 	</tr>
 <?php endif; ?>

@@ -47,7 +47,7 @@ $addrModel = new Address();
 
 				<div class="span6" style="width: 49%; margin-left: 0; margin-right: 1%;">
 
-					<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', $ui->item("address_contact_notes")); ?>" name="Address[notes]"></textarea>
+					<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', $ui->item("address_contact_notes")); ?>" name="notes"></textarea>
 
 				</div>
 				<div class="span6" style="width: 50%; margin: 0;">

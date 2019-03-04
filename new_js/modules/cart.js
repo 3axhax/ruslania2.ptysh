@@ -80,6 +80,7 @@
 
             $('#Address_country').on('change', function() {
                 self.showStates(this);
+                self.showAddressFields('Address');
             })
         },
 

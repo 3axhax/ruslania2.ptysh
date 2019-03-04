@@ -18,7 +18,7 @@ class User extends CActiveRecord
     public function rules()
     {
         return array(
-            array('login, first_name, last_name', 'checkLatin'),
+            array('login', 'checkLatin'),
             array('login, pwd', 'required', 'on' => 'login'),
             array('login, pwd, pwd2, first_name, last_name', 'required', 'on' => 'register'),
             array('login', 'email', 'on' => 'register'),
@@ -69,19 +69,26 @@ class User extends CActiveRecord
             $this->addError($attribute, Yii::app()->ui->item('ONLY_LATIN'));
     }
 
-    public function RegisterNew($langID, $currencyID)
+    public function RegisterNew($langID, $currencyID, $m20n = 1, $m10n = 1, $m60n = 1, $m22n = 1, $m15n = 1, $m24n = 1, $m40n = 1)
     {
-	    $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
+	    $sql = 'INSERT INTO users (login, pwd, first_name, last_name, middle_name, mail_language, mail_audio_news, mail_books_news, '
         . 'mail_maps_news, mail_music_news, mail_musicsheets_news, mail_soft_news, mail_video_news, currency) VALUES '
-        . '(:login, :pwd, :fName, :lName, :lang, 1, 1, 1, 1, 1, 1, 1, :currency)';
+        . '(:login, :pwd, :fName, :lName, :mName, :lang, :m20n, :m10n, :m60n, :m22n, :m15n, :m24n, :m40n, :currency)';
         $ret = Yii::app()->db->createCommand($sql)->execute(array(
             ':login' => $this->login,
             ':pwd' => $this->pwd,
             ':fName' => $this->first_name,
             ':lName' => $this->last_name,
+            ':mName' => $this->middle_name,
             ':lang' => $langID,
+            ':m20n' => $m20n,
+            ':m10n' => $m10n,
+            ':m60n' => $m60n,
+            ':m22n' => $m22n,
+            ':m15n' => $m15n,
+            ':m24n' => $m24n,
+            ':m40n' => $m40n,
             ':currency' => $currencyID));
-
         return $ret;
     }
 

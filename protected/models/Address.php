@@ -85,14 +85,14 @@ class Address extends CActiveRecord
                       . 'contact_phone, contact_email', 'required', 'on' => 'new'),
             array('country', 'checkCountry', 'on' => 'new'),
             array('postindex', 'checkPostIndex', 'on' => 'new'),
-            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'new'),
+            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'new'),
             array('business_title', 'iforg', 'on' => 'new'),
 
             array('id, type, receiver_first_name, receiver_last_name, city, streetaddress,'
                   . 'contact_phone, business_title', 'required', 'on' => 'edit'),
             array('country', 'checkCountry', 'on' => 'edit'),
             array('postindex', 'checkPostIndex', 'on' => 'edit'),
-            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'edit'),
+            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'edit'),
             array('business_title', 'iforg', 'on' => 'edit'),
 
         );
