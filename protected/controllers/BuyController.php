@@ -98,7 +98,7 @@ class BuyController extends MyController {
 				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_FINEST');
 				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_FINEST');
 				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_FINEST');
-				$ret['smartpost'] = $this->renderPartial('smartpost', array(), true);
+				$ret['smartpost'] = $this->renderPartial('smartpost', array('countryId'=>$countryId), true);
 			}
 			elseif ($deliveryPriceEur < 15) {
 				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER');
@@ -129,7 +129,7 @@ class BuyController extends MyController {
 	public function actionLoadsp() {
 		if (Yii::app()->request->isPostRequest) {
 			$points = Cart::model()->cart_getpoints_smartpost(addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('ind'))), addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('country'))));
-			$this->renderPartial('points', array('points' => $points));
+			$this->renderPartial('smartpost_points', array('points' => $points));
 		}
 	}
 

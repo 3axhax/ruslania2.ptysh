@@ -8,6 +8,7 @@
         addrFormIds:['Reg', 'Address'],
         onlyPereodic: 0,
         activePromocode: false,
+        activeSmartpost: false,
         init: function(options) {
             this.setConst(options);
             this.setEvents();
@@ -23,6 +24,7 @@
             this.$deliveryTypeData = $('#deliveryTypeData');
             this.$paymentsData = $('#paymentsData');
             this.promocode = $('#promocode');
+            this.$smartpostBox = $('#js_smartpostBox');
 
             var $promocodeBlock = $('#js_promocode');
             this.$inputPromocode = $promocodeBlock.find('input[type=text]');
@@ -196,13 +198,11 @@
                     var $this = $(this);
                     $this.closest('.variant').siblings().find('label').removeClass('act');
                     $this.closest('label').addClass('act');
-                    if (this.value == '0') {
-                        self.takeInStore.checked = true;
-                        self.paymentsForm();
-                    }
-                    else {
-                        self.takeInStore.checked = false;
-                        self.paymentsForm();
+                    self.takeInStore.checked = (this.value == '0');
+                    self.paymentsForm();
+                    if (self.activeSmartpost) {
+                        if (this.value == '3') self.$smartpostBox.show();
+                        else self.$smartpostBox.hide();
                     }
                     self.recount(self.getPromocodeValue());
                 });
@@ -242,7 +242,15 @@
                         $block.find('.js_price').html(r.tarif[i]['value']);
                         $block.siblings('.info_box').html(r.tarif[i]['description']);
                     }
-                    $('.delivery_box').html(r.smartpost);
+                    self.$smartpostBox.html(r.smartpost);
+                    if (r.smartpost == '') {
+                        self.activeSmartpost = false;
+                        self.$smartpostBox.hide();
+                    }
+                    else {
+                        self.activeSmartpost = true;
+                        self.$smartpostBox.show();
+                    }
                 }
             });
             self.recount(self.getPromocodeValue());
@@ -315,7 +323,6 @@
             var cid = t.value;
             var data = {'cid':cid};
             data[this.csrf[0]] = this.csrf[1];
-            console.log(data);
             $.ajax({
                 url: self.urlLoadStates,
                 data: data,
@@ -328,7 +335,6 @@
                     $states.find('option').each(function(i, el) {
                         if (el.value > 0) el.remove();
                     });
-                    console.log($statesTr, $states);
                     var len = r.length;
                     if (len == 0) $statesTr.hide();
                     else {
@@ -362,11 +368,12 @@
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
+            if (this.activeSmartpost && (fd['dtipe'] == '3')) fd['pickpoint_address'] = $('#pickpoint_address').val();
             fd[this.csrf[0]] = this.csrf[1];
-            //if (errors.length) {
-            //    self.viewErrors(errors);
-            //}
-            //else {
+            if (errors.length) {
+                self.viewErrors(errors);
+            }
+            else {
                 $.ajax({
                     url : self.urlSubmit,
                     data: fd,
@@ -386,7 +393,7 @@
                         }
                     }
                 });
-            //}
+            }
         },
 
         viewErrors: function(errors) {
@@ -415,13 +422,11 @@
 
 }());
 
-function search_smartpost(loadUrl) {
+function search_smartpost(loadUrl, countryId, loadName, buttonName) {
     var csrf = $('meta[name=csrf]').attr('content').split('=');
-    $('.start-search-smartpost').html('Поиск...');
+    $('.start-search-smartpost').html(loadName);
     var country = 'FI';
-    if ($('#Address_country').val() == 62) {
-        country = 'EE';
-    }
+    if (countryId == 62) country = 'EE';
     $('.box_smartpost').html('');
     $('.sel_smartpost').html('');
     $('.box_smartpost').hide();
@@ -433,8 +438,25 @@ function search_smartpost(loadUrl) {
             $('.box_smartpost').html('');
             $('.box_smartpost').hide();
         }
-        $('.start-search-smartpost').html('Найти');
+        $('.start-search-smartpost').html(buttonName);
     });
+
+}
+
+function select_smartpost_row(cont, buttonName, txt) {
+    var $cont = $(cont);
+
+    $('.row_smartpost').hide().removeClass('act');
+    $('.close_points').hide();
+    $('.more_points').show();
+    $cont.closest('.row_smartpost').addClass('act').show();
+
+    $('.address.addr2, label.addr_buyer').hide();
+
+    $('.btn.btn-success', $cont.closest('.row_smartpost')).html(buttonName);
+
+    $('#pickpoint_address').val(txt);
+    $('.smartpost_action').toggle();
 
 }
 

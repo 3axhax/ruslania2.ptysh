@@ -56,5 +56,5 @@
 		</label>
 	</div>
 	<div class="clearfix"></div>
-	<div class="delivery_box" style="display: none; margin: 15px 0;"></div>
+	<div class="delivery_box" id="js_smartpostBox" style="display: none; margin: 15px 0;"><?php /*$this->renderPartial('smartpost', array()) */?></div>
 </div>
