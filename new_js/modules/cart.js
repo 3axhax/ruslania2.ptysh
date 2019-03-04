@@ -451,7 +451,7 @@ function select_smartpost_row(cont, buttonName, txt) {
     $('.more_points').show();
     $cont.closest('.row_smartpost').addClass('act').show();
 
-    $('.address.addr2, label.addr_buyer').hide();
+    //$('.address.addr2, label.addr_buyer').hide();
 
     $('.btn.btn-success', $cont.closest('.row_smartpost')).html(buttonName);
 

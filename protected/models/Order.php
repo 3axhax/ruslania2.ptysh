@@ -229,58 +229,6 @@ class Order extends CMyActiveRecord
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
         list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
 
-
-/*        $withVAT = Address::UseVAT($da);
-            
-        $itemsPrice = 0;
-        $pricesValues = array();
-        foreach ($items as $idx=>$item)
-        {
-            $values = DiscountManager::GetPrice($uid, $item);
-            $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
-            $itemKey = $item['entity'].'_'.$item['id'];
-            $price = $values[$key];
-            if($item['entity'] == Entity::PERIODIC)
-            {
-                if($da['is_finland'])
-                    $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
-                else
-                    $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
-                $price = $values[$key];
-                $price /= 12;
-            }
-            $pricesValues[$itemKey] = $price;
-            $itemsPrice += $item['quantity'] * $price;
-
-            if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
-            {
-                $items[$idx]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
-            }
-        }
-
-        if ($order->DeliveryMode == 0)
-        {
-            $p = new PostCalculator();
-            $list = $p->GetRates($order->DeliveryAddressID, $uid, $sid);
-            
-            //var_dump($list);
-            
-            $deliveryPrice = false;
-            foreach ($list as $l)
-                if ($l['id'] == $order->DeliveryTypeID) $deliveryPrice = $l['value'];
-        }
-        else
-        {
-            $deliveryPrice = 0;
-        }
-
-        $rates = Currency::GetRates();
-        $rate = $rates[$order->CurrencyID];
-        $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
-        if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
-        $fullPrice = $itemsPrice + $deliveryPrice;*/
-
-
         $promocodeId = 0;
         if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
         else {

@@ -116,7 +116,12 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		$ret['errors'] = $this->_checkForm();
+		if (Yii::app()->getRequest()->isPostRequest) {
+			$ret['errors'] = $this->_checkForm();
+			if (empty($ret['errors'])) {
+
+			}
+		}
 		$this->ResponseJson($ret);
 	}
 
@@ -175,6 +180,27 @@ class BuyController extends MyController {
 						}
 					}
 				}
+				elseif(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
+					$errors['Reg_contact_email'] = Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
+				}
+			}
+			else $errors['Reg'] = 'error';
+			if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
+				$requireFields = $this->_requireFieldsAddress($items, 'Address');
+				if (!empty($requireFields)) {
+					/**@var $addressModel Address*/
+					$addressModel = new Address('edit');
+					$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Address'), false);
+					if (!$addressModel->validate()) {
+						$addrErrors = $addressModel->getErrors();
+						foreach ($requireFields as $field) {
+							if (!empty($addrErrors[$field])) {
+								$errors['Address_' . $field] = $addrErrors[$field];
+							}
+						}
+					}
+				}
+				else $errors['Address'] = 'error';
 			}
 		}
 		else {
