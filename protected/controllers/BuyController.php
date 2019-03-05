@@ -169,6 +169,7 @@ class BuyController extends MyController {
 				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 
 				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
+				$ret['url'] = Yii::app()->createUrl('buy/orderok') . '?id=' . $id;
 			}
 		}
 		$this->ResponseJson($ret);

@@ -417,8 +417,13 @@
                                 }
                             }
 
-                            if (errors.length) self.viewErrors(errors);
-                            console.log(errors);
+                            if (errors.length) {
+                                self.viewErrors(errors);
+                                console.log(errors);
+                            }
+                            else {
+                                document.location.href = r.url;
+                            }
                         }
                     }
                 });

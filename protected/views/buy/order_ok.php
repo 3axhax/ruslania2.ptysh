@@ -71,7 +71,7 @@
 			?>
 				<div class="clearBoth"></div>
 
-				<div style="">
+				<div style="margin-top: 20px;">
 					<?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
 				</div>
 			</div>

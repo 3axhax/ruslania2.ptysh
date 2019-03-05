@@ -96,7 +96,7 @@ $addrModel = new Address();
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
 				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
 				urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
-				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>?ha'
+				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>'
 			});
 		});
 	});
