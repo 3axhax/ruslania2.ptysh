@@ -242,22 +242,6 @@ class Order extends CMyActiveRecord
                 . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address) VALUES '
                 . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address)';
 
-            var_dump('query', $sql, array(':uid' => $uid,
-                ':daid' => $order->DeliveryAddressID,
-                ':baid' => $order->BillingAddressID,
-                ':dtid' => $order->DeliveryTypeID,
-                ':ptid' => (int) $ptype, // payment in next step
-                ':cur' => $order->CurrencyID,
-                ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
-                ':full' => $fullPrice,
-                ':items' => $itemsPrice,
-                ':delivery' => $deliveryPrice,
-                ':notes' => $order->Notes,
-                ':mandate' => $order->Mandate,
-                ':promocodeId' => $promocodeId,
-                ':smartpost_address' => $order->SmartpostAddress,
-            ));
-
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
                       ':daid' => $order->DeliveryAddressID,

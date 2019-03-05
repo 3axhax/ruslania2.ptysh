@@ -9,7 +9,7 @@ class BuyController extends MyController {
 	public function accessRules() {
 		return array(
 			array('allow',
-				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp'),
+				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp','orderok'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -122,7 +122,6 @@ class BuyController extends MyController {
 				$aid = $bid = 0;
 				$cart = Cart::model();
 				$items = $cart->GetCart($this->uid, $this->sid);
-				$userId = 0;
 				if (Yii::app()->user->isGuest) {
 					if ($userId = $this->_regUser()) {
 						if (!Yii::app()->getRequest()->getParam('check_addressa')||$this->_existPereodic($items)) {
@@ -156,7 +155,6 @@ class BuyController extends MyController {
 					'Mandate' => 0,
 					'SmartpostAddress' => Yii::app()->getRequest()->getParam('pickpoint_address')
 				);
-				var_dump('orderData', $orderData);
 				$order = new OrderForm($this->sid);
 				$order->setAttributes($orderData);
 
@@ -168,12 +166,22 @@ class BuyController extends MyController {
 				$o = new Order;
 				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
 				$id = $o->CreateNewOrder($userId, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
-				var_dump('result', $userId, $id);
+				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
+
+				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
 			}
 		}
 		$this->ResponseJson($ret);
 	}
 
+	function actionOrderOk() {
+		$id = (int) Yii::app()->getRequest()->getParam('id');
+		$o = new Order;
+		if(!$o->isMyOrder($this->uid,$id)) throw new CHttpException(404);
+
+		$order = $o->GetOrder($id);
+		$this->render('order_ok', array('order' => $order));
+	}
 
 	public function actionLoadStates() {
 		$states = array();
@@ -326,6 +334,22 @@ class BuyController extends MyController {
 			}
 		}
 		return array_flip($requireReg);
+	}
+
+	private function _mailOrder($id, $beautyItems) {
+		$user = User::model()->findByPk(Yii::app()->user->id);
+		$order = Order::model()->findByPk($id);
+		$message = new YiiMailMessage(sprintf(Yii::app()->ui->item('MSG_ORDER_PRINT_PAGE_TITLE'), $id));
+		$message->view = 'thanks_for_order';
+		$message->setBody(array(
+			'items' => $beautyItems,
+			'user' => $user->attributes,
+			'order' => $order->attributes,
+		), 'text/html');
+		$message->addTo($user['login']);
+		$message->from = 'noreply@ruslania.com';
+		@Yii::app()->mail->send($message);
+
 	}
 
 }
