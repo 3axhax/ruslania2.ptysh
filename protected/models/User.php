@@ -113,14 +113,8 @@ class User extends CActiveRecord
     }
     
     public function checkLogin($email) {
-        
-        $sql = ' SELECT * FROM `users` WHERE login="'.$email.'" ';
-        
-        $rows = Yii::app()->db->createCommand($sql)->queryAll();
-        
-        if (count($rows)) return true;
-        
-        return false;
+        $sql = 'SELECT 1 FROM `users` WHERE (login = :email) limit 1';
+        return (bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':email'=>$email));
     }
     
 }

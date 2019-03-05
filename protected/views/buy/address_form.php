@@ -83,7 +83,7 @@ $form = $this->beginWidget('CActiveForm', array(
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt country_lbl">
 			<span style="width: 5pt" class="redtext">*</span>
-			<?= $ui->item("address_country"); ?>
+			<?= $ui->item(($alias == 'Reg')?"address_country":'COUNTRY'); ?>
 		</td>
 		<td class="maintxt-vat">
 			<?= $form->dropDownList($addrModel, 'country', CHtml::listData($countrys, 'id', 'title_en'), array('name'=>'' . $alias . '[country]')) ?>
@@ -153,6 +153,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		<td class="maintxt-vat" style="position: relative;">
 			<?= $form->textField($addrModel, 'contact_email', array('name'=>'' . $alias . '[contact_email]')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_ERROR_WRONG_EMAIL') ?></span>
+			<?php if ($alias == 'Reg'): ?><div class="info_box" style="display: none;"></div><?php endif; ?>
 		</td>
 	</tr>
 	<tr>

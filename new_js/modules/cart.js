@@ -12,6 +12,8 @@
         init: function(options) {
             this.setConst(options);
             this.setEvents();
+            if (this.$paymentsData.find('input[name=ptype]:checked').val() == '25') $('.paytail_payment').show();
+            else $('.paytail_payment').hide();
             return this;
         },
         setConst: function(options) {
@@ -131,15 +133,33 @@
         },
         paymentsForm: function() {
             var self = this;
+            var $paymentDesc = $('.paytail_payment');
+            var paytrail = this.$paymentsData.find('input[name=ptype][value="25"]').get(0);
             this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 switch (el.value) {
                     case '0':
                         if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').show();
-                        else $(el).closest('label').hide();
+                        else {
+                            $(el).closest('label').hide();
+                            if (el.checked) {
+                                el.checked = false;
+                                paytrail.checked = true;
+                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $paymentDesc.show();
+                            }
+                        }
                         break;
                     case '14':case '13':case '7':
-                    if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').hide();
-                    else $(el).closest('label').show();
+                        if (self.takeInStore&&self.takeInStore.checked) {
+                            $(el).closest('label').hide();
+                            if (el.checked) {
+                                el.checked = false;
+                                paytrail.checked = true;
+                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $paymentDesc.show();
+                            }
+                        }
+                        else $(el).closest('label').show();
                         break;
                 }
             });
@@ -174,6 +194,7 @@
 
             var $orderPay = $orderButton.find('.js_orderPay');
             var $orderSave = $orderButton.find('.js_orderSave');
+            var $paymentDesc = $('.paytail_payment');
             this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 $(el).on('click', function() {
                     var $this = $(this);
@@ -183,10 +204,13 @@
                         case '0': case '14':case '13': case '7':
                             $orderPay.hide();
                             $orderSave.show();
+                            $paymentDesc.hide();
                             break;
                         default:
                             $orderSave.hide();
                             $orderPay.show();
+                            if (this.value == '25') $paymentDesc.show();
+                            else $paymentDesc.hide();
                             break;
                     }
                 });
@@ -369,7 +393,7 @@
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
-            if (this.activeSmartpost && (fd['dtipe'] == '3')) fd['pickpoint_address'] = $('#pickpoint_address').val();
+            if (this.activeSmartpost && (fd['dtype'] == '3')) fd['pickpoint_address'] = $('#pickpoint_address').val();
             fd[this.csrf[0]] = this.csrf[1];
             if (errors.length) {
                 self.viewErrors(errors);
@@ -381,12 +405,16 @@
                     type: 'post',
                     dataType : 'json',
                     success: function(r) {
-                        console.log(r);
                         if ('errors' in r) {
                             errors = [];
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
                                 if (t) errors.push(t);
+                                else if (field == 'forgot_button') {
+                                    t = document.getElementById('Reg_contact_email');
+                                    $(t).siblings('.info_box').html(r.errors[field]).toggle();
+                                    errors.push(t);
+                                }
                             }
 
                             if (errors.length) self.viewErrors(errors);

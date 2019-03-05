@@ -67,6 +67,7 @@ $addrModel = new Address();
 					</div>
 					<div class="cart_footer footer3">
 						<?=$ui->item('CARTNEW_TOTAL_COST_LABEL')?>: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($total['itemsPrice'] + $total['deliveryPrice']); ?></span>
+						<?php if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif; ?>
 					</div>
 
 					<?php
@@ -95,7 +96,7 @@ $addrModel = new Address();
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
 				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
 				urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
-				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>'
+				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>?ha'
 			});
 		});
 	});

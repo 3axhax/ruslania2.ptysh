@@ -8,7 +8,7 @@
 </label>
 <label class="selp span3 act" style="width: 484px;">
 	<img src="/images/pt2.png" style="margin-top: -3px;" />
-	<span style="display: block; margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL')?></span>
+	<div style="margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL')?>. <?=$ui->item('CARTNEW_PAYTRAYL_DESC')?></div>
 
 	<div class="red_checkbox">
 		<input type="radio" value="25" name="ptype" class="checkbox_custom" checked/>

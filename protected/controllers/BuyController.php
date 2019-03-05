@@ -116,12 +116,13 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (isset($_GET['ha'])||Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
 				$cart = Cart::model();
 				$items = $cart->GetCart($this->uid, $this->sid);
+				$userId = 0;
 				if (Yii::app()->user->isGuest) {
 					if ($userId = $this->_regUser()) {
 						if (!Yii::app()->getRequest()->getParam('check_addressa')||$this->_existPereodic($items)) {
@@ -140,9 +141,11 @@ class BuyController extends MyController {
 				else {
 					$aid = 0;
 					$bid = 0;
+					$userId = $this->uid;
 				}
 				$DeliveryMode = 0;
-				if ((int) Yii::app()->getRequest()->getParam('dtype') === 0) { $DeliveryMode = 1; }
+				if ((int) Yii::app()->getRequest()->getParam('dtype') === 0) $DeliveryMode = 1;
+
 				$orderData = array(
 					'DeliveryAddressID' => $aid,
 					'DeliveryTypeID' => Yii::app()->getRequest()->getParam('dtype'),
@@ -151,9 +154,11 @@ class BuyController extends MyController {
 					'BillingAddressID' => $bid,
 					'Notes' => Yii::app()->getRequest()->getParam('notes'),
 					'Mandate' => 0,
+					'SmartpostAddress' => Yii::app()->getRequest()->getParam('pickpoint_address')
 				);
+				var_dump('orderData', $orderData);
 				$order = new OrderForm($this->sid);
-				$order->attributes = $orderData;
+				$order->setAttributes($orderData);
 
 				$orderItems = array();
 				foreach ($items as $item) {
@@ -162,8 +167,8 @@ class BuyController extends MyController {
 				}
 				$o = new Order;
 				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
-				$id = $o->CreateNewOrder($this->uid, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
-
+				$id = $o->CreateNewOrder($userId, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
+				var_dump('result', $userId, $id);
 			}
 		}
 		$this->ResponseJson($ret);
@@ -208,7 +213,7 @@ class BuyController extends MyController {
 			}
 		}
 		$userID = 0;
-		if ($userModel->RegisterNew(Yii::app()->getLanguage(), Yii::app()->currency, $m20n, $m10n, $m60n, $m22n, $m15n, $m24n, $m40n)) {
+		if ($userModel->RegisterNew(Language::ConvertToInt(Yii::app()->getLanguage()), Yii::app()->currency, $m20n, $m10n, $m60n, $m22n, $m15n, $m24n, $m40n)) {
 			$email = $userModel->getAttribute('login');
 			$identity = new RuslaniaUserIdentity($email, $userModel->getAttribute('pwd'));
 			if ($identity->authenticate()) {
@@ -224,14 +229,15 @@ class BuyController extends MyController {
 				$message->addTo($email);
 				$message->from = 'noreply@ruslania.com';
 				$mailResult = Yii::app()->mail->send($message);
-				file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
-							date('d.m.Y H:i:s'),
-							$email,
-							serialize($mailResult),
-							$message->view,
-							serialize($message->from),
-						)
-					) . "\n", FILE_APPEND);
+				file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t",
+					array(
+						date('d.m.Y H:i:s'),
+						$email,
+						serialize($mailResult),
+						$message->view,
+						serialize($message->from),
+					)
+				) . "\n", FILE_APPEND);
 			}
 			$userID = $identity->getId();
 		}
@@ -280,8 +286,8 @@ class BuyController extends MyController {
 						}
 					}
 				}
-				elseif(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
-					$errors['Reg_contact_email'] = Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
+				if (empty($errors)&&User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
+					$errors['forgot_button'] = $this->renderPartial('/site/forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
 				}
 			}
 			else $errors['Reg'] = 'error';
