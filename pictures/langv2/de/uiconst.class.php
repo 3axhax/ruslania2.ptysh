@@ -1215,7 +1215,11 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'A_NEW_LABEL' => 'Label',
   'A_NEW_PRODUCER' => 'Hersteller',
   'PERIODIC_TYPE_PLURAL_2' => 'Zeitschriften Abo',
+<<<<<<< HEAD
   'PERIODIC_TYPE_PLURAL_1' => 'Zeitung Abo',
+=======
+  'PERIODIC_TYPE_PLURAL_1' => 'Zeitung abo',
+>>>>>>> 2ca586ec322e0260670a4d9430ae5f3d1f295a08
   'PERIODIC_TYPE_PLURAL_3' => 'Online-Ausgaben',
   'NAME_POPULAR' => 'Meistgekauft',
   'NAME_SCIENCE' => 'Wissenschaftliche',
