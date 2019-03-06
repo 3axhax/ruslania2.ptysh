@@ -53,6 +53,14 @@ class RepairAuthorsCommand extends CConsoleCommand {
 
 		$sql = ''.
 			'update ' . $this->_table . ' set '	.
+			'first_ru = upper(left(trim(repair_title_ru), 1)), '.
+			'first_en = upper(left(trim(repair_title_en), 1)) '.
+			'where (trim(repair_title_en) <> "") and ((first_ru is null) or (first_ru = "")) '.
+		'';
+		$this->_query($sql);
+
+		$sql = ''.
+			'update ' . $this->_table . ' set '	.
 				'first_ru = upper(left(trim(title_ru), 1)), '.
 				'first_en = upper(left(trim(title_en), 1)) '.
 			'where (first_ru is null) or (first_ru = "") '.
