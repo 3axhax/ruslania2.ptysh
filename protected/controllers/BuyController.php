@@ -9,7 +9,7 @@ class BuyController extends MyController {
 	public function accessRules() {
 		return array(
 			array('allow',
-				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp','orderok'),
+				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp','orderok','newaddr'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -22,12 +22,11 @@ class BuyController extends MyController {
 		);
 	}
 
-	function actionNoRegister() {
+	function actionDoOrder() {
 		/**@var $cart Cart*/
 		$cart = Cart::model();
 		$items = $cart->GetCart($this->uid, $this->sid);
 		if (!count($items)) $this->redirect(Yii::app()->createUrl('cart'));
-		if (!Yii::app()->user->isGuest) $this->redirect(Yii::app()->createUrl('me'));
 
 		/**@var $order Order*/
 		$order = Order::model();
@@ -35,7 +34,7 @@ class BuyController extends MyController {
 		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
 		$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
 		$this->breadcrumbs[] = 'Оформление заказа';
-		$this->render('no_register', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'existPereodic'=>$this->_existPereodic($items), 'countItems'=>$this->_getCountItems($total)));
+		$this->render(!Yii::app()->user->isGuest?'do_order':'no_register', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'existPereodic'=>$this->_existPereodic($items), 'countItems'=>$this->_getCountItems($total)));
 	}
 
 	function actionCheckPromocode() {
@@ -114,9 +113,38 @@ class BuyController extends MyController {
 		$this->ResponseJson($ret);
 	}
 
+	function actionNewAddr() {
+		$ret = array('errors'=>array());
+		if (Yii::app()->getRequest()->isPostRequest) {
+			$formName = (string) Yii::app()->getRequest()->getParam('alias');
+			$requireFields = $this->_requireFieldsAddress(array(), $formName);
+			if (!empty($requireFields)) {
+				/**@var $addressModel Address*/
+				$addressModel = new Address('edit');
+				$addressModel->setAttributes(Yii::app()->getRequest()->getParam($formName), false);
+				if (!$addressModel->validate()) {
+					$addrErrors = $addressModel->getErrors();
+					foreach ($requireFields as $field) {
+						if (!empty($addrErrors[$field])) {
+							$ret['errors'][$formName . '_' . $field] = $addrErrors[$field];
+						}
+					}
+				}
+			}
+			else $ret['errors'][] = 'error';
+			if (empty($ret['errors'])) {
+				$addressModel = new Address('new');
+				$addressModel->setAttributes(Yii::app()->getRequest()->getParam($formName), false);
+				$aid = $addressModel->InsertNew($this->uid, 0);
+				$ret['address'] = array('id'=>$aid, 'name'=>CommonHelper::FormatAddress($addressModel->getAttributes()));
+			}
+		}
+		$this->ResponseJson($ret);
+	}
+
 	function actionOrderAdd() {
 		$ret = array();
-		if (isset($_GET['ha'])||Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
@@ -138,8 +166,9 @@ class BuyController extends MyController {
 					}
 				}
 				else {
-					$aid = 0;
+					$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
 					$bid = 0;
+					if (!Yii::app()->getRequest()->getParam('addr_buyer')) $bid = Yii::app()->getRequest()->getParam('billing_address_id');
 					$userId = $this->uid;
 				}
 				$DeliveryMode = 0;
@@ -319,7 +348,12 @@ class BuyController extends MyController {
 			}
 		}
 		else {
-
+			$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
+			$bid = Yii::app()->getRequest()->getParam('billing_address_id');
+			if (empty($aid)&&$this->_existPereodic($items)) $errors['delivery_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY');
+			if (!Yii::app()->getRequest()->getParam('addr_buyer')&&empty($bid)) {
+				$errors['billing_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER');
+			}
 		}
 		return $errors;
 	}
@@ -330,7 +364,7 @@ class BuyController extends MyController {
 		$regFields = (array) Yii::app()->getRequest()->getParam($formName);
 		if (!empty($regFields)&&($regFields['type'] == 2)) {
 			unset($requireReg['business_title']);
-			if (Yii::app()->getRequest()->getParam('check_addressa')&&!$this->_existPereodic($items)) {
+			if (!empty($items)&&Yii::app()->getRequest()->getParam('check_addressa')&&!$this->_existPereodic($items)) {
 				unset($requireReg['country'], $requireReg['city'], $requireReg['postindex'], $requireReg['streetaddress']);
 			}
 		}

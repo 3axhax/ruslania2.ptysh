@@ -165,7 +165,7 @@ echo '</div>';
 ?>
 -->
     <!--<a href="javascript:;" onclick="hide_dostavka($(this))" class="btn btn-link" style="margin-top: 10px;">Доставка не нужна</a>-->
-    <? $user = User::getUserID(Yii::app()->user->id); ?>
+    <? //$user = User::getUserID(Yii::app()->user->id); ?>
 
 <a href="javascript:;" onclick="$('select, input').removeClass('error'); $('span.texterror').html(''); $('table.addr1, .btn.btn-success.addr1,.cancel_add_adr').toggle('fade');" class="order_start" style="margin-top: 0; padding: 6px 0; background-color: #28618E; width: 40px;">+</a></div>
 <div style="clear: both"></div>

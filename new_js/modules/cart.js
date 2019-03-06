@@ -18,6 +18,8 @@
         },
         setConst: function(options) {
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
+            this.delivery_address = document.getElementById('delivery_address_id');
+            this.billing_address = document.getElementById('billing_address_id');
             this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
             this.confirm = document.getElementById('confirm'); //согласен с условиями
             this.country = document.getElementById('Reg_country'); //страна доставки
@@ -52,11 +54,21 @@
             this.eventPayments();
             this.eventDeliverys();
 
-            $(this.takeInStore).on('click', function() {
+            if (this.takeInStore) $(this.takeInStore).on('click', function() {
                 self.showAddressFields('Reg');
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
+            });
+            if (this.delivery_address) $(this.delivery_address).on('change', function(){
+                $('#Reg').hide();
+                self.deleveryForm();
+                self.blockPay();
+                self.paymentsForm();
+            });
+
+            if (this.billing_address) $(this.billing_address).on('change', function(){
+                $('#Adderss').hide();
             });
 
             $(this.confirm).on('click', function() {
@@ -83,7 +95,55 @@
             $('#Address_country').on('change', function() {
                 self.showStates(this);
                 self.showAddressFields('Address');
-            })
+            });
+
+            $('div.choose_address .address_add').on('click', function() {
+                $(this).closest('div.choose_address').siblings('div.form').show();
+            });
+
+            $('div.form .btn-cancel').on('click', function() {
+                $(this).closest('div.form').hide();
+            });
+
+            $('div.form .btn-success').on('click', function() {
+                var $block = $(this).closest('div.form');
+                var form = $block.find('form').get(0);
+                $.ajax({
+                    url: form.getAttribute('action') + '?alias=' + form.getAttribute('id'),
+                    data: $(form).serialize(),
+                    type: 'post',
+                    dataType : 'json',
+                    success: function (r) {
+                        console.log(r);
+                        var errors = [];
+                        if ('errors' in r) {
+                            for (field in r.errors) {
+                                var t = document.getElementById(field);
+                                if (t) errors.push(t);
+                                else if (field == 'forgot_button') {
+                                    t = document.getElementById('Reg_contact_email');
+                                    $(t).siblings('.info_box').html(r.errors[field]).toggle();
+                                    errors.push(t);
+                                }
+                            }
+                        }
+                        if (errors.length) {
+                            self.viewErrors(errors);
+                            console.log(errors);
+                        }
+
+                        if ('address' in r) {
+                            form.reset();
+                            $block.hide();
+                            $('.choose_address select.address_select').each(function(i, el) {
+                                $(el).append('<option value="' + r['address']['id'] + '">' + r['address']['name'] + '</option>');
+                                $(el).find('option[value=' + r['address']['id'] + ']').attr("selected", "selected");
+                            });
+                            self.deleveryForm();
+                        }
+                    }
+                });
+            });
         },
 
         showAddressFields: function(idForm) {
@@ -91,7 +151,9 @@
             var userType = $form.find('input[type=radio].js_userType:checked').val();
             if (!userType) userType = 0;
             var takeInStore = 0;
-            if ((idForm == 'Reg')&&this.takeInStore.checked) takeInStore = 1;
+            if (this.takeInStore) {
+                if ((idForm == 'Reg')&&this.takeInStore.checked) takeInStore = 1;
+            }
 
             var self = this;
             $form.find('tr').each(function (id, elem) {
@@ -128,8 +190,14 @@
         },
 
         deleveryForm: function() {
-            if (this.onlyPereodic||this.takeInStore.checked) this.$deliveryTypeData.hide();
-            else this.$deliveryTypeData.show();
+            if (this.takeInStore) {
+                if (this.onlyPereodic||this.takeInStore.checked) this.$deliveryTypeData.hide();
+                else this.$deliveryTypeData.show();
+            }
+            else if (this.delivery_address) {
+                if (this.onlyPereodic||(this.delivery_address.value == '0')) this.$deliveryTypeData.hide();
+                else this.$deliveryTypeData.show();
+            }
         },
         paymentsForm: function() {
             var self = this;
@@ -139,6 +207,7 @@
                 switch (el.value) {
                     case '0':
                         if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').show();
+                        else if (self.delivery_address&&(self.delivery_address.value == '0')) $(el).closest('label').show();
                         else {
                             $(el).closest('label').hide();
                             if (el.checked) {
@@ -159,6 +228,15 @@
                                 $paymentDesc.show();
                             }
                         }
+                        else if (self.delivery_address&&(self.delivery_address.value == '0')) {
+                            $(el).closest('label').hide();
+                            if (el.checked) {
+                                el.checked = false;
+                                paytrail.checked = true;
+                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $paymentDesc.show();
+                            }
+                        }
                         else $(el).closest('label').show();
                         break;
                 }
@@ -168,14 +246,23 @@
             var $block = $('ol li .op');
             if (!this.confirm.checked) $block.show();
             else {
-                if (this.takeInStore.checked||(this.country.value > 0)) $block.hide();
-                else $block.show();
+                if (this.takeInStore) {
+                    if (this.takeInStore.checked||(this.country.value > 0)) $block.hide();
+                    else $block.show();
+                }
+                else $block.hide();
             }
         },
         showPayerForm: function() {
-            var $form = $('#Address');
-            if (this.oneAddr.checked) $form.hide();
-            else $form.show();
+            if (this.billing_address) {
+                if (this.oneAddr.checked) $(this.billing_address).closest('div').hide();
+                else $(this.billing_address).closest('div').show();
+            }
+            else {
+                var $form = $('#Address');
+                if (this.oneAddr.checked) $form.hide();
+                else $form.show();
+            }
         },
         eventUserType: function(idForm) {
             var self = this;
@@ -223,7 +310,8 @@
                     var $this = $(this);
                     $this.closest('.variant').siblings().find('label').removeClass('act');
                     $this.closest('label').addClass('act');
-                    self.takeInStore.checked = (this.value == '0');
+                    if (self.takeInStore) self.takeInStore.checked = (this.value == '0');
+                    if (self.delivery_address&&(this.value == '0')) $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
                     self.paymentsForm();
                     if (self.activeSmartpost) {
                         if (this.value == '3') self.$smartpostBox.show();
@@ -405,8 +493,8 @@
                     type: 'post',
                     dataType : 'json',
                     success: function(r) {
+                        var errors = [];
                         if ('errors' in r) {
-                            errors = [];
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
                                 if (t) errors.push(t);
@@ -416,14 +504,13 @@
                                     errors.push(t);
                                 }
                             }
-
-                            if (errors.length) {
-                                self.viewErrors(errors);
-                                console.log(errors);
-                            }
-                            else {
-                                document.location.href = r.url;
-                            }
+                        }
+                        if (errors.length) {
+                            self.viewErrors(errors);
+                            console.log(errors);
+                        }
+                        else {
+                            document.location.href = r.url;
                         }
                     }
                 });

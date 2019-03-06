@@ -31,19 +31,21 @@
 
 				<tr class="footer">
 					<td colspan="4">
-						<div class="summa">
+						<div class="summa" style="padding-left: 10px; padding-right: 10px;">
 							<a style="float: left;     height: 43px;line-height: 43px; color: rgb(67, 67, 67)"
 							   href="<?= Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>"
 							   class="maintxt"
 							   target="_new"><i class="fa fa-print"></i> <?= $ui->item('MSG_ACTION_PRINT_ORDER'); ?>
 							</a>
-							<div class="itogo" style="    margin-top: -3px;">
+							<div class="itogo" style="margin-top: -3px; height: auto; width: 400px;">
 								Полная стоимость<br/> заказа с учетом доставки:
-								<b><?= ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?>
-									<?php if ($order['currency_id'] != Currency::EUR) : ?>
-										(<?php $eur = Currency::ConvertToEUR($order['full_price'], $order['currency_id']);
-										echo ProductHelper::FormatPrice($eur, true, Currency::EUR); ?>)
-									<?php endif; ?></b>
+								<b><?= ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?></b>
+								<?php if (($order['currency_id'] != Currency::EUR)&&((int)$order['payment_type_id'] === 25)) : ?>
+									<?php /*
+									(<?php $eur = Currency::ConvertToEUR($order['full_price'], $order['currency_id']);
+									echo ProductHelper::FormatPrice($eur, true, Currency::EUR); ?>) */ ?>
+									<div><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div>
+								<?php endif; ?>
 							</div>
 							<div class="clearfix"></div>
 						</div>
@@ -67,6 +69,7 @@
 						<img src="/images/alipay.jpg" style="max-width: 100%;">
 					</div>
 					<?php break;
+				case 25: $this->widget('PayTrailWidget', array('order' => $order)); break;
 			endswitch;
 			?>
 				<div class="clearBoth"></div>

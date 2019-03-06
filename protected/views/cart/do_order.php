@@ -1250,7 +1250,7 @@ $pickpoint = false;
         $full_count = 0;
         $cartInfo['items'] = array();
         
-        $cart = $cart2;
+//        $cart = $cart2;
 
         //var_dump($cart);
 

@@ -53,28 +53,27 @@ class CommonHelper
         $ui = Yii::app()->ui;
         if(empty($address)) return $ui->item('NO_DATA');
 
-        if($address['type'] == Address::ORGANIZATION) $org = $address['business_title'];
+        if($address['type'] == Address::ORGANIZATION) $org = empty($address['business_title'])?'':$address['business_title'];
         else $org = '';
 
-        $name = $address['receiver_name'];
-        if(empty($name))
-        {
-            $name = $address['receiver_first_name'];
+        $name = empty($address['receiver_name'])?'':$address['receiver_name'];
+        if(empty($name)) {
+            $name = empty($address['receiver_first_name'])?'':$address['receiver_first_name'];
             if(!empty($address['receiver_middle_name'])) $name .= ' '.$address['receiver_middle_name'];
             if(!empty($address['receiver_last_name'])) $name .= ' '.$address['receiver_last_name'];
         }
-		
+        $arr_labels = array();
 		if ($org) $arr_labels[] = $org;
 		if ($name) $arr_labels[] = $name;
-		if ($address['streetaddress']) $arr_labels[] = $address['streetaddress'];
-		if ($address['postindex']) $arr_labels[] = $address['postindex'];
-		if ($address['city']) $arr_labels[] = $address['city'];
-		if ($address['country_name']) $arr_labels[] = $address['country_name'];
+		if (!empty($address['streetaddress'])) $arr_labels[] = $address['streetaddress'];
+		if (!empty($address['postindex'])) $arr_labels[] = $address['postindex'];
+		if (!empty($address['city'])) $arr_labels[] = $address['city'];
+		if (!empty($address['country_name'])) $arr_labels[] = $address['country_name'];
 		
-        $ret = $org.$name.', '
-             .$address['streetaddress'].', '
-             .$address['postindex'].' '.$address['city'].', '
-             .$address['country_name'];
+        // $ret = $org.$name.', '
+             // .$address['streetaddress'].', '
+             // .$address['postindex'].' '.$address['city'].', '
+             // .$address['country_name'];
 			 
 			 
 		$ret = implode(', ', $arr_labels);	 
@@ -114,10 +113,7 @@ class CommonHelper
 		$ret_array['business_title'] = $address['business_title'];
 		$ret_array['business_number1'] = $address['business_number1'];
 		
-        $ret = $org.$name.', '
-             .$address['streetaddress'].', '
-             .$address['postindex'].' '.$address['city'].', '
-             .$address['country_name'];
+
         return $ret_array;
     }
 
