@@ -32,6 +32,8 @@ Stripe.applePay.checkAvailability(function(available) {
         setConst: function(options) {
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
             this.delivery_address = document.getElementById('delivery_address_id');
+            if (this.delivery_address&&(this.delivery_address.value == '0')) $('.delivery_people').show();
+
             this.billing_address = document.getElementById('billing_address_id');
             this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
             this.confirm = document.getElementById('confirm'); //согласен с условиями
@@ -78,6 +80,8 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
+                if (this.value == "0") $('.delivery_people').show();
+                else $('.delivery_people').hide();
             });
 
             if (this.billing_address) $(this.billing_address).on('change', function(){
@@ -343,6 +347,12 @@ Stripe.applePay.checkAvailability(function(available) {
                 $(el).on('click', function() {
                     self.$deliveryTypeData.find('.info_box').hide();
                     $(this).siblings('.info_box').toggle();
+                });
+            });
+            $('span.qbtn2').each(function(id, el) {
+                $(el).on('click', function() {
+                    var $t = $(this);
+                    $t.siblings('.info_box').toggle().css({top: ($t.offset().top + 30), left: ($t.offset().left - 300)});
                 });
             });
         },

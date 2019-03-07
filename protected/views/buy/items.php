@@ -15,7 +15,13 @@ if (empty($PH)) $PH = new ProductHelper();
 				</td>
 				<td>
 					<?php if ($item['InCartUnitWeight'] == 0): ?>
-						<div style="float: right; color: #5BB75B;"><?= $ui->item('MSG_DELIVERY_TYPE_4') ?></div>
+						<div style="float: right; color: #5BB75B;">
+							<?= $ui->item('MSG_DELIVERY_TYPE_4') ?>
+							<span class="qbtn2">?</span>
+							<div class="info_box">
+								<?= $ui->item('DELIVERY_ECONOMY_OTHER') ?>
+							</div>
+						</div>
 					<?php endif; ?>
 					<span class="a"><?= $PH->GetTitle($item) ?></span>
 					<div class="minitext">

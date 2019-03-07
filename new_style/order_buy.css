@@ -238,9 +238,10 @@ ol li {margin: 5px 0;}
 ol li .items_list {float: right; width: 575px; margin-left: 20px;}
 ol li .form {}
 ol li .dtypes .variant {position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;}
-ol li .dtypes .variant .qbtn2, ol li .dtypes .delivery_box .qbtn2 {display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; margin-right: 38px; }
+ol li .dtypes .variant .qbtn2, ol li .dtypes .delivery_box .qbtn2, span.qbtn2 {color:#000; display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; margin-right: 38px; }
 ol li .dtypes .variant .qbtn2 {float: right; position: absolute; z-index: 99999; left: 195px; top: 40px;}
-ol li .dtypes .variant .info_box {background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none}
+span.qbtn2 {margin-right: 0;}
+div.info_box {color:#000; background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none}
 ol li label.selp input[type=radio], ol li label.seld input[type=radio] {display: none;}
 
 ol li .op {position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.6; background: #eee; z-index: 999; display: none}
