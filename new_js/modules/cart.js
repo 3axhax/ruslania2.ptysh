@@ -137,10 +137,11 @@
                             $block.hide();
                             $('.choose_address select.address_select').each(function(i, el) {
                                 $(el).append('<option value="' + r['address']['id'] + '">' + r['address']['name'] + '</option>');
-                                $(el).find('option[value=' + r['address']['id'] + ']').attr("selected", "selected");
                             });
+                            $block.closest().find('.choose_address select.address_select option[value=' + r['address']['id'] + ']').attr("selected", "selected");
                             self.deleveryForm();
                         }
+
                     }
                 });
             });
