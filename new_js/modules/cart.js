@@ -1,3 +1,16 @@
+Stripe.setPublishableKey('pk_test_B8MwXuaz10DDZVcF6QJQTki0');
+
+Stripe.applePay.checkAvailability(function(available) {
+    if (available) {
+    }
+    else {
+        $('input[type=radio][name=ptype][value="27"]')
+            .attr("disabled", "disabled")
+            .closest('label')
+            .find('.not_supported').show();
+    }
+});
+
 (function() {
     cart = function() {
         return new _Cart();
@@ -72,6 +85,9 @@
             });
 
             $(this.confirm).on('click', function() {
+                if (self.payAllow()) {
+                    self.scrollTo(parseInt($(self.confirm).closest('label').offset().top) - 10);
+                }
                 self.blockPay();
             });
 
@@ -245,14 +261,16 @@
         },
         blockPay: function() {
             var $block = $('ol li .op');
-            if (!this.confirm.checked) $block.show();
-            else {
-                if (this.takeInStore) {
-                    if (this.takeInStore.checked||(this.country.value > 0)) $block.hide();
-                    else $block.show();
-                }
-                else $block.hide();
-            }
+            if (this.payAllow()) $block.hide();
+            else $block.show();
+            //if (!this.confirm.checked) $block.show();
+            //else {
+            //    if (this.takeInStore) {
+            //        if (this.takeInStore.checked||(this.country.value > 0)) $block.hide();
+            //        else $block.show();
+            //    }
+            //    else $block.hide();
+            //}
         },
         showPayerForm: function() {
             if (this.billing_address) {
@@ -478,7 +496,7 @@
                     default: fd[f.name] = f.value; break;
                 }
                 if ($f.is(':visible')&&((f.value == "")||(f.value == 0))&&($f.siblings('.texterror').length > 0)) {
-                    errors.push(f);
+                    if (!$f.hasClass('address_select')) errors.push(f);
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
@@ -511,7 +529,12 @@
                             console.log(errors);
                         }
                         else {
-                            document.location.href = r.url;
+                            console.log(r, fd['ptype']);
+                            switch (parseInt(fd['ptype'])) {
+                                case 8: self.paypal(r.form); break;
+                                case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
+                                default: document.location.href = r.url; break;
+                            }
                         }
                     }
                 });
@@ -537,7 +560,55 @@
                         .siblings('.texterror').show();
                 }
             }
-            jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: firstErrorPos}, 120);
+            this.scrollTo(firstErrorPos);
+        },
+
+        payAllow: function() {
+            if (!this.confirm.checked) return false;
+
+            //console.log(this.takeInStore);
+            if (this.takeInStore&&(this.takeInStore.checked||(this.country.value > 0)))
+                return true;
+
+            if (this.delivery_address) return this.confirm.checked;
+
+            return false;
+        },
+
+        scrollTo: function(top) {
+            jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: top}, 120);
+        },
+
+        paypal: function(form) {
+            $(form).appendTo('#js_orderForm').submit();
+        },
+
+        applepay: function(idOrder, urls, paymentRequest) {
+            var self = this;
+            var session = Stripe.applePay.buildSession(paymentRequest,
+                function(result, completion) {
+                    var data = {
+                        'token':result.token.id,
+                        'orderId':idOrder
+                    };
+                    data[self.csrf[0]] = self.csrf[1];
+                    $.post(urls.charges, data).done(function() {
+                        completion(ApplePaySession.STATUS_SUCCESS);
+                        // You can now redirect the user to a receipt page, etc.
+                        window.location.href = urls.accept;
+                    }).fail(function() {
+                        completion(ApplePaySession.STATUS_FAILURE);
+                    });
+
+                }, function(error) {
+                    console.log(error.message);
+                });
+
+            session.oncancel = function() {
+                window.location.href = urls.cancel;
+            };
+
+            session.begin();
         }
 
     };
@@ -549,16 +620,13 @@ function search_smartpost(loadUrl, countryId, loadName, buttonName) {
     $('.start-search-smartpost').html(loadName);
     var country = 'FI';
     if (countryId == 62) country = 'EE';
-    $('.box_smartpost').html('');
+    $('.box_smartpost').html('').hide();
     $('.sel_smartpost').html('');
-    $('.box_smartpost').hide();
     $.post(loadUrl, {ind: $('.smartpost_index').val(), YII_CSRF_TOKEN: csrf[1], country: country}, function (data) {
         if (data) {
-            $('.box_smartpost').show();
-            $('.box_smartpost').html(data);
+            $('.box_smartpost').show().html(data);
         } else {
-            $('.box_smartpost').html('');
-            $('.box_smartpost').hide();
+            $('.box_smartpost').html('').hide();
         }
         $('.start-search-smartpost').html(buttonName);
     });

@@ -254,3 +254,4 @@ label.error { background-color: #fff !important; border: solid 1px red !importan
 .choose_address .address_select {margin-bottom: 0;margin-right: 8px; background-color: #fff; border: 1px solid #cccccc; width: 475px;}
 .address_action { width: 525px; text-align: right; margin-bottom: 30px;}
 .address_action a { cursor: pointer; margin-left: 20px;}
+.not_supported { position: absolute; top: 50px; left: 140px; }

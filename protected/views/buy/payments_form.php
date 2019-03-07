@@ -46,6 +46,7 @@
 		<input type="radio" value="27" name="ptype" class="checkbox_custom" />
 		<span class="checkbox-custom"></span>
 	</div>
+	<div class="not_supported" style="display: none;"><?=$ui->item('NOT_APPLEPAY')?></div>
 </label>
 
 <label class="selp span3">

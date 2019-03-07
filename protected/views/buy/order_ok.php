@@ -82,3 +82,7 @@
 		<div style="height: 20px;"></div>
 	</div>
 </div>
+<?php
+/**@var $payPal PayPalPayment*/
+$payPal = $this->widget('PayPalPayment', array('order' => $order, 'tpl'=>'paypal_without_button'), true);
+Debug::staticRun(array($payPal));

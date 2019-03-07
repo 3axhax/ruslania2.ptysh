@@ -144,7 +144,7 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (isset($_GET['ha'])||Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
@@ -198,7 +198,27 @@ class BuyController extends MyController {
 				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 
 				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
-				$ret['url'] = Yii::app()->createUrl('buy/orderok') . '?id=' . $id;
+				$orderBaseData = $o->GetOrder($id);
+				switch ((int) Yii::app()->getRequest()->getParam('ptype')) {
+					case 8: $ret['form'] = $this->widget('PayPalPayment', array('order' => $orderBaseData, 'tpl'=>'paypal_without_button'), true); break;
+					case 27:
+						$ret['idOrder'] = $orderBaseData['id'];
+						$ret['urls'] = array(
+							'charges' => Yii::app()->createUrl('site/charges'),
+							'accept' => Yii::app()->createUrl('payment/accept', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
+							'cancel' => Yii::app()->createUrl('payment/cancel', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
+						);
+						$ret['paymentRequest'] = array(
+							'countryCode' => mb_strtoupper(Yii::app()->getLanguage()),
+                            'currencyCode'=>Currency::ToStr($orderBaseData['currency_id']),
+							'total' =>array(
+								'label' => Yii::app()->ui->item('ORDER_PAYMENT') . ' ' . $orderBaseData['id'],
+								'amount' => $orderBaseData['full_price'],
+							),
+						);
+						break;
+					default: $ret['url'] = Yii::app()->createUrl('buy/orderok') . '?id=' . $id; break;
+				}
 			}
 		}
 		$this->ResponseJson($ret);

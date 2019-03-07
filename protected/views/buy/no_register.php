@@ -9,7 +9,7 @@ $addrModel = new Address();
 <div class="container cartorder" id="js_orderForm" style="margin-bottom: 20px;">
 	<ol>
 		<li id="deliveryContactData">
-			<span class="step_header"><?=$ui->item('CARTNEW_NOREG_STEP1_TITLE')?></span>
+			<span class="step_header"><?=$ui->item('PAYMENT_METHOD_DELIVERY')?></span>
 			<div class="items_list">
 				<?php $this->renderPartial('items', array('PH'=>$PH, 'total'=>$total, 'items'=>$items, 'countItems'=>$countItems)); ?>
 			</div>
@@ -70,11 +70,6 @@ $addrModel = new Address();
 						<?php if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif; ?>
 					</div>
 
-					<?php
-					//TODO:: название кнопки исправить на "Завершить оформление заказа" или "Оформить заказ и оплатить"
-					//	'BUTTON_ORDER_PAY' => 'Оформить заказ и оплатить',
-					//  'BUTTON_ORDER_SAVE' => 'Завершить оформление заказа',
-					?>
 					<div class="cart_footer"><a class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></a></div>
 					<div class="cart_footer">
 						<?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
@@ -87,6 +82,7 @@ $addrModel = new Address();
 	</ol>
 
 </div>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script>
 	$(function(){
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {

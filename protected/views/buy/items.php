@@ -26,7 +26,7 @@ if (empty($PH)) $PH = new ProductHelper();
 						<?= $ui->item('CARTNEW_COUNT_NAME')?>.
 					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($total['pricesValues'][$item['entity'] . '_' . $item['id']]); ?></span>
 					<?php if ($item['InCartUnitWeight'] > 0): ?>
-						<br /> <?= $ui->item('CARTNEW_WEIGHT_LABEL') ?>: <?= ($item['InCartUnitWeight']) ?> <?= $ui->item('CARTNEW_WEIGHT_NAME') ?>
+						<br /> <?= $ui->item('CARTNEW_WEIGHT_LABEL') ?>: <?= ($item['InCartUnitWeight'] / 1000) ?> <?= $ui->item('CARTNEW_WEIGHT_NAME') ?>
 					<?php endif; ?>
 					</div>
 				</td>

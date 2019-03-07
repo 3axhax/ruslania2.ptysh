@@ -1339,7 +1339,7 @@ IBAN DE79514303006474790001 <br>
 'CARTNEW_LABEL_NO_ACCOUNT' => 'Нет учётной записи?',
 'CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION' => 'Продолжить без авторизации',
 'CARTNEW_LOGIN_SOCIAL' => 'Войти с помощью социальных сетей',
-'CARTNEW_NOREG_STEP1_TITLE' => 'Укажите ваши личные данные',
+'CARTNEW_NOREG_STEP1_TITLE' => '1. Укажите ваши личные данные',
 'CARTNEW_NOREG_STEP2_TITLE' => '2. Где и как вы хотите получить заказ?',
 'CARTNEW_NOREG_STEP3_TITLE' => '3. Как вам будет удобнее оплатить заказ?',
 'CARTNEW_CHECK_NO_ADDR' => 'Отметьте, если хотите забрать заказ в магазине. В этом случае адрес указывать не обязательно.',
@@ -1390,6 +1390,7 @@ IBAN DE79514303006474790001 <br>
     'PHONE_WITH_CODE' => 'Введите номер телефона включая код страны',
     'CHECKBOX_TERMS_OF_USE'=>'Я согласен с условиями пользования виртуальным магазином Руслания и с обработкой персональных данных (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_rus.pdf" target="_blank">заявление о  конфиденциальности Руслании</a> на русском языке)',
 //    'PAYMENT_METHOD'=>'Выберите способ оплаты',
+    'PAYMENT_METHOD_DELIVERY'=>'Укажите данные получателя',
     'PAYMENT_METHOD_PAYER'=>'Выберите способ оплаты и плательщика',
     'DELIVERY_METHOD'=>'Выберите способ получения заказа',
     'BUTTON_ORDER_PAY' => 'Оформить заказ и оплатить',
@@ -1406,4 +1407,6 @@ IBAN DE79514303006474790001 <br>
     'PRICE_PAYTRAYL_DESC' => 'Сумма Вашего заказа будет автоматически переведена в евро',
     'COUNTRY'=>'Страна',
     'IN_SHOP' => 'Ждем вас в нашем магазине',
+    'NOT_APPLEPAY' => 'Ваше устройство не поддерживает ApplePay',
+
 );

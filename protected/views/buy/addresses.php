@@ -6,7 +6,7 @@ $selected = false;
 foreach ($addrList as $addr):
 	$addrStr = CommonHelper::FormatAddress($addr);
 	if (!empty($addrStr)): ?>
-	<option value="<?= $addr['address_id'] ?>"<?php if(!$selected&&!empty($addr['if_default '])): $selected = true; ?> selected<?php endif; ?>><?= $addrStr ?></option>
+	<option value="<?= $addr['address_id'] ?>"<?php if(!$selected&&!empty($addr['if_default'])): $selected = true; ?> selected<?php endif; ?>><?= $addrStr ?></option>
 <?php endif; endforeach?>
 </select>
 <span class="address_add">+</span>
