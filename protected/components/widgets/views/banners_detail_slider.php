@@ -9,7 +9,33 @@
 <?php foreach ($items as $item):
 	$url = ProductHelper::CreateUrl($item);
 	$productTitle = ProductHelper::GetTitle($item, 'title', 18);
-	$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+	
+	
+                        $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+						
+						$item['priceData']['unit'] = '';
+                        if ($item['entity'] == Entity::PERIODIC) {
+                            $issues = Periodic::getCountIssues($item['issues_year']);
+                            if (!empty($issues['show3Months'])) {
+                                $item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                                $price[DiscountManager::BRUTTO] = $price[DiscountManager::BRUTTO]/4;
+                                $price[DiscountManager::WITH_VAT] = $price[DiscountManager::WITH_VAT]/4;
+                                $price[DiscountManager::WITHOUT_VAT] = $price[DiscountManager::WITHOUT_VAT]/4;
+                            }
+                            elseif (!empty($issues['show6Months'])) {
+                                $item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                                $price[DiscountManager::BRUTTO] = $price[DiscountManager::BRUTTO]/2;
+                                $price[DiscountManager::WITH_VAT] = $price[DiscountManager::WITH_VAT]/2;
+                                $price[DiscountManager::WITHOUT_VAT] = $price[DiscountManager::WITHOUT_VAT]/2;
+                            }
+                            else {
+                                $item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            }
+                        }
+                   
+	
+	
+	
 	?>
 					
 					<?
@@ -32,7 +58,7 @@
 					
 					?>
 	
-					<li><?=Yii::app()->user->id?>
+					<li>
 						<div class="span1 photo">
 							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt=""  style="max-height: 130px;"/></a>
 						</div>
