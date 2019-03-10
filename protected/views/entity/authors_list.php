@@ -50,8 +50,7 @@
                     if ($yo&&!in_array(trim($item['first_'.$lang]), array('А','Б','В','Г','Д','Е'))):
                         $yo = false; ?>
                         <a class="<?=(('Ё' == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
-                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>"
-                            >Ё</a>
+                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>">Ё</a>
                     <?php endif;
                     if (!$lineOther&&preg_match("/[^a-zа-я0-9]/ui", $item['first_'.$lang])): $lineOther = true; ?>
                         <br>
@@ -64,14 +63,17 @@
                 <?php endforeach; ?>
             </div>
 			<?php if ($_GET['char'] != ''):?>
-			<h1 class="title_char"><?=$_GET['char']?></h1>
+			<h2 class="title_char"><?=$_GET['char']?></h2>
 			<?php endif; ?>
             <div class="text">
                 <ul class="list authors" id="al">
                     <?php if (empty($url)) $url ='/entity/byauthor'; ?>
-                    <?php if (empty($idName)) $idName = 'aid'; ?>
+                    <?php if (empty($idName)) $idName = 'aid';
+                    $lang = Yii::app()->getLanguage();
+                    if (!in_array($lang, HrefTitles::get()->getLangs($entity, 'entity/byauthor'))) $lang = 'en';
+                    ?>
                     <?php foreach($list as $item) : ?>
-                        <?php $title = $item['title_'.$lang];
+                        <?php $title = $item['title_' . $lang];
                         if (preg_match("/\w/iu", $title)): ?>
                         <li style="margin-bottom: 10px;"><a href="<?=Yii::app()->createUrl($url,
                                 array('entity' => Entity::GetUrlKey($entity),

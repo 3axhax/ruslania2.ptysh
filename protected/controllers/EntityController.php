@@ -1,4 +1,7 @@
 <?php
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
 
 class EntityController extends MyController {
 
@@ -448,6 +451,8 @@ class EntityController extends MyController {
         $a = new CommonAuthor();
 
         $lang = Yii::app()->language;
+//        if (!in_array($lang, HrefTitles::get()->getLangs($entity, 'entity/byauthor'))) $lang = 'en';
+
         if ($lang != 'ru' && $lang != 'en') $lang = 'en';
 
         $abc = $a->GetABC($lang, $entity);
