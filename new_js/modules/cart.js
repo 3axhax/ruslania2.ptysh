@@ -229,38 +229,41 @@ Stripe.applePay.checkAvailability(function(available) {
             this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 switch (el.value) {
                     case '0':
-                        if (self.takeInStore&&self.takeInStore.checked) $(el).closest('label').show();
-                        else if (self.delivery_address&&(self.delivery_address.value == '0')) $(el).closest('label').show();
+                        if (self.takeInStore&&self.takeInStore.checked) $(el).closest('.variant').show();
+                        else if (self.delivery_address&&(self.delivery_address.value == '0')) $(el).closest('.variant').show();
                         else {
-                            $(el).closest('label').hide();
+                            $(el).closest('.variant').hide();
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
-                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $(paytrail).closest('label').addClass('act')
+                                    .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
                             }
                         }
                         break;
                     case '14':case '13':case '7':
                         if (self.takeInStore&&self.takeInStore.checked) {
-                            $(el).closest('label').hide();
+                            $(el).closest('.variant').hide();
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
-                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $(paytrail).closest('label').addClass('act')
+                                    .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
                             }
                         }
                         else if (self.delivery_address&&(self.delivery_address.value == '0')) {
-                            $(el).closest('label').hide();
+                            $(el).closest('.variant').hide();
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
-                                $(paytrail).closest('label').addClass('act').siblings().removeClass('act');
+                                $(paytrail).closest('label').addClass('act')
+                                    .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
                             }
                         }
-                        else $(el).closest('label').show();
+                        else $(el).closest('.variant').show();
                         break;
                 }
             });
@@ -307,10 +310,17 @@ Stripe.applePay.checkAvailability(function(available) {
             var $orderPay = $orderButton.find('.js_orderPay');
             var $orderSave = $orderButton.find('.js_orderSave');
             var $paymentDesc = $('.paytail_payment');
+            this.$paymentsData.find('.qbtn2').each(function(id, el) {
+                $(el).on('click', function() {
+                    var $t = $(this);
+                    self.$paymentsData.find('.info_box').hide();
+                    $t.siblings('.info_box').toggle().css({top: (this.offsetTop + 30), left: (this.offsetLeft - 300)});
+                });
+            });
             this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
                 $(el).on('click', function() {
                     var $this = $(this);
-                    $this.closest('label').siblings().removeClass('act');
+                    $this.closest('.variant').siblings().find('label').removeClass('act');
                     $this.closest('label').addClass('act');
                     switch(this.value) {
                         case '0': case '14':case '13': case '7':

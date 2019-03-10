@@ -22,7 +22,7 @@ label.selp {
     padding: 1.8rem 2rem 2.2rem;
     border: 1px solid #ccc;
     margin-top: 10px;
-    height: 70px;
+    height: 70px; !important;
     position: relative;
     padding-right: 55px;
     width: 188px;
@@ -237,10 +237,13 @@ ol li span.step_header {margin-bottom: 15px; display: inline-block;}
 ol li {margin: 5px 0;}
 ol li .items_list {float: right; width: 575px; margin-left: 20px;}
 ol li .form {}
-ol li .dtypes .variant {position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;}
-ol li .dtypes .variant .qbtn2, ol li .dtypes .delivery_box .qbtn2, span.qbtn2 {color:#000; display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; margin-right: 38px; }
-ol li .dtypes .variant .qbtn2 {float: right; position: absolute; z-index: 99999; left: 195px; top: 40px;}
+ol li .dtypes .variant, ol li .spay .variant {position: relative; display: inline-block; width: auto; height: 160px; float: left; margin-left: 0;}
+ol li .dtypes .variant .qbtn2, ol li .spay div.qbtn2, ol li .spay .variant .qbtn2, ol li .dtypes .delivery_box .qbtn2, span.qbtn2 {color:#000; display: inline-block;border-radius: 50%;background-color: #edb421;padding: 5px;width: 18px;font-weight:  bold;height: 18px;font-size: 17px;text-align: center;line-height: 18px;margin-left: 15px; cursor: pointer; margin-right: 38px; }
+ol li .dtypes .variant .qbtn2 {float: right; position: absolute; z-index: 998; left: 195px; top: 40px;}
 span.qbtn2 {margin-right: 0;}
+ol li .spay div.qbtn2 {margin: 0; right: 10px; position: absolute; bottom: 10px}
+ol li .spay .variant .qbtn2 {margin-right: 0; right: 10px; bottom: 30px; position: absolute; z-index: 998; }
+ol li .selp span.qbtn2 {margin-right: 0; position: absolute; right: 15px; bottom: 10px; }
 div.info_box {color:#000; background-color: rgb(255, 255, 255);position: absolute;padding: 20px;width: 300px;z-index: 999991111;border-radius: 2px;box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 10px;left: 250px; top: 40px;display: none}
 ol li label.selp input[type=radio], ol li label.seld input[type=radio] {display: none;}
 
