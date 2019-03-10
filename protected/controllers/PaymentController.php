@@ -26,8 +26,16 @@ class PaymentController extends MyController
         $view = 'cancel';
         if($check)
         {
+			
+			$sql = 'UPDATE users_orders SET hide_edit_order=:hideEdit, hide_edit_payment=:hidePay WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':hideEdit' => 1, ':hidePay' => 1, ':id' => $oid));
+			
+//			$sql = 'UPDATE users_orders SET hide_edit_payment=:int WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':int' => 1, ':id' => $oid));
+			//$this->redirect(Yii::app()->createUrl('cart/orderPay').'?id='.$id.'&ptype='.$ptype);
+			
+			$order = $o->GetOrder($oid);
+
             $view = 'accept';
-            $uid = Yii::app()->user->id;
+            $uid = $order['uid'];
             $o->ChangeOrderPaymentType($uid, $oid, $tid);
             $ret = $o->AddStatus($oid, OrderState::AutomaticPaymentConfirmation);
             if(empty($ret))

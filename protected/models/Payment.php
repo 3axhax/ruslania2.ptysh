@@ -117,10 +117,28 @@ class Payment
         if(!$result)
         {
             $msg = CommonHelper::Log('Payment fail '.$oid.' - '.$tid);
+            self::_mailOrder($order, Yii::app()->ui->item('ORDER_HELP'), 'order_pay_fail');
             return false;
         }
 
+        self::_mailOrder($order, Yii::app()->ui->item('ORDER_HAS_BEEN_PAID'), 'order_pay_success');
         return true;
     }
+
+    private function _mailOrder($order, $subject, $tpl) {
+        $user = User::model()->findByPk($order['uid']);
+        $message = new YiiMailMessage($subject);
+        $message->view = $tpl;
+        $message->setBody(array(
+            'user' => $user->attributes,
+            'order' => $order->attributes,
+        ), 'text/html');
+        $message->addTo($user['login']);
+        $message->from = 'noreply@ruslania.com';
+        @Yii::app()->mail->send($message);
+
+    }
+
+
 }
 

@@ -32,8 +32,6 @@ Stripe.applePay.checkAvailability(function(available) {
         setConst: function(options) {
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
             this.delivery_address = document.getElementById('delivery_address_id');
-            if (this.delivery_address&&(this.delivery_address.value == '0')) $('.delivery_people').show();
-
             this.billing_address = document.getElementById('billing_address_id');
             this.oneAddr = document.getElementById('addr_buyer'); //адрес плательщика и получателя совпадают
             this.confirm = document.getElementById('confirm'); //согласен с условиями
@@ -45,16 +43,21 @@ Stripe.applePay.checkAvailability(function(available) {
             this.promocode = $('#promocode');
             this.$smartpostBox = $('#js_smartpostBox');
 
-            var $promocodeBlock = $('#js_promocode');
-            this.$inputPromocode = $promocodeBlock.find('input[type=text]');
-            this.$submitPromocode = $promocodeBlock.find('input[type=button]');
-
             this.onlyPereodic = options.onlyPereodic;
             this.existPereodic = options.existPereodic;
             this.urlRecount = options.urlRecount;
             this.urlChangeCountry = options.urlChangeCountry;
             this.urlLoadStates = options.urlLoadStates;
             this.urlSubmit = options.urlSubmit;
+
+            if (this.delivery_address) {
+                if (this.delivery_address.value == '0') $('.delivery_people').show();
+                else this.changeCountry();
+            }
+
+            var $promocodeBlock = $('#js_promocode');
+            this.$inputPromocode = $promocodeBlock.find('input[type=text]');
+            this.$submitPromocode = $promocodeBlock.find('input[type=button]');
         },
         setEvents: function() {
             var self = this;
@@ -77,6 +80,7 @@ Stripe.applePay.checkAvailability(function(available) {
             });
             if (this.delivery_address) $(this.delivery_address).on('change', function(){
                 $('#Reg').hide();
+                self.changeCountry();
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
@@ -134,7 +138,6 @@ Stripe.applePay.checkAvailability(function(available) {
                     type: 'post',
                     dataType : 'json',
                     success: function (r) {
-                        console.log(r);
                         var errors = [];
                         if ('errors' in r) {
                             for (field in r.errors) {
@@ -149,7 +152,6 @@ Stripe.applePay.checkAvailability(function(available) {
                         }
                         if (errors.length) {
                             self.viewErrors(errors);
-                            console.log(errors);
                         }
 
                         if ('address' in r) {
@@ -364,7 +366,9 @@ Stripe.applePay.checkAvailability(function(available) {
         changeCountry: function () {
             var self = this;
             var aid = 0;
-            var cid = this.country.value;
+            var cid = 0;
+            if (self.delivery_address) aid = self.delivery_address.value;
+            else cid = self.country.value;
             var data = {
                 'aid':aid,
                 'cid':cid
@@ -536,10 +540,8 @@ Stripe.applePay.checkAvailability(function(available) {
                         }
                         if (errors.length) {
                             self.viewErrors(errors);
-                            console.log(errors);
                         }
                         else {
-                            console.log(r, fd['ptype']);
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
                                 case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
@@ -576,7 +578,6 @@ Stripe.applePay.checkAvailability(function(available) {
         payAllow: function() {
             if (!this.confirm.checked) return false;
 
-            //console.log(this.takeInStore);
             if (this.takeInStore&&(this.takeInStore.checked||(this.country.value > 0)))
                 return true;
 
