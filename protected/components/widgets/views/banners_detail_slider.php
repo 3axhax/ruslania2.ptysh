@@ -35,10 +35,14 @@
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
 							<div class="cost">
 								<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])): ?>
-									<span class="without_discount"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]) ?></span>&nbsp;
-									<span class="price with_discount"<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?></span>
+									<span class="without_discount">
+										<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]) ?>
+									</span>&nbsp;
+									<span class="price with_discount"<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
+										<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?><?= $item['priceData']['unit'] ?>
+									</span>
 								<?php else: ?>
-									<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?>
+									<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?><?= $item['priceData']['unit'] ?>
 								<?php endif; ?>
 							</div>
 							<div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
