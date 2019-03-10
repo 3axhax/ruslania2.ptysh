@@ -212,13 +212,15 @@ class Banners extends MyWidget {
     }
 
     private function _getBannerFilePath($id, $lang) {
-        return 'http://ruslania2.ptysh.ru/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
+        return 'https://beta.ruslania.com/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
     }
 
     protected function _viewDetail() {
         $type = 'image';
         if (!empty($this->_params['type'])) $type = $this->_params['type'];
-
+		
+		//var_dump();
+		
         switch ($type) {
             case 'image':
                 $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
@@ -267,7 +269,31 @@ class Banners extends MyWidget {
                         break;
                 }
                 $banners = $this->_getProducts($items);
-                $this->render('banners_detail_slider', array('items' => $banners));
+                foreach ($banners as $i=>$item) {
+
+                    $item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+                    $item['priceData']['unit'] = '';
+                    if ($item['entity'] == Entity::PERIODIC) {
+                        $issues = Periodic::getCountIssues($item['issues_year']);
+                        if (!empty($issues['show3Months'])) {
+                            $item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/4;
+                            $item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/4;
+                            $item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/4;
+                        }
+                        elseif (!empty($issues['show6Months'])) {
+                            $item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/2;
+                            $item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/2;
+                            $item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/2;
+                        }
+                        else {
+                            $item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                        }
+                    }
+                    $banners[$i] = $item;
+                }
+                $this->render('banners_detail_slider', array('items' => $banners, 'sid'=>$this->_params['sid'], 'uid'=>$this->_params['uid']));
                 break;
         }
     }

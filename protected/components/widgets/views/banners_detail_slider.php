@@ -9,37 +9,6 @@
 <?php foreach ($items as $item):
 	$url = ProductHelper::CreateUrl($item);
 	$productTitle = ProductHelper::GetTitle($item, 'title', 18);
-	
-	
-                        $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-						
-						$item['priceData']['unit'] = '';
-                        if ($item['entity'] == Entity::PERIODIC) {
-                            $issues = Periodic::getCountIssues($item['issues_year']);
-                            if (!empty($issues['show3Months'])) {
-                                $item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
-                                $price[DiscountManager::BRUTTO] = $price[DiscountManager::BRUTTO]/4;
-                                $price[DiscountManager::WITH_VAT] = $price[DiscountManager::WITH_VAT]/4;
-                                $price[DiscountManager::WITHOUT_VAT] = $price[DiscountManager::WITHOUT_VAT]/4;
-                            }
-                            elseif (!empty($issues['show6Months'])) {
-                                $item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
-                                $price[DiscountManager::BRUTTO] = $price[DiscountManager::BRUTTO]/2;
-                                $price[DiscountManager::WITH_VAT] = $price[DiscountManager::WITH_VAT]/2;
-                                $price[DiscountManager::WITHOUT_VAT] = $price[DiscountManager::WITHOUT_VAT]/2;
-                            }
-                            else {
-                                $item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
-                            }
-                        }
-                   
-	
-	
-	
-	?>
-					
-					<?
-					
 						$c = new Cart;
 						$cart = $c->GetCart($uid, $sid);
 						$sCount = 0;
@@ -65,14 +34,14 @@
 						<div class="span2 text">
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
 							<div class="cost">
-								<?php if (!empty($price[DiscountManager::DISCOUNT])): ?>
-									<span class="without_discount"><?= ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]) ?></span>&nbsp;
-									<span class="price with_discount"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?></span>
+								<?php if (!empty($item['priceData'][DiscountManager::DISCOUNT])): ?>
+									<span class="without_discount"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]) ?></span>&nbsp;
+									<span class="price with_discount"<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?></span>
 								<?php else: ?>
-									<?= ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]) ?>
+									<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?>
 								<?php endif; ?>
 							</div>
-							<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
+							<div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
 							<?php if ($item['entity'] == Entity::PERIODIC): ?>
 							
 							<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;" tabindex="0"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a>
