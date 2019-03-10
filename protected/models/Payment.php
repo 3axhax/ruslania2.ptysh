@@ -117,26 +117,34 @@ class Payment
         if(!$result)
         {
             $msg = CommonHelper::Log('Payment fail '.$oid.' - '.$tid);
-            self::_mailOrder($order, Yii::app()->ui->item('ORDER_HELP'), 'order_pay_fail');
+            self::_mailOrder($order, Yii::app()->ui->item('ORDER_HELP'), 'order_pay_fail', array('oid'=>$oid, 'tid'=>$tid, 'params'=>$params));
             return false;
         }
 
-        self::_mailOrder($order, Yii::app()->ui->item('ORDER_HAS_BEEN_PAID'), 'order_pay_success');
+        self::_mailOrder($order, Yii::app()->ui->item('ORDER_HAS_BEEN_PAID'), 'order_pay_success', array('oid'=>$oid, 'tid'=>$tid, 'params'=>$params));
         return true;
     }
 
-    private function _mailOrder($order, $subject, $tpl) {
+    private static function _mailOrder($order, $subject, $tpl, $forlog = array()) {
         $user = User::model()->findByPk($order['uid']);
         $message = new YiiMailMessage($subject);
         $message->view = $tpl;
         $message->setBody(array(
             'user' => $user->attributes,
-            'order' => $order->attributes,
+            'order' => $order,
         ), 'text/html');
         $message->addTo($user['login']);
         $message->from = 'noreply@ruslania.com';
-        @Yii::app()->mail->send($message);
-
+        $mailResult = @Yii::app()->mail->send($message);
+        file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t", array(
+                date('d.m.Y H:i:s'),
+                $user['login'],
+                serialize($mailResult),
+                $message->view,
+                serialize($message->from),
+                serialize($forlog),
+            )
+        ) . "\n", FILE_APPEND);
     }
 
 

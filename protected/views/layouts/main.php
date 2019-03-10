@@ -215,10 +215,11 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
             <? elseif (($ctrl == 'cart' AND (!in_array('doorder',$url))) OR $ctrl == 'payment') : ?>
 
                 <?
-				
-				$ref = explode('?',$_SERVER['HTTP_REFERER']);
-				
-                $url_ref = end(explode('/', trim($ref[0], '/')));
+
+                $httpReferer = getenv('HTTP_REFERER');
+				$ref = explode('?',$httpReferer);
+                $ref = explode('/', trim($ref[0], '/'));
+                $url_ref = end($ref);
 
 				
 				
@@ -226,13 +227,13 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                 if (in_array($url_ref, $arr_cart_url) OR $ctrl == 'payment') {
 
-                    $_SERVER['HTTP_REFERER'] = '/';
+                    $httpReferer = '/';
 
                 }
 
                 ?>
 
-                <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: right; margin-top: 50px; color: #ff0000;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
+                <a href="<?= $httpReferer ?>" style="float: right; margin-top: 50px; color: #ff0000;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
 
             <? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
 
