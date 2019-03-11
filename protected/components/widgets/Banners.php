@@ -116,6 +116,7 @@ class Banners extends MyWidget {
                 break;
             case 'small':
                 $offerDay = DiscountManager::getOfferDay();
+
                 if (!empty($offerDay)) {
                     $entity = $offerDay['entity_id'];
                     $extraTxt = $offerDay['extra_txt'];

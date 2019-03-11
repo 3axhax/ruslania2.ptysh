@@ -3,7 +3,7 @@
 class PayTrailWidget extends CWidget
 {
     public $order;
-    public $env = PayTrail::ENV_TEST;//PayTrail::ENV_PROD;
+    public $env = /*PayTrail::ENV_TEST;//*/PayTrail::ENV_PROD;
     public $acceptUrl = 'payment/accept',
         $cancelUrl = 'payment/cancel',
         $notifyUrl = 'payment/notify';
