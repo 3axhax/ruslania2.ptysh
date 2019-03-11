@@ -85,7 +85,7 @@
 		</div>
 		<div class="span2">
 			<div class="poht">Для автозамены:</div>
-			<div><span>{geoip_country}</span> - название страныб определяется по IP</div>
+			<div><span>{geoip_country}</span> - название страны, определяется по IP</div>
 			<div><span>{domain}</span> - Rusliania.com</div>
 			<div><span>{page_n}</span> - Страница N (N > 1)</div>
 			<div><span>{entity_name}</span> - Название раздела</div>

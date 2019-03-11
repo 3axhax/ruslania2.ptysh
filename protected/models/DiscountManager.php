@@ -50,8 +50,9 @@ class DiscountManager
                 'limit 1 '.
             '';
             self::$_offerDay = Yii::app()->db->createCommand($sql)->queryRow();
-            if (!empty(self::$_offerDay['extra_txt'])) self::$_offerDay['extra_txt'] = unserialize(self::$_offerDay['extra_txt']);
-            else self::$_offerDay = array();
+            if (empty(self::$_offerDay)) self::$_offerDay = array();
+            elseif (!empty(self::$_offerDay['extra_txt'])) self::$_offerDay['extra_txt'] = unserialize(self::$_offerDay['extra_txt']);
+            else self::$_offerDay['extra_txt'] = array();
         }
         return self::$_offerDay;
     }

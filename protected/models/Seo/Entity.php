@@ -43,7 +43,7 @@ class ModelsSeoEntity extends Seo_settings {
 	}
 
 	function getDefaultSettings($lang) {
-		if (empty($this->_cid)) $file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/seo_entity.php';
+		if (empty(/*$this->_cid*/$this->_id)) $file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/seo_entity.php';
 		else $file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/seo_category.php';
 		if (file_exists($file)) {
 			$fileSettings = include $file;
@@ -60,7 +60,7 @@ class ModelsSeoEntity extends Seo_settings {
 	protected function _fillReplace() {
 		parent::_fillReplace();
 		$this->_replace['{entity_name}'] = Entity::GetTitle($this->_eid);
-		if (empty($this->_cid)) {
+		if (empty($this->_id)) {
 			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE (avail_for_order > 0)';
 			$this->_replace['{counts}'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
 			switch ($this->_route) {
@@ -86,6 +86,12 @@ class ModelsSeoEntity extends Seo_settings {
 				case 'entity/subtitleslist': $this->_replace['{name}'] = Yii::app()->ui->item('Credits'); break;
 				case 'entity/studioslist': $this->_replace['{name}'] = Yii::app()->ui->item('STUDIOS'); break;
 			}
+		}
+		elseif (empty($this->_cid)) {
+			if (mb_strpos($this->_settings['h1'], '{entity_name}') === false) $this->_settings['h1'] = str_replace('{name}', '{entity_name},', $this->_settings['h1']);
+			if (mb_strpos($this->_settings['title'], '{entity_name}') === false) $this->_settings['title'] = str_replace('{name}', '{entity_name},', $this->_settings['title']);
+			if (mb_strpos($this->_settings['description'], '{entity_name}') === false) $this->_settings['description'] = str_replace('{name}', '{entity_name},', $this->_settings['description']);
+			if (mb_strpos($this->_settings['keywords'], '{entity_name}') === false) $this->_settings['keywords'] = str_replace('{name}', '{entity_name},', $this->_settings['keywords']);
 		}
 		else {
 			$category = new Category();

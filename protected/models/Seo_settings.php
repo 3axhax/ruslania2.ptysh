@@ -67,7 +67,8 @@ class Seo_settings {
 	protected function _prepareText($s){
 		if (!empty($this->_replace)) $s = str_replace(array_keys($this->_replace), $this->_replace, $s);
 		$s = preg_replace('/\{\w+\}/', '', $s);
-		$s = preg_replace('/$[:, ]+/', '', $s);
+		$s = preg_replace('/[:, ]+$/', '', $s);
+		$s = preg_replace('/\s+/u', ' ', $s);
 		return $s;
 	}
 
