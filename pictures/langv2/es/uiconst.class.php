@@ -165,7 +165,7 @@ return array(
     'CART_COL_DELETE' => 'Eliminar',
     'CART_COL_ITEM_AVAIBILITY' => 'Disponibilidad',
     'CART_COL_ITEM_MOVE_TO_ORDERED' => 'Notificar cuando disponible',//'Ver encargos',
-    'CART_COL_ITEM_MOVE_TO_SHOPCART' => 'Añadir a cesta de compras',
+    'CART_COL_ITEM_MOVE_TO_SHOPCART' => 'Añadir a la cesta',
     'CART_COL_ITEM_MOVE_TO_SUSPENDED' => 'Marcar como interesante',
     'CART_COL_PRICE' => 'Precio',
     'CART_COL_QUANTITY' => 'Cantidad',
