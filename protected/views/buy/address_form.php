@@ -59,7 +59,7 @@ $form = $this->beginWidget('CActiveForm', array(
 	<tr>
 		<td class="maintxt">
 			<span style="width: 5pt" class="redtext">*</span>
-			<?= $ui->item("regform_lastname"); ?></td>
+			<span class="js_userName"><?= $ui->item("regform_lastname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_FIRSTNAME"); ?></span></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_last_name', array('name'=>'' . $alias . '[receiver_last_name]')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
@@ -68,14 +68,14 @@ $form = $this->beginWidget('CActiveForm', array(
 	<tr>
 		<td class="maintxt">
 			<span style="width: 5pt" class="redtext">*</span>
-			<?= $ui->item("regform_firstname"); ?></td>
+			<span class="js_userName"><?= $ui->item("regform_firstname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_LASTNAME"); ?></span></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_first_name', array('name'=>'' . $alias . '[receiver_first_name]')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
 	<tr class="js_delivery">
-		<td class="maintxt"><?= $ui->item("regform_middlename"); ?></td>
+		<td class="maintxt"><span class="js_userName"><?= $ui->item("regform_middlename"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_MIDDLENAME"); ?></span></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_middle_name', array('name'=>'' . $alias . '[receiver_middle_name]')); ?>
 		</td>

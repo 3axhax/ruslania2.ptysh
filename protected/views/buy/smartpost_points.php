@@ -43,16 +43,7 @@
     <div class="addr_name"><?=$p['address']['fi']['address']?>, <?=$p['address']['fi']['streetName']?>, <?=$p['address']['fi']['streetNumber']?>, <?=$p['address']['fi']['postalCode']?> <?=$p['address']['fi']['postalCodeName']?></div>
 </div>
     <?php endforeach; ?>
-    
-<?php /*
-<div style="display: none; text-align: right;" class="more_points">
-<a href="javascript:;" onclick="$('.row_smartpost').removeClass('act'); $('.row_smartpost, .close_points',).show(); $(this).parent().hide(); $('.row_smartpost .btn.btn-success').html('<?= $ui->item('CHOOSE') ?>');"><?= $ui->item('SHOW_ALL') ?></a>
-</div>
-
-<div style="display: block; text-align: right;" class="close_points">
-<a href="javascript:;" onclick="$('.row_smartpost').removeClass('act'); $('.row_smartpost').show(); $('.box_smartpost').html(''); $('.smartpost_index').val('')"><?= $ui->item('ROLL_UP') ?></a>
-</div>
-*/?>
+<a href="javascript:;" class="btn btn-success" onclick="$('.row_smartpost').removeClass('act').show(); $('.box_smartpost').html(''); $('.smartpost_index').val(''); $('#pickpoint_address').val(''); "><?= $ui->item('BTN_CATALOG_SEARCH_RESET') ?></a>
 
 <?php else: ?>
 <?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?>

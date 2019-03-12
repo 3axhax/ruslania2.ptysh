@@ -25,7 +25,7 @@ Stripe.applePay.checkAvailability(function(available) {
         init: function(options) {
             this.setConst(options);
             this.setEvents();
-            if (this.$paymentsData.find('input[name=ptype]:checked').val() == '25') $('.paytail_payment').show();
+            if ((this.$paymentsData.find('input[name=ptype]:checked').val() == '25')&&this.confirm.checked) $('.paytail_payment').show();
             else $('.paytail_payment').hide();
             return this;
         },
@@ -73,6 +73,11 @@ Stripe.applePay.checkAvailability(function(available) {
             this.eventDeliverys();
 
             if (this.takeInStore) $(this.takeInStore).on('click', function() {
+                if (this.checked) {
+                    self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
+                    $('.js_orderPay').hide();
+                    $('.js_orderSave').show();
+                }
                 self.showAddressFields('Reg');
                 self.deleveryForm();
                 self.blockPay();
@@ -95,7 +100,8 @@ Stripe.applePay.checkAvailability(function(available) {
 
             $(this.confirm).on('click', function() {
                 if (self.payAllow()) {
-                    self.scrollTo(parseInt($(self.confirm).closest('label').offset().top) - 10);
+                    var $label = $(self.confirm).closest('label');
+                    self.scrollTo(parseInt($label.offset().top) - 5 + $label.outerHeight(true));
                 }
                 self.blockPay();
             });
@@ -174,6 +180,14 @@ Stripe.applePay.checkAvailability(function(available) {
             var $form = $('#' + idForm);
             var userType = $form.find('input[type=radio].js_userType:checked').val();
             if (!userType) userType = 0;
+            if (userType == '1') {
+                $('.js_userName').hide();
+                $('.js_firmName').show();
+            }
+            else {
+                $('.js_userName').show();
+                $('.js_firmName').hide();
+            }
             var takeInStore = 0;
             if (this.takeInStore) {
                 if ((idForm == 'Reg')&&this.takeInStore.checked) takeInStore = 1;
@@ -222,6 +236,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 if (this.onlyPereodic||(this.delivery_address.value == '0')) this.$deliveryTypeData.hide();
                 else this.$deliveryTypeData.show();
             }
+            else if (this.onlyPereodic) this.$deliveryTypeData.hide();
         },
         paymentsForm: function() {
             var self = this;
@@ -237,18 +252,22 @@ Stripe.applePay.checkAvailability(function(available) {
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
+                                $('.js_orderPay').show();
+                                $('.js_orderSave').hide();
                                 $(paytrail).closest('label').addClass('act')
                                     .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
                             }
                         }
                         break;
-                    case '14':case '13':case '7':
+                    /*case '14':*/case '13':case '7':
                         if (self.takeInStore&&self.takeInStore.checked) {
                             $(el).closest('.variant').hide();
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
+                                $('.js_orderPay').show();
+                                $('.js_orderSave').hide();
                                 $(paytrail).closest('label').addClass('act')
                                     .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
@@ -259,6 +278,8 @@ Stripe.applePay.checkAvailability(function(available) {
                             if (el.checked) {
                                 el.checked = false;
                                 paytrail.checked = true;
+                                $('.js_orderPay').show();
+                                $('.js_orderSave').hide();
                                 $(paytrail).closest('label').addClass('act')
                                     .closest('.variant').siblings().find('label').removeClass('act');
                                 $paymentDesc.show();
@@ -271,8 +292,15 @@ Stripe.applePay.checkAvailability(function(available) {
         },
         blockPay: function() {
             var $block = $('ol li .op');
-            if (this.payAllow()) $block.hide();
-            else $block.show();
+            if (this.payAllow()) {
+                $block.hide();
+                if ((this.$paymentsData.find('input[name=ptype]:checked').val() == '25')&&this.confirm.checked) $('.paytail_payment').show();
+                else $('.paytail_payment').hide();
+            }
+            else {
+                $block.show();
+                $('.paytail_payment').hide();
+            }
             //if (!this.confirm.checked) $block.show();
             //else {
             //    if (this.takeInStore) {
@@ -308,8 +336,8 @@ Stripe.applePay.checkAvailability(function(available) {
             var $orderButton = $('.order_start');
             $orderButton.on('click', function() { self.sendforma(); return false; });
 
-            var $orderPay = $orderButton.find('.js_orderPay');
-            var $orderSave = $orderButton.find('.js_orderSave');
+            var $orderPay = $('.js_orderPay');
+            var $orderSave = $('.js_orderSave');
             var $paymentDesc = $('.paytail_payment');
             this.$paymentsData.find('.qbtn2').each(function(id, el) {
                 $(el).on('click', function() {
@@ -349,6 +377,9 @@ Stripe.applePay.checkAvailability(function(available) {
                     if (this.value == '0') {
                         if (self.takeInStore) self.takeInStore.checked = true;
                         if (self.delivery_address) $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
+                        self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
+                        $('.js_orderPay').hide();
+                        $('.js_orderSave').show();
                     }
                     self.paymentsForm();
                     if (self.activeSmartpost) {
@@ -378,42 +409,44 @@ Stripe.applePay.checkAvailability(function(available) {
 
         changeCountry: function () {
             var self = this;
-            var aid = 0;
-            var cid = 0;
-            if (self.delivery_address) aid = self.delivery_address.value;
-            else {
-                if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
-            }
-            var data = {
-                'aid':aid,
-                'cid':cid
-            };
-            data[this.csrf[0]] = this.csrf[1];
-            $.ajax({
-                url: self.urlChangeCountry,
-                data: data,
-                type: 'post',
-                dataType : 'json',
-                success: function (r) {
-                    for (i in r.tarif) {
-                        var $block = self.$deliveryTypeData
-                            .find('input[type=radio][value=' + r.tarif[i]['id'] + ']')
-                            .closest('label');
-                        $block.find('.js_xDays').html(r.tarif[i]['deliveryTime']);
-                        $block.find('.js_price').html(r.tarif[i]['value']);
-                        $block.siblings('.info_box').html(r.tarif[i]['description']);
-                    }
-                    self.$smartpostBox.html(r.smartpost);
-                    if (r.smartpost == '') {
-                        self.activeSmartpost = false;
-                        self.$smartpostBox.hide();
-                    }
-                    else {
-                        self.activeSmartpost = true;
-                        self.$smartpostBox.show();
-                    }
+            if (!this.onlyPereodic) {
+                var aid = 0;
+                var cid = 0;
+                if (self.delivery_address) aid = self.delivery_address.value;
+                else {
+                    if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
                 }
-            });
+                var data = {
+                    'aid':aid,
+                    'cid':cid
+                };
+                data[this.csrf[0]] = this.csrf[1];
+                $.ajax({
+                    url: self.urlChangeCountry,
+                    data: data,
+                    type: 'post',
+                    dataType : 'json',
+                    success: function (r) {
+                        for (i in r.tarif) {
+                            var $block = self.$deliveryTypeData
+                                .find('input[type=radio][value=' + r.tarif[i]['id'] + ']')
+                                .closest('label');
+                            $block.find('.js_xDays').html(r.tarif[i]['deliveryTime']);
+                            $block.find('.js_price').html(r.tarif[i]['value']);
+                            $block.siblings('.info_box').html(r.tarif[i]['description']);
+                        }
+                        self.$smartpostBox.html(r.smartpost);
+                        if (r.smartpost == '') {
+                            self.activeSmartpost = false;
+                            self.$smartpostBox.hide();
+                        }
+                        else {
+                            self.activeSmartpost = true;
+                            self.$smartpostBox.show();
+                        }
+                    }
+                });
+            }
             self.recount(self.getPromocodeValue());
             self.showStates(self.country);
         },
@@ -598,10 +631,11 @@ Stripe.applePay.checkAvailability(function(available) {
         payAllow: function() {
             if (!this.confirm.checked) return false;
 
-            if (this.takeInStore&&(this.takeInStore.checked||(this.country.value > 0)))
-                return true;
-
-            if (this.delivery_address) return this.confirm.checked;
+            if (this.takeInStore) {
+                if (this.takeInStore.checked||(this.country.value > 0)) return true;
+            }
+            else if (this.delivery_address) return this.confirm.checked;
+            else return this.country.value > 0;
 
             return false;
         },

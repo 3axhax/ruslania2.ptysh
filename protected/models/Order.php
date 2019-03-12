@@ -192,7 +192,7 @@ class Order extends CMyActiveRecord
                 $price = $values[$key];
                 $price /= 12;
             }
-            $pricesValues[$itemKey] = $price;
+            $pricesValues[$itemKey] = round($price, 2);
             $discountKeys[$itemKey] = ['discountPrice'=>$key, 'originalPrice'=>$keyWithoutDiscount, 'quantity'=>$item['quantity']];
             $itemsPrice += $item['quantity'] * $price;
             if (!empty($item['InCartUnitWeight'])) $fullweight += ($item['InCartUnitWeight']/1000);
