@@ -80,7 +80,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.recount(self.getPromocodeValue());
             });
             if (this.delivery_address) $(this.delivery_address).on('change', function(){
-                $('#Reg').hide();
+                $('#Reg').closest('div.form').hide();
                 self.changeCountry();
                 self.deleveryForm();
                 self.blockPay();
@@ -346,8 +346,10 @@ Stripe.applePay.checkAvailability(function(available) {
                     var $this = $(this);
                     $this.closest('.variant').siblings().find('label').removeClass('act');
                     $this.closest('label').addClass('act');
-                    if (self.takeInStore) self.takeInStore.checked = (this.value == '0');
-                    if (self.delivery_address&&(this.value == '0')) $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
+                    if (this.value == '0') {
+                        if (self.takeInStore) self.takeInStore.checked = true;
+                        if (self.delivery_address) $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
+                    }
                     self.paymentsForm();
                     if (self.activeSmartpost) {
                         if (this.value == '3') self.$smartpostBox.show();

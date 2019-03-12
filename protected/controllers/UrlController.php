@@ -21,10 +21,15 @@ class UrlController extends MyController {
 
 	function actionOfferDay() {
 		if ($num = Yii::app()->getRequest()->getParam('num')) {
-			$search = new SearchController($this->getId(), $this->getModule());
-			$search->beforeAction($this->getAction());
-			$code = $search->isCode($num);
-			$find = $search->getByCode($code, $num);
+			$model = new SearchProducts(1, 0);
+			$code = $model->isCode($num);
+			$find = $model->getByCode($code, $num);
+
+//			$search = new SearchController($this->getId(), $this->getModule());
+//			$search->beforeAction($this->getAction());
+//			$code = $search->isCode($num);
+//			$find = $search->getByCode($code, $num);
+			var_dump($find);
 			$row = array();
 			if (empty($find)) Yii::app()->end();
 

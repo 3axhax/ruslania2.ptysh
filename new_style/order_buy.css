@@ -255,7 +255,7 @@ label.error { background-color: #fff !important; border: solid 1px red !importan
 
 .choose_address {margin-bottom: 20px;}
 .choose_address .address_add { display: inline-block; border-radius: 4px; border: 0; text-align: center; font-size: 14px; color: #fff; font-weight: bold; margin-top: 0; padding: 5px 0; background-color: #28618E; width: 40px; cursor: pointer; }
-.choose_address .address_select {margin-bottom: 0;margin-right: 8px; background-color: #fff; border: 1px solid #cccccc; width: 475px;}
+.choose_address .address_select {margin-bottom: 0;margin-right: 8px; background-color: #fff; border: 1px solid #ccc; width: 475px;}
 .address_action { width: 525px; text-align: right; margin-bottom: 30px;}
 .address_action a { cursor: pointer; margin-left: 20px;}
 .not_supported { position: absolute; top: 50px; left: 140px; }
