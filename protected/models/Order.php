@@ -206,7 +206,7 @@ class Order extends CMyActiveRecord
         if ($deliveryMode == 0) {
             $p = new PostCalculator();
             $list = $p->GetRates(0, $uid, $sid, isset($address['country'])?$address['country']:$address['id']);
-            $deliveryPrice = false;
+            $deliveryPrice = 0;
             foreach ($list as $l)
                 if ($l['id'] == $deliveryTypeID) $deliveryPrice = $l['value'];
         }

@@ -77,6 +77,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
+                self.recount(self.getPromocodeValue());
             });
             if (this.delivery_address) $(this.delivery_address).on('change', function(){
                 $('#Reg').hide();
@@ -378,7 +379,9 @@ Stripe.applePay.checkAvailability(function(available) {
             var aid = 0;
             var cid = 0;
             if (self.delivery_address) aid = self.delivery_address.value;
-            else cid = self.country.value;
+            else {
+                if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
+            }
             var data = {
                 'aid':aid,
                 'cid':cid
@@ -418,7 +421,11 @@ Stripe.applePay.checkAvailability(function(available) {
             var self = this;
             var dtype = this.$deliveryTypeData.find('input[name=dtype]:checked').val();
             var aid = 0;
-            var cid = this.country.value;
+            var cid = 0;
+            if (self.delivery_address) aid = self.delivery_address.value;
+            else {
+                if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
+            }
             var userType = $regForm.find('input[type=radio].js_userType:checked').val();
             var nVAT = this.nVAT.value;//
             if (userType != 1) nVAT = '';
@@ -524,6 +531,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
+            if (this.takeInStore&&this.takeInStore.checked) fd['dtype'] = 0;
             if (this.activeSmartpost && (fd['dtype'] == '3')) fd['pickpoint_address'] = $('#pickpoint_address').val();
             fd[this.csrf[0]] = this.csrf[1];
             if (errors.length) {
