@@ -112,4 +112,4 @@
                 </table>
                 <?php endif; ?>
             
-</div><?if ($co != $i){?><hr style="margin: 30px 0;" /><?}?>
+</div><?if (!empty($c)&&($co != $i)){?><hr style="margin: 30px 0;" /><?}?>

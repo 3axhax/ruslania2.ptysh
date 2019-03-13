@@ -106,7 +106,7 @@
 		<?= $ui->item('DESC_PAYTYPE14') ?>
 	</div>
 <label class="selp span3">
-	<span class="js_payRus"><?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT2')?></span><span class="js_payFin" style="display: none;"><?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT2')?></span>
+	<span class="js_payRus"><?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT3')?>
 	<div class="red_checkbox">
 		<input type="radio" value="14" name="ptype" class="checkbox_custom" />
 		<span class="checkbox-custom"></span>

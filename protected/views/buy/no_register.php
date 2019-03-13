@@ -91,6 +91,7 @@ $addrModel = new Address();
 				existPereodic: <?= (int) $existPereodic ?>,
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',
 				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
+				urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
 				urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
 				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>'
 			});

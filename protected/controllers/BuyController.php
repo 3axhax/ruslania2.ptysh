@@ -26,7 +26,11 @@ class BuyController extends MyController {
 		/**@var $cart Cart*/
 		$cart = Cart::model();
 		$items = $cart->GetCart($this->uid, $this->sid);
-		if (!count($items)) $this->redirect(Yii::app()->createUrl('cart'));
+		if (!count($items)) {
+			$lastOrderId = (int)Yii::app()->getRequest()->cookies['lastOrderId']->value;
+			if ($lastOrderId > 0) $this->redirect(Yii::app()->createUrl('payment/cancel', array('oid' => $lastOrderId, 'tid'=>0)));
+			$this->redirect(Yii::app()->createUrl('cart/view'));
+		}
 
 		/**@var $order Order*/
 		$order = Order::model();
@@ -198,9 +202,13 @@ class BuyController extends MyController {
 				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 
 				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
+				$cookieOrderId = new CHttpCookie('lastOrderId', $id);
+				$cookieOrderId->expire = time() + 300;
+				Yii::app()->getRequest()->cookies['lastOrderId'] = $cookieOrderId;
 				$orderBaseData = $o->GetOrder($id);
 				switch ((int) Yii::app()->getRequest()->getParam('ptype')) {
 					case 8: $ret['form'] = $this->widget('PayPalPayment', array('order' => $orderBaseData, 'tpl'=>'paypal_without_button'), true); break;
+					case 25: $ret['form'] = $this->widget('PayTrailWidget', array('order' => $orderBaseData, 'tpl'=>'paytrail_without_button'), true); break;
 					case 27:
 						$ret['idOrder'] = $orderBaseData['id'];
 						$ret['urls'] = array(
@@ -231,6 +239,15 @@ class BuyController extends MyController {
 
 		$order = $o->GetOrder($id);
 		$this->render('order_ok', array('order' => $order));
+	}
+
+	function actionGetCountry() {
+		$ret = array();
+		if (Yii::app()->request->isPostRequest) {
+			$country = Country::model()->findByPk(Yii::app()->getRequest()->getParam('id_country'));
+			$ret = $country->getAttributes();
+		}
+		$this->ResponseJson($ret);
 	}
 
 	public function actionLoadStates() {

@@ -8,6 +8,7 @@ class PayTrailWidget extends CWidget
         $cancelUrl = 'payment/cancel',
         $notifyUrl = 'payment/notify';
 
+    var $tpl = 'paytrail';
     public function run()
     {
         $provider = new PayTrail();
@@ -24,7 +25,7 @@ class PayTrailWidget extends CWidget
         
         $provider->culture = $langInt;
 
-        $this->render('paytrail', array('provider' => $provider,
+        $this->render($this->tpl, array('provider' => $provider,
             'formName' => uniqid(),
             'env' => $this->env,
         ));

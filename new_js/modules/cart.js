@@ -47,6 +47,7 @@ Stripe.applePay.checkAvailability(function(available) {
             this.existPereodic = options.existPereodic;
             this.urlRecount = options.urlRecount;
             this.urlChangeCountry = options.urlChangeCountry;
+            this.urlGetCountry = options.urlGetCountry;
             this.urlLoadStates = options.urlLoadStates;
             this.urlSubmit = options.urlSubmit;
 
@@ -101,7 +102,7 @@ Stripe.applePay.checkAvailability(function(available) {
             $(this.confirm).on('click', function() {
                 if (self.payAllow()) {
                     var $label = $(self.confirm).closest('label');
-                    self.scrollTo(parseInt($label.offset().top) - 5 + $label.outerHeight(true));
+                    self.scrollTo(parseInt($label.offset().top) - 10);//5 + $label.outerHeight(true));
                 }
                 self.blockPay();
             });
@@ -109,6 +110,7 @@ Stripe.applePay.checkAvailability(function(available) {
             $(this.country).on('change', function() {
                 self.blockPay();
                 self.changeCountry();
+                self.fillPhoneCode(this);
             });
 
             $(this.oneAddr).on('click', function() {
@@ -126,6 +128,7 @@ Stripe.applePay.checkAvailability(function(available) {
             $('#Address_country').on('change', function() {
                 self.showStates(this);
                 self.showAddressFields('Address');
+                self.fillPhoneCode(this);
             });
 
             $('div.choose_address .address_add').on('click', function() {
@@ -173,6 +176,23 @@ Stripe.applePay.checkAvailability(function(available) {
 
                     }
                 });
+            });
+        },
+
+        fillPhoneCode: function(t) {
+            var self = this;
+            var data = {'id_country': t.value};
+            data[this.csrf[0]] = this.csrf[1];
+            $.ajax({
+                url: self.urlGetCountry,
+                data: data,
+                type: 'post',
+                dataType: 'json',
+                success: function (r) {
+                    if ('phone_code' in r) {
+                        $(t).closest('table.address').find('input.js_contactPhone').val('+' + r['phone_code']);
+                    }
+                }
             });
         },
 
@@ -597,6 +617,7 @@ Stripe.applePay.checkAvailability(function(available) {
                         else {
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
+                                case 25: self.paytrail(r.form); break;
                                 case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
                                 default: document.location.href = r.url; break;
                             }
@@ -640,11 +661,13 @@ Stripe.applePay.checkAvailability(function(available) {
             return false;
         },
 
-        scrollTo: function(top) {
-            jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: top}, 120);
-        },
+        scrollTo: function(top) { scrollTo(top); },
 
         paypal: function(form) {
+            $(form).appendTo('#js_orderForm').submit();
+        },
+
+        paytrail: function(form) {
             $(form).appendTo('#js_orderForm').submit();
         },
 
@@ -680,6 +703,10 @@ Stripe.applePay.checkAvailability(function(available) {
 
 }());
 
+function scrollTo(top) {
+    jQuery("html:not(:animated),body:not(:animated)").animate({scrollTop: top}, 120);
+}
+
 function search_smartpost(loadUrl, countryId, loadName, buttonName) {
     var csrf = $('meta[name=csrf]').attr('content').split('=');
     $('.start-search-smartpost').html(loadName);
@@ -712,7 +739,7 @@ function select_smartpost_row(cont, buttonName, txt) {
 
     $('#pickpoint_address').val(txt);
     $('.smartpost_action').toggle();
-
+    scrollTo(parseInt($('#js_smartpostBox').offset().top));
 }
 
 $(document).click(function (event) {

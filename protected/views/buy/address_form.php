@@ -162,7 +162,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			<?= $ui->item("address_contact_phone"); ?>
 		</td>
 		<td class="maintxt-vat">
-			<?= $form->textField($addrModel, 'contact_phone', array('name'=>'' . $alias . '[contact_phone]', 'placeholder'=>$ui->item('PHONE_WITH_CODE'))); ?>
+			<?= $form->textField($addrModel, 'contact_phone', array('name'=>'' . $alias . '[contact_phone]', 'class'=>'js_contactPhone', 'placeholder'=>$ui->item('PHONE_WITH_CODE'))); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
