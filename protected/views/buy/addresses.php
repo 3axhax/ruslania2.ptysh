@@ -1,6 +1,6 @@
 <?php /*Created by Кирилл (06.03.2019 22:00)*/ ?>
 <select class="address_select" name="<?= $fieldName ?>" id="<?= $fieldName ?>">
-	<option value="0"><?= $ui->item(($fieldName == 'delivery_address_id')?'TAKE_IN_THE_STORE':'CHOOSE') ?></option>
+	<?php if ($fieldName == 'delivery_address_id'): ?><option value="0"><?= $ui->item('TAKE_IN_THE_STORE') ?></option><?php endif; ?>
 <?php
 $selected = false;
 foreach ($addrList as $addr):

@@ -132,7 +132,7 @@ Stripe.applePay.checkAvailability(function(available) {
             });
 
             $('div.choose_address .address_add').on('click', function() {
-                $(this).closest('div.choose_address').siblings('div.form').show();
+                $(this).closest('div.choose_address').siblings('div.form').show().find('.btn-cancel').show();
             });
 
             $('div.form .btn-cancel').on('click', function() {
@@ -170,7 +170,14 @@ Stripe.applePay.checkAvailability(function(available) {
                             $('.choose_address select.address_select').each(function(i, el) {
                                 $(el).append('<option value="' + r['address']['id'] + '">' + r['address']['name'] + '</option>');
                             });
-                            $block.closest().find('.choose_address select.address_select option[value=' + r['address']['id'] + ']').attr("selected", "selected");
+                            $block.closest('div').find('.choose_address select.address_select option[value=' + r['address']['id'] + ']')
+                                .attr("selected", "selected");
+                            $('.choose_address').show();
+                            //console.log($block.closest('div').find('.choose_address'));
+                            //$block.closest('div').find('.choose_address').show();
+                            //$block.closest().find('.choose_address').show()
+                            //    .find('select.address_select option[value=' + r['address']['id'] + ']')
+                            //    .attr("selected", "selected");
                             self.deleveryForm();
                         }
 
@@ -331,12 +338,25 @@ Stripe.applePay.checkAvailability(function(available) {
             //}
         },
         showPayerForm: function() {
+            var $form = $('#Address');
             if (this.billing_address) {
-                if (this.oneAddr.checked) $(this.billing_address).closest('div').hide();
-                else $(this.billing_address).closest('div').show();
+                var $adr = $(this.billing_address);
+                if (this.oneAddr.checked) {
+                    $adr.closest('div').hide();
+                    $form.closest('div').hide();
+                }
+                else {
+                    if ($adr.children('option').length > 0) {
+                        $adr.closest('div').show();
+                        $form.closest('div').hide().find('.btn-cancel').show();
+                    }
+                    else {
+                        $adr.closest('div').hide();
+                        $form.closest('div').show().find('.btn-cancel').hide();
+                    }
+                }
             }
             else {
-                var $form = $('#Address');
                 if (this.oneAddr.checked) $form.hide();
                 else $form.show();
             }
