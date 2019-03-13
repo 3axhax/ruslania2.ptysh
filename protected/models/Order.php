@@ -217,7 +217,7 @@ class Order extends CMyActiveRecord
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
 
-        return [$itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight];
+        return [round($itemsPrice, 2), round($deliveryPrice, 2), $pricesValues, $discountKeys, $fullweight];
     }
 
     public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
