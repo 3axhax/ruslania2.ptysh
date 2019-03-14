@@ -144,7 +144,8 @@ class BuyController extends MyController {
 				$addressModel = new Address('new');
 				$addressModel->setAttributes(Yii::app()->getRequest()->getParam($formName), false);
 				$aid = $addressModel->InsertNew($this->uid, 0);
-				$ret['address'] = array('id'=>$aid, 'name'=>CommonHelper::FormatAddress($addressModel->getAttributes()));
+				$addr = $addressModel->GetAddress($this->uid, $aid);
+				$ret['address'] = array('id'=>$aid, 'name'=>CommonHelper::FormatAddress($addr));
 			}
 		}
 		$this->ResponseJson($ret);
@@ -152,7 +153,7 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		if (isset($_GET['ha'])||Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
@@ -365,8 +366,10 @@ class BuyController extends MyController {
 						}
 					}
 				}
-				if (empty($errors)&&User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
-					$errors['forgot_button'] = $this->renderPartial('/site/forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
+				if (empty($errors)) {
+					if(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
+						$errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
+					}
 				}
 			}
 			else $errors['Reg'] = 'error';
@@ -400,7 +403,8 @@ class BuyController extends MyController {
 	}
 
 	private function _requireFieldsAddress($items, $formName) {
-		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'city', 'postindex', 'streetaddress', 'contact_email', 'contact_phone');
+		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'city', 'postindex', 'streetaddress', 'contact_phone');
+		if (!empty($items)) $requireFields[] = 'contact_email';
 		$requireReg = array_flip($requireFields);
 		$regFields = (array) Yii::app()->getRequest()->getParam($formName);
 		if (!empty($regFields)&&($regFields['type'] == 2)) {

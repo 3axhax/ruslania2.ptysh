@@ -3,6 +3,7 @@
 $PH = new ProductHelper();
 $addrModel = new Address();
 $addrList = Address::model()->GetAddresses($this->uid);
+$user = User::model()->findByPk($this->uid);
 ?>
 <link rel="stylesheet" href="/new_style/order_buy.css">
 <hr />
@@ -96,11 +97,17 @@ $addrList = Address::model()->GetAddresses($this->uid);
 	</ol>
 
 </div>
+<?php $userData = array(
+	'id' => $this->uid,
+	'email'	=> $user->getAttribute('login'),
+);
+?>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script>
 	$(function(){
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
+				userData: <?= json_encode($userData) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
 				existPereodic: <?= (int) $existPereodic ?>,
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',

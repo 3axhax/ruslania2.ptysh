@@ -30,6 +30,9 @@ Stripe.applePay.checkAvailability(function(available) {
             return this;
         },
         setConst: function(options) {
+            if ('userData' in options) {
+                $('.js_contactEmail').val(options['userData']['email']);
+            }
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
             this.delivery_address = document.getElementById('delivery_address_id');
             this.billing_address = document.getElementById('billing_address_id');
@@ -87,12 +90,12 @@ Stripe.applePay.checkAvailability(function(available) {
             });
             if (this.delivery_address) $(this.delivery_address).on('change', function(){
                 $('#Reg').closest('div.form').hide();
-                self.changeCountry();
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
                 if (this.value == "0") $('.delivery_people').show();
                 else $('.delivery_people').hide();
+                self.changeCountry();
             });
 
             if (this.billing_address) $(this.billing_address).on('change', function(){
@@ -170,9 +173,10 @@ Stripe.applePay.checkAvailability(function(available) {
                             $('.choose_address select.address_select').each(function(i, el) {
                                 $(el).append('<option value="' + r['address']['id'] + '">' + r['address']['name'] + '</option>');
                             });
-                            $block.closest('div').find('.choose_address select.address_select option[value=' + r['address']['id'] + ']')
-                                .attr("selected", "selected");
-                            $('.choose_address').show();
+                            $block.closest('li')
+                                .find('.choose_address select.address_select option[value=' + r['address']['id'] + ']')
+                                .attr("selected", "selected")
+                                .closest('.choose_address').show();
                             //console.log($block.closest('div').find('.choose_address'));
                             //$block.closest('div').find('.choose_address').show();
                             //$block.closest().find('.choose_address').show()
@@ -261,7 +265,16 @@ Stripe.applePay.checkAvailability(function(available) {
             }
             else if (this.delivery_address) {
                 if (this.onlyPereodic||(this.delivery_address.value == '0')) this.$deliveryTypeData.hide();
-                else this.$deliveryTypeData.show();
+                else {
+                    var dtype = 0;
+                    var econom;
+                    this.$deliveryTypeData.show().find('input[name=dtype]').each(function (id, el) {
+                        if (el.checked) dtype = parseInt(el.value);
+                        if (el.value == "3") econom = el;
+                        $(el).removeAttr("disabled").closest('label').removeClass('deny');
+                    });
+                    if ((dtype == 0)&&econom) econom.checked = true;
+                }
             }
             else if (this.onlyPereodic) this.$deliveryTypeData.hide();
         },
@@ -416,8 +429,26 @@ Stripe.applePay.checkAvailability(function(available) {
                     $this.closest('label').addClass('act');
                     if (this.value == '0') {
                         if (self.takeInStore) self.takeInStore.checked = true;
-                        if (self.delivery_address) $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
-                        self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
+                        if (self.delivery_address) {
+                            $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
+                            $(this).closest('.variant').siblings('.variant').each(function(num, variant){
+                                $(variant).find('input[name=dtype]')
+                                    .attr("disabled", "disabled")
+                                    .closest('label').addClass('deny');
+                            });
+                        }
+
+                        self.$paymentsData.find('label').each(function (num, label) {
+                            var $el = $(label);
+                            var ptype = $el.find('input[name=ptype]').get(0);
+                            if (ptype) {
+                                if (ptype.value == "0") {
+                                    ptype.checked = true;
+                                    $el.addClass('act');
+                                }
+                                else $el.removeClass('act');
+                            }
+                        });
                         $('.js_orderPay').hide();
                         $('.js_orderSave').show();
                     }

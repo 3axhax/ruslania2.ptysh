@@ -80,6 +80,7 @@ class Address extends CActiveRecord
         return array(
             array('contact_email', 'checkLatin'),
             array('contact_email', 'email'),
+            array('contact_phone', 'checkPhone'),
 
             array('type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
                       . 'contact_phone, contact_email', 'required', 'on' => 'new'),
@@ -94,8 +95,15 @@ class Address extends CActiveRecord
             array('postindex', 'checkPostIndex', 'on' => 'edit'),
             array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'edit'),
             array('business_title', 'iforg', 'on' => 'edit'),
-
+            array('contact_phone', 'checkPhone', 'on' => 'edit'),
         );
+    }
+
+    function checkPhone($attr, $params) {
+        $phone = trim($this->$attr);
+        if (mb_strlen($phone, 'utf-8') < 6) {
+            $this->addError($attr, Yii::app()->ui->item('PHONE_WITH_CODE'));
+        }
     }
 
     public function checkPostIndex($attr, $params)

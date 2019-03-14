@@ -91,7 +91,10 @@ $form = $this->beginWidget('CActiveForm', array(
 		</td>
 	</tr>
 	<tr class="states_list js_delivery" style="display: none">
-		<td nowrap="" class="maintxt"><?= $ui->item("address_state"); ?></td>
+		<td nowrap="" class="maintxt">
+			<span style="width: 5pt" class="redtext">*</span>
+			<?= $ui->item("address_state"); ?>
+		</td>
 		<td class="maintxt-vat select_states">
 			<?= $form->dropDownList($addrModel, 'state_id', CHtml::listData(array(0=>array('id'=>'','title_en'=>'---')), 'id', 'title_en'), array('name'=>'' . $alias . '[state_id]')) ?>
 		</td>
@@ -147,13 +150,15 @@ $form = $this->beginWidget('CActiveForm', array(
 	</tr>
 	<tr>
 		<td nowrap="" class="maintxt">
+	<?php if (($alias == 'Reg')&&(Yii::app()->user->isGuest)): ?>
 			<span style="width: 5pt" class="redtext">*</span>
+	<?php endif; ?>
 			<?= $ui->item("address_contact_email"); ?>
 		</td>
 		<td class="maintxt-vat" style="position: relative;">
-			<?= $form->textField($addrModel, 'contact_email', array('name'=>'' . $alias . '[contact_email]')); ?>
+			<?= $form->textField($addrModel, 'contact_email', array('name'=>'' . $alias . '[contact_email]', 'class'=>'js_contactEmail')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_ERROR_WRONG_EMAIL') ?></span>
-			<?php if ($alias == 'Reg'): ?><div class="info_box" style="display: none;"></div><?php endif; ?>
+			<?php if (($alias == 'Reg')&&(Yii::app()->user->isGuest)): ?><div class="info_box" style="display: none;"></div><?php endif; ?>
 		</td>
 	</tr>
 	<tr>
