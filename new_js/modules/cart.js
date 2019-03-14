@@ -421,6 +421,9 @@ Stripe.applePay.checkAvailability(function(available) {
                         $('.js_orderPay').hide();
                         $('.js_orderSave').show();
                     }
+                    else {
+                        if (self.takeInStore) self.takeInStore.checked = false;
+                    }
                     self.paymentsForm();
                     if (self.activeSmartpost) {
                         if (this.value == '3') self.$smartpostBox.show();
@@ -527,6 +530,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     $('.itogo_cost').html(r.totalPrice + ' ' + r.currency);
                     $('.items_cost').html(r.itemsPrice + ' ' + r.currency);
                     $('.delivery_cost').html(r.deliveryPrice + ' ' + r.currency);
+                    $('.delivery_name').html(r.deliveryName);
                     for (itemId in r.pricesValues) {
                         $('.js_' + itemId).find('.item_cost').html(r.pricesValues[itemId] + ' ' + r.currency);
                     }

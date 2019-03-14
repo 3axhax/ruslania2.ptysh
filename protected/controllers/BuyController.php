@@ -64,6 +64,10 @@ class BuyController extends MyController {
 			$cart = new Cart();
 			$items = $cart->GetCart($this->uid, $this->sid);
 			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
+			$ret['deliveryName'] = Delivery::ToString($dtype);
+			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
+				$ret['deliveryName'] = Delivery::ToString(0);
+			}
 			$promocode = (string) Yii::app()->getRequest()->getParam('promocode');
 			if ($promocode === '') {
 				$ret['currency'] = Currency::ToSign(Yii::app()->currency);

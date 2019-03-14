@@ -139,6 +139,11 @@ label.selp.act, label.seld.act {
     border: 1px solid #64717f;
 }
 
+label.seld.deny {
+    background-color: #eee;
+    cursor: default;
+}
+
 input.error {
     border: 1px solid #ed1d24;
     margin-bottom: 0;
