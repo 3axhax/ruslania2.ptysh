@@ -24,18 +24,21 @@
 						$issues = Periodic::getCountIssues($product['issues_year']);
 						if (!empty($issues['show3Months'])) {
 							$product['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
-							$product['priceData'][DiscountManager::BRUTTO] = $product['priceData'][DiscountManager::BRUTTO]/4;
-							$product['priceData'][DiscountManager::WITH_VAT] = $product['priceData'][DiscountManager::WITH_VAT]/4;
-							$product['priceData'][DiscountManager::WITHOUT_VAT] = $product['priceData'][DiscountManager::WITHOUT_VAT]/4;
+							$product['priceData'][DiscountManager::BRUTTO] = $product['priceData'][DiscountManager::BRUTTO_FIN]/4;
+							$product['priceData'][DiscountManager::WITH_VAT] = $product['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+							$product['priceData'][DiscountManager::WITHOUT_VAT] = $product['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
 						}
 						elseif (!empty($issues['show6Months'])) {
 							$product['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
-							$product['priceData'][DiscountManager::BRUTTO] = $product['priceData'][DiscountManager::BRUTTO]/2;
-							$product['priceData'][DiscountManager::WITH_VAT] = $product['priceData'][DiscountManager::WITH_VAT]/2;
-							$product['priceData'][DiscountManager::WITHOUT_VAT] = $product['priceData'][DiscountManager::WITHOUT_VAT]/2;
+							$product['priceData'][DiscountManager::BRUTTO] = $product['priceData'][DiscountManager::BRUTTO_FIN]/2;
+							$product['priceData'][DiscountManager::WITH_VAT] = $product['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+							$product['priceData'][DiscountManager::WITHOUT_VAT] = $product['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
 						}
 						else {
 							$product['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+							$product['priceData'][DiscountManager::BRUTTO] = $product['priceData'][DiscountManager::BRUTTO_FIN];
+							$product['priceData'][DiscountManager::WITH_VAT] = $product['priceData'][DiscountManager::WITH_VAT_FIN];
+							$product['priceData'][DiscountManager::WITHOUT_VAT] = $product['priceData'][DiscountManager::WITHOUT_VAT_FIN];
 						}
 					}
 
@@ -78,7 +81,7 @@
                 </span>
 									<?php endif; ?>
 								</div>
-								<div class="nds"><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="display: none;" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
 									<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a>
 								<?php else: ?>

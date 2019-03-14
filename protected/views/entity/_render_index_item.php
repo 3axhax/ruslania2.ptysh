@@ -84,16 +84,29 @@
                 </span>
         <?php endif; ?>
 	</div>
-    <div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $item['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+    <div class="nds"<?php if($item['entity'] == Entity::PERIODIC):?> style="display: none;" <?php endif; ?>><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $item['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 <?php endif; ?>
     <?php if ($entity != Entity::PERIODIC):?>
                     <div class="addcart">
 					
+					<?
 					
+					$sCount = Cart::getCountCartItem($item['id'], $item['entity'], $this->uid, $this->sid);
 					
-                        <a class="cart-action add_cart_plus" data-action="add" data-entity="<?= $item['entity']; ?>"
+					if ($sCount > 0) :
+					?>
+					<a class="fa cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"  style="width: 132px;">
+                        <span><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
+                    </a>
+					
+					<? else : ?>
+					
+					<a class="cart-action add_cart_plus list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>"
                data-id="<?= $item['id']; ?>" data-quantity="1"
                href="javascript:;" style="width: 132px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+					<? endif; ?>
+					
+                      
 			   
 			   
 			   
@@ -101,6 +114,6 @@
                     </div>
     <?php else:?>
         <div class="more">
-            <a href="<?=$url?>"><?=$ui->item('A_NEW_MORE3');?></a>
+            <a class="fa" href="<?=$url?>"><span><?=$ui->item('A_NEW_MORE3');?></span></a>
     </div>
     <?php endif;?>

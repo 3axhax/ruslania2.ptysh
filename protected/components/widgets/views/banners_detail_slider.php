@@ -45,10 +45,12 @@
 									<?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]) ?><?= $item['priceData']['unit'] ?>
 								<?php endif; ?>
 							</div>
-							<div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
+							<div class="nds"<?php if($item['entity'] == Entity::PERIODIC):?> style="display: none;" <?php endif; ?>><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]).' '.$ui->item('WITHOUT_VAT') ?></div>
 							<?php if ($item['entity'] == Entity::PERIODIC): ?>
 							
-							<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;" tabindex="0"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a>
+							<a href="<?=$url;?>" class="btn_yellow fa" style="float: right; border-radius: 4px;" tabindex="0"><span style=""><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
+							
+							                           
 							
 							<?php else: ?>
 							<div class="addcart" style="margin-top: 10px;">
@@ -60,14 +62,17 @@
 								
 								<? if ($sCount > 0) : ?>
 	
-	<a class="cart-action cart_add_slider add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 115px; float: right;  margin-top: 8px;">
-                        <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN2'), $sCount)?></span>
+	<a class="count<?=$sCount?> cart-action cart_add_slider add_cart list_cart<?//if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 177px; ">
+                        <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
                     </a>
 	
 	
 	
 <? else : ?>
-	<a class="cart-action cart_add_slider add_cart add_cart_plus cartMini<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 40px; float: right;  margin-top: 8px;"></a>
+	
+	
+	                                <a class="cart-action add_cart_plus cartMini<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+	
 <? endif; ?>
 								
 								
