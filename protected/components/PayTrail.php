@@ -84,12 +84,13 @@ class PayTrail
                 $ret[] = $data[$field];
         }
 
-        $env = $env == 'test' ? PayTrail::ENV_TEST : PayTrail::ENV_PROD;
-        $ret[] = $this->GetSecret($env);
+//        $env = (($env === 'test') ? PayTrail::ENV_TEST : PayTrail::ENV_PROD);
+//        $ret[] = $this->GetSecret($env);
 
+        $ret[] = $this->GetSecret(PayTrail::ENV_PROD);
         $line = implode('|', $ret);
 
-        $checkSum = strtoupper(md5($line));
+        $checkSum = mb_strtoupper(md5($line), 'utf-8');
 
         $this->paymentUniqID = $data['PAID'];
         $this->orderNumber = $data['ORDER_NUMBER'];

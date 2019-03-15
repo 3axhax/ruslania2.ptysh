@@ -1161,6 +1161,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'MSG_PERSNAL_DISCOUNT' => 'vasha personalnaya skidka',
   'A_NEW_SALE' => 'Rasprodazha',
   'A_NEW_PERIODIC_FOR_GIFT' => 'Podarit podpisku',
+    'A_NEW_PERIODIC' => 'Podpiska',
   'A_NEW_OTHER' => 'Prochee',
   'A_NEW_ALL_CATEGORIES' => 'Vse kategorii',
   'A_NEW_APPLY' => 'Primenit',
@@ -1284,5 +1285,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'VIEW_LIST'=>'Смотреть списком',
 	'CARTNEW_IN_CART_BTN2' => '%d sht.',
     'LAST_STATE' => 'Posledniy status',
+    'CARTNEW_IN_CART_BTN' => 'V korzine %d sht.',
 
 );
