@@ -50,7 +50,11 @@ class PaymentController extends MyController
                 CommonHelper::Log('Payment already exists '.$oid.' - '.$tid, 'mywarnings');
             }
         }
-
+        if (isset($_GET['ha'])) {
+            $view = 'accept';
+            $check = 1;
+        }
+        else
         if($order['uid'] != $this->uid) throw new CException('Wrong order id');
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));

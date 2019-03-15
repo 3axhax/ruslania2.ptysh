@@ -167,4 +167,15 @@ class UrlController extends MyController {
 		$this->ResponseJson($codes);
 	}
 
+
+	function actionInstagram() {
+		$inst = new Instagram();
+		$inst->getUser();
+		$inst->getMedia();
+	}
+
+	function actionTokken() {
+		var_dump($_GET);
+		exit;
+	}
 }
