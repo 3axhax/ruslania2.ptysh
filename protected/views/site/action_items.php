@@ -81,9 +81,12 @@
                 </span>
 									<?php endif; ?>
 								</div>
-								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="display: none;" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+								
+								
+								
+								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="<?=(($product['priceData'][DiscountManager::DISCOUNT] == '0') ? 'visibility: hidden;' : 'display: none')?>" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
-								<div style="height: 20px;"></div>
+								
 									<?php /*<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a> */?>
 									<a href="<?=$url;?>" class="btn_yellow fa" style="float: right; border-radius: 4px;" tabindex="0"><span style=""><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
 								<?php else: ?>
