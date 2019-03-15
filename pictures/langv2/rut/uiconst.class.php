@@ -1282,7 +1282,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'A_NEW_MY_FAVORITE' => 'Mojo izbrannoe',
     'NAME_CROSSWORD'=>'Krossvordi',
     'MENU'=>'Menu',
-    'VIEW_LIST'=>'Смотреть списком',
+    'VIEW_LIST'=>'Smotret spiskom',
 	'CARTNEW_IN_CART_BTN2' => '%d sht.',
     'LAST_STATE' => 'Posledniy status',
     'CARTNEW_IN_CART_BTN' => 'V korzine %d sht.',

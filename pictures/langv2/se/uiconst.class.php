@@ -1282,7 +1282,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   'A_NEW_MY_FAVORITE' => 'Intressanta artiklar',
     'NAME_CROSSWORD'=>'Korsord',
     'MENU'=>'Menu',
-    'VIEW_LIST'=>'Смотреть списком',
+    'VIEW_LIST'=>'Bläddra produkter',
     'CARTNEW_IN_CART_BTN' => 'Lägt i kundvagn %d st.',
 'CARTNEW_IN_CART_BTN2' => '%d st.',
     'LAST_STATE' => 'Senaste status',

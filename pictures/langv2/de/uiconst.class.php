@@ -1282,7 +1282,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   '3_FOR_PRICE_2' => '3 für 2',
   'NAME_CROSSWORD' => 'Kreuzwörter',
   'MENU' => 'Menü',
-  'VIEW_LIST' => 'Смотреть списком',
+  'VIEW_LIST' => 'Produkte durchsuchen',
   'CARTNEW_IN_CART_BTN2' => '%d stck.',
   'CARTNEW_IN_CART_BTN' => 'Im Warenkorb: %d',
   'LAST_STATE' => 'Letzter Status',

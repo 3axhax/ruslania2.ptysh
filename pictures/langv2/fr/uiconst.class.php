@@ -1272,7 +1272,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'A_NEW_MY_FAVORITE' => 'Articles intéressants',
     'NAME_CROSSWORD'=>'Mots croisés',
     'MENU'=>'Menu',
-    'VIEW_LIST'=>'Смотреть списком',
+    'VIEW_LIST'=>'Parcourir les produits',
     'CARTNEW_IN_CART_BTN' => 'Quantité au panier: %d',
 	'CARTNEW_IN_CART_BTN2' => '%d kpl',
     'LAST_STATE' => 'Dernier statut',

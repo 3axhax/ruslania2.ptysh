@@ -1275,7 +1275,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'A_NEW_MY_FAVORITE' => 'Kiinnostavat tuotteet',
     'NAME_CROSSWORD'=>'Ristikot',
     'MENU'=>'Menu',
-    'VIEW_LIST'=>'Смотреть списком',
+    'VIEW_LIST'=>'Selaa tuotteita',
     'CARTNEW_IN_CART_BTN' => 'Ostoskorissa %d kpl',
 'CARTNEW_IN_CART_BTN2' => '%d kpl',
     'LAST_STATE' => 'Viimeisin päivitys',

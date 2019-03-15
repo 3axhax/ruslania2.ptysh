@@ -1293,7 +1293,7 @@ By clicking on a category you are interested in, you can see all the products wi
     '3_FOR_PRICE_2' => '3 по цене 2',
     'NAME_CROSSWORD'=>'Crucigramas',
     'MENU'=>'Menu',
-    'VIEW_LIST'=>'Смотреть списком',
+    'VIEW_LIST'=>'Buscar productos',
     'CARTNEW_IN_CART_BTN' => 'Cantidad a la cesta: %d',
 	'CARTNEW_IN_CART_BTN2' => '%d item(s)',
     'LAST_STATE' => 'Último estado',
