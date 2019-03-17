@@ -87,6 +87,7 @@ $addrModel = new Address();
 	$(function(){
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
+				userData: <?= json_encode($userInfo) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
 				existPereodic: <?= (int) $existPereodic ?>,
 				urlRecount: '<?= Yii::app()->createUrl('buy/checkPromocode') ?>',

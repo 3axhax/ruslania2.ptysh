@@ -1,8 +1,5 @@
 <?php
 /*Created by Кирилл (24.02.2019 10:15)*/
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 class BuyController extends MyController {
 	public $layout = 'without_menu';
 
@@ -38,7 +35,21 @@ class BuyController extends MyController {
 		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
 		$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
 		$this->breadcrumbs[] = 'Оформление заказа';
-		$this->render(!Yii::app()->user->isGuest?'do_order':'no_register', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'existPereodic'=>$this->_existPereodic($items), 'countItems'=>$this->_getCountItems($total)));
+		if (Yii::app()->user->isGuest) {
+			$userInfo = array();
+			if (Yii::app()->getRequest()->getParam('useSocial')) $userInfo = $this->_getUserInfoBySocial();
+			$this->render('no_register', array(
+				'items'=>$items,
+				'total'=>$total,
+				'onlyPereodic'=>$this->_onlyPereodic($items),
+				'existPereodic'=>$this->_existPereodic($items),
+				'countItems'=>$this->_getCountItems($total),
+				'userInfo'=>$userInfo,
+			));
+		}
+		else {
+			$this->render('do_order', array('items'=>$items, 'total'=>$total, 'onlyPereodic'=>$this->_onlyPereodic($items), 'existPereodic'=>$this->_existPereodic($items), 'countItems'=>$this->_getCountItems($total)));
+		}
 	}
 
 	function actionCheckPromocode() {
@@ -320,6 +331,9 @@ class BuyController extends MyController {
 				) . "\n", FILE_APPEND);
 			}
 			$userID = $identity->getId();
+			if (($userSocialId = (int) Yii::app()->getRequest()->getParam('userSocialId')) > 0) {
+				UsersSocials::model()->updateByPk($userSocialId, array('id_user'=>$userID));
+			}
 		}
 		return $userID;
 	}
@@ -432,4 +446,11 @@ class BuyController extends MyController {
 
 	}
 
+	private function _getUserInfoBySocial() {
+		$ret = array();
+		if (isset(Yii::app()->session['user_social'])) {
+			$ret = UsersSocials::model()->getUserInfoForAddressForm(Yii::app()->session['user_social']);
+		}
+		return $ret;
+	}
 }

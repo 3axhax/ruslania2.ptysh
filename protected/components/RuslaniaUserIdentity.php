@@ -38,4 +38,13 @@ class RuslaniaUserIdentity extends CUserIdentity
         $message = Yii::app()->ui->item($key);
         return $message;
     }
+
+    function authorize($user) {
+        if (empty($user)) $this->errorCode = self::ERROR_USERNAME_INVALID;
+        else {
+            $this->_id = $user->id;
+            $this->errorCode = self::ERROR_NONE;
+        }
+        return !$this->errorCode;
+    }
 }

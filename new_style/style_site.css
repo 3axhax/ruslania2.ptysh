@@ -562,13 +562,14 @@ div.footer {
 }
 
 .news_box ul.books { margin: 0; margin-top: 30px; padding: 0; list-style: none;}
-.news_box ul.books li { width: 170px; float: left; margin-left: 30px; }
+.news_box ul.books li { max-width: 214px; float: left; margin-left: 30px; }
 .news_box ul.books li:first-child { margin-left: 0; }
 .news_box ul.books li .title_book {
     margin-top: 10px;
     margin-bottom: 5px;
     height: 30px;
     line-height: 15px;
+	width: 99%;
     font-size: 13px;
     overflow: hidden;
     position: relative;
@@ -1542,7 +1543,7 @@ a.read_book {
 	
 }
 
-.news_box ul.books li .more a { padding: 0; width: 93px; position: relative; }
+.news_box ul.books li .more a { padding: 0; width: 120px; position: relative; }
 
 .news_box ul.books li .more a:before {
 	
@@ -3806,3 +3807,5 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .cke_reset {display: none;}
 /*form#js_filter input[type=text] {height: 30px;}*/
 
+/*.social_auth span.instagram { position:absolute; top: 6px; left: 7px }*/
+.social_auth span.instagram:before { content: '\f16d'; color: #cecece; font-size: 20px; }

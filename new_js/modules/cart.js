@@ -22,17 +22,37 @@ Stripe.applePay.checkAvailability(function(available) {
         onlyPereodic: 0,
         activePromocode: false,
         activeSmartpost: false,
+        userSocialId: 0,
         init: function(options) {
+            if ('userData' in options) {
+                this.setValues(options['userData']);
+            }
             this.setConst(options);
             this.setEvents();
             if ((this.$paymentsData.find('input[name=ptype]:checked').val() == '25')&&this.confirm.checked) $('.paytail_payment').show();
             else $('.paytail_payment').hide();
             return this;
         },
-        setConst: function(options) {
-            if ('userData' in options) {
-                $('.js_contactEmail').val(options['userData']['email']);
+
+        setValues: function(userData) {
+             for (userField in userData) {
+                switch (userField) {
+                    case 'users_socials_id': this.userSocialId = parseInt(userData['users_socials_id']); break;
+                    case 'email': $('.js_contactEmail').val(userData['email']); break;
+                    case 'is_business':
+                        console.log(userData['is_business']);
+                        if (userData['is_business'] > 0) {
+                            $('form#Reg').find('input.js_userType[value="1"]').get(0).checked = true;
+                        }
+                        break;
+                    case 'business_title':case 'receiver_first_name':case 'receiver_last_name':
+                        if (userData[userField] != "") $('#Reg_' + userField).val(userData[userField]);
+                        break;
+                }
             }
+        },
+
+        setConst: function(options) {
             this.takeInStore = document.getElementById('check_addressa'); //забрать в магазине
             this.delivery_address = document.getElementById('delivery_address_id');
             this.billing_address = document.getElementById('billing_address_id');
@@ -626,6 +646,7 @@ Stripe.applePay.checkAvailability(function(available) {
 
             var self = this;
             var fd = {};
+            if (this.userSocialId > 0) fd['userSocialId'] = this.userSocialId;
             var errors = [];
             if (!this.confirm.checked) errors.push(this.confirm);
             $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
