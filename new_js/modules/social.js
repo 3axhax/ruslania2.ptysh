@@ -1,3 +1,17 @@
+var vkCom = function() {
+    var authWindow;
+    function getUserInfo(t) {
+        authWindow = openWindow(t);
+        return false;
+    }
+
+    function setUserInfo(userData, url) { closeWindow(authWindow, userData, url); }
+    return {
+        setUserInfo: setUserInfo,
+        getUserInfo: getUserInfo
+    }
+}();
+
 var facebookCom = function() {
     var authWindow;
     function getUserInfo(t) {

@@ -37,6 +37,11 @@ class UsersSocials extends CMyActiveRecord
 					$ret['is_business'] = empty($userInfo['is_business'])?0:1;
 					$ret['business_title'] = empty($userInfo['full_name'])?'':$userInfo['full_name'];
 					break;
+				case Vk::SHORTNAME:
+					$ret['receiver_first_name'] = empty($userInfo['first_name'])?'':$userInfo['first_name'];
+					$ret['receiver_last_name'] = empty($userInfo['last_name'])?'':$userInfo['last_name'];
+					$ret['email'] = empty($userInfo['email'])?'':$userInfo['email'];
+					break;
 			}
 		}
 		return $ret;

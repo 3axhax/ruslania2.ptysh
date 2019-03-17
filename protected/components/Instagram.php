@@ -18,23 +18,6 @@ class Instagram {
 			$this->_clientSecret = '25623aa2b303471fa70a642d87a6bab8 ';
 		}
 	}
-/*	function getToken() {
-		$param = array(
-			'client_id' => $this->_clientId,
-			'redirect_uri' => $this->_redirectUrl,
-			'response_type' => 'token',
-			'scope' => 'basic',
-		);
-		$url = 'https://api.instagram.com/oauth/authorize?' . http_build_query($param);
-		$curl = curl_init($url);    // we init curl by passing the url
-		curl_setopt($curl,CURLOPT_POST,true);   // to send a POST request
-//		curl_setopt($curl,CURLOPT_POSTFIELDS,$param);   // indicate the data to send
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   // to return the transfer as a string of the return value of curl_exec() instead of outputting it out directly.
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);   // to stop cURL from verifying the peer certificate.
-		$result = curl_exec($curl);   // to perform the curl session
-		curl_close($curl);   // to close the curl session
-		Debug::staticRun(array($url, $result));
-	}*/
 
 	function urlCode() {
 		$param = array(
@@ -52,11 +35,11 @@ class Instagram {
 			'access_token' => $accessToken,
 		);
 		$url = 'https://api.instagram.com/v1/users/self/?' . http_build_query($param);
-		$curl = curl_init($url);    // we init curl by passing the url
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   // to return the transfer as a string of the return value of curl_exec() instead of outputting it out directly.
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);   // to stop cURL from verifying the peer certificate.
-		$result = curl_exec($curl);   // to perform the curl session
-		curl_close($curl);   // to close the curl session
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($curl);
+		curl_close($curl);
 		$result = json_decode($result, true);
 		return $result;
 	}
@@ -67,11 +50,11 @@ class Instagram {
 			'count' => 9
 		);
 		$url = 'https://api.instagram.com/v1/users/self/media/recent/?' . http_build_query($param);
-		$curl = curl_init($url);    // we init curl by passing the url
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   // to return the transfer as a string of the return value of curl_exec() instead of outputting it out directly.
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);   // to stop cURL from verifying the peer certificate.
-		$result = curl_exec($curl);   // to perform the curl session
-		curl_close($curl);   // to close the curl session
+		$curl = curl_init($url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		$result = curl_exec($curl);
+		curl_close($curl);
 		$result = json_decode($result, true);
 		return $result;
 	}

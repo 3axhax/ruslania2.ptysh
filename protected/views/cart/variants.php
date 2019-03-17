@@ -103,7 +103,9 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 
 			<script src="/new_js/modules/social.js" type="text/javascript"></script>
 			<div style="display: none;" class="social_auth">
-				<a id="button_insta" href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
+				<!--<a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="fa facebook"></span></a> -->
+				<a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="fa vk"></span></a>
 			</div>
 		</div>
 
