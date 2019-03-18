@@ -29,7 +29,6 @@ class UrlController extends MyController {
 //			$search->beforeAction($this->getAction());
 //			$code = $search->isCode($num);
 //			$find = $search->getByCode($code, $num);
-			var_dump($find);
 			$row = array();
 			if (empty($find)) Yii::app()->end();
 
