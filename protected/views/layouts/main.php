@@ -11,6 +11,8 @@
 // $session = Yii::app()->session;
 // echo  $session['shopcartkey'];
 
+
+
 $url = explode('?', $_SERVER['REQUEST_URI']);
 $url = trim($url[0], '/');
 
@@ -174,6 +176,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <span class="telephone2"><a href="whatsapp://send?phone=+358503889439" class="icons"><span class="fa whatsapp"></span></a></span>
                         <span class="telephone-circle"><a href="tel:+35892727070" class="icons"><span class="fa phone"></span></a></span>
                         <a href="tel:+35892727070"><span>+358 92727070</span></a>
+                        <?php $this->renderPartial('/request/_button_call', array()) ?>
                     </li>
                     <?php /*
                     <li><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank"><span class="adrs">Bulevardi 7, FI-00120 Helsinki, Finland</span></a></li>
@@ -430,6 +433,10 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                         <a target="_blank" href="https://www.facebook.com/RuslaniaBooks/" class="icons"><span class="fa facebook"></span></a>
                         <a target="_blank" href="https://www.twitter.com/RuslaniaKnigi/" class="icons"><span class="fa twitter"></span></a>
                         <a target="_blank" href="https://www.instagram.com/ruslaniabooks/" class="icons"><span class="fa instagram"></span></a>
+						
+						 <a target="_blank" href="https://www.tripadvisor.com/Attraction_Review-g189934-d15003860-Reviews-Ruslania-Helsinki_Uusimaa.html" class="icons"><span class="fa tripadvisor"></span></a>
+						
+						
                         <?php /*
                         <a href="https://vk.com/ruslaniabooks"><img src="/new_img/vk.png" alt="" /></a>
                         <a href="https://www.facebook.com/RuslaniaBooks/"><img src="/new_img/fb.png" alt="" /></a>
@@ -506,7 +513,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             <div class="copyright">
 
-                2017 © <span class="title__bold">Ruslania</span> - All rights Reserved
+               <?=date('Y')?> © <span class="title__bold">Ruslania</span> - All rights Reserved
 
             </div>
 
@@ -670,10 +677,10 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     $($el).html('<span>'+json.buttonName2 + '</span>');
 					$('span', $el).css('width', 'auto');
-					$el.css('width', '115px');
-					$el.css('float', 'right');
-					$el.css('margin-top', '8px');
-					$el.css('margin-left', '-36px');
+					$el.css('width', '177px');
+					$el.css('float', '');
+					$el.css('margin-top', '');
+					$el.css('margin-left', '');
                 }
 
 

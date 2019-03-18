@@ -3564,7 +3564,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
     cursor: pointer
 }
 
-.price_h { font-size: 16px; color: #301c53; }
+.price_h { font-size: 14px; color: #301c53; }
 .without_discount { color: #301c53/*#ed1d24*/; margin-right: 5px; text-decoration: line-through; font-size: 16px; font-weight: bold; }
 .price { color: #301c53;font-size: 18px; font-weight: bold; white-space: nowrap;}
 .price b.pwvat { color: #ed1d24; }
@@ -3616,7 +3616,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .entity_icons i.e24:before { content: '\f108'; top: 9px; left: 7px; }    /*soft*/
 
 span.notes { position: relative; }
-span.notes span.notes-circle { position:absolute; top: -9px; left: 8px }
+span.notes span.notes-circle { position:absolute; top: -5px; left: 8px }
 span.notes span.notes-circle:before { content: '\f129'; color: #edb421; font-size: 8px; font-weight: 100; }    /*notes*/
 span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size: 15px; font-weight: 100; position: relative; top:2px; left: -8px; }    /*notes*/
 .notes .notes-block{
@@ -3683,6 +3683,9 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .social_icons a.icons span.vk:before { content: '\f189'; color: #cecece; font-size: 20px; font-weight: bold; }
 .social_icons a.icons span.instagram { position:absolute; top: 6px; left: 7px }
 .social_icons a.icons span.instagram:before { content: '\f16d'; color: #cecece; font-size: 20px; }
+.social_icons a.icons span.tripadvisor:before { content: "\f262"; color: #cecece; font-size: 20px; }
+.social_icons a.icons span.tripadvisor { position:absolute; top: 6px; left: 2.4px; }
+
 
 .telephone2 a.icons { opacity: 0.8; position: relative; width: 20px; height: 15px; display: inline-block; border-color: #676767;}
 .telephone2 a.icons span.whatsapp { position:absolute; top: 2px; left: 5px }
@@ -3690,6 +3693,7 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 /*.telephone-circle a.icons { top:3px; opacity: 0.8; position: relative; width: 15px; height: 15px; border-radius: 32px; display: inline-block; background-color: #676767;}*/
 .telephone-circle a.icons span.phone { width: 15px; }
 .telephone-circle a.icons span.phone:before { content: '\f111'; color: #676767; font-size: 18px; position: relative; top: 2px}
+.telephone-circle.call-request a.icons span.phone:before { color: #ed1d24; }
 .telephone-circle a.icons span.phone:after { content: '\f095'; color: #f8f8f8; font-size: 10px; font-weight: bold; position: relative; top: -1px; left:-11px; }
 .telephone-circle a.icons span.location { width: 15px; }
 .telephone-circle a.icons span.location:before { content: '\f111'; color: #676767; font-size: 18px; position: relative; top: 2px}
@@ -3722,16 +3726,21 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .fa-angle-down { opacity: 0.2; margin-left: 8px; font-size: 15px; }
 .red { color: #ed1d24;}
 
-.download, .button_view { display: inline-block; white-space: nowrap; margin-right: 10px;}
-.download span, .button_view span { display: block; color: #fff; text-align: center; border-radius: 0 4px 4px 0; padding: 8px 12px; float: left; }
-.download.excel span.fa, .button_view.list span.fa { display: block; border-radius: 4px 0 0 4px; width: 20px; }
-.download.excel span.fa::after, .button_view.list span.fa::after { color: #fff; font-size: 20px; }
+.download, .button_view, .button_call { display: inline-block; white-space: nowrap; margin-right: 10px;}
+.download span, .button_view span, .button_call span { display: block; color: #fff; text-align: center; border-radius: 0 4px 4px 0; padding: 8px 12px; float: left; }
+.download.excel span.fa, .button_view.list span.fa, .button_call span.fa { display: block; border-radius: 4px 0 0 4px; width: 20px; }
+.download.excel span.fa::after, .button_view.list span.fa::after, .button_call span.fa::after { color: #fff; font-size: 20px; }
 .download span {  background-color: #5bb75b; }
 .download.excel span.fa { background-color: #369f4b; }
 .button_view span { background-color: #347bd7 ; }
 .button_view.list span.fa { background-color: #0e5abd ; }
 .download.excel span.fa::after { content: '\f1c3'; }
 .button_view.list span.fa::after { content: '\f03a'; }
+
+.button_call span.fa::before { color: #fff; font-size: 20px; content: '\f095'; }
+.button_call span { background-color: #ed1d24 ; }
+.button_call span.fa { background-color: #D50B12 ; }
+.button_call span.fa::after { content: '\f112'; transform: rotate(31deg); position: relative; left: -8px; top: -9px; font-size: 10px; }
 
 
 .sale_info_block {
@@ -3811,3 +3820,18 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .social_auth span.instagram:before { content: '\f16d'; color: #cecece; font-size: 20px; }
 .social_auth span.facebook:before { content: '\f09a'; color: #cecece; font-size: 20px; }
 .social_auth span.vk:before { content: '\f189'; color: #cecece; font-size: 20px; }
+
+
+.send_call_form {
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+    background-color: #FFF;
+    -webkit-box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.15);
+    position: absolute;
+    z-index: 28;
+    display: none;
+    top: 70px;
+    padding: 100px 110px;
+    width: 500px;
+}
