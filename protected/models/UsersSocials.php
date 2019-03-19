@@ -42,6 +42,13 @@ class UsersSocials extends CMyActiveRecord
 					$ret['receiver_last_name'] = empty($userInfo['last_name'])?'':$userInfo['last_name'];
 					$ret['email'] = empty($userInfo['email'])?'':$userInfo['email'];
 					break;
+				case Facebook::SHORTNAME:
+					$ret['receiver_first_name'] = empty($userInfo['name'])?'':$userInfo['name'];
+					$ret['email'] = empty($userInfo['email'])?'':$userInfo['email'];
+					break;
+				case Twitter::SHORTNAME:
+					$ret['receiver_first_name'] = empty($userInfo['name'])?'':$userInfo['name'];
+					break;
 			}
 		}
 		return $ret;

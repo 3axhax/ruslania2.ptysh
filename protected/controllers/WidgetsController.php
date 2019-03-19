@@ -70,30 +70,39 @@ class WidgetsController extends MyController {
 	function actionDataTwitter() {
 		$user = array();
 		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
-		$code = (string) Yii::app()->getRequest()->getParam('code');
-		if (!empty($code)) {
-			$vk = new Vk();
-			$token = $vk->getToken($code);
-			if (!empty($token['user_id'])) {
-				$res = $vk->getUser($token['user_id'], $token['access_token']);
-				if (!empty($res['response'])) $user = array_shift($res['response']);
+		$oauth_verifier = (string) Yii::app()->getRequest()->getParam('oauth_verifier');
+		$oauth_token = (string) Yii::app()->getRequest()->getParam('oauth_token');
+		if (!empty($oauth_verifier)&&!empty($oauth_token)) {
+			$tw = new Twitter();
+			$user = $tw->getUser($oauth_verifier, $oauth_token);
+			if (!empty($user['id'])) {
+				$isAuth = $this->_saveSocial($user['id'], Twitter::SHORTNAME, $user);
+				if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
 			}
-			if (!empty($token['email'])) $user['email'] = $token['email'];
-
-			$isAuth = $this->_saveSocial($user['id'], Vk::SHORTNAME, $user);
-			if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
 		}
-		$this->renderPartial('user_vk', array('userInfo'=>$user, 'url'=>$url));
+		$this->renderPartial('user_twitter', array('userInfo'=>$user, 'url'=>$url));
 	}
 
 	function actionAuthTwitter() {
-		$twitter = new Twitter();
-		$this->redirect($twitter->urlCode());
+		$tw = new Twitter();
+		$this->redirect($tw->urlCode());
+	}
+
+	function actionDataFacebook() {
+		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+
+		$facebook = new Facebook();
+		$user = $facebook->getUser();
+		if (!empty($user['id'])) {
+			$isAuth = $this->_saveSocial($user['id'], Facebook::SHORTNAME, $user);
+			if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+		}
+		$this->renderPartial('user_facebook', array('userInfo'=>$user, 'url'=>$url));
 	}
 
 	function actionAuthFacebook() {
-		$insta = new Instagram();
-		$this->redirect($insta->urlCode());
+		$fb = new Facebook();
+		$this->redirect($fb->urlCode());
 	}
 
 	private function _auth($uid) {
@@ -103,6 +112,8 @@ class WidgetsController extends MyController {
 			$identity = new RuslaniaUserIdentity($user->getAttribute('login'), $user->getAttribute('pwd'));
 			if ($identity->authorize($user)) {
 				$result = Yii::app()->user->login($identity, Yii::app()->params['LoginDuration']);
+				$cart = new Cart();
+				$cart->UpdateCartToUid($this->sid, $identity->getId());
 			}
 		}
 		return $result;
