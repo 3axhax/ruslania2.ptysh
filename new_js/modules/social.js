@@ -47,7 +47,10 @@ var instagramCom = function() {
         return false;
     }
 
-    function setUserInfo(userData, url) { closeWindow(authWindow, userData, url); }
+    function setUserInfo(userData, url) {
+        console.log(userData, url);
+        closeWindow(authWindow, userData, url);
+    }
     return {
         setUserInfo: setUserInfo,
         getUserInfo: getUserInfo
@@ -64,5 +67,5 @@ function closeWindow(authWindow, userData, url) {
         console.log(userData);
         //g('errors').innerHTML = userData['error'];
     }
-    else window.location.href = url;
+    window.location.href = url;
 }

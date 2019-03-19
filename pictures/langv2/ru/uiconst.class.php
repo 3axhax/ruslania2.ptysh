@@ -1426,8 +1426,8 @@ IBAN DE79514303006474790001 <br>
     'INSTAGRAM_SUBSCRIBE'=>'Подписаться',
     'STATUS_IN_ME'=>'Теперь Вы можете отследить статус заказа в <a href="%s">личном кабинете</a>',
     'SEND_CALL_HEADER'=>'Заполните форму и мы  оперативно перезвоним вам',
-    'CODE_COUNTRY'=>'Код стран',
-    'PLACEHOLDER_PHONE'=>'+7(999)',
+    'CODE_COUNTRY'=>'Код страны',
+    'PLACEHOLDER_PHONE_CODE'=>'+7(999)',
     'NUMBER_PHONE'=>'Номер телефона',
     'BUTTON_CALL'=>'Заказать звонок',
 );

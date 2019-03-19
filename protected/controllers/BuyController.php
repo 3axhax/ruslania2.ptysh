@@ -2,6 +2,17 @@
 /*Created by Кирилл (24.02.2019 10:15)*/
 class BuyController extends MyController {
 	public $layout = 'without_menu';
+	private $_returnButton = array();
+
+	function returnButton() {
+		if (empty($this->_returnButton)) {
+			$this->_returnButton = array(
+				'href'=>Yii::app()->createUrl('cart/view'),
+				'name'=>Yii::app()->ui->item('CARTNEW_BACK_TO_CART'),
+			);
+		}
+		return $this->_returnButton;
+	}
 
 	public function accessRules() {
 		return array(
@@ -253,6 +264,10 @@ class BuyController extends MyController {
 		$o = new Order;
 		if(!$o->isMyOrder($this->uid,$id)) throw new CHttpException(404);
 
+		$this->_returnButton = array(
+			'href'=>Yii::app()->createUrl('site/index'),
+			'name'=>Yii::app()->ui->item('CARTNEW_CONTINUE_SHOPPING'),
+		);
 		$order = $o->GetOrder($id);
 		$this->render('order_ok', array('order' => $order));
 	}

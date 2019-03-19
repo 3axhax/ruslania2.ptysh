@@ -28,12 +28,15 @@ class WidgetsController extends MyController {
 		$code = (string) Yii::app()->getRequest()->getParam('code');
 		if (!empty($code)) {
 			$insta = new Instagram();
-			$user = $insta->getUser();
-			$ret = $user['data'];
-			if (!empty($ret['id'])) {
-				$isAuth = $this->_saveSocial($ret['id'], Instagram::SHORTNAME, $ret);
-				if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+			$user = $insta->getUser($code);
+			if (!empty($user['data'])) {
+				$ret = $user['data'];
+				if (!empty($ret['id'])) {
+					$isAuth = $this->_saveSocial($ret['id'], Instagram::SHORTNAME, $ret);
+					if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+				}
 			}
+			else $ret = $user;
 		}
 		$this->renderPartial('user_instagram', array('userInfo'=>$ret, 'url'=>$url));
 	}

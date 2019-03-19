@@ -97,12 +97,12 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 			<center><h2 class="h1_reg"
 			            style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;"><?= $ui->item('CARTNEW_LOGIN_SOCIAL') ?></h2>
 			</center>
-
+<?php /*
 			<div style="margin:0 auto; width: 260px;" id="uLogin"
 			     data-ulogin="display=panel;theme=classic;fields=first_name,last_name,email;providers=vkontakte,odnoklassniki,googleplus,facebook,twitter,instagram;redirect_uri=<?= urlencode('/ulogin.php') ?>;mobilebuttons=0;"></div>
-
+ */?>
 			<script src="/new_js/modules/social.js" type="text/javascript"></script>
-			<div style="display: none;" class="social_auth">
+			<div class="social_auth">
 				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
 				<a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="fa facebook"></span></a>
 				<a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="fa vk"></span></a>
