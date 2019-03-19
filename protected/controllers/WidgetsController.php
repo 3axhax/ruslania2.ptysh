@@ -67,6 +67,30 @@ class WidgetsController extends MyController {
 		$this->redirect($vk->urlCode());
 	}
 
+	function actionDataTwitter() {
+		$user = array();
+		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+		$code = (string) Yii::app()->getRequest()->getParam('code');
+		if (!empty($code)) {
+			$vk = new Vk();
+			$token = $vk->getToken($code);
+			if (!empty($token['user_id'])) {
+				$res = $vk->getUser($token['user_id'], $token['access_token']);
+				if (!empty($res['response'])) $user = array_shift($res['response']);
+			}
+			if (!empty($token['email'])) $user['email'] = $token['email'];
+
+			$isAuth = $this->_saveSocial($user['id'], Vk::SHORTNAME, $user);
+			if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+		}
+		$this->renderPartial('user_vk', array('userInfo'=>$user, 'url'=>$url));
+	}
+
+	function actionAuthTwitter() {
+		$twitter = new Twitter();
+		$this->redirect($twitter->urlCode());
+	}
+
 	function actionAuthFacebook() {
 		$insta = new Instagram();
 		$this->redirect($insta->urlCode());

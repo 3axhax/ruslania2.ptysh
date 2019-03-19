@@ -3820,7 +3820,7 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .social_auth span.instagram:before { content: '\f16d'; color: #cecece; font-size: 20px; }
 .social_auth span.facebook:before { content: '\f09a'; color: #cecece; font-size: 20px; }
 .social_auth span.vk:before { content: '\f189'; color: #cecece; font-size: 20px; }
-
+.social_auth span.twitter:before { content: '\f099'; color: #cecece; font-size: 20px; }
 
 .send_call_form {
     -webkit-border-radius: 15px;

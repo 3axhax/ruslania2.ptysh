@@ -106,6 +106,7 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
 				<!--<a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="fa facebook"></span></a> -->
 				<a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="fa vk"></span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authTwitter') ?>" target="_blank" onclick="return twitterCom.getUserInfo(this);"><span class="fa twitter"></span></a>
 			</div>
 		</div>
 

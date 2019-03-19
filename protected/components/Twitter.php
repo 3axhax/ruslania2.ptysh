@@ -3,6 +3,7 @@
 class Twitter {
 	const SHORTNAME = 'twitter';
 
+	private $_apiId = 1519126;
 	private $_apiKey = 'Gh87DOTWmpij1ihZSmoXA';
 	private $_apiSecret = 'mVlbON6gEgWdeUP0Iw9E5BTatkkgkG4Pr6HYTwCa8';
 	private $_accessToken = '460037939-K7D6KlsyCAINzn2IS67JNz6NkMBVSREJsDQelLgp';
