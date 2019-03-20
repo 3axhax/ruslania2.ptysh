@@ -3580,7 +3580,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
     background: #EEEEEE !important;
 }
 
-.list-banner-content, .detail-banner-content { width: 900px; /*height: 236px;*/ overflow: hidden; text-align: center; }
+.list-banner-content, .detail-banner-content { width: 900px; height: 247px; overflow: hidden; text-align: center; }
 .list-bannerImg, .detail-bannerImg, .main-bannerImg { max-width: 100%; max-height: 100%; }
 .main-banner-content { height: 157px; overflow: hidden; text-align: left; font-size: 19px; color: #1d1b69; letter-spacing: 0.2px;}
 .main-banner-content a { color: #1d1b69; font-size: 17px; letter-spacing: -0.6px;}

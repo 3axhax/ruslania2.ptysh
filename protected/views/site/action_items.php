@@ -15,7 +15,8 @@
 					$product = Product::GetProduct($actionItem['entity'], $actionItem['item_id']);
 					
 					$url = ProductHelper::CreateUrl($product);						
-					$productTitle = ProductHelper::GetTitle($product, 'title', 18);
+					$productTitle = ProductHelper::GetTitle($product, 'title');
+					$productTitleSmall = ProductHelper::GetTitle($product, 'title', 18);
 					$productPicture = Picture::Get($product, Picture::SMALL);
 
 					$product['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $product);
@@ -62,11 +63,11 @@
 						<li>
 							<div class="span1 photo<?=$actionTitleClass;?>">
 								<?=$actionTitle;?>
-								<a href="<?=$url;?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="" style="max-height: 130px;"/></a>
+								<a title="<?= htmlspecialchars($productTitle) ?>" href="<?=$url;?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/></a>
 							</div>
 							<div class="span2 text">
 								
-								<div class="title"><a href="<?=$url;?>"><?=$productTitle;?></a></div>
+								<div class="title"><a title="<?= htmlspecialchars($productTitle) ?>" href="<?=$url;?>"><?=$productTitleSmall;?></a></div>
 								<div class="cost">
 									<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
 										<span class="without_discount">

@@ -2,7 +2,7 @@
 
 <div class="img" style="position: relative">
     <?php $this->renderStatusLables($item['status'], $size = '-sm', true)?>
-    <a href="<?=$url; ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>" alt="" /></a>
+    <a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>"  фде="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" /></a>
  </div>
  
     <div class="title_book">

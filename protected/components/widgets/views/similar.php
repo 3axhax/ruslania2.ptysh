@@ -12,18 +12,19 @@
 	<div class="more_goods" style="overflow: hidden">
 		<ul class="books">
 		<?php foreach ($items as $product):
-			$title = ProductHelper::GetTitle($product, 'title', 42);
+			$titleSmall = ProductHelper::GetTitle($product, 'title', 42);
+			$title = ProductHelper::GetTitle($product, 'title');
 			$url = ProductHelper::CreateUrl($product);
 			?>
 			<li>
 				<div class="img" style="min-height: 130px; position: relative">
 					<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
-					<a href="<?= $url ?>" title="<?= $title ?>">
+					<a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
 						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
 					</a>
 				</div>
 
-				<div class="title_book" style="height:29px;min-height:auto;margin-bottom:0;"><a href="<?= $url ?>" title="<?= $title ?>"><?= $title ?></a></div>
+				<div class="title_book" style="height:29px;min-height:auto;margin-bottom:0;"><a href="<?= $url ?>" title="<?= $title ?>"><?= $titleSmall ?></a></div>
 <div class="params"<?php if ($paramsHeight): ?> style="height: <?= $paramsHeight ?>px;" <?php endif; ?>>
 				<?php if (!empty($product['Authors'])):
 					$author = array_shift($product['Authors']);
