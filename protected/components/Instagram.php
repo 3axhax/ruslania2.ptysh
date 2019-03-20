@@ -2,7 +2,7 @@
 /*Created by Кирилл (15.03.2019 18:02)*/
 
 class Instagram {
-	const SHORTNAME = 'insta1111';
+	const SHORTNAME = 'insta';
 
 	private $_clientId = '563249cf22a94cf98837e74c962c2acb';
 	private $_clientSecret = '599805cb8720423fa42ed3780ff7dfdd';
