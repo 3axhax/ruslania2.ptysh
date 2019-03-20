@@ -133,6 +133,7 @@ class WidgetsController extends MyController {
 					$isAuth = true;
 				}
 				else {
+					unset($data['bio']);
 					$userSocialModel->updateByPk($uS->getAttribute('users_socials_id'), array('user_info'=>serialize($data)));
 				}
 			}

@@ -48,7 +48,6 @@ var instagramCom = function() {
     }
 
     function setUserInfo(userData, url) {
-        console.log(userData, url);
         closeWindow(authWindow, userData, url);
     }
     return {

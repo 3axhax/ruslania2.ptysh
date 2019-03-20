@@ -40,7 +40,6 @@ Stripe.applePay.checkAvailability(function(available) {
                     case 'users_socials_id': this.userSocialId = parseInt(userData['users_socials_id']); break;
                     case 'email': $('.js_contactEmail').val(userData['email']); break;
                     case 'is_business':
-                        console.log(userData['is_business']);
                         if (userData['is_business'] > 0) {
                             $('form#Reg').find('input.js_userType[value="1"]').get(0).checked = true;
                         }
