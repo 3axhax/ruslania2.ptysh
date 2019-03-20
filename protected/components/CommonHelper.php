@@ -70,6 +70,15 @@ class CommonHelper
 		if (!empty($address['city'])) $arr_labels[] = $address['city'];
 		if (!empty($address['country_name'])) {
             if (!empty($address['statesNameShort'])) $arr_labels[] = $address['statesNameShort'];
+            elseif (!empty($address['state_id'])&&!empty($address['country'])) {
+                $countryStates = Country::model()->GetStatesList($address['country']);
+                foreach ($countryStates as $countryState) {
+                    if ($countryState['id'] == $address['state_id']) {
+                        $arr_labels[] = $countryState['title_short'];
+                        break;
+                    }
+                }
+            }
             $arr_labels[] = $address['country_name'];
         }
 		
