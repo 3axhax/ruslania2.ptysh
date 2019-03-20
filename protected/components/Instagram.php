@@ -4,12 +4,6 @@
 class Instagram {
 	const SHORTNAME = 'insta';
 
-	private $_clientId = '563249cf22a94cf98837e74c962c2acb';
-	private $_clientSecret = '599805cb8720423fa42ed3780ff7dfdd';
-	private $_authUrl = 'https://api.instagram.com/oauth/authorize/';
-	private $_redirectUrl = 'https://beta.ruslania.com/ru/widgets/dataInstagram/';
-	private $_login = 'ruslaniabooks';
-	private $_accessToken = '1744713549.563249c.e55128f09b30458aa00f49f11685de1b';
 
 
 	function __construct($login = true) {

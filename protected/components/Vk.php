@@ -3,14 +3,6 @@
 class Vk {
 	const SHORTNAME = 'vk';
 
-	private $_clientId = 6903561;
-	private $_clientSecret = '0T5SRFMO0EgaKWTQUWXR';
-	private $_serviceKey = '74689f2374689f2374689f23397401c82a7746874689f2328e6e60facf4bdc0f3bf0c24';
-	private $_v = '5.92';
-	private $_authUrl = 'https://oauth.vk.com/authorize';
-	private $_tokenUrl = 'https://oauth.vk.com/access_token';
-	private $_userUrl = 'https://api.vk.com/method/users.get';
-	private $_redirectUrl = 'https://beta.ruslania.com/ru/widgets/datavk/';
 
 	function urlCode() {
 		$param = array(
