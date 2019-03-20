@@ -4,7 +4,7 @@ require_once dirname(dirname(__FILE__)) . '/extensions/twitteroauth/autoload.php
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 class Twitter {
-	const SHORTNAME = 'twqqq';
+	const SHORTNAME = 'tw';
 
 	private $_apiId = 1519126;
 	private $_apiKey = 'Gh87DOTWmpij1ihZSmoXA';
