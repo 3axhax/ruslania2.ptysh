@@ -3,6 +3,10 @@
 require_once dirname(dirname(__FILE__)) . '/extensions/Facebook/autoload.php';
 class Facebook {
 	const SHORTNAME = 'fb';
+	private $_apiId = '120700978031357';
+	private $_apiSecret = 'd43bfd2088cafe5f1b0110319a4e0bb4';
+	private $_v = 'v3.2';
+	private $_redirectUrl = 'https://beta.ruslania.com/ru/widgets/dataFacebook/';
 	/**
 	 * @var Facebook\Facebook
 	 */

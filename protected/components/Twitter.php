@@ -6,6 +6,17 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 class Twitter {
 	const SHORTNAME = 'tw';
 
+	private $_apiId = 1519126;
+	private $_apiKey = 'Gh87DOTWmpij1ihZSmoXA';
+	private $_apiSecret = 'mVlbON6gEgWdeUP0Iw9E5BTatkkgkG4Pr6HYTwCa8';
+	private $_accessToken = '460037939-K7D6KlsyCAINzn2IS67JNz6NkMBVSREJsDQelLgp';
+	private $_accessTokenSecret = 'BCsVEJxoMqrua2PqVwaOKV8nmpQwpa0LocsXBZROQ';
+	private $_redirectUrl = 'https://beta.ruslania.com/ru/widgets/datatwitter/';
+	private $_authUrl = 'https://api.twitter.com/oauth/authorize';
+	private $_accessTokenUrl = 'https://api.twitter.com/oauth/access_token';
+	private $_requestTokenUrl = 'https://api.twitter.com/oauth/request_token';
+	private $_userUrl = 'https://api.twitter.com/1.1/users/show.json';
+	private $_v = '1.1';
 
 	function urlCode() {
 		$connection = new TwitterOAuth($this->_apiKey, $this->_apiSecret);
