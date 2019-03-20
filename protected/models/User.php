@@ -95,11 +95,12 @@ class User extends CActiveRecord
 
     public function GetAddresses($uid)
     {
-        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.is_europe, cl.code '
-               .'FROM users_addresses AS uas JOIN user_address AS ua ON uas.address_id=ua.id '
-               .'JOIN country_list AS cl ON ua.country=cl.id '
-               .'WHERE uas.uid=:uid ORDER BY if_default DESC';
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':uid' => $uid));
+//        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.is_europe, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
+//               .'FROM users_addresses AS uas JOIN user_address AS ua ON uas.address_id=ua.id '
+//               .'JOIN country_list AS cl ON ua.country=cl.id '
+//            . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
+//               .'WHERE uas.uid=:uid ORDER BY if_default DESC';
+        $rows = Address::model()->GetAddresses($uid);
         $ret = array();
         foreach($rows as $row)
         {

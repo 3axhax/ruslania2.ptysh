@@ -216,10 +216,11 @@ class Address extends CActiveRecord
 
     public function GetAddress($uid, $addressID)
     {
-        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code '
+        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
             . 'FROM users_addresses AS uas '
             . 'JOIN user_address AS ua ON uas.address_id=ua.id '
             . 'JOIN country_list AS cl ON ua.country=cl.id '
+            . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
             . 'WHERE uas.uid=:uid AND uas.address_id=:aid';
 
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':uid' => $uid, ':aid' => $addressID));
@@ -251,11 +252,12 @@ class Address extends CActiveRecord
 
     public function GetAddresses($uid)
     {
-        $sql = 'SELECT *, cl.title_en AS country_name, cl.code, ua.id as id FROM users_addresses AS uas '
+        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
+            . 'FROM users_addresses AS uas '
               .'JOIN user_address AS ua ON uas.address_id=ua.id '
               .'LEFT JOIN country_list AS cl ON ua.country=cl.id '
-              .'LEFT JOIN address_states_list AS asl ON ua.state_id=asl.id '
-              .'WHERE uas.uid=:uid';
+              . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
+              .'WHERE uas.uid=:uid ORDER BY uas.if_default DESC';
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':uid' => $uid));
         return $rows;

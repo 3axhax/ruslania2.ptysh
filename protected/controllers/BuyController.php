@@ -228,6 +228,8 @@ class BuyController extends MyController {
 				$id = $o->CreateNewOrder($userId, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
 				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 
+				$this->_log(array('type'=>'order_add', 'id'=>$id, 'data'=>serialize($_POST)));
+
 				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
 				$cookieOrderId = new CHttpCookie('lastOrderId', $id);
 				$cookieOrderId->expire = time() + 300;
@@ -467,5 +469,10 @@ class BuyController extends MyController {
 			$ret = UsersSocials::model()->getUserInfoForAddressForm(Yii::app()->session['user_social']);
 		}
 		return $ret;
+	}
+
+	private function _log($data) {
+		array_unshift($data, date('d.m.Y H:i:s'));
+		file_put_contents(Yii::getPathOfAlias('webroot') . '/test/order.log', implode("\t", $data) . "\n", FILE_APPEND);
 	}
 }

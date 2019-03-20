@@ -68,7 +68,10 @@ class CommonHelper
 		if (!empty($address['streetaddress'])) $arr_labels[] = $address['streetaddress'];
 		if (!empty($address['postindex'])) $arr_labels[] = $address['postindex'];
 		if (!empty($address['city'])) $arr_labels[] = $address['city'];
-		if (!empty($address['country_name'])) $arr_labels[] = $address['country_name'];
+		if (!empty($address['country_name'])) {
+            if (!empty($address['statesNameShort'])) $arr_labels[] = $address['statesNameShort'];
+            $arr_labels[] = $address['country_name'];
+        }
 		
         // $ret = $org.$name.', '
              // .$address['streetaddress'].', '
