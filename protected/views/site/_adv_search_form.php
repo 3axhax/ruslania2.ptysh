@@ -49,7 +49,12 @@
 
 		?>
 		<tr data-bind="visible: Entity()==<?= $id ?>">
-            <td><?= $ui->item('A_NEW_PEREP') ?>:</td>
+            <td><?php switch ($id):
+                    case Entity::BOOKS: case Entity::SHEETMUSIC: ?><?= $ui->item('A_NEW_FILTER_TYPE1') ?><?php break;
+                    case Entity::MUSIC: ?><?= $ui->item('A_NEW_FILTER_TYPE3') ?><?php break;
+                    case Entity::PERIODIC: ?><?= $ui->item('A_NEW_TYPE_IZD') ?><?php break;
+                    default: ?><?= $ui->item('A_NEW_FILTER_TYPE2') ?><?php break;
+            endswitch;?>:</td>
             <td><?= CHtml::dropDownList('binding_id'.$id, $binding_id, $$bindingList, array('empty' => '---', 'class'=>'select2_series')) ?></td>
         </tr>
 		

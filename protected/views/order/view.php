@@ -8,7 +8,7 @@
 
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
-            <?php $this->renderPartial('/client/_one_order', array('order' => $order)); ?>
+            <?php $this->renderPartial('/client/_one_order_my', array('order' => $order)); ?>
 
             <!-- /content -->
         </div>

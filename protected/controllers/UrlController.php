@@ -71,7 +71,7 @@ class UrlController extends MyController {
 		$translite = array();
 		$fileSource = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].'ru/uiconst.class.php';
 		$dataSource = require_once($fileSource);
-		$langs = array('de', 'en', 'es', 'fi', 'fr', 'se');
+		$langs = array('en', /*'de', 'es', 'fi', 'fr', 'se'*/);
 		foreach ($langs as $lang) {
 			$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$lang.'/uiconst.class.php';
 			$data = require_once($file);

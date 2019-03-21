@@ -955,7 +955,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			<?php if (isset($item['AlreadyInCart'])) : ?>
 			
 				<a class="cart-action add_cart add_cart_plus add_cart_view green_cart cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
-			<span style="padding: 0 17px 0 20px;">В корзине <?=$item['AlreadyInCart']?> шт.</span></a>
+			<span style="padding: 0 17px 0 20px;"><?= $ui->item('CARTNEW_IN_CART_BTN', $item['AlreadyInCart']) ?></span></a>
 			
 			<? else : ?>
 				
