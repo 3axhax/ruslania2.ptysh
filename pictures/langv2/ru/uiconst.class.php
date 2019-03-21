@@ -407,7 +407,7 @@ return array (
   //'MSG_PAYMENT_TYPE_26' => 'Оплата через систему Alipay<br><br><img src="/images/alipay.jpg" width="200">',
   'MSG_PAYMENT_TYPE_27' => 'ApplePay',
   'MSG_PAYMENT_TYPE_COMMENT_26' => 'Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N XXXXXXX оплачен» на адрес orders@ruslania.com',
-  'MSG_PAYMENT_TYPE_COMMENT_1' => 'Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС с действующим VAT номером. Счет-фактура на оплату заказа прикладывается к посылке. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
+  'MSG_PAYMENT_TYPE_COMMENT_1' => 'Выбранный способ оплаты - счет-фактура. Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС с действующим VAT номером. Счет-фактура на оплату заказа прикладывается к посылке. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
   'MSG_PAYMENT_TYPE_COMMENT_10' => 'Pay by check ( only in USD ) Send check to: TM Keller, 55 Chrissy Pl., Novato CA 94949-6481, USA. Pay to the order of TM Keller. Please write the order number on your check.',
   'MSG_PAYMENT_TYPE_COMMENT_11' => 'Pay by check ( only in USD ) Send check to: TM Keller, 55 Chrissy Pl., Novato CA 94949-6481, USA. Pay to the order of TM Keller. Please write the order number on your check.',
   'MSG_PAYMENT_TYPE_COMMENT_2' => '<img src="pic1/sampo_logo.gif" >',

@@ -112,7 +112,12 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.deleveryForm();
                 self.blockPay();
                 self.paymentsForm();
-                if (this.value == "0") $('.delivery_people').show();
+                if (this.value == "0") {
+                    $('.delivery_people').show();
+                    self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
+                    $('.js_orderPay').hide();
+                    $('.js_orderSave').show();
+                }
                 else $('.delivery_people').hide();
                 self.changeCountry();
             });
