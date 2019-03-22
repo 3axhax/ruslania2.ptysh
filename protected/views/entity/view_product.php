@@ -490,16 +490,18 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($item['binding_id'])) :
-            $row = (new Binding)->GetBinding($entity, $item['binding_id']);
-            ?>
+        <?php if (!empty($item['binding_id'])&&!empty($item['Binding']['title_' . Yii::app()->language])): ?>
             <div class="authors" style="margin-bottom:5px;">
-                <?php if($entity == 10 || $entity == 15 || $entity == 60): ?>
-                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_TYPOGRAPHY")); ?></div>
-                <?php else: ?>
-                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_PEREP")); ?></div>
-                <?php endif;?>
-                <div style="padding-left: 253px;"><?= $row['title_' . Yii::app()->language] ?></div>
+                <?php
+                switch ($entity) {
+                    case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+                    case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+                    case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+                    default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+                }
+                ?>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $label); ?></div>
+                <div style="padding-left: 253px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
                 <div class="clearBoth"></div>
             </div>
         <?php endif; ?>

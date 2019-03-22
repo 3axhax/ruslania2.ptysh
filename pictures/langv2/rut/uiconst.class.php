@@ -1287,4 +1287,5 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'LAST_STATE' => 'Posledniy status',
     'CARTNEW_IN_CART_BTN' => 'V korzine %d sht.',
 
+    'PEREODIC_NAME' => 'Podpiska',
 );

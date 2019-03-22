@@ -1147,7 +1147,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_FILTER_TYPE1' => 'Format',
   'A_NEW_FILTER_TYPE2' => 'Type',
   'A_NEW_FILTER_SORT_FOR' => 'Sort by:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Search for books by  Title / Author / ISBN',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Search by title / author / ISBN  / anything',
   'A_NEW_YEAR_REAL' => 'Publication year',
   'A_NEW_MENU_REK' => 'Recommendations',
   'A_NEW_FILTER_TITLE_LANG' => 'Product language -',
@@ -1294,4 +1294,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
 	'CARTNEW_IN_CART_BTN2' => '%d item(s)',
     'LAST_STATE' => 'Latest status',
 
+    'PEREODIC_NAME' => 'Magazines and newspapers subscription',
 );

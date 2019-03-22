@@ -1118,7 +1118,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_FILTER_TYPE1' => 'Format',
   'A_NEW_FILTER_TYPE2' => 'Type',
   'A_NEW_FILTER_SORT_FOR' => 'Trier par:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Rechercher des produits par titre / auteur / ISBN',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Recherche par titre / auteur / ISBN / n\'importe quoi',
   'A_NEW_YEAR_REAL' => 'Année de publication',
   'A_NEW_MENU_REK' => 'Recommandations',
   'A_NEW_FILTER_TITLE_LANG' => 'Langue du produit -',
@@ -1277,4 +1277,5 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
 	'CARTNEW_IN_CART_BTN2' => '%d kpl',
     'LAST_STATE' => 'Dernier statut',
 
+    'PEREODIC_NAME' => 'Abonnement aux périodiques',
 );

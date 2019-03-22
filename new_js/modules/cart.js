@@ -513,6 +513,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 if (self.delivery_address) aid = self.delivery_address.value;
                 else {
                     if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
+                    else if (this.onlyPereodic) cid = self.country.value;
                 }
                 var data = {
                     'aid':aid,
@@ -558,6 +559,7 @@ Stripe.applePay.checkAvailability(function(available) {
             if (self.delivery_address) aid = self.delivery_address.value;
             else {
                 if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
+                else if (this.onlyPereodic) cid = self.country.value;
             }
             var userType = $regForm.find('input[type=radio].js_userType:checked').val();
             var nVAT = this.nVAT.value;//

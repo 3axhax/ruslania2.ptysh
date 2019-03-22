@@ -1130,7 +1130,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'A_NEW_FILTER_TYPE1'=>'Formato',
     'A_NEW_FILTER_TYPE2'=>'Тип',
     'A_NEW_FILTER_SORT_FOR'=>'Сортировать по:',
-    'A_NEW_PLACEHOLDER_SEARCH'=>'Search for books by  Title / Author / ISBN',
+    'A_NEW_PLACEHOLDER_SEARCH'=>'Busca un título / autor / ISBN / cualquier cosa',
     'A_NEW_YEAR_REAL'=>'Год издания',
     'A_NEW_MENU_REK'=>'Рекомендации',
     'A_NEW_FILTER_TITLE_LANG'=>'Язык товара - ',
@@ -1297,4 +1297,7 @@ By clicking on a category you are interested in, you can see all the products wi
     'CARTNEW_IN_CART_BTN' => 'Cantidad a la cesta: %d',
 	'CARTNEW_IN_CART_BTN2' => '%d item(s)',
     'LAST_STATE' => 'Último estado',
+
+    'PEREODIC_NAME' => 'Suscripción a publicaciones periódicas',
+
 );

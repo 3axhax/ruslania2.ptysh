@@ -251,9 +251,16 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (!empty($item['binding_id'])) : ?>
                 <?php
-                if (!empty($item['Binding']['title_' . Yii::app()->language])): ?>
+                if (!empty($item['Binding']['title_' . Yii::app()->language])):
+                    switch ($entity) {
+                        case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+                        case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+                        case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+                        default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+                    }
+                    ?>
                     <div class="authors" style="margin-top: 0;">
-                        <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_TYPOGRAPHY')?></div>
+                        <div style="float: left;width: 130px;" class="nameprop"><?= $label ?></div>
                         <div style="padding-left: 140px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
                         <div class="clearBoth"></div>
                     </div>

@@ -202,6 +202,7 @@ class BuyController extends MyController {
 					if (!Yii::app()->getRequest()->getParam('addr_buyer')) $bid = Yii::app()->getRequest()->getParam('billing_address_id');
 					$userId = $this->uid;
 				}
+				if (empty($bid)) $bid = $aid; //что бы адрес плательщика совпадал с адесом доставки, если плательщик не указан (адрес доставки и плательщика одинаковый)
 				$DeliveryMode = 0;
 				if ((int) Yii::app()->getRequest()->getParam('dtype') === 0) $DeliveryMode = 1;
 

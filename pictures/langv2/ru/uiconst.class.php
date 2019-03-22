@@ -1168,7 +1168,7 @@ IBAN DE79514303006474790001 <br>
   'A_NEW_FILTER_TYPE2' => 'Тип',
   'A_NEW_FILTER_TYPE3' => 'Тип носителя',
   'A_NEW_FILTER_SORT_FOR' => 'Сортировать по:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Поиск по Названию / Автору / ISBN',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Поиск по названию / автору / ISBN  / чему угодно',
   'A_NEW_YEAR_REAL' => 'Год издания',
   'A_NEW_MENU_REK' => 'Рекомендации',
   'A_NEW_FILTER_TITLE_LANG' => 'Язык товара -',
@@ -1430,4 +1430,6 @@ IBAN DE79514303006474790001 <br>
     'PLACEHOLDER_PHONE_CODE'=>'+7(999)',
     'NUMBER_PHONE'=>'Номер телефона',
     'BUTTON_CALL'=>'Заказать звонок',
+
+    'PEREODIC_NAME' => 'Подписка',
 );

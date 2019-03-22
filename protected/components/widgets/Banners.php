@@ -321,9 +321,11 @@ class Banners extends MyWidget {
             $order .= ', "' . $item['entity'] . '_' . $item['id'] . '"';
         }
         $sql = array();
+        $titleLang = Yii::app()->getLanguage();
+        if (!in_array($titleLang, HrefTitles::get()->getLangs(10, 'product/view'))) $titleLang = 'en';
         $fields = array(
             'id'=>'id',
-            'title'=>'title_ru',
+            'title'=>'title_' . $titleLang,
             'image'=>'image',
             'vat'=>'vat',
             'discount'=>'discount',
