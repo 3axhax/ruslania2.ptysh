@@ -561,6 +561,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 if (this.takeInStore && !this.takeInStore.checked) cid = self.country.value;
                 else if (this.onlyPereodic) cid = self.country.value;
             }
+            if ((aid == 0)&&(cid == 0)) dtype = 0;
             var userType = $regForm.find('input[type=radio].js_userType:checked').val();
             var nVAT = this.nVAT.value;//
             if (userType != 1) nVAT = '';
