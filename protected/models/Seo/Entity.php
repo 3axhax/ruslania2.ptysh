@@ -19,7 +19,9 @@ class ModelsSeoEntity extends Seo_settings {
 		if ($idName == 'cid') $this->_cid = $this->_id;
 
 		if ($params === null) {
-			$sql = 'select `' . Yii::app()->getLanguage() . '` from seo_settings where (`route` = :route) and (`entity` = :eid) and (`id` = :id) limit 1';
+			$language = Yii::app()->getLanguage();
+			if ($language === 'rut') $language = 'ru';
+			$sql = 'select `' . $language . '` from seo_settings where (`route` = :route) and (`entity` = :eid) and (`id` = :id) limit 1';
 			$bdSettings = Yii::app()->db->createCommand($sql)->queryRow(true, array('route'=>$this->_route, 'eid'=>$this->_eid, 'id'=>$this->_id));
 			if (!empty($bdSettings[Yii::app()->language])) {
 				$bdSettings[Yii::app()->language] = unserialize($bdSettings[Yii::app()->language]);
