@@ -221,6 +221,14 @@ $entityKey = Entity::GetUrlKey($entity);
 
             ?>
 
+            <?php if (!empty($item['eancode'])&&(in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::MUSIC)))) : ?>
+                <div class="authors" style="margin-top: 0;">
+                    <div style="float: left;width: 130px;" class="nameprop">EAN</div>
+                    <div style="padding-left: 140px;"><?=str_replace('-','',$item['eancode'])?></div>
+                    <div class="clearBoth"></div>
+                </div>
+            <?php endif; ?>
+
             <?php
             /*if (!empty($item['inDescription'])) $txt = nl2br($item['inDescription']);
             else */$txt = nl2br(ProductHelper::GetDescription($item, 200, $url));
