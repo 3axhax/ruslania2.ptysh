@@ -95,9 +95,11 @@ class Payment
         );
     }
 
-    public static function CheckPayment($oid, $tid, $params, $order)
-    {
+    public static function CheckPayment($oid, $tid, $params, $order) {
+        if (OrderState::IsPaid($order['States'])) return true;
+
         $tid = intVal($tid);
+
 
         $classes = array(
             self::OKO => 'OKOPayment',

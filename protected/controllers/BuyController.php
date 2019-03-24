@@ -17,7 +17,8 @@ class BuyController extends MyController {
 	public function accessRules() {
 		return array(
 			array('allow',
-				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp','orderok','newaddr'),
+				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp',
+					'orderok','newaddr'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -236,27 +237,7 @@ class BuyController extends MyController {
 				$cookieOrderId->expire = time() + 300;
 				Yii::app()->getRequest()->cookies['lastOrderId'] = $cookieOrderId;
 				$orderBaseData = $o->GetOrder($id);
-				switch ((int) Yii::app()->getRequest()->getParam('ptype')) {
-					case 8: $ret['form'] = $this->widget('PayPalPayment', array('order' => $orderBaseData, 'tpl'=>'paypal_without_button'), true); break;
-					case 25: $ret['form'] = $this->widget('PayTrailWidget', array('order' => $orderBaseData, 'tpl'=>'paytrail_without_button'), true); break;
-					case 27:
-						$ret['idOrder'] = $orderBaseData['id'];
-						$ret['urls'] = array(
-							'charges' => Yii::app()->createUrl('site/charges'),
-							'accept' => Yii::app()->createUrl('payment/accept', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
-							'cancel' => Yii::app()->createUrl('payment/cancel', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
-						);
-						$ret['paymentRequest'] = array(
-							'countryCode' => mb_strtoupper(Yii::app()->getLanguage()),
-                            'currencyCode'=>Currency::ToStr($orderBaseData['currency_id']),
-							'total' =>array(
-								'label' => Yii::app()->ui->item('ORDER_PAYMENT') . ' ' . $orderBaseData['id'],
-								'amount' => $orderBaseData['full_price'],
-							),
-						);
-						break;
-					default: $ret['url'] = Yii::app()->createUrl('buy/orderok') . '?id=' . $id; break;
-				}
+				$ret = $this->_paySystemResult($orderBaseData, (int) Yii::app()->getRequest()->getParam('ptype'));
 			}
 		}
 		$this->ResponseJson($ret);
@@ -284,6 +265,26 @@ class BuyController extends MyController {
 		$this->ResponseJson($ret);
 	}
 
+	function actionOrderEdit() {
+		$ret = array();
+		if (Yii::app()->getRequest()->isPostRequest) {
+			$oid = (int) Yii::app()->getRequest()->getParam('orderId');
+			$o = new Order;
+			if ($o->isMyOrder($this->uid, $oid)) {
+				$orderBaseData = $o->GetOrder($oid);
+				$ptype = (int) Yii::app()->getRequest()->getParam('ptype');
+				switch ((string) Yii::app()->getRequest()->getParam('action')) {
+					case 'changePaySystem':
+						$sql = 'UPDATE users_orders SET payment_type_id = ' . $ptype . ', must_upgrade = 1 WHERE id = ' . $oid . ' LIMIT 1';
+						Yii::app()->db->createCommand($sql)->execute();
+						$ret = $this->_paySystemResult($orderBaseData, $ptype);
+						break;
+				}
+			}
+		}
+		$this->ResponseJson($ret);
+	}
+
 	public function actionLoadStates() {
 		$states = array();
 		if (Yii::app()->request->isPostRequest) $states = Country::GetStatesList((int) Yii::app()->getRequest()->getParam('cid'));
@@ -295,6 +296,32 @@ class BuyController extends MyController {
 			$points = Cart::model()->cart_getpoints_smartpost(addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('ind'))), addslashes(htmlspecialchars(Yii::app()->getRequest()->getParam('country'))));
 			$this->renderPartial('smartpost_points', array('points' => $points));
 		}
+	}
+
+	private function _paySystemResult($orderBaseData, $ptype) {
+		$ret = array();
+		switch ((int)$ptype) {
+			case 8: $ret['form'] = $this->widget('PayPalPayment', array('order' => $orderBaseData, 'tpl'=>'paypal_without_button'), true); break;
+			case 25: $ret['form'] = $this->widget('PayTrailWidget', array('order' => $orderBaseData, 'tpl'=>'paytrail_without_button'), true); break;
+			case 27:
+				$ret['idOrder'] = $orderBaseData['id'];
+				$ret['urls'] = array(
+					'charges' => Yii::app()->createUrl('site/charges'),
+					'accept' => Yii::app()->createUrl('payment/accept', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
+					'cancel' => Yii::app()->createUrl('payment/cancel', array('oid'=>$orderBaseData['id'], 'tid' => $orderBaseData['payment_type_id'])),
+				);
+				$ret['paymentRequest'] = array(
+					'countryCode' => mb_strtoupper(Yii::app()->getLanguage()),
+					'currencyCode'=>Currency::ToStr($orderBaseData['currency_id']),
+					'total' =>array(
+						'label' => Yii::app()->ui->item('ORDER_PAYMENT') . ' ' . $orderBaseData['id'],
+						'amount' => $orderBaseData['full_price'],
+					),
+				);
+				break;
+			default: $ret['url'] = Yii::app()->createUrl('buy/orderok') . '?id=' . $orderBaseData['id']; break;
+		}
+		return $ret;
 	}
 
 	private function _regUser() {

@@ -1,14 +1,22 @@
 <?php /*Created by Кирилл (24.02.2019 20:30)*/
 if (empty($PH)) $PH = new ProductHelper();
+if (empty($total)) $total = null;
+if (empty($countItems)) $countItems = null;
 ?>
+<?php if ($countItems !== null): ?>
 <div class="cart_header" style="width: 553px;">
 	<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), $countItems . ' ' . $PH->endOfWord($countItems, $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1'), $ui->item('CARTNEW_PRODUCTS_TITLE3')), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
 	<?php /*if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif;*/ ?>
 </div>
+<?php endif; ?>
 <div class="cart_box">
 	<table class="cart" style="width: 100%;">
 		<tbody>
-		<?php foreach ($items as $id => $item): ?>
+		<?php foreach ($items as $id => $item):
+			$itemsPrice = 0;
+			if (!empty($total)) $itemsPrice = $total['pricesValues'][$item['entity'] . '_' . $item['id']];
+			elseif (!empty($item['items_price'])) $itemsPrice = $item['items_price'];
+			?>
 			<tr class="js_<?= $item['entity'] ?>_<?= $item['id'] ?>">
 				<td style="width: 35px; height: 35px;">
 					<span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
@@ -30,7 +38,7 @@ if (empty($PH)) $PH = new ProductHelper();
 						<?= $ui->item('MONTH_SMALL'); ?>
 					<?php else: ?>
 						<?= $ui->item('CARTNEW_COUNT_NAME')?>.
-					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($total['pricesValues'][$item['entity'] . '_' . $item['id']]); ?></span>
+					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($itemsPrice); ?></span>
 					<?php if ($item['InCartUnitWeight'] > 0): ?>
 						<br /> <?= $ui->item('CARTNEW_WEIGHT_LABEL') ?>: <?= ($item['InCartUnitWeight'] / 1000) ?> <?= $ui->item('CARTNEW_WEIGHT_NAME') ?>
 					<?php endif; ?>

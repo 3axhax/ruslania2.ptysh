@@ -12,6 +12,168 @@ Stripe.applePay.checkAvailability(function(available) {
 });
 
 (function() {
+    repay = function() {
+        return new _Repay();
+    };
+    function _Repay() {}
+    _Repay.prototype = {
+        orderId: 0,
+        ptype: 0,
+        dtype: 0,
+        action: '',
+        init: function(options) {
+            this.setConst(options);
+            this.setEvents();
+            return this;
+        },
+        setConst: function(options) {
+            this.csrf = $('meta[name=csrf]').attr('content').split('=');
+            this.$paymentsData = $('#paymentsData');
+            this.orderId = options.orderId;
+            this.ptype = options.ptype;
+            this.dtype = options.dtype;
+            this.action = options.action;
+            if ((this.dtype > 0)&&(this.ptype == 0)) this.ptype = 25;
+            this.urlSubmit = options.urlSubmit;
+        },
+        setEvents: function() {
+            var self = this;
+            this.paymentsForm();
+            this.eventPayments();
+        },
+        paymentsForm: function() {
+            var self = this;
+            var $orderPay = $('.js_orderPay');
+            var $orderSave = $('.js_orderSave');
+            var $paymentDesc = $('.paytail_payment');
+            this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
+                switch (el.value) {
+                    case '0':
+                        if (self.dtype > 0) $(el).attr("disabled", "disabled").closest('.variant').hide();
+                        else if (el.value == '0') {
+                            el.checked = true;
+                            $orderPay.hide();
+                            $orderSave.show();
+                            $paymentDesc.hide();
+                        }
+                        break;
+                    default:
+                        if (parseInt(el.value) == this.ptype) {
+                            el.checked = true;
+                            if ((this.ptype == 13)||(this.ptype == 14)||(this.ptype == 7)) {
+                                $orderPay.hide();
+                                $orderSave.show();
+                                $paymentDesc.hide();
+                            }
+                            else {
+                                $orderSave.hide();
+                                $orderPay.show();
+                                if (this.ptype == 25) $paymentDesc.show();
+                                else $paymentDesc.hide();
+                            }
+                        }
+                        break;
+                }
+            });
+        },
+        eventPayments: function () {
+            var self = this;
+            var $orderButton = $('.order_start');
+            $orderButton.on('click', function() { self.sendforma(); return false; });
+
+            var $orderPay = $('.js_orderPay');
+            var $orderSave = $('.js_orderSave');
+            var $paymentDesc = $('.paytail_payment');
+            this.$paymentsData.find('.qbtn2').each(function(id, el) {
+                $(el).on('click', function() {
+                    var $t = $(this);
+                    self.$paymentsData.find('.info_box').hide();
+                    $t.siblings('.info_box').toggle().css({top: (this.offsetTop + 30), left: (this.offsetLeft - 300)});
+                });
+            });
+            this.$paymentsData.find('input[name=ptype]').each(function(id, el) {
+                $(el).on('click', function() {
+                    var $this = $(this);
+                    $this.closest('.variant').siblings().find('label').removeClass('act');
+                    $this.closest('label').addClass('act');
+                    switch(this.value) {
+                        case '0': case '14':case '13': case '7':
+                            $orderPay.hide();
+                            $orderSave.show();
+                            $paymentDesc.hide();
+                        break;
+                        default:
+                            $orderSave.hide();
+                            $orderPay.show();
+                            if (this.value == '25') $paymentDesc.show();
+                            else $paymentDesc.hide();
+                        break;
+                    }
+                });
+            });
+        },
+
+        paypal: function(form) {
+            $(form).appendTo(this.$paymentsData).submit();
+        },
+
+        paytrail: function(form) {
+            $(form).appendTo(this.$paymentsData).submit();
+        },
+
+        applepay: function(idOrder, urls, paymentRequest) {
+            var self = this;
+            var session = Stripe.applePay.buildSession(paymentRequest,
+                function(result, completion) {
+                    var data = {
+                        'token':result.token.id,
+                        'orderId':idOrder
+                    };
+                    data[self.csrf[0]] = self.csrf[1];
+                    $.post(urls.charges, data).done(function() {
+                        completion(ApplePaySession.STATUS_SUCCESS);
+                        // You can now redirect the user to a receipt page, etc.
+                        window.location.href = urls.accept;
+                    }).fail(function() {
+                        completion(ApplePaySession.STATUS_FAILURE);
+                    });
+
+                }, function(error) {
+                    console.log(error.message);
+                });
+
+            session.oncancel = function() {
+                window.location.href = urls.cancel;
+            };
+
+            session.begin();
+        },
+
+        sendforma: function () {
+            var self = this;
+            var fd = {
+                orderId:this.orderId,
+                ptype:this.$paymentsData.find('input[name=ptype]:checked').val(),
+                action:this.action
+            };
+            fd[this.csrf[0]] = this.csrf[1];
+            $.ajax({
+                url : self.urlSubmit,
+                data: fd,
+                type: 'post',
+                dataType : 'json',
+                success: function(r) {
+                    switch (parseInt(fd['ptype'])) {
+                        case 8: self.paypal(r.form); break;
+                        case 25: self.paytrail(r.form); break;
+                        case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
+                        default: document.location.href = r.url; break;
+                    }
+                }
+            });
+        }
+    };
+
     cart = function() {
         return new _Cart();
     };

@@ -17,8 +17,7 @@ ini_set('display_startup_errors', 1);
 
 class PaymentController extends MyController
 {
-    public function actionAccept($oid, $tid)
-    {
+    public function actionAccept($oid, $tid) {
         $o = new Order;
         $order = $o->GetOrder($oid);
         if(empty($order)) throw new CHttpException(404);
@@ -26,7 +25,7 @@ class PaymentController extends MyController
         $check = Payment::CheckPayment($oid, $tid, $_REQUEST, $order);
         $ret = 0;
 
-        $view = 'cancel';
+        $view = 'fail';
         if($check)
         {
 			
@@ -50,11 +49,11 @@ class PaymentController extends MyController
                 CommonHelper::Log('Payment already exists '.$oid.' - '.$tid, 'mywarnings');
             }
         }
-        if (isset($_GET['ha'])) {
-            $view = 'accept';
-            $check = 1;
-        }
-        else
+//        if (isset($_GET['ha'])) {
+//            $view = 'accept';
+//            $check = 1;
+//        }
+//        else
         if($order['uid'] != $this->uid) throw new CException('Wrong order id');
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));
@@ -81,7 +80,7 @@ class PaymentController extends MyController
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
-        $this->render('cancel', array('order' => $order, 'newOid' => $newOid));
+        $this->render('fail', array('order' => $order, 'newOid' => $newOid));
     }
 
     public function actionNotify()

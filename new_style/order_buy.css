@@ -236,6 +236,7 @@ table.address select {
 
 ol {list-style-type: none; counter-reset: num; margin: 0;}
 ol li::before {content: counter(num) '. '; counter-increment: num;}
+ol li.nonum::before {content: ''; counter-increment: none;}
 ol li::before, ol li span.step_header {font-size: 22px;}
 ol li span.step_header {margin-bottom: 15px; display: inline-block;}
 
@@ -264,3 +265,5 @@ label.error { background-color: #fff !important; border: solid 1px red !importan
 .address_action { width: 525px; text-align: right; margin-bottom: 30px;}
 .address_action a { cursor: pointer; margin-left: 20px;}
 .not_supported { position: absolute; top: 50px; left: 140px; }
+
+.info_order div div.span11 { width: 500px; }

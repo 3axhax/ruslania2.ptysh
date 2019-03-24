@@ -1,4 +1,7 @@
 <?php /*Created by Кирилл (05.03.2019 22:25)*/ ?>
+<style>
+	.info_order div div.span11 { width: 400px; }
+</style>
 <div class="container cartorder">
 	<h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?><?php
 		switch ((int)$order['delivery_type_id']):
@@ -7,6 +10,13 @@
 		?></h1>
 	<div class="row">
 		<div class="span8">
+			<?php $this->renderPartial('/client/_one_order', array('order' => $order, 'onlyContent' => 1, 'class' => 'bordered', 'enableSlide' => 1)); ?>
+			<script type="text/javascript">
+				function slideContents(id) {
+					$('#cnt' + id).fadeToggle();
+				}
+			</script>
+			<?php /*
 			<table cellspacing="1" cellpadding="5" border="0" width="100%" class="cart1 items_orders" style="display: table; margin-top: 22px;">
 				<tbody>
 				<tr>
@@ -41,9 +51,6 @@
 								Полная стоимость<br/> заказа с учетом доставки:
 								<b><?= ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?></b>
 								<?php if (($order['currency_id'] != Currency::EUR)&&((int)$order['payment_type_id'] === 25)) : ?>
-									<?php /*
-									(<?php $eur = Currency::ConvertToEUR($order['full_price'], $order['currency_id']);
-									echo ProductHelper::FormatPrice($eur, true, Currency::EUR); ?>) */ ?>
 									<div><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div>
 								<?php endif; ?>
 							</div>
@@ -56,6 +63,7 @@
 				</tr>
 				</tbody>
 			</table>
+			<?php */ ?>
 			<div style="background-color: #f8f8f8; padding: 20px 25px;">
 			<?php
 			switch ((int)$order['payment_type_id']):

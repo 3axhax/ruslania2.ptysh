@@ -438,5 +438,20 @@ class Order extends CMyActiveRecord
 		return $cnt;
 		
 	}
-	
+
+    function getItemsByOrder($order) {
+        if (empty($order['Items'])) return array();
+        foreach ($order['Items'] as $i=>$item) {
+            if (empty($r['unitweight'])) {
+                $order['Items'][$i]['FullUnitWeight'] = 0;
+                $order['Items'][$i]['InCartUnitWeight'] = 0;
+            }
+            else {
+                $order['Items'][$i]['FullUnitWeight'] = $item['quantity'] * $item['unitweight'] * Cart::UNITWEIGHT_VALUE;
+                $order['Items'][$i]['InCartUnitWeight'] = $item['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+            }
+        }
+        return $order['Items'];
+    }
+
 }
