@@ -62,7 +62,7 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
         <div class="price_h"><?= $ui->item($realPriceTitle); ?>:</div>
         <span class="price">
             <span class="pwvat"><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></span>
-            <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="visibility: hidden;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
+            <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="display: none;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
         </span>
     <?php endif; ?>
 </div>

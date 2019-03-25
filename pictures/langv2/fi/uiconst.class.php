@@ -1133,7 +1133,7 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'A_NEW_FILTER_TYPE1' => 'Sidosasu',
   'A_NEW_FILTER_TYPE2' => 'Tuotetyyppi',
   'A_NEW_FILTER_SORT_FOR' => 'Lajittelu:',
-  'A_NEW_PLACEHOLDER_SEARCH' => 'Etsi nimellä, tekijällä, ISBN:llä / millä tahansa',
+  'A_NEW_PLACEHOLDER_SEARCH' => 'Etsi nimellä, tekijällä, ISBN:llä, millä tahansa',
   'A_NEW_YEAR_REAL' => 'Ilmestymisvuosi',
   'A_NEW_MENU_REK' => 'Suositukset',
   'A_NEW_FILTER_TITLE_LANG' => 'Tuotteen kieli -',

@@ -27,7 +27,7 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
 
 ?>
 <div class="clearfix"></div>
-<div class="mb5 <?=strtolower($key); ?>" style="margin-bottom: 16px; margin-top: 30px; float: left;">
+<div class="mb5 <?=strtolower($key); ?>" style="margin-bottom: 16px; margin-top: 30px; float: left; min-width: 220px;">
     <?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
         <div class="price_h"><?= $ui->item($realPriceTitle); ?>:</div>
 		<span class="without_discount"><?= ProductHelper::FormatPrice($price[$realKeyBrutto]); ?></span>

@@ -108,7 +108,7 @@ return array(
                 'login' => 'site/login',
                 'register' => 'site/register',
 
-                'doorder' => 'cart/doorder',
+                /*'doorder'*/'placeorder' => 'cart/doorder',
                 'request-<entity:(' . $entities . ')>-<iid:(\d+)>' => 'cart/dorequest',
                 'print/<oid:(\d+)>' => 'client/printorder',
 
