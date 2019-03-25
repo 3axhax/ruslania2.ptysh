@@ -82,7 +82,7 @@
             <td><?= CHtml::textField('perf', $perf, array('data-bind' => 'enable: Entity()=='.Entity::VIDEO)); ?></td>
         </tr>
 		
-        <tr>
+        <tr data-bind="visible: Entity()!=<?=Entity::PERIODIC?>">
             <td><?= $ui->item('Published by'); ?>:</td>
             <td><?= CHtml::textField('publisher', $publisher); ?></td>
         </tr>
@@ -94,11 +94,11 @@
                 <?/*=CHtml::dropDownList('l', $lang, $langList, array('empty' => '---', 'class'=>'select2_series')); */?>
             </td>
         </tr>
-        <tr>
+        <tr data-bind="visible: Entity()!=<?=Entity::PERIODIC?>">
             <td><?=trim(sprintf($ui->item('A_NEW_YEAR'), '')); ?>:</td>
             <td><?=CHtml::textField('year', $year); ?></td>
         </tr>
-        <tr>
+        <tr data-bind="visible: Entity()!=<?=Entity::PERIODIC?>">
             <td><?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>:</td>
             <td class="red_checkbox" onclick="check_search($(this));" style="height: 42px;">
                 <span class="checkbox">

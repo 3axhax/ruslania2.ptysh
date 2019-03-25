@@ -135,6 +135,23 @@ class SearchProducts {
 		return $result;
 	}
 
+	function getIds($q, $page, $pp, $eid) {
+		if (empty($eid)) return array();
+
+		$condition = $join = [];
+		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
+		$condition['entity'] = '(entity = ' . (int) $eid . ')';
+		$sql = ''.
+			'select real_id '.
+			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by position asc, time_position asc '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
+		'';
+		return SphinxQL::getDriver()->queryCol($sql);
+	}
+
 	function getDidYouMean($q) {
 		$authors = $this->_getAuthors($q);
 		foreach ($authors as $i=>$item) $authors[$i]['didYouMeanType'] = 'authors';

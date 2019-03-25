@@ -630,18 +630,20 @@ class SearchHelper
         $order = 'order by ' . SortOptions::GetSQL(SortOptions::GetDefaultSort(0), $lang, $e);
         if (!empty($title)) {
             $searchModel = new SearchProducts($only, $e);
-            $spxCond = array($searchModel->getMath($title));
+            $spxIds = $searchModel->getIds($title, 1, 1000, $e);
+/*            $spxCond = array($searchModel->getMath($title));
             $spxCond['mode'] = 'mode=extended';
             $spxCond['filter'] = 'filter=entity:' . $e;
-//            $spxCond['mode'] = 'mode=extended';
+            $spxCond['mode'] = 'mode=extended';
             $spxCond['ranker'] = 'ranker=sph04';
             $spxCond['sort'] = 'sort=extended:position asc,time_position asc';
+//            $spxCond['sort'] = 'sort=extended:time_position asc';
             $spxCond['limit'] = 'limit=1000';
             $spxCond['maxmatches'] = 'maxmatches=100000';
             if ($only) {
                 $spxSql = ''.
                     'SELECT real_id '.
-                    'FROM `_se_avail_items_without_morphy` '.
+                    'FROM `_se_all_items_without_morphy` '.
                     'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
                     'union '.
                     'SELECT real_id '.
@@ -660,7 +662,7 @@ class SearchHelper
                     'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
                 '';
             }
-            $spxIds = Yii::app()->db->createCommand($spxSql)->queryColumn();
+            $spxIds = Yii::app()->db->createCommand($spxSql)->queryColumn();*/
             if (empty($spxIds)) return array('Items' => array(), 'Paginator' => new CPagination(0));
 
             $condition['ids'] = '(t.id in (' . implode(',', $spxIds) . '))';
