@@ -158,10 +158,31 @@ $ctrl = Yii::app()->getController()->id;
 								
                             </td>
                         </tr>
+						
+						<? $weight = $weight + $cart['UnitWeight'];?>
+						
                         <?php endforeach; ?>
                         <!-- /ko --></tbody>
                         <tr class="footer">
-                            <td align="right" class="cart1header2" colspan="6"><div class="summa"><?=$ui->item('CART_COL_TOTAL_PRICE'); ?>, <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+                            <td align="right" class="cart1header2" colspan=
+							"6">
+							
+							<?//=$weight?>
+							
+							<div class="summa">
+							
+							<? if ($weight > 0) : ?>
+							
+							<?
+							echo $ui->item('CART_COL_TOTAL_PRICE'); ?>, <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+							
+							<? else : ?>
+							
+							<?
+							echo $ui->item('CART_COL_TOTAL_PRICE2'); ?> <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+							
+							<? endif; ?>
+							
 								<span style="font-weight: bold;" data-bind="visible: !AjaxCall()">
                                         <span data-bind="text: TotalVAT"><?= $CartItems->totalVAT() ?></span>
                                         <?= Currency::ToSign(Yii::app()->currency); ?>
@@ -364,7 +385,7 @@ $ctrl = Yii::app()->getController()->id;
 </div>
 </div>
 
-
+<? } ?>
 
 <script type="text/javascript">
 
@@ -537,18 +558,27 @@ $ctrl = Yii::app()->getController()->id;
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
-            {
-                if(json.changed)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+                if(json.changed) {
                     data.InfoField(json.changedStr);
-                else
+                    if (json.origQuantity == 0) {
+                        $(event.target).closest('tr').find('.alerthtml').show();
+                        $('.opacity.alerthtml').show();
+                    }
+                }
+                else {
                     data.InfoField('');
+                }
 //                console.log(json);
                 data.Quantity(json.quantity);
 				//update_header_cart();
             }, 'json');
 			
 			}
+            else {
+                $(event.target).closest('tr').find('.alerthtml').show();
+                $('.opacity.alerthtml').show();
+            }
         };
 		
 		self.QuantityChangedPlus = function (data, event)
@@ -675,4 +705,4 @@ $ctrl = Yii::app()->getController()->id;
 
 
 <div style="height: 20px;"></div>
-	<? } ?>
+	

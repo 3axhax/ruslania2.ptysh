@@ -1259,7 +1259,7 @@ class CartController extends MyController {
                     'msg' => $message,
                     'already' => $already,
                     'buttonName' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
-                    'buttonName2' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN2', $alreadyInCart),
+                    'buttonName2' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
                 ));
             }
             else
@@ -1323,19 +1323,29 @@ class CartController extends MyController {
                 $show3Months = $product['issues_year']['show3Months'];
                 $show6Months = $product['issues_year']['show6Months'];
                 if (!empty($_POST['decrement'])) {
-                    if ($originalQuantity < 6) {
-                        if ($show3Months)
-                            $availCount = 3;
-                        elseif ($show6Months)
+                    if ($originalQuantity < 3) {
+                        $availCount = 3;
+                        $originalQuantity = 0;
+                    }
+                    elseif ($originalQuantity < 6) {
+                        if ($show3Months) $availCount = 3;
+//                        else $availCount = 0;
+                        elseif ($show6Months) {
+                            $originalQuantity = 0;
                             $availCount = 6;
-                        else
+                        }
+                        else {
+                            $originalQuantity = 0;
                             $availCount = 12;
+                        }
                     }
                     elseif ($originalQuantity < 12) {
-                        if ($show6Months)
-                            $availCount = 6;
-                        else
+                        if ($show6Months) $availCount = 6;
+//                        else $availCount = 0;
+                        else {
                             $availCount = 12;
+                            $originalQuantity = 0;
+                        }
                     } else
                         $availCount = 12;
                 }
@@ -1357,8 +1367,8 @@ class CartController extends MyController {
                 }
             }
             $quantity = $availCount;
-            $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
-            if ($entity == 30) {
+            if ($entity != 30) $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
+            elseif (!empty($originalQuantity)) {
                 $changedStr = sprintf('Количество товара было изменено с %d до %d', $quantity2, $quantity);
             }
         }
