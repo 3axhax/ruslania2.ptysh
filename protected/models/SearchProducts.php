@@ -197,6 +197,7 @@ class SearchProducts {
 			'group by t.entity '.
 		'';
 		$find = Yii::app()->db->createCommand($sql)->queryAll();;
+		Debug::staticRun(array($sql, $find));
 
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
