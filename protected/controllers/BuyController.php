@@ -37,7 +37,13 @@ class BuyController extends MyController {
 		$items = $cart->GetCart($this->uid, $this->sid);
 		if (!count($items)) {
 			$lastOrderId = (int)Yii::app()->getRequest()->cookies['lastOrderId']->value;
-			if ($lastOrderId > 0) $this->redirect(Yii::app()->createUrl('payment/cancel', array('oid' => $lastOrderId, 'tid'=>0)));
+			if ($lastOrderId > 0) {
+				$o = new Order;
+				$order = $o->GetOrder($lastOrderId);
+				if (in_array($order['payment_type_id'], array(25, 8, 27))) {
+					$this->redirect(Yii::app()->createUrl('payment/cancel', array('oid' => $lastOrderId, 'tid'=>0)) . '?ha');
+				}
+			}
 			$this->redirect(Yii::app()->createUrl('cart/view'));
 		}
 
