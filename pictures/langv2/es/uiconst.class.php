@@ -1300,4 +1300,8 @@ By clicking on a category you are interested in, you can see all the products wi
 
     'PEREODIC_NAME' => 'Suscripción a publicaciones periódicas',
 
+    'INSTAGRAM_MEDIA'=>'Publicationes',
+    'INSTAGRAM_FOLLOWED_BY'=>'Seguidores',
+    'INSTAGRAM_FOLLOWS'=>'Seguidos',
+    'INSTAGRAM_SUBSCRIBE'=>'Seguir',
 );

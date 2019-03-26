@@ -1278,4 +1278,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'LAST_STATE' => 'Dernier statut',
 
     'PEREODIC_NAME' => 'Abonnement aux périodiques',
+
+    'INSTAGRAM_MEDIA'=>'Publications',
+    'INSTAGRAM_FOLLOWED_BY'=>'Abonnés',
+    'INSTAGRAM_FOLLOWS'=>'Abonnements',
+    'INSTAGRAM_SUBSCRIBE'=>'S\'abonner',
+
 );

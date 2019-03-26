@@ -1288,4 +1288,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'LAST_STATE' => 'Senaste status',
 
     'PEREODIC_NAME' => 'Tidningsprenumerationer',
+
+    'INSTAGRAM_MEDIA'=>'Inlägg',
+    'INSTAGRAM_FOLLOWED_BY'=>'Följare',
+    'INSTAGRAM_FOLLOWS'=>'Följer',
+    'INSTAGRAM_SUBSCRIBE'=>'Följ',
+
 );

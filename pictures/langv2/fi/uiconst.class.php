@@ -1281,4 +1281,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'LAST_STATE' => 'Viimeisin päivitys',
 
     'PEREODIC_NAME' => 'Lehtitilaukset',
+
+    'INSTAGRAM_MEDIA'=>'Julkaisut',
+    'INSTAGRAM_FOLLOWED_BY'=>'Seuraajat',
+    'INSTAGRAM_FOLLOWS'=>'Seurataan',
+    'INSTAGRAM_SUBSCRIBE'=>'Seuraa',
+
 );

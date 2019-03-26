@@ -1291,4 +1291,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
 
     'PEREODIC_NAME' => 'Zeitschriften im Abo',
 
+    'INSTAGRAM_MEDIA'=>'Beiträge',
+    'INSTAGRAM_FOLLOWED_BY'=>'Abonnenten',
+    'INSTAGRAM_FOLLOWS'=>'Abonniert',
+    'INSTAGRAM_SUBSCRIBE'=>'Folgen',
 );

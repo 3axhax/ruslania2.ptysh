@@ -1295,4 +1295,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'LAST_STATE' => 'Latest status',
 
     'PEREODIC_NAME' => 'Magazines and newspapers subscription',
+
+    'INSTAGRAM_MEDIA'=>'Posts',
+    'INSTAGRAM_FOLLOWED_BY'=>'Followers',
+    'INSTAGRAM_FOLLOWS'=>'Following',
+    'INSTAGRAM_SUBSCRIBE'=>'Follow',
+
 );
