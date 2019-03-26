@@ -1011,7 +1011,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php else : ?>
             <?php //var_dump($item['description_ru']); ?>
             <?php if(!empty($item['presaleMessage'])): ?>
-                <div class="presale" style="padding: 10px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
+                <div class="presale" style="padding: 10px; margin-bottom: 20px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
             <?php endif; ?>
             <?= nl2br(ProductHelper::GetDescription($item)); ?>
 
