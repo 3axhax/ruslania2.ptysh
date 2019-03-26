@@ -212,7 +212,13 @@ class HrefTitles {
 
 	function getIdName($entity, $route) {
 		$routes = EntityUrlRule::getRoutes();
-		if (empty($routes[$route]['idName'])) return '';
+		if (empty($routes[$route]['idName'])) {
+			switch ($route) {
+				case 'bookshelf/view': return 'id'; break;
+				case 'offers/view': return 'oid'; break;
+			}
+			return '';
+		}
 
 		return $routes[$route]['idName'];
 	}

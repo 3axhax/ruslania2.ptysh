@@ -407,7 +407,7 @@ return array (
   //'MSG_PAYMENT_TYPE_26' => 'Оплата через систему Alipay<br><br><img src="/images/alipay.jpg" width="200">',
   'MSG_PAYMENT_TYPE_27' => 'ApplePay',
   'MSG_PAYMENT_TYPE_COMMENT_26' => 'Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N XXXXXXX оплачен» на адрес orders@ruslania.com',
-  'MSG_PAYMENT_TYPE_COMMENT_1' => 'Выбранный способ оплаты - счет-фактура. Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС с действующим VAT номером. Счет-фактура на оплату заказа прикладывается к посылке. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
+  'MSG_PAYMENT_TYPE_COMMENT_1' => 'Выбранный способ оплаты - счет-фактура. Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС с действующим VAT номером. Счет-фактура на оплату заказа прикладывается к посылке или отправляется отдельно в адрес плательщика в бумажном или виртуальном виде. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
   'MSG_PAYMENT_TYPE_COMMENT_10' => 'Pay by check ( only in USD ) Send check to: TM Keller, 55 Chrissy Pl., Novato CA 94949-6481, USA. Pay to the order of TM Keller. Please write the order number on your check.',
   'MSG_PAYMENT_TYPE_COMMENT_11' => 'Pay by check ( only in USD ) Send check to: TM Keller, 55 Chrissy Pl., Novato CA 94949-6481, USA. Pay to the order of TM Keller. Please write the order number on your check.',
   'MSG_PAYMENT_TYPE_COMMENT_2' => '<img src="pic1/sampo_logo.gif" >',
@@ -415,7 +415,7 @@ return array (
   'MSG_PAYMENT_TYPE_COMMENT_4' => '<img src="pic1/nordea_button_50x50px.gif" width="50" height="50">',
   'MSG_PAYMENT_TYPE_COMMENT_5' => '<img src="pic1/visa_mastercard_amex_logo.gif" width="259" height="38">',
   'MSG_PAYMENT_TYPE_COMMENT_6' => '<img src="pic1/oko_logo.gif" width="30" height="30">',
-  'MSG_PAYMENT_TYPE_COMMENT_7' => 'Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС. Счет-фактура на оплату заказа прикладывается к посылке. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
+  'MSG_PAYMENT_TYPE_COMMENT_7' => 'Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии или организации из стран ЕС. Счет-фактура на оплату заказа прикладывается к посылке или отправляется отдельно в адрес плательщика в бумажном или виртуальном виде. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. ',
   'MSG_PAYMENT_TYPE_COMMENT_8' => '<a href="https://www.paypal.com/us/webapps/mpp/security/verification-faq" target="_blank"><img src="http://www.paypal.com/en_US/i/icon/verification_seal.gif" border="0"  height="75" align="middle"></a>  <a href="http://www.ruslania.com/context-268435528.html" target="_blank">Что такое PayPal?</a>',
   'MSG_PAYMENT_TYPE_COMMENT_12' => '<a href="https://www.paypal.com/us/webapps/mpp/security/verification-faq" target="_blank"><img src="http://www.paypal.com/en_US/i/icon/verification_seal.gif" border="0"  height="75" align="middle"></a>  <a href="http://www.ruslania.com/context-268435528.html" target="_blank">Что такое PayPal?</a>',
   'MSG_PAYMENT_TYPE_COMMENT_13' => 'Реквизиты для оплаты заказа: Ruslania Books Corp., <br>
@@ -1215,7 +1215,7 @@ IBAN DE79514303006474790001 <br>
   'DESC_PAYPAL' => 'Оплата со средств на счету PayPal или с помощью карт VISA или MASTERCARD',
   'DESC_ALIPAY' => '<b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке снизу. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'Платить с Apple Pay очень просто — достаточно устройства, которое с вами каждый день. Вы можете безопасно делать покупки в магазинах, приложениях и на сайтах. Одно прикосновение — и всё готово.',
-  'DESC_PAYTYPE7' => 'Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии и организации из стран ЕС с действующим VAT-номером. Счет-фактура на оплату заказа прикладывается к посылке. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. Руслания оставляет за собой право требовать предоплату также от финских клиентов.',
+  'DESC_PAYTYPE7' => 'Внимание! Этот способ оплаты могут выбирать только клиенты из Финляндии и организации из стран ЕС с действующим VAT-номером. Счет-фактура на оплату заказа прикладывается к посылке или отправляется отдельно в адрес плательщика в бумажном или виртуальном виде. Заказы частным клиентам могут быть отправлены со счетом-фактурой только в том случае, если оплачены предыдущие счета. Руслания оставляет за собой право требовать предоплату также от финских клиентов.',
   'DESC_PAYTYPE13' => 'Реквизиты для оплаты заказа: Ruslania Books Corp.,<br>Nordea Bank. Helsinki, Finland,<br>IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br>Просим Вас указать при оплате номер заказа и отправить е-мейл «заказ N %d оплачен» на адрес orders@ruslania.com',
   'DESC_PAYTYPE14' => 'Банковские реквизиты для оплаты заказа будут отправлены на Ваш e-mail.',
   'DESC_PAYTYPE999' => '',
@@ -1432,4 +1432,5 @@ IBAN DE79514303006474790001 <br>
     'BUTTON_CALL'=>'Заказать звонок',
 
     'PEREODIC_NAME' => 'Подписка',
+    'ITOGO_WITHOUT_DELIVERY' => 'Итого, без учета стоимости доставки: %s',
 );

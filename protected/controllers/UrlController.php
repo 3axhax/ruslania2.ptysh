@@ -1,5 +1,8 @@
 <?php
 /*Created by Кирилл (19.09.2018 21:26)*/
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 class UrlController extends MyController {
 
 	function actionGetParams() {
@@ -9,13 +12,21 @@ class UrlController extends MyController {
 		$result = array(
 			'route'=>Yii::app()->getUrlManager()->parseUrl($request),
 		);
-		$entity = $request->getParam('entity');
-		if (!empty($entity)) $result['entity'] = (int)Entity::ParseFromString($entity);
-		if (empty($result['entity'])) $result['id'] = 0;
+		if ($result['route'] == 'search/general') {
+			unset($result['route']);
+		}
 		else {
+			$result['entity'] = 0;
+			$entity = $request->getParam('entity');
+			if (!empty($entity)) $result['entity'] = (int)Entity::ParseFromString($entity);
+
+			$result['id'] = 0;
 			$idName = HrefTitles::get()->getIdName($result['entity'], $result['route']);
 			if (!empty($idName)) $result['id'] = $request->getParam($idName);
+
+			$result['params'] = $request->getParams();
 		}
+
 		$this->ResponseJson($result);
 	}
 

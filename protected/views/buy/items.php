@@ -5,7 +5,10 @@ if (empty($countItems)) $countItems = null;
 ?>
 <?php if ($countItems !== null): ?>
 <div class="cart_header" style="width: 553px;">
+	<?php /*
 	<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), $countItems . ' ' . $PH->endOfWord($countItems, $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1'), $ui->item('CARTNEW_PRODUCTS_TITLE3')), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
+    */ ?>
+	<?= $ui->item('ITOGO_WITHOUT_DELIVERY', '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
 	<?php /*if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif;*/ ?>
 </div>
 <?php endif; ?>

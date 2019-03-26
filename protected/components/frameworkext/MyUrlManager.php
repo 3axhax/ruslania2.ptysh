@@ -219,11 +219,11 @@ class MyUrlRule extends CUrlRule {
      * @return bool|string
      */
     private function _parseReferer($manager, MyRefererRequest $request, $pathInfo,$rawPathInfo) {
-        $urlRule = new EntityUrlRule();
+        $urlRule = new EntityUrlRule($request->getLangFromUrl());
         $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
         if ($result !== false) return $result;
 
-        $urlRule = new StaticUrlRule();
+        $urlRule = new StaticUrlRule($request->getLangFromUrl());
         $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
         if ($result !== false) return $result;
 

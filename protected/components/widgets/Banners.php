@@ -47,7 +47,7 @@ class Banners extends MyWidget {
             $page = 1;
             if (!empty($this->_params['page'])) $page = $this->_params['page'];
             $sql = ''.
-                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                 'from banners_entity t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'where (t.entity_id = ' . (int) $this->entity . ') '.
@@ -73,7 +73,7 @@ class Banners extends MyWidget {
     private function _getMainBanners($lang) {
         if (self::$_mainBanners === null) {
             $sql = ''.
-                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                 'from banners_main t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'order by t.position, t.id desc '.
@@ -199,13 +199,20 @@ class Banners extends MyWidget {
 
     private function _getBannerHref($banner) {
         if (!empty($banner['path_route'])) {
-            $params = array( );
+            $params = array();
             if (!empty($banner['path_entity'])){
                 $params['entity'] = $banner['path_entity'];
                 if (!empty($banner['path_id'])) {
                     $idName = HrefTitles::get()->getIdName($params['entity'], $banner['path_route']);
                     if (!empty($idName)) $params[$idName] = $banner['path_id'];
                 }
+            }
+            elseif (!empty($banner['path_id'])) {
+                $idName = HrefTitles::get()->getIdName(0, $banner['path_route']);
+                if (!empty($idName)) $params[$idName] = $banner['path_id'];
+            }
+            elseif (!empty($banner['path_params'])) {
+                $params = unserialize($banner['path_params']);
             }
             $href = Yii::app()->createUrl($banner['path_route'], $params);
         }
@@ -231,7 +238,7 @@ class Banners extends MyWidget {
                 $lang = strtolower(Yii::app()->language);
                 if (!in_array($lang, $langs)) $lang = 'en';
                 $sql = ''.
-                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                     'from banners_entity t '.
                         'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1) '.
                     'where (t.entity_id = ' . (int) $this->entity . ') '.

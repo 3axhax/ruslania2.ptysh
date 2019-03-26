@@ -118,7 +118,8 @@ class ModelsSeoEntity extends Seo_settings {
 		if (!empty($params)) $this->_replace['{params}'] = implode('; ', $params);
 
 		if (!empty($this->_replace['{params}'])) {
-			if (!empty($this->_id)) $this->_settings['h1'] = str_replace('{entity_name} {params}', '{entity_name}, {params}', $this->_settings['h1']);
+			if ($this->_route == 'entity/list') $this->_replace['{params}'] = '';
+			elseif (!empty($this->_id)) $this->_settings['h1'] = str_replace('{entity_name} {params}', '{entity_name}, {params}', $this->_settings['h1']);
 		}
 
 //		Debug::staticRun(array($this->_route, $this->_replace, $this->_settings['h1']));
