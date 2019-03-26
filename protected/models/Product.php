@@ -382,7 +382,6 @@ class Product
         $data = $data[0];
         $data['entity'] = $entity;
         $data['status'] = Product::GetStatusProduct($entity, $id);
-        Debug::staticRun(array($data));
         if (!empty($data['presale'])) {
             //последний день месяца предзаказа 23:59:59
             $datePresale = mktime(23, 59, 59, date('m', $data['presale'])+1, -1, date('Y', $data['presale']));
