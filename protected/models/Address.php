@@ -168,9 +168,17 @@ class Address extends CActiveRecord
             $this->addError($attr, $msg);
         }
         else {
-            $sql = 'select country_id from `address_states_list` group by country_id';
-            $countryStates = Yii::app()->db->createCommand($sql)->queryColumn();
-            if (in_array($country, $countryStates) && empty($this->state_id)) $this->addError('state_id', 'Select State');
+            $countryBase = Country::model()->findByPk($country);
+            if (empty($countryBase)) {
+                $labels = $this->attributeLabels();
+                $msg = Yii::t('yii','{attribute} cannot be blank.', array('{attribute}' => $labels[$attr]));
+                $this->addError($attr, $msg);
+            }
+            else {
+                $sql = 'select country_id from `address_states_list` group by country_id';
+                $countryStates = Yii::app()->db->createCommand($sql)->queryColumn();
+                if (in_array($country, $countryStates) && empty($this->state_id)) $this->addError('state_id', 'Select State');
+            }
         }
     }
 

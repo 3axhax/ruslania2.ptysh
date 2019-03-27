@@ -880,6 +880,7 @@ Stripe.applePay.checkAvailability(function(available) {
         viewErrors: function(errors) {
             var len = errors.length;
             var firstErrorPos = 0;
+            var errorVisible = false;
             for (var i = 0; i < len; i++) {
                 var $f = $(errors[i]);
                 if (errors[i].name == 'confirm') {
@@ -892,9 +893,14 @@ Stripe.applePay.checkAvailability(function(available) {
                 else {
                     if (firstErrorPos == 0) firstErrorPos = parseInt($f.offset().top) - 10;
                     else firstErrorPos = Math.min(firstErrorPos, parseInt($f.offset().top) - 10);
+                    if ($f.is(':visible')) errorVisible = true;
                     $f.addClass('error')
                         .siblings('.texterror').show();
                 }
+            }
+            if (!errorVisible) {
+                console.log(errors);
+                alert('Something went wrong');
             }
             this.scrollTo(firstErrorPos);
         },

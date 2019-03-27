@@ -97,6 +97,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		</td>
 		<td class="maintxt-vat select_states">
 			<?= $form->dropDownList($addrModel, 'state_id', CHtml::listData(array(0=>array('id'=>'','title_en'=>'---')), 'id', 'title_en'), array('name'=>'' . $alias . '[state_id]')) ?>
+			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
 <?php if ($userType == 'payer'): ?>

@@ -3,11 +3,14 @@
 	.info_order div div.span11 { width: 400px; }
 </style>
 <div class="container cartorder">
+	
+	<? if ($order['payment_type_id'] != 25) :  ?>
+	
 	<h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?><?php
 		switch ((int)$order['delivery_type_id']):
 			case 0: ?> <?= $ui->item('IN_SHOP') ?>!<?php break;
 		endswitch;
-		?></h1>
+		?></h1><? endif;?>
 	<div class="row">
 			<?php if ((int)$order['payment_type_id'] === 25): ?>
 				<?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
