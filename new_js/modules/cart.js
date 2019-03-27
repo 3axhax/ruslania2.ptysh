@@ -243,6 +243,7 @@ Stripe.applePay.checkAvailability(function(available) {
             var $promocodeBlock = $('#js_promocode');
             this.$inputPromocode = $promocodeBlock.find('input[type=text]');
             this.$submitPromocode = $promocodeBlock.find('input[type=button]');
+            this.notesHeight();
         },
         setEvents: function() {
             var self = this;
@@ -953,6 +954,12 @@ Stripe.applePay.checkAvailability(function(available) {
             };
 
             session.begin();
+        },
+
+        notesHeight: function() {
+            var notes = document.getElementById('Notes');
+            var $notes = $(notes);
+            $notes.css({height: $notes.closest('div.span6').siblings('div.span6').outerHeight(true)});
         }
 
     };

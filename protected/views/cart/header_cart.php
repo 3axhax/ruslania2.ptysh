@@ -118,15 +118,15 @@
             //$out = (show) ?  $value . ' ' : '';
             switch (num) {
                 case 1:
-                    out = count+' товар';
+                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE2') ?>';
                     break;
                 case 2:
                 case 3:
                 case 4:
-                    out = count+' товара';
+                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE1') ?>';
                     break;
                 default:
-                    out = count+' товаров';
+                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE3') ?>';
                     break;
             }
             return out;
@@ -177,8 +177,8 @@
 						
 						$('a.cartMini'+item.ID()).removeClass('green_cart');
 						
-						$('a.cartMini'+item.ID()).html('');
-						$('a.cartMini'+item.ID()).attr('style', 'width: 40px; float: right;  margin-top: 8px;');
+						$('a.cartMini'+item.ID()).html('<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+						$('a.cartMini'+item.ID()).attr('style', '');
 						
 						
 						

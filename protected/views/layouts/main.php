@@ -99,7 +99,7 @@ if (isset($_GET['avail'])) {
     <script src="libs/respond/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="/js/magnific-popup.js"></script>
-
+    <script type="text/javascript"> var typeDeliveryPereodic = 0; </script>
 </head>
 
 <body>
@@ -420,7 +420,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                         <div class="ico-circle"><span class="icons"><span class="fa location"></span></span><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="ico-circle"><span class="icons"><span class="fa phone"></span></span><a href="tel:+35892727070">+358 9 2727070</a></div>
-                        <div class="ico-circle"><span class="icons"><span class="fa email"></span></span>generalsupports@ruslania.com</div>
+                        <div class="ico-circle"><span class="icons"><span class="fa email"></span></span><a href="mailto:info@ruslania.com">info@ruslania.com</a></div>
                         <?php /*
                         <div class="maps_ico"><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="phone_ico"><a href="tel:+35892727070">+358 9 2727070</a></div>
@@ -733,6 +733,15 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
             success: function (data) {
                 var d = JSON.parse(data);
                 $.getJSON('<?=Yii::app()->createUrl('cart/getall') ?>', {is_MiniCart: 1}, function (json) {
+                    typeDeliveryPereodic = 0;
+                    if ('CartItems' in json) {
+                        for (var i in json['CartItems']) {
+                            if (json['CartItems'][i]['Entity'] == <?= Entity::PERIODIC ?>) {
+                                typeDeliveryPereodic = json['CartItems'][i]['Price2Use'];
+                                break;
+                            }
+                        }
+                    }
                     ko.mapping.fromJS(json, {}, cvm_1);
                     cvm_1.FirstLoad(false);
                 });
@@ -809,17 +818,18 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
         var $formIid = $formDiv.find('input[name="iid"]');
         var $formQty = $formDiv.find('input[name="qty"]');
 
-
         $finSubButton.click(function ()
         {
             $.magnificPopup.close();
             add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 1, $finSubButton.data());
+            typeDeliveryPereodic = 1;
         });
 
         $worldSubButton.click(function ()
         {
             $.magnificPopup.close();
             add2Cart('add', $formEid.val(), $formIid.val(), $formQty.val(), 2, $worldSubButton.data());
+            typeDeliveryPereodic = 2;
         });
 
         $(elems).click(function () {
@@ -831,7 +841,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             var entity = $el.attr('data-entity');
 
-            if (entity == <?= Entity::PERIODIC; ?> && $el.attr('data-action') != 'mark ') {
+            if ((typeDeliveryPereodic == 0)&&(entity == <?= Entity::PERIODIC; ?>) && ($el.attr('data-action') != 'mark ')) {
                 var $finPrice = $('#finPrice');
                 var $worldPrice = $('#worldPrice');
 
@@ -868,11 +878,13 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                 }
             }
 
+            var typeDelivery = null;
+            if (entity == <?= Entity::PERIODIC; ?>) typeDelivery = typeDeliveryPereodic;
             add2Cart($el.attr('data-action'),
                 $el.attr('data-entity'),
                 $el.attr('data-id'),
                 $el.attr('data-quantity'),
-                null,
+                typeDelivery,
                 $el
             );
 
