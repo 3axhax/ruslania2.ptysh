@@ -69,7 +69,10 @@ class PaymentController extends MyController
         $order = $o->GetOrder($oid);
         if(empty($order)) throw new CHttpException(404);
 
-        if($order['uid'] != $this->uid) throw new CException('Wrong order id');
+        if($order['uid'] != $this->uid) {
+            throw new CHttpException(404);
+            throw new CException('Wrong order id');
+        }
 
         $newOid = null;
         if($tid == Payment::Luottokunta && isset($_GET['LKPRC']) && $_GET['LKPRC'] == 300)

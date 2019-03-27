@@ -165,7 +165,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 success: function(r) {
                     switch (parseInt(fd['ptype'])) {
                         case 8: self.paypal(r.form); break;
-                        case 25: self.paytrail(r.form); break;
+                        //case 25: self.paytrail(r.form); break;
                         case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
                         default: document.location.href = r.url; break;
                     }
@@ -831,7 +831,12 @@ Stripe.applePay.checkAvailability(function(available) {
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
-            if (this.takeInStore&&this.takeInStore.checked) fd['dtype'] = 0;
+            if (this.takeInStore) {
+                if (this.takeInStore.checked) fd['dtype'] = 0;
+            }
+            else if (this.delivery_address) {
+                if (this.delivery_address.value == '0') fd['dtype'] = 0;
+            }
             if (this.activeSmartpost && (fd['dtype'] == '3')) fd['pickpoint_address'] = $('#pickpoint_address').val();
             fd[this.csrf[0]] = this.csrf[1];
             if (errors.length) {
@@ -862,7 +867,7 @@ Stripe.applePay.checkAvailability(function(available) {
                         else {
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
-                                case 25: self.paytrail(r.form); break;
+                                //case 25: self.paytrail(r.form); break;
                                 case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
                                 default: document.location.href = r.url; break;
                             }

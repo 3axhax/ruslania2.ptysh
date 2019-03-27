@@ -9,6 +9,9 @@
 		endswitch;
 		?></h1>
 	<div class="row">
+			<?php if ((int)$order['payment_type_id'] === 25): ?>
+				<?php $this->widget('PayTrailWidget', array('order' => $order)); ?>
+			<?php else: ?>
 		<div class="span8">
 			<?php $this->renderPartial('/client/_one_order', array('order' => $order, 'onlyContent' => 1, 'class' => 'bordered', 'enableSlide' => 1)); ?>
 			<script type="text/javascript">
@@ -87,6 +90,7 @@
 				</div>
 			</div>
 		</div>
+			<?php endif; ?>
 		<div style="height: 20px;"></div>
 	</div>
 </div>

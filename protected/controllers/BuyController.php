@@ -308,7 +308,7 @@ class BuyController extends MyController {
 		$ret = array();
 		switch ((int)$ptype) {
 			case 8: $ret['form'] = $this->widget('PayPalPayment', array('order' => $orderBaseData, 'tpl'=>'paypal_without_button'), true); break;
-			case 25: $ret['form'] = $this->widget('PayTrailWidget', array('order' => $orderBaseData, 'tpl'=>'paytrail_without_button'), true); break;
+//			case 25: $ret['form'] = $this->widget('PayTrailWidget', array('order' => $orderBaseData, 'tpl'=>'paytrail_without_button'), true); break;
 			case 27:
 				$ret['idOrder'] = $orderBaseData['id'];
 				$ret['urls'] = array(
