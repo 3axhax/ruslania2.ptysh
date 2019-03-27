@@ -1278,7 +1278,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'PROMOCODE_ERROR_3' => 'Promocode outdated',
   'MSG_ORDER_FROM_SUMM' => 'when order over %s',
   'MSG_FAIL_PAY' => '<p>If the payment didn\'t go through or if you don\'t seem to find an appropriate payment method, or in any other arising matters please call us at +358 9 27270737 or send e-mail to periodicals@ruslania.com.</p>',
-  'PRESALE_MSG' => 'In pre-release sale. Pre-orderers will be the first ones to receive the freshly released title: approximate time of release',
+  'PRESALE_MSG' => 'In pre-release sale. Pre-orderers will be the first ones to receive the freshly released title. Approximate time of release',
   'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'Delete from Interesting items list',
   'MSG_DELIVERY_TYPE_0' => 'Pick up at the store',
   'DELETED_FROM_MARK' => 'Item deleted from Interesting items list',

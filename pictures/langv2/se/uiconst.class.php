@@ -1271,7 +1271,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   'PROMOCODE_ERROR_3' => 'Promokoden har löpt ut',
   'MSG_ORDER_FROM_SUMM' => 'när du beställer från %s',
   'MSG_FAIL_PAY' => '<p> Om betalningen fungerade inte, eller om du inte verkar hitta en lämplig betalningsmetod, eller i något annat uppkommande fall, ring oss på +358 9 27270737 eller skicka e-post till periodicals@ruslania.com. </ p>',
-  'PRESALE_MSG' => 'Produkten kan förhandsbeställas och skickas genast när den utkommer. Uppskattat utgivningsdatum:',
+  'PRESALE_MSG' => 'Produkten kan förhandsbeställas och skickas genast när den utkommer. Uppskattat utgivningsdatum',
   'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'Ta bort från listan av Intressanta artiklar',
   'MSG_DELIVERY_TYPE_0' => 'Hämta i butiken',
   'DELETED_FROM_MARK' => 'Borttagit från listan av Intressanta artiklar',

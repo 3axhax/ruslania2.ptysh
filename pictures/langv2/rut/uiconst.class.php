@@ -1271,7 +1271,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'PROMOCODE_ERROR_3' => 'zakonchilsya srok dejstviya promokoda',
   'MSG_ORDER_FROM_SUMM' => 'pri zakaze ot %s',
   'MSG_FAIL_PAY' => '<p>esli u vas ne proshla oplata ili vam neudoben ehtot variant oplaty svyazhites s nami po telefonu 09 27270737, (+358) 927270737 ili po e-mail: periodicals@ruslania.com.</p>',
-  'PRESALE_MSG' => 'v predvaritelnoj prodazhe. predvaritelnye zakazchiki budut pervymi, kto poluchit novuyu knigu: vremya vykhoda',
+  'PRESALE_MSG' => 'v predvaritelnoj prodazhe. predvaritelnye zakazchiki budut pervymi, kto poluchit novuyu knigu. Vremya vykhoda',
   'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'ubrat iz zametok',
   'MSG_DELIVERY_TYPE_0' => 'zabrat v magazine',
   'DELETED_FROM_MARK' => 'tovar ubran iz vashikh zametok',
