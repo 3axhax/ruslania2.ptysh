@@ -259,7 +259,14 @@ class BuyController extends MyController {
 			'name'=>Yii::app()->ui->item('CARTNEW_CONTINUE_SHOPPING'),
 		);
 		$order = $o->GetOrder($id);
-		$this->render('order_ok', array('order' => $order));
+		
+		if ($order['payment_type_id'] == 25) {
+			
+			$this->renderPartial('order_ok', array('order' => $order));
+			
+		} else { $this->render('order_ok', array('order' => $order)); }
+		
+		
 	}
 
 	function actionGetCountry() {
