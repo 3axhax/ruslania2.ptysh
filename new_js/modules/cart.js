@@ -743,6 +743,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 type: 'post',
                 dataType : 'json',
                 success: function (r) {
+                    console.log(r);
                     //items_cost - цена товаров
                     //js_item_{eid}_{id} - строка с товаром
                     //item_cost - цена товара
@@ -753,7 +754,13 @@ Stripe.applePay.checkAvailability(function(available) {
                     $('.delivery_cost').html(r.deliveryPrice + ' ' + r.currency);
                     $('.delivery_name').html(r.deliveryName);
                     for (itemId in r.pricesValues) {
-                        $('.js_' + itemId).find('.item_cost').html(r.pricesValues[itemId] + ' ' + r.currency);
+                        var $itemStr = $('.js_' + itemId);
+                        $itemStr.find('.item_cost').html(r.pricesValues[itemId] + ' ' + r.currency);
+                        if (itemId in r.discountKeys) {
+                            var quantity = parseInt(r.discountKeys[itemId]['quantity']);
+                            if (quantity > 1)
+                                $itemStr.find('.item_cost_itogo').html(Math.floor(r.pricesValues[itemId]*quantity*100)/100 + ' ' + r.currency);
+                        }
                     }
 
                     self.$inputPromocode.closest('div').siblings().remove();
