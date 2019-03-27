@@ -4,7 +4,7 @@
 	'id' => 'send_call',
 ));
 ?>
-<span class="close fa"></span>
+<span class="close fa">×</span>
 <h2><?= Yii::app()->ui->item('SEND_CALL_HEADER') ?></h2>
 <div class="title"><?= Yii::app()->ui->item('regform_firstname') ?></div>
 <div>
@@ -22,7 +22,10 @@
 <div class="clearBoth"></div>
 <div class="confirm">
 	<label>
-		<input type="checkbox" value="1" name="Send_calls[confirm]">
+		<input type="checkbox" value="1" name="Send_calls[confirm]" class="checkbox_custom">
+		
+		<span class="checkbox-custom"></span>
+		
 		<?= $ui->item('CHECKBOX_TERMS_OF_USE') ?>
 	</label>
 	<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_ERROR_AGREE_CONDITION') ?></span>
@@ -34,3 +37,12 @@
 	</a>
 </div>
 <?php $this->endWidget(); ?>
+
+
+<script>
+
+function send_forma() {
+	
+}
+
+</script>

@@ -3737,10 +3737,10 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .download.excel span.fa::after { content: '\f1c3'; }
 .button_view.list span.fa::after { content: '\f03a'; }
 
-.button_call span.fa::before { color: #fff; font-size: 27px; position: relative; content: '\f095'; top: 13px; }
-.button_call span { background-color: #ed1d24; font-size: 18px; padding: 23px 25px;}
-.button_call span.fa { background-color: #D50B12; width: 24px; height: 49px; padding: 8px 12px; }
-.button_call span.fa::after { content: '\f112'; transform: rotate(31deg); position: relative; left: -11px; top: 0; font-size: 11px; }
+.button_call span.fa::before { color: #fff; font-size: 14px; position: relative; content: '\f095'; top: 8px;  }
+.button_call span { background-color: #ed1d24; font-size: 14px; padding: 11px 13px;}
+.button_call span.fa { background-color: #D50B12; width: 24px; height: 26px; padding: 8px 12px; }
+.button_call span.fa::after { content: '\f112'; transform: rotate(31deg); position: relative; left: -5px; top: 2px; font-size: 7px;}
 
 .sale_info_block {
     width: 820px;
@@ -3831,12 +3831,12 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     z-index: 28;
     display: none;
     top: 70px;
-    padding: 50px 60px 20px;
+    padding: 17px 44px 17px;
     width: 533px;
 }
 .send_call_form h2 {
     color: #1257ab;
-    font-size: 30px;
+    font-size: 21px;
     letter-spacing: 1.3px;
     font-weight: 900;
     margin-bottom: 18px;
@@ -3852,9 +3852,10 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 }
 .send_call_form input[type=text] {
     width: 494px;
-    height: 55px;
+    height: 40px;
     padding-left: 27px;
-    font-size: 23px;
+    font-size: 19px;
+	border: 1px solid #ECECEC;
 }
 
 .send_call_form .code {
@@ -3862,12 +3863,46 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     float: left;
     margin-right: 20px;
 }
-.send_call_form .code input[type=text] { width: 104px; }
-.send_call_form .phone input[type=text] { width: 334px; }
-.send_call_form .confirm { padding: 5px 0 0 50px; }
+.send_call_form .code input[type=text] { width: 104px; border: 1px solid #ECECEC; }
+.send_call_form .phone input[type=text] { width: 334px; border: 1px solid #ECECEC; }
+.send_call_form .confirm { padding: 5px 0 0 0; }
 .send_call_form .confirm label {color: #6a6a6a; font-size: 14px;}
 .send_call_form .confirm label input[type=checkbox] { display: none; }
-.send_call_form .confirm label a {font-size: 14px;}
+.send_call_form .confirm label a {font-size: 14px; display: inline; }
 .send_call_form .button {margin-top: 30px; cursor: pointer;}
-.send_call_form .close { position: absolute; top: 10px; right: 30px }
-.send_call_form .close.fa:before { color: #6a6a6a; font-size: 40px; position: relative; content: '\f00d'; top: 13px; }
+.send_call_form .close { position: absolute; top: 10px; right: 30px; font-size: 51px; color: #000; opacity: 0.2;}
+/*.send_call_form .close.fa:before { color: #6a6a6a; font-size: 40px; position: relative; content: '\f00d'; top: 13px; }*/
+
+input::-moz-placeholder { color: #EBEBEB; }
+input::-webkit-input-placeholder { color: #EBEBEB; }
+.checkbox-custom {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -3px;
+}
+.checkbox-custom {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.checkbox_custom:checked + .checkbox-custom::before {
+    content: "";
+    position: absolute;
+
+    top: 3px;
+    right: 3px;
+    bottom: 3px;
+    left: 3px;
+    border-radius: 2px;
+
+    background: #ed1d24;
+    width: 9px;
+    height: 9px;
+    display: inline-block;
+    font-size: 0;
+
+}
