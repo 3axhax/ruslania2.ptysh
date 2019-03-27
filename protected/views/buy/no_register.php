@@ -71,7 +71,7 @@ $addrModel = new Address();
 						<?php if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif; ?>
 					</div>
 
-					<div class="cart_footer"><a class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></a></div>
+					<div class="cart_footer"><div class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></div></div>
 					<div class="cart_footer">
 						<?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
 					</div>

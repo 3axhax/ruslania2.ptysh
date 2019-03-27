@@ -184,6 +184,7 @@ class BuyController extends MyController {
 		$ret = array();
 		if (Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
+//			if (isset($_GET['ha'])) $ret['errors'][] = 'errors';
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
 				$cart = Cart::model();
@@ -475,7 +476,7 @@ class BuyController extends MyController {
 	}
 
 	private function _requireFieldsAddress($items, $formName) {
-		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'city', 'postindex', 'streetaddress', 'contact_phone');
+		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'state_id', 'city', 'postindex', 'streetaddress', 'contact_phone');
 		if (!empty($items)) $requireFields[] = 'contact_email';
 		$requireReg = array_flip($requireFields);
 		$regFields = (array) Yii::app()->getRequest()->getParam($formName);

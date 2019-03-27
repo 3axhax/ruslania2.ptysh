@@ -1267,7 +1267,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'PROMOCODE_ERROR_3' => 'Promokoodi ei ole voimassa',
   'MSG_ORDER_FROM_SUMM' => 'kun tilaus ylittää %s',
   'MSG_FAIL_PAY' => '<p>Jos maksu ei mennyt läpi tai maksutavoista ei löydy sopivaa, ota yhteyttä puhelimitse 09 27270737, (+358) 9 27270737 tai sähköpostilla periodicals@ruslania.com</p>',
-  'PRESALE_MSG' => 'Ennakkomyynnissä. Ennakkotilaajille lähetetään ensimmäisinä tuote heti, kun se ilmestyy. Arvioitu ilmestymisaika:',
+  'PRESALE_MSG' => 'Ennakkomyynnissä. Ennakkotilaajille lähetetään ensimmäisinä tuote heti, kun se ilmestyy. Arvioitu ilmestymisaika',
   'BTN_SHOPCART_DELETE_SUSPEND_ALT' => 'Poista kiinnostavista tuotteista',
   'MSG_DELIVERY_TYPE_0' => 'Nouto myymälästä',
   'DELETED_FROM_MARK' => 'Tuote poistettu kiinnostavista tuotteista',
