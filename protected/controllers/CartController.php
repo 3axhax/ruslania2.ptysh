@@ -241,7 +241,6 @@ class CartController extends MyController {
             $id_country = Yii::app()->getRequest()->getParam('id_country');
             $res = Country::GetCountryById($id_country);
             $r = $delivery->GetRates2($id_country, $this->uid, $this->sid);
-            Debug::staticRun(array($r));
             $this->renderPartial('delivery2', array('items' => $r));
         }
     }
@@ -329,6 +328,20 @@ class CartController extends MyController {
             $data['isEnded'] = true;
             $data['EndedItems'] = new IteratorsCart($data['EndedItems']);
         }
+
+        $hrefContinueShopping = getenv('HTTP_REFERER');
+        if (empty($hrefContinueShopping)) $hrefContinueShopping = Yii::app()->createUrl('site/index');
+        else {
+            $request = new MyRefererRequest();
+            $request->setFreePath($hrefContinueShopping);
+
+            $routeReferer = Yii::app()->getUrlManager()->parseUrl($request);
+            $routeReferer = explode('/', $routeReferer);
+            if (in_array($routeReferer[0], array('cart', 'buy', 'payments')))
+                $hrefContinueShopping = Yii::app()->createUrl('site/index');
+        }
+        $data['hrefContinueShopping'] = $hrefContinueShopping;
+
         $this->render('view', $data);
     }
     public function actionDoOrderJSON() {
@@ -1242,7 +1255,11 @@ class CartController extends MyController {
         } else {
             $cart = new Cart;
             $alreadyInCart = $cart->AddToCart($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorld);
-            $message = $entity == Entity::PERIODIC ? Yii::app()->ui->item('ADDED_TO_CART') : sprintf(Yii::app()->ui->item('ADDED_TO_CART_ALREADY'), $alreadyInCart);
+
+            $message = $entity == Entity::PERIODIC
+                ? Yii::app()->ui->item('ADDED_TO_CART', Yii::app()->createUrl('cart/view'))
+                : sprintf(Yii::app()->ui->item('ADDED_TO_CART_ALREADY'), Yii::app()->createUrl('cart/view'), $alreadyInCart);
+
             $already = $entity == Entity::PERIODIC ? Yii::app()->ui->item('PERIODIC_ALREADY_IN_CART') : sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $alreadyInCart);
 			
 			if ($_POST['hidecount'] == '1') {

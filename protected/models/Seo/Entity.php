@@ -90,10 +90,10 @@ class ModelsSeoEntity extends Seo_settings {
 			}
 		}
 		elseif (empty($this->_cid)) {
-			if (mb_strpos($this->_settings['h1'], '{entity_name}') === false) $this->_settings['h1'] = str_replace('{name}', '{entity_name},', $this->_settings['h1']);
-			if (mb_strpos($this->_settings['title'], '{entity_name}') === false) $this->_settings['title'] = str_replace('{name}', '{entity_name},', $this->_settings['title']);
-			if (mb_strpos($this->_settings['description'], '{entity_name}') === false) $this->_settings['description'] = str_replace('{name}', '{entity_name},', $this->_settings['description']);
-			if (mb_strpos($this->_settings['keywords'], '{entity_name}') === false) $this->_settings['keywords'] = str_replace('{name}', '{entity_name},', $this->_settings['keywords']);
+			/*if (mb_strpos($this->_settings['h1'], '{entity_name}') === false)*/ $this->_settings['h1'] = str_replace('{name}', '{entity_name},', $this->_settings['h1']);
+			/*if (mb_strpos($this->_settings['title'], '{entity_name}') === false)*/ $this->_settings['title'] = str_replace('{name}', '{entity_name},', $this->_settings['title']);
+			/*if (mb_strpos($this->_settings['description'], '{entity_name}') === false)*/ $this->_settings['description'] = str_replace('{name}', '{entity_name},', $this->_settings['description']);
+			/*if (mb_strpos($this->_settings['keywords'], '{entity_name}') === false)*/ $this->_settings['keywords'] = str_replace('{name}', '{entity_name},', $this->_settings['keywords']);
 		}
 		else {
 			$category = new Category();

@@ -1,5 +1,8 @@
 <?php
 /*Created by Кирилл (24.02.2019 10:15)*/
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
 class BuyController extends MyController {
 	public $layout = 'without_menu';
 	private $_returnButton = array();
@@ -95,7 +98,7 @@ class BuyController extends MyController {
 			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
 			$ret['deliveryName'] = Delivery::ToString($dtype);
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
-				$ret['deliveryName'] = Delivery::ToString(0);
+				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);
 			}
 			$promocode = (string) Yii::app()->getRequest()->getParam('promocode');
 			if ($promocode === '') {
@@ -274,7 +277,7 @@ class BuyController extends MyController {
 		$ret = array();
 		if (Yii::app()->request->isPostRequest) {
 			$country = Country::model()->findByPk(Yii::app()->getRequest()->getParam('id_country'));
-			$ret = $country->getAttributes();
+			if (!empty($country)) $ret = $country->getAttributes();
 		}
 		$this->ResponseJson($ret);
 	}

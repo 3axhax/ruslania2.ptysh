@@ -43,7 +43,7 @@ $ctrl = Yii::app()->getController()->id;
 
                     <?php if (Yii::app()->user->isGuest) { ?>
 
-                        <a href="<?= Yii::app()->createUrl('/cart/variants')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                        <a href="<?= Yii::app()->createUrl('cart/variants')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                             <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                         </a>
 
@@ -51,7 +51,7 @@ $ctrl = Yii::app()->getController()->id;
 
                     } else {
                         ?>
-                        <a href="<?= Yii::app()->createUrl('/cart/doorder')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                        <a href="<?= Yii::app()->createUrl('cart/doorder')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                             <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                         </a>
                         <?
@@ -206,7 +206,7 @@ $ctrl = Yii::app()->getController()->id;
 						
 							<? 
 				
-				$url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
+				/*$url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
 				
 				$arr_cart_url = array('variants', 'noregister', 'doorder');
 				
@@ -214,16 +214,16 @@ $ctrl = Yii::app()->getController()->id;
 					
 					$_SERVER['HTTP_REFERER'] = '/';
 					
-				}
-				
+				}*/
+
 				?>
 						
-                            <td style="padding-left: 0;"> <a href="<?=$_SERVER['HTTP_REFERER']?>" style="float: left; color: #ff0000; font-size: 14px;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
+                            <td style="padding-left: 0;"> <a href="<?= $hrefContinueShopping ?>" style="float: left; color: #ff0000; font-size: 14px;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
                             <td colspan="7" class="order_start_box" class="cart1header2" align="right">
 
                                 <?php if (Yii::app()->user->isGuest) { ?>
 
-                                    <a href="<?= Yii::app()->createUrl('/cart/variants')?>" class="order_start" style="background-color: #5bb75b;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                    <a href="<?= Yii::app()->createUrl('cart/variants')?>" class="order_start" style="background-color: #5bb75b;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                         <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                                     </a>
 
@@ -231,7 +231,7 @@ $ctrl = Yii::app()->getController()->id;
 
                                 } else {
                                     ?>
-                                    <a href="<?= Yii::app()->createUrl('/cart/doorder')?>" class="order_start" style="background-color: #5bb75b; " data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                    <a href="<?= Yii::app()->createUrl('cart/doorder')?>" class="order_start" style="background-color: #5bb75b; " data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
                                         <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
                                     </a>
                                     <?
@@ -335,6 +335,9 @@ $ctrl = Yii::app()->getController()->id;
 		if ($product['isbn']) {
 			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';
 		}
+    else {
+    echo '<div style="visibility: hidden;">ISBN:</div>';
+    }
 		
 		if ($product['year']) {
 			

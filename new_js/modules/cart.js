@@ -50,7 +50,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 switch (el.value) {
                     case '0':
                         if (self.dtype > 0) $(el).attr("disabled", "disabled").closest('.variant').hide();
-                        else if (el.value == '0') {
+                        else if (self.ptype == '0') {
                             el.checked = true;
                             $orderPay.hide();
                             $orderSave.show();
@@ -58,9 +58,9 @@ Stripe.applePay.checkAvailability(function(available) {
                         }
                         break;
                     default:
-                        if (parseInt(el.value) == this.ptype) {
+                        if (parseInt(el.value) == self.ptype) {
                             el.checked = true;
-                            if ((this.ptype == 13)||(this.ptype == 14)||(this.ptype == 7)) {
+                            if ((self.ptype == 13)||(self.ptype == 14)||(self.ptype == 7)) {
                                 $orderPay.hide();
                                 $orderSave.show();
                                 $paymentDesc.hide();
@@ -68,7 +68,7 @@ Stripe.applePay.checkAvailability(function(available) {
                             else {
                                 $orderSave.hide();
                                 $orderPay.show();
-                                if (this.ptype == 25) $paymentDesc.show();
+                                if (self.ptype == 25) $paymentDesc.show();
                                 else $paymentDesc.hide();
                             }
                         }
@@ -189,6 +189,7 @@ Stripe.applePay.checkAvailability(function(available) {
             if ('userData' in options) {
                 this.setValues(options['userData']);
             }
+            this.fillByUrl();
             this.setConst(options);
             this.setEvents();
             if ((this.$paymentsData.find('input[name=ptype]:checked').val() == '25')&&this.confirm.checked) $('.paytail_payment').show();
@@ -244,6 +245,10 @@ Stripe.applePay.checkAvailability(function(available) {
             this.$inputPromocode = $promocodeBlock.find('input[type=text]');
             this.$submitPromocode = $promocodeBlock.find('input[type=button]');
             this.notesHeight();
+            if (!this.delivery_address&&(parseInt(this.country.value) > 0)) {
+                this.blockPay();
+                this.changeCountry();
+            }
         },
         setEvents: function() {
             var self = this;
@@ -375,6 +380,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     }
                 });
             });
+            this.changeLangOrCurrency();
         },
 
         fillPhoneCode: function(t) {
@@ -743,7 +749,6 @@ Stripe.applePay.checkAvailability(function(available) {
                 type: 'post',
                 dataType : 'json',
                 success: function (r) {
-                    console.log(r);
                     //items_cost - цена товаров
                     //js_item_{eid}_{id} - строка с товаром
                     //item_cost - цена товара
@@ -967,6 +972,81 @@ Stripe.applePay.checkAvailability(function(available) {
             var notes = document.getElementById('Notes');
             var $notes = $(notes);
             $notes.css({height: $notes.closest('div.span6').siblings('div.span6').outerHeight(true)});
+        },
+
+        fillByUrl: function() {
+            var urlData = window.location.search.replace('?','').split('&').reduce(
+                function(p,e){
+                    var a = e.split('=');
+                    p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+                    return p;
+                },
+                {}
+            );
+            $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
+                switch (f.type) {
+                    case 'radio':
+                        if ((f.name in urlData)&&(f.value == urlData[f.name])) f.checked = true;
+                        break;
+                    case 'checkbox':
+                        if (f.name in urlData) f.checked = true;
+                        break;
+                    case 'hidden': break;
+                    default:
+                        if (f.name in urlData) {
+                            switch (f.tagName) {
+                                case 'SELECT':
+                                    $(f).find('option[value=' + urlData[f.name] + ']').attr("selected", "selected");
+                                    break;
+                                case 'TEXTAREA':
+                                    f.innerHTML = urlData[f.name];
+                                    break;
+                                default:
+                                    f.value = urlData[f.name];
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            });
+        },
+
+        changeLangOrCurrency: function() {
+            var self = this;
+            var getFormData = function() {
+                var fd = {};
+                $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
+                    switch (f.type) {
+                        case 'radio':case 'checkbox':
+                        if (f.checked) fd[f.name] = f.value;
+                        break;
+                        case 'hidden': break;
+                        default: fd[f.name] = f.value; break;
+                    }
+                });
+                return fd;
+            };
+            $('.dd_select_valut').find('div.label_valut a').each(function(i, el){
+                $(el).on('click', function() {
+                    var valute = 0;
+                    this.search.replace('?','').split('&').reduce(
+                        function(p,e){
+                            var a = e.split('=');
+                            if (a[0] == 'currency') valute = a[1];
+                        },
+                        {}
+                    );
+                    var fd = getFormData();
+                    fd['currency'] = valute;
+                    this.setAttribute('href', this.pathname + '?' + $.param(fd));
+                });
+            });
+            $('.dd_select_lang').find('span.lang a').each(function(i, el){
+                $(el).on('click', function() {
+                    var fd = getFormData();
+                    this.setAttribute('href', this.pathname + '?' + $.param(fd));
+                });
+            });
         }
 
     };

@@ -219,7 +219,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                 <?
 
-                $httpReferer = getenv('HTTP_REFERER');
+/*                $httpReferer = getenv('HTTP_REFERER');
 				$ref = explode('?',$httpReferer);
                 $ref = explode('/', trim($ref[0], '/'));
                 $url_ref = end($ref);
@@ -232,11 +232,23 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     $httpReferer = '/';
 
+                }*/
+                $hrefContinueShopping = getenv('HTTP_REFERER');
+                if (empty($hrefContinueShopping)) $hrefContinueShopping = Yii::app()->createUrl('site/index');
+                else {
+                    $request = new MyRefererRequest();
+                    $request->setFreePath($hrefContinueShopping);
+
+                    $routeReferer = Yii::app()->getUrlManager()->parseUrl($request);
+                    $routeReferer = explode('/', $routeReferer);
+                    Debug::staticRun(array($hrefContinueShopping, $routeReferer));
+                    if (in_array($routeReferer[0], array('cart', 'buy', 'payments')))
+                        $hrefContinueShopping = Yii::app()->createUrl('site/index');
                 }
 
                 ?>
 
-                <a href="<?= $httpReferer ?>" style="float: right; margin-top: 50px; color: #ff0000;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
+                <a href="<?= $hrefContinueShopping ?>" style="float: right; margin-top: 50px; color: #ff0000;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
 
             <? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
 
