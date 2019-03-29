@@ -237,7 +237,9 @@ Stripe.applePay.checkAvailability(function(available) {
             this.urlSubmit = options.urlSubmit;
 
             if (this.delivery_address) {
-                if (this.delivery_address.value == '0') $('.delivery_people').show();
+                if (this.delivery_address.value == '0') {
+                    //$('.delivery_people').show();
+                }
                 else this.changeCountry();
             }
 
@@ -281,12 +283,12 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.blockPay();
                 self.paymentsForm();
                 if (this.value == "0") {
-                    $('.delivery_people').show();
+                    //$('.delivery_people').show();
                     self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
                     $('.js_orderPay').hide();
                     $('.js_orderSave').show();
                 }
-                else $('.delivery_people').hide();
+                //else $('.delivery_people').hide();
                 self.changeCountry();
             });
 

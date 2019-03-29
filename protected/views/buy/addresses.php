@@ -11,5 +11,5 @@ foreach ($addrList as $addr):
 </select>
 <span class="address_add">+</span>
 <span class="texterror" style="display: none;"><?= $ui->item(($fieldName == 'delivery_address_id')?'CARTNEW_ERROR_SELECT_ADDR_DELIVERY':'CARTNEW_ERROR_SELECT_ADDR_BUYER') ?></span>
-<?php if ($fieldName == 'delivery_address_id'): ?><div style="display: none;" class="delivery_people"><?= $ui->item('DELIVERY_PEOPLE') ?></div><?php endif; ?>
+<?php /*if ($fieldName == 'delivery_address_id'): ?><div style="display: none;" class="delivery_people"><?= $ui->item('DELIVERY_PEOPLE') ?></div><?php endif; */?>
 
