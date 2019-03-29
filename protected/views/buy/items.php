@@ -13,7 +13,7 @@ if (empty($countItems)) $countItems = null;
 </div>
 <?php endif; ?>
 <div class="cart_box">
-	<table class="cart" style="width: 100%;">
+	<table class="cart rows_number" style="width: 100%;">
 		<tbody>
 		<?php foreach ($items as $id => $item):
 			$itemsPrice = 0;
@@ -21,8 +21,8 @@ if (empty($countItems)) $countItems = null;
 			elseif (!empty($item['items_price'])) $itemsPrice = $item['items_price'];
 			?>
 			<tr class="js_<?= $item['entity'] ?>_<?= $item['id'] ?>">
-				<td style="width: 35px; height: 35px;">
-					<span class="entity_icons"><i class="fa e<?= $item['entity'] ?>"></i></span>
+				<td style="padding-left: 25px;" class="index_number">
+					<span class="entity_icons" style="display: block;margin-left: 10px;"><i class="fa e<?= $item['entity'] ?>"></i></span>
 				</td>
 				<td>
 					<?php if ($item['InCartUnitWeight'] == 0): ?>

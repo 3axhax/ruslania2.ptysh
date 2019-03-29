@@ -63,12 +63,11 @@ $ctrl = Yii::app()->getController()->id;
 
                     
                     
-                    <table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1 items_tbl"
+                    <table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1 items_tbl rows_number"
                            style="margin-bottom: 10px; margin-top: 15px;">
                         <thead>
                         <tr>
-                            <th valign="middle"
-                                class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
+                            <th valign="middle" class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
 								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('CARTNEW_TITLE_TABLE_AVAILABILITY')?><?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
@@ -89,17 +88,11 @@ $ctrl = Yii::app()->getController()->id;
 						
 						?>
                         <tr<?php if (!empty($i)): ?> class="js_ko_not"<?php endif; ?>>
-                            <td valign="middle" class="cart1contents1">
+                            <td valign="middle" class="cart1contents1 index_number">
                                 <table>
 								<tr>
 								<td>
                                     <span class="entity_icons"><i class="fa e<?= $cart['Entity'] ?>" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
-<?php /*
-								<img width="31" height="31" align="middle"
-                                     alt="<?= htmlspecialchars($cart['Title']) ?>" style="vertical-align: middle"
-                                     data-bind="attr: { alt: Title}"
-                                     src="/pic1/cart_ibook.gif">
-*/ ?>
 								</td>
 								<td style="padding-left: 20px;">
                                     <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
@@ -115,17 +108,6 @@ $ctrl = Yii::app()->getController()->id;
 							 <td valign="middle" align="center" class="cart1contents1">
                 <span data-bind="text: AvailablityText"><?= htmlspecialchars($cart['AvailablityText']) ?></span>
             </td>
-                           <!-- <td valign="middle" nowrap="true" align="center" class="cart1contents1 center">
-                                <span data-bind="text: $root.ReadyPriceStr($data), visible: DiscountPercent() == 0"><?= ((float)$cart['DiscountPercent']>0)?'':$cart['ReadyPriceStr'] ?></span>
-                                <div data-bind="visible: DiscountPercent() > 0">
-                                    <s data-bind="text: PriceOriginal"><?= ((float)$cart['DiscountPercent']>0)?$cart['PriceOriginal']:'' ?></s><br/>
-                                    <span data-bind="text: $root.ReadyPriceStr($data)"><?= ((float)$cart['DiscountPercent']>0)?$cart['ReadyPriceStr']:'' ?></span>
-                                </div>
-
-                            </td>-->
-<!--                            <td align="center" class="center cart1contents1">-->
-<!--                                <span data-bind="text: VAT"></span>%-->
-<!--                            </td>-->
                             <td valign="middle" align="center" class="cart1contents1 minus_plus" nowrap>
                                <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"/> */?></a>
                                 <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
@@ -138,12 +120,6 @@ $ctrl = Yii::app()->getController()->id;
                                 <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
                                 <?=Currency::ToSign(Yii::app()->currency); ?>
                             </td>
-							
-							
-							
-                           <!-- <td valign="middle" align="center" class="cart1contents1">
-                                <a href="javascript:;" data-bind="click: $root.ToMark"><img src="/new_img/add_mark.png" /></a>
-                            </td> -->
                             <td valign="middle" align="center" class="cart1contents1">
                                 <a href="javascript:;" onclick="$('.alerthtml',$(this).parent()).show(); $('.opacity.alerthtml').show();"><img src="/new_img/del_cart.png" /></a>
 								
