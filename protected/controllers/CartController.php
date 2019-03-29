@@ -540,12 +540,13 @@ class CartController extends MyController {
         echo json_encode($input);
     }
     function actionOrderPay() {
-		
-		
+
+
 		
 		
         $id = (int) Yii::app()->getRequest()->getParam('id');
-		
+        $this->redirect(Yii::app()->createUrl('buy/repay') . '?oid=' . $id);
+
 		$o = new Order;
 		$order = $o->isMyOrder($this->uid,$id);
         if(!$order) throw new CHttpException(404);

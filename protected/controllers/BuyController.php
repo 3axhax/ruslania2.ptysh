@@ -95,7 +95,7 @@ class BuyController extends MyController {
 			}
 			$cart = new Cart();
 			$items = $cart->GetCart($this->uid, $this->sid);
-			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype);
+			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice(0, $this->sid, $items, $da, $dMode, $dtype);
 			$ret['deliveryName'] = Delivery::ToString($dtype);
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
 				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);
@@ -155,7 +155,7 @@ class BuyController extends MyController {
 
 	function actionNewAddr() {
 		$ret = array('errors'=>array());
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
 			$formName = (string) Yii::app()->getRequest()->getParam('alias');
 			$requireFields = $this->_requireFieldsAddress(array(), $formName);
 			if (!empty($requireFields)) {
@@ -300,6 +300,21 @@ class BuyController extends MyController {
 			}
 		}
 		$this->ResponseJson($ret);
+	}
+
+	function actionRepay() {
+		$o = new Order;
+		$order = $o->GetOrder((int) Yii::app()->getRequest()->getParam('oid'));
+		Debug::staticRun(array($order));
+		if(empty($order)) throw new CHttpException(404);
+
+		if($order['uid'] != $this->uid) {
+			throw new CHttpException(404);
+			throw new CException('Wrong order id');
+		}
+
+		$this->breadcrumbs[] = Yii::app()->ui->item('ORDER_PAYMENT');
+		$this->render('repay', array('order' => $order));
 	}
 
 	public function actionLoadStates() {
@@ -480,9 +495,15 @@ class BuyController extends MyController {
 
 	private function _requireFieldsAddress($items, $formName) {
 		$requireFields = array('business_title', 'receiver_last_name', 'receiver_first_name', 'country', 'state_id', 'city', 'postindex', 'streetaddress', 'contact_phone');
-		if (!empty($items)) $requireFields[] = 'contact_email';
+		/*if (!empty($items)) */$requireFields[] = 'contact_email';
 		$requireReg = array_flip($requireFields);
 		$regFields = (array) Yii::app()->getRequest()->getParam($formName);
+		if (empty($items)&&empty($regFields['contact_email'])) {
+			// поле email обязательное при регистрации пользователя
+			// однако, при добавлении адреса это поле не обязательное, поэтому если поле пустое, то его не надо проверять
+			// а на валидность надо проверить
+			unset($requireReg['contact_email']);
+		}
 		if (!empty($regFields)&&($regFields['type'] == 2)) {
 			unset($requireReg['business_title']);
 			if (!empty($items)&&Yii::app()->getRequest()->getParam('check_addressa')&&!$this->_existPereodic($items)) {
