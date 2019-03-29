@@ -39,13 +39,14 @@
                     'afterAjax' => 'redirectToAddressList'));
             }
             */?>
-
+<?php /*
             <script type="text/javascript">
                 function redirectToAddressList(json)
                 {
                     window.location.href = '<?=Yii::app()->createUrl('client/addresses'); ?>';
                 }
             </script>
+ */ ?>
             <!-- /content -->
         </div>
     <div class="span2">
