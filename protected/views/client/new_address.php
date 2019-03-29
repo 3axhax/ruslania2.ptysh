@@ -10,7 +10,7 @@
             </div>
 
             <?php
-            if (isset($_GET['ha'])) {
+            //if (isset($_GET['ha'])) {
                 $this->renderPartial('/buy/address_form', array('alias'=>'Reg', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
                 ?>
                 <div class="address_action">
@@ -31,14 +31,14 @@
                     });
                 </script>
 
-                <?php
+                <?php /*
             }
             else {
                 $this->renderPartial('/site/address_form', array('model' => $model,
                     'mode' => $mode,
                     'afterAjax' => 'redirectToAddressList'));
             }
-            ?>
+            */?>
 
             <script type="text/javascript">
                 function redirectToAddressList(json)
