@@ -13,6 +13,7 @@ $form = $this->beginWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl('buy/newaddr'),
 	'id' => $alias,
 ));
+if (empty($showNotes)) $showNotes = false;
 ?>
 <table class="address">
 	<tbody>
@@ -172,6 +173,16 @@ $form = $this->beginWidget('CActiveForm', array(
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
+	<?php if ($showNotes): ?>
+		<tr>
+			<td nowrap="" class="maintxt">
+				<?= $ui->item("address_contact_notes2"); ?>
+			</td>
+			<td class="maintxt-vat">
+				<?= $form->textArea($addrModel, 'notes', array('name'=>'' . $alias . '[notes]')); ?>
+			</td>
+		</tr>
+	<?php endif; ?>
 	</tbody>
 </table>
 <?php $this->endWidget();
