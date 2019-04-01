@@ -387,7 +387,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `books_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 10)) tOf using (id) '.
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.year between ' . (date('Y')-1) . ' and ' . date('Y') . ') '.
                         'and (t.avail_for_order = 1) '.
@@ -420,33 +420,40 @@ class Banners extends MyWidget {
                         'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
+                    Debug::staticRun(array($sql));
                     $beforeIds['authors'] = Yii::app()->db->createCommand($sql)->queryColumn();
                     $exclude = array_merge($exclude, $beforeIds['authors']);
                 }
             }
             if (!empty($this->_params['item']['series_id'])) {
                 $sql = ''.
-                    'select t.id ' .
+                    'select t1.id from ('.
+                    'select t.id, t.avail_for_order ' .
                     'from `books_catalog` as t '.
-                    'where (t.avail_for_order = 1) '.
-                        'and (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
+                    'where (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'having (avail_for_order = 1) '.
+                    'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
+                Debug::staticRun(array($sql));
                 $beforeIds['serie'] = Yii::app()->db->createCommand($sql)->queryColumn();
                 $exclude = array_merge($exclude, $beforeIds['serie']);
             }
             if (!empty($this->_params['item']['publisher_id'])) {
                 $sql = ''.
-                    'select t.id ' .
+                    'select t1.id from ('.
+                    'select t.id, t.avail_for_order ' .
                     'from `books_catalog` as t '.
-                    'where (t.avail_for_order = 1) '.
-                        'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
+                    'where (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'having (avail_for_order = 1) '.
+                    'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
+                Debug::staticRun(array($sql));
                 $beforeIds['publisher'] = Yii::app()->db->createCommand($sql)->queryColumn();
             }
             $beforeIds = array_merge($beforeIds['authors'], $beforeIds['serie'], $beforeIds['publisher']);
@@ -489,11 +496,13 @@ class Banners extends MyWidget {
         }
         if ($counts > 0) {
             $sql = ''.
-                'select t.id ' .
+                'select t1.id from ('.
+                'select t.id, t.avail_for_order ' .
                 'from `musicsheets_catalog` as t '.
-                'where (t.avail_for_order = 1) '.
-                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'having (avail_for_order = 1) '.
+                'limit 1000) t1 '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
@@ -547,10 +556,9 @@ class Banners extends MyWidget {
         if ($counts > 0) {
             //категория
             $sql = ''.
-                'select t.id ' .
+                'select t.id, t.avail_for_order ' .
                 'from `music_catalog` as t '.
-                'where (t.avail_for_order = 1) '.
-                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
@@ -568,7 +576,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `music_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 22)) tOf using (id) '.
                     'where (t.id not in (' . implode(',', $exclude) . '))'.
                         'and (t.avail_for_order = 1) '.
                     'group by t.id '.
@@ -782,7 +790,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `soft_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 24)) tOf using (id) '.
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.avail_for_order = 1) '.
                     'order by rand() '.
