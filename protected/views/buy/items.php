@@ -21,10 +21,10 @@ if (empty($countItems)) $countItems = null;
 			elseif (!empty($item['items_price'])) $itemsPrice = $item['items_price'];
 			?>
 			<tr class="js_<?= $item['entity'] ?>_<?= $item['id'] ?>">
-				<td style="padding-left: 25px;" class="index_number">
+				<td style="padding-left: 25px; padding-right: 20px;" class="index_number">
 					<span class="entity_icons" style="display: block;margin-left: 10px;"><i class="fa e<?= $item['entity'] ?>"></i></span>
 				</td>
-				<td>
+				<td style="width: 100%;">
 					<?php if ($item['InCartUnitWeight'] == 0): ?>
 						<div style="float: right; color: #5BB75B;">
 							<?= $ui->item('MSG_DELIVERY_TYPE_4') ?>
