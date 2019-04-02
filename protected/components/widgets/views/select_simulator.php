@@ -22,5 +22,5 @@
          </li>
  <?php endif; endforeach; ?>
     </ul>
-	<div class="ss_selected"><?= $items[$selected] ?></div>
+	<div class="ss_selected" title="<?= htmlspecialchars($items[$selected]) ?>"><?= $items[$selected] ?></div>
 </div>

@@ -943,7 +943,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 			<?php if ($item['entity'] != Entity::PERIODIC) : ?>
                 
                     
-                    <select class="select2_periodic_no_float selquantity" onchange="$('.add_cart_view').removeClass('green_cart'); $('.add_cart_view span').html('В корзину');" style="height: 30px; height: 38px; margin: 0; margin-top: -1px; width: 73px; margin-right: 19px;" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
+                    <select class="select2_periodic_no_float selquantity" onchange="$('.add_cart_view').removeClass('green_cart'); $('.add_cart_view span').html('<?= htmlspecialchars($ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')) ?>');" style="height: 30px; height: 38px; margin: 0; margin-top: -1px; width: 73px; margin-right: 19px;" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
                             style="display: inline-block; margin-bottom: 5px; width: 85px;">
                         <?php
                         for ($i = 1; $i <= 100; $i++) {

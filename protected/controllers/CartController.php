@@ -1385,7 +1385,7 @@ class CartController extends MyController {
                 }
             }
             $quantity = $availCount;
-            if ($entity != 30) $changedStr = sprintf(Yii::app()->ui->item('new (shopping cart)'), $quantity, $quantity);
+            if ($entity != 30) $changedStr = sprintf(Yii::app()->ui->item('COUNTS_IN_ORDER_MAX'), $quantity, $quantity);
             elseif (!empty($originalQuantity)) {
                 $changedStr = Yii::app()->ui->item('REAL_PEREODIC_COUNTS');
             }

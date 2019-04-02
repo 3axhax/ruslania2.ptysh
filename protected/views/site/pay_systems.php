@@ -65,7 +65,7 @@
 ?>
 
 <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'dtype1')">
-	<?=$ui->item('CARTNEW_PAY_IN_STORE')?>
+	<?=$ui->item('MSG_PAYMENT_TYPE_00')?>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>

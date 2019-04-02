@@ -3033,6 +3033,7 @@ form span.info { font-size: 13px; color: #747474; margin-left: 20px; display: no
     font-size: 14px;
     color: #555555;
     border-radius: 4px;
+    overflow: hidden;
 }
 
 input.add_cart {

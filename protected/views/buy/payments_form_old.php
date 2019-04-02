@@ -1,6 +1,6 @@
 <?php /*Created by Кирилл (27.02.2019 18:40)*/ ?>
 <label class="selp span3">
-	<?=$ui->item('CARTNEW_PAY_IN_STORE')?>
+	<?=$ui->item('MSG_PAYMENT_TYPE_00')?>
 	<div class="red_checkbox">
 		<input type="radio" value="0" name="ptype" class="checkbox_custom" />
 		<span class="checkbox-custom"></span>

@@ -13,13 +13,14 @@ class XlsxToLangvCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		require_once dirname(dirname(__FILE__)) . '/extensions/excel/xlsx/simplexlsx.class.php';
-		$file = dirname(dirname(__FILE__)) . '/doc/langs_2019_03_01.xlsx';
+		$file = dirname(dirname(__FILE__)) . '/doc/langs_2019_03_29.xlsx';
 
 		//первая строка - заголовки ОБЯЗАТЕЛЬНО с обозначение языков
 		if ( $xlsx = SimpleXLSX::parse($file)) {
 			$rows = $xlsx->rows();
 			$langs = array_shift($rows);
 			array_shift($langs);
+			var_dump($langs);
 			$result = array();
 			foreach ($langs as $lang) {
 //				if ($lang != 'de') continue;
@@ -38,17 +39,17 @@ class XlsxToLangvCommand extends CConsoleCommand {
 					$v = trim($v);
 					if (!empty($v)) {
 						$lang = $langs[$langPos];
-						if (
-							empty($result[$lang][$key])//если значение ключа пустое
-							||(($lang != 'ru')&&preg_match("/[а-я]/ui", $result[$lang][$key])) // или для не русского языка в значении ключа есть русские буквы
-						) {
+//						if ( //если значение в php файле пустое
+//							empty($result[$lang][$key])//если значение ключа пустое
+//							||(($lang != 'ru')&&preg_match("/[а-я]/ui", $result[$lang][$key])) // или для не русского языка в значении ключа есть русские буквы
+//						) {
 							$result[$lang][$key] = $v;
 							if ($lang == 'ru') {
 								$v = ProductHelper::ToAscii($v, array('onlyTranslite'=>true));
 								$v = mb_strtoupper(mb_substr($v, 0, 1, 'utf-8'), 'utf-8') . mb_substr($v, 1, null, 'utf-8');
 								$result['rut'][$key] = $v;
 							}
-						}
+//						}
 					}
 				}
 			}
