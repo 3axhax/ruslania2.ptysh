@@ -1204,11 +1204,11 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
   'DESC_ALIPAY' => ' <b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'Betala med Apple Pay är enkelt, din iPhone är allt du behöver. Ett tryck är nog.',
-  'DESC_PAYTYPE7' => '<h3>Выбранный способ оплаты - счет-фактура.</h3>La facture sera jointe à votre envoi ou envoyera à l\'adresse de facturation. Attention! Seulement pour clients en Finlande ou pour organisations en pais de l\'Union européenne avec un numéro TVA valid.',
-  'DESC_PAYTYPE13' => 'Uppgifter för bankgiro: Ruslania Books Corp., <br>
+  'DESC_PAYTYPE7' => '<h3>Du har valt betalningsmetod - faktura.</h3>La facture sera jointe à votre envoi ou envoyera à l\'adresse de facturation. Attention! Seulement pour clients en Finlande ou pour organisations en pais de l\'Union européenne avec un numéro TVA valid.',
+  'DESC_PAYTYPE13' => '<h3>Du har valt betalningsmetod - Förskottsbetalning till bankkonto i Finland .</h3>Uppgifter för bankgiro: Ruslania Books Corp., <br>
 Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer vid betalning.',
-  'DESC_PAYTYPE14' => 'Bankuppgifter skickas på begäran',
+  'DESC_PAYTYPE14' => '<h3>Du har valt betalningsmetod - Förskottsbetalning till bankkonto i Ryssland.</h3>Bankuppgifter skickas på begäran',
   'DESC_PAYTYPE999' => '',
   'A_NEW_TYPOGRAPHY' => 'Typ',
   'A_NEW_LABEL' => 'Label',

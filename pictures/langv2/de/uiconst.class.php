@@ -1,4 +1,4 @@
-<?php // FILE: language constants, generated at 01.03.2019 17:32:04
+<?php // FILE: language constants, generated at 02.04.2019 20:22:11
 return array (
   '1_MONTH_FOR_FINLAND' => 'Monatsabo in Finnland',
   '1_MONTH_FOR_WORLD' => 'Monatsabo in anderen Ländern',
@@ -19,7 +19,7 @@ return array (
   'A_GOTOEVERYWHERE' => '&uuml;berall',
   'A_GOTOMAPS' => 'Landkarten',
   'A_GOTOMUSICSHEETS' => 'Noten und Musikbücher',
-  'A_GOTOPEREODICALS' => 'Zeitschriften im Abo', //'Zeitschriften im Abo-Angebot',
+  'A_GOTOPEREODICALS' => 'Zeitschriften im Abo',
   'A_NEW_PERIODIC' => 'Zeitschriften',
   'A_GOTOPRINTED' => 'Andere',
   'A_GOTOSOFT' => 'Multimedia',
@@ -714,7 +714,6 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Bitte die Bestellnummer bei de
   'A_MAIL_TO_RUSLANIA' => 'Rückmeldung schicken',
   'FOOTER_CONTACTS' => 'Tel: +358-9-272-7070 WhatsApp: +358-50-388-9439',
   'ITEM_AVAIBLE_STATUS_NOT_AVAILABLE_AT_ALL' => 'Ausverkauft',
-//  'ORDER_MSG_CURRENCY_AUTO_CHANGED' => 'Der Bestellungspreis wird automatisch in Euro angezeigt, weil die gewählte Zahlungsweise keine andere Währung gestattet.',
   'LANGUAGE_ENCODING' => 'iso-8859-1',
   'ORDER_MSG_STATE_11' => 'Die Bestellung wird nach Zahlungseingang abgeschickt ',
   'ORDER_MSG_STATE_12' => 'Die Bestellung wird nach Eingang der fehlender Ware  abgeschickt ',
@@ -754,7 +753,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Bitte die Bestellnummer bei de
   'ORDER_MSG_STATE_7' => 'Wir haben Ihr Abonnement erhalten. Vielen Dank! ',
   'ORDER_MSG_STATE_14' => 'Die Waren sind eine Woche lang auf Ihren Namen reserviert. Bei Abholung in unserem Laden können Sie sie an der Kasse bezahlen.',
   'ITEM_AVAIBLE_STATUS_AVAIBLE_LESS_5' => 'Nur noch wenige Stück im Geschäft',
-  'MSG_REGFORM_LASTNAME_TIP_1' => 'Der Firmenname wird auf dem nächsten Schritt der Registration angegeben.',
+  'MSG_REGFORM_LASTNAME_TIP_1' => 'Der Firmenname wird auf dem n ächsten Schritt der Registration angegeben.',
   'MSG_CONDITIONS_PHASE1' => 'Bitte, markieren Sie, dass Sie mit den <A HREF="http://www.ruslania.com/language-5/context-2120.html" target="new">AGBs</a> einverstanden sind.',
   'MSG_NEED_AGREEMENT' => 'Um die Bestellung fortzusetzen, müssen Sie die Benutzungsbedingungen 
 des Onlinegeschäfts Ruslania akzeptieren.
@@ -1205,11 +1204,11 @@ By clicking on a category you are interested in, you can see all the products wi
   'DESC_PAYPAL' => 'не нужно переводить',
   'DESC_ALIPAY' => 'не нужно переводить, покажем только ENG/RUS',
   'DESC_APPLEPAY' => 'Es ist sehr einfach, durch Apple Pay zu bezahlen. Sie brauchen nur ein Apple-Gerät. Damit können sie sicher in Läden, in Apps und auf Internetseiten. Es reicht nur eine Berührung.',
-  'DESC_PAYTYPE7' => 'Achtung! Diese Zahlungsweise kann nur von Kunden aus Finnland und Organisationen aus EU-Ländern mit gültiger Umsatzsteuer-Identifikationsnummer ausgewählt werden. Die Rechnung für die Bestellung ist dem Paket beigefügt. Bestellungen an Privatkunden können nur mit Rechnung versendet werden, wenn die vorherigen Rechnungen bezahlt worden sind.',
-  'DESC_PAYTYPE13' => 'Information zur Kontoüberweisung: Ruslania Books Corp., <br>
+  'DESC_PAYTYPE7' => '<h3>Sie haben die Zahlungsart gewählt - Rechnung.</h3>Achtung! Diese Zahlungsmethode kann nur von Kunden aus Finnland und Organisationen aus EU-Ländern mit gültiger Umsatzsteuer-Identifikationsnummer ausgewählt werden. Die Rechnung für der Bestellung ist dem Paket beigefügt. Bestellungen an Privatkunden können nur mit Rechnung versendet werden, wenn die vorherigen Rechnungen bezahlt sind.',
+  'DESC_PAYTYPE13' => '<h3>Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Finnland.</h3>Information zur Kontoüberweisung: Ruslania Books Corp., <br>
 Nordea Bank. Helsinki, Finnland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei der Auszahlung geben.<br>(Zur eindeutigen Identifikation der Bankverbindung geben Sie hier bitte den Bankcode (BIC) - der auch als SWIFT-Code bekannt - ein. Der Eintrag im Feld BIC muss immer aus 11 Zeichen bestehen. Falls Sie vom Empfänger z.B. einen 8-stelligen BIC mitgeteilt bekommen haben, so ergänzen Sie bitte "XXX" am Ende des BIC.)',
-  'DESC_PAYTYPE14' => 'Information zur Banküberweisung wird an Ihr Email gesendet.',
+  'DESC_PAYTYPE14' => '<h3>Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Russland</h3>Information zur Banküberweisung wird an Ihr Email gesendet.',
   'DESC_PAYTYPE999' => '',
   'A_NEW_TYPOGRAPHY' => 'Format',
   'A_NEW_LABEL' => 'Label',
@@ -1288,11 +1287,29 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'LAST_STATE' => 'Letzter Status',
   'A_NEW_MY_FAVORITE' => 'Interessante Produkte',
   'ORDER_MSG_CURRENCY_AUTO_CHANGED' => 'Der Bestellungspreis wird automatisch in Euro angezeigt, weil die gewählte Zahlungsweise keine andere Währung gestattet.',
-
-    'PEREODIC_NAME' => 'Zeitschriften im Abo',
-
-    'INSTAGRAM_MEDIA'=>'Beiträge',
-    'INSTAGRAM_FOLLOWED_BY'=>'Abonnenten',
-    'INSTAGRAM_FOLLOWS'=>'Abonniert',
-    'INSTAGRAM_SUBSCRIBE'=>'Folgen',
+  'PEREODIC_NAME' => 'Zeitschriften im Abo',
+  'INSTAGRAM_MEDIA' => 'Beiträge',
+  'INSTAGRAM_FOLLOWED_BY' => 'Abonnenten',
+  'INSTAGRAM_FOLLOWS' => 'Abonniert',
+  'INSTAGRAM_SUBSCRIBE' => 'Folgen',
+  'MSG_PAYMENT_TYPE_27' => 'ApplePay',
+  'CARTNEW_CHANGE_COUNT_CART' => '%d %d',
+  'COUNTS_IN_ORDER_MAX' => 'Wenn unser Onlinegeschäft es Ihnen nicht erlaubt eine größere  Artikelanzahl zu bestellen und ändert die Anzahl, hängt es davon ab, dass die gewünschte Anzahl nicht auf Lager ist. In diesem Fall bestellen Sie die Artikelanzahl, die das Onlinegeschäft akzeptiert, und schreiben Sie die gewünschte Anzahl in "Hinweise und Wünsche hinsichtlich der Bestellung“.',
+  'ITOGO_WITHOUT_DELIVERY' => 'Gesamtbetrag ohne Versandkosten: %s',
+  'CARTNEW_ADD_ADDR_BTN' => 'Anschrift angeben',
+  'CARTNEW_ADDR_DELIVERY_LABEL' => 'Lieferadresse',
+  'CARTNEW_WEIGHT_NAME' => 'kg',
+  'CARTNEW_PREPAY_TO_BANK_ACCOUNT1' => 'Vorauszahlung auf das Bankkonto von Ruslania in Finnland',
+  'CARTNEW_PREPAY_TO_BANK_ACCOUNT2' => 'Vorauszahlung auf das Bankkonto von Ruslania in Russland',
+  'CARTNEW_COST_DELIVERY' => 'Versandkosten',
+  'CARTNEW_BTN_ADD_ADDRESS' => 'Angeben',
+  'CARTNEW_BTN_CANCEL_ADDRESS' => 'Abbrechen',
+  'CARTNEW_PAYTRAIL_TEXT2' => 'Wählen Sie <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">eine andere Zahlungsart</a>',
+  'DELIVERY_METHOD' => 'Lieferungsart',
+  'PRICE_PAYTRAYL_DESC' => 'Der Bestellungspreis wird automatisch in Euro angezeigt',
+  'DELEGATE_FIRSTNAME' => 'Vorname',
+  'DELEGATE_LASTNAME' => 'Familienname',
+  'DELEGATE_MIDDLENAME' => 'Zweiter Name',
+  'CARTNEW_PREPAY_TO_BANK_ACCOUNT3' => 'Vorauszahlung auf das Bankkonto von Ruslania in Russland',
+  'PLACEHOLDER_PHONE_CODE' => '+49',
 );
