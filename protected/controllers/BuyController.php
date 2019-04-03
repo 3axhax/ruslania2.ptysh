@@ -75,12 +75,13 @@ class BuyController extends MyController {
 
 	function actionCheckPromocode() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
 			$dtype = (int) Yii::app()->getRequest()->getParam('dtype');
 			$dMode = 0;
 			if ($dtype <= 0) $dMode = 1;
 
 			$aid = (int) Yii::app()->getRequest()->getParam('aid');
+			Debug::staticRun(array($aid));
 			$countryId = 0;
 			$da = array();
 			if ($aid > 0) {
@@ -95,7 +96,8 @@ class BuyController extends MyController {
 			}
 			$cart = new Cart();
 			$items = $cart->GetCart($this->uid, $this->sid);
-			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice(0, $this->sid, $items, $da, $dMode, $dtype);
+			Debug::staticRun(array($da, $aid));
+			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false);
 			$ret['deliveryName'] = Delivery::ToString($dtype);
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
 				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);

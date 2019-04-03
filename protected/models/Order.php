@@ -166,8 +166,8 @@ class Order extends CMyActiveRecord
      * @param $deliveryTypeID int - тип доставки
      * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки]
      */
-    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null) {
-        if (empty($address)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
+    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null, $useDefaultAddr = true) {
+        if (empty($address)&&!empty($useDefaultAddr)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
         if ($currencyId === null) $currencyId = Yii::app()->currency;
         $withVAT = Address::UseVAT($address);
         $itemsPrice = $fullweight = 0;
@@ -180,7 +180,7 @@ class Order extends CMyActiveRecord
             $itemKey = $item['entity'].'_'.$item['id'];
             $price = $values[$key];
             if($item['entity'] == Entity::PERIODIC) {
-                if($address['code'] == 'FI') {
+                if(!empty($address['code'])&&($address['code'] == 'FI')) {
                     $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
                     $keyWithoutDiscount = DiscountManager::BRUTTO_FIN;
                 }
@@ -225,7 +225,7 @@ class Order extends CMyActiveRecord
         $transaction = Yii::app()->db->beginTransaction();
         $a = new Address();
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-        list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice(0, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID);
+        list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false);
 
         $promocodeId = 0;
         if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
