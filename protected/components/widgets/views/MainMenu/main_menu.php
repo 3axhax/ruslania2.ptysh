@@ -3,7 +3,7 @@ $ui = Yii::app()->ui;
 ?>
 <div class="index_menu">
 
-	<div class="container">
+	<div class="container" style="width: auto; display: table;">
 		<ul>
 
 			<!--Книги-->
