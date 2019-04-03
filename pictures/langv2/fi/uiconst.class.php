@@ -1207,11 +1207,16 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
   'DESC_ALIPAY' => ' <b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'Apple Paylla maksaminen on helppoa, iPhonesi riittää. Yksi kosketus ja maksu on valmis.',
-  'DESC_PAYTYPE7' => '<h3>Valitsemasi maksutapa - lasku.</h3>Lasku tulee lähetyksen mukana tai lähetetään erikseen asiakkaan ilmoittamaan laskutusosoitteeseen. Huom.! Vain asiakkaille Suomessa ja yhteisöille EU-maissa, joilla on eurooppalainen VAT-tunnus. Yksityishenkilöille laskulla lähettämisen edellytyksenä on se, että edelliset laskut ovat maksettu. Varaamme itsellemme oikeuden käyttää postiennakkoa tai edellyttää ennakkomaksua myös suomalaisilta asiakkailta harkintamme mukaan.',
-  'DESC_PAYTYPE13' => '<h3>Valitsemasi maksutapa - Ennakkomaksu Ruslanian Suomen pankkitilille.</h3>Tiedot pankkisiirtoa varten: Ruslania Books Oy, <br>
+  'DESC_PAYTYPE7' => 'Lasku tulee lähetyksen mukana tai lähetetään erikseen asiakkaan ilmoittamaan laskutusosoitteeseen. Huom.! Vain asiakkaille Suomessa ja yhteisöille EU-maissa, joilla on eurooppalainen VAT-tunnus. Yksityishenkilöille laskulla lähettämisen edellytyksenä on se, että edelliset laskut ovat maksettu. Varaamme itsellemme oikeuden käyttää postiennakkoa tai edellyttää ennakkomaksua myös suomalaisilta asiakkailta harkintamme mukaan.',
+  'DESC_PAYTYPE13' => 'Tiedot pankkisiirtoa varten: Ruslania Books Oy, <br>
 Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumeron maksaessanne ja lähettämään sähköpostiviestin ”Tilaus maksettu” osoitteeseen orders@ruslania.com.',
-  'DESC_PAYTYPE14' => '<h3>Valitsemasi maksutapa - Ennakkomaksu Ruslanian Venäjän pankkitilille.</h3>Tiedot pankkisiirtoa varten lähetetään tilaajalle sähköpostilla.',
+  'DESC_PAYTYPE14' => 'Tiedot pankkisiirtoa varten lähetetään tilaajalle sähköpostilla.',
+
+    'DESC_PAYTYPE7_H' => 'Valitsemasi maksutapa - lasku.',
+    'DESC_PAYTYPE13_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Suomen pankkitilille.',
+    'DESC_PAYTYPE14_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Venäjän pankkitilille.',
+
   'DESC_PAYTYPE999' => '',
   'A_NEW_LABEL' => 'Levy-yhtiö',
   'A_NEW_PRODUCER' => 'Valmistaja',

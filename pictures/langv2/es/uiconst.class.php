@@ -1203,11 +1203,16 @@ By clicking on a category you are interested in, you can see all the products wi
   'DESC_PAYPAL' => 'Pago con PayPal. Puedes utilizar tu cuenta o Visa y Mastercard.',
   'DESC_ALIPAY' => ' <b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'El pago con Appe Pay es fácil, usted necesitan solo un iPhone. Basta con pulsar un botón.',
-  'DESC_PAYTYPE7' => '<h3>Has elegido el método de pago - factura.</h3>La factura será adjuntada al pedido.  ¡Atención!  Sólo para clientes en Finlandia o para organizaciones de los países de la Unión Europea con una identificación de IVA válida.',
-  'DESC_PAYTYPE13' => '<h3>Has elegido el método de pago - Pago por adelantado a la cuenta bancaria de Ruslania in Finlandia.</h3>Datos para transferencia bancaria: Ruslania Books Ltd, <br>
+  'DESC_PAYTYPE7' => 'La factura será adjuntada al pedido.  ¡Atención!  Sólo para clientes en Finlandia o para organizaciones de los países de la Unión Europea con una identificación de IVA válida.',
+  'DESC_PAYTYPE13' => 'Datos para transferencia bancaria: Ruslania Books Ltd, <br>
 Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del número de orden al realizar la transferencia.',
-  'DESC_PAYTYPE14' => '<h3>Has elegido el método de pago - Pago por adelantado a la cuenta bancaria de Ruslania in Rusia.</h3>Los datos bancarios serán enviados a petición.',
+  'DESC_PAYTYPE14' => 'Los datos bancarios serán enviados a petición.',
+
+    'DESC_PAYTYPE7_H' => 'Has elegido el método de pago - factura.',
+    'DESC_PAYTYPE13_H' => 'Has elegido el método de pago - Pago por adelantado a la cuenta bancaria de Ruslania in Finlandia.',
+    'DESC_PAYTYPE14_H' => 'Has elegido el método de pago - Pago por adelantado a la cuenta bancaria de Ruslania in Rusia.',
+
   'DESC_PAYTYPE999' => '',
   'A_NEW_TYPOGRAPHY' => 'Formato',
   'A_NEW_LABEL' => 'Compañía discográfica',

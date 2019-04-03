@@ -1204,11 +1204,14 @@ By clicking on a category you are interested in, you can see all the products wi
   'DESC_PAYPAL' => 'не нужно переводить',
   'DESC_ALIPAY' => 'не нужно переводить, покажем только ENG/RUS',
   'DESC_APPLEPAY' => 'Es ist sehr einfach, durch Apple Pay zu bezahlen. Sie brauchen nur ein Apple-Gerät. Damit können sie sicher in Läden, in Apps und auf Internetseiten. Es reicht nur eine Berührung.',
-  'DESC_PAYTYPE7' => '<h3>Sie haben die Zahlungsart gewählt - Rechnung.</h3>Achtung! Diese Zahlungsmethode kann nur von Kunden aus Finnland und Organisationen aus EU-Ländern mit gültiger Umsatzsteuer-Identifikationsnummer ausgewählt werden. Die Rechnung für der Bestellung ist dem Paket beigefügt. Bestellungen an Privatkunden können nur mit Rechnung versendet werden, wenn die vorherigen Rechnungen bezahlt sind.',
-  'DESC_PAYTYPE13' => '<h3>Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Finnland.</h3>Information zur Kontoüberweisung: Ruslania Books Corp., <br>
+  'DESC_PAYTYPE7' => 'Achtung! Diese Zahlungsmethode kann nur von Kunden aus Finnland und Organisationen aus EU-Ländern mit gültiger Umsatzsteuer-Identifikationsnummer ausgewählt werden. Die Rechnung für der Bestellung ist dem Paket beigefügt. Bestellungen an Privatkunden können nur mit Rechnung versendet werden, wenn die vorherigen Rechnungen bezahlt sind.',
+  'DESC_PAYTYPE13' => 'Information zur Kontoüberweisung: Ruslania Books Corp., <br>
 Nordea Bank. Helsinki, Finnland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei der Auszahlung geben.<br>(Zur eindeutigen Identifikation der Bankverbindung geben Sie hier bitte den Bankcode (BIC) - der auch als SWIFT-Code bekannt - ein. Der Eintrag im Feld BIC muss immer aus 11 Zeichen bestehen. Falls Sie vom Empfänger z.B. einen 8-stelligen BIC mitgeteilt bekommen haben, so ergänzen Sie bitte "XXX" am Ende des BIC.)',
-  'DESC_PAYTYPE14' => '<h3>Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Russland</h3>Information zur Banküberweisung wird an Ihr Email gesendet.',
+  'DESC_PAYTYPE14' => 'Information zur Banküberweisung wird an Ihr Email gesendet.',
+    'DESC_PAYTYPE7_H' => 'Sie haben die Zahlungsart gewählt - Rechnung.',
+    'DESC_PAYTYPE13_H' => 'Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Finnland.',
+    'DESC_PAYTYPE14_H' => 'Sie haben die Zahlungsart gewählt - Vorauszahlung auf das Bankkonto von Ruslania in Russland.',
   'DESC_PAYTYPE999' => '',
   'A_NEW_TYPOGRAPHY' => 'Format',
   'A_NEW_LABEL' => 'Label',

@@ -1212,11 +1212,16 @@ By clicking on a category you are interested in, you can see all the products wi
   'DESC_PAYPAL' => 'PayPal payments',
   'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
   'DESC_APPLEPAY' => 'Payment with Apple Pay is easy, your iPhone is all you need. One touch is enough.',
-  'DESC_PAYTYPE7' => '<h3>Your have chosen payment method - invoice.</h3>Attention! This payment method can be chosen only by our customers with special terms, consumers in Finland and organizations from EU countries with a valid European VAT number. An invoice will be sent along with the goods in the parcel or separately to the invoice address in paper or electronically. Orders to consumers can only be sent with an invoice if the previous invoices have been paid. Ruslania reserves the right to demand prepayment also from Finnish customers.',
-  'DESC_PAYTYPE13' => '<h3>Your have chosen payment method - Prepayment to Ruslania\'s bank account in Finland.</h3>Details for bank transfer: Ruslania Books Corp., <br>
+  'DESC_PAYTYPE7' => 'Attention! This payment method can be chosen only by our customers with special terms, consumers in Finland and organizations from EU countries with a valid European VAT number. An invoice will be sent along with the goods in the parcel or separately to the invoice address in paper or electronically. Orders to consumers can only be sent with an invoice if the previous invoices have been paid. Ruslania reserves the right to demand prepayment also from Finnish customers.',
+  'DESC_PAYTYPE13' => 'Details for bank transfer: Ruslania Books Corp., <br>
 Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order number upon transferring. If your bank requires a 11 character BIC code, please give NDEAFIHHXXX',
-  'DESC_PAYTYPE14' => '<h3>Your have chosen payment method - Prepayment to Ruslania\'s bank account in Russia.</h3>Details for the bank transfer will be sent to you via e-mail.',
+  'DESC_PAYTYPE14' => 'Details for the bank transfer will be sent to you via e-mail.',
+
+    'DESC_PAYTYPE7_H' => 'Your have chosen payment method - invoice.',
+    'DESC_PAYTYPE13_H' => 'Your have chosen payment method - Prepayment to Ruslania\'s bank account in Finland.',
+    'DESC_PAYTYPE14_H' => 'Your have chosen payment method - Prepayment to Ruslania\'s bank account in Russia.',
+
   'DESC_PAYTYPE999' => '',
   'A_NEW_LABEL' => 'Label',
   'A_NEW_PRODUCER' => 'Manufacturer',

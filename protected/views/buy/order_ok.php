@@ -74,6 +74,7 @@
 			<?php
 			switch ((int)$order['payment_type_id']):
 				case 7:case 13:case 14: ?>
+					<h3><?= Yii::app()->ui->item('DESC_PAYTYPE' . $order['payment_type_id'] . '_H') ?></h3>
 					<div><?= Yii::app()->ui->item('DESC_PAYTYPE' . $order['payment_type_id'], $order['id']) ?></div>
 					<?php break;
 				case 26: ?>

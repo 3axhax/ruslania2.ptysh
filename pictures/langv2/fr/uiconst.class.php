@@ -1195,10 +1195,15 @@ By clicking on a category you are interested in, you can see all the products wi
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
   'DESC_ALIPAY' => ' <b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'Payer avec Apple Pay, c\'est facile, votre iPhone est tout ce dont vous avez besoin. Une seule touche suffit.',
-  'DESC_PAYTYPE7' => '<h3>Vous avez choisi le mode de paiement - facture.</h3>Faktura bifogas försändelsen eller skickas till faktureringadres. Obs! Endast för kunder i Finland eller för företag och organisationer i EU-länder med giltigt momsnummer.',
-  'DESC_PAYTYPE13' => '<h3>Vous avez choisi le mode de paiement - Prépaiement sur le compte bancaire de Ruslania en Finlande.</h3>Détails pour les virements bancaires : Ruslania Books Oy, <br>Nordea Bank. Helsinki, Finland, <br>
+  'DESC_PAYTYPE7' => 'Faktura bifogas försändelsen eller skickas till faktureringadres. Obs! Endast för kunder i Finland eller för företag och organisationer i EU-länder med giltigt momsnummer.',
+  'DESC_PAYTYPE13' => 'Détails pour les virements bancaires : Ruslania Books Oy, <br>Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro de commande sur le virement.',
-  'DESC_PAYTYPE14' => '<h3>Vous avez choisi le mode de paiement - Prépaiement sur le compte bancaire de Ruslania en Russie.</h3>Nos coordonnées bancaires seront communiquées sur demande',
+  'DESC_PAYTYPE14' => 'Nos coordonnées bancaires seront communiquées sur demande',
+
+    'DESC_PAYTYPE7_H' => 'Vous avez choisi le mode de paiement - facture.',
+    'DESC_PAYTYPE13_H' => 'Vous avez choisi le mode de paiement - Prépaiement sur le compte bancaire de Ruslania en Finlande.',
+    'DESC_PAYTYPE14_H' => 'Vous avez choisi le mode de paiement - Prépaiement sur le compte bancaire de Ruslania en Russie.',
+
   'DESC_PAYTYPE999' => '',
   'A_NEW_TYPOGRAPHY' => 'Type',
   'A_NEW_LABEL' => 'Label',
