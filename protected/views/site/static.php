@@ -1,4 +1,4 @@
-<div class="container" id="js_container100">
+<div class="container" id="js_container100" <?php if ($page == 'ourstore'):?> style="width: 100%;" <?php endif; ?>>
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
             
             <div style="padding-left: 10px" class="text"<?php if (!empty($isWordpanel)): ?> id="js_wordpanel"<?php endif; ?>>
@@ -6,9 +6,9 @@
             </div>
             <!-- /content -->
 </div>
-<?php if ($page == 'ourstore'): ?>
-    <script type="text/javascript">document.getElementById('js_container100').style.width = $('.index_menu').outerWidth() + 'px';</script>
-<?php endif; ?>
+<?php /*if ($page == 'ourstore'): ?>
+    <script type="text/javascript">document.getElementById('js_container100').style.width = '100%';</script>
+<?php endif;*/ ?>
 <?php if(!empty($isWordpanel)): ?>
     <div class="buttonCKEDITOR"><a onclick="runCKEDITOR(); $('.buttonCKEDITOR').toggle(); return false;">Редактировать</a></div>
     <div class="buttonCKEDITOR" style="display: none;"><a onclick="if (confirm('Не сохраненные данные будут потеряны!!!')) { closeCKEDITOR(); $('.buttonCKEDITOR').toggle(); } return false;">Закрыть</a></div>
