@@ -56,7 +56,7 @@
 	</div>
 </label>
 </div>
-
+<?php if (in_array(Yii::app()->getLanguage(), array('ru', 'rut', 'en'))): ?>
 <div class="variant">
 	<div class="qbtn2">?</div>
 	<div class="info_box">
@@ -70,7 +70,7 @@
 	</div>
 </label>
 </div>
-
+<?php endif; ?>
 <div class="variant">
 	<div class="qbtn2">?</div>
 	<div class="info_box">
