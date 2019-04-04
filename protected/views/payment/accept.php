@@ -3,7 +3,7 @@
 
 <div class="container cabinet" style="margin-bottom: 50px;">
     <div class="row">
-        <div class="span10" style="float: right">
+        <div class="span10" style="float: none;width: 100%;">
             <h1><?= $ui->item('PAY_ACCEPT_H1') ?></h1>
             <div class="info-box warning" style="border: none; background-color: #edb421; color: #333333;">
                 <h2><?=$ui->item('A_SAMPO_PAYMENT_ACCEPTED'); ?></h2>

@@ -4,7 +4,7 @@
 
 <div class="row">
         <div class="span10">
-			<h2 class="cattitle me_left" style="margin-bottom: 25px;">Мои заказы</h2>
+			<h2 class="cattitle me_left" style="margin-bottom: 25px;"><?= $ui->item('A_LEFT_PERSONAL_ORDERS') ?></h2>
             <?php if(count($list) == 0) : ?>
 
                 <?=$ui->item("ORDER_MSG_NO_ORDERS"); ?>

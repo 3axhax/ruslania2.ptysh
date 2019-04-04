@@ -11,7 +11,7 @@ class SiteController extends MyController {
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
-                'certificate'
+                'certificate', 'charges'
             ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
@@ -20,7 +20,34 @@ class SiteController extends MyController {
             array('deny',
                 'users' => array('*')));
     }
+	
+	function actionCharges() {
+		
+		$o = new Order;
+		$order = $o->GetOrder($_POST['orderId']);
+		
+		$_POST['token'] = '1111';
+		
+		$ch = curl_init();
 
+		curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/charges');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "amount=".$order['full_price']."&currency=".Currency::ToStr($order['currency_id'])."&description=\"Оплата за заказ ".$order['id']."\"&source=".$_POST['token']);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_USERPWD, 'pk_test_B8MwXuaz10DDZVcF6QJQTki0' . ':' . '');
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		$result = curl_exec($ch);
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+		curl_close ($ch);
+		
+	}
+	
     function actionCertificate() {
         $this->_checkUrl(array());
         $model = new Certificate();
@@ -1035,6 +1062,7 @@ class SiteController extends MyController {
     }
 
     public function actionForgot() {
+        $this->_checkUrl(array());
         $this->breadcrumbs[] = Yii::app()->ui->item('A_TITLE_REMIND_PASS');
 
         $model = new User('forgot');

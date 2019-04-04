@@ -68,26 +68,21 @@ if (isset($_GET['avail'])) {
     <?php foreach ($this->getOtherLangPaths() as $lang=>$path): ?>
         <link rel="alternate" href="<?= $path ?>" hreflang="<?= $lang ?>">
     <?php endforeach; ?>
-    <link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
-    <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
-    <link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
-    <link href="/new_style/select2.css" rel="stylesheet" type="text/css"/>
+    
+    
 
-    <link rel="stylesheet" href="/new_style/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/template_styles.css" />
-    <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
-    <link rel="stylesheet" href="/css/opentip.css">
-    <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
-    <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
-    <script src="/new_js/jquery.js" type="text/javascript"></script>
-
-
-
-
-    <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
+	<style>
+ body { display: none; }
+ </style>
+	
+	
 
     <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
+	
+	<script src="/new_js/jquery.js" type="text/javascript"></script>
+	
+    <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>
+	
     <?php /*
     <script src="/new_js/nouislider.js" type="text/javascript" charset="utf-8"></script>
     <link href="/new_js/nouislider.css" rel="stylesheet" type="text/css"/>*/?>
@@ -496,7 +491,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                             <?php else : ?>
                                 <li><a href="<?= Yii::app()->createUrl('client/me'); ?>"><?= $ui->item('YM_CONTEXT_PERSONAL_MAIN'); ?></a></li>
                                 <li><a href="<?= Yii::app()->createUrl('cart/view'); ?>"><?= $ui->item('A_SHOPCART'); ?></a></li>
-                                <li><a href="/my/memo"><?= $ui->item('MSG_SHOPCART_SUSPENDED_ITEMS'); ?></a></li>
+                                <li><a href="<?=Yii::app()->createUrl('my/memo'); ?>"><?= $ui->item('MSG_SHOPCART_SUSPENDED_ITEMS'); ?></a></li>
                                 <li><a href="<?= Yii::app()->createUrl('site/logout'); ?>"><?= $ui->item('YM_CONTEXT_PERSONAL_LOGOUT'); ?></a></li>
                             <?endif;?>
                         </ul>
@@ -908,6 +903,18 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
 
 </script>
+<link href="/new_style/jscrollpane.css" rel="stylesheet" type="text/css"/>
+    <link href="/new_style/bootstrap.css" rel="stylesheet" type="text/css"/>
+    
+    <link href="/new_style/select2.css" rel="stylesheet" type="text/css"/>
 
+    <link rel="stylesheet" href="/new_style/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/template_styles.css" />
+    <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
+    <link rel="stylesheet" href="/css/opentip.css">
+    <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
+    <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
+	<link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php // FILE: language constants, generated at 02.04.2019 20:22:11
+<?php // FILE: language constants, generated at 04.04.2019 18:44:09
 return array (
   'RUSLANIA' => 'Ruslania',
   '1_MONTH_FOR_FINLAND' => 'Kuukauden tilaus Suomeen',
@@ -123,7 +123,7 @@ return array (
   'address_business_title' => 'Yhteisön nimi',
   'address_city' => 'Postitoimipaikka',
   'address_contact_email' => 'Sähköpostiosoite',
-  'address_contact_notes' => 'Huomautukset',
+  'address_contact_notes' => 'Tilausta koskevat toivomukset',
   'address_contact_phone' => 'Puhelinnumero',
   'address_country' => 'Saajan maa',
   'ADDRESS_DELETE' => 'Poista osoite',
@@ -412,7 +412,8 @@ Danske Pankki, tilinumero FI80001470689309. Pyydämme mainitsemaan tilausnumeron
   'MSG_PEREODICALS_NOTE' => 'Lehtitilaushinnat sisältävät lähetyskulut maailmanlaajuisesti.',
   'MSG_PEREODICALS_NOTE_2' => 'Pyydämme tutustumaan lehtivuosikertojen tilausohjeisiin.',
   'MSG_PERSNAL_INDEX_GREETEING_AUTH' => 'Tervetuloa Ruslaniaan,  %s, ',
-  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Jos haluat tilata niin, että vastaanottaja on muu kuin Sinä (kun tilaat esimerkiksi lahjaksi), niin vastaanottajan osoitetiedot on annettava lisäosoitteena (kohdassa Minun osoitteeni) ja valittava vastaanottaja "Toimitusosoitteeksi" tilauksen toisessa vaiheessa. Tällöin Laskutusosoitteeksi tulee Sinun osoitteesi.',
+  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Jos haluat tilata toiselle vastaanottajalle (kun tilaat esimerkiksi lahjaksi), lisää ensin vastaanottaja osoitetietoihisi kohdassa ”Osoitteeni” Minun Ruslaniassa. Kun teet tilausta, valitse ensimmäisessä kohdassa tilauksen vastaanottaja pudotusvalikosta kohdassa "Saaja ja toimitusosoite". 
+Tilauksen kolmannessa kohdassa ”Maksaja ja maksutapa”, poista ruksi ruudusta ”Laskutusosoite on sama kuin toimitusosoite”. Valitse pudotusvalikosta maksajaksi itsesi tai laskun saajaksi muu osoite tai verkkolasku.',
   'MSG_PERSONAL_ADDRESS_COMMENT_1' => 'Yhteisön kontaktihenkilön nimi',
   'MSG_PERSONAL_ADDRESS_COMMENT_2' => 'Katuosoite tai laskutusosoite (PL)',
   'MSG_PERSONAL_ADDRESS_COMMENT_3' => '&nbsp;',
@@ -1211,12 +1212,10 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'DESC_PAYTYPE13' => 'Tiedot pankkisiirtoa varten: Ruslania Books Oy, <br>
 Nordea Bank. Helsinki, Finland, <br>
 IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumeron maksaessanne ja lähettämään sähköpostiviestin ”Tilaus maksettu” osoitteeseen orders@ruslania.com.',
-  'DESC_PAYTYPE14' => 'Tiedot pankkisiirtoa varten lähetetään tilaajalle sähköpostilla.',
-
-    'DESC_PAYTYPE7_H' => 'Valitsemasi maksutapa - lasku.',
-    'DESC_PAYTYPE13_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Suomen pankkitilille.',
-    'DESC_PAYTYPE14_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Venäjän pankkitilille.',
-
+  'DESC_PAYTYPE14' => 'Pankkitilitiedot lähetetään pyynnöstä',
+  'DESC_PAYTYPE7_H' => 'Valitsemasi maksutapa - lasku.',
+  'DESC_PAYTYPE13_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Suomen pankkitilille.',
+  'DESC_PAYTYPE14_H' => 'Valitsemasi maksutapa - Ennakkomaksu Ruslanian Venäjän pankkitilille.',
   'DESC_PAYTYPE999' => '',
   'A_NEW_LABEL' => 'Levy-yhtiö',
   'A_NEW_PRODUCER' => 'Valmistaja',
@@ -1306,7 +1305,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'CARTNEW_ADD_ADDR_BTN' => 'Lisää osoite',
   'CARTNEW_ADDR_BUYER_LABEL' => 'Maksajan osoite / laskutusosoite',
   'CARTNEW_ADDR_DELIVERY_LABEL' => 'Toimitusosoite',
-  'CARTNEW_ERROR_SELECT_ADDR_BUYER' => 'Valitse maksajan osoite',
+  'CARTNEW_ERROR_SELECT_ADDR_BUYER' => 'Valitse maksajan osoite / laskutusosoite',
   'CARTNEW_COUNT_NAME' => 'kpl',
   'CARTNEW_WEIGHT_LABEL' => 'Paino',
   'CARTNEW_WEIGHT_NAME' => 'kg',
@@ -1366,10 +1365,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'CARTNEW_ALIPAY_H1' => 'Maksa AliPaylla',
   'CARTNEW_PAYPAL_THANK_ORDER' => 'Kiitos, tilaus on tallennettu.',
   'CARTNEW_YOUR_SELECT' => 'Valitsit',
-  'CARTNEW_PAYTRAIL_TEXT1' => 'Tilauksesi № %s. Tilauksen loppusumma: %s. Maksa tilaus valitsemalla maksutapa',
+  'CARTNEW_PAYTRAIL_TEXT1' => 'Tilauksesi № %s. Tilauksen yhteissumma: %s. Maksa tilaus valitsemalla maksutapa',
   'CARTNEW_PAYTRAIL_TEXT2' => 'Valitse <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">toinen maksutapa</a>',
-  'CARTNEW_RESULT_TEXT1' => 'Tilauksesi № %s. Tilauksen loppusumma: %s.<br />%s',
-  'CARTNEW_ALIPAY_TEXT1' => 'Tilauksesi № %s. Tilauksen loppusumma: %s.',
+  'CARTNEW_RESULT_TEXT1' => 'Tilauksesi № %s. Tilauksen yhteissumma: %s.<br />%s',
+  'CARTNEW_ALIPAY_TEXT1' => 'Tilauksesi № %s. Tilauksen yhteissumma: %s.',
   'TAKE_IN_THE_STORE' => 'Noudan tilaukseni Ruslanian Helsingin myymälästä',
   'PHONE_WITH_CODE' => 'Anna puhelinnumero maakoodin kanssa',
   'CHECKBOX_TERMS_OF_USE' => 'Olen tietoinen Ruslanian nettikaupan käyttöehdoista ja annan suostumukseni henkilötietojeni käsittelylle (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania.pdf" target="_blank">Ruslanian asiakasrekisteriseloste</a>)',
@@ -1403,4 +1402,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'PLACEHOLDER_PHONE_CODE' => '+358',
   'NUMBER_PHONE' => 'Puhelinnumero',
   'BUTTON_CALL' => 'Pyydä takaisinsoitto',
+  'CARTNEW_ERROR_SELECT_ADDR_DELIVERY' => 'Valitse toimitusosoite',
+  'DESC_PAY_IN_STORE' => 'Ruslanian Helsingin myymälässä voit maksaa käteisellä, pankki- ja luottokorteilla.',
 );

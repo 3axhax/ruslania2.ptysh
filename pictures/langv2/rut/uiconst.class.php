@@ -1,4 +1,4 @@
-<?php // FILE: language constants, generated at 02.04.2019 20:22:11
+<?php // FILE: language constants, generated at 04.04.2019 18:44:09
 return array (
   '1_MONTH_FOR_FINLAND' => '1 mesjats, Finljandija',
   '1_MONTH_FOR_WORLD' => '1 mesjats, drugie strany',
@@ -121,7 +121,7 @@ return array (
   'address_business_title' => 'Nazvanie organizatsii',
   'address_city' => 'Gorod',
   'address_contact_email' => 'Kontaktnyj e-mail',
-  'address_contact_notes' => 'Primechanija',
+  'address_contact_notes' => 'Primechaniya i pozhelaniya k zakazu',
   'address_contact_phone' => 'Kontaktnyj telefon',
   'address_country' => 'Strana poluchatelja',
   'ADDRESS_DELETE' => 'Udalit',
@@ -412,7 +412,8 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Objazatelno ukazhite nomer zak
   'MSG_PEREODICALS_NOTE' => 'Vse tseny vkljuchajut stoimost dostavki v ljubuju tochku mira.',
   'MSG_PEREODICALS_NOTE_2' => 'Prosim oznakomitsja s uslovijami podpiski na periodicheskie izdanija.',
   'MSG_PERSNAL_INDEX_GREETEING_AUTH' => 'Dobro pozhalovat v Ruslaniju,  %s, ',
-  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Esli khotite poslat zakaz na imya i adres drugogo cheloveka, to ego dannye nuzhno vvesti kak dopolnitelnyj adres, i vybrat ego v kachestve "adresa dostavki" na shage 2 oformleniya zakaza. pri ehtom v kachestve "adresa platelshhika" dolzhen byt ukazan vash sobstvennyj adres.',
+  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Esli khotite poslat zakaz na imya i adres drugogo cheloveka, to ego imya i dannye nuzhno vvesti v «moi adresa», i vybrat ego adres v pervom shage oformleniya zakaza "ukazhite dannye poluchatelya". 
+pri ehtom v tretem shage zakaza snimite galochku «dannye platelshhika sovpadayut s poluchatelem», v pole «vyberite platelshhika i sposob oplaty» nuzhno ukazat vas.',
   'MSG_PERSONAL_ADDRESS_COMMENT_1' => 'Dlja organizatsii - imja kontaktnogo litsa',
   'MSG_PERSONAL_ADDRESS_COMMENT_2' => 'Ulitsa, dom, kvartira, i t.d., v ljubom porjadke',
   'MSG_PERSONAL_ADDRESS_COMMENT_3' => '&nbsp;',
@@ -1207,16 +1208,13 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'DESC_PAYPAL' => 'oplata s pomoshhyu kart visa ili mastercard',
   'DESC_ALIPAY' => '<b>oplata cherez sistemu alipay</b><br /><br />sdelajte oplatu na vashem ustrojstve sledya po shagam na kartinke snizu. posle oplaty, prosim vas otpravit i-mejl «zakaz n %d oplachen» na adres orders@ruslania.com<br /><br />',
   'DESC_APPLEPAY' => 'platit s apple pay ochen prosto — dostatochno ustrojstva, kotoroe s vami kazhdyj den. vy mozhete bezopasno delat pokupki v magazinakh, prilozheniyakh i na sajtakh. odno prikosnovenie — i vsjo gotovo.',
-  'DESC_PAYTYPE7' => 'vnimanie! ehtot sposob oplaty mogut vybirat tolko klienty iz finlyandii i organizacii iz stran es s dejstvuyushhim vat-nomerom. schet-faktura na oplatu zakaza prikladyvaetsya k posylke ili otpravlyaetsya otdelno v adres platelshhika v bumazhnom ili virtualnom vide. zakazy chastnym klientam mogut byt otpravleny so schetom-fakturoj tolko v tom sluchae, esli oplacheny predydushhie scheta. ruslaniya ostavlyaet za soboj pravo trebovat predoplatu takzhe ot finskikh klientov',
-  'DESC_PAYTYPE13' => 'rekvizity dlya oplaty zakaza: ruslania books corp.,<br>nordea bank. helsinki, finland,<br>iban fi5512393000604210, bic/swift: ndeafihh<br>prosim vas ukazat pri oplate nomer zakaza i otpravit e-mejl «zakaz n %d oplachen» na adres orders@ruslania.com',
-  'DESC_PAYTYPE14' => 'bankovskie rekvizity dlya oplaty zakaza budut otpravleny na vash e-mail.',
-
-    'DESC_PAYTYPE7_H' => 'Vybrannyj sposob oplaty - schet-faktura.',
-    'DESC_PAYTYPE13_H' => '',
-    'DESC_PAYTYPE14_H' => '',
-
-
-    'DESC_PAYTYPE999' => '',
+  'DESC_PAYTYPE7' => 'Vnimanie! ehtot sposob oplaty mogut vybirat tolko klienty iz finlyandii i organizacii iz stran es s dejstvuyushhim vat-nomerom. schet-faktura na oplatu zakaza prikladyvaetsya k posylke ili otpravlyaetsya otdelno v adres platelshhika v bumazhnom ili virtualnom vide. zakazy chastnym klientam mogut byt otpravleny so schetom-fakturoj tolko v tom sluchae, esli oplacheny predydushhie scheta. ruslaniya ostavlyaet za soboj pravo trebovat predoplatu takzhe ot finskikh klientov',
+  'DESC_PAYTYPE13' => 'Rekvizity dlya oplaty zakaza: ruslania books corp.,<br>nordea bank. helsinki, finland,<br>iban fi5512393000604210, bic/swift: ndeafihh<br>prosim vas ukazat pri oplate nomer zakaza i otpravit e-mejl «zakaz n %d oplachen» na adres orders@ruslania.com',
+  'DESC_PAYTYPE14' => 'Bankovskie rekvizity dlya oplaty zakaza budut otpravleny na vash e-mail.',
+  'DESC_PAYTYPE7_H' => 'Vybrannyj sposob oplaty - schet-faktura.',
+  'DESC_PAYTYPE13_H' => '',
+  'DESC_PAYTYPE14_H' => '',
+  'DESC_PAYTYPE999' => '',
   'A_NEW_LABEL' => 'Lejbl',
   'A_NEW_PRODUCER' => 'Proizvoditel',
   'PERIODIC_TYPE_PLURAL_2' => 'Zhurnaly',
@@ -1302,7 +1300,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'CARTNEW_CONTINUE_SHOPPING_BTN' => 'Prodolzhit',
   'CARTNEW_ADD_CART_2EURO_TITLE' => 'Dobavte vygodnye predlozheniya v korzinu',
   'CARTNEW_CHANGE_COUNT_CART' => 'Kolichestvo tovara bylo izmeneno s %d do %d',
-  'COUNTS_IN_ORDER_MAX' => 'Esli pri oformlenii zakaza ukazannoe vami kolichestvo menyaetsya na menshee, ehto znachit, chto dannyj produkt imeetsya tolko pokazyvaemom kolichestve. v ehtom sluchae v "pozhelaniyakh k zakazu" ukazhite zhelaemoe kolichestvo.',
+  'COUNTS_IN_ORDER_MAX' => 'Esli pri oformlenii zakaza ukazannoe vami kolichestvo menyaetsya na menshee, ehto znachit, chto dannyj produkt imeetsya tolko pokazyvaemom kolichestve. v ehtom sluchae v "primechaniyakh i pozhelaniyakh k zakazu" ukazhite zhelaemoe kolichestvo.',
   'REAL_PEREODIC_COUNTS' => 'Znachenie bylo izmeneno na dostupnoe kolichestvo mesyacev podpiski.',
   'ITOGO_WITHOUT_DELIVERY' => 'Itogo, bez ucheta stoimosti dostavki: %s',
   'CARTNEW_INPUT_ERROR' => 'Zapolnite ehto pole',
@@ -1320,7 +1318,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'CARTNEW_PICK_UP_STORE1' => 'Zabrat v magazine v khelsinki',
   'CARTNEW_PICK_UP_STORE2' => 'Budete v khelsinki? otmette, chtoby zabrat v magazine',
   'CARTNEW_PAYTRAYL_LABEL' => 'Kreditnye karty i finskie banki',
-  'CARTNEW_PAY_INVOICE_LABEL' => '<div style="margin-top: -8px;"><b>cchet-faktura</b><br> oplata posle polucheniya po schetu dlya klientov v finlyandii i organizacij v es </div>',
+  'CARTNEW_PAY_INVOICE_LABEL' => '<div style="margin-top: -8px;"><b>cchet-faktura</b><br> oplata posle polucheniya tovara po schetu dlya klientov v finlyandii i organizacij v es </div>',
   'CARTNEW_PREPAY_TO_BANK_ACCOUNT1' => 'Predoplata na bankovskij schet ruslanii v finlyandii',
   'CARTNEW_PREPAY_TO_BANK_ACCOUNT2' => 'Predoplata na bankovskij schet ruslanii v rossii',
   'CARTNEW_COST_DELIVERY' => 'Stoimost dostavki',
@@ -1399,7 +1397,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'DELEGATE_FIRSTNAME' => 'Imya predstavitelya',
   'DELEGATE_LASTNAME' => 'Familiya predstavitelya',
   'DELEGATE_MIDDLENAME' => 'Otchestvo predstavitelya',
-  'CARTNEW_PREPAY_TO_BANK_ACCOUNT3' => 'Predoplata na bankovskij schet v rossii ili oplata s karty na kartu posle podtverzhdeniya zakaza menedzherom',
+  'CARTNEW_PREPAY_TO_BANK_ACCOUNT3' => 'Predoplata na bankovskij schet  ruslanij v rossii ili oplata s karty na kartu posle podtverzhdeniya zakaza menedzherom',
   'PAY_ERROR_H1' => 'Voznikla oshibka v processe oplaty',
   'PAY_ACCEPT_H1' => 'Spasibo, zakaz oplachen!',
   'STATUS_IN_ME' => 'Teper vy mozhete otsledit status zakaza v <a href="%s">lichnom kabinete</a>',
@@ -1408,4 +1406,5 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'PLACEHOLDER_PHONE_CODE' => '+7(999)',
   'NUMBER_PHONE' => 'Nomer telefona',
   'BUTTON_CALL' => 'Zakazat zvonok',
+  'DESC_PAY_IN_STORE' => 'V nashem magazine mozhno oplatit nalichkoj v eur, kreditnymi i debitnymi kartochkami i alipay.',
 );
