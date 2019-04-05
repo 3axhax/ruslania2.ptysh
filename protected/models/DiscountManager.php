@@ -196,6 +196,10 @@ class DiscountManager
                      self::RATE => $rate,
                      self::TYPE_FREE_SHIPPING => $haveFreeShipping,
         );
+        if ($item['entity'] == Entity::PERIODIC) {
+            //Периодика в финляндии не может быть без ндс
+            $ret[self::WITHOUT_VAT_FIN] = $ret[self::WITH_VAT_FIN];
+        }
 
         return $ret;
     }

@@ -206,6 +206,17 @@ class Cart extends CActiveRecord
             $tmp['AvailablityText'] = Availability::ToStr($c);
             $tmp['DiscountPercent'] = $values[DiscountManager::DISCOUNT];
             $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::ORIGINAl_PRICE]);
+
+            if ($tmp['Entity'] == Entity::PERIODIC) {
+                if ($tmp['Price2Use'] == 1) {
+                    //фины
+                    $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::BRUTTO_FIN]/12 * $tmp['Quantity']);
+                }
+                else {
+                    $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::BRUTTO_WORLD]/12 * $tmp['Quantity']);
+                }
+            }
+
             $tmp['ReadyVAT'] = $values[DiscountManager::READY_EUR_PRICE_VAT];
             $tmp['ReadyVAT0'] = $values[DiscountManager::READY_EUR_PRICE_WITHOUT_VAT];
             $tmp['Rate'] = $values[DiscountManager::RATE];

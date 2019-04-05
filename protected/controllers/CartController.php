@@ -1147,7 +1147,7 @@ class CartController extends MyController {
 		$cart = $this->actionGetAll(0);
 		
 		$cart = $cart['CartItems'];
-		
+
 		
         $withVat = false;
         $fullprice = 0;
@@ -1158,7 +1158,7 @@ class CartController extends MyController {
         foreach ($cart as $item) {
             
 			$withVat = $item['UseVAT'];
-			
+
 			$item['type'] = $item['Price2Use'];
 			
             if ($item['Entity'] == 30) {
