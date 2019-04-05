@@ -57,7 +57,7 @@ var instagramCom = function() {
 }();
 
 function openWindow(t) {
-    return window.open(t.getAttribute('href'), t.innerHTML, 'width=600,height=400');
+    return window.open(t.getAttribute('href'), t.innerHTML, 'width=800,height=600');
 }
 
 function closeWindow(authWindow, userData, url) {
