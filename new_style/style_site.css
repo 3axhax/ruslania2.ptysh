@@ -1529,7 +1529,7 @@ a.read_book {
 	
 }
 
-.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow span {
+/*.slider_bg .slider_container .container_slides ul li .span2.text */a.btn_yellow span {
 	border-radius: 0 4px 4px 0;
 	background-color: #ecad0a;
 	margin-left: 39px;
@@ -3579,7 +3579,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
 
 .cost span.without_discount {font-size: 13px; color: #301c53/*#ed1d24*/; text-decoration: line-through;}
 .cost span.with_discount {color: #ed1d24/*#301c53*/;font-size: 18px; font-weight: bold; white-space: nowrap;}
-
+.cost span.with_discount.entity-30 {display: block; }
 .disabled {
     pointer-events: none !important;
     cursor: default !important;
@@ -3934,3 +3934,5 @@ input::-webkit-input-placeholder { color: #EBEBEB; }
     width: 25px;
     text-align: left;
 }
+
+a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }

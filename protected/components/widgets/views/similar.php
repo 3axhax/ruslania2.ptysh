@@ -77,7 +77,7 @@
 				</div>
 				<?php /*<div class="nds"><?= ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . Yii::app()->ui->item('WITHOUT_VAT') ?></div> */ ?>
 				<?php if ($product['entity'] == Entity::PERIODIC): ?>
-					<a href="<?=$url;?>" class="btn_yellow fa"><span><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
+					<a href="<?=$url;?>" class="btn_yellow fa"><span class="lang-<?= Yii::app()->getLanguage() ?>"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
 				<?php else: ?>
 				<div class="addcart">
 				

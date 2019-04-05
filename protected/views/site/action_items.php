@@ -73,7 +73,7 @@
 										<span class="without_discount">
                     <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-										<span class="price with_discount"<?php if ($product['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
+										<span class="price with_discount entity-<?= $product['entity'] ?>"<?php if ($product['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
                     <?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITH_VAT]); ?><?= $product['priceData']['unit'] ?>
                 </span>
 									<?php else : ?>
@@ -89,7 +89,7 @@
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
 								
 									<?php /*<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a> */?>
-									<a href="<?=$url;?>" class="btn_yellow fa" style="float: right; border-radius: 4px;" tabindex="0"><span style=""><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
+									<a href="<?=$url;?>" class="btn_yellow fa" style="float: right; border-radius: 4px;" tabindex="0"><span class="lang-<?= Yii::app()->getLanguage() ?>"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
 								<?php else: ?>
 									<div class="addcart" style="margin-top: 10px;">
 								<?file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.txt', print_r($product,1))?>	
