@@ -40,7 +40,7 @@ if (empty($countItems)) $countItems = null;
 					<?php if ($item['entity'] == 30): ?>
 						<?= $ui->item('MONTH_SMALL'); ?>
 					<?php else: ?>
-						<?= $ui->item('CARTNEW_COUNT_NAME')?>.
+						<?= $ui->item('CARTNEW_COUNT_NAME')?>
 					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($itemsPrice); ?></span>
 					<?php if ($item['quantity'] > 1): ?>
 						= <span class="item_cost_itogo"><?= $PH->FormatPrice($itemsPrice*$item['quantity']); ?></span>

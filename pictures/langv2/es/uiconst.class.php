@@ -326,7 +326,7 @@ return array (
   'MSG_DELIVERY_TYPE_1' => 'Express',
   'MSG_DELIVERY_TYPE_2' => 'Priority',
   'MSG_DELIVERY_TYPE_3' => 'Economy',
-  'MSG_DELIVERY_TYPE_4' => '',
+  'MSG_DELIVERY_TYPE_4' => 'Free shipping',
   'MSG_ERROR_DELETED_ITEM_RECORD' => 'Este artículo todavía no existe o ha sido descatalogado',
   'MSG_FIELD_X' => 'Campo "%s"',
   'MSG_FORM_VALIDATE_ERROR' => '<b>Se han detectado errores:</b>',
@@ -1202,7 +1202,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'HEADER_PAYTYPE999' => 'Pago en la tienda',
   'DESC_PAYTRAIL' => 'Tarjetas de crédito y débito y bancos finlandeses',
   'DESC_PAYPAL' => 'Pago con PayPal. Puedes utilizar tu cuenta o Visa y Mastercard.',
-//  'DESC_ALIPAY' => ' <b>Оплата через систему Alipay</b><br /><br />Сделайте оплату на вашем устройстве следя по шагам на картинке слева. После оплаты, просим Вас отправить и-мейл «заказ N %d оплачен» на адрес orders@ruslania.com<br /><br />',
+    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
   'DESC_APPLEPAY' => 'El pago con Appe Pay es fácil, usted necesitan solo un iPhone. Basta con pulsar un botón.',
   'DESC_PAYTYPE7' => 'La factura será adjuntada al pedido.  ¡Atención!  Sólo para clientes en Finlandia o para organizaciones de los países de la Unión Europea con una identificación de IVA válida.',
   'DESC_PAYTYPE13' => 'Datos para transferencia bancaria: Ruslania Books Ltd, <br>
