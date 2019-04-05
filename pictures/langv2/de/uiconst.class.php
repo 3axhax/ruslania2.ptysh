@@ -1320,7 +1320,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'payer_type' => 'Zahler',
   'CART_COL_TOTAL_PRICE2' => 'Gesamt',
   'MSG_PAYMENT_TYPE_00' => 'Bezahlung im Helsinki Laden',
-  'CARTNEW_CONTINUE_SHOPPING' => 'Mit dem Einkaufen fortfahren',
+  'CARTNEW_CONTINUE_SHOPPING' => 'Weiter einkaufen',//'Mit dem Einkaufen fortfahren',
   'CARTNEW_CONTINUE_SHOPPING_BTN' => 'Fortsetzen',
   'CARTNEW_ADD_CART_2EURO_TITLE' => 'Rabatt-Produkte in den Warenkorb legen',
   'REAL_PEREODIC_COUNTS' => 'Die Anzahl der Monate wurde geändert, um mit einer verfügbaren Abonnementperiode übereinzustimmen.',

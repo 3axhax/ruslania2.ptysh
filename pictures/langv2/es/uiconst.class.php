@@ -1381,7 +1381,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
   'CARTNEW_ALIPAY_TEXT1' => 'Su pedido № %s. Gran total:%s.',
   'TAKE_IN_THE_STORE' => 'Quiero comprar el pedido en la tienda Ruslania de Helsinki',
   'PHONE_WITH_CODE' => 'Por favor, indique su número de teléfono con el código del país',
-  'CHECKBOX_TERMS_OF_USE' => 'Estoy de acuerdo con los términos de uso de la tienda web de Ruslania y doy mi consentimiento para el uso de mis datos personales (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">(declaración de privacidad de Ruslania</a>)',
+  'CHECKBOX_TERMS_OF_USE' => 'Estoy de acuerdo con los términos de uso de la tienda web de Ruslania y doy mi consentimiento para el uso de mis datos personales (<a href="https://ruslania.com/download/Rekisteriseloste_ruslania_eng.pdf" target="_blank">declaración de privacidad de Ruslania</a>)',
   'PAYMENT_METHOD_DELIVERY' => 'Nombre del destinatario y dirección de entrega',
   'PAYMENT_METHOD_PAYER' => 'Pagador y método de pago',
   'BUTTON_ORDER_PAY' => 'Hacer un pedido y pagar',

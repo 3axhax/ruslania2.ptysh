@@ -62,7 +62,7 @@ class Availability
         $code = self::GetStatus($item);
 
         if ($item['entity'] == 30) {
-            return 'В наличии';
+            return Yii::app()->ui->item('CARTNEW_NAME_TABLE_AVAILABILITY');
         }
 
         switch ($code)
