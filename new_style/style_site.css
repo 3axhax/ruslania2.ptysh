@@ -3823,17 +3823,18 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 /*form#js_filter input[type=text] {height: 30px;}*/
 
 /*.social_auth span.instagram { position:absolute; top: 6px; left: 7px }*/
-/*
-.social_auth span {background: url(/new_img/soc.svg) no-repeat; background-size: 340px 40px; width: 40px; height: 40px;}
+.social_auth {text-align: center;}
+.social_auth span {background: url(/new_img/soc.svg) no-repeat; background-size: 340px 40px; width: 50px; height: 40px;}
 .social_auth span.instagram { background-position: -300px 0; }
 .social_auth span.facebook { background-position: -120px 0; }
 .social_auth span.vk { background-position: 0 0; }
 .social_auth span.twitter { background-position: -240px 0; }
-*/
+/*
 .social_auth span.instagram:before { content: '\f16d'; color: #cecece; font-size: 20px; }
 .social_auth span.facebook:before { content: '\f09a'; color: #cecece; font-size: 20px; }
 .social_auth span.vk:before { content: '\f189'; color: #cecece; font-size: 20px; }
 .social_auth span.twitter:before { content: '\f099'; color: #cecece; font-size: 20px; }
+*/
 
 .send_call_form {
     -webkit-border-radius: 15px;
