@@ -1206,7 +1206,9 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'HEADER_PAYTYPE999' => 'Оплата в магазине',
   'DESC_PAYTRAIL' => 'Pankki- ja luottokortit sekä suomalaiset pankit',
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
-    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
+
+    'DESC_ALIPAY' => 'Please follow the instructions on the image. After you have submitted the payment, please send an e-mail "order N%d has been paid via Alipay" to <a href="mailto:orders@ruslania.com">orders@ruslania.com</a>',
+//    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
   'DESC_APPLEPAY' => 'Apple Paylla maksaminen on helppoa, iPhonesi riittää. Yksi kosketus ja maksu on valmis.',
   'DESC_PAYTYPE7' => 'Lasku tulee lähetyksen mukana tai lähetetään erikseen asiakkaan ilmoittamaan laskutusosoitteeseen. Huom.! Vain asiakkaille Suomessa ja yhteisöille EU-maissa, joilla on eurooppalainen VAT-tunnus. Yksityishenkilöille laskulla lähettämisen edellytyksenä on se, että edelliset laskut ovat maksettu. Varaamme itsellemme oikeuden käyttää postiennakkoa tai edellyttää ennakkomaksua myös suomalaisilta asiakkailta harkintamme mukaan.',
   'DESC_PAYTYPE13' => 'Tiedot pankkisiirtoa varten: Ruslania Books Oy, <br>

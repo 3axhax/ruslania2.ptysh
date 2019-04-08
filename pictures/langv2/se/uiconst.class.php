@@ -1200,7 +1200,7 @@ Du har väljat leveranssättet: "Jag vill hämta min beställning från Ruslania
   'HEADER_PAYTYPE999' => 'Betalning på butiken',
   'DESC_PAYTRAIL' => 'Kreditkort och finska banker',
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
-    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
+    'DESC_ALIPAY' => 'Please follow the instructions on the image. After you have submitted the payment, please send an e-mail "order N%d has been paid via Alipay" to <a href="mailto:orders@ruslania.com">orders@ruslania.com</a>',
   'DESC_APPLEPAY' => 'Betala med Apple Pay är enkelt, din iPhone är allt du behöver. Ett tryck är nog.',
   'DESC_PAYTYPE7' => 'Faktura bifogas försändelsen eller skickas till faktureringadres. Obs! Endast för kunder i Finland eller för företag och organisationer i EU-länder med giltigt momsnummer.',
   'DESC_PAYTYPE13' => 'Uppgifter för bankgiro: Ruslania Books Corp., <br>

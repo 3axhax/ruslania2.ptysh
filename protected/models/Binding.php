@@ -68,8 +68,8 @@ class Binding {
 
         if (empty($entities[$entity]['binding_table'])) return array();
         $lang = Yii::app()->language;
-        $allowLangs = array('ru', 'rut', 'en', 'fi');
-        if (!in_array($lang, $allowLangs)) $lang = 'en';
+//        $allowLangs = array('ru', 'rut', 'en', 'fi');
+//        if (!in_array($lang, $allowLangs)) $lang = 'en';
 
         $sql = ''.
             'select t.id, t.title_' . $lang . ' title '.

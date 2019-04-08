@@ -29,7 +29,7 @@
 	
 					<li>
 						<div class="span1 photo">
-							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt=""  style="max-height: 130px;"/></a>
+							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" alt=""  style="max-height: 130px;" <?= ((count($items) > 3)?'data-lazy':'lazySrc') ?>="<?= Picture::Get($item, Picture::SMALL) ?>"/></a>
 						</div>
 						<div class="span2 text">
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
@@ -87,6 +87,7 @@
 		</div>
 	</div>
 </div>
+<?php if (count($items) > 3): ?>
 <script type="text/javascript">
 	$(document).ready(function() {
 		scriptLoader('/new_js/slick.js').callFunction(function() {
@@ -100,3 +101,4 @@
 		});
 	});
 </script>
+<?php endif; ?>

@@ -1191,7 +1191,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'HEADER_PAYTYPE999' => 'Paiement en magasin',
   'DESC_PAYTRAIL' => 'Cartes de crédit et banques finlandaises',
   'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
-    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
+    'DESC_ALIPAY' => 'Please follow the instructions on the image. After you have submitted the payment, please send an e-mail "order N%d has been paid via Alipay" to <a href="mailto:orders@ruslania.com">orders@ruslania.com</a>',
   'DESC_APPLEPAY' => 'Payer avec Apple Pay, c\'est facile, votre iPhone est tout ce dont vous avez besoin. Une seule touche suffit.',
   'DESC_PAYTYPE7' => 'La facture sera jointe à votre envoi ou envoyera à l\'adresse de facturation. Attention! Seulement pour clients en Finlande ou pour organisations en pais de l\'Union européenne avec un numéro TVA valid.',
   'DESC_PAYTYPE13' => 'Détails pour les virements bancaires : Ruslania Books Oy, <br>Nordea Bank. Helsinki, Finland, <br>

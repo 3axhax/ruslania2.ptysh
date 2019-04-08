@@ -1211,7 +1211,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'HEADER_PAYTYPE999' => 'Payment at the shop',
   'DESC_PAYTRAIL' => 'Credit and debit cards Worldwide and Finnish banks',
   'DESC_PAYPAL' => 'PayPal payments',
-  'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',
+    'DESC_ALIPAY' => 'Please follow the instructions on the image. After you have submitted the payment, please send an e-mail "order N%d has been paid via Alipay" to <a href="mailto:orders@ruslania.com">orders@ruslania.com</a>',
   'DESC_APPLEPAY' => 'Payment with Apple Pay is easy, your iPhone is all you need. One touch is enough.',
   'DESC_PAYTYPE7' => 'Attention! This payment method can be chosen only by our customers with special terms, consumers in Finland and organizations from EU countries with a valid European VAT number. An invoice will be sent along with the goods in the parcel or separately to the invoice address in paper or electronically. Orders to consumers can only be sent with an invoice if the previous invoices have been paid. Ruslania reserves the right to demand prepayment also from Finnish customers.',
   'DESC_PAYTYPE13' => 'Details for bank transfer: Ruslania Books Corp., <br>
