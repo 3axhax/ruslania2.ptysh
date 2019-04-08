@@ -127,7 +127,7 @@ $ctrl = Yii::app()->getController()->id;
 
 	<div style="text-align: center;"><?=$ui->item('ARE_YOU_SURE'); ?></div>
 	<div class="box_btns">
-		<a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }" class="btn_yes">Да</a> <a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_no">Нет</a>
+		<a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }" class="btn_yes"><?= $ui->item('MSG_YES') ?></a> <a href="javascript:;" onclick="$('.alerthtml').hide();" class="btn_no"><?= $ui->item('MSG_NO') ?></a>
 	</div>
 
 </div>
