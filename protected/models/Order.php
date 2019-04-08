@@ -193,7 +193,15 @@ class Order extends CMyActiveRecord
                 $price /= 12;
             }
             $pricesValues[$itemKey] = round($price, 2);
-            $discountKeys[$itemKey] = ['discountPrice'=>$key, 'originalPrice'=>$keyWithoutDiscount, 'quantity'=>$item['quantity']];
+            $discountKeys[$itemKey] = [
+                'discountPrice'=>$key,
+                'originalPrice'=>$keyWithoutDiscount,
+                'quantity'=>$item['quantity'],
+                'info'=>(($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
+                    ?DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%'
+                    :''
+                ),
+            ];
             $itemsPrice += $item['quantity'] * $price;
             if (!empty($item['InCartUnitWeight'])) $fullweight += ($item['InCartUnitWeight']/1000);
 
@@ -227,6 +235,8 @@ class Order extends CMyActiveRecord
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
         list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false);
 
+        $notes = $order->Notes;
+
         $promocodeId = 0;
         if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
         else {
@@ -234,6 +244,13 @@ class Order extends CMyActiveRecord
             $code = $promocode->getPromocode($this->_promocode)['code'];
             $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
             $promocodeId = $this->_promocode;
+            if (!empty($notes)) $notes .= ' ';
+            $notes .= 'Использован промокод: ' . $code . '. ';
+            $briefly = $promocode->briefly($code, false, $itemsPrice);
+            if (!empty($briefly['promocodeValue'])) $notes .= $briefly['promocodeValue'] . ' ';
+            if (!empty($briefly['promocodeUnit'])) $notes .= $briefly['promocodeUnit'] . ' ';
+            if (!empty($briefly['name'])) $notes .= strip_tags($briefly['name']) . ' ';
+            if ((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST) $deliveryPrice = 0;
         }
 
         try
@@ -253,7 +270,7 @@ class Order extends CMyActiveRecord
                       ':full' => $fullPrice,
                       ':items' => $itemsPrice,
                       ':delivery' => $deliveryPrice,
-                      ':notes' => $order->Notes,
+                      ':notes' => $notes,
                       ':mandate' => $order->Mandate,
                       ':promocodeId' => $promocodeId,
                       ':smartpost_address' => $order->SmartpostAddress,
@@ -297,8 +314,7 @@ class Order extends CMyActiveRecord
             $sql = 'INSERT INTO users_orders_items (oid, entity, iid, quantity, items_price, price, info) VALUES '
                 . '(:oid, :entity, :iid, :quantity, :subtotal, :price, :info)';
 
-            foreach ($items as $item)
-            {
+            foreach ($items as $item) {
                 $itemKey = $item['entity'].'_'.$item['id'];
                 $price = $pricesValues[$itemKey];
 
@@ -310,7 +326,7 @@ class Order extends CMyActiveRecord
                          ':quantity' => $item['quantity'],
                          ':subtotal' => $item['quantity'] * $price,
                          ':price' => $price,
-                         ':info' => empty($item['info']) ? null : $item['info']
+                         ':info' => empty($discountKeys[$itemKey]['info']) ? '' : $discountKeys[$itemKey]['info']
                     ));
             }
 
