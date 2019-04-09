@@ -1,11 +1,7 @@
       <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
      <div class="container view_product">
 			<div class="row">
-
         <div class="span10">
-			<?php /*
-            <h2 class="cattitle"><?=$ui->item('RUSLANIA_RECOMMENDS'); ?>:</h2>
- */ ?>
 			<h1 class="titlename poht" style="margin-bottom: 20px;"><?php
 				$breadcrumbs = $this->breadcrumbs;
 				$h1 = array_pop($breadcrumbs);
@@ -16,11 +12,8 @@
             <ul class="entity text recomends">
                 <?php $i = 1;  foreach($list as $item): ?>
                     <?php $title = ProductHelper::GetTitle($item->attributes);
-					
-					
                     ?>
                     <li class="iconentity-<?=$item['icon_entity']; ?>">
-					
 						<?php
 							$o = new Offer;
 							$offer = $o->GetItems($item['id']);
@@ -29,32 +22,19 @@
 								$entity = $k['entity'];
 								break;
 							}
-							
-							//var_dump(Entity::GetTitle($entity));
-							
-							//echo Entity::GetTitle($entity);
-
-							
-							$s = 0;
-							//var_dump($item);
 							$href = Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title)));
 						?>
-					
-					
                         <div>
 <a class="title_item_recomend" href="<?= $href ?>"><?= CHtml::encode($title) ?></a>
 <span class="date_recomend"><?=Yii::app()->dateFormatter->format('dd MMM yyyy', $item['creation_date']); ?></span>
                         </div>
 <?= ProductHelper::GetDescription($item->attributes); ?>
-							
 							<?
 							if (count($offer[Entity::GetTitle($entity)]['items'])) {
 								echo '<div class="items_goods_recomends">';
 								echo '<div class="slider_recomend custom-slider">';
 								foreach ($offer as $offer_entity) {
                                     foreach ($offer_entity['items'] as $of) {
-
-                                        //if ($s < 7) {
                                         if (!empty($of['image'])): ?>
 	                                        <div class="item slider_recomend__item">
 		                                        <div class="img slider__img">
@@ -62,24 +42,13 @@
 				                                        <img src="<?= Picture::Get($of, Picture::SMALL) ?>" data-lazy="<?= Picture::Get($of, Picture::SMALL) ?>">
 			                                        </a>
 		                                        </div>
-	                                        </div><?php /*
-	                                        <div class="item slider_recomend__item">
-                                            <a href="<?= ProductHelper::createUrl($of) ?>" class="slider__img-block">
-												<div class="img slider__img" style="background: url('<?= Picture::Get($of, Picture::SMALL) ?>') center center no-repeat; background-size: 100%; position: relative">
-                                            <?php $this->renderStatusLables(Product::GetStatusProduct($of['entity'], $of['id']), '', true) ?>
-                                                </div>
-                                            </a>
-                                        </div> */ ?>
+	                                        </div>
                                         <?php endif;
-                                        $s++;
                                     }
                                 }
 								echo '</div><div class="clearfix"></div></div>';
 							}
 							?><div style="margin-top: 15px;"></div>
-	                    
-						
-						
 						<a href="<?= $href ?>" class="button_view list">
                            <span class="fa"></span> <span><?=$ui->item('VIEW_LIST'); ?></span>
                             
@@ -88,16 +57,12 @@
 							<a title="<?=htmlspecialchars($ui->item('DOWNLOAD_EXCEL_FILE')); ?>" rel="nofollow" class="download excel" href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>">
 							<span class="fa"></span>
 								<span><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?></span>
-								
                             </a>
 					<? if (count($list) > $i) { echo '<hr />'; } $i++;?>
 					</li>
                 <?php
-				
-
 				endforeach; ?>
             </ul>
-
 			<?php if (count($list) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginator)); ?>
         </div>
 				<div class="span2">
@@ -105,7 +70,6 @@
 				</div>
         </div>
         </div>
-
 <script type="text/javascript">
 	$(document).ready(function () {
 		scriptLoader('/new_js/slick.js').callFunction(function() {
@@ -118,7 +82,9 @@
 				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>",
 				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>"
 			}).on('lazyLoadError', function(event, slick, image, imageSource){
-				image.closest('div.slider_recomend__item').remove()/*image.attr('src', '<?= Picture::srcNoPhoto() ?>')*/;
+				image.closest('div.slider_recomend__item').remove();
+//				slick.slickGoTo(0, true);
+				slick.next();
 			});
 		});
 	});
