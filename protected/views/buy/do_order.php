@@ -58,43 +58,7 @@ $user = User::model()->findByPk($this->uid);
 					<?php $this->renderPartial('payments_form', array()); ?>
 				</div>
 				<div class="clearBoth"></div>
-				<div class="row" style="margin-left: 0; margin-top: 10px;">
-
-					<div class="span6" style="width: 49%; margin-left: 0; margin-right: 1%;">
-
-						<textarea id="Notes" style="width: 100%; margin-bottom: 0; height: 245px; box-sizing: border-box;" placeholder="<?=str_replace('<br />', '', $ui->item("address_contact_notes")); ?>" name="notes"></textarea>
-
-					</div>
-					<div class="span6" style="width: 50%; margin: 0;">
-
-						<div class="cart_footer  footer1">
-							<?php /*<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), $countItems . ' ' . $PH->endOfWord($countItems, $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1', $ui->item('CARTNEW_PRODUCTS_TITLE3'))), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?> */ ?>
-							<?= $ui->item('ITOGO_WITHOUT_DELIVERY', '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
-						</div>
-						<div class="cart_footer  footer1">
-							<?=$ui->item('ORDER_MSG_DELIVERY_COST')?> <span class="delivery_cost"><?= $PH->FormatPrice($total['deliveryPrice']); ?></span> <span class="add_cost" style="font-weight: bold; display: none;"><?=$ui->item('CARTNEW_OTHER_PRODUCTS_CART')?></span>
-						</div>
-						<div class="cart_footer footer2">
-							<?=$ui->item('CART_COL_SUBTOTAL_DELIVERY')?>: <span class="delivery_name"><?=$ui->item('MSG_DELIVERY_TYPE_0')?></span><span class="date" style="display: none"></span><?=$ui->item('CARTNEW_TOTAL_WEIGHT_LABEL')?>: <?= $total['fullWeight'] ?> <?=$ui->item('CARTNEW_WEIGHT_NAME')?>
-						</div>
-
-						<div class="cart_footer footer_promocode">
-							<?php $this->renderPartial('/cart/_promocode', array('priceId'=>'itogo_cost')); ?>
-						</div>
-						<div class="cart_footer footer3">
-							<?=$ui->item('CARTNEW_TOTAL_COST_LABEL')?>: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($total['itemsPrice'] + $total['deliveryPrice']); ?></span>
-							<?php if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif; ?>
-						</div>
-
-						<div class="cart_footer"><div class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></div></div>
-						<?php /*
-						<div class="cart_footer">
-							<?=$ui->item('CARTNEW_SEND_INFO_LABEL')?>
-						</div>
-						*/?>
-					</div>
-					<div class="clearfix"></div>
-				</div>
+				<?php $this->renderPartial('itogo', array('PH'=>$PH, 'total'=>$total, 'items'=>$items, 'countItems'=>$countItems)); ?>
 		</li>
 	</ol>
 
