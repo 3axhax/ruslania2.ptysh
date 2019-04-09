@@ -4,11 +4,23 @@
 class Instagram {
 	const SHORTNAME = 'insta';
 
-	function __construct($login = true) {
-		if ($login) {
-			$this->_clientId = '0ead008ed078401b8681ad43286882cd';
-			$this->_clientSecret = '25623aa2b303471fa70a642d87a6bab8 ';
-		}
+	private $_clientId = '';
+	private $_clientSecret = '';
+	private $_authUrl = '';
+	private $_redirectUrl = '';
+	private $_tokenUrl = '';
+	private $_login = '';
+	private $_accessToken = '';
+
+	function __construct() {
+		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
+		$this->_clientId = $cfg[Instagram::SHORTNAME]['clientId'];
+		$this->_clientSecret = $cfg[Instagram::SHORTNAME]['clientSecretId'];
+		$this->_authUrl = $cfg[Instagram::SHORTNAME]['authUrl'];
+		$this->_redirectUrl = $cfg[Instagram::SHORTNAME]['redirectUrl'];
+		$this->_tokenUrl = $cfg[Instagram::SHORTNAME]['tokenUrl'];
+		$this->_login = $cfg[Instagram::SHORTNAME]['login'];
+		$this->_accessToken = $cfg[Instagram::SHORTNAME]['accessToken'];
 	}
 
 	function urlCode() {
@@ -17,22 +29,60 @@ class Instagram {
 			'redirect_uri' => $this->_redirectUrl,
 			'response_type' => 'code',
 		);
+//		file_put_contents(Yii::getPathOfAlias('webroot') . '/test/instagram.log', implode("\t", array(
+//				$this->_authUrl . '?' . http_build_query($param),
+//			)
+//		) . "\n", FILE_APPEND);
 		return $this->_authUrl . '?' . http_build_query($param);
 	}
 
 	function getUser($code = null) {
-		$accessToken = $this->_accessToken;
-		if ($code !== null) $accessToken = $code;
-		$param = array(
-			'access_token' => $accessToken,
-		);
-		$url = 'https://api.instagram.com/v1/users/self/?' . http_build_query($param);
-		$curl = curl_init($url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-		$result = curl_exec($curl);
-		curl_close($curl);
-		$result = json_decode($result, true);
+		if ($code !== null) {
+			$param = array(
+				'client_id' => $this->_clientId,
+				'client_secret' => $this->_clientSecret,
+				'grant_type' => 'authorization_code',
+				'redirect_uri' => $this->_redirectUrl,
+				'code' => $code,
+			);
+			$curl = curl_init($this->_tokenUrl);
+			curl_setopt($curl,CURLOPT_POST,true);
+			curl_setopt($curl,CURLOPT_POSTFIELDS,$param);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			$res = curl_exec($curl);
+			curl_close($curl);
+			$res = json_decode($res, true);
+//			file_put_contents(Yii::getPathOfAlias('webroot') . '/test/instagram.log', implode("\t", array(
+//					$this->_tokenUrl,
+//					http_build_query($param),
+//					serialize($res),
+//				)
+//			) . "\n", FILE_APPEND);
+			if (!empty($res['access_token'])) {
+				$accessToken = $res['access_token'];
+				if (!empty($res['user'])) return array('data'=>$res['user']);
+			}
+		}
+		else $accessToken = $this->_accessToken;
+		if (empty($accessToken)) return array();
+//		else {
+			$param = array(
+				'access_token' => $accessToken,
+			);
+			$url = 'https://api.instagram.com/v1/users/self/?' . http_build_query($param);
+			$curl = curl_init($url);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+			$result = curl_exec($curl);
+			curl_close($curl);
+			$result = json_decode($result, true);
+//			file_put_contents(Yii::getPathOfAlias('webroot') . '/test/instagram.log', implode("\t", array(
+//					'https://api.instagram.com/v1/users/self/?' . http_build_query($param),
+//					serialize($result),
+//				)
+//			) . "\n", FILE_APPEND);
+//		}
 		return $result;
 	}
 

@@ -6,6 +6,33 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 class Twitter {
 	const SHORTNAME = 'tw';
 
+	private $_apiId = '';
+	private $_apiKey = '';
+	private $_apiSecret = '';
+	private $_accessToken = '';
+	private $_accessTokenSecret = '';
+	private $_redirectUrl = '';
+	private $_authUrl = '';
+	private $_accessTokenUrl = '';
+	private $_requestTokenUrl = '';
+	private $_userUrl = '';
+	private $_v = '';
+
+	function __construct() {
+		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
+		$this->_apiId = $cfg[Twitter::SHORTNAME]['apiId'];
+		$this->_apiKey = $cfg[Twitter::SHORTNAME]['apiKey'];
+		$this->_apiSecret = $cfg[Twitter::SHORTNAME]['apiSecret'];
+		$this->_accessToken = $cfg[Twitter::SHORTNAME]['accessToken'];
+		$this->_accessTokenSecret = $cfg[Twitter::SHORTNAME]['accessTokenSecret'];
+		$this->_redirectUrl = $cfg[Twitter::SHORTNAME]['redirectUrl'];
+		$this->_authUrl = $cfg[Twitter::SHORTNAME]['authUrl'];
+		$this->_accessTokenUrl = $cfg[Twitter::SHORTNAME]['accessTokenUrl'];
+		$this->_requestTokenUrl = $cfg[Twitter::SHORTNAME]['requestTokenUrl'];
+		$this->_userUrl = $cfg[Twitter::SHORTNAME]['userUrl'];
+		$this->_v = $cfg[Twitter::SHORTNAME]['v'];
+	}
+
 	function urlCode() {
 		$connection = new TwitterOAuth($this->_apiKey, $this->_apiSecret);
 		$temporary_credentials = $connection->oauth('oauth/request_token', array("oauth_callback" =>$this->_redirectUrl));

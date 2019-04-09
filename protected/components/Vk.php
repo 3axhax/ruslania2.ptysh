@@ -3,6 +3,27 @@
 class Vk {
 	const SHORTNAME = 'vk';
 
+	private $_clientId = '';
+	private $_clientSecret = '';
+	private $_serviceKey = '';
+	private $_v = '';
+	private $_authUrl = '';
+	private $_tokenUrl = '';
+	private $_userUrl = '';
+	private $_redirectUrl = '';
+
+	function __construct() {
+		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
+		$this->_clientId = $cfg[Vk::SHORTNAME]['clientId'];
+		$this->_clientSecret = $cfg[Vk::SHORTNAME]['clientSecret'];
+		$this->_serviceKey = $cfg[Vk::SHORTNAME]['serviceKey'];
+		$this->_v = $cfg[Vk::SHORTNAME]['v'];
+		$this->_authUrl = $cfg[Vk::SHORTNAME]['authUrl'];
+		$this->_tokenUrl = $cfg[Vk::SHORTNAME]['tokenUrl'];
+		$this->_userUrl = $cfg[Vk::SHORTNAME]['userUrl'];
+		$this->_redirectUrl = $cfg[Vk::SHORTNAME]['redirectUrl'];
+	}
+
 	function urlCode() {
 		$param = array(
 			'client_id' => $this->_clientId,

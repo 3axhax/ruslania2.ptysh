@@ -3,13 +3,22 @@
 require_once dirname(dirname(__FILE__)) . '/extensions/Facebook/autoload.php';
 class Facebook {
 	const SHORTNAME = 'fb';
-	
+	private $_apiId = '';
+	private $_apiSecret = '';
+	private $_v = '';
+	private $_redirectUrl = '';
 	/**
 	 * @var Facebook\Facebook
 	 */
 	protected $_fb;
 
 	function __construct() {
+		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
+		$this->_apiId = $cfg[Facebook::SHORTNAME]['apiId'];
+		$this->_apiSecret = $cfg[Facebook::SHORTNAME]['apiSecret'];
+		$this->_v = $cfg[Facebook::SHORTNAME]['v'];
+		$this->_redirectUrl = $cfg[Facebook::SHORTNAME]['redirectUrl'];
+
 		$this->_fb = new Facebook\Facebook([
 			'app_id' => $this->_apiId,
 			'app_secret' => $this->_apiSecret,
