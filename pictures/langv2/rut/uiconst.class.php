@@ -1303,6 +1303,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'COUNTS_IN_ORDER_MAX' => 'Esli pri oformlenii zakaza ukazannoe vami kolichestvo menyaetsya na menshee, ehto znachit, chto dannyj produkt imeetsya tolko pokazyvaemom kolichestve. v ehtom sluchae v "primechaniyakh i pozhelaniyakh k zakazu" ukazhite zhelaemoe kolichestvo.',
   'REAL_PEREODIC_COUNTS' => 'Znachenie bylo izmeneno na dostupnoe kolichestvo mesyacev podpiski.',
   'ITOGO_WITHOUT_DELIVERY' => 'Itogo, bez ucheta stoimosti dostavki: %s',
+    'WITHOUT_DELIVERY' => 'Bez ucheta stoimosti dostavki',
   'CARTNEW_INPUT_ERROR' => 'Zapolnite ehto pole',
   'CARTNEW_SELECT_COUNTRY_ERROR' => 'Vyberite stranu',
   'CARTNEW_ADD_ADDR_BTN' => 'Dobavit adres',

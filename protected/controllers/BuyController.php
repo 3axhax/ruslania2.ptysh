@@ -1,8 +1,8 @@
 <?php
 /*Created by Кирилл (24.02.2019 10:15)*/
-//ini_set('error_reporting', E_ALL);
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 class BuyController extends MyController {
 	public $layout = 'without_menu';
 	private $_returnButton = array();
@@ -52,10 +52,11 @@ class BuyController extends MyController {
 
 		/**@var $order Order*/
 		$order = Order::model();
-		$total = array('itemsPrice'=>null, 'deliveryPrice'=>null, 'pricesValues'=>null, 'discountKeys'=>null, 'fullweight'=>null);
-		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
+		$total = array('itemsPrice'=>null, 'deliveryPrice'=>null, 'pricesValues'=>null, 'discountKeys'=>null, 'fullWeight'=>null, 'withVAT'=>true, 'isDiscount'=>false);
+		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight'], $total['withVAT'], $total['isDiscount']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
 		$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
 		$this->breadcrumbs[] = 'Оформление заказа';
+		Debug::staticRun(array($total));
 		if (Yii::app()->user->isGuest) {
 			$userInfo = array();
 			if (Yii::app()->getRequest()->getParam('useSocial')) $userInfo = $this->_getUserInfoBySocial();
@@ -75,7 +76,7 @@ class BuyController extends MyController {
 
 	function actionCheckPromocode() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
 			$dtype = (int) Yii::app()->getRequest()->getParam('dtype');
 			$dMode = 0;
 			if ($dtype <= 0) $dMode = 1;
@@ -95,7 +96,9 @@ class BuyController extends MyController {
 			}
 			$cart = new Cart();
 			$items = $cart->GetCart($this->uid, $this->sid);
-			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false);
+			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight, $withVAT, $ret['isDiscount']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false);
+			if ($withVAT) $ret['withVAT'] = '';
+			else $ret['withVAT'] = ', ' . mb_strtolower(Yii::app()->ui->item('WITHOUT_VAT'));
 			$ret['deliveryName'] = Delivery::ToString($dtype);
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
 				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);
@@ -132,22 +135,24 @@ class BuyController extends MyController {
 			$ret['tarif'] = $delivery->GetRates(0, $this->uid, $this->sid, $countryId);
 			$ret['smartpost'] = '';
 
-			$deliveryPriceEur = Currency::ConvertToEUR($ret['tarif'][0]['value'], Yii::app()->currency);
-			if (($deliveryPriceEur == 7)&&(in_array($countryId, array(62, 68)))) {
-				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_FINEST');
-				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_FINEST');
-				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_FINEST');
-				$ret['smartpost'] = $this->renderPartial('smartpost', array('countryId'=>$countryId), true);
-			}
-			elseif ($deliveryPriceEur < 15) {
-				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER');
-				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER');
-				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER');
-			}
-			else {
-				$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER_YES');
-				$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER_YES');
-				$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER_YES');
+			if (!empty($ret['tarif'])) {
+				$deliveryPriceEur = Currency::ConvertToEUR($ret['tarif'][0]['value'], Yii::app()->currency);
+				if (($deliveryPriceEur == 7)&&(in_array($countryId, array(62, 68)))) {
+					$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_FINEST');
+					$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_FINEST');
+					$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_FINEST');
+					$ret['smartpost'] = $this->renderPartial('smartpost', array('countryId'=>$countryId), true);
+				}
+				elseif ($deliveryPriceEur < 15) {
+					$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER');
+					$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER');
+					$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER');
+				}
+				else {
+					$ret['tarif'][0]['description'] = YII::app()->ui->item('DELIVERY_ECONOMY_OTHER_YES');
+					$ret['tarif'][1]['description'] = YII::app()->ui->item('DELIVERY_PRIORITY_OTHER_YES');
+					$ret['tarif'][2]['description'] = YII::app()->ui->item('DELIVERY_EXPRESS_OTHER_YES');
+				}
 			}
 		}
 		$this->ResponseJson($ret);
@@ -232,9 +237,8 @@ class BuyController extends MyController {
 
 				$orderItems = array();
 				foreach ($items as $item) {
-					if (ProductHelper::IsAvailableForOrder($item)){
+					if (ProductHelper::IsAvailableForOrder($item))
 						$orderItems[] = $item;
-					}
 				}
 				$o = new Order;
 				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
@@ -306,7 +310,6 @@ class BuyController extends MyController {
 	function actionRepay() {
 		$o = new Order;
 		$order = $o->GetOrder((int) Yii::app()->getRequest()->getParam('oid'));
-		Debug::staticRun(array($order));
 		if(empty($order)) throw new CHttpException(404);
 
 		if($order['uid'] != $this->uid) {

@@ -342,6 +342,7 @@ class CartController extends MyController {
         }
         $data['hrefContinueShopping'] = $hrefContinueShopping;
 
+        Debug::staticRun(array($data));
         $this->render('view', $data);
     }
     public function actionDoOrderJSON() {
@@ -1147,7 +1148,7 @@ class CartController extends MyController {
 		$cart = $this->actionGetAll(0);
 		
 		$cart = $cart['CartItems'];
-
+		
 		
         $withVat = false;
         $fullprice = 0;

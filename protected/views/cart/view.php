@@ -117,8 +117,13 @@ $ctrl = Yii::app()->getController()->id;
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="type[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Price2Use'] ?>">
                             </td>
                             <td valign="middle" nowrap="" align="center" class="cart1contents1">
-                                <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
-                                <?=Currency::ToSign(Yii::app()->currency); ?>
+                                <div data-bind="visible: DiscountPercent() > 0, text: PriceOriginal()" style="text-decoration: line-through;<?php if (empty($cart['DiscountPercent'])): ?> display: none;<?php endif; ?>">
+                                    <?= $cart['PriceOriginal'] ?>
+                                </div>
+                                <div>
+                                    <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
+                                    <?=Currency::ToSign(Yii::app()->currency); ?>
+                                </div>
                             </td>
                             <td valign="middle" align="center" class="cart1contents1">
                                 <a href="javascript:;" onclick="$('.alerthtml',$(this).parent()).show(); $('.opacity.alerthtml').show();"><img src="/new_img/del_cart.png" /></a>

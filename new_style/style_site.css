@@ -2549,8 +2549,9 @@ a.count_mini_cart {
     box-shadow: none;
 }
 
-#cart_renderpartial { 
-    position:absolute; 
+#cart_renderpartial {
+    top: 90px;
+    position:absolute;
     z-index:1000; 
     margin-left:-100px; 
     display:none;

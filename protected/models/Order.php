@@ -164,7 +164,7 @@ class Order extends CMyActiveRecord
      * @param $address array -это адрес доставки с данными пользователя (Address::GetAddress), но можно просто передать страну (если пользователь не авторизирован). Адрес нужен потому, что ндс зависит от кода предприятия
      * @param $deliveryMode int 0 - считаю стоимость доставки, 1 - несчитаю стоимость доставки
      * @param $deliveryTypeID int - тип доставки
-     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки]
+     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки, withVAT(да|нет), естьТоварСоСкидкой(да|нет)]
      */
     function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null, $useDefaultAddr = true) {
         if (empty($address)&&!empty($useDefaultAddr)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
@@ -173,6 +173,7 @@ class Order extends CMyActiveRecord
         $itemsPrice = $fullweight = 0;
         $pricesValues = array();
         $discountKeys = array();//нужно для получения цены по промокоду, сюда же положил количество товара, что бы не создавать новую переменную
+        $isDiscount = false;//признак, что есть товар со скидкой
         foreach ($items as $idx=>$item) {
             $values = DiscountManager::GetPrice($uid, $item);
             $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
@@ -197,11 +198,12 @@ class Order extends CMyActiveRecord
                 'discountPrice'=>$key,
                 'originalPrice'=>$keyWithoutDiscount,
                 'quantity'=>$item['quantity'],
-                'info'=>(($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
-                    ?DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%'
-                    :''
-                ),
+                'info'=>'',
             ];
+            if ($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT) {
+                $isDiscount = true;
+                $discountKeys[$itemKey]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
+            }
             $itemsPrice += $item['quantity'] * $price;
             if (!empty($item['InCartUnitWeight'])) $fullweight += ($item['InCartUnitWeight']/1000);
 
@@ -225,7 +227,7 @@ class Order extends CMyActiveRecord
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
 
-        return [round($itemsPrice, 2), round($deliveryPrice, 2), $pricesValues, $discountKeys, $fullweight];
+        return [round($itemsPrice, 2), round($deliveryPrice, 2), $pricesValues, $discountKeys, $fullweight, (bool)$withVAT, (bool)$isDiscount];
     }
 
     public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)

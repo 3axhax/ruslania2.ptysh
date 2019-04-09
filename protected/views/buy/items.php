@@ -2,13 +2,18 @@
 if (empty($PH)) $PH = new ProductHelper();
 if (empty($total)) $total = null;
 if (empty($countItems)) $countItems = null;
+$head = $ui->item('CART_COL_TOTAL_PRICE2');
+if (!empty($total)&&!empty($total['isDiscount'])) $head .= ', ' . mb_strtolower($ui->item('PRICE_DISCOUNT_FORMAT'));
+$head .= ', ' . mb_strtolower($ui->item('WITHOUT_DELIVERY'));
+if (!empty($total)&&empty($total['withVAT'])) $head .= '<span class="items_nds">, ' . mb_strtolower($ui->item('WITHOUT_VAT')) . '</span>';
+else $head .= '<span class="items_nds"></span>';
 ?>
 <?php if ($countItems !== null): ?>
 <div class="cart_header" style="width: 553px;">
 	<?php /*
 	<?= sprintf($ui->item('CARTNEW_HEADER_AMOUNT_TITLE'), $countItems . ' ' . $PH->endOfWord($countItems, $ui->item('CARTNEW_PRODUCTS_TITLE2'), $ui->item('CARTNEW_PRODUCTS_TITLE1'), $ui->item('CARTNEW_PRODUCTS_TITLE3')), '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
     */ ?>
-	<?= $ui->item('ITOGO_WITHOUT_DELIVERY', '<span class="items_cost">' . $PH->FormatPrice($total['itemsPrice']) . '</span>') ?>
+	<?= $head ?>: <span class="items_cost"><?= $PH->FormatPrice($total['itemsPrice']) ?></span>
 	<?php /*if (Yii::app()->currency != Currency::EUR): ?><div class="paytail_payment" style="display: none;"><?= $ui->item('PRICE_PAYTRAYL_DESC') ?></div><?php endif;*/ ?>
 </div>
 <?php endif; ?>
