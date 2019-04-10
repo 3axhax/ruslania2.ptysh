@@ -169,7 +169,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 */ ?>
                     <li>
                         <span class="telephone2"><a href="whatsapp://send?phone=+358503889439" class="icons"><span class="fa whatsapp"></span></a></span>
-                        <span class="telephone-circle"><a href="tel:+35892727070" class="icons"><span class="fa phone"></span></a></span>
+                       <!-- <span class="telephone-circle"><a href="tel:+35892727070" class="icons"><span class="fa phone"></span></a></span>-->
                         <a href="tel:+35892727070"><span>+358 92727070</span></a>
                         <?php $this->renderPartial('/request/_button_call', array()) ?>
                     </li>
@@ -177,7 +177,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
                     <li><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank"><span class="adrs">Bulevardi 7, FI-00120 Helsinki, Finland</span></a></li>
 */ ?>
                     <li>
-                        <span class="telephone-circle"><a href="tel:+35892727070" class="icons"><span class="fa location"></span></a></span>
+                        <span class="telephone-circle"><span class="icons"><span class="fa location"></span></span></span>
                         <a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank"><span>Bulevardi 7, FI-00120 Helsinki, Finland</span></a>
                     </li>
                     <li><?= $ui->item('A_NEW_TITLE_TOP'); ?></li>
@@ -558,7 +558,23 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 <script>
 
     $(document).ready(function () {
-        scriptLoader('/js/marcopolo.js').callFunction(function(){
+        
+		$(window).keypress(function(e) {
+			
+			//alert(e.keyCode);
+			
+			if (e.keyCode == 13) {
+				
+				$('.btn_yes').click();
+				
+			}
+			
+			
+		})
+		
+		
+		
+		scriptLoader('/js/marcopolo.js').callFunction(function(){
             $('#Search').marcoPolo({
                 url: '<?= Yii::app()->createUrl('liveSearch/general') ?>',
                 cache: false,
