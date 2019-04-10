@@ -273,37 +273,37 @@ class Product
                 $sql = $cart_sql;
             }
             //CVarDumper::dump($ret, 10, true);
-        }
-        else
-        {
+        //}
+       // else
+       // {
 			
 			//echo $entity . ',';
 			
 //            if (isset($_GET['ha'])) {
-            $dp = Entity::CreateDataProvider($entity);
-            $criteria = $dp->getCriteria();
-            $criteria->alias = 't';
-            $criteria->addCondition('t.id in (' . implode(',', $ids) . ')');
-            $criteria->order = '';
-            $dp->setCriteria($criteria);
-            $dp->pagination = false;
+            // $dp = Entity::CreateDataProvider($entity);
+            // $criteria = $dp->getCriteria();
+            // $criteria->alias = 't';
+            // $criteria->addCondition('t.id in (' . implode(',', $ids) . ')');
+            // $criteria->order = '';
+            // $dp->setCriteria($criteria);
+            // $dp->pagination = false;
 
-            $data = $dp->getData();
-            $rows = Product::FlatResult($data);
-//            }
-//            else {
-//                $sql .= ' FROM ' . $table
-//                    . ' WHERE id IN (' . implode(', ', $ids) . ') ';
-//
-//                $rows = Yii::app()->db->createCommand($sql)->queryAll();
-//            }
+            // $data = $dp->getData();
+            // $rows = Product::FlatResult($data);
+           }
+           else {
+               $sql .= ' FROM ' . $table
+                   . ' WHERE id IN (' . implode(', ', $ids) . ') ';
+
+               $rows = Yii::app()->db->createCommand($sql)->queryAll();
+           }
 
             $ret = array();
             foreach ($rows as $row) {
                 $row['entity'] = $entity;
                 $ret[$row['id']] = $row;
             }
-        }
+        //}
         return $ret;
     }
 	

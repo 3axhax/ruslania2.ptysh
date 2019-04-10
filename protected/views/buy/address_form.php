@@ -6,8 +6,8 @@ array_unshift($countrys, array('id'=>'','title_en'=>'---'));
 if (empty($alias)) $alias = 'Address';
 if (empty($userType)) $userType = 'destination';
 switch ($userType) {
-	case 'destination': $userName = $ui->item("address_type"); break;
-	case 'payer': $userName = $ui->item("payer_type"); break;
+	case 'destination': $userName = trim($ui->item("address_type"),':'); break;
+	case 'payer': $userName = trim($ui->item("payer_type"),':'); break;
 }
 $form = $this->beginWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl('buy/newaddr'),
