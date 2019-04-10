@@ -758,6 +758,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     //delivery_cost - цена доставки
                     //itogo_cost - общая стоимость
                     $('.itogo_cost').html(r.totalPrice + ' ' + r.currency);
+                    $('.items_cost').html(r.itemsPrice + ' ' + r.currency);
                     $('.items_nds').html(r.withVAT);
                     $('.delivery_cost').html(r.deliveryPrice + ' ' + r.currency);
                     $('.delivery_name').html(r.deliveryName);
