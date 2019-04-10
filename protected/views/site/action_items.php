@@ -85,7 +85,7 @@
 								
 								
 								
-								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="<?=(($product['priceData'][DiscountManager::DISCOUNT] == '0') ? 'visibility: hidden;' : 'display: none')?>" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="<?=(($product['priceData'][DiscountManager::DISCOUNT] == '0') ? 'visibility: hidden; white-space: nowrap;' : 'display: none')?>" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
 								
 									<?php /*<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a> */?>

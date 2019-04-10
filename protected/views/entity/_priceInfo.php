@@ -56,7 +56,7 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
         <?php else: ?>
             <?= $ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?>
         <?php endif;*/ ?>
-            <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="visibility: hidden;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
+            <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="visibility: hidden;white-space: nowrap;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
         </div>
     <?php else : ?>
         <div class="price_h"><?= $ui->item($realPriceTitle); ?>:</div>
