@@ -6,13 +6,63 @@
     function _Address() {}
     _Address.prototype = {
         init: function(options) {
+            if ('userData' in options) {
+                this.setValues(options['userData']);
+            }
+            this.fillByUrl(options.formId);
             this.setConst(options);
             this.setEvents();
             return this;
         },
 
+        setValues: function(userData) {
+            for (userField in userData) {
+                switch (userField) {
+                    case 'email': $('.js_contactEmail').val(userData['email']); break;
+                    break;
+                }
+            }
+        },
+
+        fillByUrl: function(formId) {
+            var urlData = window.location.search.replace('?','').split('&').reduce(
+                function(p,e){
+                    var a = e.split('=');
+                    if (a[1]) p[decodeURIComponent(a[0])] = decodeURIComponent(a[1].replace(/\+/g, ' '));
+                    return p;
+                },
+                {}
+            );
+            $('#' + formId).find('input[name], textarea[name], select[name]').each(function(i, f) {
+                switch (f.type) {
+                    case 'radio':
+                        if ((f.name in urlData)&&(f.value == urlData[f.name])) f.checked = true;
+                        break;
+                    case 'checkbox':
+                        if (f.name in urlData) f.checked = true;
+                        break;
+                    case 'hidden': break;
+                    default:
+                        if (f.name in urlData) {
+                            switch (f.tagName) {
+                                case 'SELECT':
+                                    $(f).find('option[value=' + urlData[f.name] + ']').attr("selected", "selected");
+                                    break;
+                                case 'TEXTAREA':
+                                    f.innerHTML = urlData[f.name];
+                                    break;
+                                default:
+                                    f.value = urlData[f.name];
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            });
+        },
+
         setConst: function(options) {
-            this.formId = options.formId
+            this.formId = options.formId;
 
             this.country = document.getElementById(this.formId + '_country'); //страна доставки
             this.csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -38,6 +88,45 @@
                 self.fillPhoneCode(this);
             });
             $('#send-forma').on('click', function(){ self.sendforma(); });
+            this.changeLangOrCurrency();
+        },
+
+        changeLangOrCurrency: function() {
+            var self = this;
+            var getFormData = function() {
+                var fd = {};
+                $('#' + self.formId).find('input[name], textarea[name], select[name]').each(function(i, f) {
+                    switch (f.type) {
+                        case 'radio':case 'checkbox':
+                        if (f.checked) fd[f.name] = f.value;
+                        break;
+                        case 'hidden': break;
+                        default: fd[f.name] = f.value; break;
+                    }
+                });
+                return fd;
+            };
+            $('.dd_select_valut').find('div.label_valut a').each(function(i, el){
+                $(el).on('click', function() {
+                    var valute = 0;
+                    this.search.replace('?','').split('&').reduce(
+                        function(p,e){
+                            var a = e.split('=');
+                            if (a[0] == 'currency') valute = a[1];
+                        },
+                        {}
+                    );
+                    var fd = getFormData();
+                    fd['currency'] = valute;
+                    this.setAttribute('href', this.pathname + '?' + $.param(fd));
+                });
+            });
+            $('.dd_select_lang').find('span.lang a').each(function(i, el){
+                $(el).on('click', function() {
+                    var fd = getFormData();
+                    this.setAttribute('href', this.pathname + '?' + $.param(fd));
+                });
+            });
         },
 
         fillPhoneCode: function(t) {

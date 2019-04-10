@@ -982,7 +982,7 @@ Stripe.applePay.checkAvailability(function(available) {
             var urlData = window.location.search.replace('?','').split('&').reduce(
                 function(p,e){
                     var a = e.split('=');
-                    p[decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+                    if (a[1]) p[decodeURIComponent(a[0])] = decodeURIComponent(a[1].replace(/\+/g, ' '));
                     return p;
                 },
                 {}

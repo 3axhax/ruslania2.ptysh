@@ -17,10 +17,18 @@
                     <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
                 </div>
                 <link rel="stylesheet" href="/new_style/order_buy.css">
-                <script>
+            <?php
+            $user = User::model()->findByPk($this->uid);
+            $userData = array(
+                'id' => $this->uid,
+                'email'	=> $user->getAttribute('login'),
+            );
+            ?>
+            <script>
                     $(function(){
                         scriptLoader('/new_js/modules/address.js').callFunction(function() {
                             address().init({
+                                userData: <?= json_encode($userData) ?>,
                                 formId: 'Reg',
                                 urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
                                 urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
