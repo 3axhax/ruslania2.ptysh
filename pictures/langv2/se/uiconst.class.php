@@ -96,7 +96,7 @@ return array (
   'A_REGISTER' => 'Registrering',
   'A_REMIND_PASS' => 'Glömt ditt lösenord?',
   'A_SAMPO_PAYMENT_ACCEPTED' => 'Resultat, betalning: Betalning godkänd ',
-  'A_SAMPO_PAYMENT_DECLINED' => 'Resultat, betalning: Betalning ej godkänd',
+  'A_SAMPO_PAYMENT_DECLINED' => 'Resultat: Betalning inte godkänd',
   'A_SEARCH' => 'Sök',
   'A_SHOPCART' => 'Kundvagn',
   'A_SIGNIN' => 'Logga in',
