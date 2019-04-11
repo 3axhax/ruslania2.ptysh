@@ -1277,8 +1277,8 @@ class CartController extends MyController {
                     'hasError' => false, 
                     'msg' => $message,
                     'already' => $already,
-                    'buttonName' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
-                    'buttonName2' => Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
+                    'buttonName' => $entity == Entity::PERIODIC?Yii::app()->ui->item('CARTNEW_IN_CART_BTN0'):Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
+                    'buttonName2' => $entity == Entity::PERIODIC?Yii::app()->ui->item('CARTNEW_IN_CART_BTN0'):Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $alreadyInCart),
                 ));
             }
             else

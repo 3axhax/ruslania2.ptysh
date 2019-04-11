@@ -170,19 +170,20 @@
                         update_header_cart();
 						
 						$('a.cart'+item.ID()).removeClass('green_cart');
-						
-						$('a.cart'+item.ID()).html('<span style="padding: 0 17px 0 20px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
-						$('a.cart'+item.ID()).attr('style', '');
-						
-						
-						$('a.cartMini'+item.ID()).removeClass('green_cart');
-						
-						$('a.cartMini'+item.ID()).html('<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
-						$('a.cartMini'+item.ID()).attr('style', '');
-						
-						
-						
-						$('div.already-in-cart'+item.ID()).html('&nbsp;');
+                        $('a.cartMini'+item.ID()).removeClass('green_cart');
+
+                        if (item.Entity() == <?= Entity::PERIODIC ?>) {
+                            $('a.cart'+item.ID()).html('<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+                            $('a.cartMini'+item.ID()).html('<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+                        }
+                        else {
+                            $('a.cart'+item.ID()).html('<span style="padding: 0 17px 0 20px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+                            $('a.cart'+item.ID()).attr('style', '');
+                            $('a.cartMini'+item.ID()).html('<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span>');
+                            $('a.cartMini'+item.ID()).attr('style', '');
+                        }
+
+                        $('div.already-in-cart'+item.ID()).html('&nbsp;');
 						
                     }
                 })).then(function(json) {

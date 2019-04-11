@@ -1290,6 +1290,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'CARTNEW_IN_CART_BTN2' => '%d sht.',
   'LAST_STATE' => 'Posledniy status',
   'CARTNEW_IN_CART_BTN' => 'V korzine %d sht.',
+    'CARTNEW_IN_CART_BTN0' => 'V korzine',
   'PEREODIC_NAME' => 'Podpiska',
   'address_contact_notes2' => 'Primechaniya k adresu',
   'payer_type' => 'Platelshhik',

@@ -92,13 +92,14 @@ class Cart extends CActiveRecord
 		//if (!$cart) { $cart = new Cart; }
 		
 		//file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/1.log', print_r($cnt, 1));
-		
+        $availCount = $cnt + $quantity;
+        if (($entity == Entity::PERIODIC)&&($availCount > 12)) $availCount = 12;
 		$cart = new Cart;
         $cart->entity = Entity::ConvertToSite($entity);
         $cart->iid = $id;
         $cart->uid = $uid;
         $cart->sidv2 = $sid;
-        $cart->quantity = $cnt + $quantity;
+        $cart->quantity = $availCount;
         $cart->type = $finOrWorldPrice;
 		
         switch($type)
@@ -281,6 +282,12 @@ class Cart extends CActiveRecord
         $sql .= $where;
         if ($isMiniCart) 
             $sql .= ' ORDER BY iid DESC';
+		
+		
+		//var_dump($sql);
+		//var_dump($params);
+		
+		
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
         $ret = array();
         $data = array();
@@ -370,6 +377,8 @@ class Cart extends CActiveRecord
         }
         
         
+		//var_dump($rows);
+		
         return $ret;
     }
 

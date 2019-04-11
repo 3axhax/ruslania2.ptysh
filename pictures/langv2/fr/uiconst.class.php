@@ -1275,6 +1275,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'MENU' => 'Menu',
   'VIEW_LIST' => 'Parcourir les produits',
   'CARTNEW_IN_CART_BTN' => 'Quantité au panier: %d',
+    'CARTNEW_IN_CART_BTN0' => 'Quantité au panier',
   'CARTNEW_IN_CART_BTN2' => '%d kpl',
   'LAST_STATE' => 'Dernier statut',
   'PEREODIC_NAME' => 'Abonnement aux périodiques',

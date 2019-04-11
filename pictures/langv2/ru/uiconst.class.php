@@ -1289,6 +1289,7 @@ IBAN DE79514303006474790001 <br>
   'A_NEW_MY_FAVORITE' => 'Товары, взятые на заметку',
   'NAME_CROSSWORD' => 'Кроссворды',
   'CARTNEW_IN_CART_BTN' => 'В корзине %d шт.',
+  'CARTNEW_IN_CART_BTN0' => 'В корзине',
   'CARTNEW_IN_CART_BTN2' => '%d шт.',
   'CARTNEW_CONTINUE_SHOPPING' => 'Продолжить покупки',
   'CARTNEW_CONTINUE_SHOPPING_BTN' => 'Продолжить',

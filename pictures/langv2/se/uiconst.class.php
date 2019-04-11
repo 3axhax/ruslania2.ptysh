@@ -1285,6 +1285,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
   'MENU' => 'Menu',
   'VIEW_LIST' => 'Bläddra produkter',
   'CARTNEW_IN_CART_BTN' => 'Lägt i kundvagn %d st.',
+    'CARTNEW_IN_CART_BTN0' => 'Lägt i kundvagn',
   'CARTNEW_IN_CART_BTN2' => '%d st.',
   'LAST_STATE' => 'Senaste status',
   'PEREODIC_NAME' => 'Tidningsprenumerationer',

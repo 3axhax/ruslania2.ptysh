@@ -931,10 +931,18 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                    class="finmonthpricevat0"/>
 
 
-         
-			
-			<a class="cart-action add_cart add_cart_plus" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" data-hidecount="1" href="javascript:;">
-			<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+
+            <?php if (isset($item['AlreadyInCart'])) : ?>
+
+                <a class="cart-action add_cart add_cart_plus add_cart_view green_cart cart<?=$item['id']?>" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+                    <span><?=$ui->item('CARTNEW_IN_CART_BTN0')?></span></a>
+
+            <? else : ?>
+
+                <a class="cart-action add_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" data-hidecount="1" href="javascript:;">
+                    <span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+
+            <? endif; ?>
 
         <?php endif;?>
 

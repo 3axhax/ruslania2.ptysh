@@ -1288,6 +1288,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'VIEW_LIST' => 'Produkte durchsuchen',
   'CARTNEW_IN_CART_BTN2' => '%d stck.',
   'CARTNEW_IN_CART_BTN' => 'Im Warenkorb: %d',
+    'CARTNEW_IN_CART_BTN0' => 'Im Warenkorb',
   'LAST_STATE' => 'Letzter Status',
   'A_NEW_MY_FAVORITE' => 'Interessante Produkte',
   'ORDER_MSG_CURRENCY_AUTO_CHANGED' => 'Der Bestellungspreis wird automatisch in Euro angezeigt, weil die gewählte Zahlungsweise keine andere Währung gestattet.',

@@ -1283,6 +1283,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'MENU' => 'Menu',
   'VIEW_LIST' => 'Selaa tuotteita',
   'CARTNEW_IN_CART_BTN' => 'Ostoskorissa %d kpl',
+    'CARTNEW_IN_CART_BTN0' => 'Ostoskorissa',
   'CARTNEW_IN_CART_BTN2' => '%d kpl',
   'LAST_STATE' => 'Viimeisin päivitys',
   'PEREODIC_NAME' => 'Lehtitilaukset',
