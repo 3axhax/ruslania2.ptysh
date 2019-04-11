@@ -1408,4 +1408,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'CODE_COUNTRY' => 'Landesvorwahl',
   'NUMBER_PHONE' => 'Telefonnummer',
   'BUTTON_CALL' => 'Bitte um Rückruf',
+    'CONTINUE_PLACING_ORDER' => 'Bestellung fortsetzen',
+
 );

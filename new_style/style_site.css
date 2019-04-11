@@ -2234,7 +2234,7 @@ table.items_orders a.printed_btn {
 	height: 31px;
 	line-height: 31px;
 	position: relative;
-	width: 141px;
+	width: 170px;
 	padding-left: 37px;
 	text-align: center;
 	font-size: 13px;
@@ -3893,6 +3893,8 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 
 input::-moz-placeholder { color: #EBEBEB; }
 input::-webkit-input-placeholder { color: #EBEBEB; }
+textarea::-moz-placeholder { color: #EBEBEB; }
+textarea::-webkit-input-placeholder { color: #EBEBEB; }
 .checkbox-custom {
     display: inline-block;
     vertical-align: middle;

@@ -1419,4 +1419,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'CARTNEW_SMARTPOST_SUBTITLE' => 'Leave the box blank if you want delivery to your nearest post office. <br /><br />You can choose a suitable pick-up point. Enter your zip code in the box and click "Search". Get a list of pickup points and SmartPost automats. If you can\'t find a suitable pick-up point, you can try another zip code. <br /><br />',
   'CARTNEW_SMARTPOST_INPUT_INDEX_PLACEHOLDER' => 'Give postal index code',
   'DESC_PAY_IN_STORE' => 'In our actual store in Helsinki, you can pay in cash in EUR, credit and debit cards and Alipay.',
+    'CONTINUE_PLACING_ORDER' => 'Continue placing an order',
+
 );

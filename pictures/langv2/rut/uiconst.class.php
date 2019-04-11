@@ -1408,4 +1408,6 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
   'NUMBER_PHONE' => 'Nomer telefona',
   'BUTTON_CALL' => 'Zakazat zvonok',
   'DESC_PAY_IN_STORE' => 'V nashem magazine mozhno oplatit nalichkoj v eur, kreditnymi i debitnymi kartochkami i alipay.',
+    'CONTINUE_PLACING_ORDER' => 'Prodiljit oformlenie zakaza',
+
 );

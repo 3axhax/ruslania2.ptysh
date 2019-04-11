@@ -1407,4 +1407,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
   'BUTTON_CALL' => 'Pyydä takaisinsoitto',
   'CARTNEW_ERROR_SELECT_ADDR_DELIVERY' => 'Valitse toimitusosoite',
   'DESC_PAY_IN_STORE' => 'Ruslanian Helsingin myymälässä voit maksaa käteisellä, pankki- ja luottokorteilla.',
+    'CONTINUE_PLACING_ORDER' => 'Jatka tilauksen tekemistä',
+
 );

@@ -46,7 +46,7 @@
 								?>
 								
 								<a href="<?=Yii::app()->createUrl('cart/view');?>" class="order_start" style="background-color: #5bb75b;width:  auto;padding: 9px;">
-                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Продолжить оформление заказа</span>
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item('CONTINUE_PLACING_ORDER') ?></span>
                         </a>
 								
 								<?

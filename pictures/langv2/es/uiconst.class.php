@@ -300,7 +300,7 @@ return array (
   'More info on printed' => 'Más información sobre el impreso',
   'More info on soft' => 'Más información sobre el software',
   'More info on video' => 'Más información sobre el vídeo',
-  'MSG_ACTION_PRINT_ORDER' => 'Imprimir la orden de compra',
+  'MSG_ACTION_PRINT_ORDER' => 'Imprimir la orden',
   'MSG_ADDRESS_ERROR_EMPTY' => ' <b>No ha añadido ninguna dirección de entrega.   </b><br>Para poder realizar una compra en este sitio, es obligatorio insertar una dirección de entrega.  <br>Para añadir una nueva dirección de entrega hacer click en el botón "añadir una nueva dirección de entrega"',
   'MSG_ALL_EAN' => 'EAN: %s',
   'MSG_ALL_NOTE' => '¡Estimado cliente! Todos los precios de nuestro sitio incluyen el impuesto al valor añadido (IVA) en vigor en la Unión Europea (UE). <br> Si reside fuera de la Unión Europea, podrá ver los precios sin impuestos luego de haber iniciado su sesión.',
@@ -1406,4 +1406,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
   'CODE_COUNTRY' => 'Código de país',
   'NUMBER_PHONE' => 'Número de teléfono',
   'BUTTON_CALL' => 'Pedir una llamada de vuelta',
+    'CONTINUE_PLACING_ORDER' => 'Continuar haciendo un pedido',
+
 );

@@ -122,7 +122,7 @@ return array (
   'address_business_title' => 'Nom de la société',
   'address_city' => 'Localité',
   'address_contact_email' => 'Adresse électronique',
-  'address_contact_notes' => 'Önskemål rörande beställningen',
+  'address_contact_notes' => 'Vos souhaits concernant cette commande',
   'address_contact_phone' => 'Numéro de téléphone',
   'address_country' => 'Pays du destinataire',
   'ADDRESS_DELETE' => 'Supprimer l’adresse',
@@ -300,7 +300,7 @@ return array (
   'More info on printed' => 'En savoir plus sur l\'imprimé',
   'More info on soft' => 'En savoir plus sur le logiciel',
   'More info on video' => 'En savoir plus sur la vidéo',
-  'MSG_ACTION_PRINT_ORDER' => 'Imprimer la commande',
+  'MSG_ACTION_PRINT_ORDER' => 'Imprimir la commande',
   'MSG_ADDRESS_ERROR_EMPTY' => '<b>Vous n’avez pas encore saisi d’adresse de livraison. </b><br>Pour pouvoir passer une commande dans notre boutique en ligne, vous devez saisir une adresse de livraison. <b>Pour ce faire, cliquez sur le bouton « Ajouter adresse de livraison » ci-dessous.</b>',
   'MSG_ALL_EAN' => 'EAN: %s',
   'MSG_ALL_NOTE' => 'Cher client ! Tous les prix figurant sur notre site incluent la taxe sur la valeur ajoutée (TVA), en vigueur dans l’Union européenne. <br>Si vous résidez en dehors de l’UE, inscrivez-vous et vous verrez les prix hors taxe à l’ouverture de votre session.',
@@ -1394,4 +1394,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'CODE_COUNTRY' => 'Code du pays',
   'NUMBER_PHONE' => 'Numéro de téléphone',
   'BUTTON_CALL' => 'Demander un rappel',
+    'CONTINUE_PLACING_ORDER' => 'Continuer la commande',
+
 );
