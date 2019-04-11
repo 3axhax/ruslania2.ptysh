@@ -1,4 +1,5 @@
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<script type="text/javascript" src="/new_js/modules/print.js"></script>
 
 <div class="container cabinet">
 
@@ -19,7 +20,11 @@
                     <li>
                         <?php $this->renderPartial('_one_order', array('order' => $order, 'co'=>count($list), 'i'=>$i)); ?>
                         <div class=""></div>
-						
+
+                        <script type="text/javascript">
+                            print<?= $order['id'] ?> = function() { return new _Print(); };
+                            print<?= $order['id'] ?>().init({$button: $('#printedBtn<?= $order['id'] ?>'), $content: $('#orderBlock<?= $order['id'] ?>')});
+                        </script>
                     </li>
                 <?php $i++; endforeach; ?>
                 </ul>

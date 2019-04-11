@@ -1,7 +1,7 @@
 <?php $onlyContent = isset($onlyContent) && $onlyContent; ?>
 <?php $enableSlide = isset($enableSlide) && $enableSlide; ?>
 <?php $class = empty($class) ? '' : 'class="'.$class.'"'; ?>
-<div <?=$class;?>>
+<div <?=$class;?> id="orderBlock<?= $order['id'] ?>">
     <b><?=sprintf($ui->item("ORDER_MSG_NUMBER"), $order['id']); ?></b>
 
                 <?php if($order['is_reserved']) : ?>
@@ -71,7 +71,7 @@
 						<td colspan="4">
 							<div class="summa">
 								
-								<a style="float: left;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn"
+								<a style="float: left;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn" id="printedBtn<?= $order['id'] ?>"
                                      target="_new"><?=$ui->item('MSG_ACTION_PRINT_ORDER'); ?></a>
 								
 							<div class="itogo">
