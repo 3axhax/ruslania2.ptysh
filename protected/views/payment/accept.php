@@ -5,7 +5,7 @@
     <div class="row">
         <div class="span10" style="float: none;width: 100%;">
             <h1><?= $ui->item('PAY_ACCEPT_H1') ?></h1>
-            <div class="info-box warning" style="border: none; background-color: #edb421; color: #333333;">
+            <div class="info-box warning" style="border: none; background-color: rgba(85,180,86,0.4); color: #333333;">
                 <h2><?=$ui->item('A_SAMPO_PAYMENT_ACCEPTED'); ?></h2>
                 <?=$ui->item('MSG_PAYMENT_RESULTS_ACCEPTED_2'); ?><br/>
                 <?=$ui->item('MSG_PAYMENT_RESULTS_ACCEPTED_3'); ?><br/>
