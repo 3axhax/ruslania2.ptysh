@@ -1349,7 +1349,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'CARTNEW_MORE_CART_COUNT' => 'And %d more',
   'CARTNEW_TITLE_PAGE_VARIANT' => 'Choose login type to place an order',
   'CARTNEW_LABEL_NO_ACCOUNT' => 'Is this your first time here?',
-  'CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION' => 'Continue without registration',
+  'CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION' => 'Continue without login',
   'CARTNEW_LOGIN_SOCIAL' => 'Login with your social media account',
   'CARTNEW_ALERT_PSW' => 'Forgot password? Get a reminder to your email',
   'CARTNEW_CHANGE_EMAIL_OTHER' => 'Please give another e-mail address',

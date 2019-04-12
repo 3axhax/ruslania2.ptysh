@@ -33,11 +33,9 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 		</ul>
 
 		<?= $form->textField('login', array('placeholder' => $ui->item('regform_email'))); ?>
-		<?= $form->passwordField('pwd', array('placeholder' => $ui->item('regform_password'))); ?><a
-			href="<?= Yii::app()->createUrl('site/forgot'); ?>"
-			title="<?= $ui->item('A_REMIND_PASS'); ?>"><?= $ui->item('A_REMIND_PASS'); ?></a> <a
-			href="<?= Yii::app()->createUrl('site/register'); ?>" title="Регистрация"
-			style="float: right"><?= $ui->item('A_REGISTER') ?></a>
+		<?= $form->passwordField('pwd', array('placeholder' => $ui->item('regform_password'))); ?>
+		<a href="<?= Yii::app()->createUrl('site/register'); ?>" title="Регистрация" style="float: right"><?= $ui->item('A_REGISTER') ?></a>
+		<a href="<?= Yii::app()->createUrl('site/forgot'); ?>" title="<?= $ui->item('A_REMIND_PASS'); ?>"><?= $ui->item('A_REMIND_PASS'); ?></a>
 
 		<div
 			style="margin-top: 10px;"><?= $form->submitButton($ui->item('A_SIGNIN'), array('class' => 'sort')); ?></div>
@@ -66,15 +64,12 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 	</div>
 
 	<div class="span6">
-		<style>
-			form.registr2 {
+		<style> form.registr2 {
 				width: auto;
 				margin: 0 auto;
 				padding: 30px 32px;
 				background-color: #f8f8f8;
-			}
-
-		</style>
+			} </style>
 		<?php
 		$form = $this->beginWidget('KnockoutForm', array(
 			'model' => new User,
@@ -106,10 +101,10 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
  */?>
 			<script src="/new_js/modules/social.js" type="text/javascript"></script>
 			<div class="social_auth">
-				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="socsvg instagram">ins</span></a>
-				<a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="socsvg facebook">fb</span></a>
-				<a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="socsvg vk">vk</span></a>
-				<a href="<?= Yii::app()->createUrl('widgets/authTwitter') ?>" target="_blank" onclick="return twitterCom.getUserInfo(this);"><span class="socsvg twitter">tw</span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="fa facebook"></span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="fa vk"></span></a>
+				<a href="<?= Yii::app()->createUrl('widgets/authTwitter') ?>" target="_blank" onclick="return twitterCom.getUserInfo(this);"><span class="fa twitter"></span></a>
 			</div>
 		</div>
 

@@ -98,7 +98,7 @@ class BuyController extends MyController {
 			$items = $cart->GetCart($this->uid, $this->sid);
 			list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight, $withVAT, $ret['isDiscount']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false);
 			if ($withVAT) $ret['withVAT'] = '';
-			else $ret['withVAT'] = ', ' . mb_strtolower(Yii::app()->ui->item('WITHOUT_VAT'));
+			else $ret['withVAT'] = ', ' . Yii::app()->ui->item('WITHOUT_VAT');
 			$ret['deliveryName'] = Delivery::ToString($dtype);
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
 				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);

@@ -554,7 +554,7 @@ pri ehtom v tretem shage zakaza snimite galochku «dannye platelshhika sovpadayu
   'PUBLISHED_BY_T1' => 'Izdatel/ Izgotovitel: %s',
   'PUBLISHED_IN_YEAR' => 'God vykhoda %s',
   'Publisher' => 'Izdatel',
-  'READ_BY' => 'ispolnitel(i): %s',
+  'READ_BY' => 'Ispolnitel(i): %s',
   'regform_email' => 'El. pochta',
   'regform_firstname' => 'Imja',
   'regform_lastname' => 'Familija',
