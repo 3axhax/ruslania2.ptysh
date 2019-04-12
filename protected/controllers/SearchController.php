@@ -11,13 +11,15 @@ class SearchController extends MyController {
 	private $_search;
 
 	function actionGeneral() {
-		$model = new SearchProducts($this->GetAvail(1), (int) Yii::app()->getRequest()->getParam('e'));
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (empty($q)) {
 			$this->_viewEmpty($q);
 			return;
 		}
 
+		$availForOrder = $this->GetAvail(1);
+		$eId = (int) Yii::app()->getRequest()->getParam('e');
+		$model = new SearchProducts($availForOrder, $eId);
 		$list = array();
 		$isCode = false;
 		if ($code = $model->isCode($q)) {
@@ -59,6 +61,16 @@ class SearchController extends MyController {
 			else $paginatorInfo = new CPagination(array_sum($abstractInfo));
 		}
 		$paginatorInfo->setPageSize(Yii::app()->params['ItemsPerPage']);
+
+		if ($availForOrder&&empty($eId)&&((int)$paginatorInfo->getItemCount() <= 0)) {
+			$referer = getenv('REQUEST_URI');
+			$request = new MyRefererRequest();
+			$request->setFreePath($referer);
+			$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+			$get = $_GET;
+			$get['avail'] = 0;
+			$this->redirect(Yii::app()->createUrl($refererRoute, $get));
+		}
 
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
 		$this->render('list', array(

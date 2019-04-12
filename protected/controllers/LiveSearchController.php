@@ -6,7 +6,8 @@ ini_set('display_startup_errors', 1);*/
 class LiveSearchController extends MyController {
 
 	function actionGeneral() {
-		$model = new SearchProducts($this->GetAvail(1));
+		$availForOrder = $this->GetAvail(1);
+		$model = new SearchProducts($availForOrder);
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
@@ -36,8 +37,14 @@ class LiveSearchController extends MyController {
 				$abstractInfo = $model->getEntitys($q);
 			}
 
-			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
-				$this->ResponseJson(array());
+			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
+				if ($availForOrder) {
+					$availForOrder = 0;
+					$model = new SearchProducts($availForOrder);
+					$list = $model->getList($q, 1, 10);
+				}
+				if (empty($list)) $this->ResponseJson(array());
+			}
 
 			if (!$isCode) {
 				if (!empty($abstractInfo))
@@ -45,7 +52,7 @@ class LiveSearchController extends MyController {
 			}
 
 //			if (!empty($list)||!empty($abstractInfo)||!empty($didYouMean))
-				$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
+				$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q, 'availForOrder'=>$availForOrder), true);
 
 			if (!$isCode) {
 				if (!empty($didYouMean))
@@ -60,16 +67,32 @@ class LiveSearchController extends MyController {
 				}
 			}
 
+			if ($availForOrder&&(count($result) == 1)) {
+				$model = new SearchProducts(0);
+				$list = $model->getList($q, 1, 10);
+				if (!empty($list)) {
+					$list = $model->inDescription($list, $q);
+					$result['list'] = array();
+					foreach ($list as $row) {
+						$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row), true);
+					}
+				}
+
+			}
+
 		}
 		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result), true)));
 	}
 
 	function actionGeneralHa() {
-		$model = new SearchProducts($this->GetAvail(1));
+		$availForOrder = $this->GetAvail(1);
+		$model = new SearchProducts($availForOrder);
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
-		$this->_haList($q, $model);
+//		$this->_haList($q, $model);
+//		Debug::staticRun(array($q));
 		if (!empty($q)) {
+			Debug::staticRun(array($q));
 			$isCode = false;
 			if ($code = $model->isCode($q)) {
 				$list = $model->getByCode($code, $q);
@@ -95,8 +118,13 @@ class LiveSearchController extends MyController {
 				$abstractInfo = $model->getEntitys($q);
 			}
 
-			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean))
-				$this->ResponseJson(array());
+			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
+				if ($availForOrder) {
+					$model = new SearchProducts(0);
+					$list = $model->getList($q, 1, 10);
+				}
+				if (empty($list)) $this->ResponseJson(array());
+			}
 
 			if (!$isCode) {
 				if (!empty($abstractInfo))
