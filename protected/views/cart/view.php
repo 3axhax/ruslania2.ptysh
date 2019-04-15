@@ -308,7 +308,7 @@ $ctrl = Yii::app()->getController()->id;
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank"><img alt="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" src="' . Picture::srcLoad() . '" data-lazy="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank"><img alt="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" src="'.Picture::Get($product, Picture::SMALL).'" data-lazy="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
     </div>
  
 	<div class="title_book"><a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
