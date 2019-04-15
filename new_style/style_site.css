@@ -224,8 +224,9 @@ a:hover {
 
 .header_logo_search_cart .search_box input.search_text {
     font-size: 16px;
-    width: 708px;
+    width: 460px;
     padding: 14px 23px;
+	padding-right: 220px;
     margin: 0;
     border: 1px solid #ececec; 
     box-shadow: none;
