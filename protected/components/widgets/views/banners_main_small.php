@@ -46,7 +46,7 @@
 				$block.html(otrezat($block.html()));
 				findPhrase();
 			}
-			else $block.html(otrezat($block.html()));
+//			else $block.html(otrezat($block.html()));
 		}
 		findPhrase();
 	});

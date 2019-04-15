@@ -3604,7 +3604,7 @@ div.detail-prop .prop-value li { list-style-type: none; }
     display: table-cell;
     width: 400px;
     height: 65px;
-    background: linear-gradient(0deg, rgba(29,27,105,0) 0%, rgba(29,27,105,1) );
+    background: linear-gradient(0deg, rgba(29,27,105,0) 10%, rgba(29,27,105,1) );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
