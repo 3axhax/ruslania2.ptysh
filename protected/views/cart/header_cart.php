@@ -61,7 +61,7 @@
                     </div>
 					
 					<div class="b-basket-list__bottom">
-                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: '<?=Yii::app()->ui->item('A_NEW_CART_MORE_ORDER1')?> '+priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
+                                <div class="b-basket-list__load-wrapp"><a class="b-basket-list__load-btn" href="<?=Yii::app()->createUrl('cart/view'); ?>"  data-bind="text: priceStrToPrice(CartItems().length-3)+' ', visible: CartItems().length > 3"></a></div>
                                 <div class="b-basket-list__order-wrapp" data-bind="visible: CartItems().length > 0"><a class="b-basket-list__order-btn" href="<?=Yii::app()->createUrl('cart/view')?>"><?=Yii::app()->ui->item('CONFIRM_ORDER');?></a></div>
                             </div>
 <?php /*
@@ -118,15 +118,18 @@
             //$out = (show) ?  $value . ' ' : '';
             switch (num) {
                 case 1:
-                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE2') ?>';
+                    out = '<?= Yii::app()->ui->item('CARTNEW_MORE_CART_COUNT') ?>'.replace('%d', count) + ' <?= !in_array(Yii::app()->getLanguage(), array('fi', 'se'))?Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE2'):'' ?>';
+//                    out = count+' <?//= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE2') ?>//';
                     break;
                 case 2:
                 case 3:
                 case 4:
-                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE1') ?>';
+                    out = '<?= Yii::app()->ui->item('CARTNEW_MORE_CART_COUNT') ?>'.replace('%d', count) + ' <?= !in_array(Yii::app()->getLanguage(), array('fi', 'se'))?Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE1'):'' ?>';
+//                    out = count+' <?//= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE1') ?>//';
                     break;
                 default:
-                    out = count+' <?= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE3') ?>';
+                    out = '<?= Yii::app()->ui->item('CARTNEW_MORE_CART_COUNT') ?>'.replace('%d', count) + ' <?= !in_array(Yii::app()->getLanguage(), array('fi', 'se'))?Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE3'):'' ?>';
+//                    out = count+' <?//= Yii::app()->ui->item('CARTNEW_PRODUCTS_TITLE3') ?>//';
                     break;
             }
             return out;

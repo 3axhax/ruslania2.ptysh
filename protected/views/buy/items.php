@@ -5,7 +5,7 @@ if (empty($countItems)) $countItems = null;
 $head = $ui->item('CART_COL_TOTAL_PRICE2');
 if (!empty($total)&&!empty($total['isDiscount'])) $head .= ', ' . mb_strtolower($ui->item('PRICE_DISCOUNT_FORMAT'));
 $head .= ', ' . mb_strtolower($ui->item('WITHOUT_DELIVERY'));
-if (!empty($total)&&empty($total['withVAT'])) $head .= '<span class="items_nds">, ' . $ui->item('WITHOUT_VAT') . '</span>';
+if (!empty($total)&&empty($total['withVAT'])) $head .= '<span class="items_nds">, ' . $ui->item('WITHOUT_VAT_FULL') . '</span>';
 else $head .= '<span class="items_nds"></span>';
 ?>
 <?php if ($countItems !== null): ?>

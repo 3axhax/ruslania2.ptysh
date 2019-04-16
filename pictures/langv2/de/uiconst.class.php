@@ -1352,7 +1352,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'CARTNEW_NAME_TABLE_AVAILABILITY' => 'Verfügbar',
   'CARTNEW_ALERT_OK' => 'Ja',
   'CARTNEW_ALERT_NO' => 'Nein',
-  'CARTNEW_MORE_CART_COUNT' => 'Und %d mehr',
+  'CARTNEW_MORE_CART_COUNT' => 'Und %d weitere',
   'CARTNEW_TITLE_PAGE_VARIANT' => 'Wählen Sie die Anmeldemethode für die Bestellung aus',
   'CARTNEW_LABEL_NO_ACCOUNT' => 'Sind Sie das erste Mal hier?',
   'CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION' => 'Ohne anzumelden fortfahren',
@@ -1368,9 +1368,9 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'CARTNEW_ERROR_MAIL_FIND_OK' => 'Diese Email-Adresse ist bereits registriert',
   'CARTNEW_OTHER_PRODUCTS_CART' => '(Im Warenkorb befinden sich Artikel mit Versandkosten)',
   'CARTNEW_PAY_PAYPAL_BTN_LABEL' => 'Bestellung bezahlen',
-  'CARTNEW_PRODUCTS_TITLE1' => 'Artikel',
-  'CARTNEW_PRODUCTS_TITLE2' => 'Artikel',
-  'CARTNEW_PRODUCTS_TITLE3' => 'Artikel',
+  'CARTNEW_PRODUCTS_TITLE1' => 'artikel',
+  'CARTNEW_PRODUCTS_TITLE2' => 'artikel',
+  'CARTNEW_PRODUCTS_TITLE3' => 'artikel',
   'CARTNEW_PAYPAL_LABEL' => 'Um zur Zahlung zu gelangen, klicken Sie auf den button unten.',
   'CARTNEW_ORDER_PAY_OTHER_LABEL' => 'Wählen Sie <a style="cursor: pointer;" onclick="openPaySystems(\'%s\'); $(this).css(\'color\', \'#333333\'); return false;">eine andere Zahlungsart</a>',
   'CARTNEW_FINAL_ORDER_TEXT' => 'Wenn Sie Fragen zur Bestellung oder zu den Zahlungsmethoden haben, rufen Sie uns an <a href="tel: +35892727070">+358 9 2727070</a> oder WhatsApp (Text oder Anruf) +358 503889439 Mo-Fr 9-18 Uhr, Sa 10-16 (finnische Zeit GMT +2, Sommer Zeit GMT +3).',
@@ -1410,5 +1410,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'NUMBER_PHONE' => 'Telefonnummer',
   'BUTTON_CALL' => 'Bitte um Rückruf',
     'CONTINUE_PLACING_ORDER' => 'Bestellung fortsetzen',
+    'ALREADY_REGISTERED'=>'Sie haben sich bereits angemeldet',
+    'WITHOUT_VAT_FULL' => 'ohne MwSt',
+
 
 );
