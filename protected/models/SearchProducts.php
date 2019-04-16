@@ -175,7 +175,30 @@ class SearchProducts {
 		'';
 		$find = SphinxQL::getDriver()->multiSelect($sql);*/
 
-		$spxCond = array($this->getMath($query));
+		$firstUnion = true;
+		$math = explode('|', $this->getMath($query));
+
+		$sql = ''.
+			'select t.entity, count(*) counts '.
+			'from (';
+		foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
+			foreach ($math as $m) {
+				if ($firstUnion) $firstUnion = false;
+				else $sql .= 'union ';
+				$spxCond = array($m);
+				$spxCond['ranker'] = 'ranker=sph04';
+				$spxCond['limit'] = 'limit=100000';
+				$spxCond['maxmatches'] = 'maxmatches=100000';
+				$sql .= 'SELECT entity, real_id '.
+					'FROM `' . $seTable . '` '.
+					'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+				'';
+			}
+		}
+		$sql .= ') t '.
+			'group by t.entity '.
+		'';
+/*		$spxCond = array($this->getMath($query));
 		$spxCond['ranker'] = 'ranker=sph04';
 		$spxCond['limit'] = 'limit=100000';
 		$spxCond['maxmatches'] = 'maxmatches=100000';
@@ -195,7 +218,7 @@ class SearchProducts {
 				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
 			') t '.
 			'group by t.entity '.
-		'';
+		'';*/
 		$find = Yii::app()->db->createCommand($sql)->queryAll();;
 		Debug::staticRun(array($sql, $find));
 

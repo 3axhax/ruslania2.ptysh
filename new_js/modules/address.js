@@ -86,6 +86,7 @@
             $(this.country).on('change', function() {
                 self.changeCountry();
                 self.fillPhoneCode(this);
+                self.showAddressFields();
             });
             $('#send-forma').on('click', function(){ self.sendforma(); });
             this.changeLangOrCurrency();
@@ -158,10 +159,6 @@
                 $('.js_userName').show();
                 $('.js_firmName').hide();
             }
-            var takeInStore = 0;
-            if (this.takeInStore) {
-                if ((this.formId == 'Reg')&&this.takeInStore.checked) takeInStore = 1;
-            }
 
             var self = this;
             $form.find('tr').each(function (id, elem) {
@@ -170,8 +167,8 @@
                     case '1':
                         //проверка для verkkolasku
                         if ($elem.hasClass('js_firm')) {
-                            if ((self.formId == 'Address')&&$elem.hasClass('verkkolasku')) {
-                                if ($('#Address_country').val() == '68') $elem.show();
+                            if ($elem.hasClass('verkkolasku')) {
+                                if (self.country.value == '68') $elem.show();
                                 else $elem.hide();
                             }
                             else $elem.show();
@@ -182,17 +179,12 @@
                         break;
                 }
                 if ($elem.hasClass('js_delivery')) {
-                    if (takeInStore&&!self.existPereodic) {
-                        $elem.hide();
+                    //проверка для штаты
+                    if ($elem.hasClass('states_list')) {
+                        if ($elem.find('option').length > 1) $elem.show();
+                        else $elem.hide();
                     }
-                    else {
-                        //проверка для штаты
-                        if ($elem.hasClass('states_list')) {
-                            if ($elem.find('option').length > 1) $elem.show();
-                            else $elem.hide();
-                        }
-                        else $elem.show();
-                    }
+                    else $elem.show();
                 }
             });
         },

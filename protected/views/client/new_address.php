@@ -11,7 +11,7 @@
 
             <?php
             //if (isset($_GET['ha'])) {
-                $this->renderPartial('/buy/address_form', array('alias'=>'Reg', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
+                $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
                 ?>
                 <div class="address_action">
                     <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
@@ -29,7 +29,7 @@
                         scriptLoader('/new_js/modules/address.js').callFunction(function() {
                             address().init({
                                 userData: <?= json_encode($userData) ?>,
-                                formId: 'Reg',
+                                formId: 'Address',
                                 urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
                                 urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
                                 urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
