@@ -19,3 +19,8 @@
             </div>
         </div>
         </div>
+<script type="text/javascript" src="/new_js/modules/print.js"></script>
+<script type="text/javascript">
+    print<?= $order['id'] ?> = function() { return new _Print(); };
+    print<?= $order['id'] ?>().init({$button: $('.printed_btn'), $content: $('#cnt<?= $order['id'] ?>').closest('div')});
+</script>

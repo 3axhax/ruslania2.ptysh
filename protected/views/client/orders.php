@@ -26,6 +26,10 @@
                             print<?= $order['id'] ?>().init({$button: $('#printedBtn<?= $order['id'] ?>'), $content: $('#orderBlock<?= $order['id'] ?>')});
                         </script>
                     </li>
+					
+					<? if ($i != count($list)) { echo "<li><hr /></li>"; } ?>
+					
+					
                 <?php $i++; endforeach; ?>
                 </ul>
 

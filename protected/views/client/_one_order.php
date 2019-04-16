@@ -70,10 +70,10 @@
 						
 						<td colspan="4">
 							<div class="summa">
-								
+								<?php if($onlyContent) : ?>
 								<a style="float: left;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn" id="printedBtn<?= $order['id'] ?>"
                                      target="_new"><?=$ui->item('MSG_ACTION_PRINT_ORDER'); ?></a>
-								
+								<? endif;?>
 							<div class="itogo">
 								<?=$ui->item("CART_COL_TOTAL_FULL_PRICE"); ?>: <b><?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?>
                             <?php if($order['currency_id'] != Currency::EUR) : ?>

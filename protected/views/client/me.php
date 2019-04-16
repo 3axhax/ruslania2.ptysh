@@ -99,7 +99,7 @@
                             $class =  $isClosed ? 'closed' : 'open';
                             ?>
                             <li class="<?=$class; ?>">
-                                <a href="<?=Yii::app()->createUrl('order/view', array('oid' => $id)); ?>"><?=sprintf($ui->item('ORDER_MSG_NUMBER'), $id); ?></a>, <?=$first['date_string']; ?>, <?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?> <?=ProductHelper::FormatPrice($order['full_price'], $order['currency_id']); ?>
+                                <a href="<?=Yii::app()->createUrl('order/view', array('oid' => $id)); ?>"><?=sprintf($ui->item('ORDER_MSG_NUMBER'), $id); ?></a>, <?=$first['date_string']; ?>, <?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?> <?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?>
 
                                  <?php if(!$isClosed) : ?>
                                         <?php if(array_key_exists($id, $notPay)) : ?>
