@@ -32,22 +32,19 @@
 </div>
 <script type="text/javascript">
 	$(function() {
-		var i = 30;
-		function otrezat(str) {
-//			console.log(str);
-			var lastIndex = str.lastIndexOf(" ");
-			return str.substring(0, lastIndex);
-		}
+		var i = 10;
+		var $block = $('#js_offerDay');
+		var h = $block.closest('div.title').height() + 5;
+		var str = $block.html();
 
 		function findPhrase() {
 			i--;
-			var $block = $('#js_offerDay');
-//			console.log($block.height(), $block.closest('div.title').height() + 1, $block.closest('div.title').get(0).scrollHeight);
-			if (($block.height() > ($block.closest('div.title').height() + 1))&&(i > 0)) {
-				$block.html(otrezat($block.html()));
+			if (($block.height() > h)&&(i > 0)) {
+				var lastIndex = str.lastIndexOf(" ");
+				str = str.substring(0, lastIndex);
+				$block.html(str);
 				findPhrase();
 			}
-//			else $block.html(otrezat($block.html()));
 		}
 		findPhrase();
 	});
