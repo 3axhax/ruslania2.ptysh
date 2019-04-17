@@ -41,12 +41,36 @@ class FilterNames {
 		}
 	}
 
-	function getParams() {
+	function getParams($route = '') {
+		if ($route == 'entity/list') return array();
+
 		$params = array();
-		foreach ($this->_data as $k=>$v) {
-			if ($k == 'lang_sel') continue;
-			$res = $this->$k;
-			if (!empty($res)) $params[$k] = $res;
+		$routes = array(
+			'entity/bypublisher'      =>  'publisher',
+			'entity/byseries'         =>  'series',
+			'entity/byauthor'         =>  'author',
+			'entity/bybinding'        =>  'binding',
+			'entity/byyear'           =>  'year',
+			'entity/byyearrelease'    =>  'release_year',
+			'entity/byperformer'      =>  'performer',
+			'entity/bymedia'          =>  'format_video',
+	//		'entity/bytype'
+			'entity/byactor'          =>  'actors',
+			'entity/bydirector'       =>  'directors',
+			'entity/byaudiostream'    =>  'lang_video',
+			'entity/bysubtitle'       =>  'subtitles_video',
+	//		'entity/bystudio'
+		);
+		if (!empty($routes[$route])&&isset($this->_data[$routes[$route]])) {
+			$res = $this->$routes[$route];
+			if (!empty($res)) $params[$routes[$route]] = $res;
+		}
+		else {
+			foreach ($this->_data as $k=>$v) {
+				if ($k == 'lang_sel') continue;
+				$res = $this->$k;
+				if (!empty($res)) $params[$k] = $res;
+			}
 		}
 		return $params;
 	}
