@@ -73,6 +73,9 @@ class SearchController extends MyController {
 		}
 
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_SEARCH_WIN');
+		if (!empty($list)) {
+			$list = $this->_appendCartInfo($list, $this->uid, $this->sid);
+		}
 		$this->render('list', array(
 			'q' => $q,
 			'items' => $didYouMean,
@@ -207,5 +210,20 @@ class SearchController extends MyController {
 			)
 		);
 	}
+
+	private function _appendCartInfo($items, $uid, $sid) {
+		$c = new Cart;
+		$cart = $c->GetCart($uid, $sid);
+		foreach ($items as $idx => $item) {
+			foreach ($cart as $cartItem) {
+				if ($cartItem['entity'] == $item['entity'] && $cartItem['id'] == $item['id']) {
+					$items[$idx]['AlreadyInCart'] = $cartItem['quantity'];
+				}
+			}
+		}
+		return $items;
+	}
+
+
 
 }

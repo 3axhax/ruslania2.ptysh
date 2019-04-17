@@ -624,5 +624,7 @@ class Cart extends CActiveRecord
         if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
         return Yii::app()->createUrl('cart/view', $params);
     }
+
+
 	
 }

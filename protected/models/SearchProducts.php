@@ -158,7 +158,7 @@ class SearchProducts {
 		foreach ($find as $data) {
 			$key = $data['entity'] . '-' . $data['real_id'];
 			if (!empty($prepareData[$key])) {
-				$prepareData[$key]['position'] = $data['position']; //надо, чтобы потом определить из описания или нет
+				$prepareData[$key]['position'] = empty($data['position'])?1:$data['position']; //надо, чтобы потом определить из описания или нет
 				$result[$key] = $prepareData[$key];
 			}
 		}
