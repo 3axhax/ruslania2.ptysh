@@ -13,7 +13,7 @@
 	<?php if (!empty($offerDay['priceData'][DiscountManager::DISCOUNT])) : ?>
 			<div class="discount"<?php if ($offerDay['entity'] == Entity::PERIODIC): ?> style="margin-top: 9px;" <?php endif; ?>><?= Yii::app()->ui->item('PRODUCT_OF_DAY_INFO', $offerDay['priceData'][DiscountManager::DISCOUNT]) ?></div>
 	<?php endif; ?>
-			<div class="title"><div id="js_offerDay"><?= mb_substr($productTitle, 0, 120, 'utf-8') ?></div></div>
+			<div class="title"><div id="js_offerDay"><?= $productTitle ?></div></div>
 			<div class="cost_nds"<?php if ($offerDay['entity'] == Entity::PERIODIC): ?> style="line-height: 20px; width: 140px;" <?php endif; ?>>
 <?= ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::WITH_VAT]); ?> <?= $offerDay['priceData']['unit'] ?>
 				<span>(<span><?= trim(ProductHelper::FormatPrice($offerDay['priceData'][DiscountManager::BRUTTO]) . ' ' . $offerDay['priceData']['unit']) ?></span>)</span>
@@ -30,22 +30,3 @@
 <?php endif; ?>
 	</div>
 </div>
-<script type="text/javascript">
-	$(function() {
-		var i = 10;
-		var $block = $('#js_offerDay');
-		var h = $block.closest('div.title').height() + 5;
-		var str = $block.html();
-
-		function findPhrase() {
-			i--;
-			if (($block.height() > h)&&(i > 0)) {
-				var lastIndex = str.lastIndexOf(" ");
-				str = str.substring(0, lastIndex);
-				$block.html(str);
-				findPhrase();
-			}
-		}
-		findPhrase();
-	});
-</script>

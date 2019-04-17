@@ -3598,15 +3598,16 @@ div.detail-prop .prop-value li { list-style-type: none; }
 .main-banner-content .photo div { display: table-cell; vertical-align: middle; width: 140px; height: 157px;}
 .main-banner-content .photo img { max-height: 147px; max-width: 100px; }
 /*.main-banner-content .title, .main-banner-content .cost { font-weight: bold; }*/
-.main-banner-content .title { margin-left: 160px; padding-left: 1px; height: 64px; overflow: hidden; position: relative; line-height: 22px;}
+.main-banner-content .title { margin-left: 160px; padding-left: 1px; height: 65px; overflow: hidden; position: relative; line-height: 22px;}
 .main-banner-content .title div {
     vertical-align: top;
-    display: table-cell;
+    display: block;
     width: 400px;
     height: 65px;
-    background: linear-gradient(0deg, rgba(29,27,105,0) 0%, rgba(29,27,105,1) );
+    background: linear-gradient(0deg, rgba(29,27,105,0), rgba(29,27,105,1) 30%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    overflow: hidden;
 }
 .main-banner-content .discount { padding-left: 2px; font-weight: bold; margin: 13px 0 7px 160px;}
 .main-banner-content .nds, .main-banner-content .cost { text-align: right; color: #ed1d24; font-weight: normal; padding-right: 20px;}
