@@ -124,7 +124,7 @@ class SearchProducts {
 					$sql .= '(SELECT entity, real_id '.
 						'FROM `' . $seTable . '` '.
 						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-						'order by position) '.
+						'order by position, time_position) '.
 					'';
 					if ($seTable === '_se_avail_items_without_morphy') break;
 				}
