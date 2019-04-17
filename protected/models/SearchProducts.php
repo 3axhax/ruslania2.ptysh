@@ -109,7 +109,9 @@ class SearchProducts {
 		$firstUnion = true;
 		$math = explode('|', $this->getMath($q));
 
-		$sql = '';
+		$sql = ''.
+			'select t.entity, t.real_id '.
+			'from (';
 		foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
 			foreach ($math as $m) {
 				if ($firstUnion) $firstUnion = false;
@@ -125,12 +127,10 @@ class SearchProducts {
 				if ($seTable === '_se_avail_items_without_morphy') break;
 			}
 		}
-/*		Debug::staticRun(array($sql));
-
-
-
-
-
+		$sql .= ') t '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+		'';
+/*
 		$condition = $join = [];
 		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
 		if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
