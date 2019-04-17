@@ -106,6 +106,31 @@ class SearchProducts {
 	}
 
 	function getList($q, $page, $pp, $eid = 0) {
+		$firstUnion = true;
+		$math = explode('|', $this->getMath($q));
+
+		$sql = '';
+		foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
+			foreach ($math as $m) {
+				if ($firstUnion) $firstUnion = false;
+				else $sql .= 'union ';
+				$spxCond = array($m);
+				$spxCond['ranker'] = 'ranker=' . $this->_ranker;
+				$spxCond['limit'] = 'limit=100000';
+				$spxCond['maxmatches'] = 'maxmatches=100000';
+				$sql .= 'SELECT entity, real_id '.
+					'FROM `' . $seTable . '` '.
+					'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+				'';
+				if ($seTable === '_se_avail_items_without_morphy') break;
+			}
+		}
+/*		Debug::staticRun(array($sql));
+
+
+
+
+
 		$condition = $join = [];
 		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
 		if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
@@ -117,7 +142,8 @@ class SearchProducts {
 			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
 		'';
-		$find = SphinxQL::getDriver()->multiSelect($sql);
+		$find = SphinxQL::getDriver()->multiSelect($sql);*/
+		$find = Yii::app()->db->createCommand($sql)->queryAll();;
 		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
