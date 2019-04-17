@@ -109,41 +109,45 @@ class SearchProducts {
 		$firstUnion = true;
 		$math = explode('|', $this->getMath($q));
 
-		$sql = ''.
-			'select t.entity, t.real_id '.
-			'from (';
-		foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
-			foreach ($math as $m) {
-				if ($firstUnion) $firstUnion = false;
-				else $sql .= 'union ';
-				$spxCond = array($m);
-				$spxCond['ranker'] = 'ranker=' . $this->_ranker;
-				$spxCond['limit'] = 'limit=100000';
-				$spxCond['maxmatches'] = 'maxmatches=100000';
-				$sql .= 'SELECT entity, real_id '.
-					'FROM `' . $seTable . '` '.
-					'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-				'';
-				if ($seTable === '_se_avail_items_without_morphy') break;
+//		if (count($math) > 1) {
+			$sql = ''.
+				'select t.entity, t.real_id '.
+				'from (';
+			foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
+				foreach ($math as $m) {
+					if ($firstUnion) $firstUnion = false;
+					else $sql .= 'union ';
+					$spxCond = array($m);
+					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
+					$spxCond['limit'] = 'limit=100000';
+					$spxCond['maxmatches'] = 'maxmatches=100000';
+					$sql .= '(SELECT entity, real_id '.
+						'FROM `' . $seTable . '` '.
+						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+						'order by position) '.
+					'';
+					if ($seTable === '_se_avail_items_without_morphy') break;
+				}
 			}
-		}
-		$sql .= ') t '.
-			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
-		'';
-/*
-		$condition = $join = [];
-		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
-		if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
-		$sql = ''.
-			'select id, entity, real_id, position '.
-			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
-			'where ' . implode(' and ', $condition) . ' '.
-			'order by position asc, time_position asc '.
-			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
-			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
-		'';
-		$find = SphinxQL::getDriver()->multiSelect($sql);*/
-		$find = Yii::app()->db->createCommand($sql)->queryAll();;
+			$sql .= ') t '.
+				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+			'';
+			$find = Yii::app()->db->createCommand($sql)->queryAll();;
+/*		}
+		else {
+			$condition = $join = [];
+			$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
+			if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
+			$sql = ''.
+				'select id, entity, real_id, position '.
+				'from ' . implode(',',$this->_getTablesForList()) . ' ' .
+				'where ' . implode(' and ', $condition) . ' '.
+				'order by position asc, time_position asc '.
+				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+				'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
+			'';
+			$find = SphinxQL::getDriver()->multiSelect($sql);
+		}*/
 		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
