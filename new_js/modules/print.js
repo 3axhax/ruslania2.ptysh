@@ -34,7 +34,7 @@
                     'margin-top: 10px;'+
                     'padding: 5px 5px 5px 5px;'+
                     '}'+
-                    '.printed_btn {display: none;}'+
+                    '.printed_btn, .pay_btn {display: none;}'+
                     '.info_order div.row { margin: 4px 0 4px 0; }'+
 
                     '.info_order div { font-size: 13px; }'+

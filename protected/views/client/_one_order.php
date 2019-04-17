@@ -19,7 +19,10 @@
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_DELIVERY_TYPE"); ?>:</span> <div class="span11"><?=CommonHelper::FormatDeliveryType($order['delivery_type_id']); ?></div></div>
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_BILLING_ADDRESS"); ?>:</span> <div class="span11"><?=CommonHelper::FormatAddress($order['BillingAddress']); ?></div></div>
                     <?php if(!$onlyContent) : ?>
-                        <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_PAYMENT_TYPE"); ?>:</span> <div class="span11"><?=CommonHelper::FormatPaymentType($order['payment_type_id']); ?></div></div>
+                        <div class="row">
+                            <span class="span1"><?=$ui->item("ORDER_MSG_PAYMENT_TYPE"); ?>:</span>
+                            <div class="span11"><?=CommonHelper::FormatPaymentType($order['payment_type_id']); ?></div>
+                        </div>
                     <?php endif; ?>
                     <div class="row"><span class="span1"><?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?>:</span> <div class="span11"><b><?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?></b></div></div>
 					
@@ -71,15 +74,34 @@
 						<td colspan="4">
 							<div class="summa">
 								<?php if($onlyContent) : ?>
-								<a style="float: left;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn" id="printedBtn<?= $order['id'] ?>"
-                                     target="_new"><?=$ui->item('MSG_ACTION_PRINT_ORDER'); ?></a>
-								<? endif;?>
-							<div class="itogo">
+								<a style="float: left; margin-right: 10px;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn" id="printedBtn<?= $order['id'] ?>"
+                                     target="_new"><span><?=$ui->item('MSG_ACTION_PRINT_ORDER'); ?></span></a>
+								<? endif;
+                                $notPay = array();
+                                $isClosed = false;
+                                if(!OrderState::IsClosed($order['States'])) $open[$order['id']] = $order;
+                                else $isClosed = true;
+                                if(!OrderState::IsPaid($order['States'])) $notPay[$order['id']] = $order;
+                                ?>
+
+                                <?php if(!$isClosed) : ?>
+                                    <?php if(array_key_exists($order['id'], $notPay)) : ?>
+                                        <a href="<?=Yii::app()->createUrl('cart/orderPay'); ?>?id=<?=$order['id']?>&ptype=<?=$order['payment_type_id']?>" class="pay_btn" style="background-color: #5bb75b; margin-top: 0; float: left; height: 31px; line-height: 31px; text-align: center; padding: 0;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+							<div class="itogo"<?php if (!empty($order['delivery_price'])): ?> style="line-height: 20px;"<?php endif; ?>>
+                                <?php if (!empty($order['delivery_price'])): ?>
+                                    <div>
+                                        <?=$ui->item("CARTNEW_COST_DELIVERY"); ?>: <b><?=ProductHelper::FormatPrice($order['delivery_price'], true, $order['currency_id']); ?></b>
+                                    </div>
+                                <?php endif; ?>
+                                <div>
 								<?=$ui->item("CART_COL_TOTAL_FULL_PRICE"); ?>: <b><?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?>
                             <?php if($order['currency_id'] != Currency::EUR) : ?>
                                 (<?php $eur = Currency::ConvertToEUR($order['full_price'], $order['currency_id']);
                                         echo ProductHelper::FormatPrice($eur, true, Currency::EUR); ?>)
                             <?php endif; ?></b>
+                                </div>
 							</div><div class="clearfix"></div>
 							
 							</div>

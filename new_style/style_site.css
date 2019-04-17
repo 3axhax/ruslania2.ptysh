@@ -3953,3 +3953,15 @@ textarea::-webkit-input-placeholder { color: #EBEBEB; }
 }
 
 a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
+.pay_btn {
+    background-color: #5bb75b;
+    float: left;
+    height: 31px;
+    line-height: 31px;
+    text-align: center;
+    width: 180px;
+    border-radius: 4px;
+    border: 0;
+    font-size: 14px;
+    color: #fff;
+}
