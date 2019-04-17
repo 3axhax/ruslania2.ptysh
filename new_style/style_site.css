@@ -2568,8 +2568,8 @@ a.count_mini_cart {
 } 
 
 p.cartInfo {
-	color: #ff0000;
-	marginb-top: 4px;
+	color: #c6c6c6/*#ff0000*/;
+	margin-top: 4px;
 }
 
 .select_lang .label_lang {

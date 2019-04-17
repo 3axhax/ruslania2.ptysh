@@ -193,7 +193,7 @@ class Order extends CMyActiveRecord
                 $price = $values[$key];
                 $price /= 12;
             }
-            $pricesValues[$itemKey] = round($price, 2);
+            $pricesValues[$itemKey] = sprintf("%.2f", round($price, 2));
             $discountKeys[$itemKey] = [
                 'discountPrice'=>$key,
                 'originalPrice'=>$keyWithoutDiscount,
@@ -227,7 +227,7 @@ class Order extends CMyActiveRecord
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
 
-        return [round($itemsPrice, 2), round($deliveryPrice, 2), $pricesValues, $discountKeys, $fullweight, (bool)$withVAT, (bool)$isDiscount];
+        return [sprintf("%.2f", round($itemsPrice, 2)), sprintf("%.2f", round($deliveryPrice, 2)), $pricesValues, $discountKeys, $fullweight, (bool)$withVAT, (bool)$isDiscount];
     }
 
     public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)

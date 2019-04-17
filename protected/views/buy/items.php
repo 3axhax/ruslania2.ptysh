@@ -48,7 +48,7 @@ else $head .= '<span class="items_nds"></span>';
 						<?= $ui->item('CARTNEW_COUNT_NAME')?>
 					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($itemsPrice); ?></span>
 					<?php if ($item['quantity'] > 1): ?>
-						= <span class="item_cost_itogo"><?= $PH->FormatPrice($itemsPrice*$item['quantity']); ?></span>
+						= <span class="item_cost_itogo"><?= $PH->FormatPrice(sprintf("%.2f", $itemsPrice*$item['quantity'])); ?></span>
 					<?php endif; ?>
 					<?php if ($item['InCartUnitWeight'] > 0): ?>
 						<br /> <?= $ui->item('CARTNEW_WEIGHT_LABEL') ?>: <?= ($item['InCartUnitWeight'] / 1000) ?> <?= $ui->item('CARTNEW_WEIGHT_NAME') ?>
