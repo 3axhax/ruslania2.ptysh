@@ -112,7 +112,7 @@ return array (
   'A_TITLE_GOTOSOFT' => 'Vers le catalogue des logiciels',
   'A_TITLE_GOTOVIDEO' => 'Vers vidéos-DVD',
   'A_TITLE_HOME' => 'Page d’accueil',
-  'A_TITLE_REMIND_PASS' => 'Get password',
+  'A_TITLE_REMIND_PASS' => 'Obtenir le mot de passe',
   'Actor' => 'Acteur :',
   'ADD_ADDRESS_ALT' => 'Ajouter une adresse',
   'ADD_ADDRESS_PICTURE' => 'addaddr_fr.png',
@@ -1398,5 +1398,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'CONTINUE_PLACING_ORDER' => 'Continuer la commande',
     'ALREADY_REGISTERED'=>'Vous êtes déjà inscrit',
     'WITHOUT_VAT_FULL' => 'sans TVA',
+    'FORGOT_PASS_HEADER' => 'Recevez un rappel de mot de passe à votre adresse e-mail',
+    'FORGOT_PASS_PATH' => 'Obtenir un rappel de mot de passe',
 
 );

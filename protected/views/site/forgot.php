@@ -2,7 +2,7 @@
 
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
-<h1 class="h1_registr">Восстановление пароля</h1>
+<h1 class="h1_registr"><?= $ui->item('FORGOT_PASS_HEADER') ?></h1>
 
             <?php if(isset($notFound) && $notFound) : ?>
                 <div class="info-box error">

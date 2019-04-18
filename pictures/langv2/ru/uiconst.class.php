@@ -1415,4 +1415,6 @@ IBAN DE79514303006474790001 <br>
     'CONTINUE_PLACING_ORDER' => 'Продолжить оформление заказа',
     'ALREADY_REGISTERED'=>'Вы уже зарегистрированы',
     'WITHOUT_VAT_FULL' => 'без НДС',
+    'FORGOT_PASS_HEADER' => 'Восстановление пароля по электронной почте',
+    'FORGOT_PASS_PATH' => 'Восстановление пароля',
 );

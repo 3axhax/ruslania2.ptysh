@@ -1412,5 +1412,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'CONTINUE_PLACING_ORDER' => 'Fortsätt beställa',
     'ALREADY_REGISTERED'=>'Du har redan registrerat dig',
     'WITHOUT_VAT_FULL' => 'utan moms',
+    'FORGOT_PASS_HEADER' => 'Få ett lösenord påminnelse till ditt e-post',
+    'FORGOT_PASS_PATH' => 'Få en lösenordsminnelse',
 
 );

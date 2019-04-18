@@ -1410,5 +1410,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'CONTINUE_PLACING_ORDER' => 'Continuar haciendo un pedido',
     'ALREADY_REGISTERED'=>'Usted ya esta registrado',
     'WITHOUT_VAT_FULL' => 'sin IVA',
+    'FORGOT_PASS_HEADER' => 'Obtener un recordatorio de contraseña para correo electrónico',
+    'FORGOT_PASS_PATH' => 'Obtener un recordatorio de contraseña',
 
 );

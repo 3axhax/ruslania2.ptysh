@@ -1412,5 +1412,7 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'CONTINUE_PLACING_ORDER' => 'Prodiljit oformlenie zakaza',
     'ALREADY_REGISTERED'=>'Vy uje zaregistrirovany',
     'WITHOUT_VAT_FULL' => 'bez NDS',
+    'FORGOT_PASS_HEADER' => 'Vosstanovlenie parolya',
+    'FORGOT_PASS_PATH' => 'Vosstanovlenie parolya',
 
 );

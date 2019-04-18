@@ -441,7 +441,7 @@ Deaktivieren Sie "Adresse des Zahlers entspricht der Lieferadresse" und wählen 
   'MSG_PERSONAL_PAYMENT_PAYPAL_COMMENTS' => 'Um die Bestellung zu bezahlen drücken Sie bitte auf "Paypal".<br><br>Sie werden auf die Website von Paypal<br><br>weitergeleitet.',
   'MSG_PERSONAL_PAYMENT_SAMPO_COMMENTS' => 'Um die Bestellung zu bezahlen, drücken Sie bitte auf "Bestellung bezahlen".<br><br>Sie werden auf die Website der Danske Bank.<br><br>weitergeleitet.',
   'MSG_PERSONAL_PAYMENT_TIME_LIMIT_ATTENTION' => '<b>Bitte bezahlen Sie Ihre Bestellung innerhalb von zwei Tagen nachdem Sie Ihre Bestellung abgeschickt haben.</b><br><br>Die Bestellung wird sofort bearbeitet, wenn Ihre Zahlung eingegangen ist. Wenn Ihre Bestellung innerhalb von zwei Tagen nicht bezahlt ist, wird sie aus unserem System gelöscht.<br><br><font color=red>Ihre gespeicherte Bestellung können Sie durch Anklicken von "Bestellung bezahlen" unter der Rubrik "Meine Bestellungen"</font> bezahlen.',
-  'MSG_PERSONAL_REMIND_PASS' => 'Um Ihr Kennwort zu erhalten, geben Sie bitte die von Ihnen bei Anmeldung  angegebene E-Mail-Adresse',
+  'MSG_PERSONAL_REMIND_PASS' => 'Um Ihr Passwort zu erhalten, geben Sie bitte die E-Mail-Adresse ein, die Sie bei der Registrierung angegeben haben, und klicken Sie auf "%s". Das Passwort wird an Ihre E-Mail-Adresse gesendet.',
   'MSG_PERSONAL_REMIND_PASS_ERROR' => 'Die E-Mail-Adresse stimmt nicht. ',
   'MSG_PERSONAL_REMIND_PASS_SEND' => 'Das Kennwort wurde an von Ihnen angegebene E-Mail-Adresse geschickt.',
   'MSG_PERSONAL_REQUEST_PHASE_1_COMMENTS' => 'In das Feld \'Die Anfrage betreffende Wünsche\' kann z.B. die bevorzugte Kommunikationsweise eingegeben werden. Nach dem Drücken des Buttoms "Anfrage speichern" wird Ihre Anfrage im System abgespeichert. Später sehen Sie unter Ihrer persönlichen Rubrik ”Meine Anfrage”  wann das Produkt verfügbar ist. Bitte berücksichtigen Sie, dass sich Aussehen und Preise der Produkte ändern können.',
@@ -1412,6 +1412,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'CONTINUE_PLACING_ORDER' => 'Bestellung fortsetzen',
     'ALREADY_REGISTERED'=>'Sie haben sich bereits angemeldet',
     'WITHOUT_VAT_FULL' => 'ohne MwSt',
-
+    'FORGOT_PASS_HEADER' => 'Erhalten Sie eine Passworterinnerung für Ihre E-Mail',
+    'FORGOT_PASS_PATH' => 'Erhalten Sie eine Passworterinnerung',
 
 );

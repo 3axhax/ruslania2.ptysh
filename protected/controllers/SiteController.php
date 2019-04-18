@@ -26,7 +26,7 @@ class SiteController extends MyController {
 		$o = new Order;
 		$order = $o->GetOrder($_POST['orderId']);
 		
-		$_POST['token'] = '1111';
+		//$_POST['token'] = '1111';
 		
 		$ch = curl_init();
 
@@ -34,16 +34,26 @@ class SiteController extends MyController {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, "amount=".$order['full_price']."&currency=".Currency::ToStr($order['currency_id'])."&description=\"Оплата за заказ ".$order['id']."\"&source=".$_POST['token']);
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_USERPWD, 'pk_test_B8MwXuaz10DDZVcF6QJQTki0' . ':' . '');
+		curl_setopt($ch, CURLOPT_USERPWD, 'sk_test_aAQYmBNCSAMS3uo3rRRkEAlJ' . ':' . '');
 
 		$headers = array();
 		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
 		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
 		$result = curl_exec($ch);
+		
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/test/applepay.log', print_r($result,1));
+		
+		
 		if (curl_errno($ch)) {
 			echo 'Error:' . curl_error($ch);
 		}
+		else{
+			
+			echo $result;
+			
+		}
+		
 		curl_close ($ch);
 		
 	}
@@ -1063,7 +1073,7 @@ class SiteController extends MyController {
 
     public function actionForgot() {
         $this->_checkUrl(array());
-        $this->breadcrumbs[] = Yii::app()->ui->item('A_TITLE_REMIND_PASS');
+        $this->breadcrumbs[] = Yii::app()->ui->item('FORGOT_PASS_PATH');
 
         $model = new User('forgot');
         $this->PerformAjaxValidation($model, 'remind-form');

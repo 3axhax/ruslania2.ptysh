@@ -1410,5 +1410,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'CONTINUE_PLACING_ORDER' => 'Jatka tilauksen tekemistä',
     'ALREADY_REGISTERED'=>'Olet jo rekisteröitynyt',
     'WITHOUT_VAT_FULL' => 'ilman alvia',
+    'FORGOT_PASS_HEADER' => 'Tilaa salasanamuistutus sähköpostiisi',
+    'FORGOT_PASS_PATH' => 'Tilaa salasanamuistutus',
 
 );
