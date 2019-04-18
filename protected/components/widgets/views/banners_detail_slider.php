@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (05.07.2018 19:21)*/ ?>
-<div class="slider_bg" style="background-image: none; background-color: #ccc; margin-top: 35px;">
+<div class="slider_bg" style="background-image: none; background-color: #f8f8f8; margin-top: 35px;">
 	<div class="container slider_container"><?php /*
 		<div class="btn_left"><span class="fa"></span></div>
 		<div class="btn_right"><span class="fa"></span></div>
