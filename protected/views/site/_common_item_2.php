@@ -281,7 +281,7 @@ $entityKey = Entity::GetUrlKey($entity);
 					}
 				?>
 				
-                <a class="cart-action add_cart<?if (Yii::app()->language == 'es') echo ' no_img';?>" data-action="add" style="width: 162px;font-size: 13px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a><?php else : ?><?php if ($item['entity'] != Entity::VIDEO) : ?>
+                <a class="cart-action add_cart" data-action="add" style="width: 162px;font-size: 13px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a><?php else : ?><?php if ($item['entity'] != Entity::VIDEO) : ?>
                     <?php if (Yii::app()->user->isGuest) : ?>
 <a href="<?=
                         Yii::app()->createUrl('cart/dorequest', array('entity' => Entity::GetUrlKey($item['entity']),

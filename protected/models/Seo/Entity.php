@@ -73,7 +73,15 @@ class ModelsSeoEntity extends Seo_settings {
 					break;
 				case 'entity/serieslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_BOOKS_SERIES_PROPERTYLIST'); break;
 				case 'entity/authorlist': $this->_replace['{name}'] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS'); break;
-				case 'entity/bindingslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY'); break;
+				case 'entity/bindingslist':
+					switch ($this->_eid) {
+						case Entity::BOOKS:case Entity::SHEETMUSIC: $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+						case Entity::MUSIC: $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+						case Entity::PERIODIC: $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+						default: $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+					}
+//					$this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
+					break;
 				case 'entity/yearslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_FILTER_YEAR'); break;
 				case 'entity/yearreleaseslist': $this->_replace['{name}'] = Yii::app()->ui->item('A_NEW_YEAR_REAL'); break;
 				case 'entity/performerlist': $this->_replace['{name}'] = Yii::app()->ui->item('A_LEFT_AUDIO_AZ_PROPERTYLIST_PERFORMERS'); break;

@@ -3965,3 +3965,6 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
     font-size: 14px;
     color: #fff;
 }
+.reg_btn { float: right; margin-left: 20px; }
+.reg_btn.es {margin: 0;}
+.reg_btn.fr {margin-left: 35px; }

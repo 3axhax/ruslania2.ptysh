@@ -632,7 +632,13 @@ class EntityController extends MyController {
         $list = (new Binding())->getAll($entity);
 
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
+        switch ($entity) {
+            case Entity::BOOKS:case Entity::SHEETMUSIC: $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+            case Entity::MUSIC: $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+            case Entity::PERIODIC: $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+            default: $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+        }
+//        $this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_TYPOGRAPHY');
 
         $this->render('bindings_list', array('list' => $list, 'entity' => $entity));
     }

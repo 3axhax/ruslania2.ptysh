@@ -95,13 +95,13 @@
 					
 					if ($sCount > 0) :
 					?>
-					<a class="fa cart-action add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"  style="width: 132px;">
+					<a class="fa cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"  style="width: 132px;">
                         <span><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
                     </a>
 					
 					<? else : ?>
 					
-					<a class="cart-action add_cart_plus list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>"
+					<a class="cart-action add_cart_plus list_cart cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>"
                data-id="<?= $item['id']; ?>" data-quantity="1"
                href="javascript:;" style="width: 132px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
 					<? endif; ?>
