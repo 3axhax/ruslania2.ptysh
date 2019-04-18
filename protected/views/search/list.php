@@ -1,5 +1,4 @@
-<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs));
-Debug::staticRun(array($products)); ?>
+<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
 <div class="container content_books">
 <div class="row">

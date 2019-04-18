@@ -6,7 +6,7 @@
 	$productPicture = Picture::Get($offerDay, Picture::SMALL);
 	$productTitle = ProductHelper::GetTitle($offerDay, 'title');
 	?>
-		<div onclick="window.location.href = '<?= $url ?>'" class="span6 main-banner-content" style="background: url(/new_img/day_fon.jpg) 100% 100% no-repeat; background-size: contain; cursor: pointer;">
+		<a href="<?= $url ?>"><div class="span6 main-banner-content" style="background: url(/new_img/day_fon.jpg) 100% 100% no-repeat; background-size: contain;">
 			<div class="photo">
 				<div><img src="<?= $productPicture ?>" alt=""/></div>
 			</div>
@@ -21,7 +21,7 @@
 			<?php if (!empty($offerDay['extraTxt'])): ?>
 				<div class="extra-txt"><span><?= $offerDay['extraTxt'] ?></span></div>
 			<?php endif; ?>
-		</div>
+		</div></a>
 <?php elseif (!empty($leftBanner)): ?>
 		<div class="span6 main-banner-content"><a href="<?= $leftBanner['href'] ?>"><img class="main-bannerImg" src="<?= $leftBanner['img'] ?>" alt="<?= htmlspecialchars($leftBanner['title']) ?>"/></a></div>
 <?php endif; ?>

@@ -110,10 +110,13 @@ class SearchProducts {
 		$math = explode('|', $this->getMath($q));
 
 //		if (count($math) > 1) {
+
+
+		/*
 			$sql = ''.
 				'select t.entity, t.real_id '.
 				'from (';
-			foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
+		foreach ($this->_getTablesForList() as $seTable) {
 				foreach ($math as $m) {
 					if ($firstUnion) $firstUnion = false;
 					else $sql .= 'union ';
@@ -121,12 +124,34 @@ class SearchProducts {
 					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
 					$spxCond['limit'] = 'limit=100000';
 					$spxCond['maxmatches'] = 'maxmatches=100000';
-					$sql .= '(SELECT entity, real_id '.
-						'FROM `' . $seTable . '` '.
-						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-						'order by position, time_position) '.
+					$sql .= 'SELECT entity, real_id, avail, right(position, 2) position, time_position FROM `_se_' . $seTable . '` '.
+						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') ';
+					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;
+				}
+			}
+			$sql .= ') t '.
+				'order by t.avail desc, t.position, t.time_position '.
+				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+			'';
+
+		 */
+			$sql = ''.
+				'select t.entity, t.real_id '.
+				'from (';
+		foreach ($this->_getTablesForList() as $seTable) {
+				foreach ($math as $m) {
+					if ($firstUnion) $firstUnion = false;
+					else $sql .= 'union ';
+					$spxCond = array($m);
+					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
+					$spxCond['limit'] = 'limit=100000';
+					$spxCond['maxmatches'] = 'maxmatches=100000';
+					$sql .= '(SELECT entity, real_id FROM (SELECT * '.
+						'FROM `_se_' . $seTable . '` '.
+						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ')) t1 '.
+						'order by t1.position, t1.time_position) '.
 					'';
-					if ($seTable === '_se_avail_items_without_morphy') break;
+					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;
 				}
 			}
 			$sql .= ') t '.
@@ -211,7 +236,7 @@ class SearchProducts {
 		$sql = ''.
 			'select t.entity, count(*) counts '.
 			'from (';
-		foreach (array('_se_avail_items_without_morphy', '_se_product_authors', '_se_avail_items_with_morphy') as $seTable) {
+		foreach ($this->_getTablesForList() as $seTable) {
 			foreach ($math as $m) {
 				if ($firstUnion) $firstUnion = false;
 				else $sql .= 'union ';
@@ -220,35 +245,15 @@ class SearchProducts {
 				$spxCond['limit'] = 'limit=100000';
 				$spxCond['maxmatches'] = 'maxmatches=100000';
 				$sql .= 'SELECT entity, real_id '.
-					'FROM `' . $seTable . '` '.
+					'FROM `_se_' . $seTable . '` '.
 					'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
 				'';
 			}
 		}
-		$sql .= ') t '.
+		$sql .= '
+) t './/почему то без переноса строки не правильный результат
 			'group by t.entity '.
 		'';
-/*		$spxCond = array($this->getMath($query));
-		$spxCond['ranker'] = 'ranker=sph04';
-		$spxCond['limit'] = 'limit=100000';
-		$spxCond['maxmatches'] = 'maxmatches=100000';
-		$sql = ''.
-			'select t.entity, count(*) counts '.
-			'from ('.
-				'SELECT entity, real_id '.
-				'FROM `_se_avail_items_without_morphy` '.
-				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-				'union '.
-				'SELECT entity, real_id '.
-				'FROM `_se_product_authors` '.
-				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-				'union '.
-				'SELECT entity, real_id '.
-				'FROM `_se_avail_items_with_morphy`'.
-				'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
-			') t '.
-			'group by t.entity '.
-		'';*/
 		$find = Yii::app()->db->createCommand($sql)->queryAll();;
 		Debug::staticRun(array($sql, $find));
 
