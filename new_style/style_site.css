@@ -3968,3 +3968,6 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
 .reg_btn { float: right; margin-left: 20px; }
 .reg_btn.es {margin: 0;}
 .reg_btn.fr {margin-left: 35px; }
+
+.span2 .row_category { margin-bottom: 6px; }
+.span2 .row_category span { font-weight: 600 }

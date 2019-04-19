@@ -153,6 +153,7 @@ class SearchProducts {
 					'';
 					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;*/
 					$spxCond = array($m);
+					if (!empty($eid)) $spxCond['filter'] = 'filter=entity,' . (int) $eid;
 					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
 					$spxCond['limit'] = 'limit=100000';
 					$spxCond['maxmatches'] = 'maxmatches=100000';
@@ -766,6 +767,7 @@ class SearchProducts {
 
 	function getMath($q) {
 		$q = mb_strtolower($q, 'utf-8');
+		str_replace('watercolour', 'watercolor', $q);
 		$query = preg_split("/\W/ui", $q);
 		$query = array_filter($query);
 		$math = implode(' ', $query);
