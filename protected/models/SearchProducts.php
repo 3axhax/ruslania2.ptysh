@@ -141,8 +141,8 @@ class SearchProducts {
 		foreach ($this->_getTablesForList() as $seTable) {
 				foreach ($math as $m) {
 					if ($firstUnion) $firstUnion = false;
-					else $sql .= 'union ';
-					$spxCond = array($m);
+					else $sql .= 'union all ';
+/*					$spxCond = array($m);
 					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
 					$spxCond['limit'] = 'limit=100000';
 					$spxCond['maxmatches'] = 'maxmatches=100000';
@@ -151,10 +151,21 @@ class SearchProducts {
 						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ')) t1 '.
 						'order by t1.position, t1.time_position) '.
 					'';
+					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;*/
+					$spxCond = array($m);
+					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
+					$spxCond['limit'] = 'limit=100000';
+					$spxCond['maxmatches'] = 'maxmatches=100000';
+					$sql .= 'SELECT * '.
+						'FROM `_se_' . $seTable . '` '.
+						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') '.
+					'';
 					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;
 				}
 			}
 			$sql .= ') t '.
+				'group by t.id '.
+				'order by left(substring_index(group_concat(t.position), ",", 1), 2), substring_index(group_concat(weight order by weight desc), ",", 1) desc, substring_index(group_concat(t.position), ",", 1), t.time_position '.
 				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'';
 			$find = Yii::app()->db->createCommand($sql)->queryAll();;
@@ -390,15 +401,15 @@ class SearchProducts {
 	private function _getTablesForList() {
 		if ($this->_avail) {
 			return array(
-				'avail_items_with_morphy',
-				'product_authors',
 				'avail_items_without_morphy',
+				'product_authors',
+				'avail_items_with_morphy',
 			);
 		}
 		return array(
-			'all_items_with_morphy',
-			'product_authors',
 			'all_items_without_morphy',
+			'product_authors',
+			'all_items_with_morphy',
 		);
 	}
 
