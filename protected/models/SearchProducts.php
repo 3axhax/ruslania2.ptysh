@@ -767,7 +767,7 @@ class SearchProducts {
 
 	function getMath($q) {
 		$q = mb_strtolower($q, 'utf-8');
-		str_replace('watercolour', 'watercolor', $q);
+		$q = str_replace('watercolour', 'watercolor', $q);
 		$query = preg_split("/\W/ui", $q);
 		$query = array_filter($query);
 		$math = implode(' ', $query);
