@@ -262,4 +262,17 @@ class SearchAuthors {
         return $authors;
     }
 
+	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
+		$condition = array($q, 'mode=boolean');
+		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . '_author,1';
+		$condition['limit'] = 'limit=' . $limit;
+		$condition['maxmatches'] = 'maxmatches=' . $limit;
+		$sql = ''.
+			'select id '.
+			'from _se_authors '.
+			'where (query=:condition)'.
+		'';
+		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+	}
+
 }

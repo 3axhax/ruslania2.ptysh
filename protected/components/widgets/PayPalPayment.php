@@ -5,15 +5,15 @@ class PayPalPayment extends BasePayment
     const URL = 'https://www.paypal.com/cgi-bin/webscr';
     const AUTH = 'NOmQpS3HRnmk-smm8oOmQHR7HpulUk4bFWrNY-f0rqZ6PWNL0faARwh07aC';
     const BUSINESS = 'paypal@ruslania.com';
+    var $tpl = 'paypal';
 
     public function GetPaymentType()
     {
         return Payment::PAY_PAL;
     }
 
-    public function run()
-    {
-        $this->render('paypal');
+    public function run() {
+        $this->render($this->tpl);
     }
 
 /*

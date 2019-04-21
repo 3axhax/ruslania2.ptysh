@@ -38,5 +38,25 @@ class Test123Controller extends MyController {
             // 'bgs' => $bg, 'pubs' => $pubs, 'series'=>$series, 'authors'=>$authors, 'title_cat'=>$title_cat));	
 	
         // $this->render('items');
-    }	
+    }
+
+	function actionCategory() {
+		Seo_settings::get();
+		$category = new Category();
+		Debug::staticRun(array(ProductHelper::GetTitle($category->GetByIds(50, [30])[0])));
+	}
+
+	function actionVectori() {
+		$this->render('vectori');
+	}
+
+	function actionCurrency() {
+		Debug::staticRun(array(
+			Yii::app()->ui->item('ADDED_TO_CART', Yii::app()->createUrl('cart/view')),
+			Yii::app()->ui->item('ADDED_TO_CART_ALREADY'),
+			sprintf(Yii::app()->ui->item('ADDED_TO_CART_ALREADY'), Yii::app()->createUrl('cart/view'), 3)
+		));
+
+		Debug::staticRun(array(Yii::app()->createUrl('cart/orderPay', array('ptype'=>7, 'id'=>7060087, 'currency'=>3))));
+	}
 }

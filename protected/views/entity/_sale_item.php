@@ -1,27 +1,14 @@
-
-
 <div class="news_box nb<?= $entity ?> sale_item">
     <div class="container">
         <div class="title">
             <a href="<?=$link?>"><?= $title?></a></span>
             <div class="pult">
-                <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""/></a>
-                <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""/></a>
+                <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span><?php /*<img src="/new_img/btn_left_news.png" alt=""/> */ ?></a>
+                <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><?php /*<img src="/new_img/btn_right_news.png" alt=""/>*/ ?><span class="fa"></span></a>
             </div>
 
         </div>
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.cnt<?= $entity ?> ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
-            });
-        });
-    </script>
-
     <div class="container cnt<?= $entity ?>">
         <ul class="books">
             <?php
@@ -66,3 +53,16 @@
         width: 199px !important;
     }
 </style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.cnt<?= $entity ?> ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 4,
+                slidesToScroll: 4
+            }).on('lazyLoadError', function(event, slick, image, imageSource){
+                image.attr('src', '<?= Picture::srcNoPhoto() ?>');
+            });
+        });
+    });
+</script>

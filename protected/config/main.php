@@ -73,7 +73,7 @@ return array(
             'allowAutoLogin' => true,
             'autoRenewCookie' => true,
             'class' => 'WebUser',
-            'loginUrl' => '/site/login',
+            'loginUrl' => '/login',
             'identityCookie' => array('httpOnly' => true),
         ),
 
@@ -87,7 +87,7 @@ return array(
         ),
 
       'request' => array('class' => 'MyRequest',
-                           'dontCheckCsrf' => array('payment/accept', 'payment/cancel'),
+                           'dontCheckCsrf' => array('payment/accept', 'payment/cancel', 'payment/acceptCertificate', 'payment/cancelCertificate'),
                            'enableCsrfValidation' => true,
                            'enableCookieValidation' => true,
                            'csrfCookie' => array('httpOnly' => true)),
@@ -101,14 +101,14 @@ return array(
 //            'suffix' => '/',
             'urlSuffix'=>'/',
             'rules' => array(
-                '/' => 'site/index',
                 '__entityUrlRule' => array('class' => 'EntityUrlRule'),
                 '__staticUrlRule' => array('class' => 'StaticUrlRule'),
+                '/' => 'site/index',
                 'landingpage' => 'site/landingpage',
                 'login' => 'site/login',
                 'register' => 'site/register',
 
-                'doorder' => 'cart/doorder',
+                /*'doorder'*/'placeorder' => 'cart/doorder',
                 'request-<entity:(' . $entities . ')>-<iid:(\d+)>' => 'cart/dorequest',
                 'print/<oid:(\d+)>' => 'client/printorder',
 
@@ -171,7 +171,6 @@ return array(
             'schemaCacheID' => 'schemaCache',
         ),
 
-
         'spx' => array(
             'class' => 'CDbConnection',
             'connectionString' => 'mysql:host=localhost;port=3306',
@@ -202,11 +201,12 @@ return array(
         'LangDir' => '',
         'DbCacheTime' => (60 * 60 * 4), // 4 hours,
         'OrderMinPrice' => 5, // min order 5,-
-        'PicDomain' => 'http://ruslania.com',
-        'Base' => 'ruslania2.ptysh.ru',
+        'PicDomain' => 'https://beta.ruslania.com',///'https://ruslania.com',
+        'Base' => 'beta.ruslania.com',
         'DataProviderCacheID' => 'queryCache', // cacheQuery
         'DataProviderCacheTimeout' => (60 * 60 * 4), // 4 hours
-        'PAYMENT_ENVIRONMENT' => 'prod',
+        //'PAYMENT_ENVIRONMENT' => 'prod',
+        'PAYMENT_ENVIRONMENT' => 'test',
     ),
 );
 

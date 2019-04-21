@@ -7,6 +7,7 @@ ini_set('max_execution_time', 3600);
  * таблица all_roles
  * Class RepairAuthorsCommand
  */
+define('cronAction', 1);
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class RepairAuthorsCommand extends CConsoleCommand {
 	private $_table = 'all_authorslist';
@@ -49,6 +50,14 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			$author = $this->_ltrim($author);
 			if (!empty($author['repair_title_ru'])) $this->_update($author);
 		}
+
+		$sql = ''.
+			'update ' . $this->_table . ' set '	.
+			'first_ru = upper(left(trim(repair_title_ru), 1)), '.
+			'first_en = upper(left(trim(repair_title_en), 1)) '.
+			'where (trim(repair_title_en) <> "") and ((first_ru is null) or (first_ru = "")) '.
+		'';
+		$this->_query($sql);
 
 		$sql = ''.
 			'update ' . $this->_table . ' set '	.

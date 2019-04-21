@@ -10,6 +10,7 @@ class OrderForm extends CFormModel
     public $CurrencyID;
     public $Mandate;
     public $payment;
+    public $SmartpostAddress;
     private $sid;
 
     public function __construct($sid)
@@ -25,7 +26,7 @@ class OrderForm extends CFormModel
     public function rules()
     {
         return array(
-            array('Notes, DeliveryAddressID, BillingAddressID, CurrencyID, Mandate', 'safe'),
+            array('Notes, DeliveryAddressID, BillingAddressID, CurrencyID, Mandate, SmartpostAddress', 'safe'),
             array('DeliveryMode', 'checkDM'),
             array('DeliveryTypeID', 'checkDeliveryType'),
             array('CurrencyID', 'checkCurrency'),

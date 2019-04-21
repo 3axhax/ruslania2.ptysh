@@ -18,7 +18,8 @@ class RuslaniaUI extends CApplicationComponent
             self::$_cache[$file] = $data;
             Yii::endProfile('require');
         }
-        $ret = '<span style="color:red; font-weight:bold">NOKEY {'.$key.'}</span>';
+        //$ret = '<span style="color:red; font-weight:bold">NOKEY {'.$key.'}</span>';
+        $ret = 'NOKEY {'.$key.'}';
 
         if(array_key_exists($key, $data))
         {

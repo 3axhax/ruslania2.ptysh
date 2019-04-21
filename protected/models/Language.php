@@ -40,6 +40,32 @@ class Language
         return 'Lang_'.$langID;
     }
 
+    public static function GetTitleByID_country($langID)
+    {
+        $langs = self::GetItemsLanguageList();
+        if(array_key_exists($langID, $langs)) {
+            if (!empty($langs[$langID]['country'])) {
+                $country = unserialize($langs[$langID]['country']);
+                if (!empty($country[Yii::app()->getLanguage()])) return $country[Yii::app()->getLanguage()];
+            }
+            return ProductHelper::GetTitle($langs[$langID]);
+        }
+        return 'Lang_'.$langID;
+    }
+
+    public static function GetTitleByID_predl($langID)
+    {
+        $langs = self::GetItemsLanguageList();
+        if(array_key_exists($langID, $langs)) {
+            if (!empty($langs[$langID]['predl'])) {
+                $predl = unserialize($langs[$langID]['predl']);
+                if (!empty($predl[Yii::app()->getLanguage()])) return $predl[Yii::app()->getLanguage()];
+            }
+            return ProductHelper::GetTitle($langs[$langID]);
+        }
+        return 'Lang_'.$langID;
+    }
+
     public static function GetItemsLanguageList()
     {
         if(!empty(self::$list)) return self::$list;

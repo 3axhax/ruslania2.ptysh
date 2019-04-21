@@ -3,6 +3,7 @@
 class Order extends CMyActiveRecord
 {
     public $check;
+    private $_promocode = null; //здесь должно быть ид промокода
 
     public static function HavePaidState($states)
     {
@@ -30,10 +31,12 @@ class Order extends CMyActiveRecord
     {
         return array(
 
-            array('uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
-                  . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet'),
+            array('hide_edit_order,hide_edit_payment, uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
+                  . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet', ),
             array('notes', 'safe', 'on' => 'newinternet')
+			
         );
+		
     }
 
     public function relations()
@@ -56,7 +59,7 @@ class Order extends CMyActiveRecord
         $list = Order::model()->with('items', 'states',
             'billingAddress', 'billingAddress.billingCountry',
             'deliveryAddress', 'deliveryAddress.deliveryCountry')->findAll($criteria);
-
+		
         $list = $this->FlatOrderList($list);
 
         return $list;
@@ -77,10 +80,14 @@ class Order extends CMyActiveRecord
             }
 
         $p = new Product;
+		
+		
 
         foreach ($items as $entity => $ids)
         {
-            $result = $p->GetProducts($entity, $ids);
+			
+			$result = $p->getProducts3($entity, $ids);
+			
             foreach ($result as $item)
                 $itemsData[$entity][$item['id']] = $item;
         }
@@ -143,40 +150,62 @@ class Order extends CMyActiveRecord
 
         $list = $this->FlatOrderList($list);
 
-        if (!empty($list)) return $list[0];
+        if (!empty($list)) {
+            usort($list[0]['States'], function($a, $b){ if ($a['timestamp'] == $b['timestamp']) return 0; return ($a['timestamp'] < $b['timestamp']) ? -1 : 1; });
+            return $list[0];
+        }
         return false;
     }
 
-    public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
-    {
-        $transaction = Yii::app()->db->beginTransaction();
-        $a = new Address();
-        $da = $a->GetAddress($uid, $order->DeliveryAddressID);
-        $withVAT = Address::UseVAT($da);
-            
-        
-        //var_dump($order);
-        
-        
-        $itemsPrice = 0;
+    /** для подсчета стоимости заказа, без учета промокодов
+     * @param $uid
+     * @param $sid
+     * @param $items array товары
+     * @param $address array -это адрес доставки с данными пользователя (Address::GetAddress), но можно просто передать страну (если пользователь не авторизирован). Адрес нужен потому, что ндс зависит от кода предприятия
+     * @param $deliveryMode int 0 - считаю стоимость доставки, 1 - несчитаю стоимость доставки
+     * @param $deliveryTypeID int - тип доставки
+     * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки, withVAT(да|нет), естьТоварСоСкидкой(да|нет)]
+     */
+    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null, $useDefaultAddr = true) {
+        if (empty($address)&&!empty($useDefaultAddr)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
+        if ($currencyId === null) $currencyId = Yii::app()->currency;
+        $withVAT = Address::UseVAT($address);
+        $itemsPrice = $fullweight = 0;
         $pricesValues = array();
-        foreach ($items as $idx=>$item)
-        {
+        $discountKeys = array();//нужно для получения цены по промокоду, сюда же положил количество товара, что бы не создавать новую переменную
+        $isDiscount = false;//признак, что есть товар со скидкой
+        foreach ($items as $idx=>$item) {
             $values = DiscountManager::GetPrice($uid, $item);
             $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
+            $keyWithoutDiscount = DiscountManager::BRUTTO;
             $itemKey = $item['entity'].'_'.$item['id'];
             $price = $values[$key];
-            if($item['entity'] == Entity::PERIODIC)
-            {
-                if($da['is_finland'])
+            if($item['entity'] == Entity::PERIODIC) {
+                if(!empty($address['code'])&&($address['code'] == 'FI')) {
                     $key = $withVAT ? DiscountManager::WITH_VAT_FIN : DiscountManager::WITHOUT_VAT_FIN;
-                else
+                    $keyWithoutDiscount = DiscountManager::BRUTTO_FIN;
+                }
+                else {
                     $key = $withVAT ? DiscountManager::WITH_VAT_WORLD : DiscountManager::WITHOUT_VAT_WORLD;
+                    $keyWithoutDiscount = DiscountManager::BRUTTO_WORLD;
+
+                }
                 $price = $values[$key];
                 $price /= 12;
             }
-            $pricesValues[$itemKey] = $price;
+            $pricesValues[$itemKey] = sprintf("%.2f", round($price, 2));
+            $discountKeys[$itemKey] = [
+                'discountPrice'=>$key,
+                'originalPrice'=>$keyWithoutDiscount,
+                'quantity'=>$item['quantity'],
+                'info'=>'',
+            ];
+            if ($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT) {
+                $isDiscount = true;
+                $discountKeys[$itemKey]['info'] = DiscountManager::ToStr($values[DiscountManager::DISCOUNT_TYPE]).': '.$values[DiscountManager::DISCOUNT].'%';
+            }
             $itemsPrice += $item['quantity'] * $price;
+            if (!empty($item['InCartUnitWeight'])) $fullweight += ($item['InCartUnitWeight']/1000);
 
             if($values[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_NO_DISCOUNT)
             {
@@ -184,51 +213,79 @@ class Order extends CMyActiveRecord
             }
         }
 
-        if ($order->DeliveryMode == 0)
-        {
+        if ($deliveryMode == 0) {
             $p = new PostCalculator();
-            $list = $p->GetRates($order->DeliveryAddressID, $uid, $sid);
-            
-            //var_dump($list);
-            
-            $deliveryPrice = false;
-            foreach ($list as $l)
-                if ($l['id'] == $order->DeliveryTypeID) $deliveryPrice = $l['value'];
-        }
-        else
-        {
+            $list = $p->GetRates(0, $uid, $sid, isset($address['country'])?$address['country']:$address['id']);
             $deliveryPrice = 0;
+            foreach ($list as $l)
+                if ($l['id'] == $deliveryTypeID) $deliveryPrice = $l['value'];
         }
+        else $deliveryPrice = 0;
 
         $rates = Currency::GetRates();
-        $rate = $rates[$order->CurrencyID];
+        $rate = $rates[$currencyId];
         $minOrderPrice = Yii::app()->params['OrderMinPrice'] * $rate;
         if($itemsPrice < $minOrderPrice) $itemsPrice = $minOrderPrice;
 
-        $fullPrice = $itemsPrice + $deliveryPrice;
+        return [sprintf("%.2f", round($itemsPrice, 2)), sprintf("%.2f", round($deliveryPrice, 2)), $pricesValues, $discountKeys, $fullweight, (bool)$withVAT, (bool)$isDiscount];
+    }
+
+    public function CreateNewOrder($uid, $sid, OrderForm $order, $items, $ptype)
+    {
+        $transaction = Yii::app()->db->beginTransaction();
+        $a = new Address();
+        $da = $a->GetAddress($uid, $order->DeliveryAddressID);
+        list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false);
+
+        $notes = $order->Notes;
+
+        $promocodeId = 0;
+        if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
+        else {
+            $promocode = Promocodes::model();
+            $code = $promocode->getPromocode($this->_promocode)['code'];
+            $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
+            $promocodeId = $this->_promocode;
+            if (!empty($notes)) $notes .= ' ';
+            $notes .= 'Использован промокод: ' . $code . '. ';
+            $briefly = $promocode->briefly($code, false, $itemsPrice);
+            if (!empty($briefly['promocodeValue'])) $notes .= $briefly['promocodeValue'] . ' ';
+            if (!empty($briefly['promocodeUnit'])) $notes .= $briefly['promocodeUnit'] . ' ';
+            if (!empty($briefly['name'])) $notes .= strip_tags($briefly['name']) . ' ';
+            if ((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST) $deliveryPrice = 0;
+        }
 
         try
         {
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
-                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate) VALUES '
-                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate)';
+                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address) VALUES '
+                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address)';
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
                       ':daid' => $order->DeliveryAddressID,
                       ':baid' => $order->BillingAddressID,
                       ':dtid' => $order->DeliveryTypeID,
-                      ':ptid' => $ptype, // payment in next step
+                      ':ptid' => (int) $ptype, // payment in next step
                       ':cur' => $order->CurrencyID,
                       ':isres' => $order->DeliveryMode == 1 ? 1 : 0, // 1 - выкуп в магазине
                       ':full' => $fullPrice,
                       ':items' => $itemsPrice,
                       ':delivery' => $deliveryPrice,
-                      ':notes' => $order->Notes,
+                      ':notes' => $notes,
                       ':mandate' => $order->Mandate,
+                      ':promocodeId' => $promocodeId,
+                      ':smartpost_address' => $order->SmartpostAddress,
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;
+
+            if (($orderID > 0)&&!empty($this->_promocode)) {
+                if ($fullPrice == 0) $this->AddStatus($orderID, OrderState::AutomaticPaymentConfirmation);
+                $promocode = Promocodes::model();
+                $promocode->used($this->_promocode);
+            }
+
             // NOTE: calculate order invoice reference number
             // Что такое refnumber историкам выяснить не удалось
             // Код ниже тупо скопипащен со старой версии сайта "создание заказа"
@@ -259,8 +316,7 @@ class Order extends CMyActiveRecord
             $sql = 'INSERT INTO users_orders_items (oid, entity, iid, quantity, items_price, price, info) VALUES '
                 . '(:oid, :entity, :iid, :quantity, :subtotal, :price, :info)';
 
-            foreach ($items as $item)
-            {
+            foreach ($items as $item) {
                 $itemKey = $item['entity'].'_'.$item['id'];
                 $price = $pricesValues[$itemKey];
 
@@ -272,7 +328,7 @@ class Order extends CMyActiveRecord
                          ':quantity' => $item['quantity'],
                          ':subtotal' => $item['quantity'] * $price,
                          ':price' => $price,
-                         ':info' => empty($item['info']) ? null : $item['info']
+                         ':info' => empty($discountKeys[$itemKey]['info']) ? '' : $discountKeys[$itemKey]['info']
                     ));
             }
 
@@ -288,7 +344,7 @@ class Order extends CMyActiveRecord
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
             
-          // var_dump($ex);
+			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/21212.txt', print_r($ex,1));
             
             return 0;
         }
@@ -317,6 +373,10 @@ class Order extends CMyActiveRecord
 
         $sql = 'INSERT INTO users_orders_states (oid, state) VALUES (:oid, :state)';
         $cnt = Yii::app()->db->createCommand($sql)->execute($params);
+
+        $sql = 'UPDATE users_orders SET must_upgrade = 1 WHERE id=:id LIMIT 1';
+        Yii::app()->db->createCommand($sql)->execute(array(':id' => $oid));
+
         return $cnt;
     }
 
@@ -373,4 +433,43 @@ class Order extends CMyActiveRecord
         $transaction->commit();
         return $newOid;
     }
+
+    function setPromocode($code) {
+        $promocode = Promocodes::model();
+        if ($promocode->check($promocode->getPromocodeByCode($code)) === 0) $this->_promocode = $promocode->getPromocodeByCode($code)['id'];
+    }
+	
+	function GetCountOrders($uid){
+		
+		$sql = 'SELECT COUNT(*) FROM users_orders WHERE uid=:uid';
+        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array('uid'=>$uid));
+		
+		return $cnt;
+		
+	}
+	
+	function isMyOrder($uid, $oid){
+		
+		$sql = 'SELECT COUNT(*) FROM users_orders WHERE uid=:uid AND id=:id';
+        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array('uid'=>$uid, 'id'=>$oid));
+		
+		return $cnt;
+		
+	}
+
+    function getItemsByOrder($order) {
+        if (empty($order['Items'])) return array();
+        foreach ($order['Items'] as $i=>$item) {
+            if (empty($r['unitweight'])) {
+                $order['Items'][$i]['FullUnitWeight'] = 0;
+                $order['Items'][$i]['InCartUnitWeight'] = 0;
+            }
+            else {
+                $order['Items'][$i]['FullUnitWeight'] = $item['quantity'] * $item['unitweight'] * Cart::UNITWEIGHT_VALUE;
+                $order['Items'][$i]['InCartUnitWeight'] = $item['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+            }
+        }
+        return $order['Items'];
+    }
+
 }

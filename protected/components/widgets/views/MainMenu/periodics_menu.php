@@ -1,7 +1,6 @@
 <?php /*Created by Кирилл (02.10.2018 23:30)*/ ?>
+<a class="dd"  href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item("A_NEW_PERIODIC"); ?></a>
 <div class="click_arrow"></div>
-<a class="dd"  href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item("A_GOTOPEREODICALS"); ?></a>
-
 <div class="dd_box_bg list_subcategs" style="left: -280px;">
 
     <div class="span10 mainmenu-periodics">
@@ -18,7 +17,7 @@
                         else $name = Yii::app()->ui->item($name);
                         ?>
                         <li>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(2))); ?>"><?= $name ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), /*'binding' => array(2)*/)); ?>"><?= $name ?></a>
                         </li>
                     <?php endif; endforeach; ?>
                 <li>
@@ -39,7 +38,7 @@
                         else $name = Yii::app()->ui->item($name);
                         ?>
                         <li>
-                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), 'binding' => array(1))); ?>"><?= $name ?></a>
+                            <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => $id, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[$id])), /*'binding' => array(1)*/)); ?>"><?= $name ?></a>
                         </li>
                     <?php endif; endforeach; ?>
                 <li style="margin-bottom: 10px;margin-top: 15px;">

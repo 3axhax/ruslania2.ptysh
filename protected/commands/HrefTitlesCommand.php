@@ -5,6 +5,7 @@ ini_set('max_execution_time', 3600);
  * Class HrefTitlesCommand
  */
 
+define('cronAction', 1);
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class HrefTitlesCommand extends CConsoleCommand {
 	protected $_counts = 49500; //кол-во записей за один проход

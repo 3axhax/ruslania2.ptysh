@@ -1,7 +1,40 @@
 <hr />
 
+<?
+
+$addrGet = CommonHelper::FormatAddress2($order['DeliveryAddress']);
+
+//var_dump( $addrGet );
+
+$hide_btn_next = 0;
+
+if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['city'] == '') { $hide_btn_next = 1; }
+
+?>
+
+<input type="hidden" value="<?=$hide_btn_next?>" name="hide_btn_next" />
+
+<style>
+
+	#pay_systems .selp { width: 100%; text-align: center }
+
+</style>
+
 <div class="container cartorder">
-    <h1><?= Yii::app()->ui->item('HEADER_PAYPAL') ?></h1>
+    <h1><?=$ui->item('CARTNEW_PAYPAL_THANK_ORDER')?></h1>
+	
+	<div class="row">
+	
+	<div class="span8">
+		
+		<?php $this->renderPartial('/client/_one_order_my2', array('order' => $order)); ?>
+	
+	</div>
+	
+	<div class="span6">
+
+    <div>
+       
     
     
     <div class="popup0 popup<?=$p['id']?>" style="background-color: rgba(0,0,0,0.3); position: fixed; left: 0; top: 0; width: 100%; height: 100%; z-index: 99999; opacity: 0.3; display: none;" onclick="$('.popup0').hide();"></div>
@@ -13,22 +46,33 @@
         <?php include ($_SERVER['DOCUMENT_ROOT'] . '/pictures/templates-static/paypal_'.Yii::app()->language.'.html.php'); ?>
     
     </div>
+	
+    <?=$ui->item('CARTNEW_PAYPAL_LABEL')?>
     
-    Произведите оплату нажав на логотип PayPal внизу. Ваш заказ № <?=$number_zakaz?><br /><br />
     
+	<br />
+	<br />
+    <?php $this->widget('PayPalPayment', array('order' => $order, 'hide_btn_next' => $hide_btn_next)); ?>
+   
     
+    <div><?//=sprintf($ui->item('CARTNEW_ORDER_PAY_OTHER_LABEL'), 'dtype8')?></div>
     
-    <?php $this->widget('PayPalPayment', array('order' => $order)); ?>
-    
-    <div><a href="javascript:;" onclick="$('.popup0').show();">Что такое PayPal?</a></div> <br />
-    
-    <div>Или выберите <a style="cursor: pointer;" onclick="openPaySystems('dtype8'); $(this).css('color', '#333333'); return false;">другой способ оплаты</a></div>
-    <div id="pay_systems" class="row spay" style="display: none;">
-        <?php $this->renderPartial('/site/pay_systems', array()); ?>
-    </div>
     <div style="margin: 15px 0;">
-        Если у Вас остались вопросы по оформленному заказу или способам оплаты, звоните по номеру <a href="tel:+35892727070">+358 9 2727070</a> по будням с 9 до 18 ч., по субботам с 10 до 16 ч (по финскому времени GMT +2, летом GMT +3).
+        <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>
     </div>
+	
+	
+	<div style="height: 20px;"></div>
+    
+	
+	
+	
+						
+	</div>					
+	</div>					
+    <div style="height: 20px;"></div>
+	
+
 </div>
 
 
@@ -39,7 +83,7 @@
         $ptypeP.css('border', '1px solid #64717f').addClass('act');
         $('input[type=radio]', $ptypeP).attr('checked', 'true');
         $('.check', $ptypeP).addClass('active');
-        $('#pay_systems').show();
+        $('#pay_systems').toggle();
     }
     function check_cart_sel(cont,cont2,inputId) {
         document.location.href = '<?= Yii::app()->createUrl('cart/orderPay') ?>?id=<?= $number_zakaz ?>&ptype=' + document.getElementById(inputId).value;

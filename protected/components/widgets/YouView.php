@@ -29,48 +29,50 @@ class YouView extends CWidget {
 
 	private function _getProducts() {
 		$serGoods = unserialize(Yii::app()->getRequest()->cookies['yourView']->value);
+		$products = array();
 		$items = array();
 		if (!empty($serGoods)) {
 			shuffle($serGoods);
 			$i = 0;
 			foreach ($serGoods as $good) {
-				if ($i++ >= $this->_countItems) break;
-
 				$ex = explode('_', $good);
 				$good_id = $ex[0];
 				$good_entity = $ex[1];
 				if (($good_id == $this->_params['id'])&&($good_entity == $this->_params['entity'])) continue;
+				if ($i++ >= $this->_countItems) break;
 				if (empty($items[$good_entity])) $items[$good_entity] = array();
 				$items[$good_entity][] = $good_id;
 			}
-		}
-		$products = array();
-		$p = new Product();
-		foreach($items as $entity=>$ids) {
-			if (!empty($ids)) {
-				foreach ($p->GetProductsV2($entity, $ids) as $item) {
-					$item['status'] = $p->GetStatusProduct($entity, $item['id']);
-					$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-					$item['priceData']['unit'] = '';
-					if ($entity == Entity::PERIODIC) {
-						$issues = Periodic::getCountIssues($item['issues_year']);
-						if (!empty($issues['show3Months'])) {
-							$item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
-							$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/4;
-							$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/4;
-							$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/4;
+			$p = new Product();
+			foreach($items as $entity=>$ids) {
+				if (!empty($ids)) {
+					foreach ($p->GetProductsV2($entity, $ids) as $item) {
+						$item['status'] = $p->GetStatusProduct($entity, $item['id']);
+						$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+						$item['priceData']['unit'] = '';
+						if ($entity == Entity::PERIODIC) {
+							$issues = Periodic::getCountIssues($item['issues_year']);
+							if (!empty($issues['show3Months'])) {
+								$item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+								$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN]/4;
+								$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+								$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
+							}
+							elseif (!empty($issues['show6Months'])) {
+								$item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+								$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN]/2;
+								$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+								$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
+							}
+							else {
+								$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN];
+								$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN];
+								$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN];
+								$item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+							}
 						}
-						elseif (!empty($issues['show6Months'])) {
-							$item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
-							$item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO]/2;
-							$item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT]/2;
-							$item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT]/2;
-						}
-						else {
-							$item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
-						}
+						$products[] = $item;
 					}
-					$products[] = $item;
 				}
 			}
 		}

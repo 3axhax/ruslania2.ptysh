@@ -237,7 +237,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <? endif; ?>
 
         <?php if ($item['type'] && $entity != Entity::PRINTED) : ?>
-            <span class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
+            <span class="nameprop" style="margin-bottom: 5px;"><?=$ui->item('A_NEW_TYPE_IZD')?>:</span> <?php
 
             if ($item['entity'] == Entity::PERIODIC) :
 
@@ -425,7 +425,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) :
             $langs = array();
             foreach ($item['Languages'] as $lang) {
-                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . Language::GetTitleByID($lang['language_id']) . '</span>';
+                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span>';
             }
             if (!empty($langs)):
             ?>
@@ -490,16 +490,18 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($item['binding_id'])) :
-            $row = (new Binding)->GetBinding($entity, $item['binding_id']);
-            ?>
+        <?php if (!empty($item['binding_id'])&&!empty($item['Binding']['title_' . Yii::app()->language])): ?>
             <div class="authors" style="margin-bottom:5px;">
-                <?php if($entity == 10 || $entity == 15): ?>
-                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_TYPOGRAPHY")); ?></div>
-                <?php else: ?>
-                    <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_PEREP")); ?></div>
-                <?php endif;?>
-                <div style="padding-left: 253px;"><?= $row['title_' . Yii::app()->language] ?></div>
+                <?php
+                switch ($entity) {
+                    case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+                    case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+                    case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+                    default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+                }
+                ?>
+                <div style="float: left;" class="nameprop"><?= str_replace(':', '', $label); ?></div>
+                <div style="padding-left: 253px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
                 <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
@@ -660,28 +662,31 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <? if ($item['entity'] != Entity::PERIODIC) :  ?>
 
-            <div class="already-in-cart" style="margin-top: 30px; float: left; margin-left: 10px;">
-                <?php if (isset($item['AlreadyInCart'])) : ?>
+            <div class="already-in-cart" style="margin-top: 30px; float: left; margin-left: 33px; position: relative;">
+                <?php //if (isset($item['AlreadyInCart'])) : ?>
 
-
+					<div class="price_h">&nbsp;</div>
                     <div class="price_h">&nbsp;</div>
-                    <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-                        <?= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
+                    <?php //if ($item['entity'] != Entity::PERIODIC) : ?>
+					
+						<?php if ($item['entity'] != Entity::PERIODIC) : ?>
+            <div class="mb5" style="color:#4e7eb5; width: 200px; font-size: 13px; ">
+                <span style="position: absolute; bottom: 0px; left: 0;"><?= Availability::ToStr($item); ?></span>
+            </div>
+        <?php //endif; ?>
+					
+                        <?//= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
                     <?php else : ?>
                         <?= strip_tags(Yii::app()->ui->item('PERIODIC_ALREADY_IN_CART')); ?>
                     <?php endif; ?>
 
-                <?php endif; ?>
+                <?php //endif; ?>
             </div>
         <?php endif; ?>
 
 
         <div class="clearfix"></div>
-        <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-            <div class="mb5" style="color:#4e7eb5; width: 200px; font-size: 13px; float: left;">
-                <?= Availability::ToStr($item); ?>
-            </div>
-        <?php endif; ?>
+        
 
 
 
@@ -701,29 +706,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         };
         ?>
 
+		<?php if ($isAvail) : ?>
 
-
-        <?php if ($isAvail) : ?>
-
-
-
-
-            <?php if ($item['entity'] != Entity::PERIODIC) : ?>
-                <div style="float: left; margin-top: -7px; margin-left: 10px;">
-                    <?= $ui->item('CART_COL_QUANTITY'); ?>:
-                    <select class="selquantity" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
-                            style="display: inline-block; margin-bottom: 5px; width: 85px;">
-                        <?php
-                        for ($i = 1; $i <= 100; $i++) {
-                            echo '<option value="' . $i . '">' . $i . '</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-            <?php endif; ?>
-
-
-            <? if ($item['entity'] != Entity::PERIODIC) { ?>
+			<? if ($item['entity'] != Entity::PERIODIC) { ?>
                 <div class="clearfix"></div>
                 <div style="margin-top: 10px;"></div>
             <?}?>
@@ -811,7 +796,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <a href="<?=
                 Yii::app()->createUrl('cart/dorequest', array('entity' => Entity::GetUrlKey($item['entity']),
                     'iid' => $item['id']));
-                ?>" class="cart-action request"><?=$ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
+                ?>" class="ca request"><?=$ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
 
             <?php else : ?>
                 <a class="cart-action request" data-action="request" data-entity="<?= $item['entity']; ?>"
@@ -901,7 +886,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <?= $ui->item('MSG_DELIVERY_TYPE_4'); ?>
             </div>
             <div style="height: 23px; clear: both"></div>
-            <select class="periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;">
+			
+			<div class="periodics">
+			
+            <select class="select2_periodic periodic" style="float: left; margin-right: 0; margin-bottom: 19px; width: 180px; font-size: 12px;     margin-top: 5px;" onchange="$('.cart-action.add_cart').attr('data-quantity', $(this).val())">
                 <?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
                     <option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
                 <?php endif; ?>
@@ -925,7 +913,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 ?>
                 <option value="12"<?php if(empty($item['issues_year']['show3Months'])&&empty($item['issues_year']['show6Months'])): $count_add = 12; ?> selected="selected"<?php endif; ?>>
                     12 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3'); ?> - <?= $item['issues_year']['issues_year'] ?> <?= $labelForIssues12 ?></option>
-            </select>
+            </select> </div>
             <?php if ($price[DiscountManager::TYPE_FREE_SHIPPING] && $isAvail) : ?>
 
 
@@ -943,19 +931,68 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                    class="finmonthpricevat0"/>
 
 
-            <a class="cart-action add_cart" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?= $count_add ?>" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
+
+            <?php if (isset($item['AlreadyInCart'])) : ?>
+
+                <a class="cart-action add_cart add_cart_plus add_cart_view green_cart cart<?=$item['id']?>" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+                    <span><?=$ui->item('CARTNEW_IN_CART_BTN0')?></span></a>
+
+            <? else : ?>
+
+                <a class="cart-action add_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" style="width: 132px;float: left;margin-left: 48px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" data-hidecount="1" href="javascript:;">
+                    <span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+
+            <? endif; ?>
 
         <?php endif;?>
 
         <?php if ($isAvail AND $entity != Entity::PERIODIC) : ?>
+			
+			<?php if ($item['entity'] != Entity::PERIODIC) : ?>
+                
+                    
+                    <select class="select2_periodic_no_float selquantity" onchange="$('.add_cart_view').removeClass('green_cart'); $('.add_cart_view span').html('<?= htmlspecialchars($ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')) ?>');" style="height: 30px; height: 38px; margin: 0; margin-top: -1px; width: 73px; margin-right: 19px;" id="sel<?= $item['entity']; ?>-<?= $item['id']; ?>"
+                            style="display: inline-block; margin-bottom: 5px; width: 85px;">
+                        <?php
+                        for ($i = 1; $i <= 100; $i++) {
+                            echo '<option value="' . $i . '">' . $i . '</option>';
+                        }
+                        ?>
+                    </select>
+              
+            <?php endif; ?>
+			
+			<?php if (isset($item['AlreadyInCart'])) : ?>
+			
+				<a class="cart-action add_cart add_cart_plus add_cart_view green_cart cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+			<span style="padding: 0 17px 0 20px;"><?= $ui->item('CARTNEW_IN_CART_BTN', $item['AlreadyInCart']) ?></span></a>
+			
+			<? else : ?>
+				
+				<a class="cart-action add_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" data-hidecount="1" href="javascript:;">
+			<span style="padding: 0 17px 0 20px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></span></a>
+				
+			<? endif; ?>
+			
+            
 
-            <a class="cart-action add_cart" data-action="add" style="width: 132px;" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART')?></a>
 
+        <? endif; 
+		
+		$class_mark = '';
+		$key_btn = 'BTN_SHOPCART_ADD_SUSPEND_ALT';
+		if (Cart::isMark($item['entity'], $item['id'],Cart::TYPE_MARK, $this->uid, $this->sid)) {
+			
+			$class_mark = ' active';
+			$key_btn = 'BTN_SHOPCART_DELETE_SUSPEND_ALT';
+		}
+		
+		//echo $class_mark;
+		
+		?>
 
-        <? endif; ?>
-
-        <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"<? if (!$lookinside AND $item['entity'] == 30) : echo ' style="margin-left: 20px;" '; endif; ?>
-           data-id="<?= $item['id']; ?>" class="addmark cart-action">&nbsp;<span class="tooltip"><span class="arrow"></span><?=$ui->item('BTN_SHOPCART_ADD_SUSPEND_ALT')?></span></a>
+        <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>" style="margin-left: 19px;"
+           data-id="<?= $item['id']; ?>" class="addmark cart-action<?=$class_mark?>"><i class="fa fa-heart" aria-hidden="true"></i><span class="tooltip"><span class="arrow"></span><?=$ui->item($key_btn)?></span></a>
 
 
     </div>
@@ -981,6 +1018,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
         <?php else : ?>
             <?php //var_dump($item['description_ru']); ?>
+            <?php if(!empty($item['presaleMessage'])): ?>
+                <div class="presale" style="padding: 10px; margin-bottom: 20px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
+            <?php endif; ?>
             <?= nl2br(ProductHelper::GetDescription($item)); ?>
 
         <?php endif; ?>
@@ -1019,14 +1059,14 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <div class="detail-prop">
                     <div class="prop-name"><?= str_replace(':', '', $ui->item('Related categories')); ?></div>
                     <div class="prop-value">
-                        <?php foreach ($cat as $c) : ?>
+                        <?php $i = 0; foreach ($cat as $c) : $i++; ?>
                             <?php $catTitle = ProductHelper::GetTitle($c); ?>
                             <a href="<?=
                             Yii::app()->createUrl('entity/list', array('entity' => $entityKey,
                                 'cid' => $c['id'],
                                 'title' => ProductHelper::ToAscii($catTitle)
                             ));
-                            ?>" class="catlist"><?= $catTitle; ?></a>;
+                            ?>" class="catlist"><?= $catTitle; ?></a><?if ($i < count($cat)) { ?><br /><? } ?>
                         <?php endforeach; ?></div>
                     <div class="clearBoth"></div>
                 </div>
@@ -1128,6 +1168,21 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                         <div class="prop-value"><?= $item['eancode']; ?></div>
                         <div class="clearBoth"></div>
                     </div>
+            <?php endif; ?>
+
+            <?php if ((Yii::app()->getLanguage() == 'fi')&&($entity == Entity::BOOKS)&&!empty($item['Category']['fin_codes'])): ?>
+                <div class="detail-prop">
+                    <div class="prop-name">Kirjastoluokka</div>
+                    <div class="prop-value"><?= $item['Category']['fin_codes'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
+            <?php endif; ?>
+            <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
+                <div class="detail-prop">
+                    <div class="prop-name">BIC-code(s)</div>
+                    <div class="prop-value"><?= $item['Category']['BIC_categories'] ?></div>
+                    <div class="clearBoth"></div>
+                </div>
             <?php endif; ?>
 
             <?php if (!empty($item['isbn'])&&in_array($entity, array(Entity::SHEETMUSIC))) : ?>

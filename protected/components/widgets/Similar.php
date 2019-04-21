@@ -2,6 +2,7 @@
 /*Created by Кирилл (27.07.2018 21:10)*/
 
 class Similar extends CWidget {
+	private $_paramsHeight = 0;
 	/**
 	 * @var array здесь массив начальных значений
 	 */
@@ -23,7 +24,7 @@ class Similar extends CWidget {
 		$products = $this->_getProducts();
 		if (empty($products)) return;
 
-		$this->render('similar', array('items'=>$products));
+		$this->render('similar', array('items'=>$products, 'paramsHeight'=>$this->_paramsHeight));
 	}
 
 	private function _getProducts() {
@@ -41,6 +42,14 @@ class Similar extends CWidget {
 		foreach($items as $entity=>$ids) {
 			if (!empty($ids)) {
 				foreach ($p->GetProductsV2($entity, $ids) as $item) {
+					$paramsHeight = 0;
+					if (!empty($item['Authors'])) $paramsHeight += 20;//высота одного параметра
+					if (!empty($item['isbn'])&&!in_array($item['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))) $paramsHeight += 20;
+					if (!empty($item['eancode'])&&in_array($item['entity'], array(Entity::SHEETMUSIC/*, Entity::MUSIC*/))) $paramsHeight += 20;
+					if ($item['year']) $paramsHeight += 20;
+					if ($item['binding_id']) $paramsHeight += 20;
+					if ($paramsHeight > $this->_paramsHeight) $this->_paramsHeight = $paramsHeight;
+
 					$item['status'] = $p->GetStatusProduct($entity, $item['id']);
 					$item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 					$item['priceData']['unit'] = '';
@@ -145,15 +154,18 @@ class Similar extends CWidget {
 		if (!empty($cid)) $catIds[] = $cid;
 		if (!empty($cidSub)) $catIds[] = $cidSub;
 
-		$condition = array('id'=>'(t.id <> ' . (int) $this->_params['item']['id'] . ')', 'avail'=>'(t.avail_for_order = 1)', 'image'=>'(t.image <> "")');
+		$condition = array('avail'=>'(t.avail_for_order = 1)', );
 		if (!empty($catIds)) $condition['category'] = '((t.code in (' . implode(',', $catIds) . ')) or (t.subcode in (' . implode(',', $catIds) . ')))';
+
+		$having = array('id'=>'(id <> ' . (int) $this->_params['item']['id'] . ')', 'image'=>'(image <> "")', );
 
 		$order = $this->_getOrders($entity);
 		if (!empty($order['year'])) unset($order['add_date']);
 		$sql = ''.
-			'select t.id '.
+			'select t.id, t.image '.
 			'from ' . $entityParam['site_table'] . ' t '.
 			'where ' . implode(' and ', $condition) . ' '.
+			'having ' . implode(' and ', $having) . ' '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -180,7 +192,7 @@ class Similar extends CWidget {
 				'join ' . $entityParam['author_table'] . ' tA on (tA.' . $entityParam['author_entity_field'] . ' = t.id) '.
 					'and (tA.author_id in (' . implode(',', $authorIds) . ')) '.
 					'and (tA.' . $entityParam['author_entity_field'] . ' <> ' . (int) $this->_params['item']['id'] . ') '.
-			'having (avail_for_order = 1) and (t.image <> "") ' .
+			'having (avail_for_order = 1) and (image <> "") ' .
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 			'';
@@ -196,12 +208,10 @@ class Similar extends CWidget {
 		$order = $this->_getOrders($entity);
 
 		$sql = ''.
-			'select t.id ' .
+			'select t.id, t.image, t.avail_for_order ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-			'where (t.avail_for_order = 1) ' .
-				'and (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-				'and (t.series_id = ' . $this->_params['item']['series_id'] . ') '.
-				'and (t.image <> "") '.
+			'where (t.series_id = ' . $this->_params['item']['series_id'] . ') '.
+			'having (t.avail_for_order = 1) and (id <> ' . (int) $this->_params['item']['id'] . ') and (image <> "") '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -217,12 +227,10 @@ class Similar extends CWidget {
 		$order = $this->_getOrders($entity);
 
 		$sql = ''.
-			'select t.id ' .
+			'select t.id, t.avail_for_order, t.image ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-			'where (t.avail_for_order = 1) ' .
-				'and (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-				'and (t.publisher_id = ' . $this->_params['item']['publisher_id'] . ') '.
-				'and (t.image <> "") '.
+			'where(t.publisher_id = ' . $this->_params['item']['publisher_id'] . ') '.
+			'having (id <> ' . (int) $this->_params['item']['id'] . ') and (avail_for_order = 1) and (image <> "")'.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -303,7 +311,7 @@ class Similar extends CWidget {
 				'join video_directors tA on (tA.video_id = t.id) '.
 					'and (tA.person_id in (' . implode(',', $actorIds) . ')) '.
 					'and (tA.video_id <> ' . (int) $this->_params['item']['id'] . ') '.
-			'having (avail_for_order = 1) and (t.image <> "") ' .
+			'having (avail_for_order = 1) and (image <> "") ' .
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -319,12 +327,10 @@ class Similar extends CWidget {
 		$order = $this->_getOrders($entity);
 
 		$sql = ''.
-			'select t.id ' .
+			'select t.id, t.avail_for_order, t.image ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-			'where (t.avail_for_order = 1) ' .
-				'and (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-				'and (t.binding_id = ' . $this->_params['item']['binding_id'] . ') '.
-				'and (t.image <> "") '.
+			'where (t.binding_id = ' . $this->_params['item']['binding_id'] . ') '.
+			'having (id <> ' . (int) $this->_params['item']['id'] . ') and (avail_for_order = 1) and (image <> "") '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -352,7 +358,7 @@ class Similar extends CWidget {
 				'join video_audiostreams tA on (tA.video_id = t.id) '.
 					'and (tA.stream_id in (' . implode(',', $ids) . ')) '.
 					'and (tA.video_id <> ' . (int) $this->_params['item']['id'] . ') '.
-			'having (avail_for_order = 1) and (t.image <> "") ' .
+			'having (avail_for_order = 1) and (image <> "") ' .
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -380,7 +386,7 @@ class Similar extends CWidget {
 				'join video_credits tA on (tA.video_id = t.id) '.
 					'and (tA.credits_id in (' . implode(',', $ids) . ')) '.
 					'and (tA.video_id <> ' . (int) $this->_params['item']['id'] . ') '.
-			'having (avail_for_order = 1) and (t.image <> "") ' .
+			'having (avail_for_order = 1) and (image <> "") ' .
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -396,12 +402,10 @@ class Similar extends CWidget {
 		$order = $this->_getOrders($entity);
 
 		$sql = ''.
-			'select t.id ' .
+			'select t.id, t.avail_for_order, t.image ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-			'where (t.avail_for_order = 1) ' .
-				'and (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-				'and (t.media_id = ' . $this->_params['item']['media_id'] . ') '.
-				'and (t.image <> "") '.
+			'where (t.media_id = ' . $this->_params['item']['media_id'] . ') '.
+			'having (id <> ' . (int) $this->_params['item']['id'] . ') and (avail_for_order = 1) and (image <> "") '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -417,12 +421,10 @@ class Similar extends CWidget {
 		$order = $this->_getOrders($entity);
 
 		$sql = ''.
-			'select t.id ' .
+			'select t.id, t.avail_for_order, t.image ' .
 			'from ' . $entityParam['site_table'] . ' t '.
-			'where (t.avail_for_order = 1) ' .
-				'and (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
-				'and (t.type = ' . $this->_params['item']['type'] . ') '.
-				'and (t.image <> "") '.
+			'where (t.type = ' . $this->_params['item']['type'] . ') '.
+			'having (id <> ' . (int) $this->_params['item']['id'] . ') and (avail_for_order = 1) and (image <> "") '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
 		'';
@@ -430,6 +432,7 @@ class Similar extends CWidget {
 	}
 
 	private function _getOrders($entity) {
+		return array('t.positionTimeHL');
 		$order = array('year'=>'t.year desc', 'add_date'=>'t.add_date desc');
 		if (!Entity::checkEntityParam($entity, 'years')) unset($order['year']);
 		return $order;

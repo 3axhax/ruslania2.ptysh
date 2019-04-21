@@ -9,18 +9,52 @@
                 <?= $ui->item("MSG_PERSONAL_FORM_DESCRIPTION"); ?>
             </div>
 
-            <?php $this->renderPartial('/site/address_form', array('model' => $model,
-                                                                   'mode' => $mode,
-                                                                   'afterAjax' => 'redirectToAddressList')); ?>
+            <?php
+            //if (isset($_GET['ha'])) {
+                $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
+                ?>
+                <div class="address_action">
+                    <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
+                </div>
+                <link rel="stylesheet" href="/new_style/order_buy.css">
+            <?php
+            $user = User::model()->findByPk($this->uid);
+            $userData = array(
+                'id' => $this->uid,
+                'email'	=> $user->getAttribute('login'),
+            );
+            ?>
+            <script>
+                    $(function(){
+                        scriptLoader('/new_js/modules/address.js').callFunction(function() {
+                            address().init({
+                                userData: <?= json_encode($userData) ?>,
+                                formId: 'Address',
+                                urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
+                                urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
+                                urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
+                                urlRedirect: '<?= Yii::app()->createUrl('client/addresses') ?>'
+                            });
+                        });
+                    });
+                </script>
 
-
-
+                <?php /*
+            }
+            else {
+                $this->renderPartial('/site/address_form', array('model' => $model,
+                    'mode' => $mode,
+                    'afterAjax' => 'redirectToAddressList'));
+            }
+            */?>
+<?php /*
             <script type="text/javascript">
                 function redirectToAddressList(json)
                 {
                     window.location.href = '<?=Yii::app()->createUrl('client/addresses'); ?>';
                 }
             </script>
+ */ ?>
             <!-- /content -->
         </div>
     <div class="span2">

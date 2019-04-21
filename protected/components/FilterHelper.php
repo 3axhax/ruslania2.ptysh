@@ -30,6 +30,10 @@ class FilterHelper
      *
      */
 
+    /**
+     * @var array нужно, что бы много раз не получать self::$data;
+     */
+    protected static $_data = array();
     protected static $data = false;
     protected static $sessionData = [];
 
@@ -95,43 +99,52 @@ class FilterHelper
 
     static function getFiltersData ($entity, $cid = 0) {
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
-        if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
-            self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
-        }
-        if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
-            self::$sessionData = unserialize(Yii::app()->session[$key]);
-        }
-        $filtersData = FiltersData::instance();
-        if ($filtersData->isSetKey($key)) {
-            self::$sessionData = $filtersData->getFiltersData($key);
-        }
-        self::$data = [];
-        self::getEntity();
-        if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
-            self::$data = [];
-            return self::$data;
-        }
-        self::getCid();
-        self::getAvail();
-        self::getLangSel();
-        self::getSort();
-        self::getYears();
-        self::getCost();
-        self::getAuthor();
-        self::getPublisher();
-        self::getSeries();
-        self::getBinding();
-        self::getFormatVideo();
-        self::getLangVideo();
-        self::getSubtitlesVideo();
-        self::getPreSale();
-        self::getPerformer();
-        self::getCountry();
-        self::getDirector();
-        self::getActor();
-        self::getReleaseYears();
+        if (!isset(self::$_data[$key])) {
+            if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
+                self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+            }
+            if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
+                self::$sessionData = unserialize(Yii::app()->session[$key]);
+            }
+            $filtersData = FiltersData::instance();
+            if ($filtersData->isSetKey($key)) {
+                self::$sessionData = $filtersData->getFiltersData($key);
+            }
 
-        return self::$data;
+            $data = self::$data;
+            self::$data = [];
+            foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
+                if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
+            }
+            unset($data);
+            self::getEntity();
+            if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
+                self::$data = [];
+                return self::$data;
+            }
+            self::getCid();
+            self::getAvail();
+            self::getLangSel();
+            self::getSort();
+            self::getYears();
+            self::getCost();
+            if (Entity::checkEntityParam($entity, 'authors')) self::getAuthor();
+            if (Entity::checkEntityParam($entity, 'publisher')) self::getPublisher();
+            if (Entity::checkEntityParam($entity, 'series')) self::getSeries();
+            self::getBinding();
+            self::getFormatVideo();
+            self::getLangVideo();
+            if (Entity::checkEntityParam($entity, 'subtitles')) self::getSubtitlesVideo();
+            self::getPreSale();
+            if (Entity::checkEntityParam($entity, 'performers')) self::getPerformer();
+            self::getCountry();
+            if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
+            if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
+            self::getReleaseYears();
+            self::$_data[$key] = self::$data;
+        }
+
+        return self::$_data[$key];
     }
 
     static function setOneFiltersData ($entity, $cid = 0, $key, $value) {
@@ -150,12 +163,28 @@ class FilterHelper
         $filtersData->deleteFiltersData();
     }
 
+    /** чистит фильтр в сессии и куках если на страницу попали с какой-то определенной страницы
+     * @param $roure
+     * @param $entity
+     * @param int $cid
+     * @throws CHttpException
+     */
+    static function deleteEntityFilterIfReferer ($roure, $entity, $cid = 0) {
+        $referer = Yii::app()->getRequest()->getUrlReferrer();
+        $request = new MyRefererRequest();
+        $request->setFreePath($referer);
+        //$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
+        $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+
+        if ($roure == $refererRoute) self::deleteEntityFilter ($entity, $cid);
+    }
+
     static private function normalizeData ($data) {
         self::$data = [];
         self::getEntity();
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
             self::$data = [];
-            return false;
+            return;
         }
         self::$data['cid'] = $data['cid'] ?: $data['cid_val'] ?: 0;
         self::$data['avail'] = $data['avail'] ?: 0;
@@ -179,6 +208,15 @@ class FilterHelper
         self::$data['actors'] = $data['actors'] ?: false;
         self::$data['release_year_min'] = $data['release_year_min'] ?: false;
         self::$data['release_year_max'] = $data['release_year_max'] ?: false;
+
+        //далее строковые значения из фильтра для живого поиска, сохраняю только с длиной строки > 2
+        if (!empty($data['new_author'])&&(mb_strlen($data['new_author'], 'utf-8') > 2)) self::$data['authorStr'] = $data['new_author'];
+        if (!empty($data['new_actors'])&&(mb_strlen($data['new_actors'], 'utf-8') > 2)) self::$data['actorsStr'] = $data['new_actors'];
+        if (!empty($data['new_directors'])&&(mb_strlen($data['new_directors'], 'utf-8') > 2)) self::$data['directorsStr'] = $data['new_directors'];
+        if (!empty($data['new_performer'])&&(mb_strlen($data['new_performer'], 'utf-8') > 2)) self::$data['performersStr'] = $data['new_performer'];
+
+        if (!empty($data['new_series'])&&(mb_strlen($data['new_series'], 'utf-8') > 2)) self::$data['seriesStr'] = $data['new_series'];
+        if (!empty($data['new_publisher'])&&(mb_strlen($data['new_publisher'], 'utf-8') > 2)) self::$data['publishersStr'] = $data['new_publisher'];
     }
 
     static private function getEntity(){
@@ -391,6 +429,19 @@ class FilterHelper
         }
         if (isset(self::$sessionData['binding']) && self::$sessionData['binding'] != '') {
             self::$data['binding'] = self::$sessionData['binding'];
+            return true;
+        }
+
+        //тип издания
+        $binding = Yii::app()->getRequest()->getParam('type', false);
+        if ($binding !== false) {
+            self::$data['binding'][0] = $binding;
+            return true;
+        }
+        //тип носителя
+        $binding = Yii::app()->getRequest()->getParam('mid', false);
+        if ($binding !== false) {
+            self::$data['binding'][0] = $binding;
             return true;
         }
         self::$data['binding'] = false;

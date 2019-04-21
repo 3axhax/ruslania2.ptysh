@@ -35,15 +35,25 @@
             <label><?=$form->radioButton('type', array('value' => 2, 'uncheckValue' => null)); ?>
             <?=$ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?></label></td>
     </tr>
-    <tr>
-        <td style="padding-left: 10pt;" class="maintxt"><?=$ui->item("regform_titlename"); ?></td>
+	
+	<tr data-bind="visible: type()==1">
+        <td nowrap="" class="maintxt"><span style="width: 5pt; visibility: hidden;" id="business_title_asterisk"
+                                            class="redtext">*</span><?=$ui->item("address_business_title"); ?>
+        </td>
         <td class="maintxt-vat">
-            <?=$form->textField('receiver_title_name'); ?>
+            <?=$form->textField('business_title', array()); ?>
         </td>
-        <td class="smalltxt1"><img width="8" height="7" src="/pic1/arr3.gif">
-            <?=$ui->item("MSG_REGFORM_TITLENAME_TIP_1"); ?>
-        </td>
+        <td class="smalltxt1"></td>
     </tr>
+    <tr data-bind="visible: type()==1">
+        <td nowrap="" style="padding-left: 10pt;" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
+        <td class="maintxt-vat">
+            <?=$form->textField('business_number1', array()); ?>
+        </td>
+        <td class="smalltxt1"></td>
+    </tr>
+	
+   
     <tr>
         <td class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("regform_lastname"); ?></td>
         <td class="maintxt-vat">
@@ -75,17 +85,31 @@
         </td>
         <td class="smalltxt1"></td>
     </tr>
-    <tr>
+	
+	<? $states = Country::GetStatesListId();  
+	
+	foreach ($states as $r) {
+		
+		?>
+		<tr data-bind="visible: country()==<?=$r['country_id']?>">
         <td nowrap="" class="maintxt"><?=$ui->item("address_state"); ?></td>
         <td class="maintxt-vat">
-            <?=$form->dropDownList('state_id', CHtml::listData(Country::GetStatesList(), 'id', 'title_long'),
+            <?=$form->dropDownList('state_id', CHtml::listData(Country::GetStatesList($r['country_id']), 'id', 'title_long'),
             array(
-                 'data-bind' => array('enable' => 'country()==225',
+                 'data-bind' => array(
                                       'optionsCaption' => "'---'")
             )); ?><br/>
         </td>
         <td class="smalltxt1"><img width="8" height="7" src="/pic1/arr3.gif"> <?=$ui->item("address_state"); ?></td>
     </tr>
+		<?
+		
+	}
+	
+	?>
+	
+	
+    
     <tr>
         <td nowrap="" class="maintxt"><span style="width: 5pt" class="redtext">*</span><?=$ui->item("address_city"); ?>
         </td>
@@ -129,32 +153,37 @@
         </td>
     </tr>
     <tr>
-        <td nowrap="" style="padding-left: 10pt;" class="maintxt"><?=$ui->item("address_contact_notes"); ?></td>
+        <td nowrap="" style="padding-left: 10pt;" class="maintxt"><?=$ui->item("address_contact_notes2"); ?></td>
         <td class="maintxt-vat">
             <?=$form->textArea('notes'); ?>
         </td>
         <td class="smalltxt1"></td>
     </tr>
-    <tr>
-        <td nowrap="" class="maintxt"><span style="width: 5pt; visibility: hidden;" id="business_title_asterisk"
-                                            class="redtext">*</span><?=$ui->item("address_business_title"); ?>
-        </td>
-        <td class="maintxt-vat">
-            <?=$form->textField('business_title', array('data-bind' => array('enable' => 'type()==1'))); ?>
-        </td>
-        <td class="smalltxt1"></td>
-    </tr>
-    <tr>
-        <td nowrap="" style="padding-left: 10pt;" class="maintxt"><?=$ui->item("address_business_number1"); ?></td>
-        <td class="maintxt-vat">
-            <?=$form->textField('business_number1', array('data-bind' => array('enable' => 'type()==1'))); ?>
-        </td>
-        <td class="smalltxt1"></td>
-    </tr>
+    
     <tr>
         <td nowrap="" style="padding-left: 10pt;" class="maintxt">&nbsp;</td>
         <td class="maintxt-vat">
-            <input data-bind="visible: !disableSubmitButton()" type="image" src="/pic1/<?= $ui->item("SAVE_PICTURE"); ?>"/>
+
+            <style>
+
+                input.order_start {
+                    display: inline-block;
+                    width: 180px;
+                    border-radius: 4px;
+                    background-color: rgb(117, 132, 149);
+                    border: 0;
+                    padding: 9px 0;
+                    text-align: center;
+                    font-size: 14px;
+                    color: rgb(255, 255, 255);
+                    font-weight: bold;
+                }
+
+
+            </style>
+
+            <input data-bind="visible: !disableSubmitButton()" type="submit" class="order_start" style="background-color: #5bb75b; padding: 9px; width:auto;" value="<?=$ui->item("BTN_FORM_SAVE"); ?>"/>
+
             <img src="/pic1/loader.gif" data-bind="visible: disableSubmitButton" />
         </td>
         <td class="smalltxt1"></td>

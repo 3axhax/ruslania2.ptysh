@@ -186,7 +186,7 @@ class SearchPublishers {
 			        'group by t.id '.
 		            'limit ' . $limit.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;limit=1000;maxmatches=1000;'));
         }
         else {
 	        if (empty($filter_data['avail'])) {
@@ -204,7 +204,7 @@ class SearchPublishers {
 			        'group by t.id '.
 			        'limit ' . $limit.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;limit=1000;maxmatches=1000;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;limit=1000;maxmatches=1000;'));
 	        }
 	        else {
 		        $sql = ''.
@@ -212,7 +212,7 @@ class SearchPublishers {
 			        'from all_publishers t '.
 			            'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
 	        }
         }
         $publishers = [];
@@ -268,5 +268,18 @@ class SearchPublishers {
         }
         return $publishers;
     }
+
+	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
+		$condition = array($q, 'mode=boolean');
+		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . ',1';
+		$condition['limit'] = 'limit=' . $limit;
+		$condition['maxmatches'] = 'maxmatches=' . $limit;
+		$sql = ''.
+			'select id '.
+			'from _se_publishers '.
+			'where (query=:condition)'.
+			'';
+		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+	}
 
 }

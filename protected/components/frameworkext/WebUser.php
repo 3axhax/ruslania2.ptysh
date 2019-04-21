@@ -6,7 +6,7 @@ class WebUser extends CWebUser
 
     public function GetPersonalDiscount()
     {
-        $uid = Yii::app()->user->id;
+        $uid = $this->id;
         if(empty($uid)) return 0;
 
         $model = $this->GetModel();
@@ -17,12 +17,19 @@ class WebUser extends CWebUser
 
     public function GetModel()
     {
-        $uid = Yii::app()->user->id;
-        if(empty(self::$model))
-        {
+        $uid = $this->id;
+        if(self::$model === null) {
             $sql = 'SELECT * FROM users WHERE id=:uid LIMIT 1';
             self::$model = Yii::app()->db->createCommand($sql)->queryRow(true, array(':uid' => $uid));
         }
         return self::$model;
+    }
+
+    function init() {
+        parent::init();
+        if ($this->id&&!$this->GetModel()) {
+            $this->logout();
+            header("Refresh: 0");
+        }
     }
 }

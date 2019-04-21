@@ -27,9 +27,19 @@ if ($serGoods) {
     
     <div class="row" style="float: left">
         <div class="span10" style="width: 901px; margin-left: 20px;">
-		<h1><?=$ui->item('A_NEW_SALE_H1')?></h1>
-		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?>
-                <br /><br />
+
+            <div class="sale_info_block">
+                <div class="maxcount"><?=$ui->item('A_NEW_SALE_COUNT')?></div>
+                <div class="header"><div><?=$ui->item('A_NEW_SALE_H1')?></div></div>
+                <div class="desc">
+                    <div><?=$ui->item('A_NEW_SALE_PAGE_TITLE')?></div>
+                    <div><?=$ui->item('A_NEW_SALE_PAGE_DESC')?></div>
+                </div>
+            </div>
+<?php /*
+        <h1><?=$ui->item('A_NEW_SALE_H1')?><br><?=$ui->item('A_NEW_SALE_COUNT')?></h1>
+		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?><br><?=$ui->item('A_NEW_SALE_PAGE_DESC')?>
+                <br /><br /> */?>
                 <?php
                 if ($items) {
                     foreach ($items as $row) {

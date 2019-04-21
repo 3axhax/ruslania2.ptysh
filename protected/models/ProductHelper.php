@@ -64,21 +64,17 @@ class ProductHelper
         $ret = '';
         $i=0;
         $maxI = count($langs);
-        while (!empty($key)||($i++<=$maxI))
-        {
+        while (!empty($key)||($i++<=$maxI)) {
             //if (isset($item[$key]) && !empty($item[$key])) return trim($item[$key]);
-            if(array_key_exists($key, $item))
-            {
+            if(array_key_exists($key, $item)) {
                 $ret = trim($item[$key]);
                 break;
             }
             $key = $langs[$key];
         }
-        if (empty($ret)&&isset($item[$sKey]))  $ret = trim($item[$sKey]);
+        if (empty($ret)&&isset($item[$sKey])) $ret = trim($item[$sKey]);
 
         if(!empty($ret)) {
-
-
             $tmp = $ret;
             if ($cnt > 0) {
                 $len = mb_strlen(trim($item[$key]), 'utf-8');
@@ -90,17 +86,17 @@ class ProductHelper
                 }
 
             }
-
             return $tmp;
-
         }
 
         // Найти первую непустую колонку
-        foreach($langs as $lang=>$data)
-        {
-            if(array_key_exists($lang, $item))
-            {
+        foreach($langs as $lang=>$data) {
+            if(array_key_exists($lang, $item)) {
                 $val = trim($item[$lang]);
+                if(!empty($val)) return $val;
+            }
+            if(array_key_exists($data, $item)) {
+                $val = trim($item[$data]);
                 if(!empty($val)) return $val;
             }
         }
@@ -152,9 +148,9 @@ class ProductHelper
 
     public static function FormatPrice($price, $includeCurrency = true, $currency = null)
     {
-        if (empty($price))
+        if ($price == '')
         {
-            return '<b>EMPTY PRICE '.$price.'</b>';
+            //return '<b>EMPTY PRICE '.$price.'</b>';
         }
 
         $ret = number_format($price, 2, '.', ' ');
@@ -348,17 +344,19 @@ class ProductHelper
             $str = str_replace(array_keys($char_map), $char_map, $str);
         }
 
-        // Replace non-alphanumeric characters with our delimiter
-        $str = preg_replace('/[^\p{L}\p{Nd}]+/u', $options['delimiter'], $str);
+        if (empty($options['onlyTranslite'])) {
+            // Replace non-alphanumeric characters with our delimiter
+            $str = preg_replace('/[^\p{L}\p{Nd}]+/u', $options['delimiter'], $str);
 
-        // Remove duplicate delimiters
-        $str = preg_replace('/(' . preg_quote($options['delimiter'], '/') . '){2,}/', '$1', $str);
+            // Remove duplicate delimiters
+            $str = preg_replace('/(' . preg_quote($options['delimiter'], '/') . '){2,}/', '$1', $str);
 
-        // Truncate slug to max. characters
-        $str = mb_substr($str, 0, ($options['limit'] ? $options['limit'] : mb_strlen($str, 'UTF-8')), 'UTF-8');
+            // Truncate slug to max. characters
+            $str = mb_substr($str, 0, ($options['limit'] ? $options['limit'] : mb_strlen($str, 'UTF-8')), 'UTF-8');
 
-        // Remove delimiter from ends
-        $str = trim($str, $options['delimiter']);
+            // Remove delimiter from ends
+            $str = trim($str, $options['delimiter']);
+        }
 
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
     }
@@ -435,8 +433,10 @@ class ProductHelper
         }
     }
 
-    public static function IsAvailableForOrder($item)
-    {
+    public static function IsAvailableForOrder($item) {
+        if (isset($item['avail_for_order'])) {
+            return !empty($item['avail_for_order']);
+        }
         $code = Availability::GetStatus($item);
 
         return $code == Availability::AVAIL_IN_SHOP ||
@@ -460,7 +460,7 @@ class ProductHelper
 			$res = Yii::app()->db->createCommand($sql)->queryAll();
 			
 			foreach ($res as $row) {
-				$rows[] = array('ID'=>$row['id'], 'Name'=>$row['title_'.Yii::app()->language]);
+				$rows[] = array('ID'=>$row['id'], 'Name'=>empty($row['title_'.Yii::app()->language])?$row['title_en']:$row['title_'.Yii::app()->language]);
 			}
 			
 		}
@@ -605,6 +605,16 @@ class ProductHelper
         $str = trim($str, $options['delimiter']);
 
         return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
+    }
+
+    function endOfWord($n, $e1 = "", $e234 = "", $e567890 = ""){
+        switch ($n%10){
+            case 1: $r = $e1; break;
+            case 2: case 3: case 4: $r = $e234; break;
+            default: $r = $e567890; break;
+        }
+        if ($n%100 >= 10 && $n%100 <= 20) $r = $e567890;
+        return $r;
     }
 
 

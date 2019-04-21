@@ -1,11 +1,10 @@
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
 
-
 <div class="container cabinet">
-
 <div class="row">
-        <div class="span10" style="float: right">
+    <div class="span10" style="float: right">
+        <h1><?= $ui->item('PAY_ERROR_H1') ?></h1>
 
             <?php if(empty($newOid)) : ?>
 
@@ -41,9 +40,9 @@
         
             </div>
             
-    <div class="span2">
+    <div class="span2" >
 
-                <?php $this->renderPartial('/site/_me_left'); ?>
+                <?php //$this->renderPartial('/site/_me_left'); ?>
 
             </div>
     

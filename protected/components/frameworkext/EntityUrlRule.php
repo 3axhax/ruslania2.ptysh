@@ -153,8 +153,9 @@ class EntityUrlRule extends CBaseUrlRule {
 		if ($langId = array_search($pathInfo[0], $langGoods)) {
 			array_shift($pathInfo);
 			if (empty($pathInfo)) return false;
-			$_REQUEST['lang'] = $_GET['lang'] = $langId;
+
 			if (method_exists($request, 'setParam')) $request->setParam('lang', $langId);
+			else $_REQUEST['lang'] = $_GET['lang'] = $langId;
 		}
 		unset($langGoods);
 
@@ -172,10 +173,15 @@ class EntityUrlRule extends CBaseUrlRule {
 					break;
 				case 2:
 					$res = $this->_parseLevel3($urlParam, $urlParamPrev, '', $request);
-					if ($res === false) return false;
+					if ($res === false) {
+						$this->_redirect($urlParam, $rawPathInfo);
+						return false;
+					}
 					list($route['id'], $route['actionId']) = $res;
 					break;
-				default; return false; break;
+				default;
+					return false;
+					break;
 			}
 			$urlParamPrev = $urlParam;
 		} while (!empty($pathInfo));
@@ -273,6 +279,17 @@ class EntityUrlRule extends CBaseUrlRule {
 			return explode('/', $route);
 		}
 		return false;
+	}
+
+	private function _redirect($urlParam, $path) {
+		switch ($urlParam) {
+			case 'download':
+				$newPath = explode('/download/', $path);
+				array_shift($newPath);
+				$newPath = implode('/download/', $newPath);
+				if (!empty($newPath)) Yii::app()->getRequest()->redirect('/pictures/download/' . $newPath, true, 301);
+				break;
+		}
 	}
 
 }

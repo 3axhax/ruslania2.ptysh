@@ -9,7 +9,7 @@
         
 <div style="text-align: center"><?=$ui->item($key); ?></div>
         
-<h1 class="h1_reg">Вход</h1>
+<h1 class="h1_reg"><?=$ui->item('USER_LOGIN_ALT')?></h1>
 
 
 <?php $form = $this->beginWidget('KnockoutForm', array(

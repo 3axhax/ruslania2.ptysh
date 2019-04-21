@@ -235,15 +235,17 @@
 ?>
     
       <div class="row spay">
-        
+
+          <?  if ($pid == 0 OR $pid == 999) : ?>
+
         <label class="selp span3 oplata1<?php if ($pid == 1) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype0')" style="<?php if ($pid == 1) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
             Оплата в магазине
              <div class="red_checkbox" style="float: right;">
             <span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 1) { echo ' active';}?>"></span></span> 
             </div>
             <input type="radio" id="dtype0" value="1" name="ptype" style="display: none;"  <?php if ($pid == 1) { echo 'checked="checked"';}?>/>
-        </label>    
-            
+        </label>
+          <? endif; ?>
         <label class="selp span3 oplata3 <?php if ($pid == 25) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 490px;<?php if ($pid == 25) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
             
             <img src="/images/pt2.png" style="margin-top: -3px;" />

@@ -32,6 +32,7 @@ class DiscountManager
     const TYPE_NO_DISCOUNT = 8;
     const TYPE_YEAR = 9;
     const TYPE_PART = 10; // скидка на раздел
+    const TYPE_PROMOCODE = 11;
 
     private static $rusDays = null;
     private static $personalDiscount = null;
@@ -49,13 +50,14 @@ class DiscountManager
                 'limit 1 '.
             '';
             self::$_offerDay = Yii::app()->db->createCommand($sql)->queryRow();
-            if (!empty(self::$_offerDay['extra_txt'])) self::$_offerDay['extra_txt'] = unserialize(self::$_offerDay['extra_txt']);
+            if (empty(self::$_offerDay)) self::$_offerDay = array();
+            elseif (!empty(self::$_offerDay['extra_txt'])) self::$_offerDay['extra_txt'] = unserialize(self::$_offerDay['extra_txt']);
             else self::$_offerDay['extra_txt'] = array();
         }
         return self::$_offerDay;
     }
 
-    public static function GetPrice($uid, $item)
+    public static function GetPrice($uid, $item, $promocodesPrecent = 0)
     {
         $discountType = null;
         $priceFin = 0;
@@ -86,6 +88,8 @@ class DiscountManager
 
         if(!empty(self::$personalDiscount) && self::$personalDiscount > 0)
             $allDiscounts[] = array('Type' => self::TYPE_PERSONAL, 'Value' => self::$personalDiscount);
+
+        if ($promocodesPrecent > 0) $allDiscounts[] = array('Type' => self::TYPE_PROMOCODE, 'Value' => $promocodesPrecent);
 
         $itemDiscount = 0;
 
@@ -192,6 +196,10 @@ class DiscountManager
                      self::RATE => $rate,
                      self::TYPE_FREE_SHIPPING => $haveFreeShipping,
         );
+        if ($item['entity'] == Entity::PERIODIC) {
+            //Периодика в финляндии не может быть без ндс
+            $ret[self::WITHOUT_VAT_FIN] = $ret[self::WITH_VAT_FIN];
+        }
 
         return $ret;
     }

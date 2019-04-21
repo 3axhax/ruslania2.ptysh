@@ -19,11 +19,14 @@ return CMap::mergeArray(
              ),
 
              'dbCache' => array(
-                 'class' => 'CDummyCache',
+                 'class' => 'CDummyCache',//'CMemCache',
              ),
 
              'queryCache' => array(
-                 'class' => 'CDummyCache',
+                 'class' => 'CDummyCache',//'CMemCache',//'CMemCache',MyDataProvider почему то не правильно работает когда включен кеш
+                 //например: для детальной страницы для блока "Вы смотрели" условие для запроса берется из кеша и дообавляется к нему новое
+                 // WHERE ((t.id=1502473) AND (t.id in (963495,1503652))),
+                 // а должно быть только (t.id=1502473)
              ),
 
              'log' => array(

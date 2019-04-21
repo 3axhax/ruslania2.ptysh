@@ -10,6 +10,23 @@ class Address extends CActiveRecord
         return parent::model($className);
     }
 
+    /**
+     * Никто не платит налог, кроме
+    1) все в финляндии, частники и фирмы  (код предприятии не сбрасывает налог)
+    2) частники в еврозоне и фирмы в еврозоне, которые не указали код предприятии.
+
+    фирмы в еврозоне, которые указывают европейский код предприятии, не платят налог (он должен сбраживаться при указании кода предприятии).
+
+    Фирмы вне еврозоны тоже могут указывать какой-то номер, но он в процессе ничего не делает.
+
+    НДС всегда считается по стране доставки.
+    И так, если белорусский клиент плательщик, но доставка в Германию, то налог есть.
+    Если доставка в Беларусь, налога нет.
+
+    А если адрес доставки в Германии фирме которая указала код предприятии, то налога нет.
+     * @param $address
+     * @return bool
+     */
     public static function UseVAT($address)
     {
         $withVat = true;
@@ -61,24 +78,32 @@ class Address extends CActiveRecord
     public function rules()
     {
         return array(
-            array('receiver_title_name, receiver_first_name, receiver_last_name, receiver_middle_name, '
-                  .'city, postindex, streetaddress', 'checkLatin'),
+            array('contact_email', 'checkLatin'),
+            array('contact_email', 'email'),
+            array('contact_phone', 'checkPhone'),
 
             array('type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
-                      . 'contact_phone', 'required', 'on' => 'new'),
+                      . 'contact_phone, contact_email', 'required', 'on' => 'new'),
             array('country', 'checkCountry', 'on' => 'new'),
             array('postindex', 'checkPostIndex', 'on' => 'new'),
-            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'new'),
+            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'new'),
             array('business_title', 'iforg', 'on' => 'new'),
 
-            array('id, type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
-                  . 'contact_phone', 'required', 'on' => 'edit'),
+            array('id, type, receiver_first_name, receiver_last_name, city, streetaddress,'
+                  . 'contact_phone, business_title', 'required', 'on' => 'edit'),
             array('country', 'checkCountry', 'on' => 'edit'),
             array('postindex', 'checkPostIndex', 'on' => 'edit'),
-            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1', 'safe', 'on' => 'edit'),
+            array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'edit'),
             array('business_title', 'iforg', 'on' => 'edit'),
-
+            array('contact_phone', 'checkPhone', 'on' => 'edit'),
         );
+    }
+
+    function checkPhone($attr, $params) {
+        $phone = trim($this->$attr);
+        if (mb_strlen($phone, 'utf-8') < 6) {
+            $this->addError($attr, Yii::app()->ui->item('PHONE_WITH_CODE'));
+        }
     }
 
     public function checkPostIndex($attr, $params)
@@ -137,13 +162,24 @@ class Address extends CActiveRecord
     public function checkCountry($attr, $params)
     {
         $country = $this->country;
-        if (empty($country))
-        {
+        if (empty($country)) {
             $labels = $this->attributeLabels();
             $msg = Yii::t('yii','{attribute} cannot be blank.', array('{attribute}' => $labels[$attr]));
             $this->addError($attr, $msg);
         }
-        if ($country == 225 && empty($this->state_id)) $this->addError('state_id', 'Select State');
+        else {
+            $countryBase = Country::model()->findByPk($country);
+            if (empty($countryBase)) {
+                $labels = $this->attributeLabels();
+                $msg = Yii::t('yii','{attribute} cannot be blank.', array('{attribute}' => $labels[$attr]));
+                $this->addError($attr, $msg);
+            }
+            else {
+                $sql = 'select country_id from `address_states_list` group by country_id';
+                $countryStates = Yii::app()->db->createCommand($sql)->queryColumn();
+                if (in_array($country, $countryStates) && empty($this->state_id)) $this->addError('state_id', 'Select State');
+            }
+        }
     }
 
     public function InsertNew($uid, $isDefault)
@@ -154,17 +190,18 @@ class Address extends CActiveRecord
             $this->insert();
             $id = $this->id;
 
-            if ($isDefault)
-            {
-                $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
-                Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
-            }
 
-            $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
-                . '(:uid, :id, :def)';
-
-            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
-                                                               ':id' => $id, ':def' => $isDefault ? 1 : 0));
+            $this->addAddresses($uid, $id, $isDefault);
+//            if ($isDefault)
+//            {
+//                $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
+//                Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
+//            }
+//            $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
+//                . '(:uid, :id, :def)';
+//
+//            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
+//                                                               ':id' => $id, ':def' => $isDefault ? 1 : 0));
 
             $transaction->commit();
             $this->RepairDefaultAddress($uid);
@@ -187,10 +224,11 @@ class Address extends CActiveRecord
 
     public function GetAddress($uid, $addressID)
     {
-        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_str, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code '
+        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
             . 'FROM users_addresses AS uas '
             . 'JOIN user_address AS ua ON uas.address_id=ua.id '
             . 'JOIN country_list AS cl ON ua.country=cl.id '
+            . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
             . 'WHERE uas.uid=:uid AND uas.address_id=:aid';
 
         $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':uid' => $uid, ':aid' => $addressID));
@@ -222,11 +260,12 @@ class Address extends CActiveRecord
 
     public function GetAddresses($uid)
     {
-        $sql = 'SELECT *, cl.title_en AS country_name, cl.code, ua.id as id FROM users_addresses AS uas '
+        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
+            . 'FROM users_addresses AS uas '
               .'JOIN user_address AS ua ON uas.address_id=ua.id '
               .'LEFT JOIN country_list AS cl ON ua.country=cl.id '
-              .'LEFT JOIN address_states_list AS asl ON ua.state_id=asl.id '
-              .'WHERE uas.uid=:uid';
+              . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
+              .'WHERE uas.uid=:uid ORDER BY uas.if_default DESC';
 
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':uid' => $uid));
         return $rows;
@@ -327,5 +366,19 @@ class Address extends CActiveRecord
         $message->addTo('periodicals@ruslania.com');
         $message->from = 'periodicals@ruslania.com';
         $ret = @Yii::app()->mail->send($message);
+    }
+
+    function addAddresses($uid, $id, $isDefault) {
+        if ($isDefault)
+        {
+            $sql = 'UPDATE users_addresses SET if_default=0 WHERE uid=:uid';
+            Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid));
+        }
+
+        $sql = 'INSERT INTO users_addresses (uid, address_id, if_default) VALUES '
+            . '(:uid, :id, :def)';
+
+        Yii::app()->db->createCommand($sql)->execute(array(':uid' => $uid,
+            ':id' => $id, ':def' => $isDefault ? 1 : 0));
     }
 }

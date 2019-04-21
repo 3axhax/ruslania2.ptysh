@@ -1,83 +1,4 @@
 <script src='/js/jquery.autocolumnlist.js'></script>			
-			<script type="text/javascript">
-    $(document).ready(function() {
-        $('.container_slides ul').slick({
-            lazyLoad: 'ondemand',
-            slidesToShow: 3,
-            slidesToScroll: 1
-        });
-    });
-    </script>
-
-	<!--<div class="slider_bg" style="margin-bottom: 40px;">
-        
-        <div class="container slider_container">
-            <div class="btn_left"><img src="/new_img/btn_left.png" /></div>
-            <div class="btn_right"><img src="/new_img/btn_right.png" /></div>
-            <div class="overflow_box">
-                <div class="container_slides" style="width: 1170px;">
-                
-                <ul>
-                    <li>
-                        <div class="span1 photo new">
-                            <div class="new_block">Новинка!</div>
-                            <img src="/new_img/book.png" alt=""/>
-                        </div>
-                        <div class="span2 text">
-                            
-                            <div class="title"><a href="">Relapse</a></div>
-                            <div class="cost">15.30 €</div>
-                            <div class="nds">87.27 € без НДС</div>
-                            <a href="" class="btn_yellow">Подробнее</a>
-                            
-                        </div>
-                    </li>
-                    <li>
-                        <div class="span1 photo new">
-                            <div class="new_block">Новинка!</div>
-                            <img src="/new_img/book.png" alt=""/>
-                        </div>
-                        <div class="span2 text">
-                            
-                            <div class="title"><a href="">Relapse</a></div>
-                            <div class="cost">15.30 €</div>
-                            <div class="nds">87.27 € без НДС</div>
-                            <a href="" class="btn_yellow">Подробнее</a>
-                            
-                        </div>
-                    </li>
-                    <li>
-                        <div class="span1 photo akciya">
-                            <div class="new_block">Акция</div>
-                            <img src="/new_img/book.png" alt=""/>
-                        </div>
-                        <div class="span2 text">
-                            <div class="title"><a href="">Диета для гурманов. План питания от доктора...</a></div>
-                            <div class="cost"><span class="z">15.30</span> <span class="n">15.30  €</span></div>
-                            <div class="nds">87.27 € без НДС</div>
-                            <a href="" class="btn_yellow">Подробнее</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="span1 photo">
-                            <img src="/new_img/book.png" alt=""/>
-                        </div>
-                        <div class="span2 text">
-                            <div class="title"><a href="">Диета для гурманов. План питания от доктора...</a></div>
-                            <div class="cost">15.30 €</div>
-                            <div class="nds">87.27 € без НДС</div>
-                            <a href="" class="btn_yellow">Подробнее</a>
-                        </div>
-                    </li>
-                </ul>
-                
-            </div>
-            </div>
-            
-        </div>
-        
-    </div>-->
-
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 <div class="container view_product">
 
@@ -91,11 +12,15 @@
             ?>
 
 <h1 class="titlename"><?php 
-    $breadcrumbs = $this->breadcrumbs; 
-    $h1 = array_pop($breadcrumbs);
-    unset($breadcrumbs) ;
-    $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
-?><?= $h1 ?></h1>
+    $breadcrumbs = $this->breadcrumbs;
+    $h1 = Seo_settings::get()->getH1();
+    if (empty($h1)):
+        $h1 = array_pop($breadcrumbs);
+        unset($breadcrumbs) ;
+        $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
+        if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . $ui->item('PAGES_N', $page);
+    endif;
+    ?><?= $h1 ?></h1>
 
 
 
@@ -104,24 +29,11 @@
 				<form method="get" class="search_aut">
                     <div class="loading" style="top: 8px;"><?=$ui->item('A_NEW_SEARCHING_RUR');?></div>
                     <input placeholder="<?= $ui->item('NAME_' . mb_strtoupper($liveAction) . '_BY_SEARCH') ?>" type="text" id="js_search_authors" name="qa" value="<?= Yii::app()->getRequest()->getParam('qa') ?>"/>
-				    <input type="submit" value="Поиск"/>
+				    <input type="submit" value="<?= $ui->item('A_LEFT_SEARCH_WIN') ?>"/>
 
 				</form>
                 <script type="text/javascript">
                     $(document).ready(function() {
-                        var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
-//                        var csrf = $('meta[name=csrf]').attr('content').split('=');
-//                        dataPost[csrf[0]] = csrf[1];
-                        $('#js_search_authors').marcoPolo({
-                            minChars:1,
-                            cache : false,
-                            hideOnSelect: false,
-                            url:'/liveSearch/<?= $liveAction ?>',
-                            data:dataPost,
-                            formatItem:function (data, $item, q) {
-                                return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
-                            }
-                        });
                     });
                 </script>
 
@@ -138,8 +50,7 @@
                     if ($yo&&!in_array(trim($item['first_'.$lang]), array('А','Б','В','Г','Д','Е'))):
                         $yo = false; ?>
                         <a class="<?=(('Ё' == $chasdr) ? 'active' : '')?>" href="<?=Yii::app()->createUrl($route,
-                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>"
-                            >Ё</a>
+                            array('entity' => Entity::GetUrlKey($entity), 'char' => 'Ё')); ?>">Ё</a>
                     <?php endif;
                     if (!$lineOther&&preg_match("/[^a-zа-я0-9]/ui", $item['first_'.$lang])): $lineOther = true; ?>
                         <br>
@@ -152,14 +63,17 @@
                 <?php endforeach; ?>
             </div>
 			<?php if ($_GET['char'] != ''):?>
-			<h1 class="title_char"><?=$_GET['char']?></h1>
+			<h2 class="title_char"><?=$_GET['char']?></h2>
 			<?php endif; ?>
             <div class="text">
                 <ul class="list authors" id="al">
                     <?php if (empty($url)) $url ='/entity/byauthor'; ?>
-                    <?php if (empty($idName)) $idName = 'aid'; ?>
+                    <?php if (empty($idName)) $idName = 'aid';
+                    $lang = Yii::app()->getLanguage();
+                    if (!in_array($lang, HrefTitles::get()->getLangs($entity, 'entity/byauthor'))) $lang = 'en';
+                    ?>
                     <?php foreach($list as $item) : ?>
-                        <?php $title = $item['title_'.$lang];
+                        <?php $title = $item['title_' . $lang];
                         if (preg_match("/\w/iu", $title)): ?>
                         <li style="margin-bottom: 10px;"><a href="<?=Yii::app()->createUrl($url,
                                 array('entity' => Entity::GetUrlKey($entity),
@@ -185,9 +99,21 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         $('#al').autocolumnlist({ columns: 3});
+        scriptLoader('/js/marcopolo.js').callFunction(function(){
+            var dataPost = <?= json_encode(array('entity'=>$entity)) ?>;
+            $('#js_search_authors').marcoPolo({
+                minChars:1,
+                cache : false,
+                hideOnSelect: false,
+                url:'/liveSearch/<?= $liveAction ?>',
+                data:dataPost,
+                formatItem:function (data, $item, q) {
+                    return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
+                }
+            });
+        });
     });
 
 </script>

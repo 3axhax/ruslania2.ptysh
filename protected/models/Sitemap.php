@@ -144,9 +144,14 @@ class Sitemap {
 		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 		$this->_putFile('<li><a href="' . Yii::app()->createUrl('offers/list') . '">' . Yii::app()->ui->item('A_OFFERS') . '</a></li>');
 
+		$o = new Offer;
 		foreach ($const as $id=>$name) {
-			$url = Yii::app()->createUrl('offers/special', array('mode' => $const[$id]));
-			$this->_putFile('<li><a href="' . $url . '">' . $name. '</a></li>');
+			$offer = $o->GetOffer($id, true, true);
+			if ($offer) {
+				$title = ProductHelper::GetTitle($offer);
+				$url = Yii::app()->createUrl('offers/special', array('mode' => $const[$id]));
+				$this->_putFile('<li><a href="' . $url . '">' . $title. '</a></li>');
+			}
 		}
 
 	}

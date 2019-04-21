@@ -25,14 +25,19 @@ class Series extends CMyActiveRecord
         if(!array_key_exists('site_series_table', $data)) return array();
         $table = $data['site_series_table'];
 
-        $sql = 'SELECT * FROM '.
-            $table.' '.
-            'ORDER BY title_'.$lang . ' '.
+        $sql = ''.
+            'select sql_calc_found_rows id, title_' . implode(', title_', $availSortLangs) . ' '.
+            'from all_series '.
+            'where (is_' . $entity . ' = 1) '.
+            'order by title_'.$lang . ' '.
             'limit ' . ($page-1)*$this->_perToPage . ', ' . $this->_perToPage . ' '.
         '';
         $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
-        return $rows;
+        $sql = 'select found_rows();';
+        $counts = Yii::app()->db->createCommand($sql)->queryScalar();
+
+        return array($rows, $counts);
     }
 
     public function GetTotalItems($entity, $sid, $avail)

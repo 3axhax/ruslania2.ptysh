@@ -176,4 +176,19 @@ class Periodic extends CMyActiveRecord
 
         return $result;
     }
+
+    function getByCategory($cid, $exclude) {
+        $dp = Entity::CreateDataProvider($this->getEntity());
+        $criteria = $dp->getCriteria();
+        $criteria->order = SortOptions::GetSQL(SortOptions::DefaultSort, '', $this->getEntity());
+        $criteria->limit = Yii::app()->params['ItemsPerPage'];
+        $criteria->offset = 0;
+        $criteria->alias = 't';
+        $criteria->addCondition('((t.code = ' . (int) $cid . ') or (t.subcode = ' . (int) $cid . ')) and (t.avail_for_order > 0) and (t.id not in (' . implode(',',$exclude) . '))');
+        $dp->setCriteria($criteria);
+        $dp->pagination = false;
+        $data = $dp->getData();
+        $ret = Product::FlatResult($data);
+        return $ret;
+    }
 }

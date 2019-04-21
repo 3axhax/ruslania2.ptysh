@@ -18,7 +18,7 @@ class User extends CActiveRecord
     public function rules()
     {
         return array(
-            array('login, first_name, last_name', 'checkLatin'),
+            array('login', 'checkLatin'),
             array('login, pwd', 'required', 'on' => 'login'),
             array('login, pwd, pwd2, first_name, last_name', 'required', 'on' => 'register'),
             array('login', 'email', 'on' => 'register'),
@@ -69,30 +69,38 @@ class User extends CActiveRecord
             $this->addError($attribute, Yii::app()->ui->item('ONLY_LATIN'));
     }
 
-    public function RegisterNew($langID, $currencyID)
+    public function RegisterNew($langID, $currencyID, $m20n = 1, $m10n = 1, $m60n = 1, $m22n = 1, $m15n = 1, $m24n = 1, $m40n = 1)
     {
-	    $sql = 'INSERT INTO users (login, pwd, first_name, last_name, mail_language, mail_audio_news, mail_books_news, '
+	    $sql = 'INSERT INTO users (login, pwd, first_name, last_name, middle_name, mail_language, mail_audio_news, mail_books_news, '
         . 'mail_maps_news, mail_music_news, mail_musicsheets_news, mail_soft_news, mail_video_news, currency) VALUES '
-        . '(:login, :pwd, :fName, :lName, :lang, 1, 1, 1, 1, 1, 1, 1, :currency)';
+        . '(:login, :pwd, :fName, :lName, :mName, :lang, :m20n, :m10n, :m60n, :m22n, :m15n, :m24n, :m40n, :currency)';
         $ret = Yii::app()->db->createCommand($sql)->execute(array(
             ':login' => $this->login,
             ':pwd' => $this->pwd,
             ':fName' => $this->first_name,
             ':lName' => $this->last_name,
+            ':mName' => $this->middle_name,
             ':lang' => $langID,
+            ':m20n' => $m20n,
+            ':m10n' => $m10n,
+            ':m60n' => $m60n,
+            ':m22n' => $m22n,
+            ':m15n' => $m15n,
+            ':m24n' => $m24n,
+            ':m40n' => $m40n,
             ':currency' => $currencyID));
-
         return $ret;
     }
 
 
     public function GetAddresses($uid)
     {
-        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.is_europe, cl.code '
-               .'FROM users_addresses AS uas JOIN user_address AS ua ON uas.address_id=ua.id '
-               .'JOIN country_list AS cl ON ua.country=cl.id '
-               .'WHERE uas.uid=:uid ORDER BY if_default DESC';
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':uid' => $uid));
+//        $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.is_europe, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
+//               .'FROM users_addresses AS uas JOIN user_address AS ua ON uas.address_id=ua.id '
+//               .'JOIN country_list AS cl ON ua.country=cl.id '
+//            . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
+//               .'WHERE uas.uid=:uid ORDER BY if_default DESC';
+        $rows = Address::model()->GetAddresses($uid);
         $ret = array();
         foreach($rows as $row)
         {
@@ -106,14 +114,8 @@ class User extends CActiveRecord
     }
     
     public function checkLogin($email) {
-        
-        $sql = ' SELECT * FROM `users` WHERE login="'.$email.'" ';
-        
-        $rows = Yii::app()->db->createCommand($sql)->queryAll();
-        
-        if (count($rows)) return true;
-        
-        return false;
+        $sql = 'SELECT 1 FROM `users` WHERE (login = :email) limit 1';
+        return (bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':email'=>$email));
     }
     
 }

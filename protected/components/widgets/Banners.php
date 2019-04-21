@@ -47,7 +47,7 @@ class Banners extends MyWidget {
             $page = 1;
             if (!empty($this->_params['page'])) $page = $this->_params['page'];
             $sql = ''.
-                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                 'from banners_entity t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'where (t.entity_id = ' . (int) $this->entity . ') '.
@@ -73,7 +73,7 @@ class Banners extends MyWidget {
     private function _getMainBanners($lang) {
         if (self::$_mainBanners === null) {
             $sql = ''.
-                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                 'from banners_main t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'order by t.position, t.id desc '.
@@ -116,6 +116,7 @@ class Banners extends MyWidget {
                 break;
             case 'small':
                 $offerDay = DiscountManager::getOfferDay();
+
                 if (!empty($offerDay)) {
                     $entity = $offerDay['entity_id'];
                     $extraTxt = $offerDay['extra_txt'];
@@ -127,17 +128,20 @@ class Banners extends MyWidget {
                         $issues = Periodic::getCountIssues($offerDay['issues_year']);
                         if (!empty($issues['show3Months'])) {
                             $offerDay['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
-                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO]/4;
-                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT]/4;
-                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT]/4;
+                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/4;
+                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
                         }
                         elseif (!empty($issues['show6Months'])) {
                             $offerDay['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
-                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO]/2;
-                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT]/2;
-                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT]/2;
+                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/2;
+                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
                         }
                         else {
+                            $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN];
+                            $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN];
+                            $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN];
                             $offerDay['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
                         }
                     }
@@ -195,13 +199,20 @@ class Banners extends MyWidget {
 
     private function _getBannerHref($banner) {
         if (!empty($banner['path_route'])) {
-            $params = array( );
+            $params = array();
             if (!empty($banner['path_entity'])){
                 $params['entity'] = $banner['path_entity'];
                 if (!empty($banner['path_id'])) {
                     $idName = HrefTitles::get()->getIdName($params['entity'], $banner['path_route']);
                     if (!empty($idName)) $params[$idName] = $banner['path_id'];
                 }
+            }
+            elseif (!empty($banner['path_id'])) {
+                $idName = HrefTitles::get()->getIdName(0, $banner['path_route']);
+                if (!empty($idName)) $params[$idName] = $banner['path_id'];
+            }
+            elseif (!empty($banner['path_params'])) {
+                $params = unserialize($banner['path_params']);
             }
             $href = Yii::app()->createUrl($banner['path_route'], $params);
         }
@@ -212,20 +223,22 @@ class Banners extends MyWidget {
     }
 
     private function _getBannerFilePath($id, $lang) {
-        return 'http://ruslania2.ptysh.ru/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
+        return 'https://beta.ruslania.com/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
     }
 
     protected function _viewDetail() {
         $type = 'image';
         if (!empty($this->_params['type'])) $type = $this->_params['type'];
-
+		
+		//var_dump();
+		
         switch ($type) {
             case 'image':
                 $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
                 $lang = strtolower(Yii::app()->language);
                 if (!in_array($lang, $langs)) $lang = 'en';
                 $sql = ''.
-                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id '.
+                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
                     'from banners_entity t '.
                         'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1) '.
                     'where (t.entity_id = ' . (int) $this->entity . ') '.
@@ -267,7 +280,34 @@ class Banners extends MyWidget {
                         break;
                 }
                 $banners = $this->_getProducts($items);
-                $this->render('banners_detail_slider', array('items' => $banners));
+                foreach ($banners as $i=>$item) {
+
+                    $item['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+                    $item['priceData']['unit'] = '';
+                    if ($item['entity'] == Entity::PERIODIC) {
+                        $issues = Periodic::getCountIssues($item['issues_year']);
+                        if (!empty($issues['show3Months'])) {
+                            $item['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN]/4;
+                            $item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+                            $item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
+                        }
+                        elseif (!empty($issues['show6Months'])) {
+                            $item['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                            $item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN]/2;
+                            $item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+                            $item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
+                        }
+                        else {
+                            $item['priceData'][DiscountManager::BRUTTO] = $item['priceData'][DiscountManager::BRUTTO_FIN];
+                            $item['priceData'][DiscountManager::WITH_VAT] = $item['priceData'][DiscountManager::WITH_VAT_FIN];
+                            $item['priceData'][DiscountManager::WITHOUT_VAT] = $item['priceData'][DiscountManager::WITHOUT_VAT_FIN];
+                            $item['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                        }
+                    }
+                    $banners[$i] = $item;
+                }
+                $this->render('banners_detail_slider', array('items' => $banners, 'sid'=>$this->_params['sid'], 'uid'=>$this->_params['uid']));
                 break;
         }
     }
@@ -288,9 +328,11 @@ class Banners extends MyWidget {
             $order .= ', "' . $item['entity'] . '_' . $item['id'] . '"';
         }
         $sql = array();
+        $titleLang = Yii::app()->getLanguage();
+        if (!in_array($titleLang, HrefTitles::get()->getLangs(10, 'product/view'))) $titleLang = 'en';
         $fields = array(
             'id'=>'id',
-            'title'=>'title_ru',
+            'title'=>'title_' . $titleLang,
             'image'=>'image',
             'vat'=>'vat',
             'discount'=>'discount',
@@ -345,7 +387,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `books_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 10)) tOf using (id) '.
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.year between ' . (date('Y')-1) . ' and ' . date('Y') . ') '.
                         'and (t.avail_for_order = 1) '.
@@ -378,33 +420,40 @@ class Banners extends MyWidget {
                         'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
+                    Debug::staticRun(array($sql));
                     $beforeIds['authors'] = Yii::app()->db->createCommand($sql)->queryColumn();
                     $exclude = array_merge($exclude, $beforeIds['authors']);
                 }
             }
             if (!empty($this->_params['item']['series_id'])) {
                 $sql = ''.
-                    'select t.id ' .
+                    'select t1.id from ('.
+                    'select t.id, t.avail_for_order ' .
                     'from `books_catalog` as t '.
-                    'where (t.avail_for_order = 1) '.
-                        'and (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
+                    'where (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'having (avail_for_order = 1) '.
+                    'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
+                Debug::staticRun(array($sql));
                 $beforeIds['serie'] = Yii::app()->db->createCommand($sql)->queryColumn();
                 $exclude = array_merge($exclude, $beforeIds['serie']);
             }
             if (!empty($this->_params['item']['publisher_id'])) {
                 $sql = ''.
-                    'select t.id ' .
+                    'select t1.id from ('.
+                    'select t.id, t.avail_for_order ' .
                     'from `books_catalog` as t '.
-                    'where (t.avail_for_order = 1) '.
-                        'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
+                    'where (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'having (avail_for_order = 1) '.
+                    'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
+                Debug::staticRun(array($sql));
                 $beforeIds['publisher'] = Yii::app()->db->createCommand($sql)->queryColumn();
             }
             $beforeIds = array_merge($beforeIds['authors'], $beforeIds['serie'], $beforeIds['publisher']);
@@ -447,11 +496,13 @@ class Banners extends MyWidget {
         }
         if ($counts > 0) {
             $sql = ''.
-                'select t.id ' .
+                'select t1.id from ('.
+                'select t.id, t.avail_for_order ' .
                 'from `musicsheets_catalog` as t '.
-                'where (t.avail_for_order = 1) '.
-                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                'having (avail_for_order = 1) '.
+                'limit 1000) t1 '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
@@ -505,10 +556,9 @@ class Banners extends MyWidget {
         if ($counts > 0) {
             //категория
             $sql = ''.
-                'select t.id ' .
+                'select t.id, t.avail_for_order ' .
                 'from `music_catalog` as t '.
-                'where (t.avail_for_order = 1) '.
-                    'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
+                'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
@@ -526,7 +576,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `music_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 22)) tOf using (id) '.
                     'where (t.id not in (' . implode(',', $exclude) . '))'.
                         'and (t.avail_for_order = 1) '.
                     'group by t.id '.
@@ -740,7 +790,7 @@ class Banners extends MyWidget {
                 $sql = ''.
                     'select t.id ' .
                     'from `soft_catalog` as t '.
-                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . '))) tOf using (id) '.
+                        'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 24)) tOf using (id) '.
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.avail_for_order = 1) '.
                     'order by rand() '.

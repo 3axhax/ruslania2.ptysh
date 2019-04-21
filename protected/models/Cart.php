@@ -92,13 +92,14 @@ class Cart extends CActiveRecord
 		//if (!$cart) { $cart = new Cart; }
 		
 		//file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/1.log', print_r($cnt, 1));
-		
+        $availCount = $cnt + $quantity;
+        if (($entity == Entity::PERIODIC)&&($availCount > 12)) $availCount = 12;
 		$cart = new Cart;
         $cart->entity = Entity::ConvertToSite($entity);
         $cart->iid = $id;
         $cart->uid = $uid;
         $cart->sidv2 = $sid;
-        $cart->quantity = $cnt + $quantity;
+        $cart->quantity = $availCount;
         $cart->type = $finOrWorldPrice;
 		
         switch($type)
@@ -143,6 +144,8 @@ class Cart extends CActiveRecord
 
         $defaultAddress = Address::GetDefaultAddress($uid);
         $useVAT = Address::UseVAT($defaultAddress);
+
+        //var_dump($useVAT);
 
         $ret = array();
         $entities = new Entity();
@@ -204,6 +207,17 @@ class Cart extends CActiveRecord
             $tmp['AvailablityText'] = Availability::ToStr($c);
             $tmp['DiscountPercent'] = $values[DiscountManager::DISCOUNT];
             $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::ORIGINAl_PRICE]);
+
+            if ($tmp['Entity'] == Entity::PERIODIC) {
+                if ($tmp['Price2Use'] == 1) {
+                    //фины
+                    $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::BRUTTO_FIN]/12 * $tmp['Quantity']);
+                }
+                else {
+                    $tmp['PriceOriginal'] = ProductHelper::FormatPrice($values[DiscountManager::BRUTTO_WORLD]/12 * $tmp['Quantity']);
+                }
+            }
+
             $tmp['ReadyVAT'] = $values[DiscountManager::READY_EUR_PRICE_VAT];
             $tmp['ReadyVAT0'] = $values[DiscountManager::READY_EUR_PRICE_WITHOUT_VAT];
             $tmp['Rate'] = $values[DiscountManager::RATE];
@@ -267,7 +281,13 @@ class Cart extends CActiveRecord
         list($where, $params) = $this->GetFilter($uid, $sid);
         $sql .= $where;
         if ($isMiniCart) 
-            $sql .= ' ORDER BY last_date DESC';
+            $sql .= ' ORDER BY iid DESC';
+		
+		
+		//var_dump($sql);
+		//var_dump($params);
+		
+		
         $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
         $ret = array();
         $data = array();
@@ -298,9 +318,15 @@ class Cart extends CActiveRecord
                 {
                     $product = array_merge($r, $data[$entity][$iid]);
                     // UnitWeight
-    
-                    $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
-                    $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+
+                    if (empty($r['unitweight'])) {
+                        $product['FullUnitWeight'] = 0;
+                        $product['InCartUnitWeight'] = 0;
+                    }
+                    else {
+                        $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
+                        $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+                    }
                     $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
     
                     $ret[] = $product;
@@ -351,6 +377,8 @@ class Cart extends CActiveRecord
         }
         
         
+		//var_dump($rows);
+		
         return $ret;
     }
 
@@ -463,6 +491,25 @@ class Cart extends CActiveRecord
         return $cnt;
     }
     
+	function isMark($entity, $iid, $type, $uid, $sid) {
+		
+		$entity = Entity::ConvertToSite($entity);
+        list($where, $params) = Cart::GetFilter($uid, $sid);
+        $sql = 'SELECT * FROM shopcarts WHERE '.$where.' AND '.Cart::CartType($type).' '
+            .'AND entity=:entity AND iid=:iid';
+        $params[':entity'] = $entity;
+        $params[':iid'] = $iid;
+		
+		$rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
+		
+		if ($rows[0] != '') {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
     function getPriceSum($uid, $sid, $type) {
         
         $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2, uid ) '
@@ -555,5 +602,29 @@ class Cart extends CActiveRecord
         return $arr['locations'];
     }
     
-    
+    function getCountCartItem($item, $entity, $uid, $sid) {
+		
+		$c = new Cart;
+        $cart = $c->GetCart($uid, $sid);
+       // foreach ($items as $idx => $item) {
+            foreach ($cart as $cartItem) {
+                if ($cartItem['entity'] == $entity && $cartItem['id'] == $item) {
+                    $count = $cartItem['quantity'];
+                }
+            }
+       // }
+        return $count;
+		
+	}
+	
+	public static function CreateUrl($item, $lang = null)
+    {
+        if ($item === false) return '';
+        
+        if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
+        return Yii::app()->createUrl('cart/view', $params);
+    }
+
+
+	
 }

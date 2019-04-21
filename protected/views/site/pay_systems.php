@@ -1,4 +1,5 @@
 <?php /*Created by Кирилл (19.07.2018 21:02)*/ ?>
+<? $ui = new RuslaniaUI; ?>
 <style>
 	label.seld {
 		padding: 1.8rem 2rem 2.2rem;
@@ -55,6 +56,8 @@
 <?
     $ordClass = new Order();
 
+
+
     $ord = $ordClass->GetOrder((int) $_GET['id']);
 
     if ($ord['delivery_type_id'] == 0) :
@@ -62,7 +65,7 @@
 ?>
 
 <label class="selp span3 oplata1" onclick="check_cart_sel($(this),'selp', 'dtype1')">
-	Оплата в магазине
+	<?=$ui->item('MSG_PAYMENT_TYPE_00')?>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
@@ -80,7 +83,7 @@
 
 <label class="selp span3 oplata3" onclick="check_cart_sel($(this),'selp', 'dtype25')" style="width: 484px;">
 
-	<img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
+	<img src="/images/pt2.png" style="margin-top: 10px;" /><br /><span style="display: block; margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL')?></span>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
@@ -88,7 +91,7 @@
 </label>
 
 <label class="selp span3 oplata4" onclick="check_cart_sel($(this),'selp', 'dtype7')">
-	<div style="margin-top: -8px;"><b>Cчет-фактура</b><br> Оплата после получения по счету для клиентов в Финляндии и организаций в ЕС </div>
+	<?=$ui->item('CARTNEW_PAY_INVOICE_LABEL')?>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
@@ -112,7 +115,7 @@
 </label>
 
 <label class="selp span3 oplata7" onclick="check_cart_sel($(this),'selp', 'dtype13')">
-	Предоплата на банковский счет в Финляндии
+	<?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT1');?>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>
@@ -120,7 +123,7 @@
 </label>
 
 <label class="selp span3 oplata8" onclick="check_cart_sel($(this),'selp', 'dtype14')">
-	Предоплата на банковский счет в России
+	<?=$ui->item('CARTNEW_PREPAY_TO_BANK_ACCOUNT2');?>
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check"></span></span>
 	</div>

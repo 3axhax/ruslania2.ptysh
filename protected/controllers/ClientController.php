@@ -1,4 +1,7 @@
 <?php
+/*ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);*/
 
 class ClientController extends MyController
 {
@@ -19,6 +22,13 @@ class ClientController extends MyController
 
     public function actionPay($oid)
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/pay', $lang);
+			}
+		}
+		
         if(Yii::app()->user->isGuest)
         {
             $this->breadcrumbs[] = Yii::app()->ui->item('ORDER_PAYMENT');
@@ -40,6 +50,22 @@ class ClientController extends MyController
 
     public function actionMe()
     {
+		//echo $this->uid;
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/me', $lang);
+			}
+		}
+		
+		if ($_GET['order_id']) {
+			
+			$sql = 'UPDATE users_orders SET hide_edit_order=:int WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':int' => 1, ':id' => $_GET['order_id']));
+			
+			
+			$this->redirect(Yii::app()->createUrl('client/me'));
+		}
+		
         $o = new Order;
         $orders = $o->GetOrders($this->uid);
         $user = Yii::app()->user->GetModel();
@@ -50,6 +76,13 @@ class ClientController extends MyController
 
     public function actionOrders()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/orders', $lang);
+			}
+		}
+		
         $o = new Order();
         $list = $o->GetOrders($this->uid);
         $this->breadcrumbs[] = Yii::app()->ui->item("YM_CONTEXT_PERSONAL_BROWSE_ORDERS");
@@ -58,6 +91,13 @@ class ClientController extends MyController
 
     public function actionMemo()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/memo', $lang);
+			}
+		}
+		
         $c = new Cart();
         $list = $c->GetMark($this->uid, $this->sid);
         $this->breadcrumbs[] = Yii::app()->ui->item("MSG_SHOPCART_SUSPENDED_ITEMS");
@@ -82,6 +122,13 @@ class ClientController extends MyController
 
     public function actionRequests()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/requests', $lang);
+			}
+		}
+		
         $uid = Yii::app()->user->id;
 
         $r = new Request;
@@ -94,6 +141,13 @@ class ClientController extends MyController
 
     public function actionAddresses()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/addresses', $lang);
+			}
+		}
+		
         $uid = Yii::app()->user->id;
         $a = new Address();
 
@@ -123,6 +177,13 @@ class ClientController extends MyController
 
     public function actionNewAddress()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/newaddress', $lang);
+			}
+		}
+		
         $model = new Address('new');
         $model->type = Address::PRIVATE_PERSON;
         $this->breadcrumbs[] = Yii::app()->ui->item('YM_CONTEXT_PERSONAL_ADD_ADDRESS');
@@ -131,6 +192,13 @@ class ClientController extends MyController
 
     public function actionEditAddress($aid)
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/editaddress', $lang);
+			}
+		}
+		
         $uid = Yii::app()->user->id;
         $a = new Address();
         if(!$a->IsMyAddress($uid, $aid)) throw new CHttpException(403, 'Not your address');
@@ -144,6 +212,13 @@ class ClientController extends MyController
 
     public function actionData()
     {
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/data', $lang);
+			}
+		}
+		
         if(Yii::app()->user->isGuest) throw new CHttpException(403, 'login required');
         $uid = Yii::app()->user->id;
 
@@ -202,6 +277,12 @@ class ClientController extends MyController
     }
 
 	public function actionSubscriptions(){
+		
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			if ($lang !== 'rut') {
+				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/subscriptions', $lang);
+			}
+		}
 		
 		$this->breadcrumbs[] = Yii::app()->ui->item('A_NEW_SUBS_MENU_TTILE');
 		

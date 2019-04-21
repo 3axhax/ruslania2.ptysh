@@ -1,10 +1,11 @@
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<script type="text/javascript" src="/new_js/modules/print.js"></script>
 
 <div class="container cabinet">
 
 <div class="row">
         <div class="span10">
-			<h2 class="cattitle me_left" style="margin-bottom: 25px;">Мои заказы</h2>
+			<h2 class="cattitle me_left" style="margin-bottom: 25px;"><?= $ui->item('A_LEFT_PERSONAL_ORDERS') ?></h2>
             <?php if(count($list) == 0) : ?>
 
                 <?=$ui->item("ORDER_MSG_NO_ORDERS"); ?>
@@ -19,8 +20,16 @@
                     <li>
                         <?php $this->renderPartial('_one_order', array('order' => $order, 'co'=>count($list), 'i'=>$i)); ?>
                         <div class=""></div>
-						
+
+                        <script type="text/javascript">
+                            print<?= $order['id'] ?> = function() { return new _Print(); };
+                            print<?= $order['id'] ?>().init({$button: $('#printedBtn<?= $order['id'] ?>'), $content: $('#orderBlock<?= $order['id'] ?>')});
+                        </script>
                     </li>
+					
+					<? if ($i != count($list)) { echo "<li><hr /></li>"; } ?>
+					
+					
                 <?php $i++; endforeach; ?>
                 </ul>
 

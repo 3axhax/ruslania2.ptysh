@@ -4,15 +4,21 @@ class PostCalculator
 {
     const UNIT_WEIGHT = 0.250; // 250 грамм в одном UnitWeight
 
-    public function GetRates($aid, $uid, $sid)
+    public function GetRates($aid, $uid, $sid, $countryId = 0)
     {
         $a = new Address();
-
         $address = $a->GetAddress($uid, $aid);
-        if (empty($address)) return array();
-
-        $country = Country::GetCountryById($address['country']);
+        if (empty($aid)&&!empty($countryId)) {
+            $country = Country::GetCountryById($countryId);
+        }
+        if (empty($country)) {
+            if (empty($address)) return array();
+            $country = Country::GetCountryById($address['country']);
+        }
         if (empty($country)) return array();
+
+        if (empty($address)) $address = $country;
+
         $isFinland = $country['code'] == 'FI';
         $isEurope = $country['is_europe'];
         $group = $country['post_group'];
@@ -28,15 +34,14 @@ class PostCalculator
         $notInEnvelope = false;
         $onlySubscription = true;
 
-        foreach ($cart as $c)
-        {
-            $realTotalUW += ($c['unitweight'] * $c['quantity']);
+        foreach ($cart as $c) {
+            if (!empty($c['unitweight'])) $realTotalUW += ($c['unitweight'] * $c['quantity']);
             if ($c['entity'] != Entity::PERIODIC) $onlySubscription = false;
             $price = DiscountManager::GetPrice($uid, $c);
             if ($price[DiscountManager::TYPE_FREE_SHIPPING]) continue;
-            if ($c['unitweight_skip']) continue; // без почтовых - то ничего не считаем
+            if (!empty($c['unitweight_skip'])) continue; // без почтовых - то ничего не считаем
 
-            $totalUW += ($c['unitweight'] * $c['quantity']);
+            if (!empty($c['unitweight'])) $totalUW += ($c['unitweight'] * $c['quantity']);
             if ($c['not_in_envelope']) $notInEnvelope = true;
         }
 
@@ -70,7 +75,7 @@ class PostCalculator
                     $found = true;
                 }
             }
-            if (!$found && !$obj->IsOrc())
+            if (!$found && !$obj->calculator->IsOrc())
             {
                 array_push($rates, $free);
             }
@@ -82,7 +87,13 @@ class PostCalculator
 
         return $rates;
     }
-    
+
+    /**
+     * @param $country
+     * @param $uid
+     * @param $sid
+     * @return array
+     */
     public function GetRates2($country, $uid, $sid)
     {
         
@@ -115,7 +126,7 @@ class PostCalculator
             if ($c['not_in_envelope']) $notInEnvelope = true;
         }
 
-        $free = array('type' => Delivery::ToString(Delivery::TYPE_FREE) . ',',
+        $free = array('type' => Delivery::ToString(Delivery::TYPE_FREE) . '<br />',
             'id' => Delivery::TYPE_FREE,
             'currency' => Currency::EUR,
             'currencyName' => 'EUR',
@@ -145,7 +156,7 @@ class PostCalculator
                     $found = true;
                 }
             }
-            if (!$found && !$obj->IsOrc())
+            if (!$found && !$obj->calculator->IsOrc())
             {
                 array_push($rates, $free);
             }
@@ -153,6 +164,9 @@ class PostCalculator
         foreach ($rates as $idx => $rate)
         {
             $rates[$idx]['deliveryTime'] = $this->GetDeliveryTime($isEurope, $isFinland, $rate['id'] == Delivery::TYPE_FREE, $rate['id']);
+            if ($isEurope) {
+                $rates[$idx]['region'] = $group;
+            }
         }
 
         return $rates;
@@ -172,9 +186,9 @@ class PostCalculator
         else if ($isFinland)
         {
             $values = array(
-                Delivery::TYPE_ECONOMY => '2-5',
-                Delivery::TYPE_PRIORITY => '1-3',
-                Delivery::TYPE_EXPRESS => '1-2',
+                Delivery::TYPE_ECONOMY => '<br />2-5',
+                Delivery::TYPE_PRIORITY => '<br />1-3',
+                Delivery::TYPE_EXPRESS => '<br />1-2',
             );
             if(isset($values[$type])) return $values[$type];
             return $values[Delivery::TYPE_ECONOMY];
@@ -182,9 +196,9 @@ class PostCalculator
         else if ($isEurope)
         {
             $values = array(
-                Delivery::TYPE_ECONOMY => '3-10',
-                Delivery::TYPE_PRIORITY => '3-6',
-                Delivery::TYPE_EXPRESS => '2-4',
+                Delivery::TYPE_ECONOMY => '<br />3-10',
+                Delivery::TYPE_PRIORITY => '<br />3-6',
+                Delivery::TYPE_EXPRESS => '<br />2-4',
             );
             if(isset($values[$type])) return $values[$type];
             return $values[Delivery::TYPE_ECONOMY];
@@ -192,9 +206,9 @@ class PostCalculator
         else
         {
             $values = array(
-                Delivery::TYPE_ECONOMY => '5-15',
-                Delivery::TYPE_PRIORITY => '3-10',
-                Delivery::TYPE_EXPRESS => '3-7',
+                Delivery::TYPE_ECONOMY => '<br />5-15',
+                Delivery::TYPE_PRIORITY => '<br />3-10',
+                Delivery::TYPE_EXPRESS => '<br />3-7',
             );
             if(isset($values[$type])) return $values[$type];
             return $values[Delivery::TYPE_ECONOMY];

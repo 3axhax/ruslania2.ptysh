@@ -14,6 +14,7 @@ ini_set('max_execution_time', 3600);
  * Class OldPagesCommand
  */
 define('OLD_PAGES', 1);
+define('cronAction', 1);
 
 require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 class OldPagesCommand extends CConsoleCommand {
@@ -106,6 +107,15 @@ class OldPagesCommand extends CConsoleCommand {
 						':route'=>'product/view',
 						':id'=>$item['id'],
 						':path'=>ProductHelper::CreateUrl($item, $lang),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'product/view',
+						':id'=>$item['id'],
+						':path'=>'/' . Entity::GetUrlKey($entity) . '/' . $item['id'],
 						':lang'=>$lang,
 					);
 					$pdo->getPdoStatement()->execute($insertParams);

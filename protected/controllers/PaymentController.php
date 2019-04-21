@@ -1,4 +1,7 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 // http://docs.paytrail.com/files/payment-api-en.pdf
 
@@ -14,8 +17,7 @@
 
 class PaymentController extends MyController
 {
-    public function actionAccept($oid, $tid)
-    {
+    public function actionAccept($oid, $tid) {
         $o = new Order;
         $order = $o->GetOrder($oid);
         if(empty($order)) throw new CHttpException(404);
@@ -23,11 +25,19 @@ class PaymentController extends MyController
         $check = Payment::CheckPayment($oid, $tid, $_REQUEST, $order);
         $ret = 0;
 
-        $view = 'cancel';
+        $view = 'fail';
         if($check)
         {
+			
+			$sql = 'UPDATE users_orders SET hide_edit_order=:hideEdit, hide_edit_payment=:hidePay WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':hideEdit' => 1, ':hidePay' => 1, ':id' => $oid));
+			
+//			$sql = 'UPDATE users_orders SET hide_edit_payment=:int WHERE id=:id'; Yii::app()->db->createCommand($sql)->execute(array(':int' => 1, ':id' => $oid));
+			//$this->redirect(Yii::app()->createUrl('cart/orderPay').'?id='.$id.'&ptype='.$ptype);
+			
+			$order = $o->GetOrder($oid);
+
             $view = 'accept';
-            $uid = Yii::app()->user->id;
+            $uid = $order['uid'];
             $o->ChangeOrderPaymentType($uid, $oid, $tid);
             $ret = $o->AddStatus($oid, OrderState::AutomaticPaymentConfirmation);
             if(empty($ret))
@@ -39,7 +49,11 @@ class PaymentController extends MyController
                 CommonHelper::Log('Payment already exists '.$oid.' - '.$tid, 'mywarnings');
             }
         }
-
+//        if (isset($_GET['ha'])) {
+//            $view = 'accept';
+//            $check = 1;
+//        }
+//        else
         if($order['uid'] != $this->uid) throw new CException('Wrong order id');
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));
@@ -55,7 +69,10 @@ class PaymentController extends MyController
         $order = $o->GetOrder($oid);
         if(empty($order)) throw new CHttpException(404);
 
-        if($order['uid'] != $this->uid) throw new CException('Wrong order id');
+        if($order['uid'] != $this->uid) {
+            throw new CHttpException(404);
+            throw new CException('Wrong order id');
+        }
 
         $newOid = null;
         if($tid == Payment::Luottokunta && isset($_GET['LKPRC']) && $_GET['LKPRC'] == 300)
@@ -66,7 +83,7 @@ class PaymentController extends MyController
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));
         $this->breadcrumbs[] = Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
-        $this->render('cancel', array('order' => $order, 'newOid' => $newOid));
+        $this->render('fail', array('order' => $order, 'newOid' => $newOid));
     }
 
     public function actionNotify()
@@ -74,4 +91,42 @@ class PaymentController extends MyController
         $get = "NOTIFY_PAYTRAIL\n".print_r($_GET, true);
         Yii::log($get);
     }
+
+    function actionCancelCertificate($oid, $tid) {
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->breadcrumbs[] = Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
+        $this->render('cancel_certificate', array());
+    }
+
+    public function actionAcceptCertificate($oid, $tid) {
+        $id = 0;
+        if (mb_strpos($oid, 'c', null, 'utf-8') === 0) $id = (int) mb_substr($oid, 1, null, 'utf-8');
+        if ($id <= 0) throw new CHttpException(404);
+
+        $o = new Certificate();
+        $order = $o->getCertificate($id);
+        if(empty($order)) throw new CHttpException(404);
+
+        $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+        $code = '';
+        if (empty($order['promocode_id'])) {
+            $view = 'cancel_certificate';
+            if($check) {
+                $view = 'accept_certificate';
+                $code = $o->paid($order);
+            }
+        }
+        else {
+            $promocode = Promocodes::model()->getPromocode($order['promocode_id']);
+            if (!empty($promocode['code'])) $code = $promocode['code'];
+            $view = 'accept_certificate';
+        }
+
+        $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
+        $this->breadcrumbs[] = $check
+            ? Yii::app()->ui->item('A_SAMPO_PAYMENT_ACCEPTED')
+            : Yii::app()->ui->item('A_SAMPO_PAYMENT_DECLINED');
+        $this->render($view, array('checkResult' => $check, 'order' => $order, 'code'=>$code));
+    }
+
 }

@@ -18,7 +18,7 @@ if (!empty($tree) && count($tree) > 0):
 				array('entity' => Entity::GetUrlKey($entity),
 					'cid' => $node['payload']['id'],
 					'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($node['payload'])),
-					'binding' => array($typeId),
+					/*'binding' => array($typeId),*/
 				)) ?>"><?= ProductHelper::GetTitle($node['payload']) ?>
 		</a>
 		<?php if ($node['children']):

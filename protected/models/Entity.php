@@ -27,7 +27,7 @@ class Entity {
                 'with' => array('authors', 'publisher', 'category', 'subcategory', 'binding', 'lookinside', 'series',
                     'languages', 'offers', 'vendorData', 'vendorData.deliveryTime')
             ),
-            20 => array('title' => 'Аудиокниги', 'site_id' => 2, 'table' => 'tblAudio', 'site_table' => 'audio_catalog',
+            /*20 => array('title' => 'Аудиокниги', 'site_id' => 2, 'table' => 'tblAudio', 'site_table' => 'audio_catalog',
                 'entity' => 'audio', 'model' => 'Audio',
                 'site_category_table' => 'audio_categories',
                 'author_table' => 'audio_authors',
@@ -38,7 +38,7 @@ class Entity {
                 'uikey' => 'A_GOTOAUDIO',
                 'with' => array('authors', 'performers', 'publisher', 'category', 'subcategory', 'media', 'lookinside',
                     'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
-            ),
+            ),*/
             22 => array('title' => 'Музыка', 'site_id' => 7, 'table' => 'tblMusic', 'site_table' => 'music_catalog',
                 'entity' => 'music', 'model' => 'Music',
                 'site_category_table' => 'music_categories',
@@ -213,8 +213,8 @@ class Entity {
         $settings = self::GetEntitiesList()[$entity];
         switch ($paramName) {
             case 'years': if ($entity == self::PERIODIC) return false; break;
-            case 'gift': if ($entity != self::PERIODIC) return false; break;
-            case 'yearreleases': if ($entity != self::VIDEO) return false; break;
+            case 'gift': case 'types': if ($entity != self::PERIODIC) return false; break;
+            case 'yearreleases': case 'studios': if ($entity != self::VIDEO) return false; break;
             default: if (!in_array($paramName, $settings['with'])) return false; break;
         }
         return true;

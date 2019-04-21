@@ -1,4 +1,4 @@
-<div class="container" id="js_container100">
+<div class="container" id="js_container100" <?php if ($page == 'ourstore'):?> style="width: 100%;" <?php endif; ?>>
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
             
             <div style="padding-left: 10px" class="text"<?php if (!empty($isWordpanel)): ?> id="js_wordpanel"<?php endif; ?>>
@@ -6,15 +6,15 @@
             </div>
             <!-- /content -->
 </div>
-<?php if ($page == 'ourstore'): ?>
-    <script type="text/javascript">document.getElementById('js_container100').style.width = $('.index_menu').outerWidth() + 'px';</script>
-<?php endif; ?>
+<?php /*if ($page == 'ourstore'): ?>
+    <script type="text/javascript">document.getElementById('js_container100').style.width = '100%';</script>
+<?php endif;*/ ?>
 <?php if(!empty($isWordpanel)): ?>
     <div class="buttonCKEDITOR"><a onclick="runCKEDITOR(); $('.buttonCKEDITOR').toggle(); return false;">Редактировать</a></div>
     <div class="buttonCKEDITOR" style="display: none;"><a onclick="if (confirm('Не сохраненные данные будут потеряны!!!')) { closeCKEDITOR(); $('.buttonCKEDITOR').toggle(); } return false;">Закрыть</a></div>
     <style>
         .cke_button_label.cke_button__inlinesave_label {display: inline;}
-        .buttonCKEDITOR {position: fixed; top: 30px; right: 10px; padding: 20px; background-color: #000; opacity: 0.4;}
+        .buttonCKEDITOR {position: fixed; top: 70px; right: 10px; padding: 20px; background-color: #000; opacity: 0.4;}
         .buttonCKEDITOR a { color: #fff; cursor: pointer; font-weight: bold;}
     </style>
     <script src="/js/ckeditor/ckeditor.js"></script>
@@ -36,7 +36,7 @@
                 filebrowserUploadUrl: '/js/kcfinder/upload.php?type=files',
                 filebrowserImageUploadUrl: '/js/kcfinder/upload.php?type=images',
                 filebrowserFlashUploadUrl: '/js/kcfinder/upload.php?type=flash',
-                extraPlugins: 'oembed,widget,inlinesave,wenzgmap',
+                extraPlugins: 'oembed,widget,inlinesave,wenzgmap,fontawesome,lineheight',
                 image_previewText: " ",
                 toolbar: [
                     { name: 'document', items: [ /*'Save', 'Source', '-', 'inlinesave', 'NewPage', 'Preview', 'Print', '-', */'Templates' ] },
@@ -49,7 +49,7 @@
                     { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
                     { name: 'insert', items: [ 'Image','oembed', 'wenzgmap', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
                     '/',
-                    { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+                    { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize', 'FontAwesome', 'lineheight' ] },
                     { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
                     { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
                     { name: 'about', items: [ 'About' ] }
@@ -87,9 +87,11 @@
             })*/.on('instanceReady', function () {
                 var CKEIframes = $('.cke_iframe');
                 var CKEIframesL = CKEIframes.length;
-                for (i = 0; i <CKEIframesL; i ++ )
+                for (i = 0; i <CKEIframesL; i ++ ) {
                     $(CKEIframes[i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
+                }
             });
+            CKEDITOR.dtd.$removeEmpty['span'] = 0;
         }
         function closeCKEDITOR() {
             $('#js_wordpanel').removeAttr('contenteditable');
@@ -99,6 +101,11 @@
                 var CKEIframesL = CKEIframes.length;
                 for (i = 0; i <CKEIframesL; i ++ ) {
                     $(CKEIframes [i]).replaceWith(decodeURIComponent($(CKEIframes[i]).data('cke-realelement')));
+                }
+                var ckeRemove = $('.cke_reset');
+                var ckeRemoveL = ckeRemove.length;
+                for (i = 0; i <ckeRemoveL; i ++ ) {
+                    $(ckeRemove[i]).remove();
                 }
             }
         }

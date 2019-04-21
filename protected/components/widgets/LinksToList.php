@@ -108,8 +108,15 @@ class LinksToList extends CWidget {
 	private function _bindingLink() {
 		if (!$this->_checkByEntity('binding')) return array();
 
+		switch ($this->_params['entity']) {
+			case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
+			case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
+			case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
+			default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+		}
+
 		return array(
-			'name'=>Yii::app()->ui->item('A_NEW_TYPOGRAPHY'),
+			'name'=>$label,
 			'href'=>Yii::app()->createUrl('entity/bindingslist', array('entity' => Entity::GetUrlKey($this->_params['entity']))),
 		);
 	}

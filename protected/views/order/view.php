@@ -8,7 +8,7 @@
 
             <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
-            <?php $this->renderPartial('/client/_one_order', array('order' => $order)); ?>
+            <?php $this->renderPartial('/client/_one_order_my', array('order' => $order)); ?>
 
             <!-- /content -->
         </div>
@@ -19,3 +19,8 @@
             </div>
         </div>
         </div>
+<script type="text/javascript" src="/new_js/modules/print.js"></script>
+<script type="text/javascript">
+    print<?= $order['id'] ?> = function() { return new _Print(); };
+    print<?= $order['id'] ?>().init({$button: $('.printed_btn'), $content: $('#cnt<?= $order['id'] ?>').closest('div')});
+</script>

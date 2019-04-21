@@ -14,6 +14,8 @@ class Availability
 
     public static function GetStatus($item)
     {
+        if (isset($item['avail_for_order'])&&empty($item['avail_for_order'])) return self::NOT_AVAIL_AT_ALL;
+
         if ($item['in_shop'] > 0)
         {
             if ($item['in_shop'] <= self::MIN_ITEMS &&
@@ -60,7 +62,7 @@ class Availability
         $code = self::GetStatus($item);
 
         if ($item['entity'] == 30) {
-            return 'В наличии';
+            return Yii::app()->ui->item('CARTNEW_NAME_TABLE_AVAILABILITY');
         }
 
         switch ($code)

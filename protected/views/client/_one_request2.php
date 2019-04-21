@@ -1,10 +1,12 @@
-<?php $isClosed = RequestState::IsClosed($request['States']); ?>
+<?php
+
+$isClosed = RequestState::IsClosed($request['States']); ?>
 <tr class="<?= (($isClosed) ? 'closed' : 'open'); ?>">
     <td class="center">
         <a href="<?= Yii::app()->createUrl('request/view', array('rid' => $request['RID'])); ?>"><?=$request['RID']; ?></a>
     </td>
     <td class="left">
-        <?= Entity::GetTitle($request['Item']['entity']); ?>:
+        <?php if (Entity::IsValid($request['Item']['entity'])): ?><?= Entity::GetTitle($request['Item']['entity']); ?>:<?php endif; ?>
         <?php if (!empty($request['Item']['id'])) : ?>
             <a href="<?= ProductHelper::CreateUrl($request['Item']); ?>"><?= ProductHelper::GetTitle($request['Item']); ?></a>
         <?php else : ?>

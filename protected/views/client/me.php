@@ -24,8 +24,45 @@
                 <?php endif; ?>
                 <br/>
                 <?php if(empty($orders)) : ?>
-                    <div class="info-box information">
-                        <?=$ui->item('ORDER_MSG_NO_ORDERS'); ?>
+                    <div class="info-box information" style="padding-left: 0;">
+                        
+						<?
+							
+							$cart = new Cart;
+							
+							$cartGoods = $cart->GetCart($this->uid, $this->sid, $isMiniCart);
+        $tmp = $cart->BeautifyCart($cartGoods, $this->uid, $isMiniCart);
+        $inCart = array();
+        $endedItems = array();
+        foreach ($tmp as $item) {
+            if ($item['IsAvailable'])
+                $inCart[] = $item;
+            else
+                $endedItems[] = $item;
+        }
+							
+							if ($inCart[0]) {
+								
+								?>
+								
+								<a href="<?=Yii::app()->createUrl('cart/view');?>" class="order_start" style="background-color: #5bb75b;width:  auto;padding: 9px;">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item('CONTINUE_PLACING_ORDER') ?></span>
+                        </a>
+								
+								<?
+								
+							} else {
+								
+								?>
+								<?=$ui->item('ORDER_MSG_NO_ORDERS'); ?>
+								<?
+								
+							}
+						
+						?>
+						
+						
+						
                     </div>
 
                 <?php else : ?>
@@ -56,16 +93,17 @@
                             <?php
                             $id = $order['id'];
                             $first = OrderState::GetFirstState($order['States']);
+
                             $isClosed = OrderState::IsClosed($order['States']);
                             $isCancelled = OrderState::IsCancelled($order['States']);
                             $class =  $isClosed ? 'closed' : 'open';
                             ?>
                             <li class="<?=$class; ?>">
-                                <a href="<?=Yii::app()->createUrl('order/view', array('oid' => $id)); ?>"><?=sprintf($ui->item('ORDER_MSG_NUMBER'), $id); ?></a>, <?=$first['date_string']; ?>, <?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?> <?=ProductHelper::FormatPrice($order['full_price'], $order['currency_id']); ?>
+                                <a href="<?=Yii::app()->createUrl('order/view', array('oid' => $id)); ?>"><?=sprintf($ui->item('ORDER_MSG_NUMBER'), $id); ?></a>, <?=$first['date_string']; ?>, <?=$ui->item('CART_COL_TOTAL_FULL_PRICE'); ?> <?=ProductHelper::FormatPrice($order['full_price'], true, $order['currency_id']); ?>
 
                                  <?php if(!$isClosed) : ?>
                                         <?php if(array_key_exists($id, $notPay)) : ?>
-                                <a href="<?=Yii::app()->createUrl('client/pay', array('oid' => $order['id'])); ?>" class="order_start" style="float: right; background-color: #5bb75b; margin-right: 90px;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
+                                <a href="<?=Yii::app()->createUrl('cart/orderPay'); ?>?id=<?=$order['id']?>&ptype=<?=$order['payment_type_id']?>" class="order_start" style="float: right; background-color: #5bb75b; margin-right: 90px;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>   
                                 
                                 <?php endif; ?>
                                 <?php endif; ?>

@@ -111,14 +111,14 @@ return array(
 	'forgot'=>'passwort-wiederherstellung',
 	'delivery'=>'versand',
 	'news'=>'nachrichten',
-
+	'certificate'=>'geschenkgutschein',
 
 	'offers'=>'empfehlungen',
 	'for-firms'=>'spezielle-angebote-fur-unternehmen',
 	'for-lib'=>'spezielle-angebote-fur-bibliotheken',
 	'for-uni'=>'spezielle-angebote-fur-lehrer',
 	'for-fs'=>'sonderangebote-ohne-porto',
-	'for-alle2'=>'spezielle-angebote-fur-2-€',
+	'for-alle2'=>'spezielle-angebote-fur-2-euro',
 
 	'bookshelf'=>'bucherregal',
 );

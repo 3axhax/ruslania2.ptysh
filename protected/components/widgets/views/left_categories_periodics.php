@@ -19,7 +19,7 @@
 		endif;
 		?>
 	<li<?= $style ?>>
-		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)), 'binding' => array($type))); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
+		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($cat)), /*'binding' => array($type)*/)); ?>"><?= ProductHelper::GetTitle($cat); ?></a>
 	</li>
 	<?php endforeach; ?>
 	<?php if ($hide): ?>

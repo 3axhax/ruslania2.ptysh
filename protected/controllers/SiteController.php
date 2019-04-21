@@ -8,10 +8,10 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-            'actions' => array('update', 'error', 'index', 'categorylistjson', 'static','AllSearch','CheckEmail',
+            'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
-                'certificate'
+                'certificate', 'charges'
             ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
@@ -20,10 +20,75 @@ class SiteController extends MyController {
             array('deny',
                 'users' => array('*')));
     }
+	
+	function actionCharges() {
+		
+		$o = new Order;
+		$order = $o->GetOrder($_POST['orderId']);
+		
+		//$_POST['token'] = '1111';
+		
+		$ch = curl_init();
 
+		curl_setopt($ch, CURLOPT_URL, 'https://api.stripe.com/v1/charges');
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, "amount=".$order['full_price']."&currency=".Currency::ToStr($order['currency_id'])."&description=\"Оплата за заказ ".$order['id']."\"&source=".$_POST['token']);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_USERPWD, 'sk_test_aAQYmBNCSAMS3uo3rRRkEAlJ' . ':' . '');
+
+		$headers = array();
+		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		$result = curl_exec($ch);
+		
+		file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/test/applepay.log', print_r($result,1));
+		
+		
+		if (curl_errno($ch)) {
+			echo 'Error:' . curl_error($ch);
+		}
+		else{
+			
+			echo $result;
+			
+		}
+		
+		curl_close ($ch);
+		
+	}
+	
     function actionCertificate() {
+        $this->_checkUrl(array());
+        $model = new Certificate();
+        if (Yii::app()->request->isPostRequest) {
+            $model->setAttributes(Yii::app()->getRequest()->getPost('Certificate'));
+            $model->setAttribute('payment_type_id', Yii::app()->getRequest()->getPost('payment_type_id'));
+            if ($model->save()) {
+                Yii::app()->getRequest()->redirect(Yii::app()->createUrl('cart/certificatePay', array('id'=>$model->id)));
+                Yii::app()->end();
+            }
+        }
+
         $this->breadcrumbs[] = Yii::app()->ui->item('GIFT_CERTIFICATE');
-        $this->render('certificate', array());
+
+        $selectPrice = $model->getAttribute('nominal');
+        if (empty($selectPrice)) {
+            $selectPrice = 50;
+            $model->setAttribute('nominal', $selectPrice);
+        }
+
+        $nominals = array();
+        for ($i=1;$i<=100;$i++) $nominals[$i] = $i;
+        $rates = Currency::GetRates();
+        $item = array(
+            'brutto' => $selectPrice/$rates[Yii::app()->currency],
+            'vat' => 24,
+            'entity' => 0,
+            'id' => 0,
+        );
+        $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+        $this->render('certificate', array('model'=>$model, 'price'=>$price, 'nominals'=>$nominals));
     }
 
     public function actionSale() {
@@ -399,14 +464,22 @@ class SiteController extends MyController {
 
         $this->_checkUrl(array());
 
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage('register');
+        $registerText = '';
+        if (!empty($item)) $registerText = $item['description_' . Yii::app()->language];
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
+
         $this->breadcrumbs[] = Yii::app()->ui->item('A_LEFT_PERSONAL_REGISTRATION');
-        $this->render('register', array('model' => $user));
-        ;
+        $this->render('register', array(
+            'model' => $user,
+            'registerText' => $registerText,
+            'isWordpanel' => $isWordpanel,
+        ));
     }
 
     public function actionLogout() {
         Yii::app()->user->logout();
-        Debug::staticRun(array(Yii::app()->user, 'exit'));
         $this->redirect($_SERVER['HTTP_REFERER']);
     }
 
@@ -975,7 +1048,7 @@ class SiteController extends MyController {
         return $result;
     }
 
-    public function actionAdvSearch($e = 0, $cid = 0, $title = '', $author = '', $perf = '', $publisher = '', $l = '', $only = false, $year = '', $page = 0) {
+    public function actionAdvSearch($e = 0, $cid = 0, $title = '', $author = '', $perf = '', $publisher = '', $l = '', $only = false, $year = '', $page = 0, $director = '') {
         $this->_checkUrl(array());
 
         $page = intVal($page);
@@ -990,17 +1063,17 @@ class SiteController extends MyController {
                 $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
                 $refererParams = $request->getParams();
                 if (!empty($refererParams['entity'])) $_GET['e'] = Entity::ParseFromString($refererParams['entity']);
-//                Debug::staticRun(array($e, $_GET['e'], $request->getParams()));
            }
         }
 
-        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e]);
+        $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e], $director);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
     }
 
     public function actionForgot() {
-        $this->breadcrumbs[] = Yii::app()->ui->item('A_TITLE_REMIND_PASS');
+        $this->_checkUrl(array());
+        $this->breadcrumbs[] = Yii::app()->ui->item('FORGOT_PASS_PATH');
 
         $model = new User('forgot');
         $this->PerformAjaxValidation($model, 'remind-form');
@@ -1071,6 +1144,19 @@ class SiteController extends MyController {
         $tree = $c->GetCategoriesTree($entity);
         $ret = array();
         $this->formatTree($tree, 0, $ret);
+        $this->ResponseJson($ret);
+    }
+
+    public function actionlangslistjson() {
+        $eid = (int)Yii::app()->getRequest()->getParam('eid');
+        $cid = (int)Yii::app()->getRequest()->getParam('cid');
+        $eid = (Entity::IsValid($eid)) ? $eid : Entity::BOOKS;
+        if ($cid < 0) $cid = 0;
+
+        $langs = ProductLang::getLangs($eid, $cid, false);
+        unset($langs[0]);
+        $ret = [];
+        foreach ($langs as $id=>$title) $ret[] = array('ID'=>$id, 'Name'=>$title);
         $this->ResponseJson($ret);
     }
 
@@ -1165,21 +1251,11 @@ class SiteController extends MyController {
             return $this->_keyPrefix = md5('Yii.' . get_class($this) . '.' . Yii::app()->getId());
     }
 
-    function actionGGfilter($entity = 10, $cid = 0, $author = '0', $avail = '0', $ymin = '0', $ymax = '0',
-                            $izda = '0', $seria = '0', $min_cost = '0', $max_cost = '0', $binding = '0', $langsel = '',
-                            $langVideo = '0', $formatVideo = '0', $subtitlesVideo = '0') {
-
-        /* Строка урл: /site/ggfilter/entity/10/cid/0/author/4758/avail/1/ymin/2008/ymax/2018/izda/18956/seria/1290/min_cost/1000/max_cost/9000/ */
-
-        $_GET['sort'] = (($_POST['sort']) ? $_POST['sort'] : SortOptions::GetDefaultSort());
-        if (isset($_GET['entity'])) $entity = $_GET['entity'];
-        if (isset($_GET['entity_val'])) $entity = $_GET['entity_val'];
-
-        $data = FilterHelper::getFiltersData($entity, $cid);
+    function actionGGfilter() {
+        $entity = $_POST['entity_val'];
+        $cid = $_POST['cid_val'];
+        $data = $_POST;
         FilterHelper::setFiltersData($entity, $cid, $data);
-
-        $entity = $data['entity'];
-        $cid = $data['cid'];
 
         $cat = new Category();
 
@@ -1188,8 +1264,8 @@ class SiteController extends MyController {
         $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
         $paginator->itemCount = $totalItems;
 
-        $entity = $data['entity'];
-        $cid = $data['cid'];
+//        $entity = $data['entity'];
+//        $cid = $data['cid'];
 
         $sort = 0;
         if (isset($_GET['sort'])) $sort = $_GET['sort'];

@@ -50,7 +50,7 @@ return array(
 		'level_1'=>'prenumeration',
 		'level_2'=>array(
 			'categories'=>'kategorier',
-			'types'=>'typ-av-utgåva',
+			'types'=>'typ-av-utgava',
 			'gift'=>'som-gava',
 		),
 	),
@@ -69,7 +69,7 @@ return array(
 		),
 	),
 	'printed'=>array(
-		'level_1'=>'souvenirer',
+		'level_1'=>'andra',
 		'level_2'=>array(
 			'categories'=>'kategorier',
 			'publishers'=>'tillverkare',
@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'losenordaterstallning',
 	'delivery'=>'leverans',
 	'news'=>'nyheter',
+	'certificate'=>'presentkort',
 
 
 	'offers'=>'rekommendationer',
@@ -118,7 +119,7 @@ return array(
 	'for-lib'=>'specialerbjudanden-for-bibliotek',
 	'for-uni'=>'specialerbjudanden-for-larare',
 	'for-fs'=>'specialerbjudanden-utan-porto',
-	'for-alle2'=>'specialerbjudanden-for-2-€',
+	'for-alle2'=>'specialerbjudanden-for-2-euro',
 
 	'bookshelf'=>'bokhylla',
 );

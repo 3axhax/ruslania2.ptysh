@@ -116,27 +116,32 @@ class MyController extends CController
         //if(empty($this->pageTitle))
         if (is_array($this->breadcrumbs)) {
             $title  = array();
-            foreach($this->breadcrumbs as $idx=>$data)
-            {
+            foreach($this->breadcrumbs as $idx=>$data) {
                 if(is_numeric($idx)) $title[] = $data;
                 else $title[] = $idx;
             }
-            if(empty($this->pageTitle))
-            {
-                $this->pageTitle = implode(' &gt; ', $title);
-                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
-                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+            if(empty($this->pageTitle)) {
+                $this->pageTitle = Seo_settings::get()->getTitle();
+                if (empty($this->pageTitle)) {
+                    $this->pageTitle = implode(' &gt; ', $title);
+                    if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                        $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                    }
+                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
                 }
-                $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
             }
             if (empty($this->pageDescription)) {
-                $this->pageDescription = implode(' &gt; ', $title);
-                if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
-                    $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                $this->pageDescription = Seo_settings::get()->getDescription();
+                if (empty($this->pageDescription)) {
+                    $this->pageDescription = implode(' &gt; ', $title);
+                    if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
+                        $this->pageDescription .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
+                    }
                 }
             }
             if (empty($this->pageKeywords)) {
-                $this->pageKeywords = implode(' ', $title);
+                $this->pageKeywords = Seo_settings::get()->getKeywords();
+                if (empty($this->pageKeywords)) $this->pageKeywords = implode(' ', $title);
             }
         }
         return true;
@@ -155,6 +160,8 @@ class MyController extends CController
         }
 				
         $this->sid = $session['shopcartkey'];
+        $this->getTduid();
+        $test = Yii::app()->request->cookies['TRADEDOUBLER']->value;
         return true;
     }
 
@@ -336,10 +343,10 @@ class MyController extends CController
     protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
 //        $this->redirect($realPage . $query, true, 301);
 //        return;
-
+        $m = [];
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
+        elseif (preg_match("/\/(\d+)\/?$/", $oldPage, $m)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
         elseif (mb_substr($oldPage, -1, null, 'utf-8') !== '/') $oldPage = $oldPage . '/';
-        elseif (preg_match("/(\d+)\/?$/", $oldPage)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
 
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
 
@@ -349,15 +356,26 @@ class MyController extends CController
             if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
             else $entity = Entity::ParseFromString($entity);
             $idName = HrefTitles::get()->getIdName($entity, $route);
-            Debug::staticRun(array($idName, $data));
             if (!empty($idName)&&!empty($data[$idName])) {
                 $data['__useTitleParams'] = true;
-                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], Yii::app()->language) as $oldTitle) {
+                $language = Yii::app()->getRequest()->getParam('language', Yii::app()->language);
+                /*if ($language <> Yii::app()->language) */$data['__langForUrl'] = $language;
+                foreach (HrefTitles::get()->getOldNames($entity, $route, $data[$idName], $language) as $oldTitle) {
                     $data['title'] = $oldTitle;
                     $path = Yii::app()->createUrl($route, $data);
                     if ($path === $oldPage) $this->redirect($realPage . $query, true, 301);
                 }
             }
+        }
+    }
+
+    protected function getTduid () {
+        if (!empty($_GET["tduid"]))
+        {
+            $cookie = new CHttpCookie('TRADEDOUBLER', $_GET["tduid"]);
+            $cookie->expire = time() + (60*60*24*365);
+            Yii::app()->request->cookies['TRADEDOUBLER'] = $cookie;
+            Yii::app()->session['TRADEDOUBLER'] = $_GET["tduid"];
         }
     }
 

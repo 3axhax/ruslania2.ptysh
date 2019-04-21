@@ -65,4 +65,20 @@ class Currency
         $newPrice = round($newPrice, 1);
         return $newPrice;
     }
+
+    /**
+     * @param $price
+     * @param $priceCurrency int текущая валюта
+     * @param $toCurrency int новая валюта
+     * @return float
+     */
+    static function convertToCurrency($price, $priceCurrency, $toCurrency) {
+        if ($priceCurrency == $toCurrency) return $price;
+        if (($toCurrency ==  Currency::EUR) || empty($toCurrency)) return self::ConvertToEUR($price, $priceCurrency);
+
+        $rates = self::GetRates();
+        $rate = $rates[$priceCurrency];
+        $toRate = $rates[$toCurrency];
+        return round(($price / $rate) * $toRate, 1);
+    }
 }

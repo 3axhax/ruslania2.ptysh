@@ -9,24 +9,23 @@
 KnockoutForm::RegisterScripts();
 
 
-$url = explode('?', $_SERVER['REQUEST_URI']);
-$url = trim($url[0], '/');
-
-$ex = explode('?', $url);
-
-$ex = explode('/', $ex[0]);
-
-$url = $ex;
+$ctrl = Yii::app()->getController()->id;
 
 ?>
             <hr />
+			
+<div class="opacity alerthtml" onclick="$('.alerthtml').hide();"></div>			
+
+
+
+			
 <div class="container cabinet">
 			
 			<div class="row">
 
-			<div class=" <? if (!in_array('korzina',$url)) : ?>span10<? else : ?><? endif; ?>">
+			<div class=" <? if ($ctrl != 'cart') : ?>span10<? else : ?><? endif; ?>">
 			
-			<h1 class="title">Корзина</h1>
+			<h1 class="title"><?=$ui->item('A_NEW_CART')?></h1>
             <div id="cart">
 			
 				<p style="display: none"data-bind="visible: CartItems().length > 0">
@@ -41,20 +40,35 @@ $url = $ex;
                 <!-- content -->
                 <form action="/cart/doorder" method="get" onsubmit="return false;">
                 <div data-bind="visible:  CartItems().length > 0">
+
+                    <?php if (Yii::app()->user->isGuest) { ?>
+
+                        <a href="<?= Yii::app()->createUrl('cart/variants')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
+                        </a>
+
+                        <?php
+
+                    } else {
+                        ?>
+                        <a href="<?= Yii::app()->createUrl('cart/doorder')?>" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                            <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
+                        </a>
+                        <?
+                    }
+
+                    ?>
+
+                    
+
                     
                     
-                    <a href="/cart/variants" class="order_start" style="background-color: #5bb75b; float: right; margin-top: -65px;" data-bind="visible: CartItems().length > 0 &amp;&amp; !AjaxCall() &amp;&amp; TotalVAT() > 0">
-                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;">Оформить заказ</span>
-                                </a>
-                    
-                    
-                    <table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1 items_tbl"
+                    <table width="100%" cellspacing="1" cellpadding="5" border="0" class="cart1 items_tbl rows_number"
                            style="margin-bottom: 10px; margin-top: 15px;">
                         <thead>
                         <tr>
-                            <th valign="middle"
-                                class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
-								<th valign="middle" align="center" class="cart1header1">Наличие<?//=$ui->item('SHIPPING'); ?></th>
+                            <th valign="middle" class="cart1header1"><?= $ui->item("CART_COL_TITLE"); ?></th>
+								<th valign="middle" align="center" class="cart1header1"><?=$ui->item('CARTNEW_TITLE_TABLE_AVAILABILITY')?><?//=$ui->item('SHIPPING'); ?></th>
                             <!--<th valign="middle" align="center"  style="width:70px;"
                                 class="cart1header1"><?= $ui->item("Price"); ?></th>-->
                             <th valign="middle" align="center"  style="width:80px;"
@@ -68,19 +82,17 @@ $url = $ex;
                         </tr>
                         </thead>
                         <tbody class="items"><!-- ko foreach: CartItems -->
-                        <?php foreach($CartItems as $i=>$cart): ?>
+                        <?php foreach($CartItems as $i=>$cart): 
+						
+						
+						
+						?>
                         <tr<?php if (!empty($i)): ?> class="js_ko_not"<?php endif; ?>>
-                            <td valign="middle" class="cart1contents1">
+                            <td valign="middle" class="cart1contents1 index_number">
                                 <table>
 								<tr>
 								<td>
                                     <span class="entity_icons"><i class="fa e<?= $cart['Entity'] ?>" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
-<?php /*
-								<img width="31" height="31" align="middle"
-                                     alt="<?= htmlspecialchars($cart['Title']) ?>" style="vertical-align: middle"
-                                     data-bind="attr: { alt: Title}"
-                                     src="/pic1/cart_ibook.gif">
-*/ ?>
 								</td>
 								<td style="padding-left: 20px;">
                                     <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
@@ -96,40 +108,62 @@ $url = $ex;
 							 <td valign="middle" align="center" class="cart1contents1">
                 <span data-bind="text: AvailablityText"><?= htmlspecialchars($cart['AvailablityText']) ?></span>
             </td>
-                           <!-- <td valign="middle" nowrap="true" align="center" class="cart1contents1 center">
-                                <span data-bind="text: $root.ReadyPriceStr($data), visible: DiscountPercent() == 0"><?= ((float)$cart['DiscountPercent']>0)?'':$cart['ReadyPriceStr'] ?></span>
-                                <div data-bind="visible: DiscountPercent() > 0">
-                                    <s data-bind="text: PriceOriginal"><?= ((float)$cart['DiscountPercent']>0)?$cart['PriceOriginal']:'' ?></s><br/>
-                                    <span data-bind="text: $root.ReadyPriceStr($data)"><?= ((float)$cart['DiscountPercent']>0)?$cart['ReadyPriceStr']:'' ?></span>
-                                </div>
-
-                            </td>-->
-<!--                            <td align="center" class="center cart1contents1">-->
-<!--                                <span data-bind="text: VAT"></span>%-->
-<!--                            </td>-->
-                            <td valign="middle" align="center" class="cart1contents1" nowrap>
-                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><img src="/new_img/cart_minus.png" class="grayscale"/></a>
+                            <td valign="middle" align="center" class="cart1contents1 minus_plus" nowrap>
+                               <a href="javascript:;" style="margin-right: 9px;" data-bind="event : { click : $root.QuantityChangedMinus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"/> */?></a>
                                 <input name="quantity[<?= (int) $cart['ID'] ?>]" type="text" size="3" class="cart1contents1 center" value="<?= (int) $cart['Quantity'] ?>" style="margin: 0;" data-bind="value: Quantity, event : { blur : $root.QuantityChanged }, id : 'field'">
                                 <div style="width:12px;float:left;" data-bind="visible: noUseChangeQuantity() > 0">&nbsp;</div>
-                                <a href="javascript:;" style="margin-left: 9px;"><img src="/new_img/cart_plus.png" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"/></a>
+                                <a href="javascript:;" style="margin-left: 9px;" data-bind="event : { click : $root.QuantityChangedPlus }, visible: noUseChangeQuantity() == 0"><?php /*<img src="/new_img/cart_plus.png"/>*/ ?></a>
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="entity[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Entity'] ?>">
                                 <input<?php if (empty($i)): ?> class="js_ko_not"<?php endif; ?> type="hidden" name="type[<?= (int) $cart['ID'] ?>]" value="<?= (int) $cart['Price2Use'] ?>">
                             </td>
                             <td valign="middle" nowrap="" align="center" class="cart1contents1">
-                                <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
-                                <?=Currency::ToSign(Yii::app()->currency); ?>
+                                <div data-bind="visible: DiscountPercent() > 0, text: PriceOriginal()" style="text-decoration: line-through;<?php if (empty($cart['DiscountPercent'])): ?> display: none;<?php endif; ?>">
+                                    <?= $cart['PriceOriginal'] ?>
+                                </div>
+                                <div>
+                                    <span data-bind="text: $root.LineTotalVAT($data)"><?= $cart['LineTotalVAT'] ?></span>
+                                    <?=Currency::ToSign(Yii::app()->currency); ?>
+                                </div>
                             </td>
-                           <!-- <td valign="middle" align="center" class="cart1contents1">
-                                <a href="javascript:;" data-bind="click: $root.ToMark"><img src="/new_img/add_mark.png" /></a>
-                            </td> -->
                             <td valign="middle" align="center" class="cart1contents1">
-                                <a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }"><img src="/new_img/del_cart.png" /></a>
+                                <a href="javascript:;" onclick="$('.alerthtml',$(this).parent()).show(); $('.opacity.alerthtml').show(); $('.box_btns .btn_yes').focus()"><img src="/new_img/del_cart.png" /></a>
+								
+								<div class="lang_yesno_box alerthtml" style="display: none;margin-left: -181px;width: 220px;">
+
+	<div style="text-align: center;"><?=$ui->item('ARE_YOU_SURE'); ?></div>
+	<div class="box_btns">
+		<a href="javascript:;" data-bind="click: function(data, event) { cvm.RemoveFromCart(data, <?=Cart::TYPE_ORDER; ?>); }" class="btn_yes"><?= $ui->item('MSG_YES') ?></a> <a href="javascript:;" onclick="$('.alerthtml').hide(); " class="btn_no"><?= $ui->item('MSG_NO') ?></a>
+	</div>
+
+</div>
+								
                             </td>
                         </tr>
+						
+						<? $weight = $weight + $cart['UnitWeight'];?>
+						
                         <?php endforeach; ?>
                         <!-- /ko --></tbody>
                         <tr class="footer">
-                            <td align="right" class="cart1header2" colspan="6"><div class="summa"><?=$ui->item('CART_COL_TOTAL_PRICE'); ?>, <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+                            <td align="right" class="cart1header2" colspan=
+							"6">
+							
+							<?//=$weight?>
+							
+							<div class="summa">
+							
+							<? if ($weight > 0) : ?>
+							
+							<?
+							echo $ui->item('CART_COL_TOTAL_PRICE'); ?>, <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+							
+							<? else : ?>
+							
+							<?
+							echo $ui->item('CART_COL_TOTAL_PRICE2'); ?> <span data-bind="text: IsVATInPrice()"><?= $CartItems->isVATInPrice() ?></span>:
+							
+							<? endif; ?>
+							
 								<span style="font-weight: bold;" data-bind="visible: !AjaxCall()">
                                         <span data-bind="text: TotalVAT"><?= $CartItems->totalVAT() ?></span>
                                         <?= Currency::ToSign(Yii::app()->currency); ?>
@@ -150,25 +184,40 @@ $url = $ex;
                             
                         </tr>
                         <tr>
-                            <td style="padding-left: 0;"> <a href="/" style="float: left; color: #ff0000;">Продолжить покупки</a></td>
+						
+							<? 
+				
+				/*$url_ref = end(explode('/', trim($_SERVER['HTTP_REFERER'], '/')));
+				
+				$arr_cart_url = array('variants', 'noregister', 'doorder');
+				
+				if (in_array($url_ref, $arr_cart_url)) {
+					
+					$_SERVER['HTTP_REFERER'] = '/';
+					
+				}*/
+
+				?>
+						
+                            <td style="padding-left: 0;"> <a href="<?= $hrefContinueShopping ?>" style="float: left; color: #ff0000; font-size: 14px;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
                             <td colspan="7" class="order_start_box" class="cart1header2" align="right">
-                            
-                            <?php if (Yii::app()->user->isGuest) { ?>
-                           
-                                <a href="/cart/variants" class="order_start" style="background-color: #5bb75b" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
-                                </a>
-                                 
-                                <?php
-                                
+
+                                <?php if (Yii::app()->user->isGuest) { ?>
+
+                                    <a href="<?= Yii::app()->createUrl('cart/variants')?>" class="order_start" style="background-color: #5bb75b;" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
+                                    </a>
+
+                                    <?php
+
                                 } else {
-                                   ?>
-                                   <a href="/cart/doorder" class="order_start" style="background-color: #5bb75b" data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
-                                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?= $ui->item("CONFIRM_ORDER"); ?></span>
-                                </a>
-                                   <? 
+                                    ?>
+                                    <a href="<?= Yii::app()->createUrl('cart/doorder')?>" class="order_start" style="background-color: #5bb75b; " data-bind="visible: CartItems().length > 0 && !AjaxCall() && TotalVAT() > 0">
+                                        <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING_BTN');?></span>
+                                    </a>
+                                    <?
                                 }
-                                
+
                                 ?>
                                 
                             </td>
@@ -200,7 +249,7 @@ $url = $ex;
         </div>
 
                             
-                             <? if (!in_array('korzina',$url)) : ?>
+                             <? if ($ctrl != 'cart') : ?>
                             
                             
                 <div class="span2">
@@ -221,27 +270,20 @@ $url = $ex;
     $groups = $o->GetItemsAll(999);
     
     //echo var_dump($groups);
+	
+	if ( $groups ) {
+	
     ?>
     
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.more_goods ul').slick({
-                lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
-            });
-        });
-    </script>
-
 <div class="news_box" style="margin-top: 60px;">
 
 
 		<div class="">
 			<div class="title">
-				Добавьте выгодные предложения в корзину      
+				<?=$ui->item('CARTNEW_ADD_CART_2EURO_TITLE')?>      
 				<div class="pult">
-					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><img src="/new_img/btn_left_news.png" alt=""></a>
-					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><img src="/new_img/btn_right_news.png" alt=""></a>
+					<a href="javascript:;" onclick="$('.news_box .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span></a>
+					<a href="javascript:;" onclick="$('.news_box .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span></a>
 				</div>
 			</div>
 		</div>
@@ -266,14 +308,17 @@ $url = $ex;
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank"><img title="'.ProductHelper::GetTitle($product, 'title', 42).'" alt="'.ProductHelper::GetTitle($product, 'title', 42).'" src="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank"><img alt="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" src="'.Picture::Get($product, Picture::SMALL).'" data-lazy="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
     </div>
  
-	<div class="title_book"><a href="'.$url.'" title="'.ProductHelper::GetTitle($product, 'title', 42).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
+	<div class="title_book"><a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
 		
 		if ($product['isbn']) {
 			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';
 		}
+    else {
+    echo '<div style="visibility: hidden;">ISBN:</div>';
+    }
 		
 		if ($product['year']) {
 			
@@ -289,13 +334,12 @@ $url = $ex;
 		}
 		
 		$price = DiscountManager::GetPrice(Yii::app()->user->id, $product);
-	
 		echo '
         
     	<div class="cost">';
 		if (!empty($price[DiscountManager::DISCOUNT])) :
             echo '<span class="without_discount">'.ProductHelper::FormatPrice($price[DiscountManager::BRUTTO]).'
-            </span>&nbsp;<span class="price with_discount">
+            </span>&nbsp;<span class="price with_discount"' . (($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL)?' style="color: #42b455;"':'') . '>
                 '.ProductHelper::FormatPrice($price[DiscountManager::WITH_VAT]).'
             </span>';
 
@@ -325,7 +369,7 @@ $url = $ex;
 </div>
 </div>
 
-
+<? } ?>
 
 <script type="text/javascript">
 
@@ -417,8 +461,13 @@ $url = $ex;
 
         self.RemoveFromCart = function(item, type)
         {
-            if(confirm('<?=$ui->item('ARE_YOU_SURE'); ?>'))
-            {
+			
+			//$('.opacity, .lang_yesno_box').show();
+			
+			
+			//return 0;
+			
+           
                 var obj =
                 {
                     entity : item.Entity(),
@@ -444,7 +493,10 @@ $url = $ex;
                            // update_header_cart();
                         }
                     });
-            }
+					
+					
+					$('.alerthtml').hide();
+            
         };
 
         self.UsingMinPrice = ko.observable(false);
@@ -490,18 +542,27 @@ $url = $ex;
             };
             post[csrf[0]] = csrf[1];
 
-            $.post('<?=Yii::app()->createUrl('cart/')?>changequantity', post, function (json)
-            {
-                if(json.changed)
+            $.post('<?=Yii::app()->createUrl('cart/changequantity')?>', post, function (json) {
+                if(json.changed) {
                     data.InfoField(json.changedStr);
-                else
+                    if (json.origQuantity == 0) {
+                        $(event.target).closest('tr').find('.alerthtml').show();
+                        $('.opacity.alerthtml').show();
+                    }
+                }
+                else {
                     data.InfoField('');
+                }
 //                console.log(json);
                 data.Quantity(json.quantity);
 				//update_header_cart();
             }, 'json');
 			
 			}
+            else {
+                $(event.target).closest('tr').find('.alerthtml').show();
+                $('.opacity.alerthtml').show();
+            }
         };
 		
 		self.QuantityChangedPlus = function (data, event)
@@ -611,10 +672,21 @@ $url = $ex;
     //        });
  
     //}
-	
 
+    $(document).ready(function () {
+        scriptLoader('/new_js/slick.js').callFunction(function() {
+            $('.more_goods ul').slick({
+                lazyLoad: 'ondemand',
+                slidesToShow: 4,
+                slidesToScroll: 4
+            }).on('lazyLoadError', function(event, slick, image, imageSource){
+                image.attr('src', '<?= Picture::srcNoPhoto() ?>');
+            });
+        });
+    });
 
 </script>
 
 
 <div style="height: 20px;"></div>
+	

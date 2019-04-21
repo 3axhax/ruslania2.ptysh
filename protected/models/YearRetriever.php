@@ -93,13 +93,16 @@ class YearRetriever
         if (empty($entities[$entity])) return array();
         if ($entities[$entity]['site_table'] == 'pereodics_catalog') return array();
 
-        $sql = ''.
-            'select t.year '.
+/*        $sql = ''.
+            'select t.year, max(t.avail_for_order) avail_for_order '.
             'from `' . $entities[$entity]['site_table'] . '` t '.
             'where (t.year is not null) and (t.year > 0) '.
             'group by t.year '.
+            'having (avail_for_order > 0) '.
             'order by t.year '.
-        '';
+        '';*/
+        if (!Entity::checkEntityParam($entity, 'years')) return array();
+        $sql = 'select `year` from items_years where (eid = ' . (int) $entity . ') order by `year`';
         return Yii::app()->db->createCommand($sql)->queryColumn();
     }
 
@@ -107,10 +110,11 @@ class YearRetriever
         if (!Entity::checkEntityParam($entity, 'yearreleases')) return array();
 
         $sql = ''.
-            'select t.release_year '.
+            'select t.release_year, max(t.avail_for_order) avail_for_order '.
             'from `' . Entity::GetEntitiesList()[$entity]['site_table'] . '` t '.
             'where (t.release_year is not null) and (t.release_year > 0) '.
             'group by t.release_year '.
+            'having (avail_for_order > 0) '.
             'order by t.release_year '.
             '';
         return Yii::app()->db->createCommand($sql)->queryColumn();

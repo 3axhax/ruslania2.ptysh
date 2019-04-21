@@ -2,6 +2,7 @@
 
 class MyUrlManager extends CUrlManager
 {
+    public $appendParams=false;
     public $urlRuleClass = 'MyUrlRule';
 
     public static function RewriteCurrent($controller, $lang, $sel = false) {
@@ -86,6 +87,18 @@ class MyUrlManager extends CUrlManager
         $rawPathInfo=$request->getPathInfo();
         $pathInfo=$this->removeUrlSuffix($rawPathInfo,$this->urlSuffix);
         $result = parent::parseUrl($request);
+//        $myIp = array('92.55.47.205', '91.79.174.141', '183.89.33.58', '217.118.83.225', '217.118.83.201', '217.118.83.243');
+//        if (in_array((string)getenv('REMOTE_ADDR'), $myIp)) {
+            //что бы пока не сделано не ломать то, что есть
+            $route = preg_replace("/^\/+/ui", '', $result);
+            $route = explode('/', $route);
+            $buyActions = array('noregister', 'doorder');
+            if (($route[0] === 'cart')&&(!empty($route[1]))&&in_array($route[1], $buyActions)) {
+                return 'buy/doorder';
+//                $route[0] = 'buy';
+//                return implode('/', $route);
+            }
+//        }
         if ($pathInfo === $result) {
             HrefTitles::get()->redirectOldPage($pathInfo);
         }
@@ -155,6 +168,11 @@ class MyUrlRule extends CUrlRule {
         unset($params['lang']);
 
         if ($language === 'rut') $params['language'] = $language;
+        $currency = 0;
+        if (!empty($params['currency'])) {
+            $currency = (int) $params['currency'];
+            unset($params['currency']);
+        }
         $url = parent::createUrl($manager,$route,$params,$ampersand);
 
         if ($url !== false) {
@@ -168,6 +186,11 @@ class MyUrlRule extends CUrlRule {
             }
 
             if (!empty($language)&&empty($params['language'])) $url = $language . '/' . $url;
+            if ($currency > 0) {
+                if (mb_strpos($url, '?', null, 'utf-8') === false) $url .= '?';
+                else $url .= '&';
+                $url .= 'currency=' . $currency;
+            }
         }
         return $url;
     }
@@ -196,11 +219,11 @@ class MyUrlRule extends CUrlRule {
      * @return bool|string
      */
     private function _parseReferer($manager, MyRefererRequest $request, $pathInfo,$rawPathInfo) {
-        $urlRule = new EntityUrlRule();
+        $urlRule = new EntityUrlRule($request->getLangFromUrl());
         $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
         if ($result !== false) return $result;
 
-        $urlRule = new StaticUrlRule();
+        $urlRule = new StaticUrlRule($request->getLangFromUrl());
         $result = $urlRule->parseUrl($manager, $request, $pathInfo, $rawPathInfo);
         if ($result !== false) return $result;
 

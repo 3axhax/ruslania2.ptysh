@@ -111,6 +111,7 @@ return array(
 	'forgot'=>'password-recovery',
 	'delivery'=>'delivery',
 	'news'=>'news',
+	'certificate'=>'gift_certificate',
 
 
 	'offers'=>'recommendations',
@@ -118,7 +119,7 @@ return array(
 	'for-lib'=>'special-offers-for-libraries',
 	'for-uni'=>'special-offers-for-teachers',
 	'for-fs'=>'special-offers-without-postage',
-	'for-alle2'=>'special-offers-for-2-€',
+	'for-alle2'=>'special-offers-for-2-euro',
 
 	'bookshelf'=>'bookshelf',
 );

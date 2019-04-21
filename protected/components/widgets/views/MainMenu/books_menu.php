@@ -1,6 +1,6 @@
 <?php /*Created by Кирилл (05.09.2018 19:32)*/ ?>
-<div class="click_arrow"></div>
 <a class="dd" href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::BOOKS))); ?>"><?= Yii::app()->ui->item("A_GOTOBOOKS"); ?></a>
+<div class="click_arrow"></div>
 <div class="dd_box_bg list_subcategs" style="left: 0;">
 	<div class="span10">
 		<ul id="books_menu">

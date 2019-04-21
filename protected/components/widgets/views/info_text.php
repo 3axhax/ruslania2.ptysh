@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (27.09.2018 21:48)*/ ?>
-<span style="display: none;" class="text" id="js_container-alert_text"><?= $text ?></span>
+<span style="display: none;" class="text" id="js_container-alert_text"><span class="fa"></span><?= $text ?></span>
 <script>
 	$(document).ready(function () {
 		var refElem = document.getElementById('js_container-alert_close');

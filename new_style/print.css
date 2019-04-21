@@ -1,0 +1,21 @@
+@media print {
+.bordered {
+    margin-top: 10px;
+    padding: 5px 5px 5px 5px;
+    border: 1px #ddd solid;
+    border-radius: 4px;
+}
+.printed_btn {display: none;}
+.info_order div.row { margin: 4px 0 4px 0; }
+
+.info_order div { font-size: 13px; }
+.info_order div span.span1 { display: inline-block; width: 200px; }
+.info_order div div.span11 {
+    width: 400px;
+    display: inline-block;
+    margin: 0;
+    font-weight: bold;
+}
+.mbt10 {margin-bottom: 10px;}
+table.items_orders { margin-top: 25px; }
+}

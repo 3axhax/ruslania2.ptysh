@@ -51,7 +51,7 @@ return array(
 		'level_2'=>array(
 			'categories'=>'kategorii',
 			'types'=>'tip-izdanija',
-			'gift'=>'v-podarok',
+			'gift'=>'podarit-podpisku',
 		),
 	),
 	'video'=>array(
@@ -109,9 +109,9 @@ return array(
 	'me'=>'akkaunt',
 	'advsearch'=>'poisk',
 	'forgot'=>'vosstanovlenie-parolja',
-	'delivery'=>'dostavka',
+	'delivery'=>'delivery',
 	'news'=>'novosti',
-
+	'certificate'=>'podarochnyj_sertifikat',
 
 	'offers'=>'rekomendatsii',
 	'for-firms'=>'specialnye-predlozhenija-dlja-firm',

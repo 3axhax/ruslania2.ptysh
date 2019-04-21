@@ -5,9 +5,18 @@ $lang = Yii::app()->language;
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
         <div class="span10 listgoods" style="float: right;">
-
-            <h1 class="titlename"><?=((!$cid) ? '' . Entity::GetTitle($entity) : $ui->item('A_NEW_GOODS_CAT_TITLE') . ': ' . $title_cat); ?><?php if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1): ?> &ndash; <?= $ui->item('PAGES_N', $page) ?> <?php endif; ?></h1>
-			
+            <?php /*$this->widget('TradedoublerPixel', array(
+                'orderValue' => '1.00',
+                'currency' => 'EUR',
+                'orderNumber' => '12345',
+            ));*/
+            ?>
+<?php $h1 = Seo_settings::get()->getH1();
+if (empty($h1)): ?>
+    <h1 class="titlename"><?=((!$cid) ? '' . Entity::GetTitle($entity) : $title_cat); ?><?php if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1): ?> &ndash; <?= $ui->item('PAGES_N', $page) ?> <?php endif; ?></h1>
+<?php else: ?>
+    <h1 class="titlename"><?= $h1 ?></h1>
+<?php endif; ?>
 			<? if ($entity == 100) : ?>
 			Ведётся оптимизация раздела...
 			<? else : ?>
@@ -19,6 +28,7 @@ $lang = Yii::app()->language;
                         'entity' => $entity,
                         'title_cat' => $title_cat,
                         'filter_data' => $filter_data,
+                        'total' => $total,
                         'cid' => $cid)); ?>
             </div>
 
@@ -68,16 +78,6 @@ $lang = Yii::app()->language;
 			<?//=sprintf($ui->item('X items here'), $total)?>
 			</div>
 
-            <?php
-                if (isset($presentation)) {
-                    preg_match('/([\w,\s-]+)\.[A-Za-z]{3}/', $presentation, $f);
-                    $fileName = $f[1];
-                    if (file_exists(__DIR__.'/authors/'.$fileName.'.php')) {
-                        $this->renderPartial('/entity/authors/' . $fileName);
-                    }
-                }
-                ?>
-
             <ul class="items">
                 <?php $i=0; foreach ($items as $item) : $i++;?>
                     <?php
@@ -100,7 +100,11 @@ $lang = Yii::app()->language;
             <?php if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
             </ul>
 			<? endif; ?>
-			
+            <?php if (isset($presentation)):
+                $fileText = str_replace('ruslania.com/templates-html/', 'ruslania.com/pictures/templates-html/', file_get_contents($presentation));
+                ?>
+                <div class="description_container"><?= $fileText ?></div>
+            <?php endif; ?>
 		</div>
         <div class="span2">
 <?php $this->widget('LinksToList', array('entity'=>$entity)); ?>

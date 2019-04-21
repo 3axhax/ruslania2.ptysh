@@ -2,11 +2,11 @@
 
 <div class="img" style="position: relative">
     <?php $this->renderStatusLables($item['status'], $size = '-sm', true)?>
-    <a href="<?=$url; ?>"><img src="<?=Picture::Get($item, Picture::SMALL); ?>" alt="" /></a>
+    <a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>"  фде="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" /></a>
  </div>
  
     <div class="title_book">
-        <a href="<?=$url; ?>" title="<?=ProductHelper::GetTitle($item, 'title'); ?>">
+        <a href="<?=$url; ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>">
                 <?=ProductHelper::GetTitle($item, 'title'); ?><span class="gradient_link"></span></a>
 
     </div>
@@ -75,7 +75,7 @@
             <span class="without_discount">
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::BRUTTO]); ?>
                 </span>&nbsp;
-            <span class="price with_discount">
+            <span class="price with_discount"<?php if ($item['priceData'][DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>>
                     <?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITH_VAT]); ?><?= $item['priceData']['unit'] ?>
                 </span>
         <?php else : ?>
@@ -84,16 +84,36 @@
                 </span>
         <?php endif; ?>
 	</div>
-    <div class="nds"><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $item['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
+    <div class="nds"<?php if($item['entity'] == Entity::PERIODIC):?> style="display: none;" <?php endif; ?>><?= ProductHelper::FormatPrice($item['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $item['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 <?php endif; ?>
     <?php if ($entity != Entity::PERIODIC):?>
                     <div class="addcart">
-                        <a class="cart-action" data-action="add" data-entity="<?= $item['entity']; ?>"
+					
+					<?
+					
+					$sCount = Cart::getCountCartItem($item['id'], $item['entity'], $this->uid, $this->sid);
+					
+					if ($sCount > 0) :
+					?>
+					<a class="fa cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;"  style="width: 132px;">
+                        <span><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
+                    </a>
+					
+					<? else : ?>
+					
+					<a class="cart-action add_cart_plus list_cart cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>"
                data-id="<?= $item['id']; ?>" data-quantity="1"
-               href="javascript:;" style="width: 132px;"><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></a>
+               href="javascript:;" style="width: 132px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+					<? endif; ?>
+					
+                      
+			   
+			   
+			   
+			   
                     </div>
     <?php else:?>
         <div class="more">
-            <a href="<?=$url?>"><?=$ui->item('A_NEW_MORE3');?></a>
+            <a class="fa" href="<?=$url?>"><span><?=$ui->item('A_NEW_MORE3');?></span></a>
     </div>
     <?php endif;?>

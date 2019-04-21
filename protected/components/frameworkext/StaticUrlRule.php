@@ -34,7 +34,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		if (($language === null)||!in_array($language, Yii::app()->params['ValidLanguages'])) $language = Yii::app()->language;
 		$this->_language = $language;
 
-		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'].$language.'/urlTranslite.php';
+		$file = Yii::getPathOfAlias('webroot').Yii::app()->params['LangDir'] . $this->_language . '/urlTranslite.php';
 		if (file_exists($file)) {
 			foreach (include $file as $entityStr=>$urlNames) {
 				if ($entityId = Entity::ParseFromString($entityStr)) {}

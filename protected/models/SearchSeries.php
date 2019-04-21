@@ -37,7 +37,7 @@ class SearchSeries
                 'group by t.id '.
                 'limit ' . $limit.
             '';
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => $q . ';mode=boolean;filter=entity,' . $entity . ';limit=1000;maxmatches=1000;'));
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;filter=entity,' . $entity . ';limit=1000;maxmatches=1000;'));
 
 /*            $sql = 'SELECT tc.series_id, st.title_ru, st.title_rut, st.title_en, st.title_fi
             FROM (SELECT id, title_ru, title_rut, title_en, title_fi FROM '.$series_tbl.' 
@@ -128,4 +128,18 @@ class SearchSeries
         }
         return $series;
     }
+
+    function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
+        $condition = array($q, 'mode=boolean', 'filter=entity,' . $entity);
+        $condition['limit'] = 'limit=' . $limit;
+        $condition['maxmatches'] = 'maxmatches=' . $limit;
+        $sql = ''.
+            'select real_id '.
+            'from _se_series '.
+            'where (query=:condition)'.
+            '';
+        return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+    }
+
+
 }
