@@ -160,6 +160,7 @@ class MyController extends CController
         }
 				
         $this->sid = $session['shopcartkey'];
+        $this->getTduid();
         return true;
     }
 
@@ -364,6 +365,16 @@ class MyController extends CController
                     if ($path === $oldPage) $this->redirect($realPage . $query, true, 301);
                 }
             }
+        }
+    }
+
+    protected function getTduid () {
+        if (!empty($_GET["tduid"]))
+        {
+            $cookie = new CHttpCookie('TRADEDOUBLER', $_GET["tduid"]);
+            $cookie->expire = time() + (60*60*24*365);
+            Yii::app()->request->cookies['TRADEDOUBLER'] = $cookie;
+            Yii::app()->session['TRADEDOUBLER'] = $_GET["tduid"];
         }
     }
 
