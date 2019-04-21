@@ -5,12 +5,6 @@ $lang = Yii::app()->language;
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
         <div class="span10 listgoods" style="float: right;">
-            <?php /*$this->widget('TradedoublerPixel', array(
-                'orderValue' => '1.00',
-                'currency' => 'EUR',
-                'orderNumber' => '12345',
-            ));*/
-            ?>
 <?php $h1 = Seo_settings::get()->getH1();
 if (empty($h1)): ?>
     <h1 class="titlename"><?=((!$cid) ? '' . Entity::GetTitle($entity) : $title_cat); ?><?php if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1): ?> &ndash; <?= $ui->item('PAGES_N', $page) ?> <?php endif; ?></h1>
