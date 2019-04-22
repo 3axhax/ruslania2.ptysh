@@ -9,7 +9,7 @@ return array(
 			'publishers'=>'forlag',
 			'series'=>'serier',
 			'authors'=>'forfattarna',
-			'bindings'=>'omslag',
+			'bindings'=>'bandtyp',
 			'years'=>'ar',
 		),
 	),

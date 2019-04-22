@@ -237,6 +237,7 @@ Stripe.applePay.checkAvailability(function(available) {
             this.urlSubmit = options.urlSubmit;
 
             if (this.delivery_address) {
+                if (this.onlyPereodic) $(this.delivery_address).find('option[value="0"]').remove();
                 if (this.delivery_address.value == '0') {
                     //$('.delivery_people').show();
                 }

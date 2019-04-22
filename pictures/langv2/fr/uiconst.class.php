@@ -1016,7 +1016,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_MORE_ABOUTUS' => 'Plus sur nous.',
   'A_NEW_DESC_FOOTER' => 'Ruslania a été fondée en 1986 à Helsinki, en Finlande. Il s’agit d’une entreprise familiale finlandaise à 100%. <br/>Notre société est un pont culturel entre la Russie et l’Europe.<br/>',
   'A_NEW_VIEW_ALL_CATEGORY' => 'Afficher toutes les catégories',
-  'A_NEW_SETTINGS_FILTER' => 'Le filtre',
+  'A_NEW_SETTINGS_FILTER' => 'Filtre',
   'A_NEW_SEARCH_CAT' => 'Rechercher dans la catégorie',
   'A_NEW_NAME_ISBN' => 'Rechercher des produits par titre / auteur / ISBN',
   'A_NEW_FILTER_ALL' => 'Tous',
@@ -1391,14 +1391,16 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
   'DESC_PAY_IN_STORE' => 'Dans notre magasin actuel à Helsinki, vous pouvez payer en espèces en euros, par cartes de crédit et de débit.',
   'PAY_ACCEPT_H1' => 'Merci, la commande a été payée',
   'STATUS_IN_ME' => 'Vous pouvez maintenant vérifier l\'état de la commande à <a href="%s">Mes Ruslania</a>',
-  'SEND_CALL_HEADER' => 'Remplissez le formulaire et nous vous rappellerons',
+  'SEND_CALL_HEADER' => 'Remplissez le formulaire et nous vous appellerons',
   'CODE_COUNTRY' => 'Code du pays',
   'NUMBER_PHONE' => 'Numéro de téléphone',
-  'BUTTON_CALL' => 'Demander un rappel',
+  'BUTTON_CALL' => 'Demander un appel',
     'CONTINUE_PLACING_ORDER' => 'Continuer la commande',
     'ALREADY_REGISTERED'=>'Vous êtes déjà inscrit',
     'WITHOUT_VAT_FULL' => 'sans TVA',
     'FORGOT_PASS_HEADER' => 'Recevez un rappel de mot de passe à votre adresse e-mail',
     'FORGOT_PASS_PATH' => 'Obtenir un rappel de mot de passe',
+	'CALL_FORM_ERROR_PHONE'=>'Seules des données numériques sont acceptées ici',
+	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Votre demande de rappel a été enregistrée</b><br />Votre demande de rappel a été enregistrée et nous vous appellerons dès que possible.'
 
 );

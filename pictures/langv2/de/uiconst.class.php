@@ -1405,7 +1405,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
   'PAY_ERROR_H1' => 'Die Zahlung hat nicht funktioniert',
   'PAY_ACCEPT_H1' => 'Danke, die Bestellung wurde bezahlt',
   'STATUS_IN_ME' => 'Jetzt können Sie den Status der Bestellung bei  <a href="%s"> Mein Ruslania überprüfen </a>',
-  'SEND_CALL_HEADER' => 'Bitte füllen Sie dieses Formular aus und rufen Sie an',
+  'SEND_CALL_HEADER' => 'Bitte füllen Sie dieses Formular aus und wir rufen Sie',
   'CODE_COUNTRY' => 'Landesvorwahl',
   'NUMBER_PHONE' => 'Telefonnummer',
   'BUTTON_CALL' => 'Bitte um Rückruf',
@@ -1414,5 +1414,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'WITHOUT_VAT_FULL' => 'ohne MwSt',
     'FORGOT_PASS_HEADER' => 'Erhalten Sie eine Passworterinnerung für Ihre E-Mail',
     'FORGOT_PASS_PATH' => 'Erhalten Sie eine Passworterinnerung',
+	'CALL_FORM_ERROR_PHONE'=>'Hier können nur Zahlen eingegeben werden',
+	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Anfrage gesendet</b><br />Ihre Anfrage wurde an einen unserer Support-Mitarbeiter gesendet und wird nun schnellstmöglich bearbeitet.'
 
 );

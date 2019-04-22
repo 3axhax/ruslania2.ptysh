@@ -1027,7 +1027,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_MORE_ABOUTUS' => 'Más información sobre nosotros',
   'A_NEW_DESC_FOOTER' => 'La librería Ruslania fue fundada en 1986 en Helsinki (Finlandia). Somos una empresa familiar finlandesa. Somos uno de los líderes en la distribución mundial de artículos de prensa de Rusia.',
   'A_NEW_VIEW_ALL_CATEGORY' => 'Mostrar todas las categorías',
-  'A_NEW_SETTINGS_FILTER' => 'Filtros',
+  'A_NEW_SETTINGS_FILTER' => 'Filtro',
   'A_NEW_SEARCH_CAT' => 'Búsqueda en la categoría',
   'A_NEW_NAME_ISBN' => 'уже изменено',
   'A_NEW_FILTER_ALL' => 'Todos',
@@ -1129,7 +1129,7 @@ By clicking on a category you are interested in, you can see all the products wi
   'A_NEW_PLACEHOLDER_SEARCH' => 'Busca un título / autor / ISBN / cualquier cosa',
   'A_NEW_YEAR_REAL' => 'Año de publicación',
   'A_NEW_MENU_REK' => 'Recomendados',
-  'A_NEW_FILTER_TITLE_LANG' => 'Idioma del producto',
+  'A_NEW_FILTER_TITLE_LANG' => 'Idioma del producto -',
   'MONTH_SMALL' => 'meses',
   'A_STORE' => 'Nuestra tienda',
   'A_LEFT_SHEETMUSIC_AZ_PROPERTYLIST_PUBLISHERS' => 'Todas las editoriales A-Z',
@@ -1412,5 +1412,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'WITHOUT_VAT_FULL' => 'sin IVA',
     'FORGOT_PASS_HEADER' => 'Obtener un recordatorio de contraseña para correo electrónico',
     'FORGOT_PASS_PATH' => 'Obtener un recordatorio de contraseña',
+	'CALL_FORM_ERROR_PHONE'=>'Ingresar sólo números',
+	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Su llamada ha sido enviada</b><br />Su llamada ha sido enviada y uno de nuestro personal de soporte le llamare tan pronto como sea posible.'
 
 );
