@@ -110,21 +110,33 @@
             $('.dd_select_valut').find('div.label_valut a').each(function(i, el){
                 $(el).on('click', function() {
                     var valute = 0;
+                    var language = '';
                     this.search.replace('?','').split('&').reduce(
                         function(p,e){
                             var a = e.split('=');
                             if (a[0] == 'currency') valute = a[1];
+                            else if (a[0] == 'language') language = a[1];
                         },
                         {}
                     );
                     var fd = getFormData();
                     fd['currency'] = valute;
+                    if (language != '') fd['language'] = language;
                     this.setAttribute('href', this.pathname + '?' + $.param(fd));
                 });
             });
             $('.dd_select_lang').find('span.lang a').each(function(i, el){
                 $(el).on('click', function() {
+                    var language = '';
+                    this.search.replace('?','').split('&').reduce(
+                        function(p,e){
+                            var a = e.split('=');
+                            if (a[0] == 'language') language = a[1];
+                        },
+                        {}
+                    );
                     var fd = getFormData();
+                    if (language != '') fd['language'] = language;
                     this.setAttribute('href', this.pathname + '?' + $.param(fd));
                 });
             });

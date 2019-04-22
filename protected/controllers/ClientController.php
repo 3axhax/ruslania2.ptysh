@@ -194,9 +194,7 @@ class ClientController extends MyController
     {
 		
 		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
-			if ($lang !== 'rut') {
-				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/editaddress', $lang);
-			}
+            $this->_otherLangPaths[$lang] = Yii::app()->createUrl('client/editaddress', array('aid' => $aid, '__langForUrl'=>$lang));//Person::CreateUrl('client/editaddress', $lang);
 		}
 		
         $uid = Yii::app()->user->id;

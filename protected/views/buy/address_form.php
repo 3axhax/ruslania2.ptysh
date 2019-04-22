@@ -8,6 +8,7 @@ if (empty($userType)) $userType = 'destination';
 switch ($userType) {
 	case 'destination': $userName = trim($ui->item("address_type"),':'); break;
 	case 'payer': $userName = trim($ui->item("payer_type"),':'); break;
+	default: $userName = ''; break;
 }
 $form = $this->beginWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl($addrModel->getAttribute('id')?'buy/editaddr':'buy/newaddr'),
@@ -18,7 +19,7 @@ if (empty($showNotes)) $showNotes = false;
 <table class="address">
 	<tbody>
 	<tr>
-		<td><b><?= $userName ?>:</b></td>
+		<td><?php if (!empty($userName)): ?><b><?= $userName ?>:</b><?php endif; ?></td>
 		<td>
 			<label style="float: left; margin-right: 20px;">
 				<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom js_userType">
@@ -101,7 +102,7 @@ if (empty($showNotes)) $showNotes = false;
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
-<?php if ($userType == 'payer'): ?>
+<?php if ($userType != 'destination'): ?>
 	<tr class="js_firm verkkolasku">
 		<td nowrap="" class="maintxt city_lbl">
 			Verkkolaskuosoite

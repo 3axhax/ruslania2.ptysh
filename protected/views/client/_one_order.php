@@ -85,6 +85,10 @@
                                 ?>
 
                                 <?php if(!$isClosed) : ?>
+                                    <?php if(!$onlyContent) : ?>
+                                        <a style="float: left; margin-right: 10px;" href="<?=Yii::app()->createUrl('client/printorder', array('oid' => $order['id'])); ?>" class="maintxt printed_btn" id="printedBtn<?= $order['id'] ?>"
+                                           target="_new"><span><?=$ui->item('MSG_ACTION_PRINT_ORDER'); ?></span></a>
+                                    <?php endif;?>
                                     <?php if(array_key_exists($order['id'], $notPay)) : ?>
                                         <a href="<?=Yii::app()->createUrl('cart/orderPay'); ?>?id=<?=$order['id']?>&ptype=<?=$order['payment_type_id']?>" class="pay_btn" style="background-color: #5bb75b; margin-top: 0; float: left; height: 31px; line-height: 31px; text-align: center; padding: 0;"><?=$ui->item('ORDER_BTN_PAY_LUOTTOKUNTA'); ?></a>
                                     <?php endif; ?>
