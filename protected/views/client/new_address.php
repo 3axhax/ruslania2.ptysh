@@ -1,4 +1,7 @@
-<?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
+<?php
+$this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs));
+$user = User::model()->findByPk($this->uid);
+?>
 
 <div class="container cabinet">
 
@@ -11,7 +14,7 @@
 
             <?php
             //if (isset($_GET['ha'])) {
-                $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
+                $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true, 'emailPlaceholder'=>$user->getAttribute('login')));
                 ?>
                 <div class="address_action">
                     <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item(((empty($mode)||($mode != 'edit')))?'CARTNEW_BTN_ADD_ADDRESS':'ADDRESS_EDIT')?></a>
@@ -20,7 +23,6 @@
             <?php
             $userData = array();
             if (empty($mode)||($mode != 'edit')):
-                $user = User::model()->findByPk($this->uid);
                 $userData = array(
                     'id' => $this->uid,
                     'email'	=> $user->getAttribute('login'),

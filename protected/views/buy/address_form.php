@@ -158,7 +158,7 @@ if (empty($showNotes)) $showNotes = false;
 			<?= $ui->item("address_contact_email"); ?>
 		</td>
 		<td class="maintxt-vat" style="position: relative;">
-			<?= $form->textField($addrModel, 'contact_email', array('name'=>'' . $alias . '[contact_email]', 'class'=>'js_contactEmail')); ?>
+			<?= $form->textField($addrModel, 'contact_email', array('name'=>'' . $alias . '[contact_email]', 'class'=>'js_contactEmail', 'placeholder'=>empty($emailPlaceholder)?'':$emailPlaceholder)); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_ERROR_WRONG_EMAIL') ?></span>
 			<?php if (($alias == 'Reg')&&(Yii::app()->user->isGuest)): ?><div class="info_box" style="display: none;"></div><?php endif; ?>
 		</td>
