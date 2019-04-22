@@ -63,6 +63,8 @@
 
         setConst: function(options) {
             this.formId = options.formId;
+            this.oldId = options.oldId;
+            this.stateId = options.stateId;
 
             this.country = document.getElementById(this.formId + '_country'); //страна доставки
             this.csrf = $('meta[name=csrf]').attr('content').split('=');
@@ -72,11 +74,9 @@
             this.urlLoadStates = options.urlLoadStates;
             this.urlRedirect = options.urlRedirect;
 
-            if (this.delivery_address) {
-                if (this.delivery_address.value == '0') {
-                }
-                else this.changeCountry();
+            if (this.country.value == '0') {
             }
+            else this.changeCountry();
         },
         setEvents: function() {
             var self = this;
@@ -226,6 +226,8 @@
                         for (var i = 0; i < len; i++) {
                             $states.append('<option value="' + r[i]['id'] + '">' + r[i]['title_long'] + '</option>');
                         }
+                        $states.find('option[value=' + self.stateId + ']')
+                            .attr("selected", "selected");
                     }
                 }
             });
@@ -248,10 +250,11 @@
                     default: fd[f.name] = f.value; break;
                 }
                 if ($f.is(':visible')&&((f.value == "")||(f.value == 0))&&($f.siblings('.texterror').length > 0)) {
-                    if (!$f.hasClass('address_select')) errors.push(f);
+                    if (!$f.hasClass('address_select')&&(!$f.hasClass('js_contactEmail'))) errors.push(f);
                 }
             });
             fd[this.csrf[0]] = this.csrf[1];
+            if (this.oldId > 0) fd['oldId'] = this.oldId;
             if (errors.length) {
                 self.viewErrors(errors);
             }

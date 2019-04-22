@@ -56,7 +56,6 @@ class BuyController extends MyController {
 		list($total['itemsPrice'], $total['deliveryPrice'], $total['pricesValues'], $total['discountKeys'], $total['fullWeight'], $total['withVAT'], $total['isDiscount']) = $order->getOrderPrice($this->uid, $this->sid, $items, null, 1, 0);
 		$this->breadcrumbs[Yii::app()->ui->item('A_LEFT_PERSONAL_SHOPCART')] = Yii::app()->createUrl('cart/view');
 		$this->breadcrumbs[] = 'Оформление заказа';
-		Debug::staticRun(array($total));
 		if (Yii::app()->user->isGuest) {
 			$userInfo = array();
 			if (Yii::app()->getRequest()->getParam('useSocial')) $userInfo = $this->_getUserInfoBySocial();
@@ -76,7 +75,7 @@ class BuyController extends MyController {
 
 	function actionCheckPromocode() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
+		if (Yii::app()->getRequest()->isPostRequest) {
 			$dtype = (int) Yii::app()->getRequest()->getParam('dtype');
 			$dMode = 0;
 			if ($dtype <= 0) $dMode = 1;
@@ -160,7 +159,7 @@ class BuyController extends MyController {
 
 	function actionNewAddr() {
 		$ret = array('errors'=>array());
-		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
+		if (Yii::app()->getRequest()->isPostRequest) {
 			$formName = (string) Yii::app()->getRequest()->getParam('alias');
 			$requireFields = $this->_requireFieldsAddress(array(), $formName);
 			if (!empty($requireFields)) {
@@ -188,11 +187,54 @@ class BuyController extends MyController {
 		$this->ResponseJson($ret);
 	}
 
+	function actionEditAddr() {
+		$uid = Yii::app()->user->id;
+		if (Yii::app()->user->isGuest) throw new CHttpException(403, 'Access Denied');
+
+		$addressModel = new Address('edit');
+		$oldID = (int) Yii::app()->getRequest()->getParam('oldId');
+		if (!$addressModel->IsMyAddress($uid, $oldID)) $this->ResponseJsonError('Not my address');
+
+		$ret = array('errors'=>array());
+		if (Yii::app()->getRequest()->isPostRequest) {
+			$formName = (string) Yii::app()->getRequest()->getParam('alias');
+			$requireFields = $this->_requireFieldsAddress(array(), $formName);
+			if (!empty($requireFields)) {
+				/**@var $addressModel Address*/
+				$addressModel->setAttributes(Yii::app()->getRequest()->getParam($formName), false);
+				if (!$addressModel->validate()) {
+					$addrErrors = $addressModel->getErrors();
+					foreach ($requireFields as $field) {
+						if (!empty($addrErrors[$field])) {
+							$ret['errors'][$formName . '_' . $field] = $addrErrors[$field];
+						}
+					}
+				}
+			}
+			else $ret['errors'][] = 'error';
+			if (empty($ret['errors'])) {
+				// При редактировании добавляем новый адрес
+				// что бы история доставок была правильной
+				$addressModel = new Address('new');
+				$addressModel->setAttributes(Yii::app()->getRequest()->getParam($formName), false);
+				$aid = $addressModel->InsertNew($this->uid, 0);
+				$addr = $addressModel->GetAddress($this->uid, $aid);
+				$ret['address'] = array('id'=>$aid, 'name'=>CommonHelper::FormatAddress($addr));
+
+				// а так что бы это выглядело как редактирование
+				// удалим у пользователя его старый адрес из таблицы соответствий
+				$addressModel->DeleteAddress($uid, $oldID);
+				// Если у человека были подписки, то послать емейл в отдел подписок о смене адреса
+				$addressModel->NotifyIfAddressChanged($uid, $oldID, $addressModel->attributes);
+			}
+		}
+		$this->ResponseJson($ret);
+	}
+
 	function actionOrderAdd() {
 		$ret = array();
 		if (Yii::app()->getRequest()->isPostRequest) {
 			$ret['errors'] = $this->_checkForm();
-//			if (isset($_GET['ha'])) $ret['errors'][] = 'errors';
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
 				$cart = Cart::model();

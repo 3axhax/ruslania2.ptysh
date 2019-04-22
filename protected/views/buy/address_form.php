@@ -10,7 +10,7 @@ switch ($userType) {
 	case 'payer': $userName = trim($ui->item("payer_type"),':'); break;
 }
 $form = $this->beginWidget('CActiveForm', array(
-	'action' => Yii::app()->createUrl('buy/newaddr'),
+	'action' => Yii::app()->createUrl($addrModel->getAttribute('id')?'buy/editaddr':'buy/newaddr'),
 	'id' => $alias,
 ));
 if (empty($showNotes)) $showNotes = false;

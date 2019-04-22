@@ -14,21 +14,26 @@
                 $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true));
                 ?>
                 <div class="address_action">
-                    <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
+                    <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item(((empty($mode)||($mode != 'edit')))?'CARTNEW_BTN_ADD_ADDRESS':'ADDRESS_EDIT')?></a>
                 </div>
                 <link rel="stylesheet" href="/new_style/order_buy.css">
             <?php
-            $user = User::model()->findByPk($this->uid);
-            $userData = array(
-                'id' => $this->uid,
-                'email'	=> $user->getAttribute('login'),
-            );
+            $userData = array();
+            if (empty($mode)||($mode != 'edit')):
+                $user = User::model()->findByPk($this->uid);
+                $userData = array(
+                    'id' => $this->uid,
+                    'email'	=> $user->getAttribute('login'),
+                );
+            endif;
             ?>
             <script>
                     $(function(){
                         scriptLoader('/new_js/modules/address.js').callFunction(function() {
                             address().init({
                                 userData: <?= json_encode($userData) ?>,
+                                stateId: <?= ($model->getAttribute('state_id')?:0) ?>,
+                                oldId: <?= ($model->getAttribute('id')?:0) ?>,
                                 formId: 'Address',
                                 urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
                                 urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
