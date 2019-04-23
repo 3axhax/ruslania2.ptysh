@@ -768,8 +768,9 @@ Stripe.applePay.checkAvailability(function(available) {
                         $itemStr.find('.item_cost').html(r.pricesValues[itemId] + ' ' + r.currency);
                         if (itemId in r.discountKeys) {
                             var quantity = parseInt(r.discountKeys[itemId]['quantity']);
-                            if (quantity > 1)
-                                $itemStr.find('.item_cost_itogo').html((Math.floor(parseFloat(r.pricesValues[itemId])*parseInt(quantity)*100)/100).toFixed(2) + ' ' + r.currency);
+                            if (quantity > 1) {
+                                $itemStr.find('.item_cost_itogo').html((Math.ceil(parseFloat(r.pricesValues[itemId])*100)*parseInt(quantity)/100).toFixed(2) + ' ' + r.currency);
+                            }
                         }
                     }
 

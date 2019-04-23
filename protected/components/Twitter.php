@@ -26,6 +26,11 @@ class Twitter {
 		$this->_accessToken = $cfg[Twitter::SHORTNAME]['accessToken'];
 		$this->_accessTokenSecret = $cfg[Twitter::SHORTNAME]['accessTokenSecret'];
 		$this->_redirectUrl = $cfg[Twitter::SHORTNAME]['redirectUrl'];
+		switch (Yii::app()->getLanguage()) {
+			case 'ru': break;
+			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
+		}
 		$this->_authUrl = $cfg[Twitter::SHORTNAME]['authUrl'];
 		$this->_accessTokenUrl = $cfg[Twitter::SHORTNAME]['accessTokenUrl'];
 		$this->_requestTokenUrl = $cfg[Twitter::SHORTNAME]['requestTokenUrl'];

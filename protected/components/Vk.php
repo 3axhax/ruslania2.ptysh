@@ -22,6 +22,11 @@ class Vk {
 		$this->_tokenUrl = $cfg[Vk::SHORTNAME]['tokenUrl'];
 		$this->_userUrl = $cfg[Vk::SHORTNAME]['userUrl'];
 		$this->_redirectUrl = $cfg[Vk::SHORTNAME]['redirectUrl'];
+		switch (Yii::app()->getLanguage()) {
+			case 'ru': break;
+			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
+		}
 	}
 
 	function urlCode() {

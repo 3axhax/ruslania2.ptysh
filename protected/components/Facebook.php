@@ -18,6 +18,11 @@ class Facebook {
 		$this->_apiSecret = $cfg[Facebook::SHORTNAME]['apiSecret'];
 		$this->_v = $cfg[Facebook::SHORTNAME]['v'];
 		$this->_redirectUrl = $cfg[Facebook::SHORTNAME]['redirectUrl'];
+		switch (Yii::app()->getLanguage()) {
+			case 'ru': break;
+			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
+		}
 
 		$this->_fb = new Facebook\Facebook([
 			'app_id' => $this->_apiId,

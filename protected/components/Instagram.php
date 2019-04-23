@@ -18,6 +18,11 @@ class Instagram {
 		$this->_clientSecret = $cfg[Instagram::SHORTNAME]['clientSecretId'];
 		$this->_authUrl = $cfg[Instagram::SHORTNAME]['authUrl'];
 		$this->_redirectUrl = $cfg[Instagram::SHORTNAME]['redirectUrl'];
+		switch (Yii::app()->getLanguage()) {
+			case 'ru': break;
+			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
+		}
 		$this->_tokenUrl = $cfg[Instagram::SHORTNAME]['tokenUrl'];
 		$this->_login = $cfg[Instagram::SHORTNAME]['login'];
 		$this->_accessToken = $cfg[Instagram::SHORTNAME]['accessToken'];
