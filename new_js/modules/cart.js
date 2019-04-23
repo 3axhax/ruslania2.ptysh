@@ -769,7 +769,7 @@ Stripe.applePay.checkAvailability(function(available) {
                         if (itemId in r.discountKeys) {
                             var quantity = parseInt(r.discountKeys[itemId]['quantity']);
                             if (quantity > 1)
-                                $itemStr.find('.item_cost_itogo').html(Math.floor((r.pricesValues[itemId]*quantity*100)/100).toFixed(2) + ' ' + r.currency);
+                                $itemStr.find('.item_cost_itogo').html((Math.floor(parseFloat(r.pricesValues[itemId])*parseInt(quantity)*100)/100).toFixed(2) + ' ' + r.currency);
                         }
                     }
 
