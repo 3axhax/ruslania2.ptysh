@@ -235,8 +235,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
                     $routeReferer = Yii::app()->getUrlManager()->parseUrl($request);
                     $routeReferer = explode('/', $routeReferer);
-                    Debug::staticRun(array($hrefContinueShopping, $routeReferer));
-                    if (in_array($routeReferer[0], array('cart', 'buy', 'payments')))
+                    if (in_array($routeReferer[0], array('cart', 'buy', 'payment')))
                         $hrefContinueShopping = Yii::app()->createUrl('site/index');
                 }
 

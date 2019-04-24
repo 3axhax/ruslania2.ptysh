@@ -78,7 +78,7 @@ class PaymentController extends MyController
         if($tid == Payment::Luottokunta && isset($_GET['LKPRC']) && $_GET['LKPRC'] == 300)
         {
             // http://ruslania2.com/payment/cancel/oid/7003779/tid/3?LKPRC=300
-            $newOid = $o->RegenerateOrder($oid);
+//            $newOid = $o->RegenerateOrder($oid);
         }
 
         $this->breadcrumbs[Yii::app()->ui->item('ORDER_PAYMENT')] = Yii::app()->createUrl('client/pay', array('oid' => $oid));
