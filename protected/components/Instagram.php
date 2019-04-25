@@ -15,7 +15,7 @@ class Instagram {
 	function __construct() {
 		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
 		$this->_clientId = $cfg[Instagram::SHORTNAME]['clientId'];
-		$this->_clientSecret = $cfg[Instagram::SHORTNAME]['clientSecretId'];
+		$this->_clientSecret = $cfg[Instagram::SHORTNAME]['clientSecret'];
 		$this->_authUrl = $cfg[Instagram::SHORTNAME]['authUrl'];
 		$this->_redirectUrl = $cfg[Instagram::SHORTNAME]['redirectUrl'];
 		switch (Yii::app()->getLanguage()) {

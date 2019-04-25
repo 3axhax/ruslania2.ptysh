@@ -11,6 +11,7 @@ class WidgetsController extends MyController {
 		$file = Yii::getPathOfAlias('webroot') . '/test/instagram.php';
 		if (file_exists($file)) {
 			$dateFile = filemtime($file);
+			Debug::staticRun(array($dateFile, date('d.m.Y H:i:s'), date('d.m.Y H:i:s', $dateFile)));
 			if ($dateFile < (time() - 3600)) $instaData = include($file);
 		}
 		if (empty($instaData)) {
