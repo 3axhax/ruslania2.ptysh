@@ -42,7 +42,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 $first = array('img'=>'', 'audio'=>'', 'pdf'=>'');
                 foreach ($item['Lookinside'] as $li) {
                     $ext = strtolower(pathinfo($li['resource_filename'], PATHINFO_EXTENSION));
-                    if ($ext == 'jpg' || $ext == 'gif') {
+                    if ($ext == 'jpg' || $ext == 'gif' || $ext == 'png') {
                         if (empty($first['img'])) $first['img'] = '/pictures/lookinside/' . $li['resource_filename'];
                         $images[] = '/pictures/lookinside/' . $li['resource_filename'];
                     }
