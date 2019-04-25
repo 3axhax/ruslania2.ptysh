@@ -1414,7 +1414,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'FORGOT_PASS_PATH' => 'Tilaa salasanamuistutus',
 	'CALL_FORM_ERROR_PHONE'=>'Tähän voi kirjoittaa vain numeroita',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Soittopyyntö on tallennettu</b><br />Soittopyyntösi on tallennettu ja soitamme sinulle mahdollisimman pian.',
-    'CATEGORY_POPULAR' => 'Популярные категории',
+    'CATEGORY_POPULAR' => 'Suositut kategoriat',
 
 
 );

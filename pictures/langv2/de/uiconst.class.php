@@ -1416,6 +1416,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'FORGOT_PASS_PATH' => 'Erhalten Sie eine Passworterinnerung',
 	'CALL_FORM_ERROR_PHONE'=>'Hier können nur Zahlen eingegeben werden',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Anfrage gesendet</b><br />Ihre Anfrage wurde an einen unserer Support-Mitarbeiter gesendet und wird nun schnellstmöglich bearbeitet.',
-    'CATEGORY_POPULAR' => 'Популярные категории',
+    'CATEGORY_POPULAR' => 'Beliebte Kategorien',
 
 );

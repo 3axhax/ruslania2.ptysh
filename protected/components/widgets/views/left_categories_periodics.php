@@ -1,10 +1,11 @@
 <?php /*Created by Кирилл (05.06.2018 23:19)*/
 list($availCategory2, $availCategory1, $availCategorySale) = (new MainMenu)->getPeriodicCatIds();
+$catPeriodics2 = $catPeriodics1 = array();
 foreach ($categories[2] as $i=>$cat): if (isset($availCategory2[$cat['id']])):
-	$availCategory2[$cat['id']] = ProductHelper::GetTitle($cat);
+	$catPeriodics2[$cat['id']] = ProductHelper::GetTitle($cat);
 endif; endforeach;
 foreach ($categories[1] as $i=>$cat): if (isset($availCategory1[$cat['id']])):
-	$availCategory1[$cat['id']] = ProductHelper::GetTitle($cat);
+	$catPeriodics1[$cat['id']] = ProductHelper::GetTitle($cat);
 endif; endforeach;
 ?>
 <h2 class="cattitle"><?= Yii::app()->ui->item('CATEGORY_POPULAR') ?>:</h2>
@@ -14,14 +15,14 @@ endif; endforeach;
 		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $idCat, 'title' => Yii::app()->ui->item($name))); ?>"><?= Yii::app()->ui->item($name) ?></a>
 	</li>
 <?php endforeach; ?>
-<?php foreach ($availCategory2 as $idCat=>$name): ?>
+<?php foreach ($catPeriodics2 as $idCat=>$name): ?>
 	<li>
-		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($name))); ?>"><?= $name; ?></a>
+		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $idCat, 'title' => ProductHelper::ToAscii($name))); ?>"><?= $name; ?></a>
 	</li>
 <?php endforeach; ?>
-<?php foreach ($availCategory1 as $idCat=>$name): ?>
+<?php foreach ($catPeriodics1 as $idCat=>$name): ?>
 	<li>
-		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $cat['id'], 'title' => ProductHelper::ToAscii($name))); ?>"><?= $name; ?></a>
+		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $idCat, 'title' => ProductHelper::ToAscii($name))); ?>"><?= $name; ?></a>
 	</li>
 <?php endforeach; ?>
 </ul>
