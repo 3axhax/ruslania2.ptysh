@@ -181,6 +181,8 @@ class EntityController extends MyController {
 
     public function actionCategoryList($entity) {
         $entity = Entity::ParseFromString($entity);
+        if ($entity === false) $entity = Entity::BOOKS;
+        $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('LIST_SOFT_CATTREE');
 
@@ -199,9 +201,7 @@ class EntityController extends MyController {
             $this->render('category_list_periodics', array('types' => $types, 'entity' => $entity));
         }
         else {
-            if ($entity === false) $entity = Entity::BOOKS;
 
-            $this->_checkUrl(array('entity' => Entity::GetUrlKey($entity)));
             $tree = $c->GetCategoriesTree($entity, true);
                 $this->render('category_list', array('tree' => $tree, 'entity' => $entity));
         }

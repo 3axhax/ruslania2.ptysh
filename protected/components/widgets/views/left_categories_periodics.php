@@ -1,5 +1,6 @@
 <?php /*Created by Кирилл (05.06.2018 23:19)*/
 list($availCategory2, $availCategory1, $availCategorySale) = (new MainMenu)->getPeriodicCatIds();
+$availCategory2[9] = '';
 $catPeriodics2 = $catPeriodics1 = array();
 foreach ($categories[2] as $i=>$cat): if (isset($availCategory2[$cat['id']])):
 	$catPeriodics2[$cat['id']] = ProductHelper::GetTitle($cat);
