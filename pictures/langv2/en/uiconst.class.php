@@ -1425,5 +1425,9 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'WITHOUT_VAT_FULL' => 'without VAT',
     'FORGOT_PASS_HEADER' => 'Get a password reminder to your e-mail',
     'FORGOT_PASS_PATH' => 'Get a password reminder',
+	'CALL_FORM_ERROR_PHONE'=>'Only numeric data is accepted here',
+	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Your request has been sent</b><br />Your request has been sent and one of our support staff will call you as soon as possible.',
+    'CATEGORY_POPULAR' => 'Популярные категории',
+
 
 );

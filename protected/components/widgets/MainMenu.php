@@ -334,9 +334,10 @@ class MainMenu extends CWidget {
 	}
 
 	function viewPeriodics() {
-		$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE', 51=>'NAME_CROSSWORD');
-		$availCategory1 = array(119=>'NAME_POPULAR', 108=>'NAME_POLICY', 118=>'NAME_SPORT', 111=>'NAME_HEALTH', 109=>'NAME_HISTORY', 103=>'NAME_ASTROLOGY');
-		$availCategorySale = array(100=>'MENU_SALE_PERIODICS');
+//		$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE', 51=>'NAME_CROSSWORD');
+//		$availCategory1 = array(119=>'NAME_POPULAR', 108=>'NAME_POLICY', 118=>'NAME_SPORT', 111=>'NAME_HEALTH', 109=>'NAME_HISTORY', 103=>'NAME_ASTROLOGY');
+//		$availCategorySale = array(100=>'MENU_SALE_PERIODICS');
+		list($availCategory2, $availCategory1, $availCategorySale) = $this->getPeriodicCatIds();
 		$rows = $this->_categorys['periodics'];
 		$availCategory = array();
 		foreach ($rows as $row) $availCategory[$row['id']] = $row;
@@ -347,6 +348,16 @@ class MainMenu extends CWidget {
 	private function _sort($a, $b) {
 		$name = 'name';
 		return strcmp($a[$name], $b[$name]);
+	}
+
+	/** функция нужна, что бы показать популярные категории слева (в разделе подписка)
+	 * @return array
+	 */
+	function getPeriodicCatIds() {
+		$availCategory2 = array(67=>'NAME_POPULAR', 47=>'NAME_SCIENCE', 19=>'NAME_FORCHILDS', 48=>'NAME_FORFEMALE', 61=>'NAME_FORMALE', 51=>'NAME_CROSSWORD');
+		$availCategory1 = array(119=>'NAME_POPULAR', 108=>'NAME_POLICY', 118=>'NAME_SPORT', 111=>'NAME_HEALTH', 109=>'NAME_HISTORY', 103=>'NAME_ASTROLOGY');
+		$availCategorySale = array(100=>'MENU_SALE_PERIODICS');
+		return array($availCategory2, $availCategory1, $availCategorySale);
 	}
 
 }

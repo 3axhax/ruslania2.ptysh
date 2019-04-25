@@ -1401,6 +1401,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'FORGOT_PASS_HEADER' => 'Recevez un rappel de mot de passe à votre adresse e-mail',
     'FORGOT_PASS_PATH' => 'Obtenir un rappel de mot de passe',
 	'CALL_FORM_ERROR_PHONE'=>'Seules des données numériques sont acceptées ici',
-	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Votre demande de rappel a été enregistrée</b><br />Votre demande de rappel a été enregistrée et nous vous appellerons dès que possible.'
+	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Votre demande de rappel a été enregistrée</b><br />Votre demande de rappel a été enregistrée et nous vous appellerons dès que possible.',
+    'CATEGORY_POPULAR' => 'Популярные категории',
+
 
 );
