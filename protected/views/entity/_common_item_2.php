@@ -4,7 +4,7 @@ $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 ?>
-    <div class="row">
+    <div class="row" xmlns="http://www.w3.org/1999/html">
         <div class="span1 image_item" style="position: relative">
             <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
             <?php if (isset($isList) && $isList) : ?>
@@ -151,7 +151,9 @@ $entityKey = Entity::GetUrlKey($entity);
                 <?php
                 $langs = array();
                 foreach ($item['Languages'] as $lang) {
-                    if (!empty($lang['language_id'])) $langs[] = (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id']));
+                    if (!empty($lang['language_id'])) {
+                        $langs[] = '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => $entityKey, 'lang' => $lang['language_id'])) . '">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</a>';
+                    }
                 }
 
                 if (!empty($langs)): ?>
@@ -269,8 +271,11 @@ $entityKey = Entity::GetUrlKey($entity);
                     ?>
                     <div class="authors" style="margin-top: 0;">
                         <div style="float: left;width: 130px;" class="nameprop"><?= $label ?></div>
-                        <div style="padding-left: 140px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
-                        <div class="clearBoth"></div>
+                        <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
+                                'entity' => $entityKey,
+                                'bid' => $item['binding_id']));
+                            ?>"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
+                        <div class="clearBoth"></a></div>
                     </div>
                 <?php else:
 //					$row = Binding::GetBinding($entity, $item['binding_id']);

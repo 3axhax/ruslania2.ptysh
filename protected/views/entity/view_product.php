@@ -425,7 +425,10 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) :
             $langs = array();
             foreach ($item['Languages'] as $lang) {
-                if (!empty($lang['language_id'])) $langs[] = '<span class="title__bold">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span>';
+                if (!empty($lang['language_id'])) $langs[] = '<a href="' . Yii::app()->createUrl('entity/list', array(
+                        'entity' => $entityKey,
+                        'lang' => $lang['language_id'])) .
+                    '"><span class="title__bold">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span></a>';
             }
             if (!empty($langs)):
             ?>
@@ -494,14 +497,19 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <div class="authors" style="margin-bottom:5px;">
                 <?php
                 switch ($entity) {
-                    case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
-                    case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
-                    case Entity::PERIODIC: $label = Yii::app()->ui->item('A_NEW_TYPE_IZD'); break;
-                    default: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2'); break;
+                    case Entity::BOOKS:case Entity::SHEETMUSIC:
+                    $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1');
+                    break;
+                    default:
+                        $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2');
+                        break;
                 }
                 ?>
                 <div style="float: left;" class="nameprop"><?= str_replace(':', '', $label); ?></div>
-                <div style="padding-left: 253px;"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
+                <div style="padding-left: 253px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
+                        'entity' => $entityKey,
+                        'bid' => $item['binding_id']));
+                    ?>"><?= ProductHelper::GetTitle($item['Binding']) ?></a></div>
                 <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
