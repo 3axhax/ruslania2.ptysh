@@ -391,6 +391,7 @@ class Banners extends MyWidget {
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.year between ' . (date('Y')-1) . ' and ' . date('Y') . ') '.
                         'and (t.avail_for_order = 1) '.
+                        'and (t.in_shop > 0) '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
@@ -415,6 +416,7 @@ class Banners extends MyWidget {
                         'from `books_catalog` as t '.
                             'join books_authors tA on (tA.book_id = t.id) and (tA.author_id in (' . implode(',',$authors) . ')) '.
                         'where (t.avail_for_order = 1) '.
+                            'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
                         'order by rand() '.
@@ -428,11 +430,12 @@ class Banners extends MyWidget {
             if (!empty($this->_params['item']['series_id'])) {
                 $sql = ''.
                     'select t1.id from ('.
-                    'select t.id, t.avail_for_order ' .
+                    'select t.id, t.avail_for_order, t.in_shop ' .
                     'from `books_catalog` as t '.
                     'where (t.series_id = ' . (int) $this->_params['item']['series_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
                     'having (avail_for_order = 1) '.
+                        'and (in_shop > 0) '.
                     'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
@@ -444,11 +447,12 @@ class Banners extends MyWidget {
             if (!empty($this->_params['item']['publisher_id'])) {
                 $sql = ''.
                     'select t1.id from ('.
-                    'select t.id, t.avail_for_order ' .
+                    'select t.id, t.avail_for_order, t.in_shop ' .
                     'from `books_catalog` as t '.
                     'where (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
                     'having (avail_for_order = 1) '.
+                        'and (in_shop > 0) '.
                     'limit 1000) t1 '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
@@ -485,6 +489,7 @@ class Banners extends MyWidget {
                         'join musicsheets_authors tA on (tA.musicsheet_id = t.id) and (tA.author_id in (' . implode(',',$authors) . ')) '.
                     'where (t.avail_for_order = 1) '.
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                        'and (t.in_shop > 0) '.
                     'group by t.id '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
@@ -497,11 +502,12 @@ class Banners extends MyWidget {
         if ($counts > 0) {
             $sql = ''.
                 'select t1.id from ('.
-                'select t.id, t.avail_for_order ' .
+                'select t.id, t.avail_for_order, t.in_shop ' .
                 'from `musicsheets_catalog` as t '.
                 'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'having (avail_for_order = 1) '.
+                    'and (in_shop > 0) '.
                 'limit 1000) t1 '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
@@ -542,6 +548,7 @@ class Banners extends MyWidget {
                             'join music_performers tA on (tA.music_id = t.id) and (tA.person_id in (' . implode(',',$performers) . ')) '.
                         'where (t.avail_for_order = 1) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                            'and (t.in_shop > 0) '.
                         'group by t.id '.
                         'order by rand() '.
                         'limit ' . $counts . ' '.
@@ -556,10 +563,12 @@ class Banners extends MyWidget {
         if ($counts > 0) {
             //категория
             $sql = ''.
-                'select t.id, t.avail_for_order ' .
+                'select t.id ' .
                 'from `music_catalog` as t '.
                 'where ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'and (t.avail_for_order = 1) '.
+                    'and (t.in_shop > 0) '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
@@ -579,6 +588,7 @@ class Banners extends MyWidget {
                         'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 22)) tOf using (id) '.
                     'where (t.id not in (' . implode(',', $exclude) . '))'.
                         'and (t.avail_for_order = 1) '.
+                        'and (t.in_shop > 0) '.
                     'group by t.id '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
@@ -595,8 +605,9 @@ class Banners extends MyWidget {
                 'select t.id ' .
                 'from `music_catalog` as t '.
                 'where (t.avail_for_order = 1) '.
+                    'and (t.in_shop > 0) '.
                     'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
-                'and (t.id not in (' . implode(',', $exclude) . ')) '.
+                    'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
@@ -656,6 +667,7 @@ class Banners extends MyWidget {
         $sql = ''.
             'select t.id ' .
             'from `_support_languages_printed` as t '.
+            'join printed_catalog tPC on (tPC.id = t.id) and (tPC.in_shop > 0) '.
             'where ' . implode(' and ', $condition) . ' '.
             'order by rand() '.
             'limit ' . $counts . ' '.
@@ -689,6 +701,7 @@ class Banners extends MyWidget {
                         'from `video_catalog` as t '.
                             'join video_directors tA on (tA.video_id = t.id) and (tA.person_id in (' . implode(',',$directors) . ')) '.
                         'where (t.avail_for_order = 1) '.
+                            'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
                         'order by rand() '.
@@ -712,6 +725,7 @@ class Banners extends MyWidget {
                         'from `video_catalog` as t '.
                             'join video_actors tA on (tA.video_id = t.id) and (tA.person_id in (' . implode(',',$actors) . ')) '.
                         'where (t.avail_for_order = 1) '.
+                            'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
                         'order by rand() '.
@@ -730,6 +744,7 @@ class Banners extends MyWidget {
                 'select t.id ' .
                 'from `video_catalog` as t '.
                 'where (t.avail_for_order = 1) '.
+                    'and (t.in_shop > 0) '.
                     'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
@@ -758,6 +773,7 @@ class Banners extends MyWidget {
                 'select t.id ' .
                 'from `maps_catalog` as t '.
                 'where (t.avail_for_order = 1) '.
+                    'and (t.in_shop > 0) '.
                     'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
@@ -793,6 +809,7 @@ class Banners extends MyWidget {
                         'join (select item_id id from offer_items where (offer_id in (' . implode(',',$offerIds) . ')) and (entity_id = 24)) tOf using (id) '.
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.avail_for_order = 1) '.
+                        'and (t.in_shop > 0) '.
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
@@ -807,6 +824,7 @@ class Banners extends MyWidget {
                 'select t.id ' .
                 'from `soft_catalog` as t '.
                 'where (t.avail_for_order = 1) '.
+                    'and (t.in_shop > 0) '.
                     'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                 'order by rand() '.
