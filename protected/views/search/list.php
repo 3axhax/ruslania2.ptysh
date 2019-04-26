@@ -15,17 +15,17 @@
             </ul>
             <?php if (count($products) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
         </div>
-    <div class="span2">
+    <div class="span2" id="js_rightSidebar">
         <?php if (!empty($abstractInfo)): ?>
-            <div style="margin-bottom: 20px;">
+            <div class="js_fixedScroll" style="margin-bottom: 20px;">
                 <?php $dataForSearch = array('q'=>$q,'avail'=>$this->GetAvail(1));
                 foreach ($abstractInfo as $eNum=>$counts): $dataForSearch['e'] = $eNum; ?>
                     <div class="row_category"><?= $q ?> <span><?= $ui->item('A_NEW_SEARCH_IN_CAT') ?> <?= Entity::GetTitle($eNum) ?></span> <a href="<?= Yii::app()->createUrl('search/general') ?>?<?= http_build_query($dataForSearch) ?>" class="result_search_count"><?= $counts ?></a></div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-
         <?php if (!empty($items)) : ?>
+        <div class="js_fixedScroll">
             <p><?=$ui->item('DID_YOU_MEAN'); ?></p>
             <ul class="items">
                 <?php foreach ($items as $i) : ?>
@@ -34,9 +34,24 @@
                     </li>
                 <?php endforeach; ?>
             </ul>
+        </div>
         <?php endif; ?>
-
         <?php $this->widget('YouView', array()); ?>
     </div>
 </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        scriptLoader('/new_js/modules/fixedScroll.js').callFunction(function(){
+            var contentBlock = document.getElementById('js_rightSidebar');
+            fixedScroll().init({
+                block: $('.js_fixedScroll:first').get(0),
+                $blocks: $('.js_fixedScroll'),
+                $otherBlocks: $(contentBlock).children(':not(.js_fixedScroll)'),
+                contentBlock: contentBlock,
+                stopBlock: $('.footer').get(0)
+            });
+        });
+    });
+</script>
