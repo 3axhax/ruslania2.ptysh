@@ -1,6 +1,7 @@
 <?php  /**@var $this MyController*/
 $siteLang = (isset(Yii::app()->language) && Yii::app()->language != '') ? Yii::app()->language : 'ru';
 $lang = Yii::app()->language;
+$productModel = new Product();
 ?>
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?><div class="container content_books">
     <div class="row">
@@ -86,7 +87,10 @@ if (empty($h1)): ?>
                     $key = 'itemlist_' . $entity . '_' . $item['id'];
                     ?>
                     <li>
-                        <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true)); ?>
+                        <?php
+                        if (isset($_GET['ha'])&&($entity == Entity::PERIODIC)) $this->renderPartial('/entity/list/periodics', array('item' => $item, 'entity' => $entity, 'isList' => true, 'productModel' => $productModel));
+                        else $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true));
+                        ?>
                     </li>
                     <?php if ($i == 2): ?>
                         <?php $this->widget('Banners', array('location'=>'topInList', 'entity' => $entity, 'page'=>(int) Yii::app()->getRequest()->getParam('page'))) ?>
