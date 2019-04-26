@@ -81,7 +81,9 @@ class SearchController extends MyController {
 			'items' => $didYouMean,
 			'products' => $list,
 			'abstractInfo'=>$abstractInfo,
-			'paginatorInfo' => $paginatorInfo));
+			'paginatorInfo' => $paginatorInfo,
+			'eid' => $eId,
+		));
 	}
 
 	/** функция проверяет найденное в title_. Если не нашло, то в результирующий массив добавляет inDescription

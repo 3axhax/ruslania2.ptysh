@@ -5,6 +5,12 @@
 		<div class="listgoods span10">
             <div class="text" style="margin-top: 7px;">
                 <?= sprintf($ui->item("X items found"), $paginatorInfo->getItemCount()); ?>
+                <div class="red_checkbox" onclick="check_search($(this), 'js_avail'); $('#srch').append('<input type=\'hidden\' name=\'e\' value=\'<?= $eid ?>\'>').submit(); " style="float: right;">
+                    <span class="checkbox">
+                        <span class="check<?= ($this->GetAvail(1))?' active':'' ?>"></span>
+                    </span>
+                    <?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>
+                </div>
             </div>
             <ul class="items">
                 <?php foreach ($products as $i) : ?>

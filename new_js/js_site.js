@@ -92,14 +92,14 @@ $(document).ready(function(){
         if (a.keyCode == 13) $('#srch').submit();
     });
 
-    $('.cart_box').click(function () {
+    /* $('.cart_box').click(function () {
         $('#cart_renderpartial').toggle(100);
         mini_map_isOn = 1 - mini_map_isOn;
         if (mini_map_isOn)
             TimerId = setTimeout(mini_cart_off, 10000);
         else
             clearTimeout(TimerId);
-    });
+    }); */
 
     $(window).scroll(function() {
         var minicart = $('.header_logo_search_cart .span1.cart');
@@ -205,7 +205,7 @@ function check_search(cont, inputId) {
         else
             $('#' + inputId).val('1');
     }
-    if (inputId != undefined) $('#Search').marcoPolo('search');
+    //if (inputId != undefined) $('#Search').marcoPolo('search');
 }
 
 // "X" в input-ах фильтра

@@ -361,7 +361,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
             <? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
 
-                <div class="span1 cart">
+                <div id="js_fixetBasket" class="span1 cart">
 
 
                     <div class="span1 js-slide-toggle" data-slidetoggle=".b-basket-list" data-slideeffect="fade" data-slidecontext=".span1.cart">

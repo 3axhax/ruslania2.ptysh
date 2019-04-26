@@ -41,6 +41,7 @@
 	};
 
 	_fs.prototype = {
+		elemBasket: document.getElementById('js_fixetBasket'),
 		offsetTopDisplay: 0,
 		offsetLeft:0,
 		heights:[],
@@ -102,6 +103,9 @@
 			var position = '';
 			var self = this;
 			var offsetTop = self.offsetTop;
+			if ((this.elementOffsetLeft(this.elemBasket) - this.offsetLeft) < this.settings.width)
+				offsetTop =+ $(this.elemBasket).outerHeight(true);
+
 			if (this.settings.$otherBlocks) {
 				position = this.settings.contentBlock.style.position;
 				if (parseInt(self.settings.block.style.top, 10) != offsetTop) {
