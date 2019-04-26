@@ -157,8 +157,11 @@ class FilterNames {
 		if (empty($this->_data['lang_sel'])) return '';
 
 		switch ($this->_eid) {
-			case Entity::PRINTED: return Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Language::GetTitleByID_country($this->_data['lang_sel']); break;
+			case Entity::PRINTED:
+				return Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Language::GetTitleByID_country($this->_data['lang_sel']);
+				break;
 		}
+		if (Yii::app()->getLanguage() == 'en') return Language::GetTitleByID_predl($this->_data['lang_sel']);
 		return mb_strtolower(Language::GetTitleByID_predl($this->_data['lang_sel']), 'utf-8');
 	}
 
