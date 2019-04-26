@@ -29,7 +29,9 @@
 	
 					<li>
 						<div class="span1 photo">
-							<a href="<?= $url ?>"><img src="<?= Picture::srcLoad() ?>" alt=""  style="max-height: 130px;" <?= ((count($items) > 3)?'data-lazy':'lazySrc') ?>="<?= Picture::Get($item, Picture::SMALL) ?>"/></a>
+							<a href="<?= $url ?>">
+								<img class="maxh130" src="<?= Picture::srcLoad() ?>" <?= ((count($items) > 3)?'data-lazy':'lazySrc') ?>="<?= Picture::Get($item, Picture::SMALL) ?>"/>
+							</a>
 						</div>
 						<div class="span2 text">
 							<div class="title"><a href="<?= $url ?>"><?= ProductHelper::GetTitle($item, 'title', 18) ?></a></div>
