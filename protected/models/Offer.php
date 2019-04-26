@@ -57,6 +57,46 @@ class Offer extends CMyActiveRecord
         return $row;
     }
 
+    public function GetItemsExport($oid)
+    {
+        $key = 'Offer_'.$oid;
+
+        $fullInfo = Yii::app()->dbCache->get($key);
+
+        if($fullInfo === false)
+        {
+            $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order';
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
+            $items = array();
+            foreach($rows as $row)
+            {
+                $items[$row['entity_id']][] = $row['item_id'];
+            }
+
+            $p = new Product();
+            $fullInfo = array();
+            foreach($items as $entity=>$ids)
+            {
+                $tmp = array();
+                $list = $p->GetProductsV2($entity, $ids, true);
+                foreach($items[$entity] as $iid)
+                {
+                    if(!isset($list[$iid])) continue;
+                    $av = Availability::GetStatus($list[$iid]);
+                    if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
+
+                    if(isset($list[$iid])) $tmp[] = $list[$iid];
+                }
+
+                $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $tmp);
+            }
+
+            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCache']);
+        }
+
+        return $fullInfo;
+    }
+
     public function GetItems($oid, $entity = false)
     {
         $key = 'Offer_'.$oid;

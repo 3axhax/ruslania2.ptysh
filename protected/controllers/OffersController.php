@@ -91,7 +91,7 @@ class OffersController extends MyController
         $offer = $o->GetOffer($oid, true, true);
         if(empty($offer)) throw new CHttpException(404);
 
-        $groups = $o->GetItems($oid);
+        $groups = $o->GetItemsExport($oid);
 
         Yii::import('application.extensions.excel.Excel');
         $exporter = new ExportDataExcel('browser', $oid . '.xls');
