@@ -161,7 +161,7 @@ class FilterNames {
 				return Yii::app()->ui->item('A_NEW_FILTER_TITLE_THEME') . Language::GetTitleByID_country($this->_data['lang_sel']);
 				break;
 		}
-		if (Yii::app()->getLanguage() == 'en') return Language::GetTitleByID_predl($this->_data['lang_sel']);
+		if (in_array(Yii::app()->getLanguage(), array('en', 'de'))) return Language::GetTitleByID_predl($this->_data['lang_sel']);
 		return mb_strtolower(Language::GetTitleByID_predl($this->_data['lang_sel']), 'utf-8');
 	}
 

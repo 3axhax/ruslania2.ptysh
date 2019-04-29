@@ -797,7 +797,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
         $('select.periodic').change(function () {
 
             var $el = $(this);
-            var cart = $el.closest('.span11, .span1.cart');
+            var cart = $el.closest('.span11, .span1.cart, .price_item');
 
             var worldpmonthVat0 = cart.find('input.worldmonthpricevat0').val();
             var worldpmonthVat = cart.find('input.worldmonthpricevat').val();
@@ -839,6 +839,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
         var $formIid = $formDiv.find('input[name="iid"]');
         var $formQty = $formDiv.find('input[name="qty"]');
 
+
         $finSubButton.click(function ()
         {
             $.magnificPopup.close();
@@ -858,7 +859,7 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
 
             var $el = $(this);
-            var $parent = $el.closest('.to_cart');
+            var $parent = $el.closest('.to_cart, .price_item');
 
             var entity = $el.attr('data-entity');
 

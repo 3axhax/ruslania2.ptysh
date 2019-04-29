@@ -41,21 +41,21 @@ if($item['entity'] == Entity::PERIODIC && $item['id'] == 319
 
 <div class="mb5 <?=strtolower($key); ?>" style="margin-bottom: 1px;">
     <?php if (!empty($price[DiscountManager::DISCOUNT])) : ?>
-        <div class="price_h" style="margin-top: 11px;margin-bottom: 5px;font-weight: 600;"><?= $ui->item($realPriceTitle) ?></div>
-		<span class="without_discount" style="font-size: 21px;margin-right: 9px;"><?= ProductHelper::FormatPrice($price[$realKeyBrutto]); ?></span>
-        <span class="price" style="font-size: 21px;">
+        <div class="price_h"><?= $ui->item($realPriceTitle) ?></div>
+		<span class="without_discount"><?= ProductHelper::FormatPrice($price[$realKeyBrutto]); ?></span>
+        <span class="price">
             <b class="pwvat"<?php if ($price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL):?> style="color: #42b455;" <?php endif; ?>><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></b>
             <span class="notes">
                 <span class="fa notes-circle"></span>
                 <span class="notes-block"<?php if ($price[DiscountManager::DISCOUNT_TYPE] != DiscountManager::TYPE_PERSONAL):?> style="width: 90px;" <?php endif; ?>><?= $price[DiscountManager::DISCOUNT_TYPE] == DiscountManager::TYPE_PERSONAL?$ui->item('MSG_PERSNAL_DISCOUNT') . ' -':$ui->item('PRICE_DISCOUNT_FORMAT'); ?> <?= $price[DiscountManager::DISCOUNT] . '%'; ?></span>
             </span>
         </span>
-        <div class="price" style="line-height: 15px;letter-spacing: -0.4px;">
+        <div class="price">
             <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="visibility: hidden;white-space: nowrap;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
         </div>
     <?php else : ?>
-        <div class="price_h" style="margin-top: 11px;margin-bottom: 5px;font-weight: 600;"><?= $ui->item($realPriceTitle); ?>:</div>
-        <span class="price" style="font-size: 21px;">
+        <div class="price_h"><?= $ui->item($realPriceTitle); ?>:</div>
+        <span class="price">
             <span class="pwvat"><?= ProductHelper::FormatPrice($price[$realVatPrice]); ?></span>
             <span class="pwovat"<?php if ($key == 'PERIODIC_FIN'):?> style="display: none;" <?php endif; ?>><span><?= ProductHelper::FormatPrice($price[$realWOVatPrice]); ?></span> <?= $ui->item('WITHOUT_VAT'); ?></span>
         </span>

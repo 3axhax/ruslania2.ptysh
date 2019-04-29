@@ -88,7 +88,7 @@ if (empty($h1)): ?>
                     ?>
                     <li>
                         <?php
-                        if (isset($_GET['ha'])&&($entity == Entity::PERIODIC)) $this->renderPartial('/entity/list/periodics', array('item' => $item, 'entity' => $entity, 'isList' => true, 'productModel' => $productModel));
+                        if ($entity == Entity::PERIODIC) $this->renderPartial('/entity/list/periodics', array('item' => $item, 'entity' => $entity, 'isList' => true, 'productModel' => $productModel));
                         else $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true));
                         ?>
                     </li>
