@@ -1428,6 +1428,9 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
 	'CALL_FORM_ERROR_PHONE'=>'Only numeric data is accepted here',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Your request has been sent</b><br />Your request has been sent and one of our support staff will call you as soon as possible.',
     'CATEGORY_POPULAR' => 'Popular categories',
+    'PRICE_WITH_DELIVERY' => 'Price incl. delivery',
+    'TO_FINLAND' => 'to Finland',
+    'TO_WORLD' => 'to other countries',
 
 
 );

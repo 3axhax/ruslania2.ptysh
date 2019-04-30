@@ -1417,6 +1417,9 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
 	'CALL_FORM_ERROR_PHONE'=>'Använd endast siffror i det här fältet.',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Din förfrågan har skickats</b><br />Din förfrågan har skickats och en av vår supportpersonal ringer dig så snart som möjligt.',
     'CATEGORY_POPULAR' => 'Populära kategorier',
+    'PRICE_WITH_DELIVERY' => 'Pris inkl. leverans',
+    'TO_FINLAND' => 'till Finland',
+    'TO_WORLD' => 'till andra länder',
 
 
 );

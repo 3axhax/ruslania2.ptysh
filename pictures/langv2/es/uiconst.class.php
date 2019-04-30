@@ -1415,6 +1415,9 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
 	'CALL_FORM_ERROR_PHONE'=>'Ingresar sólo números',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Su llamada ha sido enviada</b><br />Su llamada ha sido enviada y uno de nuestro personal de soporte le llamare tan pronto como sea posible.',
     'CATEGORY_POPULAR' => 'Categorías populares',
+    'PRICE_WITH_DELIVERY' => 'Precio incl. entrega',
+    'TO_FINLAND' => 'a Finlandia',
+    'TO_WORLD' => 'a otros paises',
 
 
 );

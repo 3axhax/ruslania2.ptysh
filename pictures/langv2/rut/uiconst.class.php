@@ -1421,6 +1421,9 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'INSTAGRAM_FOLLOWED_BY' => 'Podpischiki',
     'INSTAGRAM_FOLLOWS' => 'Podpiski',
     'INSTAGRAM_SUBSCRIBE' => 'Podpisatsya',
+    'PRICE_WITH_DELIVERY' => 'Tsena s dostavkoy',
+    'TO_FINLAND' => 'po Finlyandii',
+    'TO_WORLD' => 'v drugie strany',
 
 
 );
