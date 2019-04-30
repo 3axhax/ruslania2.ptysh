@@ -38,7 +38,7 @@ $label = $productModel->GetStatusProduct($item['entity'], $item['id']);
 				</div>
 			<?php endif; ?>
 		<?php endif; ?>
-		<div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 250, $url)) ?></div>
+		<div class="desc_text"><?= nl2br(ProductHelper::GetDescription($item, 100, $url)) ?></div>
 	</div>
 
 	<div class="price_item">
@@ -78,8 +78,8 @@ $label = $productModel->GetStatusProduct($item['entity'], $item['id']);
 			'item' => $item,
 			'price' => $price,
 		)); ?>
-		<div class="clearBoth"></div>
-		<div class="free_delivery"><?= $ui->item('MSG_DELIVERY_TYPE_4') ?></div>
+		<div class="clearBoth" style="margin-bottom: 28px;"></div>
+		<?php /*<div class="free_delivery"><?= $ui->item('MSG_DELIVERY_TYPE_4') ?></div> */ ?>
 
 		<input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_WORLD] / 12, 2); ?>" class="worldmonthpriceoriginal"/>
 		<input type="hidden" value="<?= round($price[DiscountManager::BRUTTO_FIN] / 12, 2); ?>" class="finmonthpriceoriginal"/>

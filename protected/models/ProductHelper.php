@@ -208,8 +208,8 @@ class ProductHelper
             $pos = false;
             $len = strlen($tmp);
             if($len > $cnt) $pos = strpos($tmp, ' ', $cnt);
-            if($pos !== false)  $tmp = substr($ret, 0, $pos);
-            else $tmp = substr($ret, 0, $cnt);
+            if($pos !== false)  $tmp = mb_substr($ret, 0, $pos, 'utf-8');
+            else $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
             if($len > 0) { 
 				//var_dump($len);
 				if (!$url) {

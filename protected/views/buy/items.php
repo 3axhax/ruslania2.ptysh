@@ -31,7 +31,7 @@ else $head .= '<span class="items_nds"></span>';
 				</td>
 				<td style="width: 100%;">
 					<?php if ($item['InCartUnitWeight'] == 0): ?>
-						<div style="float: right; color: #5BB75B;">
+						<div style="float: right; color: #edb421;">
 							<?= $ui->item('MSG_DELIVERY_TYPE_4') ?>
 							<span class="qbtn2">?</span>
 							<div class="info_box">
@@ -43,7 +43,7 @@ else $head .= '<span class="items_nds"></span>';
 					<div class="minitext">
 						<?= $item['quantity'] ?>
 					<?php if ($item['entity'] == 30): ?>
-						<?= $ui->item('MONTH_SMALL'); ?>
+						<?= (Yii::app()->getLanguage() == 'fi')?$ui->item('MONTH_SMALL'):$PH->endOfWord($item['quantity'], $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_1'), $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'), $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3')); ?>
 					<?php else: ?>
 						<?= $ui->item('CARTNEW_COUNT_NAME')?>
 					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($itemsPrice); ?></span>
