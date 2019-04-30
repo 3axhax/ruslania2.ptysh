@@ -1417,6 +1417,10 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
 	'CALL_FORM_ERROR_PHONE'=>'Верными считаются только числовые значения',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Ваш запрос отправлен</b><br />Ваш запрос отправлен, и один из наших сотрудников позвонит вам как можно скорее.',
     'CATEGORY_POPULAR' => 'Popularnye kategorii',
+    'INSTAGRAM_MEDIA' => 'Media',
+    'INSTAGRAM_FOLLOWED_BY' => 'Podpischiki',
+    'INSTAGRAM_FOLLOWS' => 'Podpiski',
+    'INSTAGRAM_SUBSCRIBE' => 'Podpisatsya',
 
 
 );

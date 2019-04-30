@@ -25,7 +25,7 @@ return array (
   'A_GOTOSOFT' => 'Multimedia',
   'A_GOTOVIDEO' => 'DVD filme',
   'A_LANG_ESPANIOL' => 'Español',
-  'A_LANG_ENGLISH' => 'Englisch',
+  'A_LANG_ENGLISH' => 'English',
   'A_LANG_FINNISH' => 'Suomi',
   'A_LANG_FRENCH' => 'Français',
   'A_LANG_GERMAN' => 'Deutsch',
