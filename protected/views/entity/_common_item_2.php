@@ -430,7 +430,9 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if ($isAvail) : ?>
                 
-
+<?php /*if (empty($item['unitweight'])):?>
+                    <div class="free_delivery"><?= $ui->item('MSG_DELIVERY_TYPE_4') ?></div>
+<?php endif;*/ ?>
                 <form method="get" action="<?= Yii::app()->createUrl('cart/view') ?>" onsubmit="return false;">
 				
 					<!--<div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin: 9px 0;">
