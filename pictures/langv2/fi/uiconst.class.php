@@ -293,6 +293,7 @@ return array (
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2' => 'kuukautta',
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3' => 'kuukautta',
   'MIN_FOR_X_MONTHS_Y_ISSUES_TEMPLATE' => 'minimitilaus %1$s %2$s / %3$s %4$s',
+    'MIN_PODPISKA' => 'minimitilaus',
   'More info on audio' => 'Lisätietoa äänitteestä',
   'More info on book' => 'Lisätietoa kirjasta',
   'More info on map' => 'Lisätietoa kartasta',

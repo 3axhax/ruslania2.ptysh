@@ -300,6 +300,7 @@ return array (
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2' => 'месяца',
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3' => 'месяцев',
   'MIN_FOR_X_MONTHS_Y_ISSUES_TEMPLATE' => 'минимальная подписка на %1$s %2$s / %3$s %4$s ',
+    'MIN_PODPISKA' => 'Минимальная подписка',
   'More info on audio' => 'Дополнительная информация об аудио',
   'More info on book' => 'Дополнительная информация о книге',
   'More info on map' => 'Дополнительная информация о карте',
@@ -1423,5 +1424,6 @@ IBAN DE79514303006474790001 <br>
     'PRICE_WITH_DELIVERY' => 'Цена с доставкой',
     'TO_FINLAND' => 'по Финляндии',
     'TO_WORLD' => 'в другие страны',
+    'PERIODICITY' => 'Периодичность',
 
 );

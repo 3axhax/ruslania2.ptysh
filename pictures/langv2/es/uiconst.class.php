@@ -292,6 +292,7 @@ return array (
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2' => 'meses',
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3' => 'meses',
   'MIN_FOR_X_MONTHS_Y_ISSUES_TEMPLATE' => 'Suscripción mínima %1$s %2$s / %3$s %4$s',
+    'MIN_PODPISKA' => 'Suscripción mínima',
   'More info on audio' => 'Más información sobre el medio de audio',
   'More info on book' => 'Más información sobre el libro',
   'More info on map' => 'Más información sobre el mapa',

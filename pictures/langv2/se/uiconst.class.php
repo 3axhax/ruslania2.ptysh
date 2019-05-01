@@ -292,6 +292,7 @@ return array (
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2' => 'månader',
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3' => 'månader',
   'MIN_FOR_X_MONTHS_Y_ISSUES_TEMPLATE' => 'Kortaste prenumeration %1$s %2$s / %3$s %4$s',
+    'MIN_PODPISKA' => 'Kortaste prenumeration',
   'More info on audio' => 'Mer information om denna artikel',
   'More info on book' => 'Mer information om boken',
   'More info on map' => 'Mer information om kartan',

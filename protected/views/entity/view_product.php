@@ -5,6 +5,7 @@ $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 
 
+/* перенес в контроллер
 $serGoods = unserialize(Yii::app()->getRequest()->cookies['yourView']->value);
 
 //var_dump(Yii::app()->getRequest()->cookies['yourView']->value);
@@ -21,7 +22,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 
     Yii::app()->getRequest()->cookies['yourView'] = new CHttpCookie('yourView', serialize($arrGoods));
 
-}
+}*/
 
 // запись переменной в сессию. Следующие способы использования эквивалентны:
 

@@ -9,14 +9,15 @@
 }
 @font-face {
     font-family: 'Open Sans Extrabold';
-	font-display: auto;
+	/*font-display: auto;*/
     src: local('Open Sans Extrabold'), local('OpenSans-Extrabold'),
     url(fonts/open-sans-extrabold.ttf) format("truetype");
     font-weight: 900;
 }
 * {
 
-    font-family: 'Open Sans', 'Open Sans Extrabold', arial;
+    /*font-family: 'Open Sans', 'Open Sans Extrabold', arial;*/
+    font-family: 'Open Sans', arial;
 
 }
 
@@ -3515,8 +3516,8 @@ div.sort_lable {
 }
 
 div.detail-prop { margin-bottom: 5px; }
-div.detail-prop .prop-name { float: left; width: 200px; }
-div.detail-prop .prop-value { padding-left: 210px; }
+div.detail-prop .prop-name { float: left; width: 290px; }
+div.detail-prop .prop-value { padding-left: 297px; line-height: 25px;}
 div.detail-prop .prop-value li { list-style-type: none; }
 
 /*Виртуальная клавиатура*/
@@ -3981,7 +3982,10 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
 }
 
 .listgoods ul.items li div.row.periodics div.image_item {width: 219px; text-align: right; float: left;}
-.listgoods ul.items li div.row.periodics div.image_item .status-block { height: 20px; display: block;padding: 7px 18px 8px;letter-spacing: 1.3px;font-weight: 600; }
+.listgoods ul.items li div.row.periodics div.image_item .status-block,
+.view_product div.periodics div.detail_block div.image_item .status-block
+{ height: 20px; display: block;padding: 7px 18px 8px;letter-spacing: 1.3px;font-weight: 600; }
+
 .listgoods ul.items li div.row.periodics div.image_item img { height: auto; max-width: 78% !important; margin-top: 35px; margin-left: 12px;}
 .listgoods ul.items li div.row.periodics div.info_item { float: left; width: 305px; padding: 40px 65px 0 29px; margin: 0; color: #424243; font-weight: 600;}
 .listgoods ul.items li div.row.periodics div.info_item a.title {display:block; line-height: 27px; font-weight: bold; padding-bottom: 6px; margin: 0; font-size: 19px; color: #1257ab;}
@@ -3992,7 +3996,7 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
 .listgoods ul.items li div.row.periodics div.price_item {float: left;padding: 43px 15px 30px 30px;margin: 0;background-color: #f8f8f8;width: 255px;  text-align: left; color: #301c53;}
 .listgoods ul.items li div.row.periodics div.price_item select {margin: 0 0 22px 0;width: 242px;color: #747474;height: 38px;border: solid 2px #ececec;padding: 0 35px 0 15px; font-size: 14px;letter-spacing: -0.2px;background-color: rgba(255, 255, 255, 0);}
 .listgoods ul.items li div.row.periodics div.price_item span.arrow_down { position: relative; display: inline-block;}
-.listgoods ul.items li div.row.periodics div.price_item span.arrow_down:after { float: right; font: normal normal normal 28px FontAwesome; content: '\f107'; color: #ececec; top: 5px; position: absolute; right: 8px; z-index: 1; text-align: left; pointer-events: none; box-sizing: border-box; display: block; background-color: #f8f8f8; width: 30px; height: 28px;}
+.listgoods ul.items li div.row.periodics div.price_item span.arrow_down:after { float: right; font: normal normal normal 28px FontAwesome; content: '\f107'; color: #ececec; top: 0; position: absolute; right: 0; z-index: 1; text-align: left; pointer-events: none; box-sizing: border-box; display: block; background-color: #f8f8f8; width: 38px; height: 38px; border-right: 2px solid; border-bottom: 2px solid; border-top: 2px solid; border-radius: 4px;}
 .listgoods ul.items li div.row.periodics div.price_item .price_h {margin-top: 11px;margin-bottom: 5px;font-weight: 600;}
 .listgoods ul.items li div.row.periodics div.price_item .without_discount {font-size: 21px;margin-right: 9px;}
 .listgoods ul.items li div.row.periodics div.price_item span.price {font-size: 21px;}
@@ -4010,3 +4014,33 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
     transform: rotate(90deg);
 }
 
+.view_product div.periodics div.detail_block div.image_item {position: relative; float: left; width: 300px; overflow: hidden; text-align: center; background: #f8f8f8;}
+.view_product div.periodics div.detail_block div.image_item img {max-width: 300px; height: auto;}
+.view_product div.periodics div.detail_block div.info_item {float: left; margin-left: 68px; width: 440px; padding-right: 12px; color: #424242; font-weight: 600;}
+.view_product div.periodics div.detail_block div.info_item h1.title {margin-bottom: 25px; padding-bottom: 15px; letter-spacing: 1.5px; font-weight: bold; color: #424242;}
+.view_product div.periodics div.detail_block div.info_item .prop { margin-top: 10px; }
+.view_product div.periodics div.detail_block div.info_item .prop .prop-name { float: left; width: 220px; }
+.view_product div.periodics div.detail_block div.info_item .prop .prop-value { padding-left: 230px; }
+.view_product div.periodics div.detail_block div.price_item {float: left; padding: 57px 25px 30px 25px; margin: 0;background-color: #f8f8f8;width: 300px;  text-align: left; color: #301c53;}
+.view_product div.periodics div.detail_block div.price_item select {margin: 0 0 36px 0;width: 300px;color: #747474;height: 38px;border: solid 2px #ececec;padding: 0 35px 0 15px; font-size: 14px;letter-spacing: -0.2px;background-color: rgba(255, 255, 255, 0);}
+.view_product div.periodics div.detail_block div.price_item span.arrow_down { position: relative; display: inline-block;}
+.view_product div.periodics div.detail_block div.price_item span.arrow_down:after { float: right; font: normal normal normal 28px FontAwesome; content: '\f107'; color: #ececec; top: 0; position: absolute; right: 0; z-index: 1; text-align: left; pointer-events: none; box-sizing: border-box; display: block; background-color: #f8f8f8; width: 38px; height: 38px; border-right: 2px solid; border-bottom: 2px solid; border-top: 2px solid; border-radius: 4px;}
+.view_product div.periodics div.detail_block div.price_item .price_h {margin-top: 11px;margin-bottom: 5px;font-weight: 600;}
+.view_product div.periodics div.detail_block div.price_item .without_discount {font-size: 21px;margin-right: 9px;}
+.view_product div.periodics div.detail_block div.price_item span.price {font-size: 21px; margin-right: 25px;}
+.view_product div.periodics div.detail_block div.price_item div.price {line-height: 15px;letter-spacing: -0.4px; display: contents;}
+.view_product div.periodics div.detail_block div.price_item div.free_delivery {margin: 17px 0 28px 0;color:#4298d3;font-weight: 600;}
+.view_product div.periodics div.detail_block div.price_item .notes .notes-block.favorite {width: 100px; padding: 8px 10px; z-index: 1;left: -57px;  top: 36px;}
+/*.listgoods ul.items li div.row.periodics div.price_item .notes .notes-block.favorite:hover {}*/
+.view_product div.periodics div.detail_block div.price_item .notes .notes-block.favorite:before {
+    left: 81px;
+    top: -10px;
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+div.periodics div.detail_block div.price_item .periodic_fin,
+div.periodics div.detail_block div.price_item .periodic_world
+{ width: 100% }

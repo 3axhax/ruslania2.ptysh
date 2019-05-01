@@ -292,6 +292,7 @@ return array (
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2' => 'Monate',
   'MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3' => 'Monate',
   'MIN_FOR_X_MONTHS_Y_ISSUES_TEMPLATE' => 'Mindestbestellung %1$s %2$s / %3$s %4$s ',
+    'MIN_PODPISKA' => 'Mindestbestellung',
   'More info on audio' => 'Mehr Information über Audio',
   'More info on book' => 'Mehr Information über Bücher',
   'More info on map' => 'Mehr Information über diese Landkarte',

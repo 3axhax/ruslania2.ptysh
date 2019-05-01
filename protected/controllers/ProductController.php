@@ -108,7 +108,16 @@ class ProductController extends MyController
             $data['issues_year'] = Periodic::getCountIssues($data['issues_year']);
         }
 
-        $this->render('view', array('item' => $data, 'entity' => $entity));
+	    $serGoods = unserialize(Yii::app()->getRequest()->cookies['yourView']->value);
+	    $arrGoods = array();
+	    if ($serGoods) $arrGoods = $serGoods;
+	    if (!in_array($data['id'] . '_' . $entity, $arrGoods)) {
+		    $arrGoods[] = $data['id'] . '_' . $entity;
+		    Yii::app()->getRequest()->cookies['yourView'] = new CHttpCookie('yourView', serialize($arrGoods));
+	    }
+
+	    if ($entity == Entity::PERIODIC) $this->render('periodics', array('item' => $data, 'entity' => $entity));
+        else $this->render('view', array('item' => $data, 'entity' => $entity));
     }
 
 	private function _checkUrl($item) {

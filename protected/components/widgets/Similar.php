@@ -24,7 +24,7 @@ class Similar extends CWidget {
 		$products = $this->_getProducts();
 		if (empty($products)) return;
 
-		$this->render('similar', array('items'=>$products, 'paramsHeight'=>$this->_paramsHeight));
+		$this->render('similar', array('items'=>$products, 'eid'=>$this->_params['entity'], 'paramsHeight'=>$this->_paramsHeight));
 	}
 
 	private function _getProducts() {
