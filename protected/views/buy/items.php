@@ -45,7 +45,7 @@ else $head .= '<span class="items_nds"></span>';
 					<?php if ($item['entity'] == 30): ?>
 						<?= (Yii::app()->getLanguage() == 'fi')?$ui->item('MONTH_SMALL'):$PH->endOfWord($item['quantity'], $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_1'), $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'), $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_3')); ?>
 					<?php else: ?>
-						<?= $ui->item('CARTNEW_COUNT_NAME')?>
+						<?= $PH->endOfWord($item['quantity'], $ui->item('PIECES1'), $ui->item('PIECES234'), $ui->item('PIECES567890'))?>
 					<?php endif; ?> x <span class="item_cost"><?= $PH->FormatPrice($itemsPrice); ?></span>
 					<?php if ($item['quantity'] > 1): ?>
 						= <span class="item_cost_itogo"><?= $PH->FormatPrice(sprintf("%.2f", $itemsPrice*$item['quantity'])); ?></span>

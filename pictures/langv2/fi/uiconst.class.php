@@ -1419,6 +1419,10 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'PRICE_WITH_DELIVERY' => 'Hinta toimituskuluineen',
     'TO_FINLAND' => 'Suomeen',
     'TO_WORLD' => 'muihin maihin',
+    'PERIODICITY' => 'Ilmestymistiheys',
+    'PIECES1'=>'kpl',
+    'PIECES234'=>'kpl',
+    'PIECES567890'=>'kpl',
 
 
 );

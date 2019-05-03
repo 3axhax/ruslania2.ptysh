@@ -1425,6 +1425,10 @@ Nazhav na interesujuschuju vas kategoriju, vy smozhete uvidet vse tovary so skid
     'PRICE_WITH_DELIVERY' => 'Tsena s dostavkoy',
     'TO_FINLAND' => 'po Finlyandii',
     'TO_WORLD' => 'v drugie strany',
+    'PERIODICITY' => 'Periodichnost',
+    'PIECES1'=>'shtuka',
+    'PIECES234'=>'shtuki',
+    'PIECES567890'=>'shtuk',
 
 
 );

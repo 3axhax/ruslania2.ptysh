@@ -99,7 +99,7 @@ if (isset($_GET['avail'])) {
 <body>
 <?
 
-if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
+if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->getLanguage() == 'ru')) {
 
     ?>
 
@@ -109,28 +109,26 @@ if (!Yii::app()->getRequest()->cookies['showSelLang']->value) {
 
         <div class="box_title box_title_ru"><?= $ui->item('A_NEW_RUS_POPUP'); ?></div>
 
-        <? if (Yii::app()->language != 'en') : ?>
+        <? //if (Yii::app()->language != 'en') : ?>
 
             <div class="box_title box_title_en">Is your language <?= $ui->item('LANG_IN_EN'); ?>?</div>
 
-        <? endif; ?>
+        <? //endif; ?>
+        <div class="box_title box_title_en">Onko kielesi venäjä?</div>
 
         <div class="box_btns">
-            <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language, 1); ?>" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> <? if (Yii::app()->language != 'en') : ?>(Yes)<? endif; ?></a>
+            <a href="<?= MyUrlManager::RewriteCurrent($this, Yii::app()->language, 1); ?>" class="btn_yes"><?= $ui->item('A_NEW_BTN_YES'); ?> (Yes) Kyllä</a>
             <a href="javascript:;" onclick="$('.lang_yesno_box').hide();
-                                        $('.lang_yesno_box.select_lang').show();" class="btn_no"><?= $ui->item('A_NEW_BTN_NO'); ?> <? if (Yii::app()->language != 'en') : ?>(No)<? endif; ?></a>
+                                        $('.lang_yesno_box.select_lang').show();" class="btn_no"><?= $ui->item('A_NEW_BTN_NO'); ?> (No) Ei</a>
         </div>
 
     </div>
 
     <div class="lang_yesno_box select_lang">
 
-        <div class="box_title box_title_ru"><?= $ui->item('A_NEW_SELECT_LANG_TITLE'); ?>:</div>
-        <? if (Yii::app()->language != 'en') : ?>
-
-            <div class="box_title box_title_en">Choose your language</div>
-
-        <? endif; ?>
+        <div class="box_title box_title_ru"><?= $ui->item('A_NEW_SELECT_LANG_TITLE'); ?></div>
+        <div class="box_title box_title_en">Choose your language</div>
+        <div class="box_title box_title_en">Valitse kieli</div>
         <div class="row">
             <ul class="list_languages">
                 <li class="ru span1"><a href="<?= MyUrlManager::RewriteCurrent($this, 'ru', 1); ?>"><?= $ui->item('A_LANG_RUSSIAN') ?></a></li>

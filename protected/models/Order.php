@@ -247,7 +247,7 @@ class Order extends CMyActiveRecord
             $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
             $promocodeId = $this->_promocode;
             if (!empty($notes)) $notes .= ' ';
-            $notes .= 'Использован промокод: ' . $code . '. ';
+            $notes .= Yii::app()->ui->item('PROMOCODE_USE', $code) . '. ';
             $briefly = $promocode->briefly($code, false, $itemsPrice);
             if (!empty($briefly['promocodeValue'])) $notes .= $briefly['promocodeValue'] . ' ';
             if (!empty($briefly['promocodeUnit'])) $notes .= $briefly['promocodeUnit'] . ' ';
