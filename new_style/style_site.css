@@ -4046,3 +4046,7 @@ a.btn_yellow.fa span.lang-se { padding-left: 8px; width: 120px; }
 div.periodics div.detail_block div.price_item .periodic_fin,
 div.periodics div.detail_block div.price_item .periodic_world
 { width: 100% }
+
+.cart_isbn:not(:empty)::after {
+    content: ", ";
+}

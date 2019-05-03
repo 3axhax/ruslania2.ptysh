@@ -181,6 +181,8 @@ class Cart extends CActiveRecord
             }
 
 			$tmp['Title'] = ProductHelper::GetTitle($c);
+            $tmp['ISBN'] = '';
+            if (!empty($c['isbn'])) $tmp['ISBN'] = $c['isbn'];
             if ($isMiniCart == 1) { $tmp['Title'] = ProductHelper::GetTitle($c, 'title', 38); }
 			$tmp['PriceVAT'] = $priceVAT;
             $tmp['PriceVATStr'] = ProductHelper::FormatPrice($priceVAT);
@@ -624,7 +626,5 @@ class Cart extends CActiveRecord
         if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
         return Yii::app()->createUrl('cart/view', $params);
     }
-
-
 	
 }

@@ -38,7 +38,7 @@ $ctrl = Yii::app()->getController()->id;
                 </div>
 
                 <!-- content -->
-                <form action="/cart/doorder" method="get" onsubmit="return false;">
+                <form action="<?= Yii::app()->createUrl('cart/doorder') ?>" method="get" onsubmit="return false;">
                 <div data-bind="visible:  CartItems().length > 0">
 
                     <?php if (Yii::app()->user->isGuest) { ?>
@@ -95,7 +95,7 @@ $ctrl = Yii::app()->getController()->id;
                                     <span class="entity_icons"><i class="fa e<?= $cart['Entity'] ?>" data-bind="attr: { class: 'fa e'+Entity()}"></i></span>
 								</td>
 								<td style="padding-left: 20px;">
-                                    <div><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
+                                    <div><span class="cart_isbn" data-bind="text: ISBN"><?= $cart['ISBN'] ?></span><a href="<?= $cart['Url'] ?>" title="<?= htmlspecialchars($cart['Title']) ?>"
                                         data-bind="attr: { href: Url, title: Title},text: Title"
                                         class="maintxt1" target="_blank"><?= htmlspecialchars($cart['Title']) ?>
                                     </a></div>

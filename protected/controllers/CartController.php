@@ -342,7 +342,6 @@ class CartController extends MyController {
         }
         $data['hrefContinueShopping'] = $hrefContinueShopping;
 
-        Debug::staticRun(array($data));
         $this->render('view', $data);
     }
     public function actionDoOrderJSON() {
