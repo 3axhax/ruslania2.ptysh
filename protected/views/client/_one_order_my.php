@@ -17,7 +17,15 @@
                 <div class="mbt10 info_order">
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_DELIVERY_ADDRESS"); ?>:</span> <div class="span11">
 					
-					<? if ( $order['smartpost_address'] ) : echo $order['smartpost_address']; else : ?>
+					<? if ( $order['smartpost_address'] ) :
+                        if ($smartpostAddress = @unserialize($order['smartpost_address'])) {
+                            echo ''.
+                                $smartpostAddress['labelName']['fi'] . ': ' . $smartpostAddress['locationName']['fi'] . "<br>".
+                                $smartpostAddress['address']['fi']['address'] . ' ' . $smartpostAddress['address']['fi']['postalCode'] . ' ' . $smartpostAddress['address']['fi']['postalCodeName'] .
+                            '';
+                        }
+                        else echo $order['smartpost_address'];
+                    else : ?>
 					
 					<?=CommonHelper::FormatAddress($order['DeliveryAddress']); endif; ?></div></div>
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_DELIVERY_TYPE"); ?>:</span> <div class="span11">

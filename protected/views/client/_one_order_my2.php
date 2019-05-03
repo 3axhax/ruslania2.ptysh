@@ -505,7 +505,14 @@ $cnt_orders = Order::GetCountOrders($this->uid);
 
 					<div class="span11">
 
-						<? if ($order['smartpost_address']) : echo $order['smartpost_address'];
+						<? if ($order['smartpost_address']) :
+							if ($smartpostAddress = @unserialize($order['smartpost_address'])) {
+								echo ''.
+									$smartpostAddress['labelName']['fi'] . ': ' . $smartpostAddress['locationName']['fi'] . "<br>".
+									$smartpostAddress['address']['fi']['address'] . ' ' . $smartpostAddress['address']['fi']['postalCode'] . ' ' . $smartpostAddress['address']['fi']['postalCodeName'] .
+								'';
+							}
+							else echo $order['smartpost_address'];
 						else : ?>
 
 							<? if ($order['delivery_type_id'] == '0') : ?>
