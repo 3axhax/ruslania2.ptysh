@@ -42,7 +42,7 @@ $label = $productModel->GetStatusProduct($item['entity'], $item['id']);
 	</div>
 
 	<div class="price_item">
-		<span class="arrow_down"><select class="periodic">
+		<span class="arrow_down select"><select class="periodic">
 			<?php if ($item['issues_year']['show3Months']) : $count_add = 3; ?>
 				<option value="3" selected="selected">3 <?= $ui->item('MIN_FOR_X_MONTHS_Y_ISSUES_MONTH_2'); ?> - <?= $item['issues_year']['issues'] ?> <?= $item['issues_year']['label_for_issues'] ?></option>
 			<?php endif; ?>
