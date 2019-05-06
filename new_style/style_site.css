@@ -120,6 +120,12 @@ a:hover {
 
 }
 
+.light_gray_menu ul li label a {
+	
+	color: #0088cc;
+	
+}
+	
 .light_gray_menu ul li a.dropdown {
     background: url('../new_img/dd.png') right center no-repeat;
     padding-right: 17px;
