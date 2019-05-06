@@ -183,6 +183,7 @@ class Cart extends CActiveRecord
 			$tmp['Title'] = ProductHelper::GetTitle($c);
             $tmp['ISBN'] = '';
             if (!empty($c['isbn'])) $tmp['ISBN'] = $c['isbn'];
+            elseif (!empty($c['eancode'])) $tmp['ISBN'] = $c['eancode'];
             if ($isMiniCart == 1) { $tmp['Title'] = ProductHelper::GetTitle($c, 'title', 38); }
 			$tmp['PriceVAT'] = $priceVAT;
             $tmp['PriceVATStr'] = ProductHelper::FormatPrice($priceVAT);
