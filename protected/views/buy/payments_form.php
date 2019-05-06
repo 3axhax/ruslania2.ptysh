@@ -71,6 +71,9 @@
 </label>
 </div>
 <?php endif; ?>
+
+<!--
+
 <div class="variant">
 	<div class="qbtn2">?</div>
 	<div class="info_box">
@@ -84,7 +87,7 @@
 	</div>
 	<div class="not_supported" style="display: none;"><?=$ui->item('NOT_APPLEPAY')?></div>
 </label>
-</div>
+</div> -->
 
 <div class="variant">
 	<div class="qbtn2">?</div>
