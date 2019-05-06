@@ -1319,7 +1319,7 @@ IBAN DE79514303006474790001 <br>
   'CARTNEW_SEND_INFO_LABEL' => 'При нажатии кнопки "<span class="js_orderPay">Оформить заказ и оплатить</span><span class="js_orderSave" style="display: none;">Завершить оформление заказа</span>" Вы будете зарегистрированы в нашей системе и Вам будет отправлено письмо с учётными данными для входа в личный кабинет Руслании.',
   'CARTNEW_SEND_ORDER_BTN' => 'Оформить заказ',
   'CARTNEW_TOTAL_COST_LABEL' => 'Итоговая стоимость заказа',
-  'CARTNEW_PROMOKOD_LABEL' => 'Промокод',
+//  'CARTNEW_PROMOKOD_LABEL' => 'Промокод',
   'CARTNEW_PROMOKOD_LABEL_BTN' => 'Применить',
   'CARTNEW_BACK_TO_CART' => 'Вернуться в корзину',
   'CARTNEW_DELIVERY_LABEL' => 'Доставка',
