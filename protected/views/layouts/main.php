@@ -1,4 +1,4 @@
-<?php
+<?php echo $close;
 // session_start();
 // if(!isset($_SESSION['ert']))
 // {
@@ -39,6 +39,14 @@ $ex = explode('?', $url);
 $ex = explode('/', $ex[0]);
 
 $url = $ex;
+
+//var_dump($url);
+
+if (Yii::app()->params['developerMode'] == 1) {
+	
+	$url[count($url)-1] = 'closesite';
+	
+}
 
 $ctrl = Yii::app()->getController()->id;
 
@@ -151,9 +159,13 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
 <div class="header_logo_search_cart">
 
-    <?php $this->widget('InfoText', array('isFrame'=>1)); ?>
+    <?php
+	
+	
+
+	if (end($url) != 'closesite') { $this->widget('InfoText', array('isFrame'=>1)); } ?>
     
-	<? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
+	<? if ($ctrl != 'cart' AND $ctrl != 'payment' AND end($url) != 'closesite') : ?>
 
         <div class="light_gray_menu">
             <div class="container">
@@ -193,8 +205,12 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
         </div>
 
     <? endif; ?>
-
+<?if (end($url) != 'closesite') {?>
     <div class="container">
+	
+	
+	
+	
         <div class="row">
             <div class="span1 logo">
                 <a href="<?= Yii::app()->createUrl('site/index') ?>"><img src="/new_img/logo.png" alt=""/></a>
@@ -387,11 +403,16 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
         </div>
 
-
+	
 
     </div>
+	
+	
     <div style="height: 10px;"></div>
-    <script>
+    
+	<?}?>
+	
+	<script>
         $(document).ready(function () {
             //$('a', $('.dd_box .tabs li')[0]).click();
             // $('li.dd_box .content').jScrollPane({scrollbarWidth:18, showArrows:true});
@@ -399,14 +420,17 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
         })
     </script>
 
-    <?php $this->widget('MainMenu'); ?>
+    <?php  $this->widget('MainMenu'); ?>
 </div>
 
+<? if (end($url) != 'closesite') { ?>
+	<?= $content; ?>
+<? } else { ?>
+	<? $this->renderPartial('close_site'); ?>
+<? } ?>
 
-<?= $content; ?>
 
-
-<? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
+<? if ($ctrl != 'cart' AND $ctrl != 'payment' AND end($url) != 'closesite') : ?>
 
     <div class="footer">
 
