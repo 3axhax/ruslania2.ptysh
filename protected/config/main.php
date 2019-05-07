@@ -192,6 +192,7 @@ return array(
     ),
 
     'params' => array(
+		'developerMode'=>0,
         'DefaultLanguage' => 'ru',
         'ValidLanguages' => $ValidLanguages,
         'ItemsPerPage' => 40,
