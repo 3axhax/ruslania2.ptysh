@@ -166,7 +166,7 @@ class SearchProducts {
 			}
 			$sql .= ') t '.
 				'group by t.id '.
-				'order by left(substring_index(group_concat(t.position), ",", 1), 2), substring_index(group_concat(weight order by weight desc), ",", 1) desc, substring_index(group_concat(t.position), ",", 1), t.time_position '.
+				'order by ' . ($this->_avail?'left(substring_index(group_concat(t.position), ",", 1), 2), ':'mod(left(substring_index(group_concat(t.position), ",", 1), 1), 2) desc, '). 'substring_index(group_concat(weight order by weight desc), ",", 1) desc, substring_index(group_concat(t.position), ",", 1), t.time_position '.
 				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'';
 			$find = Yii::app()->db->createCommand($sql)->queryAll();;
@@ -772,6 +772,13 @@ class SearchProducts {
 		$query = array_filter($query);
 		$math = implode(' ', $query);
 		$countWords = count($query);
+		Debug::staticRun(array($query));
+		if ($countWords > 3) {
+			$query = array_filter($query, function($w) { return (mb_strlen($w, 'utf-8') > 1);});
+			$countWords = count($query);
+			$math = implode(' ', $query);
+		}
+		Debug::staticRun(array($query));
 		$i = 0;
 		if ($countWords > 3) {
 			$phrases = array('(' . implode(' ', $query) . ')');
