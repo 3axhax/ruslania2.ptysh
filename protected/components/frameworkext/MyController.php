@@ -127,7 +127,8 @@ class MyController extends CController
                     if (($this->_maxPages !== false)&&(($page = (int) Yii::app()->getRequest()->getParam('page')) > 1)) {
                         $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('PAGES_N', $page);
                     }
-                    $this->pageTitle .= ' &ndash; ' . Yii::app()->ui->item('RUSLANIA');
+                    if (!empty($this->pageTitle)) $this->pageTitle .= ' &ndash; ';
+                    $this->pageTitle .= Yii::app()->ui->item('RUSLANIA');
                 }
             }
             if (empty($this->pageDescription)) {

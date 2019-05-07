@@ -11,7 +11,7 @@
 				$titleSmall = ProductHelper::GetTitle($product, 'title', 42);
 				$title = ProductHelper::GetTitle($product, 'title');
 				$url = ProductHelper::CreateUrl($product);
-				?>
+				$isAvail = ProductHelper::IsAvailableForOrder($product);				?>
 				<li>
 					<div class="img" style="min-height: 130px; position: relative">
 						<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
@@ -21,6 +21,7 @@
 					</div>
 
 					<div class="title_book" style="height:29px;min-height:auto;margin-bottom:0;"><a href="<?= $url ?>" title="<?= $title ?>"><?= $titleSmall ?></a></div>
+					<?php if ($isAvail): ?>
 					<div style="height: 40px;">
 						<div class="cost">
 							<?php if (!empty($product['priceData'][DiscountManager::DISCOUNT])) : ?>
@@ -45,6 +46,20 @@
 							<a class="cart-action add_cart_plus" data-action="add" data-entity="<?= $product['entity'] ?>" data-id="<?= $product['id'] ?>" data-quantity="1" href="javascript:;"><span>
 	<?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART') ?></span>
 							</a>
+						</div>
+					<?php endif; ?>
+					<?php elseif ($product['entity'] != Entity::VIDEO): ?>
+						<div style="margin-top: 40px;">
+						<?php if (Yii::app()->user->isGuest) : ?>
+							<a style="height: 30px;line-height: 30px;margin-top: 18px;padding: 0;" href="<?=
+							Yii::app()->createUrl('cart/dorequest', array('entity' => Entity::GetUrlKey($product['entity']),
+								'iid' => $product['id']));
+							?>" class="ca request"><?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
+						<?php else : ?>
+							<a style="height: 30px;line-height: 30px;margin-top: 18px;padding: 0;" class="cart-action request" data-action="request" data-entity="<?= $product['entity']; ?>"
+							   data-id="<?= $product['id']; ?>"
+							   href="<?= Yii::app()->createUrl('cart/request', array('entity' => $product['entity'], 'id' => $product['id'])); ?>"><?= Yii::app()->ui->item('CART_COL_ITEM_MOVE_TO_ORDERED'); ?></a>
+						<?php endif; ?>
 						</div>
 					<?php endif; ?>
 				</li>
