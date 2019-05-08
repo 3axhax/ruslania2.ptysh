@@ -46,8 +46,7 @@ class OffersController extends MyController
         $this->render('list', array('list' => $list['Items'], 'paginator' => $list['Paginator']));
     }
 
-    public function actionView($oid)
-    {
+    public function actionView($oid) {
         if(empty($oid)) $this->redirect(Yii::app()->createUrl('offers/list'));
 		
 		//var_dump($oid);
@@ -79,9 +78,8 @@ class OffersController extends MyController
         $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
         $this->breadcrumbs[] = ProductHelper::GetTitle($offer);
 
-        $groups = $o->GetItems($oid);
-        //$groups = $o->GetItemsV2($oid);
-        $this->render('view', array('offer' => $offer, 'groups' => $groups));
+        list($groups, $paginator) = OfferItem::model()->getList($oid);
+        $this->render('view', array('offer' => $offer, 'groups' => $groups, 'paginator' => $paginator));
     }
 
     public function actionDownload($oid)

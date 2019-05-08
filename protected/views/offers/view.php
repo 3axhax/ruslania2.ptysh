@@ -51,6 +51,7 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
 
             <?php endforeach; ?>
+            <?php if ($paginator) $this->widget('SortAndPaging', array('paginatorInfo' => $paginator)); ?>
         </div>
         <div class="span2">
             <?php $this->widget('YouView', array()); ?>

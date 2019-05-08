@@ -163,11 +163,11 @@ class Offer extends CMyActiveRecord
         {
             //вместо * достаточно entity_id, item_id
             if (!$entity) {
-                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
+                $sql = 'SELECT sql_calc_found_rows * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
             }
             else {
-                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
+                $sql = 'SELECT sql_calc_found_rows * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid, ':entity' => $entity));
             }
 
@@ -226,5 +226,9 @@ class Offer extends CMyActiveRecord
         }
 
         return $fullInfo;
+    }
+
+    function getCounts($oid) {
+        $this->fi();
     }
 }
