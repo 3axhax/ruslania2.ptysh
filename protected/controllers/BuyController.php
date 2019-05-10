@@ -1,8 +1,8 @@
 <?php
 /*Created by Кирилл (24.02.2019 10:15)*/
-ini_set('error_reporting', E_ALL);
+/*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_startup_errors', 1);*/
 class BuyController extends MyController {
 	public $layout = 'without_menu';
 	private $_returnButton = array();

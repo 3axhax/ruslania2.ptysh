@@ -1,8 +1,8 @@
 <?php
 /*Created by Кирилл (08.02.2019 21:58)*/
-ini_set('error_reporting', E_ALL);
+/*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_startup_errors', 1);*/
 class SeoController extends MyController {
 
 	function actionEdit() {
@@ -150,7 +150,7 @@ return ' . var_export($result, true) . ';');
 			&& (mb_strpos($params['route'], 'client/', null, 'utf-8') === false)
 			&& (mb_strpos($params['route'], 'cart/', null, 'utf-8') === false)//
 		) return false;
-
+		
 		return true;
 	}
 

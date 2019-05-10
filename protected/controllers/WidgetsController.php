@@ -1,8 +1,8 @@
 <?php
 /*Created by Кирилл (15.03.2019 20:11)*/
-ini_set('error_reporting', E_ALL);
+/*ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_startup_errors', 1);*/
 class WidgetsController extends MyController {
 	private $_locale = array('se'=>'sv_SE', 'fi'=>'fi_FI', 'en'=>'en_US', 'de'=>'de_DE', 'fr'=>'fr_FR', 'ru'=>'ru_RU', 'es'=>'es_LA');
 
