@@ -87,7 +87,7 @@ table.cart {
     max-height: 236px;
 }
 
-.cart_footer { float: right; width: 575px; }
+.cart_footer { float: right; width: 575px; position: relative; }
 
 .footer3 { margin-bottom: 10px; border-bottom: 1px solid #ececec; width: 553px;}
 
@@ -281,3 +281,16 @@ label.error { background-color: #fff !important; border: solid 1px red !importan
 .not_supported { position: absolute; top: 50px; left: 140px; }
 
 .info_order div div.span11 { width: 500px; }
+
+.pleasewait {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.pleasewait span::before {
+    color: #edb421;
+    position: relative;
+    font-size: 39px;
+}

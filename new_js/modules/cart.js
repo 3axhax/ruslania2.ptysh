@@ -829,6 +829,9 @@ Stripe.applePay.checkAvailability(function(available) {
         },
 
         sendforma: function () {
+            var $pleasewait = $('.pleasewait');
+            $pleasewait.show();
+
             $('.error').removeClass('error');
             $('.texterror').hide();
 
@@ -860,6 +863,7 @@ Stripe.applePay.checkAvailability(function(available) {
             fd[this.csrf[0]] = this.csrf[1];
             if (errors.length) {
                 self.viewErrors(errors);
+                $pleasewait.hide();
             }
             else {
                 $.ajax({
@@ -867,6 +871,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     data: fd,
                     type: 'post',
                     dataType : 'json',
+                    complete: function() {$pleasewait.hide();},
                     success: function(r) {
                         var errors = [];
                         if ('errors' in r) {
@@ -908,6 +913,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     else firstErrorPos = Math.min(firstErrorPos, parseInt($label.offset().top) - 10);
                     $label.addClass('error')
                         .siblings('.texterror').show();
+                    errorVisible = true;
                 }
                 else {
                     if (firstErrorPos == 0) firstErrorPos = parseInt($f.offset().top) - 10;
