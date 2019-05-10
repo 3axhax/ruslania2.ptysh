@@ -107,16 +107,20 @@ class Offer extends CMyActiveRecord
             $items = array();
             if (!$entity) {
                 $sql = ''.
-                    'select entity_id, substring_index(group_concat(item_id order by group_order, sort_order), ",", 30) ids ' .
+                    'select entity_id, substring_index(group_concat(item_id), ",", 30) ids ' .
                     'from offer_items ' .
                     'where (offer_id=:id) ' .
-                    'group by entity_id '.
-                    'order by group_order, sort_order '.
+                    ' '.
+                    'order by group_order asc, sort_order asc'.
                 '';
+
+				//echo $sql;
+
 
 //                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
-                foreach ($rows as $row) $items[$row['entity_id']] = explode(',', $row['ids']);
+                foreach ($rows as $row) { 
+				$items[$row['entity_id']] = explode(',', $row['ids']); }
             }
             else {
                 $sql = 'SELECT item_id FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
@@ -137,6 +141,9 @@ class Offer extends CMyActiveRecord
                 $list = $p->GetProductsV2($entity, $ids, true);
                 foreach($items[$entity] as $iid)
                 {
+					
+					//if (!$list[$iid]['image']) continue;
+					
                     if(!isset($list[$iid])) continue;
                     $av = Availability::GetStatus($list[$iid]);
                     if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
@@ -163,11 +170,11 @@ class Offer extends CMyActiveRecord
         {
             //вместо * достаточно entity_id, item_id
             if (!$entity) {
-                $sql = 'SELECT sql_calc_found_rows * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
+                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
             }
             else {
-                $sql = 'SELECT sql_calc_found_rows * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
+                $sql = 'SELECT * FROM offer_items WHERE offer_id=:id AND entity_id=:entity ORDER BY group_order, sort_order limit 30';
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid, ':entity' => $entity));
             }
 
@@ -226,9 +233,5 @@ class Offer extends CMyActiveRecord
         }
 
         return $fullInfo;
-    }
-
-    function getCounts($oid) {
-        $this->fi();
     }
 }
