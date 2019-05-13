@@ -59,4 +59,10 @@ class Test123Controller extends MyController {
 
 		Debug::staticRun(array(Yii::app()->createUrl('cart/orderPay', array('ptype'=>7, 'id'=>7060087, 'currency'=>3))));
 	}
+
+	function actionMorphy() {
+		$word = 'Me ja Mosso. Suomalaisten yhteiseloa Moskovassa yli kolme vuosikymmentä';
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($word) . ", 'forMorphy')");
+		Debug::staticRun(array($result));
+	}
 }
