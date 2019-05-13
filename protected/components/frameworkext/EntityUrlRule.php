@@ -274,8 +274,8 @@ class EntityUrlRule extends CBaseUrlRule {
 		$urlId = array_shift($urlParam);
 		$urlId = (int) $urlId;
 		if (($urlId > 0)&&!empty($route)&&!empty(self::$_routes[$route]['idName'])) {
-			$_REQUEST[self::$_routes[$route]['idName']] = $_GET[self::$_routes[$route]['idName']] = $urlId;
 			if (method_exists($request, 'setParam')) $request->setParam(self::$_routes[$route]['idName'], $urlId);
+			else $_REQUEST[self::$_routes[$route]['idName']] = $_GET[self::$_routes[$route]['idName']] = $urlId;
 			return explode('/', $route);
 		}
 		return false;

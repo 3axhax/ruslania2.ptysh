@@ -151,8 +151,6 @@ class EntityController extends MyController {
             $fd->deleteFiltersData();
         }
 
-        Yii::app()->session['last_e'] = 'filter_e' . $entity . '_c_' . $cid;
-
         if (isset(Yii::app()->request->cookies['last_e']->value)
             && (($key = Yii::app()->request->cookies['last_e']->value) != '')
             && (Yii::app()->request->cookies['last_e']->value != 'filter_e' . $entity . '_c_' . $cid)) {
@@ -307,6 +305,13 @@ class EntityController extends MyController {
     }
 
     public function actionBySeries($entity, $sid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -353,6 +358,13 @@ class EntityController extends MyController {
     }
 
     public function actionByMedia($entity, $mid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -397,6 +409,13 @@ class EntityController extends MyController {
     }
 
     public function actionByPublisher($entity, $pid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -490,6 +509,13 @@ class EntityController extends MyController {
     }
 
     public function actionByAuthor($entity, $aid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -790,6 +816,13 @@ class EntityController extends MyController {
     }
 
     public function actionByPerformer($entity, $pid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -844,6 +877,13 @@ class EntityController extends MyController {
     }
 
     public function actionByDirector($entity, $did, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
@@ -890,6 +930,13 @@ class EntityController extends MyController {
     }
 
     public function actionByActor($entity, $aid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
 
         if (!Entity::checkEntityParam($entity, 'actors')) throw new CHttpException(404);
@@ -935,6 +982,13 @@ class EntityController extends MyController {
     }
 
     public function actionBySubtitle($entity, $sid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
@@ -981,6 +1035,13 @@ class EntityController extends MyController {
     }
 
     public function actionByBinding($entity, $bid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -1028,6 +1089,13 @@ class EntityController extends MyController {
     }
 
     public function actionByYear($entity, $year, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -1060,6 +1128,13 @@ class EntityController extends MyController {
     }
 	
 	public function actionByType($entity, $type, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -1102,6 +1177,13 @@ class EntityController extends MyController {
     }
 	
 	public function actionByYearRelease($entity, $year, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false)
             $entity = Entity::BOOKS;
@@ -1134,6 +1216,13 @@ class EntityController extends MyController {
     }
 
     public function actionByAudioStream($entity, $sid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO)
             throw new CHttpException(404);
@@ -1179,6 +1268,13 @@ class EntityController extends MyController {
     }
 
     public function actionByMagazineType($entity, $tid, $sort = null, $avail = true) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::PERIODIC)
             throw new CHttpException(404);
@@ -1397,6 +1493,13 @@ class EntityController extends MyController {
     }
 
     public function actionByStudio($entity, $sid, $sort = null) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'by';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity != Entity::VIDEO) throw new CHttpException(404);
 

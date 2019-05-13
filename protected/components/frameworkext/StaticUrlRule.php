@@ -147,8 +147,8 @@ class StaticUrlRule extends CBaseUrlRule {
 
 		if ($page = array_search($pathInfo, $this->_pages)) {
 			if (isset(self::$_files[$page])) {
-				$_REQUEST['page'] = $_GET['page'] = $page;
 				if (method_exists($request, 'setParam')) $request->setParam('page', $page);
+				else $_REQUEST['page'] = $_GET['page'] = $page;
 				return 'site/static';
 			}
 			elseif ($page == 'bookshelf') return 'bookshelf/list';
@@ -161,28 +161,28 @@ class StaticUrlRule extends CBaseUrlRule {
 			else {
 				switch ($page) {
 					case 'for-firms':
-						$_REQUEST['mode'] = $_GET['mode'] = 'firms';
 						if (method_exists($request, 'setParam')) $request->setParam('mode', 'firms');
+						else $_REQUEST['mode'] = $_GET['mode'] = 'firms';
 						return 'offers/special';
 						break;
 					case 'for-uni':
-						$_REQUEST['mode'] = $_GET['mode'] = 'uni';
 						if (method_exists($request, 'setParam')) $request->setParam('mode', 'uni');
+						else $_REQUEST['mode'] = $_GET['mode'] = 'uni';
 						return 'offers/special';
 						break;
 					case 'for-lib':
-						$_REQUEST['mode'] = $_GET['mode'] = 'lib';
 						if (method_exists($request, 'setParam')) $request->setParam('mode', 'lib');
+						else $_REQUEST['mode'] = $_GET['mode'] = 'lib';
 						return 'offers/special';
 						break;
 					case 'for-fs':
-						$_REQUEST['mode'] = $_GET['mode'] = 'fs';
 						if (method_exists($request, 'setParam')) $request->setParam('mode', 'fs');
+						else $_REQUEST['mode'] = $_GET['mode'] = 'fs';
 						return 'offers/special';
 						break;
 					case 'for-alle2':
-						$_REQUEST['mode'] = $_GET['mode'] = 'alle2';
 						if (method_exists($request, 'setParam')) $request->setParam('mode', 'alle2');
+						else $_REQUEST['mode'] = $_GET['mode'] = 'alle2';
 						return 'offers/special';
 						break;
 				}
@@ -190,13 +190,13 @@ class StaticUrlRule extends CBaseUrlRule {
 			return 'site/' . $page;
 		}
 		elseif (preg_match("/^" . $this->_pages['offers'] . "\/(\d+)/ui", $pathInfo, $m)) {
-			$_REQUEST['oid'] = $_GET['oid'] = $m[1];
 			if (method_exists($request, 'setParam')) $request->setParam('oid', $m[1]);
+			else $_REQUEST['oid'] = $_GET['oid'] = $m[1];
 			return 'offers/view';
 		}
 		elseif (preg_match("/^" . $this->_pages['bookshelf'] . "\/(\d+)/ui", $pathInfo, $m)) {
-			$_REQUEST['id'] = $_GET['id'] = $m[1];
 			if (method_exists($request, 'setParam')) $request->setParam('id', $m[1]);
+			else $_REQUEST['id'] = $_GET['id'] = $m[1];
 			return 'bookshelf/view';
 		}
 		return false;
