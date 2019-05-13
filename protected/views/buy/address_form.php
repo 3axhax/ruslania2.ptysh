@@ -22,12 +22,12 @@ if (empty($showNotes)) $showNotes = false;
 		<td><?php if (!empty($userName)): ?><b><?= $userName ?>:</b><?php endif; ?></td>
 		<td>
 			<label style="float: left; margin-right: 20px;">
-				<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom js_userType">
+			<input type="radio" value="1" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" <? if ($addrModel->getAttribute('type') == 1) { ?>checked<? } ?>>
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?>
 			</label>
 			<label style="float: left;">
-				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" checked>
+				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" <? if ($addrModel->getAttribute('type') == 2) { ?>checked<? } ?>>
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?>
 			</label>
