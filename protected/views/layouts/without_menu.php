@@ -9,7 +9,7 @@
             <div class="span1 logo">
                 <a href="<?= Yii::app()->createUrl('site/index') ?>"><img src="/new_img/logo.png" alt=""/></a>
             </div>
-            <a href="<?= $returnButton['href'] ?>" style="float: right; margin-top: 50px;"><?= $returnButton['name'] ?></a>
+            <a href="<?= $returnButton['href'] ?>" style="float: right; margin-top: 50px; color: #ff0000;"><?= $returnButton['name'] ?></a>
             <div class="span10" style="margin-top: 40px;">
                 <div class="pult">
                     <ul>

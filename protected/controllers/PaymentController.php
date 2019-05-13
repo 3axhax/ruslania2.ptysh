@@ -15,8 +15,20 @@ ini_set('display_startup_errors', 1);*/
 //  'oid' => string '1033492' (length=7)
 //  'tid' => string '6' (length=1)
 
-class PaymentController extends MyController
-{
+class PaymentController extends MyController {
+    public $layout = 'without_menu';
+    private $_returnButton = array();
+
+    function returnButton() {
+        if (empty($this->_returnButton)) {
+            $this->_returnButton = array(
+                'href'=>Yii::app()->createUrl('site/index'),
+                'name'=>Yii::app()->ui->item('CARTNEW_CONTINUE_SHOPPING'),
+            );
+        }
+        return $this->_returnButton;
+    }
+
     public function actionAccept($oid, $tid) {
         $o = new Order;
         $order = $o->GetOrder($oid);
