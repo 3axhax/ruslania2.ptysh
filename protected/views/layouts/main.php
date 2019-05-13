@@ -42,10 +42,14 @@ $url = $ex;
 
 //var_dump($url);
 
-if (Yii::app()->params['developerMode'] == 1) {
-	
-	$url[count($url)-1] = 'closesite';
-	
+if ($_GET['hdm'] == '') {
+
+	if (Yii::app()->params['developerMode'] == 1) {
+		
+		$url[count($url)-1] = 'closesite';
+		
+	}
+
 }
 
 $ctrl = Yii::app()->getController()->id;
@@ -489,12 +493,17 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'sitemap')); ?>"><?= $ui->item("A_SITEMAP"); ?></a></li>
                         </ul>
                     </div><div class="span1">
+                        <?php
+                        $o = Offer::model();
+                        $fs = $o->GetOffer(Offer::FREE_SHIPPING, true, true);
+                        ?>
                         <ul>
                             <li class="title"><?= $ui->item('A_NEW_OURPREDL'); ?></li>
 							<li><a href="<?= Yii::app()->createUrl('site/sale'); ?>"><?= $ui->item("MENU_SALE"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('offers/list'); ?>"><?= $ui->item("RUSLANIA_RECOMMENDS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>"><?= $ui->item("A_OFFERS_PARTNERS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'uni')); ?>"> <?= $ui->item("A_OFFERS_UNIVERCITY"); ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => Offer::getMode(Offer::FREE_SHIPPING))); ?>"> <?= ProductHelper::GetTitle($fs) ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/certificate', array()); ?>"> <?= $ui->item("GIFT_CERTIFICATE"); ?></a></li>
                         </ul>
                     </div><div class="span1">
@@ -953,5 +962,23 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
     <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
 	<link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
+	
+	
+	<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(53579293, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+	
 </body>
 </html>

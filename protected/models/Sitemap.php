@@ -118,15 +118,16 @@ class Sitemap {
 		}
 		foreach ($this->_staticPages as $pageName=>$param) {
 			$this->_log(Yii::app()->ui->item($param['name']));
-			$this->_putFile('<li><a href="' . Yii::app()->createUrl($param['route']) . '">' . Yii::app()->ui->item($param['name']) . '</a></li>');
+			$this->_putFile('<li><a href="' . Yii::app()->createUrl($param['route']) . '">' . mb_strtoupper(mb_substr(Yii::app()->ui->item($param['name']), 0, 1, 'utf-8'), 'utf-8') . mb_substr(Yii::app()->ui->item($param['name']), 1, null, 'utf-8') . '</a></li>');
 		}
 
 		$this->_offers();
 
-		$this->_putFile('<li><a href="' . Yii::app()->createUrl('bookshelf/list') . '">' . Yii::app()->ui->item('BOOKSHELF_LIST') . '</a></li>');
-
-		$this->_putFile('</ul>');
 		$this->_putFile('</li>');
+		$this->_putFile('<li><a href="' . Yii::app()->createUrl('bookshelf/list') . '">' . Yii::app()->ui->item('BOOKSHELF_LIST') . '</a></li>');
+		$this->_putFile('<li><a href="' . Yii::app()->createUrl('site/certificate') . '">' . Yii::app()->ui->item('GIFT_CERTIFICATE') . '</a></li>');
+
+//		$this->_putFile('</ul>');
 		$this->_putFile('</ul>');
 		return $this->_file;
 	}
@@ -135,14 +136,13 @@ class Sitemap {
 		//не знаю как получить список констант из класса Offer и связь с тегом
 		$const = array(
 //			Offer::INDEX_PAGE => 'index',
-			Offer::FIRMS => 'firms',
+//			Offer::FIRMS => 'firms',
 			Offer::LIBRARY => 'lib',
 			Offer::UNI => 'uni',
 			Offer::FREE_SHIPPING => 'fs',
 			Offer::ALLE_2_EURO => 'alle2',
 		);
-		$this->_putFile('<ul style="margin-left: ' . ($this->_tabPx) . 'px">');
-		$this->_putFile('<li><a href="' . Yii::app()->createUrl('offers/list') . '">' . Yii::app()->ui->item('A_OFFERS') . '</a></li>');
+		$this->_putFile('<li><a href="' . Yii::app()->createUrl('offers/list') . '">' . Yii::app()->ui->item('A_OFFERS') . '</a><ul style="margin-left: ' . ($this->_tabPx) . 'px">');
 
 		$o = new Offer;
 		foreach ($const as $id=>$name) {
@@ -154,6 +154,7 @@ class Sitemap {
 			}
 		}
 
+		$this->_putFile('</ul></li>');
 	}
 
 	private function _setFile($rewrite) {

@@ -41,11 +41,11 @@ class StaticPages {
 	}
 
 	function isWordpanel($uid) {
-		//72459 - kirill.ruh@gmail.com | kirill
+		//77925 - kirill.ruh@gmail.com | kirill
 		//5 - aa@ruslania.com
 		//60093 - maria.ponomareva@gmail.com
 		//69481 - sankes@list.ru | Александр
-		$allowUsers = array(5, 72459, 60093, 69481);
+		$allowUsers = array(5, 77925, 60093, 69481);
 		return in_array($uid, $allowUsers);
 	}
 
