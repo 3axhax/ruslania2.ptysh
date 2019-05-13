@@ -462,12 +462,18 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
                         <a target="_blank" href="https://vk.com/ruslaniabooks" class="icons"><span class="fa vk"></a>
                         <a target="_blank" href="https://www.facebook.com/RuslaniaBooks/" class="icons"><span class="fa facebook"></span></a>
-                        <a target="_blank" href="https://www.twitter.com/RuslaniaKnigi/" class="icons"><span class="fa twitter"></span></a>
                         <a target="_blank" href="https://www.instagram.com/ruslaniabooks/" class="icons"><span class="fa instagram"></span></a>
 						
 						 <a target="_blank" href="https://www.tripadvisor.com/Attraction_Review-g189934-d15003860-Reviews-Ruslania-Helsinki_Uusimaa.html" class="icons"><span class="fa tripadvisor"></span></a>
-						
-						
+<span class="notes">
+    <a target="_blank" href="https://www.twitter.com/RuslaniaKnigi/" class="icons"><span class="fa twitter"></span></a>
+    <span class="notes-block">
+        <div><a target="_blank" href="https://www.twitter.com/RuslaniaKirjat/" class="icons"><span class="fa twitter"></span> Книги на финском</a></div>
+        <div><a target="_blank" href="https://www.twitter.com/RuslaniaKnigi/" class="icons"><span class="fa twitter"></span> Книги на русском</a></div>
+        <div><a target="_blank" href="https://www.twitter.com/RuslaniaMovies/" class="icons"><span class="fa twitter"></span> Музыка и фильмы на ENG</a></div>
+        <div><a target="_blank" href="https://www.twitter.com/RuslaniaMusic/" class="icons"><span class="fa twitter"></span> Ноты на RUS и на ENG</a></div>
+    </span>
+</span>
                         <?php /*
                         <a href="https://vk.com/ruslaniabooks"><img src="/new_img/vk.png" alt="" /></a>
                         <a href="https://www.facebook.com/RuslaniaBooks/"><img src="/new_img/fb.png" alt="" /></a>
