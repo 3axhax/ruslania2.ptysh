@@ -38,7 +38,10 @@ else $head .= '<span class="items_nds"></span>';
 
 		<div class="cart_footer">
 			<div class="pleasewait"><span class="fa fa-spinner fa-pulse"></span></div>
-			<div class="order_start"><span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span><span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span></div>
+			<div class="order_start">
+				<span class="js_orderPay"><?=$ui->item('BUTTON_ORDER_PAY')?></span>
+				<span class="js_orderSave" style="display: none;"><?=$ui->item('BUTTON_ORDER_SAVE')?></span>
+			</div>
 		</div>
 		<?php if (Yii::app()->user->isGuest): ?>
 		<div class="cart_footer">

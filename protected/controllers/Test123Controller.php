@@ -61,8 +61,22 @@ class Test123Controller extends MyController {
 	}
 
 	function actionMorphy() {
-		$word = 'Me ja Mosso. Suomalaisten yhteiseloa Moskovassa yli kolme vuosikymmentä';
+		$word = '3 PIECES OP 42';
 		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($word) . ", 'forMorphy')");
 		Debug::staticRun(array($result));
+
+		$resulTime = microtime(true);
+		$condition = $join = [];
+		$condition['morphy_name'] = "match('piece op 42')";
+		$sql = ''.
+			'select real_id '.
+			'from books_boolean_mode ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by position asc, time_position asc '.
+			'limit 0, 40 '.
+			'option ranker=sph04, max_matches=100000 '.
+		'';
+		Debug::staticRun(array(SphinxQL::getDriver()->queryCol($sql), number_format(microtime(true)-$resulTime, 4)));
+
 	}
 }

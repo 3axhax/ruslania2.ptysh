@@ -889,6 +889,15 @@ Stripe.applePay.checkAvailability(function(available) {
                             self.viewErrors(errors);
                         }
                         else {
+							
+							//alert(111);
+							
+							//ym(53579293, 'reachGoal', 'start_order');
+							yaCounter53579293.reachGoal('start_order');
+							
+							//return '';
+							
+							
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
                                 //case 25: self.paytrail(r.form); break;
@@ -998,7 +1007,18 @@ Stripe.applePay.checkAvailability(function(available) {
             $('#js_orderForm').find('input[name], textarea[name], select[name]').each(function(i, f) {
                 switch (f.type) {
                     case 'radio':
-                        if ((f.name in urlData)&&(f.value == urlData[f.name])) f.checked = true;
+                        if ((f.name in urlData)&&(f.value == urlData[f.name])) {
+                            f.checked = true;
+                            if (f.name == 'ptype') {
+                                switch(f.value) {
+                                    case '0': case '14':case '13': case '7':
+                                        $('.js_orderPay').hide();
+                                        $('.js_orderSave').show();
+                                        $('.paytail_payment').hide();
+                                    break;
+                                }
+                            }
+                        }
                         break;
                     case 'checkbox':
                         if (f.name in urlData) f.checked = true;
