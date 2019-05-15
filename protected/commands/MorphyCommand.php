@@ -14,47 +14,49 @@ class MorphyCommand extends CConsoleCommand {
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
-		$insertSql = ''.
-			'insert into _morphy_books (real_id, avail, isbnnum, eancode, stock_id, title, authors, description, time_position, exists_position) '.
-			'values(:real_id, :avail, :isbnnum, :eancode, :stock_id, :title, :authors, :description, :time_position, :exists_position)'.
-		'';
-		$insertPDO = Yii::app()->db->createCommand($insertSql);
-		$insertPDO->prepare();
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			if ($entity == 10) continue;
+			if ($entity == 15) continue;
+			if ($entity == 22) continue;
+			if ($entity == 24) continue;
+			if ($entity == 30) continue;
+			$insertPDO = null;
+			$insertSql = ''.
+				'insert into _morphy_' . $params['entity'] . ' (real_id, isbnnum, title, authors, description) '.
+				'values(:real_id, :isbnnum, :title, :authors, :description)'.
+				'';
+			$insertPDO = Yii::app()->db->createCommand($insertSql);
+			$insertPDO->prepare();
 
-		$sqlItems = ''.
-			'select t.id, t.avail_for_order, t.isbn, t.eancode, t.stock_id, '.
-				't.title_ru, t.title_en, t.title_rut, t.title_fi, '.
-				'ifnull(tA.name, "") authors, '.
-				't.description_ru, t.description_en, t.description_fi, t.description_rut, '.
-				't.positionTimeHL time_position, '.
-				'case when (t.in_shop between 1 and 5) then 1 when (t.in_shop > 5) then 2 when (tIWL.item_id is not null) then 3 when (t.econet_skip > 0) then 5 else 6 end exists_position '.
-			'from books_catalog t '.
-				'left join _items_with_label tIWL on (tIWL.item_id = t.id) and (tIWL.entity_id = 10) '.
-				'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = 10) '.
-				'join (select t1.id from books_catalog t1 left join _morphy_books tMB on (tMB.real_id = t1.id) where (tMB.real_id is null) limit ' . $this->_counts . ') t2 on (t2.id = t.id) '.
+			$sqlItems = ''.
+				'select t.id, ' . ((in_array($entity, array(30, 40)))?'""':'t.isbn') . ' isbn, '.
+					't.title_ru, t.title_en, t.title_rut, t.title_fi, '.
+					'ifnull(tA.name, "") authors, '.
+					't.description_ru, t.description_en, t.description_fi, t.description_rut '.
+				'from ' . $params['site_table'] . ' t '.
+					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . $entity . ') '.
+					'join (select t1.id from ' . $params['site_table'] . ' t1 left join _morphy_' . $params['entity'] . ' tMB on (tMB.real_id = t1.id) where (tMB.real_id is null) limit ' . $this->_counts . ') t2 on (t2.id = t.id) '.
 			'';
-		//TODO:: доделать (для каждого языка свой индекс)
-		$step = 0;
-		while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
-			$step++;
-			foreach ($items as $item) {
-				$title = $this->_getMorphyNames($item['title']);
-				$desc = $this->_getMorphyNames($item['description'], $title, 2);
-				$insertPDO->execute(array(
-					':real_id'=>$item['id'],
-					':avail'=>$item['avail_for_order'],
-					':isbnnum'=>$this->_getIsbn($item['isbn']),
-					':eancode'=>$item['eancode'],
-					':stock_id'=>$item['stock_id'],
-					':title'=>implode(' ', $title),
-					':authors'=>$item['authors'],
-					':description'=>implode(' ', $desc),
-					':time_position'=>$item['time_position'],
-					':exists_position'=>$item['exists_position'],
-				));
-			}
+			echo $sqlItems . "\n";
+			//TODO:: доделать (для каждого языка свой индекс)
+			$step = 0;
+			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
+				$step++;
+				foreach ($items as $item) {
+					$title = $this->_getMorphyNames(array('ru'=>$item['title_ru'],'en'=>$item['title_en'],'fi'=>$item['title_fi'],'rut'=>$item['title_rut'],));
+					$desc = $this->_getMorphyNames(array('ru'=>$item['description_ru'],'en'=>$item['description_en'],'fi'=>$item['description_fi'],'rut'=>$item['description_rut'],), $title);
+					$insertPDO->execute(array(
+						':real_id'=>$item['id'],
+						':isbnnum'=>$this->_getIsbn($item['isbn']),
+						':title'=>implode(' ', $title),
+						':authors'=>$item['authors'] . ' ' . implode(' ', $title),
+						':description'=>implode(' ', $desc),
+					));
+				}
 //			if ($step > 1) break;
+			}
 		}
+
 
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
@@ -68,24 +70,32 @@ class MorphyCommand extends CConsoleCommand {
 		return new IteratorsPDO($pdo->getPdoStatement());
 	}
 
-	private function _getMorphyNames($name, $excludeWords = array(), $minLen = 0) {
-		$names = array();
-		$names = array_merge($names, preg_split("/\W/ui", $name));
-		if ($minLen > 0) {
-			foreach ($names as $i=>$s) {
-				if (mb_strlen($s, 'utf-8') <= $minLen) unset($names[$i]);
+	private function _getMorphyNames($names, $addWords = array()) {
+		$morphyNames = $addWords;
+		foreach ($names as $lang=>$name) {
+			$words = array();
+			$words = array_merge($words, preg_split("/\W/ui", $name));
+			$words = array_unique($words);
+			if ($lang == 'rut') {
+				foreach($words as $normForm) {
+					$morphyNames[] = $normForm;
+				}
 			}
-		}
-		$names = array_unique($names);
+			else {
+				foreach(SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy_" . $lang . "')") as $result) {
+					if (mb_strpos($result['normalized'], '=') === 0) continue;
 
-		$morphyNames = array();
-		foreach(SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $names)) . ", 'forMorphy')") as $result) {
-			if (!in_array($result['normalized'], $excludeWords)) $morphyNames[] = $result['normalized'];
+					if (is_numeric($result['tokenized'])) $normForm = $result['tokenized'];
+					else $normForm = $result['normalized'];
+					$morphyNames[] = $normForm;
+				}
+			}
 		}
 		return array_unique($morphyNames);
 	}
 
 	private function _getIsbn($s) {
+		if (empty($s)) return '';
 		return preg_replace("/\D/ui", '', $s);
 	}
 }

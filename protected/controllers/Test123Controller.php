@@ -61,22 +61,27 @@ class Test123Controller extends MyController {
 	}
 
 	function actionMorphy() {
-		$word = '3 PIECES OP 42';
+		$word = 'Пушкин онегин';
 		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($word) . ", 'forMorphy')");
+		$searchWords = [];
+		foreach ($result as $r) {
+			$searchWords[] = $r['normalized'];
+		}
 		Debug::staticRun(array($result));
 
 		$resulTime = microtime(true);
 		$condition = $join = [];
-		$condition['morphy_name'] = "match('piece op 42')";
+		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(/*'@(description)' . */implode('|', $searchWords)) . ')';
+//		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('((' . implode(' ', $searchWords) . ')^1000)|((' . implode('|', $searchWords) . ')^10)') . ')';
 		$sql = ''.
-			'select real_id '.
+			'select real_id, weight() '.
 			'from books_boolean_mode ' .
 			'where ' . implode(' and ', $condition) . ' '.
-			'order by position asc, time_position asc '.
 			'limit 0, 40 '.
-			'option ranker=sph04, max_matches=100000 '.
+//			"option ranker=none, field_weights=(title=10,authors=8,description=6), max_matches=100000 ".
+			"option ranker=expr('top(word_count*user_weight)'), field_weights=(title=100,authors=52,description=51), max_matches=100000 ".
 		'';
-		Debug::staticRun(array(SphinxQL::getDriver()->queryCol($sql), number_format(microtime(true)-$resulTime, 4)));
+		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql), number_format(microtime(true)-$resulTime, 4)));
 
 	}
 }
