@@ -205,7 +205,7 @@ class Cart extends CActiveRecord
             $tmp['Url'] = ProductHelper::CreateUrl($c);
             $tmp['Quantity'] = $c['quantity'];
             $tmp['UnitWeight'] = $c['InCartUnitWeight'] / 1000; // в кг.
-            $tmp['IsAvailable'] = ProductHelper::IsAvailableForOrder($c);
+            $tmp['IsAvailable'] = (ProductHelper::IsAvailableForOrder($c)||empty($c['out_of_print']));
             $tmp['Availability'] = Availability::GetStatus($c);
             $tmp['AvailablityText'] = Availability::ToStr($c);
             $tmp['DiscountPercent'] = $values[DiscountManager::DISCOUNT];

@@ -279,8 +279,7 @@ class BuyController extends MyController {
 
 				$orderItems = array();
 				foreach ($items as $item) {
-					if (ProductHelper::IsAvailableForOrder($item))
-						$orderItems[] = $item;
+					if (ProductHelper::IsAvailableForOrder($item)||empty($item['out_of_print'])) $orderItems[] = $item;
 				}
 				$o = new Order;
 				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
