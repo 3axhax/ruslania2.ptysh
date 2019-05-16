@@ -1,6 +1,6 @@
 <?php
 /*Created by Кирилл (14.05.2019 17:32)*/
-ini_set('max_execution_time', 3600);
+ini_set('max_execution_time', 9600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php morphy
  * готовлю тоблицу для сфинкса
  * для каждого товара оставляю только уникальные слова в нормальной форме
@@ -49,7 +49,7 @@ class MorphyCommand extends CConsoleCommand {
 						':real_id'=>$item['id'],
 						':isbnnum'=>$this->_getIsbn($item['isbn']),
 						':title'=>implode(' ', $title),
-						':authors'=>$item['authors'] . ' ' . implode(' ', $title),
+						':authors'=>(empty($item['authors'])?'':$item['authors'] . ' ' . implode(' ', $title)),
 						':description'=>implode(' ', $desc),
 					));
 				}
@@ -72,24 +72,30 @@ class MorphyCommand extends CConsoleCommand {
 
 	private function _getMorphyNames($names, $addWords = array()) {
 		$morphyNames = $addWords;
+		$allWords = array();
 		foreach ($names as $lang=>$name) {
 			$words = array();
 			$words = array_merge($words, preg_split("/\W/ui", $name));
 			$words = array_unique($words);
 			if ($lang == 'rut') {
 				foreach($words as $normForm) {
-					$morphyNames[] = $normForm;
+					if (is_numeric($normForm)) $morphyNames[] = $normForm;
+					elseif (mb_strlen($normForm, 'utf-8') > 1) $morphyNames[] = $normForm;
 				}
 			}
 			else {
-				foreach(SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy_" . $lang . "')") as $result) {
-					if (mb_strpos($result['normalized'], '=') === 0) continue;
-
-					if (is_numeric($result['tokenized'])) $normForm = $result['tokenized'];
-					else $normForm = $result['normalized'];
-					$morphyNames[] = $normForm;
-				}
+				$allWords = array_merge($allWords, $words);
 			}
+		}
+		$allWords = array_unique($allWords);
+		if (!empty($addWords)&&empty($allWords)) return array();
+
+		foreach(SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $allWords)) . ", 'forMorphy')") as $result) {
+			if (mb_strpos($result['normalized'], '=') === 0) continue;
+
+			if (is_numeric($result['tokenized'])) $normForm = $result['tokenized'];
+			else $normForm = $result['normalized'];
+			$morphyNames[] = $normForm;
 		}
 		return array_unique($morphyNames);
 	}
