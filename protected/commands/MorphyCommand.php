@@ -15,11 +15,11 @@ class MorphyCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			if ($entity == 10) continue;
-			if ($entity == 15) continue;
-			if ($entity == 22) continue;
-			if ($entity == 24) continue;
-			if ($entity == 30) continue;
+//			if ($entity == 10) continue;
+//			if ($entity == 15) continue;
+//			if ($entity == 22) continue;
+//			if ($entity == 24) continue;
+//			if ($entity == 30) continue;
 			$insertPDO = null;
 			$insertSql = ''.
 				'insert into _morphy_' . $params['entity'] . ' (real_id, isbnnum, title, authors, description) '.
