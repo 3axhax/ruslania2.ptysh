@@ -61,7 +61,8 @@ class Test123Controller extends MyController {
 	}
 
 	function actionMorphy() {
-		$word = 'матрешка аудио cd рабочая тетрадь';
+		//Matryoshka Textbook + audio CD
+		$word = 'Schönberg';
 		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($word) . ", 'forMorphy')");
 		$searchWords = [];
 		$realWords = [];
@@ -81,7 +82,7 @@ class Test123Controller extends MyController {
 
 		$resulTime = microtime(true);
 		$condition = $join = [];
-		if ($useRealWord) $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode('|', $searchWords) . ')|("' . implode('|', $realWords) . '")') . ')';
+		if ($useRealWord) $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode('|', $searchWords) . ')|(' . implode('|', $realWords) . ')') . ')';
 		else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode('|', $searchWords)) . ')';
 //		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(/*'@(description)' . */implode('|', $searchWords)) . ')';
 //		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('((' . implode(' ', $searchWords) . ')^1000)|((' . implode('|', $searchWords) . ')^10)') . ')';
