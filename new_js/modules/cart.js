@@ -890,10 +890,14 @@ Stripe.applePay.checkAvailability(function(available) {
                         }
                         else {
 							
-							//alert(111);
 							
-							//ym(53579293, 'reachGoal', 'start_order');
-							yaCounter53579293.reachGoal('start_order');
+							if (typeof (yaCounter53579293.reachGoal) === "function") {
+								
+								
+								
+								yaCounter53579293.reachGoal('start_order');
+							
+							}
 							
 							//return '';
 							
