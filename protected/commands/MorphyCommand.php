@@ -53,6 +53,7 @@ class MorphyCommand extends CConsoleCommand {
 						':description'=>implode(' ', $desc),
 					));
 				}
+				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
 		}
