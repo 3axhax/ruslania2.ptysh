@@ -62,41 +62,43 @@ class Test123Controller extends MyController {
 
 	function actionMorphy() {
 		//Matryoshka Textbook + audio CD
-		$word = 'Schönberg';
-		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($word) . ", 'forMorphy')");
-		$searchWords = [];
-		$realWords = [];
-		$useRealWord = true;
-		foreach ($result as $r) {
-			if (mb_strpos($result['normalized'], '=') === 0) continue;
-
-			if (is_numeric($result['tokenized'])) $normForm = $r['tokenized'];
-			else $normForm = $r['normalized'];
-			$searchWords[] = $normForm;
-			$realWords[] = $r['tokenized'];
-			if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
-		}
-		$searchWords = array_unique($searchWords);
-		$realWords = array_unique($realWords);
-		Debug::staticRun(array($word, $result/*, $useRealWord, $searchWords, $realWords*/));
-
+		$word = 'Matryoshka Textbook';//'Schönberg';
+		$sp = new SearchProducts(1);
+		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($word);
+		list($tables, $condition, $order, $option) = $sp->getSqlParam($searchWords, $realWords, $useRealWord, 0);
 		$resulTime = microtime(true);
-		$condition = $join = [];
-		if ($useRealWord) $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode('|', $searchWords) . ')|(' . implode('|', $realWords) . ')') . ')';
-		else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode('|', $searchWords)) . ')';
-//		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(/*'@(description)' . */implode('|', $searchWords)) . ')';
-//		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('((' . implode(' ', $searchWords) . ')^1000)|((' . implode('|', $searchWords) . ')^10)') . ')';
-		$condition['weight'] = '(weight() > 299)';
 		$sql = ''.
 			'select entity, real_id, weight() '.
+			'from ' . implode(', ', $tables) . ' ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by ' . implode(', ', $order) . ' '.
+			'limit 0, 400 '.
+		'option ' . implode(', ', $option) . ' '.
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($sql, $find, number_format(microtime(true)-$resulTime, 4)));
+
+		$sql = ''.
+			'select entity, real_id '.
+			'from pereodics_boolean_mode ' .
+			'where (issn = ' . SphinxQL::getDriver()->mest('1562-2258') . ')'.// | (index = ' . SphinxQL::getDriver()->mest('1562-2258') . ') '.
+		'';
+		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql)));
+		$sql = ''.
+			'select * '.
+			'from wrong_isbn ' .
+			'where match(' . SphinxQL::getDriver()->mest('951-581-054-X') . ') '.
+			'option ranker=none '.
+		'';
+		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql)));
+
+		$sql = ''.
+			'select entity, count(*) counts '.
 			'from books_boolean_mode, pereodics_boolean_mode, printed_boolean_mode, music_boolean_mode, musicsheets_boolean_mode, video_boolean_mode, maps_boolean_mode, soft_boolean_mode ' .
 			'where ' . implode(' and ', $condition) . ' '.
-			'order by weight() desc, position asc, time_position asc '.
-			'limit 0, 400 '.
-//			"option ranker=none, field_weights=(title=10,authors=8,description=6), max_matches=100000 ".
+			'group by entity '.
 			"option ranker=expr('top(word_count*user_weight)'), field_weights=(title=100,authors=90,description=80), max_matches=100000 ".
 		'';
 		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql), number_format(microtime(true)-$resulTime, 4)));
-
 	}
 }

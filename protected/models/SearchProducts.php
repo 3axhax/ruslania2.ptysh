@@ -22,6 +22,7 @@ class SearchProducts {
 		if (ProductHelper::IsShelfId($q)) $code[] = 'stock_id';
 		if (ProductHelper::IsEan($q)) $code[] = 'eancode';
 		if (ProductHelper::IsIsbn($q)) $code[] = 'isbnnum';
+		if (ProductHelper::IsUniqueId($q)) $code[] = 'real_id';
 		if ((mb_strlen($q, 'utf-8') > 5)&&!preg_match("/[^a-z0-9-]/i", $q)&&preg_match("/\d/i", $q)) {
 			$code[] = 'catalogue';
 		}
@@ -42,8 +43,9 @@ class SearchProducts {
 		return SearchHelper::ProcessProducts2(array('e' . $entity=>array($params['id'])), false);
 	}
 
-
 	function getByCode($code, $q) {
+		/*if (isset($_GET['ha']))*/ return $this->getBooleanByCode($code, $q);
+
 		foreach ($code as $codeName) {
 			switch ($codeName) {
 				case 'catalogue':
@@ -106,35 +108,10 @@ class SearchProducts {
 	}
 
 	function getList($q, $page, $pp, $eid = 0) {
+		/*if (isset($_GET['ha']))*/ return $this->getBooleanList($q, $page, $pp, $eid = 0);
+
 		$firstUnion = true;
 		$math = explode('|', $this->getMath($q));
-
-//		if (count($math) > 1) {
-
-
-		/*
-			$sql = ''.
-				'select t.entity, t.real_id '.
-				'from (';
-		foreach ($this->_getTablesForList() as $seTable) {
-				foreach ($math as $m) {
-					if ($firstUnion) $firstUnion = false;
-					else $sql .= 'union ';
-					$spxCond = array($m);
-					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
-					$spxCond['limit'] = 'limit=100000';
-					$spxCond['maxmatches'] = 'maxmatches=100000';
-					$sql .= 'SELECT entity, real_id, avail, right(position, 2) position, time_position FROM `_se_' . $seTable . '` '.
-						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ') ';
-					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;
-				}
-			}
-			$sql .= ') t '.
-				'order by t.avail desc, t.position, t.time_position '.
-				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
-			'';
-
-		 */
 			$sql = ''.
 				'select t.entity, t.real_id '.
 				'from (';
@@ -142,16 +119,6 @@ class SearchProducts {
 				foreach ($math as $m) {
 					if ($firstUnion) $firstUnion = false;
 					else $sql .= 'union all ';
-/*					$spxCond = array($m);
-					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
-					$spxCond['limit'] = 'limit=100000';
-					$spxCond['maxmatches'] = 'maxmatches=100000';
-					$sql .= '(SELECT entity, real_id FROM (SELECT * '.
-						'FROM `_se_' . $seTable . '` '.
-						'WHERE (query=' . SphinxQL::getDriver()->mest(implode(';', $spxCond)) . ')) t1 '.
-						'order by t1.position, t1.time_position) '.
-					'';
-					if (in_array($seTable, array('avail_items_without_morphy', 'all_items_without_morphy'))) break;*/
 					$spxCond = array($m);
 					if (!empty($eid)) $spxCond['filter'] = 'filter=entity,' . (int) $eid;
 					$spxCond['ranker'] = 'ranker=' . $this->_ranker;
@@ -170,21 +137,6 @@ class SearchProducts {
 				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'';
 			$find = Yii::app()->db->createCommand($sql)->queryAll();;
-/*		}
-		else {
-			$condition = $join = [];
-			$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest($this->getMath($q)) . ')';
-			if (!empty($eid)) $condition['entity'] = '(entity = ' . (int) $eid . ')';
-			$sql = ''.
-				'select id, entity, real_id, position '.
-				'from ' . implode(',',$this->_getTablesForList()) . ' ' .
-				'where ' . implode(' and ', $condition) . ' '.
-				'order by position asc, time_position asc '.
-				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
-				'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
-			'';
-			$find = SphinxQL::getDriver()->multiSelect($sql);
-		}*/
 		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
@@ -203,6 +155,8 @@ class SearchProducts {
 	}
 
 	function getIds($q, $page, $pp, $eid) {
+		/*if (isset($_GET['ha']))*/ return $this->getBooleanIds($q, $page, $pp, $eid);
+
 		if (empty($eid)) return array();
 
 		$condition = $join = [];
@@ -232,15 +186,7 @@ class SearchProducts {
 	}
 
 	function getEntitys($query) {
-/*		$sql = ''.
-			'select entity, count(distinct real_id) counts './/', GROUP_CONCAT(real_id) '.
-			'from ' . implode(',',$this->_getTablesForList()) . ' ' .
-			'where (match(' . SphinxQL::getDriver()->mest($this->getMath($query)) . ')) '.
-			'group by entity '.
-//			'order by position asc '.
-			'option ranker=' . $this->_ranker . ', max_matches=' . $this->_maxMatches . ' '.
-		'';
-		$find = SphinxQL::getDriver()->multiSelect($sql);*/
+		/*if (isset($_GET['ha']))*/ return $this->getBooleanEntitys($query);
 
 		$firstUnion = true;
 		$math = explode('|', $this->getMath($query));
@@ -792,4 +738,195 @@ class SearchProducts {
 		return $math;
 	}
 
+	function getNormalizedWords($q) {
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($q) . ", 'forMorphy')");
+		$searchWords = [];
+		$realWords = [];
+		$useRealWord = true;
+		$equal = true;
+		foreach ($result as $r) {
+			if (mb_strpos($result['normalized'], '=') === 0) continue;
+
+			if (is_numeric($result['tokenized'])) $normForm = $r['tokenized'];
+			else $normForm = $r['normalized'];
+			$searchWords[] = $normForm;
+			$realWords[] = $r['tokenized'];
+			if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
+			$equal = $equal&&($r['tokenized'] == $r['normalized']);
+		}
+		$searchWords = array_unique($searchWords);
+		$realWords = array_unique($realWords);
+		if ($equal) $useRealWord = false;
+		return array($searchWords, $realWords, $useRealWord);
+	}
+
+	function getSqlParam($searchWords, $realWords, $useRealWord, $eid) {
+		$wTtitle = 100; $wAuthors = 90; $wDescription = 80;
+		$countWords = count($searchWords);
+		if ($countWords > 1) {
+			$wDescription = ceil($wTtitle*($countWords - 1)/$countWords) + 1;
+			$wAuthors = $wDescription + 1;
+		}
+		$tables = array('books_boolean_mode', 'pereodics_boolean_mode', 'printed_boolean_mode', 'music_boolean_mode', 'musicsheets_boolean_mode', 'video_boolean_mode', 'maps_boolean_mode', 'soft_boolean_mode');
+		if (!empty($eid)) {
+			$params = Entity::GetEntitiesList();
+			if (isset($params[$eid])&&!empty($params[$eid]['entity'])) $tables = array($params[$eid]['entity'] . '_boolean_mode');
+		}
+		$condition = array(
+			'morphy_name'=>'',
+			'avail'=>'',
+			'weight'=>'',
+		);
+		$separator = ' ';
+		if ($countWords > 3) {
+			$separator = '|';
+			$condition['weight'] = '(weight() > ' . ($wTtitle*3 - 1) . ')';
+		}
+		if ($useRealWord) $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode($separator, $searchWords) . ')|(' . implode($separator, $realWords) . ')') . ')';
+		else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode($separator, $searchWords)) . ')';
+
+		$order = array(
+			'weight'=>'weight() desc',
+			'avail'=>'avail desc',
+			'position'=>'position asc',
+			'time_position'=>'time_position asc',
+		);
+		if ($this->_avail) {
+			$condition['avail'] = '(avail = 1)';
+			unset($order['avail']);
+		}
+		$option = array(
+			'ranker'=>"ranker=expr('top(word_count*user_weight)')",
+			'field_weights'=>"field_weights=(title=" . $wTtitle . ",authors=" . $wAuthors . ",description=" . $wDescription . ")",
+			'max_matches'=>"max_matches=100000",
+		);
+		return array($tables, array_filter($condition), $order, $option);
+	}
+
+	function getBooleanList($q, $page, $pp, $eid) {
+		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($q);
+		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, $eid);
+		$sql = ''.
+			'select entity, real_id, weight() '.
+			'from ' . implode(', ', $tables) . ' ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by ' . implode(', ', $order) . ' '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+			'option ' . implode(', ', $option) . ' '.
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($sql, $find));
+		if (empty($find)) return array();
+
+		return $this->_prepareProducts($find);
+	}
+
+	function getBooleanIds($q, $page, $pp, $eid) {
+		if (empty($eid)) return array();
+
+		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($q);
+		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, $eid);
+		$sql = ''.
+			'select entity, real_id, weight() '.
+			'from ' . implode(', ', $tables) . ' ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'order by ' . implode(', ', $order) . ' '.
+			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
+			'option ' . implode(', ', $option) . ' '.
+		'';
+		return SphinxQL::getDriver()->queryCol($sql);
+	}
+
+	function getBooleanEntitys($query) {
+		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($query);
+		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, 0);
+		$sql = ''.
+			'select entity, count(*) counts '.
+			'from ' . implode(', ', $tables) . ' ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'group by entity '.
+			'option ' . implode(', ', $option) . ' '.
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+
+		$result = array();
+		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
+
+		Debug::staticRun(array($sql, $find));
+		foreach ($find as $data) {
+			//audio не показываем
+			if (!empty($data['entity'])&&($data['entity'] != 20)) {
+				$result[$data['entity']] = $data['counts'];
+			}
+		}
+		return array_filter($result);
+	}
+
+	function getBooleanByCode($code, $q) {
+		foreach ($code as $codeName) {
+			switch ($codeName) {
+				case 'catalogue':
+					$sql = ''.
+						'select entity, real_id '.
+						'from music_boolean_mode ' .
+						'where (catalogue = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+					'';
+					$find = SphinxQL::getDriver()->multiSelect($sql);
+
+					$sql = ''.
+						'select entity, real_id '.
+						'from pereodics_boolean_mode ' .
+						'where (issn = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+					'';
+					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
+
+					$sql = ''.
+						'select entity, real_id '.
+						'from pereodics_boolean_mode ' .
+						'where (index = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+					'';
+					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
+					if (!empty($find)) return $this->_prepareProducts($find);
+					break;
+				default:
+					$qCode = preg_replace("/\D/iu", '', $q);
+					$sql = ''.
+						'select entity, real_id '.
+						'from books_boolean_mode, pereodics_boolean_mode, printed_boolean_mode, music_boolean_mode, musicsheets_boolean_mode, video_boolean_mode, maps_boolean_mode, soft_boolean_mode ' .
+						'where (' . $codeName . ' = ' . $qCode . ') '.
+						'option ranker=none '.
+					'';
+					$find = SphinxQL::getDriver()->multiSelect($sql);
+					if (!empty($find)) return $this->_prepareProducts($find);
+					break;
+			}
+		}
+		$sql = ''.
+			'select entity, real_id '.
+			'from wrong_isbn ' .
+			'where match(' . SphinxQL::getDriver()->mest($q) . ') '.
+			'option ranker=none '.
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		if (!empty($find)) return $this->_prepareProducts($find);
+		return array();
+	}
+
+	private function _prepareProducts($find) {
+		$product = array();;
+		foreach ($find as $data) $product['e'.$data['entity']][] = $data['real_id'];
+		$prepareData =  SearchHelper::ProcessProducts2($product, false);
+		$result = array();
+		foreach ($find as $data) {
+			$key = $data['entity'] . '-' . $data['real_id'];
+			if (!empty($prepareData[$key])) {
+				$prepareData[$key]['position'] = empty($data['position'])?1:$data['position']; //надо, чтобы потом определить из описания или нет
+				$result[$key] = $prepareData[$key];
+			}
+		}
+		return $result;
+	}
 }

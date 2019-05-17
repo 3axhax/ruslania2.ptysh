@@ -49,13 +49,14 @@ class MorphyCommand extends CConsoleCommand {
 						':real_id'=>$item['id'],
 						':isbnnum'=>$this->_getIsbn($item['isbn']),
 						':title'=>implode(' ', $title),
-						':authors'=>(empty($item['authors'])?'':$item['authors'] . ' ' . implode(' ', $title)),
+						':authors'=>implode(' ', $this->_getAuthorsMorphy($item['authors'], $title)),
 						':description'=>implode(' ', $desc),
 					));
 				}
 				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
+			echo date('d.m.Y H:i:s') . "\n";
 		}
 
 
@@ -91,14 +92,22 @@ class MorphyCommand extends CConsoleCommand {
 		$allWords = array_unique($allWords);
 		if (!empty($addWords)&&empty($allWords)) return array();
 
-		foreach(SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $allWords)) . ", 'forMorphy')") as $result) {
-			if (mb_strpos($result['normalized'], '=') === 0) continue;
+		$sp = new SearchProducts(0);
+		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $allWords));
+		return $searchWords;
+	}
 
-			if (is_numeric($result['tokenized'])) $normForm = $result['tokenized'];
-			else $normForm = $result['normalized'];
-			$morphyNames[] = $normForm;
+	private function _getAuthorsMorphy($names, $addWords = array()) {
+		if (empty($names)) return array();
+		$morphyNames = $this->_getMorphyNames(array('ru'=>$names), $addWords);
+		$words = array();
+		$words = array_merge($words, preg_split("/\W/ui", $names));
+		$words = array_unique($words);
+		foreach ($words as $author) {
+			$author = ProductHelper::ToAscii($author, array('onlyTranslite'=>true, 'lowercase'=>false));
+			if (!in_array($author, $morphyNames)) $morphyNames[] = $author;
 		}
-		return array_unique($morphyNames);
+		return $morphyNames;
 	}
 
 	private function _getIsbn($s) {

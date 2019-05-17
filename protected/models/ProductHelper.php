@@ -384,6 +384,11 @@ class ProductHelper
         if ($len == 8 && $firstSigns == '10') return true;
         return false;
     }
+    public static function IsUniqueId($q) {
+        if (preg_match("/\D/ui", $q)) return false;
+        if (mb_strlen($q, 'utf-8') > 7) return false;
+        return true;
+    }
 
     public static function IsEan($q)
     {
