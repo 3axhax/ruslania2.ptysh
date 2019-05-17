@@ -745,9 +745,9 @@ class SearchProducts {
 		$useRealWord = true;
 		$equal = true;
 		foreach ($result as $r) {
-			if (mb_strpos($result['normalized'], '=') === 0) continue;
+			if (mb_strpos($r['normalized'], '=') === 0) continue;
 
-			if (is_numeric($result['tokenized'])) $normForm = $r['tokenized'];
+			if (is_numeric($r['tokenized'])) $normForm = $r['tokenized'];
 			else $normForm = $r['normalized'];
 			$searchWords[] = $normForm;
 			$realWords[] = $r['tokenized'];

@@ -1,13 +1,12 @@
 <?php
 /*Created by Кирилл (15.09.2018 0:46)*/
 
-ini_set('max_execution_time', 3600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php beforesphinx
  * товары по языкам. только avail=1
  * Class BeforeSphinxCommand
  */
-
-define('cronAction', 1);
+require_once dirname(__FILE__) . '/MorphyCommand.php';
+if (!defined('cronAction')) define('cronAction', 1);
 class BeforeSphinxCommand extends CConsoleCommand {
 	private $_counts = 10000;
 
@@ -56,6 +55,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 			}
 		}
 
+		$this->_morphy();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
@@ -165,6 +165,55 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		}
 		$names = array_filter($names);
 		return array_unique($names);
+	}
+
+	private function _morphy() {
+		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+
+		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			$insertPDO = null;
+			$insertSql = ''.
+				'insert into _morphy_' . $params['entity'] . ' (real_id, isbnnum, title, authors, description) '.
+				'values(:real_id, :isbnnum, :title, :authors, :description) '.
+				'on duplicate key update isbnnum = :isbnnum, title = :title, authors = :authors, description = :description '.
+			'';
+			$insertPDO = Yii::app()->db->createCommand($insertSql);
+			$insertPDO->prepare();
+
+			$sqlItems = ''.
+				'select t.id, ' . ((in_array($entity, array(30, 40)))?'""':'t.isbn') . ' isbn, '.
+					't.title_ru, t.title_en, t.title_rut, t.title_fi, '.
+					'ifnull(tA.name, "") authors, '.
+					't.description_ru, t.description_en, t.description_fi, t.description_rut '.
+				'from ' . $params['site_table'] . ' t '.
+					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . (int)$entity . ') '.
+				'join _change_items tCI on (tCI.id = t.id) and (tCI.eid = ' . (int)$entity . ') '.
+			'';
+			echo $sqlItems . "\n";
+			$step = 0;
+			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
+				$step++;
+				foreach ($items as $item) {
+					$title = MorphyCommand::getMorphyNames(array('ru'=>$item['title_ru'],'en'=>$item['title_en'],'fi'=>$item['title_fi'],'rut'=>$item['title_rut'],));
+					$desc = MorphyCommand::getMorphyNames(array('ru'=>$item['description_ru'],'en'=>$item['description_en'],'fi'=>$item['description_fi'],'rut'=>$item['description_rut'],), $title);
+					$insertPDO->execute(array(
+						':real_id'=>$item['id'],
+						':isbnnum'=>MorphyCommand::getIsbn($item['isbn']),
+						':title'=>implode(' ', $title),
+						':authors'=>implode(' ', MorphyCommand::getAuthorsMorphy($item['authors'], $title)),
+						':description'=>implode(' ', $desc),
+					));
+					$sql = 'delete from _change_items where (eid = ' . (int)$entity . ') and (id = ' . (int) $item['id'] . ')';
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+				echo date('d.m.Y H:i:s') . "\n";
+//			if ($step > 1) break;
+			}
+			echo date('d.m.Y H:i:s') . "\n";
+		}
+
+
+		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
 }

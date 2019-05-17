@@ -37,26 +37,25 @@ class MorphyCommand extends CConsoleCommand {
 					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . $entity . ') '.
 					'join (select t1.id from ' . $params['site_table'] . ' t1 left join _morphy_' . $params['entity'] . ' tMB on (tMB.real_id = t1.id) where (tMB.real_id is null) limit ' . $this->_counts . ') t2 on (t2.id = t.id) '.
 			'';
-			echo $sqlItems . "\n";
-			//TODO:: доделать (для каждого языка свой индекс)
+//			echo $sqlItems . "\n";
 			$step = 0;
 			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
 				$step++;
 				foreach ($items as $item) {
-					$title = $this->_getMorphyNames(array('ru'=>$item['title_ru'],'en'=>$item['title_en'],'fi'=>$item['title_fi'],'rut'=>$item['title_rut'],));
-					$desc = $this->_getMorphyNames(array('ru'=>$item['description_ru'],'en'=>$item['description_en'],'fi'=>$item['description_fi'],'rut'=>$item['description_rut'],), $title);
+					$title = self::getMorphyNames(array('ru'=>$item['title_ru'],'en'=>$item['title_en'],'fi'=>$item['title_fi'],'rut'=>$item['title_rut'],));
+					$desc = self::getMorphyNames(array('ru'=>$item['description_ru'],'en'=>$item['description_en'],'fi'=>$item['description_fi'],'rut'=>$item['description_rut'],), $title);
 					$insertPDO->execute(array(
 						':real_id'=>$item['id'],
-						':isbnnum'=>$this->_getIsbn($item['isbn']),
+						':isbnnum'=>self::getIsbn($item['isbn']),
 						':title'=>implode(' ', $title),
-						':authors'=>implode(' ', $this->_getAuthorsMorphy($item['authors'], $title)),
+						':authors'=>implode(' ', self::getAuthorsMorphy($item['authors'], $title)),
 						':description'=>implode(' ', $desc),
 					));
 				}
-				echo date('d.m.Y H:i:s') . "\n";
+//				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
-			echo date('d.m.Y H:i:s') . "\n";
+//			echo date('d.m.Y H:i:s') . "\n";
 		}
 
 
@@ -72,7 +71,7 @@ class MorphyCommand extends CConsoleCommand {
 		return new IteratorsPDO($pdo->getPdoStatement());
 	}
 
-	private function _getMorphyNames($names, $addWords = array()) {
+	static function getMorphyNames($names, $addWords = array()) {
 		$morphyNames = $addWords;
 		$allWords = array();
 		foreach ($names as $lang=>$name) {
@@ -97,9 +96,9 @@ class MorphyCommand extends CConsoleCommand {
 		return $searchWords;
 	}
 
-	private function _getAuthorsMorphy($names, $addWords = array()) {
+	static function getAuthorsMorphy($names, $addWords = array()) {
 		if (empty($names)) return array();
-		$morphyNames = $this->_getMorphyNames(array('ru'=>$names), $addWords);
+		$morphyNames = self::getMorphyNames(array('ru'=>$names), $addWords);
 		$words = array();
 		$words = array_merge($words, preg_split("/\W/ui", $names));
 		$words = array_unique($words);
@@ -110,7 +109,7 @@ class MorphyCommand extends CConsoleCommand {
 		return $morphyNames;
 	}
 
-	private function _getIsbn($s) {
+	static function getIsbn($s) {
 		if (empty($s)) return '';
 		return preg_replace("/\D/ui", '', $s);
 	}
