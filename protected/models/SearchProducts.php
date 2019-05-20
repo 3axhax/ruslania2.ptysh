@@ -331,7 +331,7 @@ class SearchProducts {
 	function inDescription($list, $query, $countChars = 100) {
 		$fields = array('description_ru', 'description_rut', 'description_en', 'description_fi', );
 		foreach ($list as $k=>$item) {
-			if (in_array(mb_substr($item['position'], 0, 1, 'utf-8'), array(1, 3))) continue;//найдено по названию
+//			if (in_array(mb_substr($item['position'], 0, 1, 'utf-8'), array(1, 3))) continue;//найдено по названию
 
 			$text = '';
 			foreach ($fields as $field) $text .= $item[$field] . ' ';
@@ -760,7 +760,8 @@ class SearchProducts {
 		return array($searchWords, $realWords, $useRealWord);
 	}
 
-	function getSqlParam($searchWords, $realWords, $useRealWord, $eid) {
+	function getSqlParam($searchWords, $realWords, $useRealWord, $eid, $useSe = false) {
+		//!range=@weight,0,400
 		$wTtitle = 100; $wAuthors = 90; $wDescription = 80;
 		$countWords = count($searchWords);
 		if ($countWords > 1) {
@@ -770,7 +771,10 @@ class SearchProducts {
 		$tables = array('books_boolean_mode', 'pereodics_boolean_mode', 'printed_boolean_mode', 'music_boolean_mode', 'musicsheets_boolean_mode', 'video_boolean_mode', 'maps_boolean_mode', 'soft_boolean_mode');
 		if (!empty($eid)) {
 			$params = Entity::GetEntitiesList();
-			if (isset($params[$eid])&&!empty($params[$eid]['entity'])) $tables = array($params[$eid]['entity'] . '_boolean_mode');
+			if (isset($params[$eid])&&!empty($params[$eid]['entity'])) {
+				if ($useSe) $tables = array('_se_' . $params[$eid]['entity'] . '_boolean_mode');
+				else $tables = array($params[$eid]['entity'] . '_boolean_mode');
+			}
 		}
 		$condition = array(
 			'morphy_name'=>'',
@@ -780,10 +784,17 @@ class SearchProducts {
 		$separator = ' ';
 		if ($countWords > 3) {
 			$separator = '|';
-			$condition['weight'] = '(weight() > ' . ($wTtitle*3 - 1) . ')';
+			if ($useSe) $condition['weight'] = '!range=@weight,0,' . ($wTtitle*3 - 1);
+			else $condition['weight'] = '(weight() > ' . ($wTtitle*3 - 1) . ')';
 		}
-		if ($useRealWord) $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode($separator, $searchWords) . ')|(' . implode($separator, $realWords) . ')') . ')';
-		else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode($separator, $searchWords)) . ')';
+		if ($useRealWord) {
+			if ($useSe) $condition['morphy_name'] = '(' . implode($separator, $searchWords) . ')|(' . implode($separator, $realWords) . ')';
+			else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest('(' . implode($separator, $searchWords) . ')|(' . implode($separator, $realWords) . ')') . ')';
+		}
+		else {
+			if ($useSe) $condition['morphy_name'] = implode($separator, $searchWords);
+			else $condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode($separator, $searchWords)) . ')';
+		}
 
 		$order = array(
 			'weight'=>'weight() desc',
@@ -792,14 +803,26 @@ class SearchProducts {
 			'time_position'=>'time_position asc',
 		);
 		if ($this->_avail) {
-			$condition['avail'] = '(avail = 1)';
+			if ($useSe) $condition['avail'] = 'filter=avail,1';
+			else $condition['avail'] = '(avail = 1)';
 			unset($order['avail']);
 		}
-		$option = array(
-			'ranker'=>"ranker=expr('top(word_count*user_weight)')",
-			'field_weights'=>"field_weights=(title=" . $wTtitle . ",authors=" . $wAuthors . ",description=" . $wDescription . ")",
-			'max_matches'=>"max_matches=100000",
-		);
+		if ($useSe) {
+			$option = array();
+			$condition['mode'] = 'mode=extended';
+			$condition['ranker'] = 'ranker=expr:top(word_count*user_weight)';
+			$condition['fieldweights'] = 'fieldweights=title,' . $wTtitle . ',authors,' . $wAuthors . ',description,' . $wDescription . '';
+			$condition['limit'] = 'limit=50000';
+			$condition['maxmatches'] = 'maxmatches=50000';
+		}
+		else {
+			$option = array(
+				'ranker'=>"ranker=expr('top(word_count*user_weight)')",
+				'field_weights'=>"field_weights=(title=" . $wTtitle . ",authors=" . $wAuthors . ",description=" . $wDescription . ")",
+				'max_matches'=>"max_matches=100000",
+			);
+		}
+		Debug::staticRun(array($tables, array_filter($condition), $order, $option));
 		return array($tables, array_filter($condition), $order, $option);
 	}
 
@@ -821,6 +844,20 @@ class SearchProducts {
 		return $this->_prepareProducts($find);
 	}
 
+	function getBooleanSql($q, $eid) {
+		if (empty($eid)) return '';
+
+		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($q);
+		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, $eid, true);
+		$sql = ''.
+			'SELECT real_id, weight, position, time_position '.
+			'FROM ' . implode(', ', $tables) . ' '.
+			'where (query=' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
+		'';
+		Debug::staticRun(array($sql));
+		return $sql;
+	}
+
 	function getBooleanIds($q, $page, $pp, $eid) {
 		if (empty($eid)) return array();
 
@@ -834,6 +871,7 @@ class SearchProducts {
 			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'option ' . implode(', ', $option) . ' '.
 		'';
+		Debug::staticRun(array($sql));
 		return SphinxQL::getDriver()->queryCol($sql);
 	}
 
