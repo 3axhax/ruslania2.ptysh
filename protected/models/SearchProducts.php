@@ -827,7 +827,7 @@ class SearchProducts {
 		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($q);
 		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, $eid);
 		$sql = ''.
-			'select entity, real_id, weight() '.
+			'select real_id, entity, weight() '.
 			'from ' . implode(', ', $tables) . ' ' .
 			'where ' . implode(' and ', $condition) . ' '.
 			'order by ' . implode(', ', $order) . ' '.
