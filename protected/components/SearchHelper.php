@@ -659,7 +659,6 @@ class SearchHelper
             $order . ' '.
             'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
         '';
-        Debug::staticRun(array($sql));
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
         $sql = 'select found_rows();';
         $counts = (int) Yii::app()->db->createCommand($sql)->queryScalar();
@@ -691,6 +690,7 @@ class SearchHelper
         $paginator = new CPagination($counts);
         $paginator->setPageSize($pp);
 
+        if (!empty($searchModel)) $ret = $searchModel->inDescription($ret, $title, 300);
         return array('Items' => $ret, 'Paginator' => $paginator);
     }
 

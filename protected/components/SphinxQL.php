@@ -80,8 +80,8 @@ class SphinxQL {
 	}
 
 	function snippet($text, $q, $before_match = '<span class="title__bold">', $after_match = '</span>', $limit = 100, $around = 3, $allow_empty = true, $html_strip_mode = 'none') {
-		$index = 'forSnippet';
-		$q .= '*';
+		$index = 'forMorphy';
+//		$q .= '*';
 		$sql = ''.
 			'CALL SNIPPETS('.
 				$this->mest($text) . ', '.
@@ -95,7 +95,8 @@ class SphinxQL {
 		if (!empty($allow_empty)) $sql .= (int)$allow_empty . " as allow_empty, ";
 		if (!empty($html_strip_mode)) $sql .= $this->mest($html_strip_mode) . ' as html_strip_mode, ';
 		$sql .= "1 as limit_passages, 1 as query_mode, 1 use_boundaries)";
-		return $this->fieldSelect($sql);
+		$result = $this->fieldSelect($sql);
+		return $result;
 	}
 
 	function mest($s) {

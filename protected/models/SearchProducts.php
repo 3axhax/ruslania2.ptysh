@@ -73,7 +73,6 @@ class SearchProducts {
 						'order by position asc, time_position asc '.
 						'option ranker=none '.
 					'';
-					Debug::staticRun(array($sql));
 					$items = SphinxQL::getDriver()->multiSelect($sql);
 					if (!empty($items)) {
 						$product = array();
@@ -137,7 +136,6 @@ class SearchProducts {
 				'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'';
 			$find = Yii::app()->db->createCommand($sql)->queryAll();;
-		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
 		$product = array();;
@@ -213,12 +211,10 @@ class SearchProducts {
 			'group by t.entity '.
 		'';
 		$find = Yii::app()->db->createCommand($sql)->queryAll();;
-		Debug::staticRun(array($sql, $find));
 
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
-		Debug::staticRun(array($sql, $find));
 		foreach ($find as $data) {
 			//audio не показываем
 			if (!empty($data['entity'])&&($data['entity'] != 20)) {
@@ -329,9 +325,18 @@ class SearchProducts {
 	 * @return mixed
 	 */
 	function inDescription($list, $query, $countChars = 100) {
+		$titleFields = array('title_ru', 'title_rut', 'title_en', 'title_fi', );
 		$fields = array('description_ru', 'description_rut', 'description_en', 'description_fi', );
 		foreach ($list as $k=>$item) {
 //			if (in_array(mb_substr($item['position'], 0, 1, 'utf-8'), array(1, 3))) continue;//найдено по названию
+
+			$text = '';
+			foreach ($titleFields as $field) $text .= $item[$field] . ' ';
+			$text = trim($text);
+			if (!empty($text)) {
+				$inTitle = SphinxQL::getDriver()->snippet($text, $query);
+				if (!empty($inTitle)) continue;
+			}
 
 			$text = '';
 			foreach ($fields as $field) $text .= $item[$field] . ' ';
@@ -681,7 +686,6 @@ class SearchProducts {
 		//по отдельным словам
 		$pre = SearchHelper::BuildKeywords($query, 'forSnippet');
 		return $pre;
-		Debug::staticRun(array($pre));
 //		$resultWord = array();
 //		foreach ($pre['Queries'] as $query) {
 //			if (empty($query)) continue;
@@ -718,13 +722,11 @@ class SearchProducts {
 		$query = array_filter($query);
 		$math = implode(' ', $query);
 		$countWords = count($query);
-		Debug::staticRun(array($query));
 		if ($countWords > 3) {
 			$query = array_filter($query, function($w) { return (mb_strlen($w, 'utf-8') > 1);});
 			$countWords = count($query);
 			$math = implode(' ', $query);
 		}
-		Debug::staticRun(array($query));
 		$i = 0;
 		if ($countWords > 3) {
 			$phrases = array('(' . implode(' ', $query) . ')');
@@ -822,7 +824,6 @@ class SearchProducts {
 				'max_matches'=>"max_matches=100000",
 			);
 		}
-		Debug::staticRun(array($tables, array_filter($condition), $order, $option));
 		return array($tables, array_filter($condition), $order, $option);
 	}
 
@@ -838,7 +839,6 @@ class SearchProducts {
 			'option ' . implode(', ', $option) . ' '.
 		'';
 		$find = SphinxQL::getDriver()->multiSelect($sql);
-		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
 		return $this->_prepareProducts($find);
@@ -854,7 +854,6 @@ class SearchProducts {
 			'FROM ' . implode(', ', $tables) . ' '.
 			'where (query=' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
 		'';
-		Debug::staticRun(array($sql));
 		return $sql;
 	}
 
@@ -871,7 +870,6 @@ class SearchProducts {
 			'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
 			'option ' . implode(', ', $option) . ' '.
 		'';
-		Debug::staticRun(array($sql));
 		return SphinxQL::getDriver()->queryCol($sql);
 	}
 
@@ -890,7 +888,6 @@ class SearchProducts {
 		$result = array();
 		foreach (Entity::GetEntitiesList() as $entity=>$set) $result[$entity] = false;
 
-		Debug::staticRun(array($sql, $find));
 		foreach ($find as $data) {
 			//audio не показываем
 			if (!empty($data['entity'])&&($data['entity'] != 20)) {
