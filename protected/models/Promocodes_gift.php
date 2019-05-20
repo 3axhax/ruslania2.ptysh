@@ -124,6 +124,7 @@ class Promocodes_gift extends CActiveRecord {
 	private function _getPrice($pricesValues, $discountKeys) {
 		$priceForSale = array('withDiscount'=>0, 'withoutDiscount'=>0, 'onlyPromocode'=>0);
 		$product = new Product();
+		$priceCounts = array();
 		foreach ($pricesValues as $itemKey=>$price) {
 			list($eid, $itemId) = explode('_', $itemKey);
 
@@ -132,11 +133,36 @@ class Promocodes_gift extends CActiveRecord {
 
 			$corrector = 1;
 			if ($eid == Entity::PERIODIC) $corrector = 12;
-			elseif ($discountKeys[$itemKey]['quantity'] > 2) {
-				$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector);
+			else {
+//			    это, если подарок из общего количества товаров
+				$p = $discount[$discountKeys[$itemKey]['discountPrice']];
+				if (!isset($priceCounts[$p])) $priceCounts[$p] = $discountKeys[$itemKey]['quantity'];
+				else $priceCounts[$p] += $discountKeys[$itemKey]['quantity'];
 			}
+//			это, если подарок только из количества одного товара
+//			elseif ($discountKeys[$itemKey]['quantity'] > 2) {
+//				$priceForSale['onlyPromocode'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector);
+//			}
 			$priceForSale['withDiscount'] += ($discount[$discountKeys[$itemKey]['discountPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
 			$priceForSale['withoutDiscount'] += ($discount[$discountKeys[$itemKey]['originalPrice']]/$corrector)*$discountKeys[$itemKey]['quantity'];
+		}
+		if (!empty($priceCounts)) {
+//			это, если подарок из общего количества товаров
+			ksort($priceCounts);
+			$quantity = array_sum($priceCounts);
+			if ($quantity > 2) {
+				$countGift = floor($quantity/3);
+				foreach ($priceCounts as $priceItem=>$countsItem) {
+					if ($countsItem < $countGift) {
+						$countGift -= $countsItem;
+						$priceForSale['onlyPromocode'] += ($priceItem*$countsItem);
+					}
+					else {
+						$priceForSale['onlyPromocode'] += ($priceItem*$countGift);
+						break;
+					}
+				}
+			}
 		}
 		return $priceForSale;
 	}

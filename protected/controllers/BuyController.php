@@ -75,7 +75,7 @@ class BuyController extends MyController {
 
 	function actionCheckPromocode() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest/*||isset($_GET['ha'])*/) {
 			$dtype = (int) Yii::app()->getRequest()->getParam('dtype');
 			$dMode = 0;
 			if ($dtype <= 0) $dMode = 1;
