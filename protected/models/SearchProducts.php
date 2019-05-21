@@ -107,7 +107,7 @@ class SearchProducts {
 	}
 
 	function getList($q, $page, $pp, $eid = 0) {
-		/*if (isset($_GET['ha']))*/ return $this->getBooleanList($q, $page, $pp, $eid = 0);
+		/*if (isset($_GET['ha']))*/ return $this->getBooleanList($q, $page, $pp, $eid);
 
 		$firstUnion = true;
 		$math = explode('|', $this->getMath($q));
@@ -769,6 +769,11 @@ class SearchProducts {
 		if ($countWords > 1) {
 			$wDescription = ceil($wTtitle*($countWords - 1)/$countWords) + 1;
 			$wAuthors = $wDescription + 1;
+		}
+		elseif ($useRealWord) {
+			//это надо что бы поиск по title был приоритетнее, чем 2 слова в description
+			$wDescription = ceil($wTtitle/2) - 1;
+			$wAuthors = $wDescription + 2;
 		}
 		$tables = array('books_boolean_mode', 'pereodics_boolean_mode', 'printed_boolean_mode', 'music_boolean_mode', 'musicsheets_boolean_mode', 'video_boolean_mode', 'maps_boolean_mode', 'soft_boolean_mode');
 		if (!empty($eid)) {
