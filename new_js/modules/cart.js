@@ -350,7 +350,12 @@ Stripe.applePay.checkAvailability(function(available) {
                         if ('errors' in r) {
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
-                                if (t) errors.push(t);
+                                if (t) {
+                                    errors.push(t);
+                                    if ($(t).hasClass('js_contactPhone')) {
+                                        $(t).siblings('.texterror').html(r.errors[field].join(', '));
+                                    }
+                                }
                                 else if (field == 'forgot_button') {
                                     t = document.getElementById('Reg_contact_email');
                                     $(t).siblings('.info_box').html(r.errors[field]).toggle();
@@ -877,7 +882,12 @@ Stripe.applePay.checkAvailability(function(available) {
                         if ('errors' in r) {
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
-                                if (t) errors.push(t);
+                                if (t) {
+                                    errors.push(t);
+                                    if ($(t).hasClass('js_contactPhone')) {
+                                        $(t).siblings('.texterror').html(r.errors[field].join(', '));
+                                    }
+                                }
                                 else if (field == 'forgot_button') {
                                     t = document.getElementById('Reg_contact_email');
                                     $(t).siblings('.info_box').html(r.errors[field]).toggle();

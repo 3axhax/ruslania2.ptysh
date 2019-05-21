@@ -170,6 +170,7 @@ class BuyController extends MyController {
 					$addrErrors = $addressModel->getErrors();
 					foreach ($requireFields as $field) {
 						if (!empty($addrErrors[$field])) {
+							if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
 							$ret['errors'][$formName . '_' . $field] = $addrErrors[$field];
 						}
 					}
@@ -206,6 +207,7 @@ class BuyController extends MyController {
 					$addrErrors = $addressModel->getErrors();
 					foreach ($requireFields as $field) {
 						if (!empty($addrErrors[$field])) {
+							if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
 							$ret['errors'][$formName . '_' . $field] = $addrErrors[$field];
 						}
 					}
@@ -233,7 +235,7 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest) {
+		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
@@ -498,6 +500,7 @@ class BuyController extends MyController {
 					$addrErrors = $addressModel->getErrors();
 					foreach ($requireFields as $field) {
 						if (!empty($addrErrors[$field])) {
+							if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
 							$errors['Reg_' . $field] = $addrErrors[$field];
 						}
 					}
@@ -519,6 +522,7 @@ class BuyController extends MyController {
 						$addrErrors = $addressModel->getErrors();
 						foreach ($requireFields as $field) {
 							if (!empty($addrErrors[$field])) {
+								if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
 								$errors['Address_' . $field] = $addrErrors[$field];
 							}
 						}
