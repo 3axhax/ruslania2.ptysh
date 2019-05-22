@@ -8,10 +8,10 @@ class SiteController extends MyController {
 
     public function accessRules() {
         return array(array('allow',
-            'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail',
+            'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail','callsend',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
-                'certificate', 'charges'
+                'certificate', 'charges', 'closesite'
             ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
@@ -20,6 +20,60 @@ class SiteController extends MyController {
             array('deny',
                 'users' => array('*')));
     }
+	
+	function actionCloseSite() {
+		
+		$this->render('close_site', array('close'=>1));
+	
+	}
+	
+	
+	function actionCallSend() {
+		
+		$email = 'andreasagopov@hotmail.com';
+		
+		//var_dump($_POST);
+		
+		$sPhone = ereg_replace("[^0-9]",'',$_POST['SendCalls']['phone']);
+		$sCode = ereg_replace("[^0-9+()]",'',$_POST['Send_calls']['code']);
+		
+		
+		
+		
+		if (!$sPhone AND $_POST['SendCalls']['phone']) { echo '13'; }
+		elseif (!$sCode AND $_POST['Send_calls']['code']) { echo '14'; }
+		elseif ($_POST['SendCalls']['face'] && $_POST['Send_calls']['code'] && $_POST['SendCalls']['phone'] && $_POST['Send_calls']['confirm']) {
+		
+		$message = new YiiMailMessage('Call. Ruslania.com');
+                        $message->view = 'feedback';
+                        $message->setBody(array(
+                            'name' => $_POST['SendCalls']['face'],
+                            'country_code' => $_POST['Send_calls']['code'],
+                            'phone' => $_POST['SendCalls']['phone']
+                        ), 'text/html');
+                        $message->addTo($email);
+                        $message->from = 'noreply@ruslania.com';
+                        $mailResult = Yii::app()->mail->send($message);
+		
+			echo '1';
+		
+	} elseif ( !trim($_POST['SendCalls']['face'])) { echo '10'; } elseif ( !trim($_POST['Send_calls']['code'])) { echo '11'; } elseif (!trim($_POST['SendCalls']['phone']) ) { echo '12'; }
+	
+	
+	elseif ($_POST['Send_calls']['confirm'] == '') {
+		
+		echo '56';
+		
+		
+		
+	}
+	
+	
+
+	
+	
+	
+	}
 	
 	function actionCharges() {
 		
@@ -79,7 +133,7 @@ class SiteController extends MyController {
         }
 
         $nominals = array();
-        for ($i=1;$i<=100;$i++) $nominals[$i] = $i;
+        for ($i=5;$i<=100;$i++) $nominals[$i] = $i;
         $rates = Currency::GetRates();
         $item = array(
             'brutto' => $selectPrice/$rates[Yii::app()->currency],
