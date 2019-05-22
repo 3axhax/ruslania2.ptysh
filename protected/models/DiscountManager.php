@@ -150,6 +150,12 @@ class DiscountManager
             $percent = $maxDiscount['Value'];
         }
 
+        if (isset($item['entity']) && ($item['entity'] == Entity::PRINTED)&&in_array($item['id'], array(3555, 4124))) {
+            //подарочный сертификат продается без скидок
+            $type = self::TYPE_NO_DISCOUNT;
+            $percent = 0;
+        }
+
         $newALV0 = $vat0 - ($vat0 * $percent / 100);
         $newALV = $newALV0 * (1 + ($vat/100));
 
