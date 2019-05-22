@@ -281,7 +281,12 @@
                         if ('errors' in r) {
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
-                                if (t) errors.push(t);
+                                if (t) {
+                                    errors.push(t);
+                                    if ($(t).hasClass('js_contactPhone')) {
+                                        $(t).siblings('.texterror').html(r.errors[field].join(', '));
+                                    }
+                                }
                             }
                         }
                         if (errors.length) {

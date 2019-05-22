@@ -274,8 +274,8 @@ $entityKey = Entity::GetUrlKey($entity);
                         <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
                                 'entity' => $entityKey,
                                 'bid' => $item['binding_id']));
-                            ?>"><?= $item['Binding']['title_' . Yii::app()->language] ?></div>
-                        <div class="clearBoth"></a></div>
+                            ?>"><?= $item['Binding']['title_' . Yii::app()->language] ?></a></div>
+                        <div class="clearBoth"></div>
                     </div>
                 <?php else:
 //					$row = Binding::GetBinding($entity, $item['binding_id']);
@@ -283,6 +283,13 @@ $entityKey = Entity::GetUrlKey($entity);
                 endif; ?>
             <?php endif; ?>
 
+            <?php if (!empty($item['stock_id'])&&($entity == Entity::SHEETMUSIC)) : ?>
+                     <div class="authors" style="margin-top: 0;">
+                        <div style="float: left;width: 130px;" class="nameprop">Shelf ID</div>
+                        <div style="padding-left: 140px;"><?= $item['stock_id'] ?></div>
+                        <div class="clearBoth"></div>
+                    </div>
+            <?php endif; ?>
         </div>
 
         <div class="span1 cart to_cart" style="overflow: hidden">
