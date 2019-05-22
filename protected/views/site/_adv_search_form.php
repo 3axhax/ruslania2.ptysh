@@ -1,4 +1,4 @@
-<div id="advsearch">
+<div id="advsearch"<?php if (!empty($isHide)): ?> style="display: none;" <?php endif; ?>>
 
     <?php KnockoutForm::RegisterScripts(); ?>
     <?= CHtml::beginForm(Yii::app()->createUrl('site/advsearch'), 'get'); ?>

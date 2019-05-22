@@ -7,8 +7,15 @@
         unset($breadcrumbs) ;
         $h1 = mb_strtoupper(mb_substr($h1, 0, 1, 'utf-8')) . mb_substr($h1, 1, null, 'utf-8');
         if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 1) $h1 .= ' &ndash; ' . $ui->item('PAGES_N', $page);
-        ?><?= $h1 ?></h1>
-            <?php $this->renderPartial('_adv_search_form'); ?>
+        ?><?= $h1 ?><?php
+        $isHide = false;
+        if (!empty($items)):
+            $isHide = true; ?>
+        <div class="fa fa-arrow-down" onclick="$('#advsearch').show(); $(this).hide();" style="cursor: pointer; font-size: 16px; color: #ccc"></div>
+        <?php endif; ?>
+    </h1>
+    <?php ?>
+            <?php $this->renderPartial('_adv_search_form', array('isHide'=>$isHide)); ?>
 
             <div class="text" style="margin-top: 7px;">
                 <?= sprintf($ui->item("X items found"), $paginatorInfo->getItemCount()); ?>

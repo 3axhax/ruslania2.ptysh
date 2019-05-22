@@ -645,7 +645,10 @@ class SearchHelper
             $spxSql = $searchModel->getBooleanSql($title, $e);
             if (empty($spxSql)) return array('Items' => array(), 'Paginator' => new CPagination(0));
             $join['tSpx'] = 'join (' . $spxSql . ') tSpx on (tSpx.real_id = t.id)';
-            $order = 'order by tSpx.weight desc, tSpx.position, tSpx.time_position';
+            if (!empty($only)) {
+                $order = 'order by tSpx.weight desc, tSpx.position, tSpx.time_position';;
+            }
+            else $order = 'order by tSpx.weight desc, t.avail_for_order desc, tSpx.position, tSpx.time_position';
         }
 
         $page = max(1, min(100000, (int)$page));
@@ -659,6 +662,7 @@ class SearchHelper
             $order . ' '.
             'limit ' . ($page-1)*$pp . ', ' . $pp . ' '.
         '';
+        Debug::staticRun(array($sql));
         $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
         $sql = 'select found_rows();';
         $counts = (int) Yii::app()->db->createCommand($sql)->queryScalar();
