@@ -534,7 +534,14 @@ class SiteController extends MyController {
 
     public function actionLogout() {
         Yii::app()->user->logout();
-        $this->redirect($_SERVER['HTTP_REFERER']);
+        $request = new MyRefererRequest();
+        $oldPaget = getenv('HTTP_REFERER');
+        $request->setFreePath($oldPaget);
+
+        $routeReferer = Yii::app()->getUrlManager()->parseUrl($request);
+        $routeReferer = explode('/', $routeReferer);
+        if (in_array($routeReferer[0], array('client'))) $this->redirect(Yii::app()->createUrl('site/index'));
+        else $this->redirect($oldPaget);
     }
 
     public function afterAction($action) {
