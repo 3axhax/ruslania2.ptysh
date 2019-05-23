@@ -818,6 +818,7 @@ class SearchProducts {
 			$option = array();
 			$condition['mode'] = 'mode=extended';
 			$condition['ranker'] = 'ranker=expr:top(word_count*user_weight)';
+			if ($useRealWord) $condition['ranker'] = 'ranker=expr:min(top(word_count*user_weight), ' . ($wTtitle * $countWords) . ')';
 			$condition['fieldweights'] = 'fieldweights=title,' . $wTtitle . ',authors,' . $wAuthors . ',description,' . $wDescription . '';
 			$condition['limit'] = 'limit=50000';
 			$condition['maxmatches'] = 'maxmatches=50000';
@@ -828,6 +829,7 @@ class SearchProducts {
 				'field_weights'=>"field_weights=(title=" . $wTtitle . ",authors=" . $wAuthors . ",description=" . $wDescription . ")",
 				'max_matches'=>"max_matches=100000",
 			);
+			if ($useRealWord) $option['ranker'] = "ranker=expr('min(top(word_count*user_weight), " . ($wTtitle * $countWords) . ")')";
 		}
 		return array($tables, array_filter($condition), $order, $option);
 	}

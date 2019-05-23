@@ -11,7 +11,7 @@
         $isHide = false;
         if (!empty($items)):
             $isHide = true; ?>
-        <div class="fa fa-arrow-down" onclick="$('#advsearch').show(); $(this).hide();" style="cursor: pointer; font-size: 16px; color: #ccc"></div>
+        <div class="fa fa-angle-down" onclick="$('#advsearch').show(); $(this).hide();" style="cursor: pointer; font-size: 26px; color: #ccc; opacity: 1;"></div>
         <?php endif; ?>
     </h1>
     <?php ?>
