@@ -16,6 +16,21 @@ class OrderController extends MyController
         $this->breadcrumbs[] = sprintf(Yii::app()->ui->item('ORDER_MSG_NUMBER'), $order['id']);
         $this->render('view', array('order' => $order));
     }
+	
+	public function actionPayTrail() {
+		
+		
+		
+		$order = new Order;
+		
+		$order = $order->GetOrder(7059899);
+		
+		$this->widget('PayTrailWidget', array('order' => $order));
+		
+		
+		
+		
+	}
 
     public function actionChangePaymentType()
     {

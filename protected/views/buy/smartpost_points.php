@@ -43,7 +43,7 @@
     <div class="addr_name"><?=$p['address']['fi']['address']?>, <?=$p['address']['fi']['streetName']?>, <?=$p['address']['fi']['streetNumber']?>, <?=$p['address']['fi']['postalCode']?> <?=$p['address']['fi']['postalCodeName']?></div>
 </div>
     <?php endforeach; ?>
-<a href="javascript:;" class="btn" onclick="$('.row_smartpost').removeClass('act').show(); $('.box_smartpost').html(''); $('.smartpost_index').val(''); $('#pickpoint_address').val(''); "><?= $ui->item('BTN_CATALOG_SEARCH_RESET') ?></a>
+<a href="javascript:;" class="btn btn-success" onclick="$('.row_smartpost').removeClass('act').show(); $('.box_smartpost').html(''); $('.smartpost_index').val(''); $('#pickpoint_address').val(''); "><?= $ui->item('BTN_CATALOG_SEARCH_RESET') ?></a>
 
 <?php else: ?>
 <?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?>

@@ -71,6 +71,10 @@ $user = User::model()->findByPk($this->uid);
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script>
 	$(function(){
+		
+
+		ym(53579293, 'reachGoal', 'cart_step3');
+		
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userData) ?>,

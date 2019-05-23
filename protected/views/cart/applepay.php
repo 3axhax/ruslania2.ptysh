@@ -7,9 +7,8 @@
     background-origin: content-box;
     background-position: center;
     background-repeat: no-repeat;
-    width: 320px;
+    width: 220px;
     height: 44px;
-    margin: 0 auto;
     margin-top: 20px;
     padding: 10px 0;
     border-radius: 10px;
@@ -96,15 +95,64 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
-
+	
+	var csrf = $('meta[name=csrf]').attr('content').split('=');
+	
+	// $(document).ready(function() {
+		
+		// $.post('<?=Yii::app()->createUrl('site/charges')?>', { orderId : '<?=$order['id']?>', YII_CSRF_TOKEN: csrf[1] }).done(function() {
+			
+			// ф
+			
+		// })
+		
+	// })
+	
   Stripe.setPublishableKey('pk_test_B8MwXuaz10DDZVcF6QJQTki0');
 
   Stripe.applePay.checkAvailability(function(available) {
-	if (available) {
+	//if (available) {
       document.getElementById('apple-pay-button').style.display = 'block';
-      document.getElementById('apple-pay-text').style.display = 'none';
-    }
+     document.getElementById('apple-pay-text').style.display = 'none';
+	  document.getElementById('apple-pay-button').addEventListener('click', beginApplePay);
+	
+	
+	  
+    //}
   });
+  
+  function beginApplePay() {
+	  var paymentRequest = {
+		countryCode: '<?=strtoupper(Yii::app()->language)?>',
+		currencyCode: '<?=Currency::ToStr($order['currency_id'])?>',
+		total: {
+		  label: 'Оплата заказа <?=$number_zakaz?>',
+		  amount: '<?=$order['full_price']?>'
+		}
+	  };
+	  var session = Stripe.applePay.buildSession(paymentRequest,
+    function(result, completion) {
+
+    $.post('<?=Yii::app()->createUrl('site/charges')?>', { token: result.token.id, orderId : '<?=$order['id']?>', YII_CSRF_TOKEN: csrf[1] }).done(function() {
+      completion(ApplePaySession.STATUS_SUCCESS);
+      // You can now redirect the user to a receipt page, etc.
+      window.location.href = '<?=Yii::app()->createUrl('payment/accept')?>oid/<?=$order['id']?>/tid/<?=$order['payment_type_id']?>/';
+    }).fail(function() {
+      completion(ApplePaySession.STATUS_FAILURE);
+    });
+
+  }, function(error) {
+    console.log(error.message);
+  });
+
+  session.oncancel = function() {
+    window.location.href = '<?=Yii::app()->createUrl('payment/cancel')?>oid/<?=$order['id']?>/tid/<?=$order['payment_type_id']?>/';
+  };
+
+  session.begin();
+	}
+  
+  
 
   function openPaySystems(inputId) {
     var $ptypeP = $('#' + inputId).parent();

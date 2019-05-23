@@ -35,15 +35,15 @@
 								echo '<div class="slider_recomend custom-slider">';
 								foreach ($offer as $offer_entity) {
                                     foreach ($offer_entity['items'] as $of) {
-                                        if (!empty($of['image'])): ?>
+                                        //if (empty($of['image'])): ?>
 	                                        <div class="item slider_recomend__item">
 		                                        <div class="img slider__img">
 			                                        <a href="<?= ProductHelper::createUrl($of) ?>">
-				                                        <img src="<?= Picture::Get($of, Picture::SMALL) ?>" data-lazy="<?= Picture::Get($of, Picture::SMALL) ?>">
+				                                        <img src="<?= Picture::Get($of, Picture::BIG) ?>" data-lazy="<?= Picture::Get($of, Picture::BIG) ?>">
 			                                        </a>
 		                                        </div>
 	                                        </div>
-                                        <?php endif;
+                                        <?php //endif;
                                     }
                                 }
 								echo '</div><div class="clearfix"></div></div>';

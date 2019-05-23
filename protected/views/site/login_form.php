@@ -9,12 +9,20 @@
         
 <div style="text-align: center"><?=$ui->item($key); ?></div>
         
-<h1 class="h1_reg"><?=$ui->item('USER_LOGIN_ALT')?></h1>
+<h1 class="h1_reg"></h1>
 
+<?php
+    $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
+    $baseUrl = Yii::app()->assetManager->publish($assets);
+?>
+
+<script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
+<script type="text/javascript" src="<?= $baseUrl ?>/knockout.mapping.js"></script>
+<script type="text/javascript" src="<?= $baseUrl ?>/knockoutPostObject.js"></script>
 
 <?php $form = $this->beginWidget('KnockoutForm', array(
                                                       'model' => $model,
-                                                      'action' => Yii::app()->createUrl('site').'login',
+                                                      'action' => Yii::app()->createUrl('site/login'),
 
 'class' => 'registr',
                                                       'id' => 'user-login',

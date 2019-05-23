@@ -1,6 +1,22 @@
+<style>
 
+body { background: url(/new_img/slider_bg.jpg) left top; }
 
-<div class="container view_product" style="margin-top: 20px;">
+body .view_close {
+	
+
+    width: 90%;
+	
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    padding-right: 5px;	
+}
+
+</style>
+
+<div class="container view_close" style="margin-top: 20px;">
 <b>Under construction.</b><br />
 Sorry, the Ruslania's new webstore is closed for repair. We'll try to open as soon as possible. Please check again later or use the old webstore www.ruslania.com for the time being.
 <br />Send us an email to <a href="mailto:ruslania@ruslania.com">ruslania@ruslania.com</a> or give us a call at +358 9 2727070
@@ -23,3 +39,5 @@ Sorry, the Ruslania's new webstore is closed for repair. We'll try to open as so
 
 
 </div>
+
+<div style="height: 30px;"></div>

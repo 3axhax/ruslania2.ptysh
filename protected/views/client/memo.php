@@ -88,7 +88,7 @@
             (
                 $.ajax({
                     type: "POST",
-                    url: '/my/changememo',
+                    url: "<?= Yii::app()->createUrl('my/changememo') ?>",
                     data: obj,
                     dataType: 'json'
                 })

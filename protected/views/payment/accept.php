@@ -1,6 +1,13 @@
 <?php $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 
-
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		
+		ym(53579293, 'reachGoal', 'oplata_true');
+	})
+	
+	</script>
 <div class="container cabinet" style="margin-bottom: 50px;">
     <div class="row">
         <div class="span10" style="float: none;width: 100%;">

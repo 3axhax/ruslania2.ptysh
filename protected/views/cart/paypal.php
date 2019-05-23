@@ -52,7 +52,7 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
     
 	<br />
 	<br />
-    <?php $this->widget('PayPalPayment', array('order' => $order, 'hide_btn_next' => $hide_btn_next)); ?>
+    <?php $this->widget('PayPalPayment', array('order' => $order, 'hide_btn_next' => $hide_btn_next, 'magaz'=>$order['delivery_type_id'])); ?>
    
     
     <div><?//=sprintf($ui->item('CARTNEW_ORDER_PAY_OTHER_LABEL'), 'dtype8')?></div>

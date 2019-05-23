@@ -27,7 +27,7 @@ if (empty($showNotes)) $showNotes = false;
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_COMPANY"); ?>
 			</label>
 			<label style="float: left;">
-				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" <? if ($addrModel->getAttribute('type') == 2) { ?>checked<? } ?>>
+				<input type="radio" value="2" name="<?= $alias ?>[type]" class="checkbox_custom js_userType" <? if ($addrModel->getAttribute('type') == 2 OR ($addrModel->getAttribute('type') == '')) { ?>checked<? } ?>>
 				<span class="checkbox-custom"></span>
 				<?= $ui->item("MSG_PERSONAL_ADDRESS_PERSON"); ?>
 			</label>

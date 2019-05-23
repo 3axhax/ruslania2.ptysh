@@ -1,4 +1,4 @@
-<select name="Address[state_id]" onclick="save_form();"><option value="">---</option><?php
+<select name="Address<?=$_POST['tbl']?>[state_id]" onclick="" style="width: 220px;"><option value="">---</option><?php
 
 foreach ($items as $item) {
     

@@ -48,9 +48,12 @@ $addrModel = new Address();
 	</ol>
 
 </div>
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="/js/stripe.js"></script>
+<!--<script type="text/javascript" src="https://js.stripe.com/v2/"></script>-->
 <script>
 	$(function(){
+		
+		ym(53579293, 'reachGoal', 'cart_step3');
 		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userInfo) ?>,

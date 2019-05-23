@@ -41,11 +41,11 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 
 <div class="clearBoth"></div>
 
-	
+	<? if ($ptype_1 != '999') :  ?>
 
 	<br />
 	<br />
-
+	<? endif;?>
 
     <div style="">
         <?=$ui->item('CARTNEW_FINAL_ORDER_TEXT')?>

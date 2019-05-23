@@ -101,6 +101,13 @@
 <?php ?>
 <script type="text/javascript" src="/new_js/modules/print.js"></script>
 <script type="text/javascript">
+	$(document).ready(function() {
+
+		ym(53579293, 'reachGoal', 'step_success');
+	})
+	
+	
+
 	print = function() { return new _Print(); };
 	print().init({$button: $('.printed_btn'), $content: $('#js_print')});
 </script>

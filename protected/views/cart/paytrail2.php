@@ -33,14 +33,14 @@ if ($addrGet['streetaddress'] == '' OR $addrGet['postindex'] == '' OR $addrGet['
 	</div>
 	
 	<div class="span6">
-
-	
-                <?=$result;?>
-    	<? if ($order['hide_edit_order'] != '1') : ?>
-    <div>
-        <?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br />
+<?=$ui->item('CARTNEW_YOUR_SELECT')?>: <?= Yii::app()->ui->item('HEADER_PAYTRAIL') ?><br />
 
    <div style="height: 20px;"></div>
+	 <?=$result;?>
+         <div style="height: 20px;"></div>       
+    	<? if ($order['hide_edit_order'] != '1') : ?>
+    <div>
+        
 	
 
 	

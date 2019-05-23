@@ -10,7 +10,7 @@
 
     <?php $form = $this->beginWidget('KnockoutForm', array(
                                                           'model' => $model,
-'class' =>'registr',                                                          'action' => Yii::app()->createUrl('site').'register',
+'class' =>'registr',                                                          'action' => Yii::app()->createUrl('site/register'),
                                                           'id' => 'user-register',
                                                           'viewModel' => 'registerVM',
                                                           'beforeAjaxSubmit' => 'beforeRegister',
