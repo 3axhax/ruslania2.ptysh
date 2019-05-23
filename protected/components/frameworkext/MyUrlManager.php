@@ -7,7 +7,7 @@ class MyUrlManager extends CUrlManager
 
     public static function RewriteCurrent($controller, $lang, $sel = false) {
         $query = (string)Yii::app()->getRequest()->getQueryString();
-        if ($lang === 'rut') {
+        if (($lang === 'rut')||(Yii::app()->getLanguage() == 'rut')) {
             $action = $controller->action->id;
             if ($action == 'error') {
                 $url = '/' . Yii::app()->getRequest()->getPathInfo() . '/';
@@ -15,6 +15,7 @@ class MyUrlManager extends CUrlManager
             }
             else {
                 $params = $_GET;
+                unset($params['language']);
                 if ($sel) $params['sel'] = 1;
                 $params['__langForUrl'] = $lang;
                 if (!empty($params['avail'])) unset($params['avail']);
@@ -113,6 +114,7 @@ class MyUrlManager extends CUrlManager
     protected function createUrlDefault($route,$params,$ampersand) {
         if (defined('OLD_PAGES')) return parent::createUrlDefault($route,$params,$ampersand);
 
+//        Debug::staticRun(array($route,$params,$ampersand));
         $language = Yii::app()->language;
         if (!empty($params['__langForUrl'])&&in_array($params['__langForUrl'], Yii::app()->params['ValidLanguages'])) {
             //что бы получить путь для другого языка
@@ -120,7 +122,10 @@ class MyUrlManager extends CUrlManager
         }
         unset($params['__langForUrl']);
 
-        if (!empty($language)) $route = $language . '/' . $route;
+        if (!empty($language)) {
+            if ($language === 'rut') $params['language'] = $language;
+            else $route = $language . '/' . $route;
+        }
         return parent::createUrlDefault($route,$params,$ampersand);
     }
 

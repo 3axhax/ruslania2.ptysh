@@ -51,6 +51,9 @@ class Test123Controller extends MyController {
 	}
 
 	function actionCurrency() {
+		Debug::staticRun(array(Yii::app()->createUrl('buy/doorder', array('__langForUrl'=>'rut'))));
+
+
 		Debug::staticRun(array(
 			Yii::app()->ui->item('ADDED_TO_CART', Yii::app()->createUrl('cart/view')),
 			Yii::app()->ui->item('ADDED_TO_CART_ALREADY'),

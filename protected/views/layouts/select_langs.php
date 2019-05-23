@@ -3,13 +3,13 @@
 	<?php
 	$arrLangsTitle = array(
 		'ru' => $ui->item('A_LANG_RUSSIAN'),
-		'rut' => $ui->item('A_LANG_TRANSLIT'),
 		'fi' => $ui->item('A_LANG_FINNISH'),
 		'en' => $ui->item('A_LANG_ENGLISH'),
 		'de' => $ui->item('A_LANG_GERMAN'),
 		'fr' => $ui->item('A_LANG_FRENCH'),
 		'es' => $ui->item('A_LANG_ESPANIOL'),
-		'se' => $ui->item('A_LANG_SWEDISH')
+		'se' => $ui->item('A_LANG_SWEDISH'),
+		'rut' => $ui->item('A_LANG_TRANSLIT'),
 	);
 	?>
 	<div class="dd_select_lang">
