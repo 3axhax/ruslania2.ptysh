@@ -40,3 +40,17 @@
 <script src="libs/respond/respond.min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="/js/magnific-popup.js"></script>
+
+<script>
+
+
+	function gometrika(ident) {
+	
+		if (typeof (ym) === "function") {
+			
+			ym(53579293, 'reachGoal', ident);
+							
+		}
+	
+	}
+</script>

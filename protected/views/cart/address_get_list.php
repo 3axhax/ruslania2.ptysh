@@ -15,7 +15,7 @@ if (count($items) > 1) {
 foreach($items as $item){
 
     $array['items'][] = '<option value="'.$item['id'].'">'.$ch->FormatAddress($item).'</option>';
-
+   
 }
 
 $array['ida'] = $ida;

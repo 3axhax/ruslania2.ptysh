@@ -3,7 +3,6 @@
 <style>
 
 	#pay_systems .selp { width: 100%; text-align: center }
-
 </style>
 
 <?

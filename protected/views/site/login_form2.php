@@ -13,7 +13,7 @@
 
 <?php $form = $this->beginWidget('KnockoutForm', array(
                                                       'model' => $model,
-                                                      'action' => Yii::app()->createUrl('site').'login',
+                                                      'action' => Yii::app()->createUrl('site/login'),
 
 'class' => 'registr',
                                                       'id' => 'user-login',

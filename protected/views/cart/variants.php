@@ -41,6 +41,7 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 			style="margin-top: 10px;"><?= $form->submitButton($ui->item('A_SIGNIN'), array('class' => 'sort')); ?></div>
 
 		<script>
+			
 
 			function beforeAjax(vm) {
 				$('#user-login input').change();
@@ -116,3 +117,26 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 
 
 
+<script>
+	$(document).ready(function() {
+		
+		//yaCounter53579293.reachGoal('cart_step2');
+		ym(53579293, 'reachGoal', 'cart_step2');		
+	})
+</script>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(53579293, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->

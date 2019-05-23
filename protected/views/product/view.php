@@ -13,5 +13,9 @@
 	<?php $this->widget('YouView', array('entity'=>$entity, 'id'=>$item['id'])); ?>
 	</div>
 
+	
+	
+	
+	
 </div>
-<?php $this->widget('Banners', array('type'=>'slider', 'item'=>$item)) ?>
+<?php $this->widget('Banners', array('type'=>'slider', 'item'=>$item, 'uid'=>$this->uid, 'sid'=>$this->sid)) ?>

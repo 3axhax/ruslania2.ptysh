@@ -592,6 +592,18 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 <script type="text/javascript" src="/js/opentip.js"></script>
 <script>
 
+	function gometrika(ident) {
+	
+		if (typeof (yaCounter53579293.reachGoal) === "function") {
+			
+			yaCounter53579293.reachGoal(ident);
+							
+		}
+	
+	}
+
+
+
     $(document).ready(function () {
         
 		$(window).keypress(function(e) {

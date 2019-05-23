@@ -202,7 +202,7 @@ $ctrl = Yii::app()->getController()->id;
 
 				?>
 						
-                            <td style="padding-left: 0;"> <a href="<?= $hrefContinueShopping ?>" style="float: left; color: #ff0000; font-size: 14px;"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
+                            <td style="padding-left: 0;"> <a href="<?= $hrefContinueShopping ?>" style="float: left; color: #ff0000; font-size: 14px;" onclick="yaCounter53579293.reachGoal('continue_pokupka');"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING');?></a></td>
                             <td colspan="7" class="order_start_box" class="cart1header2" align="right">
 
                                 <?php if (Yii::app()->user->isGuest) { ?>
@@ -358,7 +358,7 @@ $ctrl = Yii::app()->getController()->id;
                     <div class="addcart">
                         <a class="cart-action" data-action="add" data-entity="'. $k['entity'] .'"
                data-id="'. $k['id'] .'" data-quantity="1"
-               href="javascript:;">'.$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART').'</a>
+               href="javascript:;"  onclick="yaCounter53579293.reachGoal(\'add_cart_cart\');">'.$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART').'</a>
                     </div>                   </li>'; ?>
 
 
@@ -677,6 +677,9 @@ $ctrl = Yii::app()->getController()->id;
     //}
 
     $(document).ready(function () {
+		
+		ym(53579293, 'reachGoal', 'cart_step1');
+		
         scriptLoader('/new_js/slick.js').callFunction(function() {
             $('.more_goods ul').slick({
                 lazyLoad: 'ondemand',
