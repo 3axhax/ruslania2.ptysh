@@ -102,7 +102,7 @@ class Address extends CActiveRecord
     function checkPhone($attr, $params) {
         $phone = trim($this->$attr);
         if (!empty($phone)) {
-            if (preg_match("/[^\d\-+() ]/ui", $phone)) $this->addError($attr, Yii::app()->ui->item('CALL_FORM_ERROR_PHONE'));
+            if (preg_match("/[^\d\-+()\/ ]/ui", $phone)) $this->addError($attr, Yii::app()->ui->item('CALL_FORM_ERROR_PHONE'));
 //            $numPhone = preg_replace("/[^\d\-+() ]/ui", '', $phone);
 //            if (empty($numPhone)) $this->addError($attr, Yii::app()->ui->item('CALL_FORM_ERROR_PHONE'));
         }

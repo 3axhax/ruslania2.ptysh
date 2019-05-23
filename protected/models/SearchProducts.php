@@ -935,14 +935,16 @@ class SearchProducts {
 					break;
 				default:
 					$qCode = preg_replace("/\D/iu", '', $q);
-					$sql = ''.
-						'select entity, real_id '.
-						'from books_boolean_mode, pereodics_boolean_mode, printed_boolean_mode, music_boolean_mode, musicsheets_boolean_mode, video_boolean_mode, maps_boolean_mode, soft_boolean_mode ' .
-						'where (' . $codeName . ' = ' . $qCode . ') '.
-						'option ranker=none '.
-					'';
-					$find = SphinxQL::getDriver()->multiSelect($sql);
-					if (!empty($find)) return $this->_prepareProducts($find);
+					if (!empty($qCode)) {
+						$sql = ''.
+							'select entity, real_id '.
+							'from books_boolean_mode, pereodics_boolean_mode, printed_boolean_mode, music_boolean_mode, musicsheets_boolean_mode, video_boolean_mode, maps_boolean_mode, soft_boolean_mode ' .
+							'where (' . $codeName . ' = ' . $qCode . ') '.
+							'option ranker=none '.
+							'';
+						$find = SphinxQL::getDriver()->multiSelect($sql);
+						if (!empty($find)) return $this->_prepareProducts($find);
+					}
 					break;
 			}
 		}

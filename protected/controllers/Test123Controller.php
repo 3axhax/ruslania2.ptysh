@@ -62,7 +62,7 @@ class Test123Controller extends MyController {
 
 	function actionMorphy() {
 		//Matryoshka Textbook + audio CD
-		$word = 'zona';//'Schönberg';
+		$word = 'цирк';//'Schönberg';
 		$sp = new SearchProducts(1);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($word);
 		list($tables, $condition, $order, $option) = $sp->getSqlParam($searchWords, $realWords, $useRealWord, 0);

@@ -385,6 +385,7 @@ class ProductHelper
         return false;
     }
     public static function IsUniqueId($q) {
+        if (empty($q)) return false;
         if (preg_match("/\D/ui", $q)) return false;
         if (mb_strlen($q, 'utf-8') > 7) return false;
         return true;
