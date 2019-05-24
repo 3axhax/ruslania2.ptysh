@@ -30,7 +30,7 @@ return array (
   'A_LANG_FINNISH' => 'Suomi',
   'A_LANG_FRENCH' => 'Francais',
   'A_LANG_GERMAN' => 'Deutsch',
-  'A_LANG_RUSSIAN' => 'Russkij',
+  'A_LANG_RUSSIAN' => 'Русский',
   'A_LANG_TRANSLIT' => 'Russkij',
   'A_LEFT_AUDIO_AZ_PROPERTYLIST_AUTHORS' => 'Vse avtory ot&nbsp;A&nbsp;do&nbsp;Ja',
   'A_LEFT_AUDIO_AZ_PROPERTYLIST_PERFORMERS' => 'Vse ispolniteli ot&nbsp;A&nbsp;do&nbsp;Ja',

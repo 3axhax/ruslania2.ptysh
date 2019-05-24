@@ -135,7 +135,7 @@ class Promocodes_gift extends CActiveRecord {
 			if ($eid == Entity::PERIODIC) $corrector = 12;
 			else {
 //			    это, если подарок из общего количества товаров
-				$p = $discount[$discountKeys[$itemKey]['discountPrice']];
+				$p = (string)$discount[$discountKeys[$itemKey]['discountPrice']];//string нужен, что бы был правильный ключ
 				if (!isset($priceCounts[$p])) $priceCounts[$p] = $discountKeys[$itemKey]['quantity'];
 				else $priceCounts[$p] += $discountKeys[$itemKey]['quantity'];
 			}
