@@ -252,6 +252,16 @@ class ProductHelper
 
     public static function ToAscii($str, $options = array())
     {
+/*
+ * Мы традиционно используем международный транслит SFS 4900, но с некоторыми уточнениями:
+ё - jo (только этот вариант)
+й - j (только этот вариант)
+и - i
+ж - zh и ž  (ищет по обоим вариантам, но пишем только zh)
+ч - ch и tš (ищет по обоим вариантам, но пишем только ch)
+ш - sh и š (ищет по обоим вариантам, но пишем только sh)
+щ - shch и štš (ищет по обоим вариантам, но пишем только shch)
+ * */
         if (defined('OLD_PAGES')) return self::__ToAscii__old($str, $options);
 
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
