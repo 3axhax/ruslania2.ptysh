@@ -57,7 +57,14 @@ class DiscountManager
         return self::$_offerDay;
     }
 
-    public static function GetPrice($uid, $item, $promocodesPrecent = 0)
+    /**
+     * @param $uid
+     * @param $item
+     * @param int $promocodesPrecent
+     * @param bool|true $useStatic надо для промокода, что бы пересчитывать каждый раз
+     * @return array
+     */
+    public static function GetPrice($uid, $item, $promocodesPrecent = 0, $useStatic = true)
     {
         $discountType = null;
         $priceFin = 0;
@@ -81,13 +88,13 @@ class DiscountManager
         if(!empty($campaignDiscount))
             $allDiscounts = $campaignDiscount;
 
-        if(!empty(self::$personalDiscount)) $personalDiscount = self::$personalDiscount;
-        else $personalDiscount = (!empty($uid)) ? Yii::app()->user->GetPersonalDiscount() : 0;
+        if($useStatic&&!empty(self::$personalDiscount)) $personalDiscount = self::$personalDiscount;
+        else $personalDiscount = (!empty($uid)) ? ((float) Yii::app()->user->GetPersonalDiscount()) : 0;
 
-        self::$personalDiscount = floatVal($personalDiscount);
+        if ($useStatic) self::$personalDiscount = floatVal($personalDiscount);
 
-        if(!empty(self::$personalDiscount) && self::$personalDiscount > 0)
-            $allDiscounts[] = array('Type' => self::TYPE_PERSONAL, 'Value' => self::$personalDiscount);
+        if(!empty($personalDiscount) && $personalDiscount > 0)
+            $allDiscounts[] = array('Type' => self::TYPE_PERSONAL, 'Value' => $personalDiscount);
 
         if ($promocodesPrecent > 0) $allDiscounts[] = array('Type' => self::TYPE_PROMOCODE, 'Value' => $promocodesPrecent);
 
