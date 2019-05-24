@@ -159,7 +159,7 @@ class HrefTitles {
 
 		$titles = array();
 		foreach ($langs as $lang) {
-			$titles[$lang] = ProductHelper::ToAscii($item['title_' . $lang]);
+			$titles[$lang] = ProductHelper::ToAsciiForUrl($item['title_' . $lang]);
 		}
 		return $titles;
 	}
