@@ -19,9 +19,9 @@
 			<li>
 				<div class="img" style="min-height: 130px; position: relative">
 					<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
-					<a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
+					<div style="display: table-cell;vertical-align: middle; height: 150px;"><a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
 						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
-					</a>
+					</a></div>
 				</div>
 
 				<div class="title_book" style="height:29px;min-height:auto;margin-bottom:0;"><a href="<?= $url ?>" title="<?= $title ?>"><?= $titleSmall ?></a></div>

@@ -58,7 +58,13 @@ if ($entity == Entity::PERIODIC) $eName = $ui->item('PEREODIC_NAME');
 <script type="text/javascript">
     $(document).ready(function () {
         scriptLoader('/new_js/slick.js').callFunction(function(){
-            $('.cnt<?= $entity ?> ul').slick({
+            var $slickBlock = $('.cnt<?= $entity ?> ul');
+            var costHeight = 0;
+            $slickBlock.find('.cost').each(function(id, el) {
+                costHeight = Math.max(costHeight, $(el).outerHeight());
+            });
+            $slickBlock.find('.cost').css({height: costHeight + 'px'});
+            $slickBlock.slick({
                 lazyLoad: 'ondemand',
                 slidesToShow: 5,
                 slidesToScroll: 5
