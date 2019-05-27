@@ -166,7 +166,7 @@ class Order extends CMyActiveRecord
      * @param $deliveryTypeID int - тип доставки
      * @return array [стоимостьТоваров, стоимостьДоставки, [товар=>стоимостьТовара], [товар=>ключи для DiscountManager::GetPrice], общийВесПосылки, withVAT(да|нет), естьТоварСоСкидкой(да|нет)]
      */
-    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null, $useDefaultAddr = true) {
+    function getOrderPrice($uid, $sid, $items, $address, $deliveryMode, $deliveryTypeID, $currencyId = null, $useDefaultAddr = true, $usePersonDiscount = true) {
         if (empty($address)&&!empty($useDefaultAddr)&&!empty($uid)) $address = Address::GetDefaultAddress($uid);
         if ($currencyId === null) $currencyId = Yii::app()->currency;
         $withVAT = Address::UseVAT($address);
@@ -175,7 +175,8 @@ class Order extends CMyActiveRecord
         $discountKeys = array();//нужно для получения цены по промокоду, сюда же положил количество товара, что бы не создавать новую переменную
         $isDiscount = false;//признак, что есть товар со скидкой
         foreach ($items as $idx=>$item) {
-            $values = DiscountManager::GetPrice($uid, $item);
+            if ($usePersonDiscount) $values = DiscountManager::GetPrice($uid, $item);
+            else $values = DiscountManager::GetPrice(0, $item, 0, false);
             $key = $withVAT ? DiscountManager::WITH_VAT : DiscountManager::WITHOUT_VAT;
             $keyWithoutDiscount = DiscountManager::BRUTTO;
             $itemKey = $item['entity'].'_'.$item['id'];
@@ -244,6 +245,9 @@ class Order extends CMyActiveRecord
         else {
             $promocode = Promocodes::model();
             $code = $promocode->getPromocode($this->_promocode)['code'];
+            if ($promocode->getPromocode($this->_promocode)['type_id'] == Promocodes::CODE_GIFT) {
+                list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false, false);
+            }
             $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
             $promocodeId = $this->_promocode;
             if (!empty($notes)) $notes .= ' ';

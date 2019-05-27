@@ -111,6 +111,12 @@ class Promocodes extends CActiveRecord {
 		return $saleHandler->used($sale['id'], $id);
 	}
 
+	function useDiscount($id, $typeDiscount) {
+		$promocode = $this->getPromocode($id);
+		if (($promocode['type_id'] == self::CODE_GIFT)&&($typeDiscount == DiscountManager::TYPE_PERSONAL)) return false;
+		return true;
+	}
+
 	/** здесь получение промокода
 	 * @return string
 	 */
@@ -132,7 +138,8 @@ class Promocodes extends CActiveRecord {
 		}
 		if ($code !== null) {
 			if (!isset(self::$_codes[$code])) {
-				$row = $this->findByAttributes(array('code'=>$code));
+				$time = time();
+				$row = $this->findByAttributes(array('code'=>$code, 'is_used'=>0), '(ifnull(unix_timestamp(date_end), ' . ($time + 100) . ') > ' . $time . ')');
 				if (empty($row)) $promocode = array();
 				else $promocode = $row->attributes?:array();
 				if (!empty($promocode['id'])) {

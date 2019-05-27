@@ -129,7 +129,7 @@ class Promocodes_gift extends CActiveRecord {
 			list($eid, $itemId) = explode('_', $itemKey);
 
 			$item = $product->GetBaseProductInfo($eid, $itemId);
-			$discount = DiscountManager::GetPrice(Yii::app()->user->id, $item, 0, false);
+			$discount = DiscountManager::GetPrice(/*Yii::app()->user->id*/0, $item, 0, false);
 
 			$corrector = 1;
 			if ($eid == Entity::PERIODIC) $corrector = 12;

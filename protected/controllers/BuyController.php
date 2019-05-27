@@ -109,6 +109,13 @@ class BuyController extends MyController {
 				$ret['briefly'] = '';
 			}
 			else {
+				$promocodeModel = Promocodes::model();
+				$promocodeId = $promocodeModel->getPromocodeByCode($promocode);
+				if ($promocodeModel->check($promocodeId) === 0) {
+					if ($promocodeModel->useDiscount($promocodeId, DiscountManager::TYPE_PERSONAL)) {
+						list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight, $withVAT, $ret['isDiscount']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false, false);
+					}
+				}
 				$ret['currency'] = Currency::ToSign(Yii::app()->currency);
 				$ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
 				$ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'), true, $ret['itemsPrice']);
