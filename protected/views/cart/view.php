@@ -354,7 +354,7 @@ $ctrl = Yii::app()->getController()->id;
 
         endif;
 	echo '</div>
-                    <div class="nds">'. ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . $ui->item('WITHOUT_VAT') .'</div>
+                    <div class="nds">'. ProductHelper::FormatPrice($price[DiscountManager::WITHOUT_VAT]) . ' ' . $ui->item('WITHOUT_VAT') .'</div>
                     <div class="addcart">
                         <a class="cart-action" data-action="add" data-entity="'. $k['entity'] .'"
                data-id="'. $k['id'] .'" data-quantity="1"

@@ -741,11 +741,23 @@ class SearchProducts {
 	}
 
 	function getNormalizedWords($q) {
-		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($q) . ", 'forMorphy')");
 		$searchWords = [];
 		$realWords = [];
 		$useRealWord = true;
 		$equal = true;
+
+		$words = array();
+		$words = array_merge($words, preg_split("/\W/ui", $q));
+		$words = array_unique($words);
+		foreach ($words as $i=>$w) {
+			if (is_numeric($w)) {
+				$searchWords[] = $w;
+				$realWords[] = $w;
+				unset($words[$i]);
+			}
+		}
+
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy')");
 		foreach ($result as $r) {
 			if (mb_strpos($r['normalized'], '=') === 0) continue;
 
@@ -767,8 +779,12 @@ class SearchProducts {
 		$wTtitle = 100; $wAuthors = 90; $wDescription = 80;
 		$countWords = count($searchWords);
 		if ($countWords > 1) {
-			$wDescription = ceil($wTtitle*($countWords - 1)/$countWords) + 1;
-			$wAuthors = $wDescription + 1;
+			if ($useRealWord) {
+				//если в поисковой строке 4 слова, то 3 слова из названия больше чем 5 слов из описания
+				$wDescription = ceil($wTtitle*($countWords - 1)/($countWords + 1)) - 1;
+			}
+			else $wDescription = ceil($wTtitle*($countWords - 1)/$countWords) + 1;
+			$wAuthors = ceil($wTtitle*($countWords - 1)/$countWords) + 2;
 		}
 		elseif ($useRealWord) {
 			//это надо что бы поиск по title был приоритетнее, чем 2 слова в description
@@ -846,6 +862,7 @@ class SearchProducts {
 			'option ' . implode(', ', $option) . ' '.
 		'';
 		$find = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
 		return $this->_prepareProducts($find);

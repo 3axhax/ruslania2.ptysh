@@ -104,7 +104,7 @@ if (empty($h1)): ?>
             <?php if (count($items) > 0) $this->widget('SortAndPaging', array('paginatorInfo' => $paginatorInfo)); ?>
             </ul>
 			<? endif; ?>
-            <?php if (isset($presentation)):
+            <?php if (!empty($presentation)&&file_exists($presentation)):
                 $fileText = str_replace('ruslania.com/templates-html/', 'ruslania.com/pictures/templates-html/', file_get_contents($presentation));
                 ?>
                 <div class="description_container"><?= $fileText ?></div>
