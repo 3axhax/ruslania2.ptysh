@@ -5,6 +5,12 @@ class SearchProducts {
 	private $_maxMatches = 100000;//это количество сфинкс перебирает в индексах
 	private $_avail, $_eid = 0;
 	private $_ranker = 'sph04';
+	//слова-синонимы хранаятся здесь: /var/lib/sphinxsearch/data/wordforms
+	/**здесь должны быть слова, у которых не надо искать нормальную форму
+	 * если слов будет много, надо делать таблицу в БД и возможно сервис для управлением этой таблицей
+	 * @var array
+	 */
+	private $_excludeWords = array( 'юзефович', );
 
 	/**
 	 * @var DGSphinxSearch
@@ -741,6 +747,7 @@ class SearchProducts {
 	}
 
 	function getNormalizedWords($q) {
+		$q = mb_strtolower($q, 'utf-8');
 		$searchWords = [];
 		$realWords = [];
 		$useRealWord = true;
@@ -750,7 +757,7 @@ class SearchProducts {
 		$words = array_merge($words, preg_split("/\W/ui", $q));
 		$words = array_unique($words);
 		foreach ($words as $i=>$w) {
-			if (is_numeric($w)) {
+			if (is_numeric($w)||in_array($w, $this->_excludeWords)) {
 				$searchWords[] = $w;
 				$realWords[] = $w;
 				unset($words[$i]);
@@ -878,6 +885,7 @@ class SearchProducts {
 			'FROM ' . implode(', ', $tables) . ' '.
 			'where (query=' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
 		'';
+		Debug::staticRun(array($sql));
 		return $sql;
 	}
 

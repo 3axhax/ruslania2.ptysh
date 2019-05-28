@@ -509,7 +509,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                             <li><a href="<?= Yii::app()->createUrl('offers/list'); ?>"><?= $ui->item("RUSLANIA_RECOMMENDS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/static', array('page' => 'offers_partners')); ?>"><?= $ui->item("A_OFFERS_PARTNERS"); ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => 'uni')); ?>"> <?= $ui->item("A_OFFERS_UNIVERCITY"); ?></a></li>
-                            <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => Offer::getMode(Offer::FREE_SHIPPING))); ?>"> <?= ProductHelper::GetTitle($fs) ?></a></li>
+                            <li><a href="<?= Yii::app()->createUrl('offers/special', array('mode' => Offer::getMode(Offer::FREE_SHIPPING))); ?>"> <?= $ui->item("FREE_SHIPPING_OFFER") ?></a></li>
                             <li><a href="<?= Yii::app()->createUrl('site/certificate', array()); ?>"> <?= $ui->item("GIFT_CERTIFICATE"); ?></a></li>
                         </ul>
                     </div><div class="span1">

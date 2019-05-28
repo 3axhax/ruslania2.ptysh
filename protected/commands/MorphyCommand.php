@@ -72,16 +72,15 @@ class MorphyCommand extends CConsoleCommand {
 	}
 
 	static function getMorphyNames($names, $addWords = array()) {
-		$morphyNames = $addWords;
-		$allWords = array();
+		$allWords = $addWords;
 		foreach ($names as $lang=>$name) {
 			$words = array();
 			$words = array_merge($words, preg_split("/\W/ui", $name));
 			$words = array_unique($words);
 			if ($lang == 'rut') {
 				foreach($words as $normForm) {
-					if (is_numeric($normForm)) $morphyNames[] = $normForm;
-					elseif (mb_strlen($normForm, 'utf-8') > 1) $morphyNames[] = $normForm;
+					if (is_numeric($normForm)) $allWords[] = $normForm;
+					elseif (mb_strlen($normForm, 'utf-8') > 1) $allWords[] = $normForm;
 				}
 			}
 			else {

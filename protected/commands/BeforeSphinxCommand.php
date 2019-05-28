@@ -2,7 +2,6 @@
 /*Created by Кирилл (15.09.2018 0:46)*/
 
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php beforesphinx
- * товары по языкам. только avail=1
  * Class BeforeSphinxCommand
  */
 require_once dirname(__FILE__) . '/MorphyCommand.php';
@@ -12,7 +11,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
-
+/*
 		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
@@ -54,7 +53,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 			}
 		}
-
+*/
 		$this->_morphy();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
