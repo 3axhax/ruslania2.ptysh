@@ -96,7 +96,7 @@ class Payment
     }
 
     public static function CheckPayment($oid, $tid, $params, $order) {
-        if (OrderState::IsPaid($order['States'])) return true;
+        if (!empty($order['States'])&&OrderState::IsPaid($order['States'])) return true;
 
         $tid = intVal($tid);
 

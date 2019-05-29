@@ -119,7 +119,8 @@ class PaymentController extends MyController {
         $order = $o->getCertificate($id);
         if(empty($order)) throw new CHttpException(404);
 
-        $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+        if (empty($order['promocode_id'])) $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+
         $code = '';
         if (empty($order['promocode_id'])) {
             $view = 'cancel_certificate';

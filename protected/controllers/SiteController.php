@@ -142,7 +142,21 @@ class SiteController extends MyController {
             'id' => 0,
         );
         $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
-        $this->render('certificate', array('model'=>$model, 'price'=>$price, 'nominals'=>$nominals));
+
+
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage('podarochnyj_sertifikat');
+        $certificateText = '';
+        if (!empty($item)) $certificateText = $item['description_' . Yii::app()->language];
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
+
+        $this->render('certificate', array(
+            'model'=>$model,
+            'price'=>$price,
+            'nominals'=>$nominals,
+            'certificateText' => $certificateText,
+            'isWordpanel' => $isWordpanel,
+        ));
     }
 
     public function actionSale() {
