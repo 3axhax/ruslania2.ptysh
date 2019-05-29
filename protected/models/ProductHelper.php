@@ -203,26 +203,20 @@ class ProductHelper
         }
 
         $tmp = $ret;
-        if ($cnt > 0)
-        {
+        if ($cnt > 0) {
+            if (!empty($url)) $tmp = strip_tags($tmp);
             $pos = false;
-            $len = strlen($tmp);
-            if($len > $cnt) $pos = strpos($tmp, ' ', $cnt);
+            $len = mb_strlen($tmp, 'utf-8');
+            $anchor = false;
+            if($len > $cnt) {
+                $anchor = true;
+                $pos = mb_strpos($tmp, ' ', $cnt, 'utf-8');
+            }
             if($pos !== false)  $tmp = mb_substr($ret, 0, $pos, 'utf-8');
             else $tmp = mb_substr($ret, 0, $cnt, 'utf-8');
-            if($len > 0) { 
-				//var_dump($len);
-				if (!$url) {
-				
-					$tmp .= '...';
-				
-				} else {
-					
-					$tmp = strip_tags($tmp);
-					
-					$tmp .= '<a href="'.$url.'">...</a>';
-					
-				}
+            if(($len > 0)&&$anchor) {
+				if (!$url) $tmp .= '...';
+                else $tmp .= '<a href="'.$url.'">...</a>';
 			}
         }
 
