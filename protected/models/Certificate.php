@@ -65,6 +65,7 @@ class Certificate extends CActiveRecord {
 			self::$_certificates[$certificate['id']]['date_pay'] = date('Y-m-d H:i:s');
 		}
 		//TODO:: добавить отправку писем
+		$pathCertificate = $this->_createPhoto($code, $certificate['maket_id']);
 		return $code;
 	}
 
@@ -146,4 +147,12 @@ class Certificate extends CActiveRecord {
 		return null;
 	}
 
+	private function _createPhoto($promocode, $maketId) {
+		$pathOrig = Yii::getPathOfAlias('webroot') . '/new_img/gift' . $maketId . '.jpg';
+		$pathCertificate = Yii::getPathOfAlias('webroot') . '/new_img/gift_certificates/' . $promocode . '.jpg';
+		copy($pathOrig, $pathCertificate);
+		$handlerStamp = new PhotoStamp($pathCertificate, $promocode);
+		$handlerStamp->saveFile();
+		return $pathCertificate;
+	}
 }

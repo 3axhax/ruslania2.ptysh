@@ -1,7 +1,7 @@
 <?php
-/*ini_set('error_reporting', E_ALL);
+ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);*/
+ini_set('display_startup_errors', 1);
 
 // http://docs.paytrail.com/files/payment-api-en.pdf
 
@@ -119,7 +119,10 @@ class PaymentController extends MyController {
         $order = $o->getCertificate($id);
         if(empty($order)) throw new CHttpException(404);
 
-        if (empty($order['promocode_id'])) $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+        $check = true;
+        if (empty($order['promocode_id'])) {
+            $check = Payment::CheckPayment($id, $tid, $_REQUEST, $order);
+        }
 
         $code = '';
         if (empty($order['promocode_id'])) {
