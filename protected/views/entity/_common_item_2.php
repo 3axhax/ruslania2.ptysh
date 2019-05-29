@@ -261,7 +261,6 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (!empty($item['binding_id'])) : ?>
                 <?php
-                if (!empty($item['Binding']['title_' . Yii::app()->language])):
                     switch ($entity) {
                         case Entity::BOOKS:case Entity::SHEETMUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE1'); break;
                         case Entity::MUSIC: $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE3'); break;
@@ -274,13 +273,9 @@ $entityKey = Entity::GetUrlKey($entity);
                         <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
                                 'entity' => $entityKey,
                                 'bid' => $item['binding_id']));
-                            ?>"><?= $item['Binding']['title_' . Yii::app()->language] ?></a></div>
+                            ?>"><?= ProductHelper::GetTitle($item['Binding']) ?></a></div>
                         <div class="clearBoth"></div>
                     </div>
-                <?php else:
-//					$row = Binding::GetBinding($entity, $item['binding_id']);
-//					echo 'Переплет: '.$row['title_' . Yii::app()->language];
-                endif; ?>
             <?php endif; ?>
 
             <?php if (!empty($item['stock_id'])&&($entity == Entity::SHEETMUSIC)) : ?>

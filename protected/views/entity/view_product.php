@@ -494,7 +494,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($item['binding_id'])&&!empty($item['Binding']['title_' . Yii::app()->language])): ?>
+        <?php if (!empty($item['binding_id'])/*&&!empty($item['Binding']['title_' . Yii::app()->language])*/): ?>
             <div class="authors" style="margin-bottom:5px;">
                 <?php
                 switch ($entity) {
