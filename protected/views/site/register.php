@@ -13,6 +13,16 @@
      <?php //echo $ui->item('REG_INFO_MESSAGE'); ?>
     <h1 class="h1_reg"><?= $h1 ?></h1>
     <?php $this->renderPartial('register_form', array('model' => $model)); ?>
+     <?php if (isset($_GET['ha'])): ?>
+    <h2 class="h1_reg" style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;">Регистрация с помощью социальных сетей</h2>
+     <script src="/new_js/modules/social.js" type="text/javascript"></script>
+     <div class="social_auth">
+         <a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
+         <a href="<?= Yii::app()->createUrl('widgets/authFacebook') ?>" target="_blank" onclick="return facebookCom.getUserInfo(this);"><span class="fa facebook"></span></a>
+         <a href="<?= Yii::app()->createUrl('widgets/authVk') ?>" target="_blank" onclick="return vkCom.getUserInfo(this);"><span class="fa vk"></span></a>
+         <a href="<?= Yii::app()->createUrl('widgets/authTwitter') ?>" target="_blank" onclick="return twitterCom.getUserInfo(this);"><span class="fa twitter"></span></a>
+     </div>
+     <?php endif; ?>
 </div>
 
 <?php if(!empty($isWordpanel)): ?>

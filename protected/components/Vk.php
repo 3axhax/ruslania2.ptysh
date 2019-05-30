@@ -13,6 +13,13 @@ class Vk {
 	private $_redirectUrl = '';
 
 	function __construct() {
+		$referer = Yii::app()->getRequest()->getUrlReferrer();
+		$request = new MyRefererRequest();
+		$request->setFreePath($referer);
+		$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+		$dataUrl = array();
+		if ($refererRoute == 'site/register') $dataUrl['page'] = 'register';
+
 		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
 		$this->_clientId = $cfg[Vk::SHORTNAME]['clientId'];
 		$this->_clientSecret = $cfg[Vk::SHORTNAME]['clientSecret'];
@@ -24,9 +31,13 @@ class Vk {
 		$this->_redirectUrl = $cfg[Vk::SHORTNAME]['redirectUrl'];
 		switch (Yii::app()->getLanguage()) {
 			case 'ru': break;
-			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			case 'rut':
+				$dataUrl['language'] = 'rut';
+				$this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl);
+				break;
 			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
 		}
+		if (!empty($dataUrl)) $this->_redirectUrl .= '?' . http_build_query($dataUrl);
 	}
 
 	function urlCode() {

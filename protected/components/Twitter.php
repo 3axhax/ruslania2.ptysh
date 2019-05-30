@@ -19,6 +19,13 @@ class Twitter {
 	private $_v = '';
 
 	function __construct() {
+		$referer = Yii::app()->getRequest()->getUrlReferrer();
+		$request = new MyRefererRequest();
+		$request->setFreePath($referer);
+		$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+		$dataUrl = array();
+		if ($refererRoute == 'site/register') $dataUrl['page'] = 'register';
+
 		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
 		$this->_apiId = $cfg[Twitter::SHORTNAME]['apiId'];
 		$this->_apiKey = $cfg[Twitter::SHORTNAME]['apiKey'];
@@ -28,9 +35,13 @@ class Twitter {
 		$this->_redirectUrl = $cfg[Twitter::SHORTNAME]['redirectUrl'];
 		switch (Yii::app()->getLanguage()) {
 			case 'ru': break;
-			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
+			case 'rut':
+				$dataUrl['language'] = 'rut';
+				$this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl); break;
 			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
 		}
+		if (!empty($dataUrl)) $this->_redirectUrl .= '?' . http_build_query($dataUrl);
+
 		$this->_authUrl = $cfg[Twitter::SHORTNAME]['authUrl'];
 		$this->_accessTokenUrl = $cfg[Twitter::SHORTNAME]['accessTokenUrl'];
 		$this->_requestTokenUrl = $cfg[Twitter::SHORTNAME]['requestTokenUrl'];

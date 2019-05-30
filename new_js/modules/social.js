@@ -57,7 +57,7 @@ var instagramCom = function() {
 }();
 
 function openWindow(t) {
-    return window.open(t.getAttribute('href'), t.innerHTML, 'width=800,height=600');
+    return window.open(t.getAttribute('href'), t.innerHTML);
 }
 
 function closeWindow(authWindow, userData, url) {
@@ -66,5 +66,5 @@ function closeWindow(authWindow, userData, url) {
         console.log(userData);
         //g('errors').innerHTML = userData['error'];
     }
-    window.location.href = url;
+    if (url != '') window.location.href = url;
 }

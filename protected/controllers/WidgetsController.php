@@ -26,7 +26,8 @@ class WidgetsController extends MyController {
 
 	function actionDataInstagram() {
 		$ret = array();
-		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+		$url = $this->_getUrl();
+
 		$code = (string) Yii::app()->getRequest()->getParam('code');
 		if (!empty($code)) {
 			$insta = new Instagram();
@@ -35,7 +36,7 @@ class WidgetsController extends MyController {
 				$ret = $user['data'];
 				if (!empty($ret['id'])) {
 					$isAuth = $this->_saveSocial($ret['id'], Instagram::SHORTNAME, $ret);
-					if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+					if ($isAuth) $url = $this->_getUrlAuth();
 				}
 			}
 			else $ret = $user;
@@ -50,7 +51,7 @@ class WidgetsController extends MyController {
 
 	function actionDataVk() {
 		$user = array();
-		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+		$url = $this->_getUrl();
 		$code = (string) Yii::app()->getRequest()->getParam('code');
 		if (!empty($code)) {
 			$vk = new Vk();
@@ -62,7 +63,7 @@ class WidgetsController extends MyController {
 			if (!empty($token['email'])) $user['email'] = $token['email'];
 
 			$isAuth = $this->_saveSocial($user['id'], Vk::SHORTNAME, $user);
-			if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+			if ($isAuth) $url = $this->_getUrlAuth();
 		}
 		$this->renderPartial('user_vk', array('userInfo'=>$user, 'url'=>$url));
 	}
@@ -74,7 +75,7 @@ class WidgetsController extends MyController {
 
 	function actionDataTwitter() {
 		$user = array();
-		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+		$url = $this->_getUrl();
 		$oauth_verifier = (string) Yii::app()->getRequest()->getParam('oauth_verifier');
 		$oauth_token = (string) Yii::app()->getRequest()->getParam('oauth_token');
 		if (!empty($oauth_verifier)&&!empty($oauth_token)) {
@@ -82,7 +83,7 @@ class WidgetsController extends MyController {
 			$user = $tw->getUser($oauth_verifier, $oauth_token);
 			if (!empty($user['id'])) {
 				$isAuth = $this->_saveSocial($user['id'], Twitter::SHORTNAME, $user);
-				if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+				if ($isAuth) $url = $this->_getUrlAuth();
 			}
 		}
 		$this->renderPartial('user_twitter', array('userInfo'=>$user, 'url'=>$url));
@@ -94,20 +95,19 @@ class WidgetsController extends MyController {
 	}
 
 	function actionDataFacebook() {
-		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
-
+		$url = $this->_getUrl();
 		$facebook = new Facebook();
 		$user = $facebook->getUser();
 		if (!empty($user['id'])) {
 			$isAuth = $this->_saveSocial($user['id'], Facebook::SHORTNAME, $user);
-			if ($isAuth) $url = Yii::app()->createUrl('cart/doorder');
+			if ($isAuth) $url = $this->_getUrlAuth();
 		}
 		$this->renderPartial('user_facebook', array('userInfo'=>$user, 'url'=>$url));
 	}
 
 	function actionAuthFacebook() {
 		$fb = new Facebook();
-		$this->redirect($fb->urlCode()/* . '&locale=' . $this->_locale[Yii::app()->getLanguage()]*/);
+		$this->redirect($fb->urlCode());
 	}
 
 	private function _auth($uid) {
@@ -149,5 +149,19 @@ class WidgetsController extends MyController {
 			Yii::app()->session['user_social'] = $idUserSocial;
 		}
 		return $isAuth;
+	}
+
+	private function _getUrl() {
+		$page = (string)Yii::app()->getRequest()->getParam('page');
+		$url = Yii::app()->createUrl('cart/noregister') . '?useSocial=1';
+		if ($page === 'register') $url = '';
+		return $url;
+	}
+
+	private function _getUrlAuth() {
+		$page = (string)Yii::app()->getRequest()->getParam('page');
+		$url = Yii::app()->createUrl('cart/doorder');
+		if ($page === 'register') Yii::app()->createUrl('client/me');
+		return $url;
 	}
 }

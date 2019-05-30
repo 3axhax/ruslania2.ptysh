@@ -1,5 +1,8 @@
 <?php
 /*Created by Кирилл (19.03.2019 15:07)*/
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 require_once dirname(dirname(__FILE__)) . '/extensions/Facebook/autoload.php';
 class Facebook {
 	const SHORTNAME = 'fb';
@@ -13,6 +16,13 @@ class Facebook {
 	protected $_fb;
 
 	function __construct() {
+		$referer = Yii::app()->getRequest()->getUrlReferrer();
+		$request = new MyRefererRequest();
+		$request->setFreePath($referer);
+		$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+		$dataUrl = array();
+		if ($refererRoute == 'site/register') $dataUrl['page'] = 'register';
+
 		$cfg = include Yii::getPathOfAlias('webroot') . '/cfg/social.php';
 		$this->_apiId = $cfg[Facebook::SHORTNAME]['apiId'];
 		$this->_apiSecret = $cfg[Facebook::SHORTNAME]['apiSecret'];
@@ -20,9 +30,15 @@ class Facebook {
 		$this->_redirectUrl = $cfg[Facebook::SHORTNAME]['redirectUrl'];
 		switch (Yii::app()->getLanguage()) {
 			case 'ru': break;
-			case 'rut': $this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl) . '?language=rut'; break;
-			default: $this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl); break;
+			case 'rut':
+				$dataUrl['language'] = 'rut';
+				$this->_redirectUrl = str_replace('/ru/', '/', $this->_redirectUrl);
+				break;
+			default:
+				$this->_redirectUrl = str_replace('/ru/', '/' . Yii::app()->getLanguage() . '/', $this->_redirectUrl);
+				break;
 		}
+		if (!empty($dataUrl)) $this->_redirectUrl .= '?' . http_build_query($dataUrl);
 
 		$this->_fb = new Facebook\Facebook([
 			'app_id' => $this->_apiId,
