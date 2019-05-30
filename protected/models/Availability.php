@@ -65,6 +65,11 @@ class Availability
             return Yii::app()->ui->item('CARTNEW_NAME_TABLE_AVAILABILITY');
         }
 
+        if (!empty($item['presale'])) {
+            $datePresale = mktime(23, 59, 59, date('m', $item['presale'])+1, -1, date('Y', $item['presale']));
+            if ($datePresale > time()) return '';
+        }
+
         switch ($code)
         {
             case self::AVAIL_IN_SHOP :
