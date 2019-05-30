@@ -66,6 +66,8 @@ class Certificate extends CActiveRecord {
 		}
 		//TODO:: добавить отправку писем
 		$pathCertificate = $this->_createPhoto($code, $certificate['maket_id']);
+		$urlCertificate = Yii::app()->params['PicDomain'] . '/new_img/gift_certificates/' . $code . '.jpg';
+		$this->_sendMail($certificate, $code, $pathCertificate, $urlCertificate);
 		return $code;
 	}
 
@@ -154,5 +156,31 @@ class Certificate extends CActiveRecord {
 		$handlerStamp = new PhotoStamp($pathCertificate, $promocode);
 		$handlerStamp->saveFile();
 		return $pathCertificate;
+	}
+
+	private function _sendMail($certificate, $promocodeTxt, $promocodeFile, $promocodeUrl) {
+		$mail = new YiiMailMessage('Ruslania.com ' . Yii::app()->ui->item('GIFT_CERTIFICATE'));
+		$mail->view = 'gift_certificate_ru';
+		$mail->setBody(array(
+			'formData'=>$certificate,
+			'promocodeTxt'=>$promocodeTxt,
+			'promocodeUrl'=>$promocodeUrl,
+		), 'text/html');
+		$mail->addTo($certificate['email_dest']);
+		$mail->from = 'ruslania@ruslania.com';
+		$mail->attach(Swift_Attachment::frompath($promocodeFile));
+		Yii::app()->mail->send($mail);
+
+		$mail = new YiiMailMessage('Ruslania.com ' . Yii::app()->ui->item('GIFT_CERTIFICATE'));
+		$mail->view = 'buy_certificate_ru';
+		$mail->setBody(array(
+			'formData'=>$certificate,
+			'promocodeTxt'=>$promocodeTxt,
+			'promocodeUrl'=>$promocodeUrl,
+		), 'text/html');
+		$mail->addTo($certificate['email_source']);
+		$mail->from = 'ruslania@ruslania.com';
+		$mail->attach(Swift_Attachment::frompath($promocodeFile));
+		Yii::app()->mail->send($mail);
 	}
 }
