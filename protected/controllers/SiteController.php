@@ -510,6 +510,10 @@ class SiteController extends MyController {
                     $cart = new Cart();
                     $cart->UpdateCartToUid($this->sid, $identity->getId());
 
+                    if (isset(Yii::app()->session['user_social'])) {
+                        UsersSocials::model()->updateByPk(Yii::app()->session['user_social'], array('id_user' => Yii::app()->user->id));
+                    }
+
                     $razds = array();
                     foreach (Entity::GetEntitiesList() as $entity=>$param) {
                         $razds[$entity] = Yii::app()->ui->item($param['uikey']);
@@ -523,7 +527,6 @@ class SiteController extends MyController {
                     $message->addTo($user->login);
                     $message->from = 'noreply@ruslania.com';
                     Yii::app()->mail->send($message);
-
                 }
                 $ret = array('hasError' => !$ret);
             }
