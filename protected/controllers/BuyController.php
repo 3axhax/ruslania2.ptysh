@@ -112,7 +112,7 @@ class BuyController extends MyController {
 				$promocodeModel = Promocodes::model();
 				$promocodeId = $promocodeModel->getPromocodeByCode($promocode);
 				if ($promocodeModel->check($promocodeId) === 0) {
-					if ($promocodeModel->useDiscount($promocodeId, DiscountManager::TYPE_PERSONAL)) {
+					if ($promocodeModel->notUseDiscount($promocodeId, DiscountManager::TYPE_PERSONAL)) {
 						list($ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys'], $fullweight, $withVAT, $ret['isDiscount']) = Order::model()->getOrderPrice($this->uid, $this->sid, $items, $da, $dMode, $dtype, null, false, false);
 					}
 				}

@@ -7,7 +7,7 @@
 <br>
 Сообщение для получателя:
 <br>
-<?= $formData['txt_dest'] ?>
+<?= nl2br($formData['txt_dest']) ?>
 <br>
 <hr>
 С уважением<br>

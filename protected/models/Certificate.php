@@ -45,7 +45,9 @@ class Certificate extends CActiveRecord {
 		$model->setAttributes(array(
 			'type_id'=>$model::CODE_CERTIFICATE,
 			'settings'=>serialize(array($certificate)),
-		));
+			'date_start'=>date('Y-m-d H:i:s'),
+			'date_end'=>date('Y-m-d H:i:s', mktime(23, 59, 59, date('m')+6, date('d'), date('Y'))),
+		), false);
 		$promocodeId = 0;
 		$code = '';
 		if ($model->save()) {
@@ -106,7 +108,10 @@ class Certificate extends CActiveRecord {
 	function getTotalPrice($id, $currencyId, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys) {
 		$nominal = $this->getNominal($id, $currencyId);
 		$total = $itemsPrice + $deliveryPrice - $nominal;
-		if ($total < 0) $total = 0;
+		if ($total < 0) {
+			if (isset(self::$_certificates[$id])) self::$_certificates[$id]['balance'] = abs($total);
+			$total = 0;
+		}
 		return $total;
 	}
 
@@ -116,13 +121,17 @@ class Certificate extends CActiveRecord {
 		return [
 			'promocodeValue'=>$certificate['nominal'],
 			'promocodeUnit'=>Currency::ToSign($certificate['currency']),
-			'realValue'=>$this->getNominal($id, $currencyId, 0),
+			'realValue'=>$this->getNominal($id, $currencyId),
 			'realUnit'=>Currency::ToSign(Yii::app()->currency),
 			'name'=>Yii::app()->ui->item('GIFT_CERTIFICATE'),
 		];
 	}
 
 	function used($id, $promocodeId) {
+		$certificate = $this->getByPromocode($promocodeId);
+		if (!empty($certificate['balance'])) {
+			return $this->updateByPk($id, array('nominal'=>$certificate['balance']));
+		}
 		return Promocodes::model()->updateByPk($promocodeId, array('is_used'=>1));
 	}
 

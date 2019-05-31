@@ -45,7 +45,8 @@ class StaticPages {
 		//5 - aa@ruslania.com
 		//60093 - maria.ponomareva@gmail.com
 		//69481 - sankes@list.ru | Александр
-		$allowUsers = array(5, 77925, 60093, 69481);
+		//11 - ruslania@ruslania.com
+		$allowUsers = array(5, 11, 77925, 60093, 69481);
 		return in_array($uid, $allowUsers);
 	}
 

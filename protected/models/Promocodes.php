@@ -111,10 +111,10 @@ class Promocodes extends CActiveRecord {
 		return $saleHandler->used($sale['id'], $id);
 	}
 
-	function useDiscount($id, $typeDiscount) {
+	function notUseDiscount($id, $typeDiscount) {
 		$promocode = $this->getPromocode($id);
-		if (($promocode['type_id'] == self::CODE_GIFT)&&($typeDiscount == DiscountManager::TYPE_PERSONAL)) return false;
-		return true;
+		if (($promocode['type_id'] == self::CODE_GIFT)&&($typeDiscount == DiscountManager::TYPE_PERSONAL)) return true;
+		return false;
 	}
 
 	/** здесь получение промокода
