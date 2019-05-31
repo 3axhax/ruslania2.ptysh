@@ -200,7 +200,7 @@
 <label class="selp span3 oplata3 <?php if ($pid == 25) { echo ' act';}?>" onclick="check_cart_sel($(this),'selp', 'dtype2')" style="width: 490px;<?php if ($pid == 25) { echo 'border: 1px solid rgb(100, 113, 127);'; }?>">
 
 	<img src="/images/pt2.png" style="margin-top: -3px;" />
-	<span style="display: block; margin-top: 5px;">Кредитные карты и Финские банки</span>
+	<span style="display: block; margin-top: 5px;"><?=$ui->item('CARTNEW_PAYTRAYL_LABEL')?>. <?=$ui->item('CARTNEW_PAYTRAYL_DESC')?></span>
 
 	<div class="red_checkbox" style="float: right;">
 		<span class="checkbox" style="height: 10px; padding-top: 2px;"><span class="check<?php if ($pid == 25) { echo ' active';}?>"></span></span>
