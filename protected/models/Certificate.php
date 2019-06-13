@@ -145,7 +145,9 @@ class Certificate extends CActiveRecord {
 		}
 		if ($promocodeId !== null) {
 			if (!isset(self::$_codeIds[$promocodeId])) {
-				$certificate = $this->findByAttributes(array('promocode_id'=>$promocodeId))->attributes?:array();
+				$certificate = $this->findByAttributes(array('promocode_id'=>$promocodeId));
+				if (empty($certificate)) $certificate = array();
+				else $certificate = $certificate->attributes?:array();
 				if (!empty($certificate['id'])) {
 					self::$_certificates[$certificate['id']] = $certificate;
 					self::$_codeIds[$promocodeId] = $certificate['id'];
