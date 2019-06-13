@@ -687,6 +687,27 @@ class Product
 
     }
 
+    /**
+     * @param $uid int ид клиента
+     * @param $eid int ид раздела
+     * @param $iid int ид товара
+     * @return bool|DateTime
+     */
+    static function isPurchased($uid, $eid, $iid) {
+        $sql = ''.
+            'select max(tUOS.timestamp) date_buy '.
+            'from users_orders t '.
+                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8)) './/статус заказа - оплачен
+                'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
+            'where (t.uid = ' . (int) $uid . ') '.
+            'group by t.id '.
+            'order by max(tUOS.timestamp) desc '.
+            'limit 1 '.
+        '';
+        $dateBuy = Yii::app()->db->createCommand($sql)->queryScalar();
+        if (empty($dateBuy)) return false;
+        return new DateTime($dateBuy);
+    }
 }
 
 /*

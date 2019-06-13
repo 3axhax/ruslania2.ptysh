@@ -3,7 +3,8 @@
     
     <div class="row" style="float: left">
         <div class="span10">
-		
+
+        <?php $this->renderPartial('is_purchased', array('item' => $item, 'entity' => $entity)); ?>
 		<?php $this->renderPartial('/entity/view_product', array('item' => $item, 'entity' => $entity)); ?>
 		
 		</div>
