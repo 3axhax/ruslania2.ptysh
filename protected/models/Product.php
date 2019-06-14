@@ -706,7 +706,29 @@ class Product
         '';
         $dateBuy = Yii::app()->db->createCommand($sql)->queryScalar();
         if (empty($dateBuy)) return false;
+
         return new DateTime($dateBuy);
+    }
+
+    /**
+     * @param $uid int ид клиента
+     * @param $eid int ид раздела
+     * @param $iid int ид товара
+     * @return array
+     */
+    static function purchasedOrders($uid, $eid, $iid) {
+        $sql = ''.
+            'select t.id '.
+            'from users_orders t '.
+                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8)) './/статус заказа - оплачен
+                'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
+            'where (t.uid = ' . (int) $uid . ') '.
+            'group by t.id '.
+            'order by max(tUOS.timestamp) desc '.
+        '';
+        $orderIds = Yii::app()->db->createCommand($sql)->queryColumn();
+        if (empty($orderIds)) return array();
+        return $orderIds;
     }
 }
 

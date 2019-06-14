@@ -3,5 +3,8 @@ if (!Yii::app()->user->isGuest):
 	$dateBuy = Product::isPurchased(Yii::app()->user->id, $entity, $item['id']);
 	if($dateBuy):
 ?>
-<div>You purchased this item on <?= $dateBuy->format('d.m.Y') ?></div>
+<div class="purchased_msg">
+	<div>You purchased this item on <?= $dateBuy->format('d') . ' ' . Yii::app()->ui->item('A_NEW_M' . (int)$dateBuy->format('m')) . ' ' . $dateBuy->format('Y') ?></div>
+	<div><a href="<?= Yii::app()->createUrl('my/orders', array('eid'=>$entity, 'iid'=>$item['id'])); ?>">View this order</a></div>
+</div>
 <?php endif; endif; ?>

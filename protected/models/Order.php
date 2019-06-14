@@ -49,10 +49,13 @@ class Order extends CMyActiveRecord
         );
     }
 
-    public function GetOrders($uid)
+    public function GetOrders($uid, $orderIds = array())
     {
         $criteria = new CDbCriteria;
-        $criteria->condition = 't.uid=:uid';
+        $criteria->condition = ''.
+            '(t.uid=:uid)'.
+            (empty($orderIds)?'':' and (t.id in (' . implode(',',$orderIds) . '))') .
+        '';
         $criteria->params = array(':uid' => $uid);
         $criteria->order = 't.id DESC';
         $criteria->limit = 2000;

@@ -82,9 +82,19 @@ class ClientController extends MyController
 				$this->_otherLangPaths[$lang] = Person::CreateUrl('client/orders', $lang);
 			}
 		}
-		
+
+        $orderIds = array();
+        if (($eid = (int)Yii::app()->getRequest()->getParam('eid'))&&($iid = (int)Yii::app()->getRequest()->getParam('iid'))) {
+            if (($eid > 0)&&($iid > 0)) {
+                $orderIds = Product::purchasedOrders($this->uid, $eid, $iid);
+                if (count($orderIds) == 1) {
+                    $orderId = array_pop($orderIds);
+                    $this->redirect(Yii::app()->createUrl('order/view', array('oid' => $orderId)));
+                }
+            }
+        }
         $o = new Order();
-        $list = $o->GetOrders($this->uid);
+        $list = $o->GetOrders($this->uid, $orderIds);
         $this->breadcrumbs[] = Yii::app()->ui->item("YM_CONTEXT_PERSONAL_BROWSE_ORDERS");
         $this->render('orders', array('list' => $list));
     }
