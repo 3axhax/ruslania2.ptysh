@@ -998,4 +998,9 @@ class SearchProducts {
 		}
 		return $result;
 	}
+
+	function savePhrase($q) {
+		$sql = 'insert into search_phrases set phrase = :q, date_add = :time';
+		Yii::app()->db->createCommand($sql)->execute(array(':q'=>$q, ':time'=>time()));
+	}
 }

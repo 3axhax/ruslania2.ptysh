@@ -20,6 +20,7 @@ class SearchController extends MyController {
 		$availForOrder = $this->GetAvail(1);
 		$eId = (int) Yii::app()->getRequest()->getParam('e');
 		$model = new SearchProducts($availForOrder, $eId);
+		$model->savePhrase($q);
 		$list = array();
 		$isCode = false;
 		if ($code = $model->isCode($q)) {

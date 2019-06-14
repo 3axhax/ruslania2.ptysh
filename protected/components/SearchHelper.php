@@ -642,6 +642,7 @@ class SearchHelper
 //            $resultTable = $sController->fillDataTable($title);
 //            $join['tRes'] = 'join ' . $resultTable . ' tRes on (tRes.real_id = t.id) and (tRes.entity = ' . $e . ')';*/
             $searchModel = new SearchProducts($only, $e);
+            $searchModel->savePhrase($title);
             $spxSql = $searchModel->getBooleanSql($title, $e);
             if (empty($spxSql)) return array('Items' => array(), 'Paginator' => new CPagination(0));
             $join['tSpx'] = 'join (' . $spxSql . ') tSpx on (tSpx.real_id = t.id)';
