@@ -4060,3 +4060,28 @@ div.periodics div.detail_block div.price_item .periodic_world
 .cart_isbn:not(:empty)::after {
     content: ", ";
 }
+
+.purchased_msg {
+    background-color: #f8f8f8;
+    border: solid 1px #eee;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    padding: 5px 0 5px 20px;
+}
+.purchased_msg span.fa {float: left;}
+.purchased_msg span.fa::before {
+    content: '\f129';
+    color: #edb421;
+    font-size: 15px;
+    position: relative;
+    top: 1px;
+    left: 0;
+}
+.purchased_msg span.fa::after {
+    content: '\f1db';
+    color: #edb421;
+    font-size: 28px;
+    position: relative;
+    top: 5px;
+    left: -15px;
+}

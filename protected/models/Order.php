@@ -251,7 +251,12 @@ class Order extends CMyActiveRecord
             if ($promocode->getPromocode($this->_promocode)['type_id'] == Promocodes::CODE_GIFT) {
                 list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false, false);
             }
-            $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
+            if (((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST)&&($order->DeliveryTypeID != 3)) {
+                $fullPrice = $itemsPrice + $deliveryPrice;
+            }
+            else {
+                $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
+            }
             $promocodeId = $this->_promocode;
             if (!empty($notes)) $notes .= ' ';
             $notes .= Yii::app()->ui->item('PROMOCODE_USE', $code) . '. ';
@@ -259,7 +264,9 @@ class Order extends CMyActiveRecord
             if (!empty($briefly['promocodeValue'])) $notes .= $briefly['promocodeValue'] . ' ';
             if (!empty($briefly['promocodeUnit'])) $notes .= $briefly['promocodeUnit'] . ' ';
             if (!empty($briefly['name'])) $notes .= strip_tags($briefly['name']) . ' ';
-            if ((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST) $deliveryPrice = 0;
+            if (((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST)&&($order->DeliveryTypeID == 3)) {
+                $deliveryPrice = 0;
+            }
         }
 
         try
