@@ -122,32 +122,44 @@ if (empty($showNotes)) $showNotes = false;
 <?php endif; ?>
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt city_lbl">
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span style="width: 5pt" class="redtext">*</span>
+	<?php endif; ?>
 			<?= $ui->item('address_city') ?>
 		</td>
 		<td colspan="2" class="maintxt-vat">
 			<?= $form->textField($addrModel, 'city', array('name'=>'' . $alias . '[city]')); ?>
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
+	<?php endif; ?>
 		</td>
 	</tr>
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt postindex_lbl">
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span style="width: 5pt" class="redtext">*</span>
+	<?php endif; ?>
 			<?= $ui->item('address_postindex') ?>
 		</td>
 		<td colspan="2" class="maintxt-vat">
 			<?= $form->textField($addrModel, 'postindex', array('name'=>'' . $alias . '[postindex]')); ?>
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
+	<?php endif; ?>
 		</td>
 	</tr>
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt streetaddress_lbl">
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span style="width: 5pt" class="redtext">*</span>
+	<?php endif; ?>
 			<?= $ui->item('address_streetaddress') ?>
 		</td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'streetaddress', array('name'=>'' . $alias . '[streetaddress]', 'placeholder'=>$ui->item('MSG_PERSONAL_ADDRESS_COMMENT_2'))); ?>
+	<?php if (!$addrModel->getAttribute('id')): ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
+	<?php endif; ?>
 		</td>
 
 	</tr>
