@@ -246,13 +246,13 @@
                                 <td style="padding-right: 40px; padding-left: 5px;" class="maintxt">
                                     <label for="music"><?=$ui->item("Music catalog"); ?></label>
                                 </td>
-                                <td class="maintxt-vat">
+                                <!--<td class="maintxt-vat">
                                     <label><?=$form->checkBox($model, 'mail_audio_news', array('id' => 'audio', 'uncheckValue' => null, 'class'=>'checkbox_custom')); ?>
                                         <span class="checkbox-custom"></span></label>
                                 </td>
                                 <td style="padding-right: 40px; padding-left: 5px;" class="maintxt">
                                     <label for="audio"><?=$ui->item("A_GOTOAUDIO"); ?></label>
-                                </td>
+                                </td>-->
                             </tr>
                             <tr>
                                 <td class="maintxt-vat">
