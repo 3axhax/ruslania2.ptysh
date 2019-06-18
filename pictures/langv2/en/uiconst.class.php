@@ -1406,7 +1406,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
   'ORDER_PAY_FAIL' => 'Dear customer! You have placed an order, but an error has occurred during the payment process. If you need help choosing a payment method, please contact us. We will be happy to help!',
   'ORDER_PAY_SUCCESS' => 'Dear customer! The order has been paid.',
   'DELEGATE_FIRSTNAME' => 'Contact person\'s name',
-  'DELEGATE_LASTNAME' => 'Contact person\'s surname',
+  'DELEGATE_LASTNAME' => 'Contact person\'s last name',
   'DELEGATE_MIDDLENAME' => 'Contact person\'s second name',
   'CARTNEW_PREPAY_TO_BANK_ACCOUNT3' => 'Prepayment to Ruslania\'s bank account in Russia or payment from card to card.',
   'PAY_ERROR_H1' => 'The payment did not go through',

@@ -5,7 +5,7 @@ if (!Yii::app()->user->isGuest):
 ?>
 <div class="purchased_msg">
 	<span class="fa"></span>
-	<div><?= Yii::app()->ui->item('YOU_PURCHASED') ?> <?= $dateBuy->format('j') . ' ' . Yii::app()->ui->item('A_NEW_M' . (int)$dateBuy->format('m')) . ' ' . $dateBuy->format('Y') ?></div>
+	<div><?= Yii::app()->ui->item('YOU_PURCHASED') ?> <?= $dateBuy->format('j') . ' ' . mb_strtolower(Yii::app()->ui->item('A_NEW_M' . (int)$dateBuy->format('m')), 'utf-8') . ' ' . $dateBuy->format('Y') ?></div>
 	<div><a href="<?= Yii::app()->createUrl('my/orders', array('eid'=>$entity, 'iid'=>$item['id'])); ?>"><?= Yii::app()->ui->item('VIEW_THIS_ORDER') ?></a></div>
 </div>
 <?php endif; endif; ?>
