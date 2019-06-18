@@ -94,6 +94,7 @@ class ModelsSeoEntity extends Seo_settings {
 				case 'entity/audiostreamslist': $this->_replace['{name}'] = Yii::app()->ui->item('AUDIO_STREAMS'); break;
 				case 'entity/subtitleslist': $this->_replace['{name}'] = Yii::app()->ui->item('Credits'); break;
 				case 'entity/studioslist': $this->_replace['{name}'] = Yii::app()->ui->item('STUDIOS'); break;
+				case 'entity/salelist': $this->_replace['{name}'] = mb_strtolower(Yii::app()->ui->item('REDUCED_PRICES')); break;
 			}
 		}
 		elseif (empty($this->_cid)) {

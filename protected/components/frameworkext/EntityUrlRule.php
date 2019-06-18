@@ -22,6 +22,7 @@ class EntityUrlRule extends CBaseUrlRule {
 		'entity/audiostreamslist' => array('idName' => '',      'nameLevel2' => 'audiostreams',),
 		'entity/subtitleslist' =>   array('idName' => '',       'nameLevel2' => 'subtitles',),
 		'entity/studioslist' =>     array('idName' => '',       'nameLevel2' => 'studios',),
+		'entity/salelist' =>        array('idName' => '',       'nameLevel2' => 'sale',),
 
 		'entity/bypublisher' =>     array('idName' => 'pid',    'nameLevel2' => 'publishers',   'useTitle'=>true,),
 		'entity/byseries' =>        array('idName' => 'sid',    'nameLevel2' => 'series',       'useTitle'=>true,),

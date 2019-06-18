@@ -11,6 +11,7 @@ return array(
 			'authors'=>'authors',
 			'bindings'=>'binding',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'authors',
 			'bindings'=>'format',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'performers'=>'performers',
 			'media'=>'product-type',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'authors',
 			'media'=>'product-type',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'categories',
 			'types'=>'edition-type',
 			'gift'=>'as-a-gift',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'years'=>'years',
 			'yearreleases'=>'release-year',
 			'studios'=>'production-companies',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'categories',
 			'publishers'=>'manufacturers',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'publishers',
 			'bindings'=>'binding',
 			'years'=>'years',
+			'sale'=>'reduced-prices',
 		),
 	),
 

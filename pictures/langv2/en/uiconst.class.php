@@ -1439,6 +1439,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'PIECES567890'=>'items',
     'YOU_PURCHASED' => 'You purchased this item on',
     'VIEW_THIS_ORDER' => 'View this order',
+    'REDUCED_PRICES' => 'REDUCED PRICES',
 
 
 );

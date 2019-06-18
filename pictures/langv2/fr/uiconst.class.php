@@ -1414,6 +1414,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'PIECES567890'=>'pièces',
     'YOU_PURCHASED' => 'Vous avez acheté cet article le',
     'VIEW_THIS_ORDER' => 'Voir cette commande',
+    'REDUCED_PRICES' => 'SOLDES',
 
 
 );

@@ -11,6 +11,7 @@ return array(
 			'authors'=>'forfattarna',
 			'bindings'=>'bandtyp',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'forfattarna',
 			'bindings'=>'format',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'performers'=>'artister',
 			'media'=>'format',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'forfattarna',
 			'media'=>'format',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'kategorier',
 			'types'=>'typ-av-utgava',
 			'gift'=>'som-gava',
+			'sale'=>'reapris',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'years'=>'ar',
 			'yearreleases'=>'utgivningsar',
 			'studios'=>'foretag',
+			'sale'=>'reapris',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'kategorier',
 			'publishers'=>'tillverkare',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'forlag',
 			'bindings'=>'omslag',
 			'years'=>'ar',
+			'sale'=>'reapris',
 		),
 	),
 

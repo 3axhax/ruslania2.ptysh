@@ -11,6 +11,7 @@ return array(
 			'authors'=>'avtory',
 			'bindings'=>'oformlenie',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'avtory',
 			'bindings'=>'oformlenie',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'performers'=>'ispolniteli',
 			'media'=>'tip-nositelja',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'avtory',
 			'media'=>'tip-nositelja',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'kategorii',
 			'types'=>'tip-izdanija',
 			'gift'=>'podarit-podpisku',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'years'=>'goda',
 			'yearreleases'=>'god-izdanija',
 			'studios'=>'studii',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'kategorii',
 			'publishers'=>'proizvoditeli',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'izdatelstva',
 			'bindings'=>'oformlenie',
 			'years'=>'goda',
+			'sale'=>'po-snizhennym-cenam',
 		),
 	),
 

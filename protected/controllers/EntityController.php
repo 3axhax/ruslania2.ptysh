@@ -1556,4 +1556,34 @@ class EntityController extends MyController {
         return array($items, $totalItems, $paginatorInfo, $data);
     }
 
+    function actionSalelist($entity) {
+        $entity = Entity::ParseFromString($entity);
+        if ($entity === false) $entity = Entity::BOOKS;
+
+        $dataForPath = array('entity' => Entity::GetUrlKey($entity));
+        $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');
+        if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
+
+        $this->_checkUrl($dataForPath);
+
+        $title = Entity::GetTitle($entity);
+        $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+        $this->breadcrumbs[] = Yii::app()->ui->item('REDUCED_PRICES');
+
+        list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
+        if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
+        $paginatorInfo->itemCount = $totalItems;
+
+        // Добавляем к товарам инфу сколько уже содержится в корзине
+        $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
+        $filters = FilterHelper::getEnableFilters($entity);
+
+        $this->render('list', array('entity' => $entity,
+            'items' => $items,
+            'paginatorInfo' => $paginatorInfo,
+            'filters' => $filters,
+            'filter_data' => $filter_data, 'total'=>$totalItems,
+        ));
+    }
+
 }

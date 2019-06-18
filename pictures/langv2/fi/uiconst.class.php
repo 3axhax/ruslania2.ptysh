@@ -1426,6 +1426,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'PIECES567890'=>'kpl',
     'YOU_PURCHASED' => 'Tilasit tämän tuotteen',
     'VIEW_THIS_ORDER' => 'Näytä tämä tilaus',
+    'REDUCED_PRICES' => 'ALENNUSMYYNTI',
 
 
 );

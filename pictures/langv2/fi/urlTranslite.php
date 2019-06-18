@@ -11,6 +11,7 @@ return array(
 			'authors'=>'tekijat',
 			'bindings'=>'ulkoasu',
 			'years'=>'vuodet',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'tekijat',
 			'bindings'=>'tuotteen-muoto',
 			'years'=>'vuodet',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'years'=>'vuodet',
 			'performers'=>'esiintyjat',
 			'media'=>'tuotteen-muoto',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'tekijat',
 			'years'=>'vuodet',
 			'media'=>'tuotteen-muoto',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'luokat',
 			'types'=>'julkaisutyyppi',
 			'gift'=>'lahjaksi',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'media'=>'tuotteen-tyyppi',
 			'yearreleases'=>'julkaisuvuosi',
 			'studios'=>'tuotantoyhtiot',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'kategoriat',
 			'publishers'=>'valmistajat',
 			'years'=>'vuodet',
+			'sale'=>'alennusmyynti',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'kustantajat',
 			'bindings'=>'ulkoasu',
 			'years'=>'vuodet',
+			'sale'=>'alennusmyynti',
 		),
 	),
 

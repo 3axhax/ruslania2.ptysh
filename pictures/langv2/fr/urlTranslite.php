@@ -11,6 +11,7 @@ return array(
 			'authors'=>'ecrivains',
 			'bindings'=>'couverture',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'ecrivains',
 			'bindings'=>'format',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'performers'=>'interpretes',
 			'media'=>'type-de-porteur',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'ecrivains',
 			'media'=>'type-de-porteur',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'categories',
 			'types'=>'type-d-edition',
 			'gift'=>'en-cadeau',
+			'sale'=>'soldes',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'years'=>'annees',
 			'yearreleases'=>'annee-de-sortie',
 			'studios'=>'societes-de-production',
+			'sale'=>'soldes',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'categories',
 			'publishers'=>'fabricants',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'editeurs',
 			'bindings'=>'couverture',
 			'years'=>'annees',
+			'sale'=>'soldes',
 		),
 	),
 

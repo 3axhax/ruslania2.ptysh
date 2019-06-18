@@ -11,6 +11,7 @@ return array(
 			'authors'=>'schriftsteller',
 			'bindings'=>'einband',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 	'sheetmusic'=>array(
@@ -22,6 +23,7 @@ return array(
 			'authors'=>'schriftsteller',
 			'bindings'=>'format',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 	'music'=>array(
@@ -34,6 +36,7 @@ return array(
 			'performers'=>'darsteller',
 			'media'=>'tragertyp',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 	'soft'=>array(
@@ -44,6 +47,7 @@ return array(
 			'authors'=>'schriftsteller',
 			'media'=>'tragertyp',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 	'periodics'=>array(
@@ -52,6 +56,7 @@ return array(
 			'categories'=>'kategorien',
 			'types'=>'art-der-ausgabe',
 			'gift'=>'als-geschenk',
+			'sale'=>'schnappchen',
 		),
 	),
 	'video'=>array(
@@ -66,6 +71,7 @@ return array(
 			'years'=>'jahr',
 			'yearreleases'=>'jahr-der-veroffentlichung',
 			'studios'=>'produktionsfirmen',
+			'sale'=>'schnappchen',
 		),
 	),
 	'printed'=>array(
@@ -74,6 +80,7 @@ return array(
 			'categories'=>'kategorien',
 			'publishers'=>'hersteller',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 	'maps'=>array(
@@ -83,6 +90,7 @@ return array(
 			'publishers'=>'verleger',
 			'bindings'=>'einband',
 			'years'=>'jahr',
+			'sale'=>'schnappchen',
 		),
 	),
 
