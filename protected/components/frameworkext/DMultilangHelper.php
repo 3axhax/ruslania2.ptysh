@@ -49,6 +49,7 @@ class DMultilangHelper
                             $showSelLang = 1;
                         }
                         if ($paramLang !== '') {
+                            $url = preg_replace("/\bavail=1\b/ui", '', $url, -1);
                             //если адрес начинается с языка, то из параметров убираю language
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
@@ -58,6 +59,7 @@ class DMultilangHelper
                         break;
                     case 'byParam':
                         if (Yii::app()->language !== 'rut') {
+                            $url = preg_replace("/\bavail=1\b/ui", '', $url, -1);
                             //если язык в паметрах и не rut
                             $url = preg_replace("/\blanguage=" . Yii::app()->language . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
@@ -77,6 +79,7 @@ class DMultilangHelper
                         HrefTitles::get()->redirectOldPage($oldUrl);
 
                         if ($paramLang !== '') {
+                            $url = preg_replace("/\bavail=1\b/ui", '', $url, -1);
                             $url = preg_replace("/\blanguage=" . $paramLang . "\b/ui", '', $url, -1);
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
                             $url = preg_replace("/\?+$/ui", '', $url);

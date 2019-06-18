@@ -251,6 +251,12 @@ class HrefTitles {
 							'mode'=>mb_substr($url, 5, null, 'utf-8'),
 							'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 						);
+						if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+							$urlParams['page'] = $page;
+						}
+						if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+							if (empty($avail)) $urlParams['avail'] = 0;
+						}
 						$url = Yii::app()->createUrl($row['route'], $urlParams);
 						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 						break;
@@ -274,6 +280,12 @@ class HrefTitles {
 								'title'=>$title,
 								'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 							);
+							if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+								$urlParams['page'] = $page;
+							}
+							if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+								if (empty($avail)) $urlParams['avail'] = 0;
+							}
 							$url = Yii::app()->createUrl($row['route'], $urlParams);
 							if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 						}
@@ -283,20 +295,35 @@ class HrefTitles {
 							'id'=>$row['id'],
 							'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 						);
+						if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+							$urlParams['page'] = $page;
+						}
+						if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+							if (empty($avail)) $urlParams['avail'] = 0;
+						}
 						$url = Yii::app()->createUrl($row['route'], $urlParams);
 						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 						break;
 				}
 			}
 			elseif (empty($row['id'])&&!empty($row['entity'])) {
+				// страница раздела
 				$urlParams = array(
 					'entity'=>Entity::GetUrlKey($row['entity']),
 					'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 				);
+				if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+					$urlParams['page'] = $page;
+				}
+				if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+					if (empty($avail)) $urlParams['avail'] = 0;
+				}
 				$url = Yii::app()->createUrl($row['route'], $urlParams);
+				Debug::staticRun(array($url, $urlParams, $_GET, 'exit'));
 				if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 			}
 			else {
+				// страница категории
 				$titles = $this->getById($row['entity'], $row['route'], $row['id']);
 				if (!empty($titles)) {
 					$title = isset($titles[$row['lang']])?$titles[$row['lang']]:$titles['en'];
@@ -306,6 +333,12 @@ class HrefTitles {
 						'title'=>$title,
 						'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 					);
+					if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+						$urlParams['page'] = $page;
+					}
+					if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+						if (empty($avail)) $urlParams['avail'] = 0;
+					}
 					$url = Yii::app()->createUrl($row['route'], $urlParams);
 					if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 				}
@@ -315,6 +348,12 @@ class HrefTitles {
 						$idName=>$row['id'],
 						'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 					);
+					if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
+						$urlParams['page'] = $page;
+					}
+					if (($avail = Yii::app()->getRequest()->getParam('avail')) !== null) {
+						if (empty($avail)) $urlParams['avail'] = 0;
+					}
 					$url = Yii::app()->createUrl($row['route'], $urlParams);
 					if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 				}
