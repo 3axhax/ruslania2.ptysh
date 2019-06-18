@@ -935,8 +935,8 @@ IBAN DE79514303006474790001 <br>
   'ORDER_NOT_PAID' => 'не оплачен',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Войдите или зарегистрируйтесь что бы добавить этот товар в лист ожидания',
   'ORDER_PAID' => 'оплачен',
-  'ADDED_TO_CART' => 'Товар добавлен. <a href="%s">Перейти в корзину</a>.',
-  'ADDED_TO_CART_ALREADY' => 'Товар добавлен. <a href="%s">Перейти в корзину</a>.',
+  'ADDED_TO_CART' => 'Товар добавлен. <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">Перейти в корзину</a>.',
+  'ADDED_TO_CART_ALREADY' => 'Товар добавлен. <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">Перейти в корзину</a>.',
   'ALREADY_IN_CART' => 'Сейчас в корзине %d шт. этого товара.',
   'PERIODIC_ALREADY_IN_CART' => 'Это издание уже есть в корзине.',
   'REQUEST_CREATED' => 'Спасибо. Товар добавлен в лист ожидания. Посмотреть <a href="/my/requests">весь список</a>',
@@ -1429,5 +1429,7 @@ IBAN DE79514303006474790001 <br>
     'PIECES1'=>'штука',
     'PIECES234'=>'штуки',
     'PIECES567890'=>'штук',
+    'YOU_PURCHASED' => 'Вы заказывали это',
+    'VIEW_THIS_ORDER' => 'Посмотреть этот заказ',
 
 );

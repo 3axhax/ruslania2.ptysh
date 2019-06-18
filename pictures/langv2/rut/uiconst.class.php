@@ -1,4 +1,4 @@
-<?php // FILE: language constants, generated at 24.05.2019 20:28:24
+<?php // FILE: language constants, generated at 28.05.2019 21:07:24
 return array (
   'MONTH_SMALL' => 'mes.',
   '1_MONTH_FOR_FINLAND' => '1 mesjats, Finljandija',
@@ -1428,4 +1428,6 @@ Nazhav na interesujushchuju vas kategoriju, vy smozhete uvidet vse tovary so ski
   'PIECES1' => 'shtuka',
   'PIECES234' => 'shtuki',
   'PIECES567890' => 'shtuk',
+  'YOU_PURCHASED' => 'Vy zakazyvali eto',
+  'VIEW_THIS_ORDER' => 'Posmotret etot zakaz',
 );

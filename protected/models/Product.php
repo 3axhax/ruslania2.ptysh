@@ -697,7 +697,7 @@ class Product
         $sql = ''.
             'select max(tUOS.timestamp) date_buy '.
             'from users_orders t '.
-                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8)) './/статус заказа - оплачен
+                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8,17,4)) './/статус заказа - оплачен
                 'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
             'where (t.uid = ' . (int) $uid . ') '.
             'group by t.id '.
@@ -720,7 +720,7 @@ class Product
         $sql = ''.
             'select t.id '.
             'from users_orders t '.
-                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8)) './/статус заказа - оплачен
+                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8,17,4)) './/статус заказа - оплачен
                 'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
             'where (t.uid = ' . (int) $uid . ') '.
             'group by t.id '.

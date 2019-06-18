@@ -908,8 +908,8 @@ Please retry to pay, or contact us.',
   'ORDER_NOT_PAID' => 'La commande n\'est pas payée',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Enregistrez pour ajouter le produit à la liste des demandes',
   'ORDER_PAID' => 'La commande est payée',
-  'ADDED_TO_CART' => 'Le produit est ajouté <a href="%s">au panier</a>.',
-  'ADDED_TO_CART_ALREADY' => 'Le produit est ajouté <a href="%s">au panier</a>.<br/>Il ya %d copies du produit dans le panier.',
+  'ADDED_TO_CART' => 'Le produit est ajouté <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">au panier</a>.',
+  'ADDED_TO_CART_ALREADY' => 'Le produit est ajouté <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">au panier</a>.<br/>Il ya %d copies du produit dans le panier.',
   'ALREADY_IN_CART' => 'Il ya %d copies du produit dans le panier.',
   'PERIODIC_ALREADY_IN_CART' => 'Ce produit est déjà dans le panier. ',
   'REQUEST_CREATED' => 'Merci! Le produit est ajouté à la liste des demandes.',
@@ -1412,6 +1412,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'PIECES1'=>'pièce',
     'PIECES234'=>'pièces',
     'PIECES567890'=>'pièces',
+    'YOU_PURCHASED' => 'Vous avez acheté cet article le',
+    'VIEW_THIS_ORDER' => 'Voir cette commande',
 
 
 );

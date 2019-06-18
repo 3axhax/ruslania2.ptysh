@@ -917,8 +917,8 @@ Por favor intente pagar de nuevo o nos contacte.',
   'ORDER_NOT_PAID' => 'El pedido no ha sido pagado',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Inicie sesión o registrese para poder añanir este articúlo a su lista de espera',
   'ORDER_PAID' => 'pagado',
-  'ADDED_TO_CART' => 'El articúlo ha sido añadido <a href="%s">a su cesta</a>.',
-  'ADDED_TO_CART_ALREADY' => 'El articúlo ha sido añadido <a href="%s">a su cesta</a>.<br/>Hay %d copias del producto en la cesta.',
+  'ADDED_TO_CART' => 'El articúlo ha sido añadido <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">a su cesta</a>.',
+  'ADDED_TO_CART_ALREADY' => 'El articúlo ha sido añadido <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">a su cesta</a>.<br/>Hay %d copias del producto en la cesta.',
   'ALREADY_IN_CART' => 'Hay %d copias del producto en la cesta.',
   'PERIODIC_ALREADY_IN_CART' => 'del producto en la cesta.',
   'REQUEST_CREATED' => 'Gracias. El artículo ha sido añadido a su lista de espera. Ver <a href="/my/requests">toda la lista</a>',
@@ -1424,6 +1424,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'PIECES1'=>'pieza',
     'PIECES234'=>'piezas',
     'PIECES567890'=>'piezas',
+    'YOU_PURCHASED' => 'Usted compró este artículo el',
+    'VIEW_THIS_ORDER' => 'Ver este pedido',
 
 
 );

@@ -913,8 +913,8 @@ Voit myös ottaa yhteyttä meihin.',
   'ORDER_NOT_PAID' => 'Tilaus ei ole maksettu',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Rekisteröidy tai kirjaudu sisään lisääksesi tuotteen kyselyjen listalle',
   'ORDER_PAID' => 'Tilaus on maksettu',
-  'ADDED_TO_CART' => 'Tuote on lisätty <a href="%s">ostoskoriin</a>.',
-  'ADDED_TO_CART_ALREADY' => 'Tuote on lisätty <a href="%s">ostoskoriin</a>.<br/>Ostoskorissa on nyt %d kpl tätä tuotetta.',
+  'ADDED_TO_CART' => 'Tuote on lisätty <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">ostoskoriin</a>.',
+  'ADDED_TO_CART_ALREADY' => 'Tuote on lisätty <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">ostoskoriin</a>.<br/>Ostoskorissa on nyt %d kpl tätä tuotetta.',
   'ALREADY_IN_CART' => 'Ostoskorissa on nyt %d kpl tätä tuotetta.',
   'PERIODIC_ALREADY_IN_CART' => 'Tämä tuote on jo ostoskorissa.',
   'REQUEST_CREATED' => 'Kiitos! Tuote on nyt lisätty kyselyjen listalle.',
@@ -1424,6 +1424,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'PIECES1'=>'kpl',
     'PIECES234'=>'kpl',
     'PIECES567890'=>'kpl',
+    'YOU_PURCHASED' => 'Tilasit tämän tuotteen',
+    'VIEW_THIS_ORDER' => 'Näytä tämä tilaus',
 
 
 );

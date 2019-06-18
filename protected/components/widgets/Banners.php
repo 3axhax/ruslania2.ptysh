@@ -422,7 +422,6 @@ class Banners extends MyWidget {
                         'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
-                    Debug::staticRun(array($sql));
                     $beforeIds['authors'] = Yii::app()->db->createCommand($sql)->queryColumn();
                     $exclude = array_merge($exclude, $beforeIds['authors']);
                 }
@@ -440,7 +439,6 @@ class Banners extends MyWidget {
                     'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
-                Debug::staticRun(array($sql));
                 $beforeIds['serie'] = Yii::app()->db->createCommand($sql)->queryColumn();
                 $exclude = array_merge($exclude, $beforeIds['serie']);
             }

@@ -926,8 +926,8 @@ Please retry to pay, or contact us.',
   'ORDER_NOT_PAID' => 'The order hasn\'t been paid',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Sign In or register to add the product to requests',
   'ORDER_PAID' => 'The order has been paid',
-  'ADDED_TO_CART' => 'The product has been added to <a href="%s">the shopping cart</a>.',
-  'ADDED_TO_CART_ALREADY' => 'The product has been added to <a href="%s">the shopping cart</a>.<br/>There are %d copy(ies) of the product in the cart.',
+  'ADDED_TO_CART' => 'The product has been added to <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">the shopping cart</a>.',
+  'ADDED_TO_CART_ALREADY' => 'The product has been added to <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">the shopping cart</a>.<br/>There are %d copy(ies) of the product in the cart.',
   'ALREADY_IN_CART' => 'There are %d copy(ies) of the product in the cart.',
   'PERIODIC_ALREADY_IN_CART' => 'This title is already in the cart.',
   'REQUEST_CREATED' => 'Thanks you! The product has now been added to the list of requests.',
@@ -1437,6 +1437,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'PIECES1'=>'item',
     'PIECES234'=>'items',
     'PIECES567890'=>'items',
+    'YOU_PURCHASED' => 'You purchased this item on',
+    'VIEW_THIS_ORDER' => 'View this order',
 
 
 );

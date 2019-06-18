@@ -921,8 +921,8 @@ Please retry to pay, or contact us.',
   'ORDER_NOT_PAID' => 'Du har inte betalat beställningen',
   'MSG_LOGIN_OR_REGISTER_TO_CREATE_REQUEST' => 'Logga in eller registrera för att tillsätta produkten till förfrågalistan',
   'ORDER_PAID' => 'Du har betalat beställningen',
-  'ADDED_TO_CART' => 'Produkten är tillsatts till <a href="%s">kundvagn</a>.',
-  'ADDED_TO_CART_ALREADY' => 'Produkten är tillsatts till <a href="%s">kundvagn</a>.<br/>Kundvagn innehaller %d stycken av denna produkt.',
+  'ADDED_TO_CART' => 'Produkten är tillsatts till <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">kundvagn</a>.',
+  'ADDED_TO_CART_ALREADY' => 'Produkten är tillsatts till <a href="%s"  onclick="yaCounter53579293.reachGoal(\'view_cart_cart_added\');">kundvagn</a>.<br/>Kundvagn innehaller %d stycken av denna produkt.',
   'ALREADY_IN_CART' => 'Kundvagn innehaller %d stycken av denna produkt.',
   'PERIODIC_ALREADY_IN_CART' => 'Den här produkten är redan i kundvagn.',
   'REQUEST_CREATED' => 'Tack! Produkten är tillsatts till förfrågalistan',
@@ -1426,6 +1426,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'PIECES1'=>'stycke',
     'PIECES234'=>'stycken',
     'PIECES567890'=>'stycken',
+    'YOU_PURCHASED' => 'Du köpte det den',
+    'VIEW_THIS_ORDER' => 'Visa denna beställning',
 
 
 );
