@@ -246,6 +246,9 @@
         },
 
         sendforma: function () {
+            var $pleasewait = $('.pleasewait');
+            $pleasewait.show();
+
             $('.error').removeClass('error');
             $('.texterror').hide();
 
@@ -269,6 +272,7 @@
             if (this.oldId > 0) fd['oldId'] = this.oldId;
             if (errors.length) {
                 self.viewErrors(errors);
+                $pleasewait.hide();
             }
             else {
                 $.ajax({
@@ -276,6 +280,7 @@
                     data: fd,
                     type: 'post',
                     dataType : 'json',
+                    complete: function() {$pleasewait.hide();},
                     success: function(r) {
                         var errors = [];
                         if ('errors' in r) {

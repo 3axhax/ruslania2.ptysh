@@ -16,7 +16,8 @@ $user = User::model()->findByPk($this->uid);
             //if (isset($_GET['ha'])) {
                 $this->renderPartial('/buy/address_form', array('alias'=>'Address', 'userType'=>'myAddr', 'addrModel'=>$model, 'onlyPereodic'=>0, 'existPereodic'=>0, 'showNotes'=>true, 'emailPlaceholder'=>$user->getAttribute('login')));
                 ?>
-                <div class="address_action">
+                <div class="address_action" style="position: relative;">
+                    <div class="pleasewait"><span class="fa fa-spinner fa-pulse" style="float: right; position: absolute; top: -5px;"></span></div>
                     <a class="btn btn-success" id="send-forma" onclick="return false;"><?=$ui->item(((empty($mode)||($mode != 'edit')))?'CARTNEW_BTN_ADD_ADDRESS':'ADDRESS_EDIT')?></a>
                 </div>
                 <link rel="stylesheet" href="/new_style/order_buy.css">

@@ -368,8 +368,10 @@ class Address extends CActiveRecord
             'uid' => $uid,
             'all' => $allAddresses,
         ), 'text/html');
-        $message->addTo('periodicals@ruslania.com');
-        $message->from = 'periodicals@ruslania.com';
+//        $toEmail = 'periodicals@ruslania.com';
+        $toEmail = 'andreasagopov@hotmail.com';
+        $message->addTo($toEmail);
+        $message->from = $toEmail;
         $ret = @Yii::app()->mail->send($message);
     }
 

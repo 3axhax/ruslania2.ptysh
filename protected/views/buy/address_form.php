@@ -68,7 +68,7 @@ if (empty($showNotes)) $showNotes = false;
 	<tr>
 		<td class="maintxt">
 			<span style="width: 5pt" class="redtext">*</span>
-			<span class="js_userName"><?= $ui->item("regform_lastname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_FIRSTNAME"); ?></span></td>
+			<span class="js_userName"><?= $ui->item("regform_lastname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_LASTNAME"); ?></span></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_last_name', array('name'=>'' . $alias . '[receiver_last_name]')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
@@ -77,7 +77,7 @@ if (empty($showNotes)) $showNotes = false;
 	<tr>
 		<td class="maintxt">
 			<span style="width: 5pt" class="redtext">*</span>
-			<span class="js_userName"><?= $ui->item("regform_firstname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_LASTNAME"); ?></span></td>
+			<span class="js_userName"><?= $ui->item("regform_firstname"); ?></span><span class="js_firmName" style="display: none;"><?= $ui->item("DELEGATE_FIRSTNAME"); ?></span></td>
 		<td class="maintxt-vat">
 			<?= $form->textField($addrModel, 'receiver_first_name', array('name'=>'' . $alias . '[receiver_first_name]')); ?>
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>

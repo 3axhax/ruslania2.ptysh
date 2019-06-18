@@ -1,5 +1,6 @@
 <?php
 /*Created by Кирилл (10.12.2018 20:40)*/
+//промокод на 3 по цене 2
 class Promocodes_gift extends CActiveRecord {
 
 	static private $_certificates = array();//для кеша промокодов

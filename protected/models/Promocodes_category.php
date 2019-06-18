@@ -1,5 +1,6 @@
 <?php
 /*Created by Кирилл (04.12.2018 23:00)*/
+//промокод на категорию (раздел)
 class Promocodes_category extends CActiveRecord {
 	static private $_certificates = array();//для кеша промокодов
 	static private $_codeIds = array(); // для кеша только ид промокодов

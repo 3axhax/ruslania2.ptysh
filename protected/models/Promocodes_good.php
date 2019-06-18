@@ -1,6 +1,6 @@
 <?php
 /*Created by Кирилл (03.01.2019 21:21)*/
-
+//промокод на товар (стоимость товара)
 class Promocodes_good extends CActiveRecord {
 	static private $_certificates = array();//для кеша промокодов
 	static private $_codeIds = array(); // для кеша только ид промокодов

@@ -1,5 +1,6 @@
 <?php
 /*Created by Кирилл (07.12.2018 17:50)*/
+//промокод на "Без почтовых расходов"
 class Promocodes_withoutpost extends CActiveRecord {
 
 	static private $_certificates = array();//для кеша промокодов
