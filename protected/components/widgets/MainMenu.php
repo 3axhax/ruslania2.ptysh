@@ -97,7 +97,8 @@ class MainMenu extends CWidget {
 	}
 
 	function viewBooks() {
-		$entityStr = 'books';
+//		$entityStr = 'books';
+		$entityStr = Entity::GetUrlKey(Entity::BOOKS);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -119,7 +120,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -130,7 +131,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewSheetmusic() {
-		$entityStr = 'sheetmusic';
+		$entityStr = Entity::GetUrlKey(Entity::SHEETMUSIC);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -150,7 +151,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -161,7 +162,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewMusic() {
-		$entityStr = 'music';
+		$entityStr = Entity::GetUrlKey(Entity::MUSIC);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -176,7 +177,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -187,7 +188,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewSuvenirs() {
-		$entityStr = 'printed';
+		$entityStr = Entity::GetUrlKey(Entity::PRINTED);
 		$categorys = $this->_categorys[$entityStr];
 		unset($categorys[6]);
 		foreach ($this->_categoryIds[$entityStr] as $id) unset($categorys[$id]);
@@ -214,7 +215,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewMaps() {
-		$entityStr = 'maps';
+		$entityStr = Entity::GetUrlKey(Entity::MAPS);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -229,7 +230,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -240,7 +241,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewPrinted() {
-		$entityStr = 'printed';
+		$entityStr = Entity::GetUrlKey(Entity::PRINTED);
 		$categorys = $this->_categorys[$entityStr];
 		foreach ($this->_suvenirs as $id) unset($categorys[$id]);
 //
@@ -261,7 +262,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -272,7 +273,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewSoft() {
-		$entityStr = 'soft';
+		$entityStr = Entity::GetUrlKey(Entity::SOFT);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -287,7 +288,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(
@@ -298,7 +299,7 @@ class MainMenu extends CWidget {
 	}
 
 	function viewVideo() {
-		$entityStr = 'video';
+		$entityStr = Entity::GetUrlKey(Entity::VIDEO);
 		$categorys = $this->_categorys[$entityStr];
 //
 		$rows = array();
@@ -323,7 +324,7 @@ class MainMenu extends CWidget {
 		$saleCategorys = $this->_sales[$entityStr];
 		$category = array_shift($saleCategorys);
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
 			'name'=>Yii::app()->ui->item('A_NEW_SALE')
 		);
 		$rows[] = array(

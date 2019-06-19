@@ -1,7 +1,10 @@
-<?php $filterData = FilterHelper::getFiltersData($entity, $cid);
+<?php
+$urlParams = array();
+if (Yii::app()->getController()->action->id === 'salelist') $urlParams['sale'] = 1;
+$filterData = FilterHelper::getFiltersData($entity, $cid);
 $urls = array();
-$urls['result'] = Yii::app()->createUrl('site/ggfilter');
-$urls['recount'] = Yii::app()->createUrl('site/gtfilter');
+$urls['result'] = Yii::app()->createUrl('site/ggfilter', $urlParams);
+$urls['recount'] = Yii::app()->createUrl('site/gtfilter', $urlParams);
 ?>
 <form id="js_filter" class="prod-filter filter" method="get" action="">
 
@@ -14,7 +17,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
     <div class="prod-filter__row">
 
         <?php if (isset($filters['author']) && $filters['author'] == true):
-            $urls['author'] = Yii::app()->createUrl('liveSearch/filter_authors');
+            $urls['author'] = Yii::app()->createUrl('liveSearch/filter_authors', $urlParams);
             ?>
             <!--Фильтр по авторам-->
         <div class="prod-filter__col">
@@ -29,7 +32,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php endif;?>
 
         <?php if (isset($filters['directors']) && $filters['directors'] == true):
-            $urls['directors'] = Yii::app()->createUrl('liveSearch/filter_directors');
+            $urls['directors'] = Yii::app()->createUrl('liveSearch/filter_directors', $urlParams);
             ?>
             <!--Фильтр по режисерам-->
             <div class="prod-filter__col">
@@ -44,7 +47,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php endif;?>
 
         <?php if (isset($filters['actors']) && $filters['actors'] == true):
-            $urls['actors'] = Yii::app()->createUrl('liveSearch/filter_actors');
+            $urls['actors'] = Yii::app()->createUrl('liveSearch/filter_actors', $urlParams);
             ?>
             <!--Фильтр по авторам-->
             <div class="prod-filter__col">
@@ -188,7 +191,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
         <?php endif;?>
 
         <?php if (isset($filters['performers']) && $filters['performers'] == true):
-            $urls['performer'] = Yii::app()->createUrl('liveSearch/filter_performers');
+            $urls['performer'] = Yii::app()->createUrl('liveSearch/filter_performers', $urlParams);
             ?>
             <!--Фильтр по исполнителю-->
             <div class="prod-filter__col">
@@ -214,7 +217,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_PUBLISHER')?>:</label>
             <?php endif;?>
             <?php if ($entity == Entity::BOOKS && $cid == 0):
-                $urls['publisher'] = Yii::app()->createUrl('liveSearch/filter_publishers');
+                $urls['publisher'] = Yii::app()->createUrl('liveSearch/filter_publishers', $urlParams);
                 ?>
                 <div class="text">
                     <input type="hidden" name="publisher" value="<?=($publisher = (isset($filter_data['publisher']) && $filter_data['publisher'] != 0)) ? $filter_data['publisher'] : 0?>">
@@ -224,7 +227,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                 </div>
                 <ul class="search_result search_result_publisher"></ul>
             <?php else:
-            $urls['publisher'] = Yii::app()->createUrl('liveSearch/select_filter_publishers');
+            $urls['publisher'] = Yii::app()->createUrl('liveSearch/select_filter_publishers', $urlParams);
             ?>
                 <select class="select2_publishers prod-filter__input prod-filter__input prod-filter__input__select--m" name="publisher">
                     <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
@@ -244,7 +247,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
             <div class="prod-filter__col">
                 <label class="prod-filter__label" for=""><?=$ui->item('A_NEW_FILTER_SERIES')?>:</label>
                 <?php if ($entity == Entity::BOOKS && $cid == 0):
-                    $urls['seria'] = Yii::app()->createUrl('liveSearch/filter_series');
+                    $urls['seria'] = Yii::app()->createUrl('liveSearch/filter_series', $urlParams);
                     ?>
                     <div class="text">
                         <input type="hidden" name="seria" value="<?=($seria = (isset($filter_data['series']) && $filter_data['series'] != 0)) ? $filter_data['series'] : 0?>">
@@ -254,7 +257,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter');
                     </div>
                     <ul class="search_result search_result_series"></ul>
                 <?php else:
-                $urls['series'] = Yii::app()->createUrl('liveSearch/select_filter_series');
+                $urls['series'] = Yii::app()->createUrl('liveSearch/select_filter_series', $urlParams);
                 ?>
                     <select class="select2_series prod-filter__input prod-filter__input prod-filter__input__select--m" name="seria">
                         <option value=""><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>

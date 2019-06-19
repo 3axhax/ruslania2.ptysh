@@ -55,7 +55,7 @@
                     <a href="<?= Yii::app()->createUrl('entity/categorylist', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))) ?>"><?= Yii::app()->ui->item('A_NEW_ALL_CATEGORIES_PERIODICS'); ?></a>
                 </li>
                 <li>
-                    <a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100, 'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($availCategory[100])))); ?>"><?= Yii::app()->ui->item($availCategorySale[100]) ?></a>
+                    <a href="<?= Yii::app()->createUrl('entity/salelist', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))); ?>"><?= Yii::app()->ui->item($availCategorySale[100]) ?></a>
                 </li>
                 <li>
                     <a href="<?= Yii::app()->createUrl('entity/gift', array('entity' => Entity::GetUrlKey(Entity::PERIODIC))) ?>"><?= Yii::app()->ui->item('A_NEW_PERIODIC_FOR_GIFT'); ?></a>

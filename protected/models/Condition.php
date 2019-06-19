@@ -59,6 +59,8 @@ class Condition {
 		$this->_avail();
 		$this->_category();
 		$this->_years();
+		$this->_sale();
+		//Важно, что бы _price() запускался после _sale().
 		$this->_price();
 		$this->_author();
 		$this->_seria();
@@ -78,6 +80,7 @@ class Condition {
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
+		Debug::staticRun(array($this->_condition));
 	}
 
 	private function _category() {
@@ -86,6 +89,16 @@ class Condition {
 			$allChildren = $category->GetChildren($this->_entity, $this->_cid);
 			$allChildren[] = $this->_cid;
 			$this->_condition['cid'] = '((t.code in (' . implode(', ', $allChildren) . ')) or (t.subcode in (' . implode(', ', $allChildren) . ')))';
+		}
+	}
+
+	private function _sale() {
+		$sale = (int)$this->g('sale');
+		if ($sale > 0) {
+			$this->_condition['sale'] = '(t.discount > 0)';
+			if ($this->_entity != Entity::PERIODIC) {
+				$this->_condition['sale'] .= ' and (t.discount < t.brutto)';
+			}
 		}
 	}
 
@@ -141,10 +154,19 @@ class Condition {
 			if (empty($bMin)) $this->_condition['brutto'] = '(' . $brutto . ' <= ' . $bMax / $rate . ')';
 			//elseif (empty($bMax)) $this->_condition['brutto'] = '(' . $brutto . ' >= ' . $bMin / $rate . ')';
 			//если пользователь задал нижнюю границу в $4, товар стоил $5, после скидки стал $3, то ему будет интересно увидеть, что возможно, он сможет купить что-то дешевле чем оно стоило.
-			elseif (empty($bMax)) $this->_condition['brutto'] = '(t.brutto >= ' . $bMin / $rate . ')';
-			elseif ($bMin == $bMax) $this->_condition['brutto'] = '((' . $brutto . ' = ' . $bMin / $rate . ') or (t.brutto = ' . $bMin / $rate . '))';
+			elseif (empty($bMax)) {
+				if (empty($this->_condition['sale'])) $this->_condition['brutto'] = '(t.brutto >= ' . $bMin / $rate . ')';
+				else $this->_condition['brutto'] = '(' . $brutto . ' >= ' . $bMin / $rate . ')';
+			}
+			elseif ($bMin == $bMax) {
+				if (empty($this->_condition['sale'])) $this->_condition['brutto'] = '((' . $brutto . ' = ' . $bMin / $rate . ') or (t.brutto = ' . $bMin / $rate . '))';
+				else $this->_condition['brutto'] = '(' . $brutto . ' = ' . $bMin / $rate . ')';
+			}
 			//else $this->_condition['brutto'] = '(' . $brutto . ' between ' . $bMin / $rate . ' and ' . $bMax / $rate . ')';
-			else $this->_condition['brutto'] = '(t.brutto >= ' . $bMin / $rate . ') and (' . $brutto . ' <= ' . $bMax / $rate . ')';
+			else {
+				if (empty($this->_condition['sale'])) $this->_condition['brutto'] = '((t.brutto between ' . $bMin / $rate . ' and ' . $bMax / $rate . ') or (' . $brutto . ' between ' . $bMin / $rate . ' and ' . $bMax / $rate . '))';
+				else $this->_condition['brutto'] = '(' . $brutto . ' between ' . $bMin / $rate . ' and ' . $bMax / $rate . ')';
+			}
 		}
 	}
 

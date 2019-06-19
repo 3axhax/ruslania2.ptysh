@@ -11,6 +11,9 @@ endif; endforeach;
 ?>
 <h2 class="cattitle"><?= Yii::app()->ui->item('CATEGORY_POPULAR') ?>:</h2>
 <ul class="left_list divider">
+	<li>
+		<a href="<?= Yii::app()->createUrl('entity/salelist', array('entity' => Entity::GetUrlKey($entity))); ?>"><?= Entity::GetTitle($entity) ?> <?= mb_strtolower(Yii::app()->ui->item('REDUCED_PRICES'), 'utf-8') ?></a>
+	</li>
 <?php foreach ($availCategorySale as $idCat=>$name):?>
 	<li>
 		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity), 'cid' => $idCat, 'title' => Yii::app()->ui->item($name))); ?>"><?= Yii::app()->ui->item($name) ?></a>

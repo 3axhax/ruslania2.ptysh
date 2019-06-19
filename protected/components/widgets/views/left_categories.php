@@ -1,6 +1,10 @@
 <?php /*Created by Кирилл (05.06.2018 23:19)*/ ?>
 <div class="poht" style="margin: 10px 0 0 0; "><?= Yii::app()->ui->item('A_NEW_CATEGORYES') ?>:</div>
-<ul class="left_list divider"><?php /*
+<ul class="left_list divider">
+	<li>
+		<a href="<?= Yii::app()->createUrl('entity/salelist', array('entity' => Entity::GetUrlKey($entity))); ?>"><?= Entity::GetTitle($entity) ?> <?= mb_strtolower(Yii::app()->ui->item('REDUCED_PRICES'), 'utf-8') ?></a>
+	</li>
+	<?php /*
 	<li>
 <?php if (empty($cid)): ?>
 		<a href="<?= Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity))) ?>">

@@ -1557,8 +1557,17 @@ class EntityController extends MyController {
     }
 
     function actionSalelist($entity) {
+        $fd = FiltersData::instance();
+        $fd->deleteFiltersData();
+        Yii::app()->session['last_e'] = 'sale';
+        if (isset(Yii::app()->request->cookies['last_e']->value) && (($key = Yii::app()->request->cookies['last_e']->value) != '')) {
+            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(''));
+        }
+
         $entity = Entity::ParseFromString($entity);
         if ($entity === false) $entity = Entity::BOOKS;
+
+        FilterHelper::deleteEntityFilterIfReferer('entity/salelist', $entity, 0);
 
         $dataForPath = array('entity' => Entity::GetUrlKey($entity));
         $dataForPath['lang'] = Yii::app()->getRequest()->getParam('lang');

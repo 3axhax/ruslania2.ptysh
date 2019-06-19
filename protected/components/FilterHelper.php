@@ -141,6 +141,7 @@ class FilterHelper
             if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
             if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
             self::getReleaseYears();
+            self::getSale();
             self::$_data[$key] = self::$data;
         }
 
@@ -187,6 +188,7 @@ class FilterHelper
             return;
         }
         self::$data['cid'] = $data['cid'] ?: $data['cid_val'] ?: 0;
+        self::$data['sale'] = $data['sale'] ?: 0;
         self::$data['avail'] = $data['avail'] ?: 0;
         self::$data['lang_sel'] = $data['lang_sel'] ?: $data['langsel'] ?: Yii::app()->getRequest()->getParam('lang', false);
         self::$data['sort'] = $data['sort'] ?: 8;
@@ -256,6 +258,21 @@ class FilterHelper
             return true;
         }
         self::$data['cid'] = 0;
+        return false;
+    }
+
+    static private function getSale(){
+        if (Yii::app()->getController()->action->id === 'salelist') {
+            self::$data['sale'] = 1;
+            return true;
+        }
+
+        $sale = (int)Yii::app()->getRequest()->getParam('sale');
+        if (($sale > 0)&&(Yii::app()->request->isPostRequest||isset($_GET['ha']))) {
+            self::$data['sale'] = 1;
+            return true;
+        }
+        self::$data['sale'] = 0;
         return false;
     }
 

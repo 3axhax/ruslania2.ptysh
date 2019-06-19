@@ -1311,14 +1311,16 @@ class SiteController extends MyController {
     }
 
     function actionGTfilter() { //узнаем сколько выбрано товаров при фильтре
-        if (Yii::app()->request->isPostRequest) {
+        if (Yii::app()->request->isPostRequest||isset($_GET['ha'])) {
             $category = new Category();
-            $entity = $_POST['entity_val'];
-            $cid = $_POST['cid_val'];
-            $data = $_POST;
-            FilterHelper::setFiltersData($entity, $cid, $data);
-            $test = FilterHelper::getFiltersData($entity, $cid);
-            echo $category->count_filter($entity, $cid, FilterHelper::getFiltersData($entity, $cid), true);
+            $entity = Yii::app()->getRequest()->getParam('entity_val');
+            $cid = Yii::app()->getRequest()->getParam('cid_val');
+            $data = FilterHelper::getFiltersData($entity, $cid);
+//            $data = $_POST;
+//            if (isset($_GET['ha'])) $data = $_GET;
+//            FilterHelper::setFiltersData($entity, $cid, $data);
+//            $test = FilterHelper::getFiltersData($entity, $cid);
+            echo $category->count_filter($entity, $cid, $data, true);
         }
     }
 
