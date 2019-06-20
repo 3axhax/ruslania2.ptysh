@@ -183,6 +183,7 @@ Stripe.applePay.checkAvailability(function(available) {
         addrFormIds:['Reg', 'Address'],
         onlyPereodic: 0,
         activePromocode: false,
+        activePromocodeCertificate: false,
         activeSmartpost: false,
         userSocialId: 0,
         init: function(options) {
@@ -247,6 +248,11 @@ Stripe.applePay.checkAvailability(function(available) {
             var $promocodeBlock = $('#js_promocode');
             this.$inputPromocode = $promocodeBlock.find('input[type=text]');
             this.$submitPromocode = $promocodeBlock.find('input[type=button]');
+
+            var $promocodeCertificateBlock = $('#js_promocode_certificate');
+            this.$inputPromocodeCertificate = $promocodeCertificateBlock.find('input[type=text]');
+            this.$submitPromocodeCertificate = $promocodeCertificateBlock.find('input[type=button]');
+
             this.notesHeight();
             if (!this.delivery_address&&(parseInt(this.country.value) > 0)) {
                 this.blockPay();
@@ -317,6 +323,11 @@ Stripe.applePay.checkAvailability(function(available) {
 
             self.$submitPromocode.on('click', function() {
                 self.recount(self.$inputPromocode.val().trim());
+            });
+
+            self.$submitPromocodeCertificate.on('click', function() {
+                self.activePromocodeCertificate = true;
+                self.recount(self.getPromocodeValue());
             });
 
             $(this.nVAT).on('blur', function() {
@@ -682,6 +693,11 @@ Stripe.applePay.checkAvailability(function(available) {
             return '';
         },
 
+        getPromocodeCertificateValue: function() {
+            if (this.activePromocodeCertificate) return this.$inputPromocodeCertificate.val().trim();
+            return '';
+        },
+
         changeCountry: function () {
             var self = this;
             if (!this.onlyPereodic) {
@@ -728,8 +744,9 @@ Stripe.applePay.checkAvailability(function(available) {
         },
 
         recount: function(value) {
-            var $regForm = $('#Reg');
             var self = this;
+            var certificateValue = self.getPromocodeCertificateValue();
+            var $regForm = $('#Reg');
             var dtype = this.$deliveryTypeData.find('input[name=dtype]:checked').val();
             var aid = 0;
             var cid = 0;
@@ -745,6 +762,7 @@ Stripe.applePay.checkAvailability(function(available) {
 
             var data = {
                 'promocode':value,
+                'certificate':certificateValue,
                 'dtype':dtype,
                 'aid':aid,
                 'cid':cid,
@@ -798,6 +816,27 @@ Stripe.applePay.checkAvailability(function(available) {
                     else {
                         self.activePromocode = false;
                         self.$inputPromocode.val('');
+                    }
+
+                    self.$inputPromocodeCertificate.closest('div').siblings().remove();
+                    if ((certificateValue != '')&&(certificateValue != value)) {
+                        var $bufCertificate = self.$inputPromocodeCertificate.closest('div');
+                        var $elemCertificate = $('<div style="font-weight: normal;"></div>');
+                        if ('certificateValue' in r.briefly) {
+                            $elemCertificate.append('<span style="margin-right: 20px;">' + r.briefly['certificateValue'] + ' ' + r.briefly['certificateUnit'] + '</span>');
+                            self.activePromocodeCertificate = true;
+                        }
+                        else if ('messageCertificate' in r.briefly) {
+                            $elemCertificate.append('<span style="margin-right: 20px;">' + r.briefly['messageCertificate'] + '</span>');
+                            self.activePromocodeCertificate = false;
+                        }
+                        $('<span style="color:#ed1d24; cursor: pointer;">&#10008;</span>').appendTo($elemCertificate).click(function(){ self.activePromocodeCertificate = false; self.recount(self.getPromocodeValue()); });
+                        if ('nameCertificate' in r.briefly) $elemCertificate.append(r.briefly['nameCertificate']);
+                        $bufCertificate.after($elemCertificate);
+                    }
+                    else {
+                        self.activePromocodeCertificate = false;
+                        self.$inputPromocodeCertificate.val('');
                     }
                 }
             });
@@ -858,6 +897,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 }
             });
             fd['promocode'] = this.getPromocodeValue();
+            fd['certificate'] = this.getPromocodeCertificateValue();
             if (this.takeInStore) {
                 if (this.takeInStore.checked) fd['dtype'] = 0;
             }

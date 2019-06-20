@@ -3,7 +3,7 @@
 class Order extends CMyActiveRecord
 {
     public $check;
-    private $_promocode = null; //здесь должно быть ид промокода
+    private $_promocode = null, $_certificate = null; //здесь должно быть ид промокода
 
     public static function HavePaidState($states)
     {
@@ -34,9 +34,9 @@ class Order extends CMyActiveRecord
             array('hide_edit_order,hide_edit_payment, uid, delivery_address_id, billing_address_id, delivery_type_id, payment_type_id, currency_id, '
                   . 'is_reserved, full_price, items_price, delivery_price, mandate, check', 'required', 'on' => 'newinternet', ),
             array('notes', 'safe', 'on' => 'newinternet')
-			
+
         );
-		
+
     }
 
     public function relations()
@@ -62,7 +62,7 @@ class Order extends CMyActiveRecord
         $list = Order::model()->with('items', 'states',
             'billingAddress', 'billingAddress.billingCountry',
             'deliveryAddress', 'deliveryAddress.deliveryCountry')->findAll($criteria);
-		
+
         $list = $this->FlatOrderList($list);
 
         return $list;
@@ -83,14 +83,14 @@ class Order extends CMyActiveRecord
             }
 
         $p = new Product;
-		
-		
+
+
 
         foreach ($items as $entity => $ids)
         {
-			
+
 			$result = $p->getProducts3($entity, $ids);
-			
+
             foreach ($result as $item)
                 $itemsData[$entity][$item['id']] = $item;
         }
@@ -244,6 +244,7 @@ class Order extends CMyActiveRecord
         $notes = $order->Notes;
 
         $promocodeId = 0;
+        $promocodes = array();
         if (empty($this->_promocode)) $fullPrice = $itemsPrice + $deliveryPrice;
         else {
             $promocode = Promocodes::model();
@@ -258,6 +259,7 @@ class Order extends CMyActiveRecord
                 $fullPrice = $promocode->getTotalPrice($code, $itemsPrice, $deliveryPrice, $pricesValues, $discountKeys);
             }
             $promocodeId = $this->_promocode;
+            $promocodes[] = $this->_promocode;
             if (!empty($notes)) $notes .= ' ';
             $notes .= Yii::app()->ui->item('PROMOCODE_USE', $code) . '. ';
             $briefly = $promocode->briefly($code, false, $itemsPrice);
@@ -267,6 +269,22 @@ class Order extends CMyActiveRecord
             if (((int)$promocode->getPromocode($this->_promocode)['type_id'] === Promocodes::CODE_WITHOUTPOST)&&($order->DeliveryTypeID == 3)) {
                 $deliveryPrice = 0;
             }
+        }
+
+        if (empty($this->_certificate)) {}
+        else {
+            $promocode = Promocodes::model();
+            $code = $promocode->getPromocode($this->_certificate)['code'];
+            if ($promocode->getPromocode($this->_certificate)['type_id'] == Promocodes::CODE_CERTIFICATE) {
+                $fullPrice = $promocode->getTotalPrice($code, $fullPrice, 0, $pricesValues, $discountKeys);
+            }
+            $promocodes[] = $this->_certificate;
+            if (!empty($notes)) $notes .= ' ';
+            $notes .= Yii::app()->ui->item('PROMOCODE_USE', $code) . '. ';
+            $briefly = $promocode->briefly($code, false, $itemsPrice);
+            if (!empty($briefly['promocodeValue'])) $notes .= $briefly['promocodeValue'] . ' ';
+            if (!empty($briefly['promocodeUnit'])) $notes .= $briefly['promocodeUnit'] . ' ';
+            if (!empty($briefly['name'])) $notes .= strip_tags($briefly['name']) . ' ';
         }
 
         try
@@ -290,14 +308,23 @@ class Order extends CMyActiveRecord
                       ':mandate' => $order->Mandate,
                       ':promocodeId' => $promocodeId,
                       ':smartpost_address' => $order->SmartpostAddress,
+//                      ':promocodes' => serialize($promocodes),
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;
 
-            if (($orderID > 0)&&!empty($this->_promocode)) {
-                if ($fullPrice == 0) $this->AddStatus($orderID, OrderState::AutomaticPaymentConfirmation);
-                $promocode = Promocodes::model();
-                $promocode->used($this->_promocode);
+            if ($orderID > 0) {
+                if (!empty($this->_promocode)||!empty($this->_certificate)) {
+                    if ($fullPrice == 0) $this->AddStatus($orderID, OrderState::AutomaticPaymentConfirmation);
+                }
+                if (!empty($this->_promocode)) {
+                    $promocode = Promocodes::model();
+                    $promocode->used($this->_promocode);
+                }
+                if (!empty($this->_certificate)) {
+                    $promocode = Promocodes::model();
+                    $promocode->used($this->_certificate);
+                }
             }
 
             // NOTE: calculate order invoice reference number
@@ -357,9 +384,9 @@ class Order extends CMyActiveRecord
         {
             CommonHelper::LogException($ex, 'Failed to create order');
             $transaction->rollback();
-            
+
 			file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/protected/runtime/21212.txt', print_r($ex,1));
-            
+
             return 0;
         }
     }
@@ -448,9 +475,10 @@ class Order extends CMyActiveRecord
         return $newOid;
     }
 
-    function setPromocode($code) {
+    function setPromocode($code, $certificate = '') {
         $promocode = Promocodes::model();
         if ($promocode->check($promocode->getPromocodeByCode($code)) === 0) $this->_promocode = $promocode->getPromocodeByCode($code)['id'];
+        if (($certificate !== $code)&& ($promocode->check($promocode->getPromocodeByCode($certificate)) === 0)) $this->_certificate = $promocode->getPromocodeByCode($certificate)['id'];
     }
 	
 	function GetCountOrders($uid){

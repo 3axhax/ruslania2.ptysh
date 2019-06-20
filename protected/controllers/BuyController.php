@@ -102,11 +102,13 @@ class BuyController extends MyController {
 			if (empty($ret['deliveryPrice'])&&$this->_onlyPereodic($items)) {
 				$ret['deliveryName'] = Delivery::ToString(Delivery::TYPE_FREE);
 			}
+
+			$useDelivery = true;
 			$promocode = (string) Yii::app()->getRequest()->getParam('promocode');
 			if ($promocode === '') {
 				$ret['currency'] = Currency::ToSign(Yii::app()->currency);
 				$ret['totalPrice'] = ProductHelper::FormatPrice($ret['itemsPrice'] + $ret['deliveryPrice'], false);
-				$ret['briefly'] = '';
+				$ret['briefly'] = array();
 			}
 			else {
 				$promocodeModel = Promocodes::model();
@@ -121,11 +123,43 @@ class BuyController extends MyController {
 					$ret['totalPrice'] = ProductHelper::FormatPrice($ret['itemsPrice'] + $ret['deliveryPrice'], false);
 				}
 				else {
-					$ret['totalPrice'] = Promocodes::model()->getTotalPrice(Yii::app()->getRequest()->getParam('promocode'), $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
+					if ($promocodeId['type_id'] == Promocodes::CODE_WITHOUTPOST) $useDelivery = false;
+					$ret['totalPrice'] = Promocodes::model()->getTotalPrice($promocode, $ret['itemsPrice'], $ret['deliveryPrice'], $ret['pricesValues'], $ret['discountKeys']);
 				}
-				$ret['briefly'] = Promocodes::model()->briefly(Yii::app()->getRequest()->getParam('promocode'), true, $ret['itemsPrice']);
+				$ret['briefly'] = Promocodes::model()->briefly($promocode, true, $ret['itemsPrice']);
 				if (!empty($ret['totalPrice'])) $ret['totalPrice'] = ProductHelper::FormatPrice($ret['totalPrice'], false);
 			}
+
+
+			$certificate = (string) Yii::app()->getRequest()->getParam('certificate');
+			if (($certificate === '')||($certificate === $promocode)) {
+			}
+			else {
+				$promocodeModel = Promocodes::model();
+				$promocodeId = $promocodeModel->getPromocodeByCode($certificate);
+				if (empty($ret['briefly'])) $ret['briefly'] = array();
+				if ($promocodeId['type_id'] == Promocodes::CODE_CERTIFICATE) {
+					$ret['totalPrice'] = Promocodes::model()->getTotalPrice($certificate, $ret['itemsPrice'], $useDelivery?$ret['deliveryPrice']:0, $ret['pricesValues'], $ret['discountKeys']);
+					$briefly = Promocodes::model()->briefly($certificate, true, $ret['itemsPrice']);
+					if (!empty($briefly)) {
+						foreach ($briefly as $k=>$v) {
+							//certificateValue, certificateUnit, messageCertificate, nameCertificate
+							switch ($k) {
+								case 'promocodeValue': $ret['briefly']['certificateValue'] = $v; break;
+								case 'promocodeUnit': $ret['briefly']['certificateUnit'] = $v; break;
+								case 'name': $ret['briefly']['nameCertificate'] = $v; break;
+								case 'message': $ret['briefly']['messageCertificate'] = $v; break;
+							}
+						}
+
+					}
+				}
+				else {
+					$ret['briefly']['messageCertificate'] = Yii::app()->ui->item('PROMOCODE_ERROR_1');
+				}
+				if (!empty($ret['totalPrice'])) $ret['totalPrice'] = ProductHelper::FormatPrice($ret['totalPrice'], false);
+			}
+
 		}
 		$this->ResponseJson($ret);
 	}
@@ -296,7 +330,7 @@ class BuyController extends MyController {
 					if (ProductHelper::IsAvailableForOrder($item)||empty($item['out_of_print'])) $orderItems[] = $item;
 				}
 				$o = new Order;
-				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'));
+				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'), Yii::app()->getRequest()->getParam('certificate'));
 				$id = $o->CreateNewOrder($userId, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
 				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 

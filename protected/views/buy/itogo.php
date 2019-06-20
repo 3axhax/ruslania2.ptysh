@@ -30,6 +30,7 @@ else $head .= '<span class="items_nds"></span>';
 
 		<div class="cart_footer footer_promocode">
 			<?php $this->renderPartial('/cart/_promocode', array('priceId'=>'itogo_cost')); ?>
+			<?php $this->renderPartial('_promocode_certificate', array('priceId'=>'itogo_cost')); ?>
 		</div>
 		<div class="cart_footer footer3">
 			<?=$ui->item('CARTNEW_TOTAL_COST_LABEL')?>: <span class="itogo_cost" id="itogo_cost"><?= $PH->FormatPrice($total['itemsPrice'] + $total['deliveryPrice']); ?></span>
