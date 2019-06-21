@@ -804,6 +804,7 @@ Stripe.applePay.checkAvailability(function(available) {
                         if ('promocodeValue' in r.briefly) {
                             $elem.append('<span style="margin-right: 20px;">' + r.briefly['promocodeValue'] + ' ' + r.briefly['promocodeUnit'] + '</span>');
                             self.activePromocode = true;
+                            $('#js_promocode_certificate').show();
                         }
                         else if ('message' in r.briefly) {
                             $elem.append('<span style="margin-right: 20px;">' + r.briefly['message'] + '</span>');
