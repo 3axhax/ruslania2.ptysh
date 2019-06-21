@@ -306,7 +306,7 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'pid' => $item['id'],
-						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+						'title' => $lang == "ru" ? urlencode($item['title_' . $lang]) : ProductHelper::ToAscii($item['title_' . $lang])
 					);
 					$insertParams = array(
 						':entity'=>$entity,
@@ -382,7 +382,8 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'sid' => $item['id'],
-						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+                                                'title' => $lang == "ru" ? urlencode($item['title_' . $lang]) : ProductHelper::ToAscii($item['title_' . $lang])
+						//'title'=>ProductHelper::ToAscii($item['title_' . $lang])
 					);
 					$insertParams = array(
 						':entity'=>$entity,
