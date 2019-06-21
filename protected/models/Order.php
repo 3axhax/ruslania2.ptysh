@@ -290,8 +290,8 @@ class Order extends CMyActiveRecord
         try
         {
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
-                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address) VALUES '
-                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address)';
+                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address, promocodes) VALUES '
+                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address, :promocodes)';
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
@@ -308,7 +308,7 @@ class Order extends CMyActiveRecord
                       ':mandate' => $order->Mandate,
                       ':promocodeId' => $promocodeId,
                       ':smartpost_address' => $order->SmartpostAddress,
-//                      ':promocodes' => serialize($promocodes),
+                      ':promocodes' => serialize($promocodes),
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;

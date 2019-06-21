@@ -5,7 +5,7 @@ $addrModel = new Address();
 $addrList = Address::model()->GetAddresses($this->uid);
 $user = User::model()->findByPk($this->uid);
 ?>
-<link rel="stylesheet" href="/new_style/order_buy.css">
+<link rel="stylesheet" href="/new_style/order_buy.css?v=2106">
 <hr />
 
 <div class="container cartorder" id="js_orderForm" style="margin-bottom: 20px;">
@@ -75,7 +75,7 @@ $user = User::model()->findByPk($this->uid);
 
 		ym(53579293, 'reachGoal', 'cart_step3');
 		
-		scriptLoader('/new_js/modules/cart.js').callFunction(function() {
+		scriptLoader('/new_js/modules/cart.js?v2106').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userData) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,

@@ -357,12 +357,12 @@ class BuyController extends MyController {
 			'name'=>Yii::app()->ui->item('CARTNEW_CONTINUE_SHOPPING'),
 		);
 		$order = $o->GetOrder($id);
-		
-		if ($order['payment_type_id'] == 25) {
-			
+		if (($order['payment_type_id'] == 25)&&($order['full_price'] > 0)) {
 			$this->renderPartial('order_ok', array('order' => $order));
-			
-		} else { $this->render('order_ok', array('order' => $order)); }
+		}
+		else {
+			$this->render('order_ok', array('order' => $order));
+		}
 		
 		
 	}
