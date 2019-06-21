@@ -19,6 +19,12 @@
             </div>
 <div>
     <b><?=sprintf($ui->item("ORDER_MSG_NUMBER"), $order['id']); ?></b>
+    <?php $this->widget('TradedoublerPixel', array(
+                'orderValue' => $order['items_price'],
+                'currency' => Currency::ConvertToEUR($order['items_price'], $order['currency_id']),
+                'orderNumber' => $order['id'],
+            ));
+    ?>
     <?php if($order['is_reserved']) : ?>
         <div class="mbt10">
             <?=$ui->item('IN_SHOP_NOT_READY'); ?>
