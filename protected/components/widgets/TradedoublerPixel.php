@@ -13,7 +13,7 @@ class TradedoublerPixel extends CWidget
     private $reportInfo = '';
 
     public $orderValue = '';
-    public $currency = '';
+    public $currency = 'EUR';
     public $orderNumber = '';
 
 
