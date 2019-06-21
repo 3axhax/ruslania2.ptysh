@@ -49,9 +49,9 @@ class OffersController extends MyController
     public function actionView($oid) {
         if(empty($oid)) $this->redirect(Yii::app()->createUrl('offers/list'));
 		
-		//var_dump($oid);
+		$this->_checkUrl(['oid' => $oid]);
 		
-        $mode = '';
+		$mode = '';
         switch($oid)
         {
             case Offer::FIRMS : $mode = 'firms'; break;
@@ -61,8 +61,8 @@ class OffersController extends MyController
             case Offer::FREE_SHIPPING : $mode = 'fs'; break;
             case Offer::ALLE_2_EURO : $mode = 'alle2'; break;
         }
-
-        if(!empty($mode))
+		
+		if(!empty($mode))
         {
             if($mode == 'index')
                 $this->redirect('/');
@@ -78,7 +78,7 @@ class OffersController extends MyController
         $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
         $this->breadcrumbs[] = ProductHelper::GetTitle($offer);
 
-        list($groups, $paginator) = OfferItem::model()->getList($oid);
+		list($groups, $paginator) = OfferItem::model()->getList($oid);
         $this->render('view', array('offer' => $offer, 'groups' => $groups, 'paginator' => $paginator));
     }
 
@@ -205,7 +205,8 @@ class OffersController extends MyController
         }
         $typePage = $this->action->id;
         $this->_canonicalPath = Yii::app()->createUrl('offers/' . $typePage, $data);
-        if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
+		
+		if ((mb_strpos($this->_canonicalPath, '?') !== false)&&!empty($query)) $query = '&' . mb_substr($query, 1, null, 'utf-8');
 
         foreach (Yii::app()->params['ValidLanguages'] as $lang) {
             if ($lang !== 'rut') {
