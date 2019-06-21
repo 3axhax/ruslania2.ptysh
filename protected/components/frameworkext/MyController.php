@@ -376,6 +376,20 @@ class MyController extends CController
             $cookie->expire = time() + (60*60*24*365);
             Yii::app()->request->cookies['TRADEDOUBLER'] = $cookie;
             Yii::app()->session['TRADEDOUBLER'] = $_GET["tduid"];
+
+            if (empty($_GET["url"])) {
+                $redir = parse_url($_SERVER['REQUEST_URI']);
+
+                $redir['query'] = str_replace('tduid=' . $_GET["tduid"], '', $redir['query']);
+
+                $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $redir['path'] .
+                    ((isset($redir['query']) && $redir['query'] != '') ? ('?' . $redir['query']) : '');
+                }
+            else {
+                $url = urldecode(substr(strstr($_SERVER["QUERY_STRING"], "url"), 4));
+            }
+            header('Location: ' . $url);
+            exit();
         }
     }
 

@@ -3,16 +3,19 @@
 
 class TradedoublerPixel extends CWidget
 {
-    public $secretcode = 'secret';
-    public $organization = 'xxxx';
-    public $isSecure = true;
+    private $secretcode;
+    private $organization;
+    private $event;
+
+    private $isSecure = true;
     private $domain = "tbs.tradedoubler.com";
-    public $event = 'xxxx';
+    private $tduid = '';
+    private $reportInfo = '';
+
     public $orderValue = '';
     public $currency = '';
     public $orderNumber = '';
-    public $tduid = '';
-    public $reportInfo = '';
+
 
     public function run() {
 
@@ -45,6 +48,15 @@ class TradedoublerPixel extends CWidget
     }
 
     private function checkInput () {
+        $cfg = include Yii::getPathOfAlias('webroot') . '/cfg/Tradedoubler.php';
+        if (empty($cfg)) return false;
+        if (!isset($cfg['secretcode']) || !isset($cfg['organization']) || !isset($cfg['event'])) return false;
+        else {
+            $this->secretcode = $cfg['secretcode'];
+            $this->organization = $cfg['organization'];
+            $this->event = $cfg['event'];
+        }
+
         if (!empty(Yii::app()->request->cookies['TRADEDOUBLER']->value))
             $this->tduid = Yii::app()->request->cookies['TRADEDOUBLER']->value;
         elseif (!empty(Yii::app()->session['TRADEDOUBLER']))
