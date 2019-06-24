@@ -306,7 +306,7 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'pid' => $item['id'],
-						'title' => $lang == "ru" ? urlencode($item['title_' . $lang]) : ProductHelper::ToAscii($item['title_' . $lang])
+						'title' => ProductHelper::ToAscii($item['title_' . $lang])
 					);
 					$insertParams = array(
 						':entity'=>$entity,
@@ -316,6 +316,26 @@ class OldPagesCommand extends CConsoleCommand {
 						':lang'=>$lang,
 					);
 					$pdo->getPdoStatement()->execute($insertParams);
+                                        
+                                        if ($lang == 'ru') {
+                                            
+                                                $urlParams = array(
+                                                        'entity' => Entity::GetUrlKey($entity),
+                                                        'pid' => $item['id'],
+                                                        'title' => urlencode($item['title_' . $lang])
+                                                );
+                                                
+                                                $insertParams = array(
+                                                        ':entity'=>$entity,
+                                                        ':route'=>'entity/bypublisher',
+                                                        ':id'=>$item['id'],
+                                                        ':path'=>Yii::app()->createUrl('entity/bypublisher', $urlParams),
+                                                        ':lang'=>$lang,
+                                                );
+                                                
+                                                $pdo->getPdoStatement()->execute($insertParams);
+                                        }
+                                        
 				}
 			}
 			unset($items);
@@ -382,8 +402,7 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'sid' => $item['id'],
-                                                'title' => $lang == "ru" ? urlencode($item['title_' . $lang]) : ProductHelper::ToAscii($item['title_' . $lang])
-						//'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+                                                'title' => ProductHelper::ToAscii($item['title_' . $lang])						
 					);
 					$insertParams = array(
 						':entity'=>$entity,
@@ -393,6 +412,25 @@ class OldPagesCommand extends CConsoleCommand {
 						':lang'=>$lang,
 					);
 					$pdo->getPdoStatement()->execute($insertParams);
+                                        
+                                        if ($lang == 'ru') {
+                                            
+                                                $urlParams = array(
+                                                        'entity' => Entity::GetUrlKey($entity),
+                                                        'sid' => $item['id'],
+                                                        'title' => urlencode($item['title_' . $lang])
+                                                );
+                                                
+                                                $insertParams = array(
+                                                        ':entity'=>$entity,
+                                                        ':route'=>'entity/byseries',
+                                                        ':id'=>$item['id'],
+                                                        ':path'=>Yii::app()->createUrl('entity/byseries', $urlParams),
+                                                        ':lang'=>$lang,
+                                                );
+                                                
+                                                $pdo->getPdoStatement()->execute($insertParams);
+                                        }
 				}
 			}
 			unset($items);
