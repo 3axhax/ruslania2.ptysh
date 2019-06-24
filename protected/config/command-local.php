@@ -5,8 +5,8 @@ $r = CMap::mergeArray(
     array(
         'components' => array(
             'request' => array(
-                'hostInfo' => 'http://ruslania2.ptysh.ru',
-                'baseUrl' => 'http://ruslania2.ptysh.ru',
+                'hostInfo' => 'https://beta.ruslania.com',
+                'baseUrl' => 'https://beta.ruslania.com',
                 'scriptUrl' => ''
            ),
 
@@ -37,7 +37,8 @@ unset($r['onBeginRequest']);
 unset($r['defaultController']);
 
 
-/*//TODO::для формирования старых адресов
+//TODO::для формирования старых адресов
+/*
 unset($r['components']['urlManager']);
 
 $r['components']['request'] = array(

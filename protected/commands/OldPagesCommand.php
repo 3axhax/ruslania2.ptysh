@@ -801,7 +801,7 @@ class OldPagesCommand extends CConsoleCommand {
 				'join (select tI.id '.
 					'from `all_publishers` tI '.
 						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/bypublisher") '.
-					'where (tSR.id is null) '.
+//					'where (tSR.id is null) '.
 					'order by tI.id '.
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.
@@ -827,7 +827,7 @@ class OldPagesCommand extends CConsoleCommand {
 				'join (select tI.id '.
 					'from `' . $tagTable . '` tI '.
 						'left join seo_redirects tSR on (tSR.id = tI.id) and (tSR.entity = ' . (int) $entity . ') and (tSR.route = "entity/byseries") '.
-					'where (tSR.id is null) '.
+//					'where (tSR.id is null) '.
 					'order by tI.id '.
 					'limit ' . $this->_counts*$step . ', ' . $this->_counts . ' '.
 				') tId using (id) '.

@@ -33,8 +33,11 @@ class LiveSearchController extends MyController {
 			if (!$isCode) {
 				$list = $model->getList($q, 1, 10);
 				$list = $model->inDescription($list, $q);
-				$didYouMean = $model->getDidYouMean($q);
-				$abstractInfo = $model->getEntitys($q);
+				list($searchWords, $realWords, $useRealWord) = $model->getNormalizedWords($q);
+				if (!$model->isFromNumeric($searchWords)) {
+					$didYouMean = $model->getDidYouMean($q);
+					$abstractInfo = $model->getEntitys($q);
+				}
 			}
 
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
