@@ -49,15 +49,18 @@
 
 <script type="text/javascript">
     $(function(){
-        scriptLoader('/new_js/modules/fixedScroll.js').callFunction(function(){
-            var contentBlock = document.getElementById('js_rightSidebar');
-            fixedScroll().init({
-                block: $('.js_fixedScroll:first').get(0),
-                $blocks: $('.js_fixedScroll'),
-                $otherBlocks: $(contentBlock).children(':not(.js_fixedScroll)'),
-                contentBlock: contentBlock,
-                stopBlock: $('.footer').get(0)
+        var block = $('.js_fixedScroll:first').get(0);
+        if (block) {
+            scriptLoader('/new_js/modules/fixedScroll.js').callFunction(function(){
+                var contentBlock = document.getElementById('js_rightSidebar');
+                fixedScroll().init({
+                    block: $('.js_fixedScroll:first').get(0),
+                    $blocks: $('.js_fixedScroll'),
+                    $otherBlocks: $(contentBlock).children(':not(.js_fixedScroll)'),
+                    contentBlock: contentBlock,
+                    stopBlock: $('.footer').get(0)
+                });
             });
-        });
+        }
     });
 </script>
