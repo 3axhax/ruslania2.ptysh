@@ -80,7 +80,6 @@ class Condition {
 
 		//Важно, что бы _lang() запускался последним.
 		$this->_lang();
-		Debug::staticRun(array($this->_condition));
 	}
 
 	private function _category() {
