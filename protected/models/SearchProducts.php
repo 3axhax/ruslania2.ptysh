@@ -16,6 +16,7 @@ class SearchProducts {
 	 * @var DGSphinxSearch
 	 */
 	private $_search;
+	private $_normalizedWords = array();
 
 	function __construct($avail, $eid = 0) {
 		$this->_avail = $avail;
@@ -748,37 +749,47 @@ class SearchProducts {
 
 	function getNormalizedWords($q) {
 		$q = mb_strtolower($q, 'utf-8');
-		$searchWords = [];
-		$realWords = [];
-		$useRealWord = true;
-		$equal = true;
+		if (!isset($this->_normalizedWords[$q])) {
+			$searchWords = [];
+			$realWords = [];
+			$useRealWord = true;
+			$equal = true;
 
-		$words = array();
-		$words = array_merge($words, preg_split("/\W/ui", $q));
-		$words = array_unique($words);
-		foreach ($words as $i=>$w) {
-			if (is_numeric($w)||in_array($w, $this->_excludeWords)) {
-				$searchWords[] = $w;
-				$realWords[] = $w;
-				unset($words[$i]);
+			$words = array();
+			$words = array_merge($words, preg_split("/\W/ui", $q));
+			$words = array_unique($words);
+			foreach ($words as $i=>$w) {
+				if (is_numeric($w)||in_array($w, $this->_excludeWords)) {
+					$searchWords[] = $w;
+					$realWords[] = $w;
+					unset($words[$i]);
+				}
 			}
-		}
 
-		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy')");
-		foreach ($result as $r) {
-			if (mb_strpos($r['normalized'], '=') === 0) continue;
+			$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy')");
+			foreach ($result as $r) {
+				if (mb_strpos($r['normalized'], '=') === 0) continue;
 
-			if (is_numeric($r['tokenized'])) $normForm = $r['tokenized'];
-			else $normForm = $r['normalized'];
-			$searchWords[] = $normForm;
-			$realWords[] = $r['tokenized'];
-			if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
-			$equal = $equal&&($r['tokenized'] == $r['normalized']);
+				if (is_numeric($r['tokenized'])) $normForm = $r['tokenized'];
+				else $normForm = $r['normalized'];
+				$searchWords[] = $normForm;
+				$realWords[] = $r['tokenized'];
+				if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
+				$equal = $equal&&($r['tokenized'] == $r['normalized']);
+			}
+			$searchWords = array_unique($searchWords);
+			$realWords = array_unique($realWords);
+			if ($equal) $useRealWord = false;
+			$this->_normalizedWords[$q] = array($searchWords, $realWords, $useRealWord);
 		}
-		$searchWords = array_unique($searchWords);
-		$realWords = array_unique($realWords);
-		if ($equal) $useRealWord = false;
-		return array($searchWords, $realWords, $useRealWord);
+		return $this->_normalizedWords[$q];
+	}
+
+	function isFromNumeric($normalizedWords) {
+		foreach ($normalizedWords as $w) {
+			if(!is_numeric($w)) return false;
+		}
+		return true;
 	}
 
 	function getSqlParam($searchWords, $realWords, $useRealWord, $eid, $useSe = false) {
@@ -812,7 +823,7 @@ class SearchProducts {
 			'weight'=>'',
 		);
 		$separator = ' ';
-		if ($countWords > 3) {
+		if (($countWords > 3)&&!$this->isFromNumeric($searchWords)) {
 			$separator = '|';
 			if ($useSe) $condition['weight'] = '!range=@weight,0,' . ($wTtitle*3 - 1);
 			else $condition['weight'] = '(weight() > ' . ($wTtitle*3 - 1) . ')';

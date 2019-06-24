@@ -77,7 +77,7 @@ KnockoutForm::RegisterScripts();
 				</div>
 			</div>
 			<?php $this->renderPartial('/payment/_payment_only_online', array('pid'=>Yii::app()->getRequest()->getPost('payment_type_id', 25))) ?>
-			<div><?= CHtml::submitButton(Yii::app()->ui->item('CERTIFICATE_BUTTON_PAY'), array('style'=>'min-width: 180px; background-color: #5bb75b; border-radius: 4px; border: 0; padding: 9px 20px; text-align: center; font-size: 14px; color: #fff; font-weight: bold; float:right;', 'onclick'=>'yaCounter53579293.reachGoal(\'add_sert\');')) ?></div>
+			<div><?= CHtml::submitButton(Yii::app()->ui->item('CERTIFICATE_BUTTON_PAY'), array('style'=>'min-width: 180px; background-color: #5bb75b; border-radius: 4px; border: 0; padding: 9px 20px; text-align: center; font-size: 14px; color: #fff; font-weight: bold; float:right;', 'onclick'=>'searchTargets(\'add_sert\');')) ?></div>
 			<?= CHtml::endForm(); ?>
 		</div>
 	</div>

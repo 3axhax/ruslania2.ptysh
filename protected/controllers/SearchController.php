@@ -47,8 +47,11 @@ class SearchController extends MyController {
 			$list = $model->getList($q, $page, Yii::app()->params['ItemsPerPage'], (int) Yii::app()->getRequest()->getParam('e'));
 //			$list = $this->getList($q, $page, Yii::app()->params['ItemsPerPage']);
 			$list = $model->inDescription($list, $q, 300);
-			$abstractInfo = $model->getEntitys($q);
-			$didYouMean = $model->getDidYouMean($q);
+			list($searchWords, $realWords, $useRealWord) = $model->getNormalizedWords($q);
+			if (!$model->isFromNumeric($searchWords)) {
+				$abstractInfo = $model->getEntitys($q);
+				$didYouMean = $model->getDidYouMean($q);
+			}
 		}
 
 		if (empty($list)&&!empty($didYouMean)) $list = $model->getListByDidYouMean($didYouMean);

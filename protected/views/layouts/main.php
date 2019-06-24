@@ -259,11 +259,11 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
                 ?>
 
-                <a href="<?= $hrefContinueShopping ?>" style="float: right; margin-top: 50px; color: #ff0000;" onclick="yaCounter53579293.reachGoal('continue_pokupka');"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
+                <a href="<?= $hrefContinueShopping ?>" style="float: right; margin-top: 50px; color: #ff0000;" onclick="searchTargets('continue_pokupka');"><?=$ui->item('CARTNEW_CONTINUE_SHOPPING')?></a>
 
             <? elseif ($ctrl == 'cart' AND (in_array('doorder',$url))) :?>
 
-                <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;" onclick="yaCounter53579293.reachGoal('back_cart');"><?=$ui->item('CARTNEW_BACK_TO_CART')?></a>
+                <a href="<?=Yii::app()->createUrl('cart/view')?>" style="float: right; margin-top: 50px;" onclick="searchTargets('back_cart');"><?=$ui->item('CARTNEW_BACK_TO_CART')?></a>
 
             <? endif; ?>
 
@@ -594,11 +594,11 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
     <div class="periodic_choice box_btns">
         <div id="finPrice"></div>
-        <button class="btn_yes" id="finSubscription" onclick="yaCounter53579293.reachGoal('add_cart_periodic_finland');"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
+        <button class="btn_yes" id="finSubscription" onclick="searchTargets('add_cart_periodic_finland');"><?= $ui->item('PERIODIC_POPUP_FINLAND_BUTTON'); ?></button>
     </div>
     <div class="periodic_choice box_btns">
         <div id="worldPrice"></div>
-        <button class="btn_yes" id="worldSubscription" onclick="yaCounter53579293.reachGoal('add_cart_periodic_world');"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
+        <button class="btn_yes" id="worldSubscription" onclick="searchTargets('add_cart_periodic_world');"><?= $ui->item('PERIODIC_POPUP_WORLD_BUTTON'); ?></button>
     </div>
     <div class="clearfix"></div>
 </div>
@@ -610,18 +610,6 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 <script type="text/javascript" src="/new_js/js_site.js"></script>
 <script type="text/javascript" src="/js/opentip.js"></script>
 <script>
-
-	function gometrika(ident) {
-	
-		if (typeof (yaCounter53579293.reachGoal) === "function") {
-			
-			yaCounter53579293.reachGoal(ident);
-							
-		}
-	
-	}
-
-
 
     $(document).ready(function () {
         

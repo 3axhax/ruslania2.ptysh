@@ -9,7 +9,7 @@
             <div class="span1 logo">
                 <a href="<?= Yii::app()->createUrl('site/index') ?>"><img src="/new_img/logo.png" alt=""/></a>
             </div>
-            <a href="<?= $returnButton['href'] ?>" style="float: right; margin-top: 50px; color: #ff0000;" onclick="yaCounter53579293.reachGoal('back_cart');"><?= $returnButton['name'] ?></a>
+            <a href="<?= $returnButton['href'] ?>" style="float: right; margin-top: 50px; color: #ff0000;" onclick="searchTargets('back_cart');"><?= $returnButton['name'] ?></a>
             <div class="span10" style="margin-top: 40px;">
                 <div class="pult">
                     <ul>
@@ -39,6 +39,24 @@
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27359361-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-27359361-1');
+</script>
+
+<script type="text/javascript" >
+    function searchTargets(name) {
+        if (typeof (yaCounter53579293.reachGoal) === "function") {
+            yaCounter53579293.reachGoal(name);
+        }
+    }
+</script>
 
 </body>
 </html>
