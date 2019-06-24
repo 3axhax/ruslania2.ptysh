@@ -700,7 +700,14 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
         opentip.deactivate();
 
-        $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
+        var requestUrl = '<?=Yii::app()->createUrl('cart/')?>' + action;
+        switch (action.trim()) {
+            case 'add': requestUrl = '<?=Yii::app()->createUrl('cart/add')?>'; break;
+            case 'mark': requestUrl = '<?=Yii::app()->createUrl('cart/mark')?>'; break;
+            case 'request': requestUrl = '<?=Yii::app()->createUrl('cart/request')?>'; break;
+        }
+
+        $.post(requestUrl, post, function (json)
         {
 
             //if ($el.hasClass('add_cart_view')) {
@@ -997,6 +1004,18 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-	
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27359361-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-27359361-1');
+</script>
+
+
 </body>
 </html>
