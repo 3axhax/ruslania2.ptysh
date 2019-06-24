@@ -40,5 +40,23 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27359361-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-27359361-1');
+</script>
+
+<script type="text/javascript" >
+    function searchTargets(name) {
+        if (typeof (yaCounter53579293.reachGoal) === "function") {
+            yaCounter53579293.reachGoal(name);
+        }
+    }
+</script>
+
 </body>
 </html>

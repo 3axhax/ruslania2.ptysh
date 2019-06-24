@@ -940,19 +940,7 @@ Stripe.applePay.checkAvailability(function(available) {
                             self.viewErrors(errors);
                         }
                         else {
-							
-							
-							if (typeof (yaCounter53579293.reachGoal) === "function") {
-								
-								
-								
-								yaCounter53579293.reachGoal('start_order');
-							
-							}
-							
-							//return '';
-							
-							
+                            searchTargets('start_order');
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
                                 //case 25: self.paytrail(r.form); break;
