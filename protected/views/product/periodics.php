@@ -141,11 +141,11 @@ $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 					<?php if (empty($count_add)) $count_add = 12; ?>
 					<input type="hidden" name="entity[<?= (int) $item['id'] ?>]" value="<?= (int) $item['entity'] ?>">
 					<?php if (isset($item['AlreadyInCart'])) : ?>
-						<a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="yaCounter53579293.reachGoal('add_cart_view_product');">
+						<a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="searchTargets('add_cart_view_product');">
 							<span><?= Yii::app()->ui->item('CARTNEW_IN_CART_BTN0') ?></span>
 						</a>
 					<? else : ?>
-						<a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="yaCounter53579293.reachGoal('add_cart_view_product');">
+						<a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="searchTargets('add_cart_view_product');">
 							<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span>
 						</a>
 					<? endif; ?>
