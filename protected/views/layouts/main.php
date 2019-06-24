@@ -531,6 +531,25 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                             <?endif;?>
                         </ul>
                     </div>
+                    <div style="clear: both"></div>
+                    <div class="subsription" style="margin-left: 36px">
+                        <form class="form-inline" onsubmit="subscribe_news_submit(event);">
+                            <div class="form-group">
+                                <label style="height: 30px" for="subscribe-news-email"><?= $ui->item('SUBSRIBE_NEWS_LABEL'); ?>: </label>
+                                <input type="text" style="height: 20px" id="subscribe-news-email" placeholder="<?= $ui->item('SUBSRIBE_NEWS_PLACEHOLDER'); ?>">
+                                <button class="" style="background-color: #ed1d24; color: white; border: none; height: 30px; padding-left: 15px; padding-right: 15px; border-radius: 3px;"><?= $ui->item('SUBSRIBE_NEWS_BTN'); ?></button>
+                            </div>
+                            
+                        </form>
+                        <script>
+                            
+                            function subscribe_news_submit(event){
+                                event.preventDefault();
+                                alert(document.getElementById('subscribe-news-email').value);
+                            }
+                            
+                        </script>
+                    </div>
                 </div>
             </div>
 
@@ -700,7 +719,14 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
         opentip.deactivate();
 
-        $.post('<?=Yii::app()->createUrl('cart/')?>' + action, post, function (json)
+        var requestUrl = '<?=Yii::app()->createUrl('cart/')?>' + action;
+        switch (action.trim()) {
+            case 'add': requestUrl = '<?=Yii::app()->createUrl('cart/add')?>'; break;
+            case 'mark': requestUrl = '<?=Yii::app()->createUrl('cart/mark')?>'; break;
+            case 'request': requestUrl = '<?=Yii::app()->createUrl('cart/request')?>'; break;
+        }
+
+        $.post(requestUrl, post, function (json)
         {
 
             //if ($el.hasClass('add_cart_view')) {
@@ -997,6 +1023,25 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
-	
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-27359361-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-27359361-1');
+</script>
+
+<script type="text/javascript" >
+function searchTargets(name) {
+    if (typeof (yaCounter53579293.reachGoal) === "function") {
+        yaCounter53579293.reachGoal(name);
+    }
+}
+</script>
+
 </body>
 </html>

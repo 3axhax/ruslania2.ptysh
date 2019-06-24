@@ -1432,4 +1432,8 @@ IBAN DE79514303006474790001 <br>
     'YOU_PURCHASED' => 'Вы заказывали это',
     'VIEW_THIS_ORDER' => 'Посмотреть этот заказ',
     'REDUCED_PRICES' => 'По сниженным ценам',
+    'SUBSRIBE_NEWS_BTN' => 'Подписаться',
+    'SUBSRIBE_NEWS_PLACEHOLDER' => 'Введите ваш email',
+    'SUBSRIBE_NEWS_LABEL' => 'Подписаться на новости',
+    
 );
