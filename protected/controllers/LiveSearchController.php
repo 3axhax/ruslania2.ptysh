@@ -88,6 +88,7 @@ class LiveSearchController extends MyController {
 	}
 
 	function actionGeneralHa() {
+		$start = microtime_float();
 		$availForOrder = $this->GetAvail(1);
 		$model = new SearchProducts($availForOrder);
 		$result = array();
@@ -95,6 +96,7 @@ class LiveSearchController extends MyController {
 //		$this->_haList($q, $model);
 //		Debug::staticRun(array($q));
 		if (!empty($q)) {
+			Debug::staticRun(array(1, number_format(microtime_float() - $start, 4)));
 			Debug::staticRun(array($q));
 			$isCode = false;
 			if ($code = $model->isCode($q)) {
@@ -109,18 +111,25 @@ class LiveSearchController extends MyController {
 				}
 			}
 
+			Debug::staticRun(array(2, number_format(microtime_float() - $start, 4)));
 			if (!$isCode) {
 				$list = $model->getByPath($q);
 				if (!empty($list)) $isCode = true;
 			}
 
+			Debug::staticRun(array(3, number_format(microtime_float() - $start, 4)));
 			if (!$isCode) {
 				$list = $model->getList($q, 1, 100);
+				Debug::staticRun(array(31, number_format(microtime_float() - $start, 4)));
 				$list = $model->inDescription($list, $q);
+				Debug::staticRun(array(32, number_format(microtime_float() - $start, 4)));
 				$didYouMean = $model->getDidYouMean($q);
+				Debug::staticRun(array(33, number_format(microtime_float() - $start, 4)));
 				$abstractInfo = $model->getEntitys($q);
+				Debug::staticRun(array(34, number_format(microtime_float() - $start, 4)));
 			}
 
+			Debug::staticRun(array(4, number_format(microtime_float() - $start, 4)));
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
 				if ($availForOrder) {
 					$model = new SearchProducts(0);
@@ -129,12 +138,14 @@ class LiveSearchController extends MyController {
 				if (empty($list)) $this->ResponseJson(array());
 			}
 
+			Debug::staticRun(array(5, number_format(microtime_float() - $start, 4)));
 			if (!$isCode) {
 				if (!empty($abstractInfo))
 					$result['entitys'] = $this->renderPartial('/search/entitys', array('q' => $q, 'abstractInfo' => $abstractInfo));
 			}
 
 //			if (!empty($list)||!empty($abstractInfo)||!empty($didYouMean))
+			Debug::staticRun(array(6, number_format(microtime_float() - $start, 4)));
 			$result['header'] = $this->renderPartial('/search/live_header', array('q' => $q), true);
 
 			if (!$isCode) {
@@ -142,6 +153,7 @@ class LiveSearchController extends MyController {
 					$result['did_you_mean'] = $this->renderPartial('/search/did_you_mean', array('q' => $q, 'items' => $didYouMean));
 			}
 
+			Debug::staticRun(array(7, number_format(microtime_float() - $start, 4)));
 			if (empty($list)&&!empty($didYouMean)) $list = $model->getListByDidYouMean($didYouMean);
 			if (!empty($list)) {
 				$result['list'] = array();
@@ -149,9 +161,11 @@ class LiveSearchController extends MyController {
 					$result['list'][] = $this->renderPartial('/search/live_list', array('q' => $q, 'item' => $row));
 				}
 			}
+			Debug::staticRun(array(8, number_format(microtime_float() - $start, 4)));
 
 		}
 		$this->ResponseJson(array($this->renderPartial('/search/live', array('q' => $q, 'result' => $result))));
+		Debug::staticRun(array(9, number_format(microtime_float() - $start, 4)));
 	}
 
 

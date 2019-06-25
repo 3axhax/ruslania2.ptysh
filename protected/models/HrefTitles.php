@@ -32,6 +32,37 @@ class HrefTitles {
 	}
 
 	function getById($entity, $route, $id) {
+/*		$sql = ''.
+			'select id, titles '.
+			'from seo_href_titles '.
+			'where (entity = :entity) '.
+				'and (route = :route) '.
+				'and (id = :id) '.
+		'';
+		$titles = Yii::app()->db->createCommand($sql)->queryAll(true, array(':entity'=>$entity, ':route'=>$route, ':id'=>$id));
+		if (empty($titles)) {
+			$table = $this->getTable($entity, $route);
+			if (!empty($table)) {
+				$langs = $this->getLangs($entity, $route);
+				if (empty($langs)) {
+					$langs[] = 'en';
+					$sql = 'select id, title title_en ';
+				}
+				else $sql = 'select id, title_' . implode(', title_', $langs) . ' ';
+				$sql .= 'from ' . $table . ' '.
+					'where (id = :id) '.
+					(($table == 'all_media')?' and (entity = ' . (int) $entity . ') ':'') .
+					'limit 1'.
+				'';
+
+				$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id'=>$id));
+				$this->_save($entity, $route, $row);
+				return $this->_getTitles($entity, $route, $row);
+			}
+			return array();
+		}
+		return unserialize($titles);*/
+
 		if (!empty($this->_titles[$route][$entity][$id])) {
 			return $this->_titles[$route][$entity][$id];
 		}
@@ -41,6 +72,8 @@ class HrefTitles {
 	}
 
 	function getByIds($entity, $route, $ids) {
+//		return [];
+
 		$idTitles = array();
 		foreach ($ids as $id) $idTitles[$id] = array();
 		$table = $this->getTable($entity, $route);
