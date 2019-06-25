@@ -65,41 +65,18 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 	</div>
 
 	<div class="span6">
-		<style> form.registr2 {
-				width: auto;
-				margin: 0 auto;
-				padding: 30px 32px;
-				background-color: #f8f8f8;
-			} </style>
-		<?php
-		$form = $this->beginWidget('KnockoutForm', array(
-			'model' => new User,
-			'action' => Yii::app()->createUrl('site/login'),
-			'class' => 'registr2',
-			'id' => 'user-login',
-			'viewModel' => 'loginVM',
-			'afterAjaxSubmit' => 'doLogin',
-			'beforeAjaxSubmit' => 'beforeAjax',
-		));
-		?>
+		<div style="width: auto; margin: 0 auto; padding: 30px 32px; background-color: #f8f8f8;">
 		<h2 class="h1_reg"
 		    style="margin-top: 0px; margin-bottom: 25px;"><?= $ui->item('CARTNEW_LABEL_NO_ACCOUNT') ?></h2>
 		<a href="<?= Yii::app()->createUrl('cart/noregister') ?>" class="order_start"
 		   style="width: 248px; margin: 0 auto; display: block"><?= $ui->item('CARTNEW_LABEL_CONTINUE_WITHOUT_AUTHORIZATION') ?></a>
 
-		<?php $this->endWidget(); ?>
-
-		<script src="//ulogin.ru/js/ulogin.js"></script>
+		</div>
 
 		<div class="span6" style="margin-left: 0;">
 			<div style="height: 20px;"></div>
-			<center><h2 class="h1_reg"
+			<h2 class="h1_reg"
 			            style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;"><?= $ui->item('CARTNEW_LOGIN_SOCIAL') ?></h2>
-			</center>
-<?php /*
-			<div style="margin:0 auto; width: 260px;" id="uLogin"
-			     data-ulogin="display=panel;theme=classic;fields=first_name,last_name,email;providers=vkontakte,odnoklassniki,googleplus,facebook,twitter,instagram;redirect_uri=<?= urlencode('/ulogin.php') ?>;mobilebuttons=0;"></div>
- */?>
 			<script src="/new_js/modules/social.js" type="text/javascript"></script>
 			<div class="social_auth">
 				<a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>
