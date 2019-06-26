@@ -242,7 +242,7 @@ class Banners extends MyWidget {
                     'from banners_entity t '.
                         'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1) '.
                     'where (t.entity_id = ' . (int) $this->entity . ') '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit 1 '.
                 '';
                 $banner = Yii::app()->db->createCommand($sql)->queryRow();
@@ -392,7 +392,7 @@ class Banners extends MyWidget {
                         'and (t.year between ' . (date('Y')-1) . ' and ' . date('Y') . ') '.
                         'and (t.avail_for_order = 1) '.
                         'and (t.in_shop > 0) '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 $ids = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -419,7 +419,7 @@ class Banners extends MyWidget {
                             'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
-                        'order by rand() '.
+//                        'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
                     $beforeIds['authors'] = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -436,7 +436,7 @@ class Banners extends MyWidget {
                     'having (avail_for_order = 1) '.
                         'and (in_shop > 0) '.
                     'limit 1000) t1 '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 $beforeIds['serie'] = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -452,7 +452,7 @@ class Banners extends MyWidget {
                     'having (avail_for_order = 1) '.
                         'and (in_shop > 0) '.
                     'limit 1000) t1 '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 Debug::staticRun(array($sql));
@@ -489,7 +489,7 @@ class Banners extends MyWidget {
                         'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'and (t.in_shop > 0) '.
                     'group by t.id '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 $ids = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -507,7 +507,7 @@ class Banners extends MyWidget {
                 'having (avail_for_order = 1) '.
                     'and (in_shop > 0) '.
                 'limit 1000) t1 '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
             $ids = array_merge($ids, Yii::app()->db->createCommand($sql)->queryColumn());
@@ -548,7 +548,7 @@ class Banners extends MyWidget {
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                             'and (t.in_shop > 0) '.
                         'group by t.id '.
-                        'order by rand() '.
+//                        'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
                     $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -567,7 +567,7 @@ class Banners extends MyWidget {
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
                     'and (t.avail_for_order = 1) '.
                     'and (t.in_shop > 0) '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
             $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -588,7 +588,7 @@ class Banners extends MyWidget {
                         'and (t.avail_for_order = 1) '.
                         'and (t.in_shop > 0) '.
                     'group by t.id '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -606,7 +606,7 @@ class Banners extends MyWidget {
                     'and (t.in_shop > 0) '.
                     'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
             $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -634,7 +634,7 @@ class Banners extends MyWidget {
             'select t.id ' .
             'from `_support_languages_periodics` as t '.
             'where ' . implode(' and ', $condition) . ' '.
-            'order by rand() '.
+//            'order by rand() '.
             'limit ' . $counts . ' '.
         '';
         $ids = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -667,7 +667,7 @@ class Banners extends MyWidget {
             'from `_support_languages_printed` as t '.
             'join printed_catalog tPC on (tPC.id = t.id) and (tPC.in_shop > 0) '.
             'where ' . implode(' and ', $condition) . ' '.
-            'order by rand() '.
+//            'order by rand() '.
             'limit ' . $counts . ' '.
         '';
         $ids = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -702,7 +702,7 @@ class Banners extends MyWidget {
                             'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
-                        'order by rand() '.
+//                        'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
                     $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -726,7 +726,7 @@ class Banners extends MyWidget {
                             'and (t.in_shop > 0) '.
                             'and (t.id not in (' . implode(',', $exclude) . ')) '.
                         'group by t.id '.
-                        'order by rand() '.
+//                        'order by rand() '.
                         'limit ' . $counts . ' '.
                     '';
                     $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -745,7 +745,7 @@ class Banners extends MyWidget {
                     'and (t.in_shop > 0) '.
                     'and ((t.code in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')) or (t.subcode in (' . (int) $this->_params['item']['code'] . ', ' . (int) $this->_params['item']['subcode'] . ')))'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
                 '';
             $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -774,7 +774,7 @@ class Banners extends MyWidget {
                     'and (t.in_shop > 0) '.
                     'and (t.publisher_id = ' . (int) $this->_params['item']['publisher_id'] . ')'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
             $ids = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -808,7 +808,7 @@ class Banners extends MyWidget {
                     'where (t.id <> ' . (int) $this->_params['item']['id'] . ') '.
                         'and (t.avail_for_order = 1) '.
                         'and (t.in_shop > 0) '.
-                    'order by rand() '.
+//                    'order by rand() '.
                     'limit ' . $counts . ' '.
                 '';
                 $result = Yii::app()->db->createCommand($sql)->queryColumn();
@@ -825,7 +825,7 @@ class Banners extends MyWidget {
                     'and (t.in_shop > 0) '.
                     'and (t.media_id = ' . (int) $this->_params['item']['media_id'] . ')'.
                     'and (t.id not in (' . implode(',', $exclude) . ')) '.
-                'order by rand() '.
+//                'order by rand() '.
                 'limit ' . $counts . ' '.
             '';
             $result = Yii::app()->db->createCommand($sql)->queryColumn();

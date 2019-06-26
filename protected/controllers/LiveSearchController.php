@@ -7,7 +7,8 @@ class LiveSearchController extends MyController {
 
 	function actionGeneral() {
 		$availForOrder = $this->GetAvail(1);
-		$model = new SearchProducts($availForOrder);
+		$eId = (int) Yii::app()->getRequest()->getParam('e');
+		$model = new SearchProducts($availForOrder, $eId);
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
@@ -31,7 +32,7 @@ class LiveSearchController extends MyController {
 			}
 
 			if (!$isCode) {
-				$list = $model->getList($q, 1, 10);
+				$list = $model->getList($q, 1, 10, $eId);
 				$list = $model->inDescription($list, $q);
 				list($searchWords, $realWords, $useRealWord) = $model->getNormalizedWords($q);
 				if (!$model->isFromNumeric($searchWords)) {
@@ -44,7 +45,7 @@ class LiveSearchController extends MyController {
 				if ($availForOrder) {
 					$availForOrder = 0;
 					$model = new SearchProducts($availForOrder);
-					$list = $model->getList($q, 1, 10);
+					$list = $model->getList($q, 1, 10, $eId);
 				}
 				if (empty($list)) $this->ResponseJson(array());
 			}

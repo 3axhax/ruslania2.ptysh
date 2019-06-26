@@ -231,13 +231,14 @@ a:hover {
 
 .header_logo_search_cart .search_box input.search_text {
     font-size: 16px;
-    width: 460px;
+    width: 370px;
     padding: 14px 23px;
 	padding-right: 220px;
     margin: 0;
     border: 1px solid #ececec; 
     box-shadow: none;
     height: auto;
+    border-radius: 0;
 }
 
 .header_logo_search_cart .search_box input.search_text:focus {
@@ -4085,3 +4086,10 @@ div.periodics div.detail_block div.price_item .periodic_world
     top: 5px;
     left: -15px;
 }
+
+div.entity_select {float: left; width: 150px; height: 50px;}
+select.entity_select {width: 100%; height: 100%; border: 1px solid #ececec; border-right: none; border-radius: 4px 0 0 4px;font-size: 16px; color: #555;}
+div.entity_select span.select2-container { height: 100% }
+div.entity_select span.select2-container span.select2-selection--single { height: 100%; border-radius: 4px 0 0 4px; border: 1px solid #ececec; border-right: none; padding-top: 8px;}
+div.entity_select span.select2-container span.select2-selection--single .select2-selection__arrow {top: 10px;}
+.select2-container--default .select2-results > .select2-results__options{ max-height: 300px; }

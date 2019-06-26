@@ -24,7 +24,11 @@ $url = trim($url[0], '/');
 //
 //}
 
-$entity = Entity::ParseFromString($url);
+//$entity = Entity::ParseFromString($url);
+$entity = Entity::ParseFromString(Yii::app()->getRequest()->getParam('entity'));
+if (empty($entity)) {
+    $entity = (int)Yii::app()->getRequest()->getParam('e');
+}
 
 //if (Yii::app()->getRequest()->cookies['showSelLang']->value != '1') {
 //
@@ -273,6 +277,12 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                 <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
                         <div class="search_box">
                             <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
+                            <div class="entity_select"><select class="entity_select" id="js_search_e" name="e">
+                                <option value="0"<?= (empty($entity) ? ' selected' : '') ?>><?= mb_strtoupper(mb_substr($ui->item('A_GOTOEVERYWHERE'), 0, 1, 'utf-8'), 'utf-8') . mb_substr($ui->item('A_GOTOEVERYWHERE'), 1, null, 'utf-8'); ?></option>
+                                <?php foreach (Entity::GetEntityListForSelect() as $_e): ?>
+                                    <option value="<?= $_e['ID'] ?>"<?= (($entity == $_e['ID']) ? ' selected' : '') ?>><?= $_e['Name'] ?></option>
+                                <?php endforeach; ?>
+                            </select></div>
                             <input type="text" name="q" class="search_text enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= Yii::app()->getRequest()->getParam('q') ?>"/>
                             <span class="search_run fa"><input type="submit" value=""></span>
                             <div class="trigger_keyboard">
@@ -531,7 +541,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                             <?endif;?>
                         </ul>
                     </div>
-                    <div style="clear: both"></div>
+                    <!-- <div style="clear: both"></div>
                     <div class="subsription" style="margin-left: 36px">
                         <form class="form-inline" onsubmit="subscribe_news_submit(event);">
                             <div class="form-group">
@@ -549,7 +559,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                             }
                             
                         </script>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -640,9 +650,10 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                     return '<em><?= $ui->item('MSG_SEARCH_ERROR_NOTHING_FOUND') ?></em>';
                 },
                 hideOnSelect: false,
-                dynamicData: {avail: function () {
-                        return $('#js_avail').val();
-                    }},
+                dynamicData: {
+                    avail: function () { return $('#js_avail').val(); },
+                    e: function () { return $('#js_search_e').val(); },
+                },
                 formatItem: function (data, $item, q) {
                     var ret = '';
                     ret += data;
@@ -651,6 +662,11 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
             });
         });
+<?php if (isset($_GET['ha'])): ?>
+        scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
+            $('#js_search_e').select2({minimumResultsForSearch: Infinity});
+        });
+<?php endif; ?>
         <?php if ($ctrl != 'cart'): ?>
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
@@ -991,7 +1007,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
     <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
     <link rel="stylesheet" href="/css/opentip.css">
     <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
-    <link href="/new_style/style_site.css" rel="stylesheet" type="text/css"/>
+    <link href="/new_style/style_site.css?v=26062205" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
 	<link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
 	
