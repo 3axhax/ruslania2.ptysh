@@ -11,7 +11,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
-/*
+
 		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
@@ -53,7 +53,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 			}
 		}
-*/
+
 		$this->_morphy();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
