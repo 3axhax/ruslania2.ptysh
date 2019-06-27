@@ -6,21 +6,21 @@ $(document).ready(function(){
     initPeriodicPriceSelect();
     scriptLoader('/new_js/modules/jkeyboard-master/lib/js/jkeyboard.js').callFunction(function(){
         $(".trigger_keyboard").click(function (event) {
+            var keyboard = $("#virtual_keyboard");
             $(".keyboard_on").toggle();
             $(".keyboard_off").toggle();
             $(".trigger_keyboard img").toggleClass('keyboard_off_img');
             if ($(".keyboard_off").is(':visible')) {
-                $("#virtual_keyboard").hide();
+                keyboard.hide();
             }
             else {
-                input_search = $("input.search_text");
-                keyboard = $("#virtual_keyboard");
+                input_search = $("td.search_text input.enable_virtual_keyboard");
                 temp_keyboard = keyboard.remove();
                 input_search.after(temp_keyboard);
                 temp_keyboard.show();
                 temp_keyboard.jkeyboard({
                     layout: "russian",
-                    input: input_search,
+                    input: input_search
                 });
             }
         });
@@ -31,7 +31,7 @@ $(document).ready(function(){
             }
             if (keyboard_visible) {
                 if (window.old_target === undefined || window.old_target !== event.target || !$("#virtual_keyboard").is(':visible')) {
-                    keyboard = $("#virtual_keyboard");
+                    var keyboard = $("#virtual_keyboard");
                     temp_keyboard = keyboard.remove();
                     $(event.target).after(temp_keyboard);
                     temp_keyboard.show();

@@ -276,20 +276,28 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                     <? if ($ctrl != 'cart' AND $ctrl != 'payment') : ?>
                 <form method="get" action="<?= Yii::app()->createUrl('search/general') ?>" id="srch" onsubmit="if (document.getElementById('Search').value.length < 3) { alert('<?= strip_tags($ui->item('SEARCH_TIP2')) ?>'); return false; } return true; ">
                         <div class="search_box">
-                            <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
-                            <div class="entity_select"><select class="entity_select" id="js_search_e" name="e">
-                                <option value="0"<?= (empty($entity) ? ' selected' : '') ?>><?= mb_strtoupper(mb_substr($ui->item('A_GOTOEVERYWHERE'), 0, 1, 'utf-8'), 'utf-8') . mb_substr($ui->item('A_GOTOEVERYWHERE'), 1, null, 'utf-8'); ?></option>
-                                <?php foreach (Entity::GetEntityListForSelect() as $_e): ?>
-                                    <option value="<?= $_e['ID'] ?>"<?= (($entity == $_e['ID']) ? ' selected' : '') ?>><?= $_e['Name'] ?></option>
-                                <?php endforeach; ?>
-                            </select></div>
-                            <input type="text" name="q" class="search_text enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= Yii::app()->getRequest()->getParam('q') ?>"/>
-                            <span class="search_run fa"><input type="submit" value=""></span>
-                            <div class="trigger_keyboard">
-                                <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
-                                <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
-                                <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
-                            </div>
+            <table style="border: 1px solid #ececec; border-radius: 4px; width: 100%; border-spacing: 1px; border-collapse: separate; height: 50px">
+                <tr>
+                    <td class="entity_select">
+                        <select class="entity_select" id="js_search_e" name="e">
+                            <option value="0"<?= (empty($entity) ? ' selected' : '') ?>><?= mb_strtoupper(mb_substr($ui->item('A_GOTOEVERYWHERE'), 0, 1, 'utf-8'), 'utf-8') . mb_substr($ui->item('A_GOTOEVERYWHERE'), 1, null, 'utf-8'); ?></option>
+                            <?php foreach (Entity::GetEntityListForSelect() as $_e): ?>
+                                <option value="<?= $_e['ID'] ?>"<?= (($entity == $_e['ID']) ? ' selected' : '') ?>><?= $_e['Name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                    <td class="search_text">
+                        <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
+                        <input type="text" name="q" class="enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= Yii::app()->getRequest()->getParam('q') ?>"/>
+                        <span class="search_run fa"><input type="submit" value=""></span>
+                        <div class="trigger_keyboard">
+                            <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
+                            <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
+                            <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
                         </div>
 
                     <? endif; ?>
@@ -617,7 +625,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
 <script type="text/javascript" src="/js/common.js"></script>
 <script type="text/javascript" src="/new_js/jScrollPane.js"></script>
-<script type="text/javascript" src="/new_js/js_site.js"></script>
+<script type="text/javascript" src="/new_js/js_site.js?v2706"></script>
 <script type="text/javascript" src="/js/opentip.js"></script>
 <script>
 
@@ -634,7 +642,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 			}
 			
 			
-		})
+		});
 		
 		
 		
@@ -662,11 +670,9 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
             });
         });
-<?php if (isset($_GET['ha'])): ?>
         scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
             $('#js_search_e').select2({minimumResultsForSearch: Infinity});
         });
-<?php endif; ?>
         <?php if ($ctrl != 'cart'): ?>
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
@@ -1007,7 +1013,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
     <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
     <link rel="stylesheet" href="/css/opentip.css">
     <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
-    <link href="/new_style/style_site.css?v=26062205" rel="stylesheet" type="text/css"/>
+    <link href="/new_style/style_site.css?v=2706" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
 	<link href="/new_js/modules/jkeyboard-master/lib/css/jkeyboard.css" rel="stylesheet" type="text/css"/>
 	

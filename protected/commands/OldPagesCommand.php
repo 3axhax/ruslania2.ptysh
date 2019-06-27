@@ -317,24 +317,18 @@ class OldPagesCommand extends CConsoleCommand {
 					);
 					$pdo->getPdoStatement()->execute($insertParams);
                                         
-                                        if ($lang == 'ru') {
-                                            
-                                                /*$urlParams = array(
-                                                        'entity' => Entity::GetUrlKey($entity),
-                                                        'pid' => $item['id'],
-                                                        'title' => urlencode($item['title_' . $lang])
-                                                );*/
-                                                
-                                                $insertParams = array(
-                                                        ':entity'=>$entity,
-                                                        ':route'=>'entity/bypublisher',
-                                                        ':id'=>$item['id'],
-                                                        ':path'=> Entity::GetUrlKey($entity) . '/bypublisher/' . $item['id'] . '/' . urlencode($item['title_' . $lang]), //Yii::app()->createUrl('entity/bypublisher', $urlParams),
-                                                        ':lang'=>$lang,
-                                                );
-                                                
-                                                $pdo->getPdoStatement()->execute($insertParams);
-                                        }
+                    if ($lang == 'ru') {
+                        $urlParams['title'] = $item['title_' . $lang];
+                        $insertParams = array(
+                                ':entity'=>$entity,
+                                ':route'=>'entity/bypublisher',
+                                ':id'=>$item['id'],
+                                ':path'=> Yii::app()->createUrl('entity/bypublisher', $urlParams),
+                                ':lang'=>$lang,
+                        );
+
+                        $pdo->getPdoStatement()->execute($insertParams);
+                    }
                                         
 				}
 			}
@@ -402,7 +396,7 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'sid' => $item['id'],
-                                                'title' => ProductHelper::ToAscii($item['title_' . $lang])						
+                        'title' => ProductHelper::ToAscii($item['title_' . $lang])
 					);
 					$insertParams = array(
 						':entity'=>$entity,
@@ -413,24 +407,18 @@ class OldPagesCommand extends CConsoleCommand {
 					);
 					$pdo->getPdoStatement()->execute($insertParams);
                                         
-                                        if ($lang == 'ru') {
-                                            
-                                                /*$urlParams = array(
-                                                        'entity' => Entity::GetUrlKey($entity),
-                                                        'sid' => $item['id'],
-                                                        'title' => urlencode($item['title_' . $lang])
-                                                );*/
-                                                
-                                                $insertParams = array(
-                                                        ':entity'=>$entity,
-                                                        ':route'=>'entity/byseries',
-                                                        ':id'=>$item['id'],
-                                                        ':path' => Entity::GetUrlKey($entity) . '/byseries/' . $item['id'] . '/' . urlencode($item['title_' . $lang]), //Yii::app()->createUrl('entity/byseries', $urlParams),
-                                                        ':lang'=>$lang,
-                                                );
-                                                
-                                                $pdo->getPdoStatement()->execute($insertParams);
-                                        }
+                    if ($lang == 'ru') {
+	                    $urlParams['title'] = $item['title_' . $lang];
+	                    $insertParams = array(
+                            ':entity'=>$entity,
+                            ':route'=>'entity/byseries',
+                            ':id'=>$item['id'],
+                            ':path' => Yii::app()->createUrl('entity/byseries', $urlParams),
+                            ':lang'=>$lang,
+                        );
+
+                        $pdo->getPdoStatement()->execute($insertParams);
+                    }
 				}
 			}
 			unset($items);
