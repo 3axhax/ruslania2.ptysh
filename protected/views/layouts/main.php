@@ -671,7 +671,9 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
             });
         });
         scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
-            $('#js_search_e').select2({minimumResultsForSearch: Infinity});
+            $('#js_search_e')
+                .on('change', function(){ $('#Search').marcoPolo('search'); })
+                .select2({minimumResultsForSearch: Infinity});
         });
         <?php if ($ctrl != 'cart'): ?>
         var csrf = $('meta[name=csrf]').attr('content').split('=');
