@@ -32,11 +32,6 @@
 				    <input type="submit" value="<?= $ui->item('A_LEFT_SEARCH_WIN') ?>"/>
 
 				</form>
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                    });
-                </script>
-
                 <?php if (empty($route)) $route = 'entity/authorlist';
                 $lineRu = $lineOther = false;
                 if (empty($chasdr)) $chasdr = '';
@@ -64,14 +59,16 @@
             </div>
 			<?php if ($_GET['char'] != ''):?>
 			<h2 class="title_char"><?=$_GET['char']?></h2>
-			<?php endif; ?>
+			<?php endif;
+            ?>
             <div class="text">
                 <ul class="list authors" id="al">
                     <?php if (empty($url)) $url ='/entity/byauthor'; ?>
                     <?php if (empty($idName)) $idName = 'aid';
                     $lang = Yii::app()->getLanguage();
-                    if (!in_array($lang, HrefTitles::get()->getLangs($entity, 'entity/byauthor'))) $lang = 'en';
+                    if (!in_array($lang, HrefTitles::get()->getLangs($entity, $url))) $lang = 'en';
                     ?>
+
                     <?php foreach($list as $item) : ?>
                         <?php $title = $item['title_' . $lang];
                         if (preg_match("/\w/iu", $title)): ?>
