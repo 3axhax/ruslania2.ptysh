@@ -81,6 +81,13 @@ class Entity {
                     'languages', 'offers', 'audiostreams', 'vendorData', 'vendorData.deliveryTime', 'videoStudio'
                 ),
             ),
+            60 => array('title' => 'Карты', 'site_id' => 9, 'table' => 'tblMaps', 'site_table' => 'maps_catalog',
+                'entity' => 'maps', 'model' => 'Maps',
+                'site_category_table' => 'maps_categories',
+                'binding_table' => 'maps_bindings',
+                'uikey' => 'A_GOTOMAPS',
+                'with' => array('publisher', 'category', 'subcategory', 'binding', 'lookinside', 'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
+            ),
             50 => array('title' => 'Печатная продукция', 'site_id' => 5, 'table' => 'tblPrinted', 'site_table' => 'printed_catalog',
                 'entity' => 'printed', 'model' => 'Printed',
                 'site_category_table' => 'printed_categories',
@@ -88,13 +95,6 @@ class Entity {
 //                'author_entity_field' => 'printed_id',
                 'uikey' => 'A_GOTOPRINTED',
                 'with' => array(/*'authors', */'publisher', 'category', 'subcategory', 'lookinside', 'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
-            ),
-            60 => array('title' => 'Карты', 'site_id' => 9, 'table' => 'tblMaps', 'site_table' => 'maps_catalog',
-                'entity' => 'maps', 'model' => 'Maps',
-                'site_category_table' => 'maps_categories',
-                'binding_table' => 'maps_bindings',
-                'uikey' => 'A_GOTOMAPS',
-                'with' => array('publisher', 'category', 'subcategory', 'binding', 'lookinside', 'languages', 'offers', 'vendorData', 'vendorData.deliveryTime'),
             ),
         );
     }

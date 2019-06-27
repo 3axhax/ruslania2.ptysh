@@ -8,6 +8,10 @@
 	<div style="float: left; width: 390px;">
 		<?= implode('', $result['list']) ?>
 	</div>
+<?php else: ?>
+	<div style="float: left; width: 390px;">
+	<div class="row_item"><?= sprintf(Yii::app()->ui->item('X items found'), '0') ?></div>
+	</div>
 <?php endif; ?>
 <?php if (!empty($result['entitys'])||!empty($result['did_you_mean'])): ?>
 	<div style="padding-left: 400px;">

@@ -24,7 +24,7 @@ return array (
   'A_GOTOPEREODICALS' => 'Подписка',
   'A_GOTOPRINTED' => 'Прочее',
   'A_GOTOSOFT' => 'Мультимедиа',
-  'A_GOTOVIDEO' => 'DVD фильмы',
+  'A_GOTOVIDEO' => 'DVD-фильмы',
   'A_LANG_ESPANIOL' => 'Español',
   'A_LANG_ENGLISH' => 'English',
   'A_LANG_FINNISH' => 'Suomi',
