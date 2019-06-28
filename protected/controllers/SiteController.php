@@ -315,6 +315,7 @@ class SiteController extends MyController {
         $o = new Offer();
         $groups = $o->GetItems(Offer::INDEX_PAGE);
         $count = 1;
+        Seo_settings::get();
         $this->render('index', array('groups' => $groups, 'cart' => $count,));
     }
 

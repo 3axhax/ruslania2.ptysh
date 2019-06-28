@@ -1,6 +1,6 @@
 <?php
 /*Created by Кирилл (21.05.2018 22:12)*/
-ini_set('max_execution_time', 3600);
+ini_set('max_execution_time', 10000);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php sitemapxml
  * Class SitemapXMLCommand
  */
@@ -33,7 +33,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				if ($file&&file_exists($file)) {
 					$urlXml = $xml->addChild('sitemap');
 					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-					$urlXml->addChild('lastmod', date('c', $lastmod));
+					if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 				}
 
 				echo "ItemPages ".date('d.m.Y H:i:s')."\r\n";
@@ -42,7 +42,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 					if ($file&&file_exists($file)) {
 						$urlXml = $xml->addChild('sitemap');
 						$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-						$urlXml->addChild('lastmod', date('c', $lastmod));
+						if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 					}
 				}
 
@@ -51,7 +51,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				if ($file&&file_exists($file)) {
 					$urlXml = $xml->addChild('sitemap');
 					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-					$urlXml->addChild('lastmod', date('c', $lastmod));
+					if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 				}
 
 				echo "tagsPages ".date('d.m.Y H:i:s')."\r\n";
@@ -60,7 +60,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 					if ($file&&file_exists($file)) {
 						$urlXml = $xml->addChild('sitemap');
 						$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-						$urlXml->addChild('lastmod', date('c', $lastmod));
+						if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 					}
 				}
 
@@ -69,7 +69,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				if ($file&&file_exists($file)) {
 					$urlXml = $xml->addChild('sitemap');
 					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-					$urlXml->addChild('lastmod', date('c', $lastmod));
+					if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 				}
 
 				echo "bookshelfPages ".date('d.m.Y H:i:s')."\r\n";
@@ -77,7 +77,7 @@ class SitemapXMLCommand extends CConsoleCommand {
 				if ($file&&file_exists($file)) {
 					$urlXml = $xml->addChild('sitemap');
 					$urlXml->addChild('loc', Yii::app()->urlManager->getBaseUrl() . '/pictures/sitemap/' .basename($file));
-					$urlXml->addChild('lastmod', date('c', $lastmod));
+					if (!empty($lastmod)) $urlXml->addChild('lastmod', date('c', $lastmod));
 				}
 			}
 		}

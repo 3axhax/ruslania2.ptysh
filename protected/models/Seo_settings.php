@@ -1,5 +1,8 @@
 <?php
 /*Created by Кирилл (28.01.2019 20:54)*/
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
 
 class Seo_settings {
 	static private $_self = null;
@@ -23,6 +26,10 @@ class Seo_settings {
 				case 'entity':
 					require_once dirname(__FILE__) . '/Seo/Entity.php';
 					self::$_self = new ModelsSeoEntity();
+					break;
+				case 'site':
+					require_once dirname(__FILE__) . '/Seo/Site.php';
+					self::$_self = new ModelsSeoSite();
 					break;
 				default: self::$_self = new self; break;
 			}
