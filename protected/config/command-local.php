@@ -5,8 +5,8 @@ $r = CMap::mergeArray(
     array(
         'components' => array(
             'request' => array(
-                'hostInfo' => 'https://beta.ruslania.com',
-                'baseUrl' => 'https://beta.ruslania.com',
+                'hostInfo' => 'https://ruslania.com',
+                'baseUrl' => 'https://ruslania.com',
                 'scriptUrl' => ''
            ),
 

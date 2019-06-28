@@ -223,7 +223,7 @@ class Banners extends MyWidget {
     }
 
     private function _getBannerFilePath($id, $lang) {
-        return 'https://beta.ruslania.com/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
+        return Yii::app()->params['PicDomain'] . '/pictures/banners/' . $id . '_banner_' . $lang . '.jpg';
     }
 
     protected function _viewDetail() {
