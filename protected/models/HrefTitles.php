@@ -268,6 +268,10 @@ class HrefTitles {
 		'';
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
 
+		if (!empty($row['entity'])&&($row['entity'] == 20)) {
+			throw new CHttpException(404);
+		}
+
 		if (!empty($row)) {
 			if (empty($row['id'])&&empty($row['entity'])) {
 				switch ($row['route']) {
@@ -298,6 +302,7 @@ class HrefTitles {
 							'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
 						);
 						$url = Yii::app()->createUrl($row['route'], $urlParams);
+						Debug::staticRun(array($sql, $row, $urlParams, $url, 'exit'));
 						if (!empty($url)) Yii::app()->getRequest()->redirect($url,true,301);
 						break;
 				}
@@ -364,7 +369,7 @@ class HrefTitles {
 						'entity'=>Entity::GetUrlKey($row['entity']),
 						$this->getIdName($row['entity'], $row['route'])=>$row['id'],
 						'title'=>$title,
-						'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
+						'__langForUrl'=>(Yii::app()->getLanguage() === 'rut')?'ru':Yii::app()->getLanguage(),
 					);
 					if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
 						$urlParams['page'] = $page;
@@ -379,7 +384,7 @@ class HrefTitles {
 					$urlParams = array(
 						'entity'=>Entity::GetUrlKey($row['entity']),
 						$idName=>$row['id'],
-						'__langForUrl'=>((Yii::app()->language == 'ru')&&!empty($row['lang']))?$row['lang']:Yii::app()->language,
+						'__langForUrl'=>(Yii::app()->getLanguage() === 'rut')?'ru':Yii::app()->getLanguage(),
 					);
 					if (($page = (int) Yii::app()->getRequest()->getParam('page')) > 0) {
 						$urlParams['page'] = $page;

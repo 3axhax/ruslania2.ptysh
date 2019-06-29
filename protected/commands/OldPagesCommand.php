@@ -33,13 +33,13 @@ class OldPagesCommand extends CConsoleCommand {
 		$pdo = Yii::app()->db->createCommand($inswerSql);
 		$pdo->prepare();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			$this->_itemPages($entity, $params, $pdo);
+//			$this->_itemPages($entity, $params, $pdo);
 			$this->_categoryPages($entity, $params, $pdo);
-			$this->_tagPages($entity, $params, $pdo);
+//			$this->_tagPages($entity, $params, $pdo);
 		}
-		$this->_staticPages($pdo);
-		$this->_offerPages($pdo);
-		$this->_bookshelfPages($pdo);
+//		$this->_staticPages($pdo);
+//		$this->_offerPages($pdo);
+//		$this->_bookshelfPages($pdo);
 		echo 'end ' . date('d.m.Y H:i:s') . "\n\n";
 
 	}
@@ -55,8 +55,20 @@ class OldPagesCommand extends CConsoleCommand {
 					$urlParams = array(
 						'entity' => Entity::GetUrlKey($entity),
 						'cid' => $item['id'],
-						'title'=>ProductHelper::ToAscii($item['title_' . $lang])
+						'title'=>'',
 					);
+					$insertParams = array(
+						':entity'=>$entity,
+						':route'=>'entity/list',
+						':id'=>$item['id'],
+						':path'=>Yii::app()->createUrl('entity/list', $urlParams),
+						':lang'=>$lang,
+					);
+					$pdo->getPdoStatement()->execute($insertParams);
+					$insertParams[':path'] = preg_replace("/\/$/", '', $insertParams[':path']);
+					$pdo->getPdoStatement()->execute($insertParams);
+
+					$urlParams['title'] = ProductHelper::ToAscii($item['title_' . $lang]);
 					$insertParams = array(
 						':entity'=>$entity,
 						':route'=>'entity/list',
