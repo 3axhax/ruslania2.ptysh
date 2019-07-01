@@ -38,7 +38,7 @@ unset($r['defaultController']);
 
 
 //TODO::для формирования старых адресов
-
+/*
 unset($r['components']['urlManager']);
 
 $r['components']['request'] = array(
@@ -133,7 +133,7 @@ $r['components']['urlManager'] = array(
         '/<page:([\w_]+)>' => 'site/static',
     ),
 );
-
+*/
 
 return $r;
 

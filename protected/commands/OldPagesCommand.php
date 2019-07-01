@@ -34,8 +34,8 @@ class OldPagesCommand extends CConsoleCommand {
 		$pdo->prepare();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 //			$this->_itemPages($entity, $params, $pdo);
-			$this->_categoryPages($entity, $params, $pdo);
-//			$this->_tagPages($entity, $params, $pdo);
+//			$this->_categoryPages($entity, $params, $pdo);
+			$this->_tagPages($entity, $params, $pdo);
 		}
 //		$this->_staticPages($pdo);
 //		$this->_offerPages($pdo);
