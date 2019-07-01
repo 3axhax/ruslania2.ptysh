@@ -4,6 +4,7 @@
  * Class MainMenu
  */
 class MainMenu extends CWidget {
+	private static $_showMenu = false;
 	/**
 	 * @var array здесь массив начальных значений
 	 */
@@ -90,10 +91,16 @@ class MainMenu extends CWidget {
 
 		$file = Yii::getPathOfAlias('webroot') . '/test/mainmenu_' . Yii::app()->language . '.html.php';
 		//TODO:: когда будут готовы переводы  сделать сохранение в файл
-		if (file_exists($file)) unlink($file);
+		if (file_exists($file)) {
+			//храним 1 час
+			if (filectime($file) < (time() - 3600)) unlink($file);
+		}
 
-		file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true), FILE_APPEND);
-		readfile($file);
+		if (!file_exists($file)) file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true), FILE_APPEND);
+		if (!self::$_showMenu) {
+			self::$_showMenu = true;
+			readfile($file);
+		}
 	}
 
 	function viewBooks() {
