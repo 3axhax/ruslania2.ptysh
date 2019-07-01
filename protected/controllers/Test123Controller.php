@@ -104,4 +104,44 @@ class Test123Controller extends MyController {
 		'';
 		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql), number_format(microtime(true)-$resulTime, 4)));
 	}
+        
+    function actionUrlencode() {
+			$entity = 10;
+			$item = ['id' => 12528, 'title_ru' => 'Черная сотня'];
+			$lang = 'ru';
+			
+			$urlParams = array(
+					'entity' => Entity::GetUrlKey($entity),
+					'pid' => $item['id'],
+					//'title' => '123456', //$item['title_' . $lang],
+					'__useTitleParams' => 1,
+					//'__langForUrl' => 'en'
+					//'test' => 1
+			);
+			
+			echo '/' . Entity::GetUrlKey($entity) . '/bypublisher/' . $item['id'] . '/' . urlencode($item['title_' . $lang]); //Yii::app()->createUrl('entity/bypublisher', $urlParams),
+			echo '<br>';
+require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.php';
+			define('OLD_PAGES', 1);
+            echo Yii::app()->createUrl('entity/bypublisher', $urlParams);
+			
+			echo '<br>';
+			
+//			var_dump($r);
+                                        
+                                        
+		
+	}
+
+	function actionPagesUpdate() {
+		$sql = 'select * from static_pages';
+		$langs = array('ru', 'rut', 'en', 'fi', 'es', 'se', 'de', 'fr');
+		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $page) {
+			foreach ($langs as $lang) {
+				if (!empty($page['description_' . $lang])) {
+					$page['description_' . $lang] = str_replace('ruslania.com/download', 'ruslania.com/pictures/download', $page['description_' . $lang]);
+				}
+			}
+		}
+	}
 }
