@@ -343,6 +343,11 @@ class MyController extends CController
      * @param $query
      */
     protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
+        file_put_contents(Yii::getPathOfAlias('webroot') . '/test/redirects.log', implode("\t", array(
+            date('d.m.Y H:i:s'),
+            $oldPage,
+            $realPage
+        )) . "\n", FILE_APPEND);
         $this->redirect($realPage . $query, true, 301);
         return;
 
