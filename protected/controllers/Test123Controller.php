@@ -1,4 +1,7 @@
 <?php
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 class Test123Controller extends MyController {
 
@@ -133,15 +136,9 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 		
 	}
 
-	function actionPagesUpdate() {
-		$sql = 'select * from static_pages';
-		$langs = array('ru', 'rut', 'en', 'fi', 'es', 'se', 'de', 'fr');
-		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $page) {
-			foreach ($langs as $lang) {
-				if (!empty($page['description_' . $lang])) {
-					$page['description_' . $lang] = str_replace('ruslania.com/download', 'ruslania.com/pictures/download', $page['description_' . $lang]);
-				}
-			}
-		}
+	function actionMemcache() {
+		Debug::staticRun(array(Yii::app()->memcache));
+//		Yii::app()->memcache->set('123', 'sss', 1);
+		Debug::staticRun(array(Yii::app()->memcache->get('123')));
 	}
 }

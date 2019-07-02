@@ -256,6 +256,7 @@ class HrefTitles {
 	}
 
 	function redirectOldPage($url) {
+		$copyUrl = $url;
 //		if (!$this->isTitleRoute($url)) return;
 
 		if (mb_strpos($url, '/', null, 'utf-8') !== 0) $url = '/' . $url;
@@ -275,7 +276,12 @@ class HrefTitles {
 				$url[] = '%';
 				$url = implode('/', $url);
 				$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
-				Debug::staticRun(array($url, $row, 'exit'));
+				if (!empty($row)) {
+					file_put_contents(Yii::getPathOfAlias('webroot') . '/test/redirects_old_sites.log', implode("\t", array(
+						date('d.m.Y H:i:s'),
+						$copyUrl,
+					)) . "\n", FILE_APPEND);
+				}
 			}
 		}
 

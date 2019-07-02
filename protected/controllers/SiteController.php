@@ -311,9 +311,12 @@ class SiteController extends MyController {
                 }
             }
         }
-
-        $o = new Offer();
-        $groups = $o->GetItems(Offer::INDEX_PAGE);
+        $groups = Yii::app()->memcache->get('main_offer_groups');
+        if ($groups === false) {
+            $o = new Offer();
+            $groups = $o->GetItems(Offer::INDEX_PAGE);
+            Yii::app()->memcache->set('main_offer_groups', $groups, 3600);
+        }
         $count = 1;
         Seo_settings::get();
         $this->render('index', array('groups' => $groups, 'cart' => $count,));
