@@ -14,7 +14,7 @@ class HrefTitles {
 	}
 
 	private function __construct() {
-		if (!defined('cronAction')) {
+/*		if (!defined('cronAction')) {
 			//на всех страницах в меню есть ссылки на разделы. По этому всегда получаю все эти ссылки
 			$key = 'hreParentCategorys';
 			$this->_titles = Yii::app()->dbCache->get($key);
@@ -28,7 +28,7 @@ class HrefTitles {
 				}
 				Yii::app()->dbCache->set($key, $this->_titles);
 			}
-		}
+		}*/
 	}
 
 	function getById($entity, $route, $id) {
@@ -67,13 +67,12 @@ class HrefTitles {
 			return $this->_titles[$route][$entity][$id];
 		}
 
-		$idTitles = $this->getByIds($entity, $route, array($id));
+		$idTitles = $this->_getByIds($entity, $route, array($id));
 		return $idTitles[$id];
 	}
 
-	function getByIds($entity, $route, $ids) {
-//		return [];
-
+	function getByIds($entity, $route, $ids) { return []; }
+	private function _getByIds($entity, $route, $ids) {
 		$idTitles = array();
 		foreach ($ids as $id) $idTitles[$id] = array();
 		$table = $this->getTable($entity, $route);
@@ -263,10 +262,22 @@ class HrefTitles {
 		$sql = ''.
 			'select entity, route, id, lang '.
 			'from seo_redirects '.
-			'where (path = :url) '.
+			'where (path like :url) '.
 			'limit 1 '.
 		'';
 		$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
+		if (empty($row)) {
+			$url = explode('/', $url);
+			if (count($url) > 3) {
+				$last = array_pop($url);
+				if (empty($last)) $last = array_pop($url);
+				if (is_numeric($last)) $url[] = $last;
+				$url[] = '%';
+				$url = implode('/', $url);
+				$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':url'=>$url));
+				Debug::staticRun(array($url, $row, 'exit'));
+			}
+		}
 
 		if (!empty($row['entity'])&&($row['entity'] == 20)) {
 			throw new CHttpException(404);

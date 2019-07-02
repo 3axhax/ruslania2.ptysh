@@ -106,7 +106,9 @@ class EntityUrlRule extends CBaseUrlRule {
 		}
 
 		$url = '';
-		$title = (!empty($params['__useTitleParams'])&&!empty($params['title'])) ? $params['title'] : '';
+//		$title = (!empty($params['__useTitleParams'])&&!empty($params['title'])) ? $params['title'] : '';
+		if (empty($params['title'])) $params['title'] = '';
+		$title = $params['title'];
 
 		switch ($route) {
 			case 'product/view':
@@ -193,13 +195,13 @@ class EntityUrlRule extends CBaseUrlRule {
 		$url = $this->_createRazd($entityStr);
 		if (empty($url)) return '';
 
-		if (empty($title)) {
+/*		if (empty($title)) {
 			$titles = HrefTitles::get()->getById($entityId, $route, $id);
 			if (!empty($titles)) {
 				if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 				elseif (!empty($titles['en'])) $title = $titles['en'];
 			}
-		}
+		}*/
 		if (empty($title)) $url .= $id . '/';
 		else $url .= $id . '-' . $title . '/';
 
@@ -218,13 +220,13 @@ class EntityUrlRule extends CBaseUrlRule {
 
 		if (empty(self::$_routes[$route]['useTitle'])) $url .= $id . '/';
 		else {
-			if (empty($title)) {
+/*			if (empty($title)) {
 				$titles = HrefTitles::get()->getById($entityId, $route, $id);
 				if (!empty($titles)) {
 					if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 					elseif (!empty($titles['en'])) $title = $titles['en'];
 				}
-			}
+			}*/
 			if (empty($title)) $url .= $id . '/';
 			else $url .= $id . '-' . $title . '/';
 		}

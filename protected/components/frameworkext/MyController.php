@@ -335,14 +335,18 @@ class MyController extends CController
      * Для страницы предполагается однозначный путь, даже если поменяется наименование
      * в таблице seo_old_href_titles старые названия, на случай если иземяется title из таблицы seo_href_titles
      *
+     * 02.07.19 однозначный путь отменяется по причине тормозного решения
+     *
      * функция делает редирект на реальный адрес, если старый адрес похож на реальный
      * @param $oldPage
      * @param $realPage
      * @param $query
      */
     protected function _redirectOldPages($oldPage, $realPage, $query, $data = array()) {
-//        $this->redirect($realPage . $query, true, 301);
-//        return;
+        $this->redirect($realPage . $query, true, 301);
+        return;
+
+
         $m = [];
         if (mb_substr($oldPage, -5, null, 'utf-8') === '.html') $oldPage = mb_substr($oldPage, 0, -5, 'utf-8') . '/';
         elseif (preg_match("/\/(\d+)\/?$/", $oldPage, $m)&&(mb_strpos($realPage, mb_substr($oldPage, 0, -1, 'utf-8'), null, 'utf-8') !== false)) $oldPage = $realPage;
@@ -351,6 +355,7 @@ class MyController extends CController
         if ($oldPage === $realPage) $this->redirect($realPage . $query, true, 301);
 
         $route = $this->id . '/' . $this->action->id;
+        Debug::staticRun(array($route, $oldPage, $realPage, $query, $data, 'exit'));
         if (!empty($data['entity'])) {
             $entity = $data['entity'];
             if (is_numeric($entity)) $data['entity'] = Entity::GetUrlKey($entity);
