@@ -318,7 +318,7 @@ class BuyController extends MyController {
 					'DeliveryMode' => $DeliveryMode,
 					'CurrencyID' => Yii::app()->currency,
 					'BillingAddressID' => $bid,
-					'Notes' => Yii::app()->getRequest()->getParam('notes'),
+					'Notes' => (string) Yii::app()->getRequest()->getParam('notes'),
 					'Mandate' => 0,
 					'SmartpostAddress' => Yii::app()->getRequest()->getParam('pickpoint_address')
 				);

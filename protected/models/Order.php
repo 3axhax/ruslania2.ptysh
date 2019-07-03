@@ -270,7 +270,8 @@ class Order extends CMyActiveRecord
                 $deliveryPrice = 0;
             }
         }
-
+		
+		
         if (empty($this->_certificate)) {}
         else {
             $promocode = Promocodes::model();
@@ -307,7 +308,7 @@ class Order extends CMyActiveRecord
                       ':notes' => $notes,
                       ':mandate' => $order->Mandate,
                       ':promocodeId' => $promocodeId,
-                      ':smartpost_address' => $order->SmartpostAddress,
+                      ':smartpost_address' => (string) $order->SmartpostAddress,
                       ':promocodes' => serialize($promocodes),
                 ));
 
