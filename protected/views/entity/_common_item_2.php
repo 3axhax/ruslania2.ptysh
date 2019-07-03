@@ -290,7 +290,7 @@ $entityKey = Entity::GetUrlKey($entity);
                     </div>
             <?php endif; ?>
 
-            <?php if (!empty($item['stock_id'])&&($entity == Entity::SHEETMUSIC)) : ?>
+            <?php if (!empty($item['stock_id'])&&(in_array($entity, array(Entity::SHEETMUSIC, Entity::MUSIC)))) : ?>
                      <div class="authors" style="margin-top: 0;">
                         <div style="float: left;width: 130px;" class="nameprop">Shelf ID</div>
                         <div style="padding-left: 140px;"><?= $item['stock_id'] ?></div>
