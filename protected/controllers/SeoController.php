@@ -154,4 +154,46 @@ return ' . var_export($result, true) . ';');
 		return true;
 	}
 
+	function actionByCategory() {
+		ini_set('max_execution_time', 3600);
+		$cid = (int) Yii::app()->getRequest()->getParam('cid');
+		if ($cid > 0) {
+			$limit = 10000;
+			$eid = (int) Yii::app()->getRequest()->getParam('eid', Entity::BOOKS);
+			$langs = HrefTitles::get()->getLangs($eid, 'entity/list');
+			$lang = Yii::app()->getLanguage();
+			if (!in_array($lang, $langs)) $lang = 'en';
+			$sql = ''.
+				'select if(title_' . $lang . ' = "", title_en, title_' . $lang . ') title '.
+				'from ' . Entity::GetEntitiesList()[$eid]['site_table'] . ' '.
+				'where (code = ' . $cid . ') or (subcode = ' . $cid . ') '.
+				'order by id asc '.
+			'';
+			$step = 0;
+			$file = Yii::getPathOfAlias('webroot') . '/test/titles_ ' . $lang . '_' . $eid . '_' . $cid . '.csv';
+			if (file_exists($file)) unlink($file);
+			while (($items = $this->_query($sql . 'limit ' . $limit*$step++ . ', ' . $limit . ''))&&($items->count() > 0)) {
+				foreach ($items as $item) {
+					file_put_contents($file, $item['title'] . "\r\n", FILE_APPEND);
+				}
+			}
+			if (file_exists($file)) {
+				header('Content-Disposition: attachment; filename="' . basename($file) . '"');
+				header('Content-type: application/octet-stream');
+				readfile($file);
+				unlink($file);
+				exit;
+			}
+			echo 'нет товаров';
+		}
+	}
+
+	private function _query($sql, $params = null) {
+		require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
+		$pdo = Yii::app()->db->createCommand($sql);
+		$pdo->prepare();
+		$pdo->getPdoStatement()->execute($params);
+		return new IteratorsPDO($pdo->getPdoStatement());
+	}
+
 }
