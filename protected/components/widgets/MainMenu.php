@@ -96,7 +96,7 @@ class MainMenu extends CWidget {
 			if (filectime($file) < (time() - 3600)) unlink($file);
 		}
 
-		if (!file_exists($file)) file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true), FILE_APPEND);
+		if (!file_exists($file)) file_put_contents($file, $this->render('MainMenu/main_menu', array('widget'=>$this), true));
 		if (!self::$_showMenu) {
 			self::$_showMenu = true;
 			readfile($file);
