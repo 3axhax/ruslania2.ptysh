@@ -290,9 +290,31 @@ class Order extends CMyActiveRecord
 
         try
         {
+            $hiddenNotes = '';
+            $spAdderss = (string) $order->SmartpostAddress;
+            if (!empty($spAdderss)) {
+                if ($spAdderss = @unserialize($spAdderss)) {
+                    $hiddenNotes .= 'Smartpost address: ';
+                    $hiddenNotes .= ''.
+                        $spAdderss['labelName']['fi'] . ': ' . $spAdderss['locationName']['fi'] . "\r\n".
+                        $spAdderss['address']['fi']['address'] . ' ' . $spAdderss['address']['fi']['postalCode'] . ' ' . $spAdderss['address']['fi']['postalCodeName'] . "\r\n".
+                        '';
+                }
+                else {
+                    $hiddenNotes = 'Smartpost: ' . $spAdderss . '. ' . "\r\n\r\n";
+                }
+            }
+            /*if (!empty($data['verkkolaskuosoite'])||!empty($data['operaattoritunnus'])) {
+                if (!empty($data['verkkolaskuosoite']))
+                    $hiddenNotes .= 'verkkolaskuosoite: ' . $data['verkkolaskuosoite'] . "\r\n";
+                if (!empty($data['operaattoritunnus']))
+                    $hiddenNotes .= 'operaattoritunnus: ' . $data['operaattoritunnus'] . "\r\n";
+                $hiddenNotes .= "\r\n";
+            }*/
+
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
-                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address, promocodes) VALUES '
-                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address, :promocodes)';
+                . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address, promocodes, hidden_notes) VALUES '
+                . '(:uid, :daid, :baid, :dtid, :ptid, :cur, :isres, :full, :items, :delivery, :notes, :mandate, :promocodeId, :smartpost_address, :promocodes, :hidden_notes)';
 
             Yii::app()->db->createCommand($sql)->execute(
                 array(':uid' => $uid,
@@ -310,6 +332,7 @@ class Order extends CMyActiveRecord
                       ':promocodeId' => $promocodeId,
                       ':smartpost_address' => (string) $order->SmartpostAddress,
                       ':promocodes' => serialize($promocodes),
+                      ':hidden_notes' => $hiddenNotes
                 ));
 
             $orderID = Yii::app()->db->lastInsertID;
