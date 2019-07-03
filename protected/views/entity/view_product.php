@@ -256,7 +256,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             echo '<a href="'.
                 Yii::app()->createUrl('entity/bytype', array(
                     'entity' => $entityKey,
-                    'type' => $item['type'])).'">' . ProductHelper::GetTitle($binding) . '</a>';
+                    'type' => $item['type'],
+                    'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($binding)),
+                )).'">' . ProductHelper::GetTitle($binding) . '</a>';
 
         endif;
         ?>
@@ -332,7 +334,11 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             ?>
             <div class="authors" style="margin-bottom:5px;">
                 <div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_STUDIO")); ?></div>
-                <div style="padding-left: 253px;"><a href="<?= Yii::app()->createUrl('entity/bystudio', array('entity' => $entityKey, 'sid' => $studio['id'], 'title' => ProductHelper::ToAscii($studio_title))) ?>" class="cprop"><?= $studio_title ?></a></div>
+                <div style="padding-left: 253px;"><a href="<?= Yii::app()->createUrl('entity/bystudio', array(
+                        'entity' => $entityKey,
+                        'sid' => $studio['id'],
+                        'title' => ProductHelper::ToAscii($studio_title),
+                )) ?>" class="cprop"><?= $studio_title ?></a></div>
                 <div class="clearBoth"></div>
             </div>
         <?php endif; ?>
@@ -509,7 +515,9 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
                 <div style="float: left;" class="nameprop"><?= str_replace(':', '', $label); ?></div>
                 <div style="padding-left: 253px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
                         'entity' => $entityKey,
-                        'bid' => $item['binding_id']));
+                        'bid' => $item['binding_id'],
+                        'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($item['Binding'])),
+                    ));
                     ?>"><?= ProductHelper::GetTitle($item['Binding']) ?></a></div>
                 <div class="clearBoth"></div>
             </div>

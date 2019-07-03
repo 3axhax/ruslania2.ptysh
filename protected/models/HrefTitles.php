@@ -280,6 +280,7 @@ class HrefTitles {
 					file_put_contents(Yii::getPathOfAlias('webroot') . '/test/redirects_old_sites.log', implode("\t", array(
 						date('d.m.Y H:i:s'),
 						$copyUrl,
+						getenv('HTTP_REFERER'),
 					)) . "\n", FILE_APPEND);
 				}
 			}

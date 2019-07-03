@@ -346,7 +346,8 @@ class MyController extends CController
         file_put_contents(Yii::getPathOfAlias('webroot') . '/test/redirects.log', implode("\t", array(
             date('d.m.Y H:i:s'),
             $oldPage,
-            $realPage
+            $realPage,
+            getenv('HTTP_REFERER'),
         )) . "\n", FILE_APPEND);
         $this->redirect($realPage . $query, true, 301);
         return;
