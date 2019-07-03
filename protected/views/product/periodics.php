@@ -24,12 +24,17 @@ $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 						<div class="clearBoth"></div>
 					</div>
 				<? endif; ?>
-				<?php if ($item['type']): ?>
+				<?php if ($item['type']):
+					$bRow = PereodicsTypes::model()->GetBinding($entity, $item['type'])?>
 					<div class="prop">
 						<div class="prop-name"><?= $ui->item('A_NEW_TYPE_IZD') ?></div>
 						<div class="prop-value">
-							<a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => $entityKey, 'type' => $item['type'])) ?>">
-								<?= ProductHelper::GetTitle(PereodicsTypes::model()->GetBinding($entity, $item['type'])) ?>
+							<a href="<?= Yii::app()->createUrl('entity/bytype', array(
+								'entity' => $entityKey,
+								'type' => $item['type'],
+								'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($bRow))
+							)) ?>">
+								<?= ProductHelper::GetTitle($bRow) ?>
 							</a>
 						</div>
 						<div class="clearBoth"></div>

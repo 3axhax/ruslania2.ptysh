@@ -216,7 +216,11 @@ $entityKey = Entity::GetUrlKey($entity);
                     else :
                         $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
                     endif; ?>
-                    <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bytype', array('entity' => $entityKey, 'type' => $item['type'])) ?>"><?= ProductHelper::GetTitle($binding) ?></a></div>
+                    <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bytype', array(
+                            'entity' => $entityKey,
+                            'type' => $item['type'],
+                            'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($binding)),
+                        )) ?>"><?= ProductHelper::GetTitle($binding) ?></a></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif;
@@ -272,8 +276,9 @@ $entityKey = Entity::GetUrlKey($entity);
                         <div style="float: left;width: 130px;" class="nameprop"><?= $label ?></div>
                         <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bybinding', array(
                                 'entity' => $entityKey,
-                                'bid' => $item['binding_id']));
-                            ?>"><?= ProductHelper::GetTitle($item['Binding']) ?></a></div>
+                                'bid' => $item['binding_id'],
+                                'title' => ProductHelper::ToAscii(ProductHelper::GetTitle($item['Binding'])),
+                            )); ?>"><?= ProductHelper::GetTitle($item['Binding']) ?></a></div>
                         <div class="clearBoth"></div>
                     </div>
             <?php endif; ?>

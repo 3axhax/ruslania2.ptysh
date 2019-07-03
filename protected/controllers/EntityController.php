@@ -1146,7 +1146,6 @@ class EntityController extends MyController {
         if (empty($dataForPath['lang'])) unset($dataForPath['lang']);
 
         $dataForPath['type'] = $type;
-        $this->_checkUrl($dataForPath);
 
         $title = Entity::GetTitle($entity);
         $this->breadcrumbs[$title] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
@@ -1158,10 +1157,17 @@ class EntityController extends MyController {
         $row = $binding->GetBinding($entity, $type);
 
         $title = ProductHelper::GetTitle($row);
-        
-        
-        
-       $this->breadcrumbs[] = $title;
+
+        $dataForPath['title'] = ProductHelper::ToAscii($title);
+        foreach (Yii::app()->params['ValidLanguages'] as $_lang) {
+            if ($_lang !== 'rut') {
+                if ($_lang === Yii::app()->language) $langTitles[$_lang] = $dataForPath['title'];
+                else $langTitles[$_lang] = ProductHelper::ToAscii(ProductHelper::GetTitle($row, 'title', 0, $_lang));
+            }
+        }
+
+        $this->_checkUrl($dataForPath);
+        $this->breadcrumbs[] = $title;
 
         list($items, $totalItems, $paginatorInfo, $filter_data) = $this->_getItems($entity, 0);
         if (!empty($items)) $items = $this->AppendCartInfo($items, $entity, $this->uid, $this->sid);
