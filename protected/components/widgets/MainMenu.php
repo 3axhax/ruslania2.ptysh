@@ -111,13 +111,13 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
 		$category = $this->_relocated['sheetmusic'][47];
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'sheetmusic', 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'sheetmusic', 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 			'name'=>ProductHelper::GetTitle($category)
 		);
 		usort($rows, array($this, '_sort'));
@@ -144,13 +144,13 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
 		$category = $this->_relocated['sheetmusic'][47];
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'sheetmusic', 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'sheetmusic', 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 			'name'=>ProductHelper::GetTitle($category)
 		);
 		usort($rows, array($this, '_sort'));
@@ -175,7 +175,7 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
@@ -203,22 +203,24 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
 		usort($rows, array($this, '_sort'));
 
+		$category6 = $this->_category->GetByIds(Entity::PRINTED, array(6));
+		$category6 = array_pop($category6);
 		array_unshift($rows, array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'lang'=>14)),
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category6)), 'lang'=>14)),
 			'name'=>Yii::app()->ui->item('PRINTED_FIN')
 		));
 
 		array_unshift($rows, array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'lang'=>7)),
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => 6, 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category6)), 'lang'=>7)),
 			'name'=>Yii::app()->ui->item('PRINTED_RUS')
 		));
-		$this->render('MainMenu/suvenirs_menu', array('rows'=>$rows));
+		$this->render('MainMenu/suvenirs_menu', array('rows'=>$rows, 'category6'=>$category6));
 	}
 
 	function viewMaps() {
@@ -228,7 +230,7 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
@@ -255,13 +257,13 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
 		$category = $this->_relocated['books'][264];
 		$rows[] = array(
-			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'books', 'cid' => $category['id'])),
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'books', 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 			'name'=>ProductHelper::GetTitle($category)
 		);
 		usort($rows, array($this, '_sort'));
@@ -286,7 +288,7 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}
@@ -312,7 +314,7 @@ class MainMenu extends CWidget {
 		$rows = array();
 		foreach ($categorys as $category) {
 			$rows[] = array(
-				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
 				'name'=>ProductHelper::GetTitle($category)
 			);
 		}

@@ -695,14 +695,15 @@ class Product
      */
     static function isPurchased($uid, $eid, $iid) {
         $sql = ''.
-            'select tUOS.date_buy '.
+            'select min(tP.timestamp) date_buy '.
             'from users_orders t '.
 //                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8,17,4)) './/статус заказа - оплачен
-                'left join (select t1.id, min(t2.timestamp) date_buy from users_orders t1 join users_orders_states t2 on (t2.oid = t1.id) and (t2.state in (5, 16)) where (t1.uid = ' . (int) $uid . ') group by t1.id) tUOS using (id) '. //заказ отменен
+                'left join (select t1.id from users_orders t1 join users_orders_states t2 on (t2.oid = t1.id) and (t2.state in (5, 16)) where (t1.uid = ' . (int) $uid . ') group by t1.id) tUOS using (id) '. //заказ отменен
                 'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
+                'join users_orders_states tP on (tP.oid = t.id) '.
             'where (t.uid = ' . (int) $uid . ') and (tUOS.id is null) '.
             'group by t.id '.
-            'order by max(tUOS.date_buy) desc '.
+            'order by min(tP.timestamp) desc '.
             'limit 1 '.
         '';
         $dateBuy = Yii::app()->db->createCommand($sql)->queryScalar();
@@ -721,11 +722,13 @@ class Product
         $sql = ''.
             'select t.id '.
             'from users_orders t '.
-                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8,17,4)) './/статус заказа - оплачен
+//                'join users_orders_states tUOS on (tUOS.oid = t.id) and (tUOS.state in (2,8,17,4)) './/статус заказа - оплачен
+                'left join (select t1.id from users_orders t1 join users_orders_states t2 on (t2.oid = t1.id) and (t2.state in (5, 16)) where (t1.uid = ' . (int) $uid . ') group by t1.id) tUOS using (id) '. //заказ отменен
                 'join users_orders_items tUOI on (tUOI.oid = t.id) and (tUOI.entity = ' . (int) $eid . ') and (tUOI.iid = ' . (int) $iid . ') '.
-            'where (t.uid = ' . (int) $uid . ') '.
+                'join users_orders_states tP on (tP.oid = t.id) '.
+            'where (t.uid = ' . (int) $uid . ') and (tUOS.id is null) '.
             'group by t.id '.
-            'order by max(tUOS.timestamp) desc '.
+            'order by min(tP.timestamp) desc '.
         '';
         $orderIds = Yii::app()->db->createCommand($sql)->queryColumn();
         if (empty($orderIds)) return array();
