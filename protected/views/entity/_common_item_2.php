@@ -242,7 +242,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 <div class="desc_text" style="margin-bottom: 10px;"><?= $txt ?></div>
             <?php endif; ?>
 
-            <?php if (!empty($item['numpages'])): ?>
+            <?php if (($entity == Entity::BOOKS)&&!empty($item['numpages'])): ?>
                 <div class="authors" style="margin-top: 0;">
                     <div style="float: left;width: 140px;" class="nameprop"><?= $ui->item('A_NEW_COUNT_PAGE') ?></div>
                     <div style="padding-left: 150px;"><?= $item['numpages'] ?></div>
@@ -298,22 +298,24 @@ $entityKey = Entity::GetUrlKey($entity);
                     </div>
             <?php endif; ?>
             <?php
-            $cats = array();
-            if (!empty($item['Category'])) {
-                $cats[] = '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => $entityKey, 'cid' => $item['Category']['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($item['Category'])))) . '">' . ProductHelper::GetTitle($item['Category']) . '</a>';
-            }
-            if (!empty($item['SubCategory'])) {
-                $cats[] = '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => $entityKey, 'cid' => $item['SubCategory']['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($item['SubCategory'])))) . '">' . ProductHelper::GetTitle($item['SubCategory']) . '</a>';
-            }
+            if ($entity == Entity::BOOKS):
+                $cats = array();
+                if (!empty($item['Category'])) {
+                    $cats[] = '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => $entityKey, 'cid' => $item['Category']['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($item['Category'])))) . '">' . ProductHelper::GetTitle($item['Category']) . '</a>';
+                }
+                if (!empty($item['SubCategory'])) {
+                    $cats[] = '<a href="' . Yii::app()->createUrl('entity/list', array('entity' => $entityKey, 'cid' => $item['SubCategory']['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($item['SubCategory'])))) . '">' . ProductHelper::GetTitle($item['SubCategory']) . '</a>';
+                }
 
-            if (!empty($cats)): ?>
-                <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 130px;" class="nameprop">
-                        <?= $ui->item('Related categories') ?>
+                if (!empty($cats)): ?>
+                    <div class="authors" style="margin-top: 0;">
+                        <div style="float: left;width: 130px;" class="nameprop">
+                            <?= $ui->item('Related categories') ?>
+                        </div>
+                        <div style="padding-left: 140px;"><?= implode(', ', $cats) ?></div>
+                        <div class="clearBoth"></div>
                     </div>
-                    <div style="padding-left: 140px;"><?= implode(', ', $cats) ?></div>
-                    <div class="clearBoth"></div>
-                </div>
+                <?php endif; ?>
             <?php endif; ?>
             <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
                 <div class="authors" style="margin-top: 0;">
