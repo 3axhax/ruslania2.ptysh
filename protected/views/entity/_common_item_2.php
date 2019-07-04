@@ -244,8 +244,8 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (($entity == Entity::BOOKS)&&!empty($item['numpages'])): ?>
                 <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 140px;" class="nameprop"><?= $ui->item('A_NEW_COUNT_PAGE') ?></div>
-                    <div style="padding-left: 150px;"><?= $item['numpages'] ?></div>
+                    <div style="float: left;width: 135px;" class="nameprop"><?= $ui->item('A_NEW_COUNT_PAGE') ?></div>
+                    <div style="padding-left: 140px;"><?= $item['numpages'] ?></div>
                     <div class="clearBoth"></div>
                 </div>
             <?php endif; ?>
@@ -317,13 +317,13 @@ $entityKey = Entity::GetUrlKey($entity);
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
-            <?php if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
+            <?php /*if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
                 <div class="authors" style="margin-top: 0;">
                     <div style="float: left;width: 130px;" class="nameprop">BIC-code(s)</div>
                     <div style="padding-left: 140px;"><?= $item['Category']['BIC_categories'] ?></div>
                     <div class="clearBoth"></div>
                 </div>
-            <?php endif;?>
+            <?php endif; */?>
 
         </div>
 

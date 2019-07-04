@@ -12,7 +12,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
-		$this->_fillProductsAuthors();
+/*		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -52,7 +52,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 				Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			}
-		}
+		}*/
 
 		$this->_morphy();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
@@ -67,7 +67,8 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		$insertPDO = Yii::app()->db->createCommand($insertSql);
 		$insertPDO->prepare();
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			$sqlItems = 'select id, title_ru, positionDefault pos from ' . $params['site_table'] . ' where (avail_for_order > 0) limit ';
+			//$sqlItems = 'select id, title_ru, positionDefault pos from ' . $params['site_table'] . ' where (avail_for_order > 0) limit ';
+			$sqlItems = 'select id, title_ru, positionDefault pos from ' . $params['site_table'] . ' limit ';
 			$step = 0;
 			while (($items = $this->_query($sqlItems . $this->_counts*$step . ', ' . $this->_counts))&&($items->count() > 0)) {
 				$step++;
