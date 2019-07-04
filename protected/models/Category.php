@@ -11,16 +11,27 @@ class Category {
             HrefTitles::get()->getByIds($entity, 'entity/list', $availCategory);
 
             $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE id IN ('.implode(',' ,$availCategory).') ORDER BY title_'.Yii::app()->language . ' ASC';
-            $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
+            $cacheKey = md5($sql);
+            $dataFromCache = Yii::app()->memcache->get($cacheKey);
+            if ($dataFromCache === false) {
+                $dataFromCache = Yii::app()->db->createCommand($sql)->queryAll(true);
+                Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+            }
             //print_r(implode(',' ,$availCategory)); die();
-            return $rows;
+            return $dataFromCache;
         }
         $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE parent_id=:parent  AND items_count > 0 ORDER BY title_'.Yii::app()->language . ' ASC';
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':parent' => $parent));
-        $ids = array();
-        foreach ($rows as $row) $ids[] = $row['id'];
-        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
-        return $rows;
+        $params = array(':parent' => $parent);
+        $cacheKey = md5($sql . serialize($params));
+        $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $dataFromCache = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+        }
+//        $ids = array();
+//        foreach ($dataFromCache as $row) $ids[] = $row['id'];
+//        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+        return $dataFromCache;
     }
 
     public function exists_subcategoryes($entity, $cid) {
@@ -30,13 +41,19 @@ class Category {
         $eTable = $entities[$entity]['entity'];
 
         $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE parent_id=:parent ORDER BY title_'.Yii::app()->language;
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':parent' => $cid));
+        $params = array(':parent' => $cid);
+        $cacheKey = md5($sql . serialize($params));
+        $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $dataFromCache = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+        }
 
-        $ids = array();
-        foreach ($rows as $row) $ids[] = $row['id'];
-        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+//        $ids = array();
+//        foreach ($dataFromCache as $row) $ids[] = $row['id'];
+//        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
-        return $rows;
+        return $dataFromCache;
     }
 
     function getFilterSlider($entity, $cid) {
@@ -678,21 +695,28 @@ class Category {
             'order by ' . $criteria->order . ' '.
             'limit ' . $page * $criteria->limit . ', ' . $criteria->limit . ' '.
         '';
-        $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
-        if (empty($itemIds)) return array();
 
-        HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
+        $dataFromCache = false;
+        $cacheKey = md5($sql);
+        if ($page < 5) $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $itemIds = Yii::app()->db->createCommand($sql)->queryColumn();
+            if (empty($itemIds)) return array();
 
-        Product::setActionItems($entity, $itemIds);
-        Product::setOfferItems($entity, $itemIds);
-        $criteria->alias = 't';
-        $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
-        $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
-        $dp->setCriteria($criteria);
-        $dp->pagination = false;
-        $data = $dp->getData();
-        $ret = Product::FlatResult($data);
-        return $ret;
+            HrefTitles::get()->getByIds($entity, 'product/view', $itemIds);
+
+            Product::setActionItems($entity, $itemIds);
+            Product::setOfferItems($entity, $itemIds);
+            $criteria->alias = 't';
+            $criteria->addCondition('t.id in (' . implode(',', $itemIds) . ')');
+            $criteria->order = 'field(t.id, ' . implode(',', $itemIds) . ')';
+            $dp->setCriteria($criteria);
+            $dp->pagination = false;
+            $data = $dp->getData();
+            $dataFromCache = Product::FlatResult($data);
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+        }
+        return $dataFromCache;
     }
 
     function getFilterCounts($entity, $cid) {
@@ -700,33 +724,40 @@ class Category {
         $condition = Condition::get($entity, $cid)->getCondition();
         $join = Condition::get($entity, $cid)->getJoin();
 
+        $cacheKey = md5(serialize(array($entity, $cid, $condition, $join)));
+        $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $distinct = '*';
+            if (!empty($onlySupportLanguageCondition) //все данные есть в таблице _support_languages_
+                ||(empty($condition)&&!empty($join['tL_support']))//все можно достать без таблицы _catalog
+            ) {
+                if (empty($onlySupportLanguageCondition)) $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition(false);
+                if (!empty($onlySupportLanguageCondition['cid'])) $distinct = 'distinct t.id';
+                unset($join['tL_support']);
+                $sql = ''.
+                    'select count(' . $distinct . ') '.
+                    'from _support_languages_' . Entity::GetUrlKey($entity) . ' t '.
+                    implode(' ', $join) . ' '.
+                    'where ' . implode(' and ', $onlySupportLanguageCondition) . ' '.
+                    '';
+                $dataFromCache = (int) Yii::app()->db->createCommand($sql)->queryScalar();
+            }
+            else {
+                if (!empty($join['tL_support'])&&!empty($condition['cid'])) $distinct = 'distinct t.id';
+                $entityParams = Entity::GetEntitiesList()[$entity];
 
-        $distinct = '*';
-        if (!empty($onlySupportLanguageCondition) //все данные есть в таблице _support_languages_
-            ||(empty($condition)&&!empty($join['tL_support']))//все можно достать без таблицы _catalog
-        ) {
-            if (empty($onlySupportLanguageCondition)) $onlySupportLanguageCondition = Condition::get($entity, $cid)->onlySupportCondition(false);
-            if (!empty($onlySupportLanguageCondition['cid'])) $distinct = 'distinct t.id';
-            unset($join['tL_support']);
-            $sql = ''.
-                'select count(' . $distinct . ') '.
-                'from _support_languages_' . Entity::GetUrlKey($entity) . ' t '.
-                implode(' ', $join) . ' '.
-                'where ' . implode(' and ', $onlySupportLanguageCondition) . ' '.
-            '';
-            return (int) Yii::app()->db->createCommand($sql)->queryScalar();
+                $sql = ''.
+                    'select count(' . $distinct . ') '.
+                    'from ' . $entityParams['site_table'] . ' t '.
+                    implode(' ', $join) . ' '.
+                    (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
+                    '';
+                $dataFromCache = (int) Yii::app()->db->createCommand($sql)->queryScalar();
+            }
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
         }
 
-        if (!empty($join['tL_support'])&&!empty($condition['cid'])) $distinct = 'distinct t.id';
-        $entityParams = Entity::GetEntitiesList()[$entity];
-
-        $sql = ''.
-            'select count(' . $distinct . ') '.
-            'from ' . $entityParams['site_table'] . ' t '.
-                implode(' ', $join) . ' '.
-            (empty($condition)?'':'where ' . implode(' and ', $condition)) . ' '.
-        '';
-        return (int) Yii::app()->db->createCommand($sql)->queryScalar();
+        return $dataFromCache;
     }
 
     public function count_filter($entity = 15, $cid, $post, $isFilter = false) {
@@ -847,22 +878,27 @@ class Category {
     }
 
     public function GetCategoryPath($entity, $cid) {
-        $entities = Entity::GetEntitiesList();
-        $eTable = $entities[$entity]['entity'];
-        $ret = array();
+        $cacheKey = md5(serialize(array('eid'=>$entity, 'cid'=>$cid)));
+        $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $entities = Entity::GetEntitiesList();
+            $eTable = $entities[$entity]['entity'];
+            $dataFromCache = array();
 
-        while (true) {
-            $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE id=:id';
-            $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id' => $cid));
-            if (empty($row))
-                break;
-            $ret[] = $row;
-            $cid = $row['parent_id'];
-            if (empty($cid))
-                break;
+            while (true) {
+                $sql = 'SELECT * FROM ' . $eTable . '_categories WHERE id=:id';
+                $row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id' => $cid));
+                if (empty($row))
+                    break;
+                $dataFromCache[] = $row;
+                $cid = $row['parent_id'];
+                if (empty($cid))
+                    break;
+            }
+            $dataFromCache = array_reverse($dataFromCache);
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
         }
-
-        return array_reverse($ret);
+        return $dataFromCache;
     }
 
     public function filter_get_books_authors($entity, $cid, $aid) {
@@ -945,13 +981,13 @@ class Category {
     // list of ID's of ALL children of current category
     public function GetChildren($entity, $cid) {
         $key = 'Category_' . $entity . '_' . $cid;
-        $ret = Yii::app()->dbCache->get($key);
+        $ret = Yii::app()->memcache->get($key);
         if ($ret === false) {
             $ret = array();
             $this->GetChildrenHelper($entity, $cid, $ret);
-            Yii::app()->dbCache->set($key, $ret, Yii::app()->params['DbCacheTime']);
+            Yii::app()->memcache->set($key, $ret, Yii::app()->params['listMemcacheTime']);
         }
-        if ($ret) HrefTitles::get()->getByIds($entity, 'entity/list', $ret);
+//        if ($ret) HrefTitles::get()->getByIds($entity, 'entity/list', $ret);
         return $ret;
     }
 
@@ -1079,7 +1115,7 @@ class Category {
     public function GetCategoriesTree($entity, $checkCountAvail = false) {
         $key = 'CategoryTree' . $entity . '_count' . (int) $checkCountAvail;
 
-        $tree = Yii::app()->dbCache->get($key);
+        $tree = Yii::app()->memcache->get($key);
         if ($tree === false) {
             $entities = Entity::GetEntitiesList();
             $eTable = $entities[$entity]['site_category_table'];
@@ -1087,7 +1123,7 @@ class Category {
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
             $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), $checkCountAvail);
-            Yii::app()->dbCache->set($key, $tree);
+            Yii::app()->memcache->set($key, $tree, Yii::app()->params['listMemcacheTime']);
         }
 
 //        $ids = array();
@@ -1100,13 +1136,13 @@ class Category {
     public function getPeriodicsCategoriesTree($type) {
         $key = 'CategoryTree' . Entity::PERIODIC . '_type' . (int) $type;
 
-        $tree = Yii::app()->dbCache->get($key);
+        $tree = Yii::app()->memcache->get($key);
         if ($tree === false) {
             $sql = 'SELECT * FROM pereodics_categories where (avail_items_type_' . $type . ' > 0) ORDER BY title_'.Yii::app()->language.', sort_order';
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
 
             $tree = $this->parseTree(0, $rows, 'id', 'parent_id', array(), false);
-            Yii::app()->dbCache->set($key, $tree);
+            Yii::app()->memcache->set($key, $tree, Yii::app()->params['listMemcacheTime']);
         }
         return $tree;
     }
@@ -1122,13 +1158,18 @@ class Category {
 
         if (empty($sql)) return array();
 
-        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        $cacheKey = md5($sql);
+        $dataFromCache = Yii::app()->memcache->get($cacheKey);
+        if ($dataFromCache === false) {
+            $dataFromCache = Yii::app()->db->createCommand($sql)->queryAll();
+            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+        }
 
-        $ids = array();
-        foreach ($rows as $row) $ids[] = $row['id'];
-        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
+//        $ids = array();
+//        foreach ($rows as $row) $ids[] = $row['id'];
+//        HrefTitles::get()->getByIds($entity, 'entity/list', $ids);
 
-        return $rows;
+        return $dataFromCache;
     }
 
 

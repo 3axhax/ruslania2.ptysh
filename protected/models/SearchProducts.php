@@ -673,6 +673,11 @@ class SearchProducts {
 		if (!empty($resultAllWords)) return $result + $resultAllWords;
 
 		//по отдельным словам
+//		$resultAllWords = $this->_querySimple(implode('|', $queryWords), $index, $limit);
+//		if (!empty($resultAllWords)) return $result + $resultAllWords;
+
+//		return $result;
+
 		$pre = SearchHelper::BuildKeywords($query, $index);
 //		var_dump($pre);
 		$resultWord = array();
@@ -706,6 +711,7 @@ class SearchProducts {
 	private function _querySimple($query, $index, $limit) {
 		$this->_search->resetCriteria();
 		if ($limit > 0) $this->_search->SetLimits(0, $limit);
+//		if ($index == 'authors') $this->_search->SetFilter('');
 		$res = $this->_search->query($query, $index);
 
 		$result = array();

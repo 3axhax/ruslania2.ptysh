@@ -143,7 +143,7 @@ return array(
 
             'connectionString' => 'mysql:host=localhost;port=3306;dbname=ruslania',
             'username' => 'ruslania',
-            'password' => 'K7h9E6r2',
+            'password' => 'A7d4Z3j5',
 
 //            'connectionString' => 'mysql:host=83.145.232.161;port=3306;dbname=ruslania_unicode',
 //            'username' => 'ruslania_www',
@@ -162,7 +162,7 @@ return array(
             'pdoClass' => 'NestedPDO',
             'connectionString' => 'mysql:host=localhost;port=3306;dbname=ruslania',
             'username' => 'ruslania',
-            'password' => 'K7h9E6r2',
+            'password' => 'A7d4Z3j5',
             'charset' => 'utf8',
             'enableProfiling' => true,
             'enableParamLogging' => true,
@@ -202,12 +202,13 @@ return array(
         'LangDir' => '',
         'DbCacheTime' => (60 * 60 * 4), // 4 hours,
         'OrderMinPrice' => 5, // min order 5,-
-        'PicDomain' => 'https://beta.ruslania.com',///'https://ruslania.com',
-        'Base' => 'beta.ruslania.com',
+        'PicDomain' => 'https://ruslania.com',///'https://ruslania.com',
+        'Base' => 'ruslania.com',
         'DataProviderCacheID' => 'queryCache', // cacheQuery
         'DataProviderCacheTimeout' => (60 * 60 * 4), // 4 hours
         //'PAYMENT_ENVIRONMENT' => 'prod',
         'PAYMENT_ENVIRONMENT' => 'test',
+        'listMemcacheTime' => (60 * 60 * 4), // 4 hours
     ),
 );
 

@@ -63,7 +63,13 @@ class ModelsSeoEntity extends Seo_settings {
 		$this->_replace['{entity_name}'] = Entity::GetTitle($this->_eid);
 		if (empty($this->_id)) {
 			$sql = 'SELECT count(*) FROM `' . Entity::GetEntitiesList()[$this->_eid]['site_table'] . '` WHERE (avail_for_order > 0)';
-			$this->_replace['{counts}'] = (int)Yii::app()->db->createCommand($sql)->queryScalar();
+			$cacheKey = md5($sql);
+			$dataFromCache = Yii::app()->memcache->get($cacheKey);
+			if ($dataFromCache === false) {
+				$dataFromCache = (int)Yii::app()->db->createCommand($sql)->queryScalar();
+				Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+			}
+			$this->_replace['{counts}'] = $dataFromCache;
 			switch ($this->_route) {
 				case 'entity/categorylist': $this->_replace['{name}'] = Yii::app()->ui->item('LIST_SOFT_CATTREE'); break;
 				case 'entity/publisherlist':
