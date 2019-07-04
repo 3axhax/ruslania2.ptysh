@@ -20,6 +20,8 @@ class Cart extends CActiveRecord
     const FIN_PRICE = 1;
     const WORLD_PRICE = 2;
 
+    static private $_itemasByUser = array();
+
     public static function model($className = __CLASS__)
     {
         return parent::model($className);
@@ -279,110 +281,113 @@ class Cart extends CActiveRecord
 
     public function GetShopcartData($uid, $sid, $type, $isMiniCart = 0)
     {
-        $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2idx, uid ) '
-              .'WHERE '.self::CartType($type).' AND ';
-        list($where, $params) = $this->GetFilter($uid, $sid);
-        $sql .= $where;
-        if ($isMiniCart) 
-            $sql .= ' ORDER BY iid DESC';
-		
-		
-		//var_dump($sql);
-		//var_dump($params);
-		
-		
-        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
-        $ret = array();
-        $data = array();
-        $ids = array();
-        //var_dump($sql);
-        //var_dump($rows);
-        //CVarDumper::dump($rows, 10, true);
-        if (!$isMiniCart)
-        {
-            foreach ($rows as $row)
-            {
-                $entity = $row['entity'];
-                $iid = $row['iid'];
-                if(!isset($data[$entity][$iid]))
-                    $data[$entity][$iid] = array('id' => $iid, 'quantity' => $row['quantity'], 'type' => $row['type']);
-                else
-                    $data[$entity][$iid]['quantity'] += $row['quantity'];
-    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
-                $ids[$row['entity']][] = $row['iid'];
-            }
-            $p = new Product;
-            //CVarDumper::dump($data, 10, true);
-            foreach ($data as $entity => $rows)
-            {
-                $result = $p->GetProducts($entity, $ids[$entity], $isMiniCart);
-                //CVarDumper::dump($ids[$entity], 10, true);
-                foreach ($result as $iid => $r)
-                {
-                    $product = array_merge($r, $data[$entity][$iid]);
-                    // UnitWeight
+        $key = md5(serialize(array($uid, $sid, $type, $isMiniCart)));
+        if (!isset(self::$_itemasByUser[$key])) {
+            $sql = 'SELECT * FROM shopcarts USE INDEX ( sidv2idx, uid ) '
+                .'WHERE '.self::CartType($type).' AND ';
+            list($where, $params) = $this->GetFilter($uid, $sid);
+            $sql .= $where;
+            if ($isMiniCart)
+                $sql .= ' ORDER BY iid DESC';
 
-                    if (empty($r['unitweight'])) {
-                        $product['FullUnitWeight'] = 0;
-                        $product['InCartUnitWeight'] = 0;
-                    }
-                    else {
-                        $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
-                        $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
-                    }
-                    $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
-    
-                    $ret[] = $product;
-                }
-            }
-        }
-        else
-        {
-            $flag = 0;
-            $tmp_data = array();
-            foreach ($rows as $row)
+
+            //var_dump($sql);
+            //var_dump($params);
+
+
+            $rows = Yii::app()->db->createCommand($sql)->queryAll(true, $params);
+            $ret = array();
+            $data = array();
+            $ids = array();
+            //var_dump($sql);
+            //var_dump($rows);
+            //CVarDumper::dump($rows, 10, true);
+            if (!$isMiniCart)
             {
-                $entity = $row['entity'];
-                $iid = $row['iid'];
-                if(!isset($data[$entity][$iid]))
+                foreach ($rows as $row)
                 {
-                    $data[$entity][$iid] = array('id' => $iid, 'quantity' => $row['quantity'], 'type' => $row['type']);
-                    $flag = 1;
+                    $entity = $row['entity'];
+                    $iid = $row['iid'];
+                    if(!isset($data[$entity][$iid]))
+                        $data[$entity][$iid] = array('id' => $iid, 'quantity' => $row['quantity'], 'type' => $row['type']);
+                    else
+                        $data[$entity][$iid]['quantity'] += $row['quantity'];
+                    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
+                    $ids[$row['entity']][] = $row['iid'];
                 }
-                else
-                    $data[$entity][$iid]['quantity'] += $row['quantity'];
-    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
-                $ids[$row['entity']][] = $row['iid'];
-                $tmp_data[0] = $row['iid'];
-            
                 $p = new Product;
                 //CVarDumper::dump($data, 10, true);
-                if ($flag)
+                foreach ($data as $entity => $rows)
                 {
-                    
+                    $result = $p->GetProducts($entity, $ids[$entity], $isMiniCart);
+                    //CVarDumper::dump($ids[$entity], 10, true);
+                    foreach ($result as $iid => $r)
+                    {
+                        $product = array_merge($r, $data[$entity][$iid]);
+                        // UnitWeight
+
+                        if (empty($r['unitweight'])) {
+                            $product['FullUnitWeight'] = 0;
+                            $product['InCartUnitWeight'] = 0;
+                        }
+                        else {
+                            $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
+                            $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
+                        }
+                        $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
+
+                        $ret[] = $product;
+                    }
+                }
+            }
+            else
+            {
+                $flag = 0;
+                $tmp_data = array();
+                foreach ($rows as $row)
+                {
+                    $entity = $row['entity'];
+                    $iid = $row['iid'];
+                    if(!isset($data[$entity][$iid]))
+                    {
+                        $data[$entity][$iid] = array('id' => $iid, 'quantity' => $row['quantity'], 'type' => $row['type']);
+                        $flag = 1;
+                    }
+                    else
+                        $data[$entity][$iid]['quantity'] += $row['quantity'];
+                    //            $data[$row['entity']][$row['iid']] = array('id' => $row['iid'], 'quantity' => $row['quantity']);
+                    $ids[$row['entity']][] = $row['iid'];
+                    $tmp_data[0] = $row['iid'];
+
+                    $p = new Product;
+                    //CVarDumper::dump($data, 10, true);
+                    if ($flag)
+                    {
+
                         $result = $p->GetProducts($entity, $tmp_data, $isMiniCart);
                         //CVarDumper::dump($ids[$entity], 10, true);
                         foreach ($result as $iid => $r)
                         {
                             $product = array_merge($r, $data[$entity][$iid]);
                             // UnitWeight
-            
+
                             $product['FullUnitWeight'] = $data[$entity][$iid]['quantity'] * $r['unitweight'] * self::UNITWEIGHT_VALUE;
                             $product['InCartUnitWeight'] = $product['FullUnitWeight'] * ($r['unitweight_skip'] == 1 ? 0 : 1);
                             $product['UseFinOrWorldPrice'] = $data[$entity][$iid]['type'];
-            
+
                             $ret[] = $product;
                         }
-                    
-                    $flag = 0;
+
+                        $flag = 0;
+                    }
                 }
             }
+
+            self::$_itemasByUser[$key] = $ret;
+            //var_dump($rows);
         }
-        
-        
-		//var_dump($rows);
-		
-        return $ret;
+
+        return self::$_itemasByUser[$key];
     }
 
 

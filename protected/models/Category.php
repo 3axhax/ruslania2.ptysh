@@ -716,6 +716,12 @@ class Category {
             $dataFromCache = Product::FlatResult($data);
             Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
         }
+        elseif (is_array($dataFromCache)) {
+            $itemIds = array();
+            foreach ($dataFromCache as $item) $itemIds[] = $item['id'];
+            Product::setActionItems($entity, $itemIds);
+            Product::setOfferItems($entity, $itemIds);
+        }
         return $dataFromCache;
     }
 

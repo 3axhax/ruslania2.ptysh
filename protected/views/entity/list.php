@@ -74,7 +74,8 @@ if (empty($h1)): ?>
 			</div>
 
             <ul class="items">
-                <?php $i=0; foreach ($items as $item) : $i++;?>
+                <?php //$start = microtime_float();
+                $i=0; foreach ($items as $item) : $i++;?>
                     <?php
 
                     $item['entity'] = $entity;
@@ -91,7 +92,9 @@ if (empty($h1)): ?>
                     <?php elseif ($i == 20): ?>
                         <?php $this->widget('Banners', array('location'=>'centerInList', 'entity' => $entity, 'page'=>(int) Yii::app()->getRequest()->getParam('page'))) ?>
                     <?php endif; ?>
-                <?php endforeach; ?>
+                <?php endforeach;
+                //var_dump(array(number_format((microtime_float() - $start), 4) . ' сек'));
+                ?>
 
 		
 
