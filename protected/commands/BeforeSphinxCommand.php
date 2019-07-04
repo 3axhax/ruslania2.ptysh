@@ -12,7 +12,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
-/*		$this->_fillProductsAuthors();
+		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -52,9 +52,10 @@ class BeforeSphinxCommand extends CConsoleCommand {
 				Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			}
-		}*/
+		}
 
 		$this->_morphy();
+		Yii::app()->memcache->flushValues();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
