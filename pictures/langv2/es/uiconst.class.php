@@ -648,7 +648,7 @@ En el tercer paso de la orden, desmarque la casilla "La dirección del pagador e
   'X_ISSUES_IN_YEAR_3' => '%s números por año',
   'X_PAGES_1' => '%s página',
   'X_PAGES_2' => '%s páginas',
-  'X_PAGES_3' => '%s páginas',
+  'PAGES_ALL' => 'Páginas',
   'Year from' => 'Publicado antes del año',
   'Year to' => 'Publicado después del año ',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Cómo hacer una orden de compra',

@@ -644,6 +644,7 @@ return array (
   'X_PAGES_1' => '%s page',
   'X_PAGES_2' => '%s pages',
   'X_PAGES_3' => '%s pages',
+    'PAGES_ALL' => 'Pages',
   'Year from' => 'Paru avant',
   'Year to' => 'Paru après',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Comment passer commande',

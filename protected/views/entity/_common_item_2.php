@@ -244,7 +244,7 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (($entity == Entity::BOOKS)&&!empty($item['numpages'])): ?>
                 <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 135px;" class="nameprop"><?= $ui->item('A_NEW_COUNT_PAGE') ?></div>
+                    <div style="float: left;width: 135px;" class="nameprop"><?= $ui->item('PAGES_ALL') ?></div>
                     <div style="padding-left: 140px;"><?= $item['numpages'] ?></div>
                     <div class="clearBoth"></div>
                 </div>

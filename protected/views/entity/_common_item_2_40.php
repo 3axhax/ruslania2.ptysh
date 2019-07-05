@@ -159,7 +159,7 @@ $entityKey = Entity::GetUrlKey($entity);
                 if (!empty($langs)): ?>
                     <div class="authors" style="margin-top: 0;">
                         <div style="float: left;width: 130px;" class="nameprop">
-                            <?= (($entity == Entity::PRINTED) ? str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_THEME')) : str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_LANGUAGE'))) ?>
+                            <?=str_replace(':', '', $ui->item('CATALOGINDEX_CHANGE_LANGUAGE')); ?>
                         </div>
                         <div style="padding-left: 140px;"><?= implode(', ', $langs) ?></div>
                         <div class="clearBoth"></div>
@@ -167,22 +167,12 @@ $entityKey = Entity::GetUrlKey($entity);
                 <?php endif; ?>
             <?php endif; ?>
             
-                <? if  (isset($item['release_year'])) : ?>
-                <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_YEAR_FILM');?></div>
-                    <div style="padding-left: 140px;"><a href="<?=Yii::app()->createUrl('entity/byyearrelease', array('entity' => $entityKey, 'year' => $item['release_year'])); ?>"><?=$item['release_year']?></a></div>
-                    <div class="clearBoth"></div>
-                </div>
-            <? endif; ?>
-            <?php endif; ?>
             <?php if (!empty($item['Publisher'])) : ?>
                 <?php $pubTitle = ProductHelper::GetTitle($item['Publisher']); ?>
                 <div class="authors" style="margin-top: 0;">
                     <div style="float: left;width: 130px;" class="nameprop">
                         <?php
-                        if ($entity == Entity::MUSIC) echo str_replace(':', '', $ui->item('A_NEW_LABEL'));
-                        elseif ($entity == Entity::SOFT || $entity == Entity::MAPS || $entity == Entity::PRINTED) echo str_replace(':', '', $ui->item('A_NEW_PRODUCER'));
-                        else echo str_replace(':', '', sprintf($ui->item("Published by"), ''));
+                        echo str_replace(':', '', sprintf($ui->item("Published by"), ''));
                         ?>
                     </div>
                     <div style="padding-left: 140px;">
@@ -196,17 +186,15 @@ $entityKey = Entity::GetUrlKey($entity);
                 </div>
             <?php endif; ?>
 
-            <?
+            
 
-            if (isset($item['type']) && $entity != Entity::PRINTED): ?>
+            
                 <div class="authors" style="margin-top: 0;">
                     <div style="float: left;width: 130px;" class="nameprop"><?=$ui->item('A_NEW_TYPE_IZD')?></div>
                     <?php
-                    if ($item['entity'] == Entity::PERIODIC) :
-                        $binding = ProductHelper::GetTypesPeriodic($entity, $item['type']);
-                    else :
+                    
                         $binding = ProductHelper::GetTypesPrinted($entity, $item['type']);
-                    endif; ?>
+                    ?>
                     <div style="padding-left: 140px;"><a href="<?= Yii::app()->createUrl('entity/bytype', array(
                             'entity' => $entityKey,
                             'type' => $item['type'],
@@ -214,17 +202,9 @@ $entityKey = Entity::GetUrlKey($entity);
                         )) ?>"><?= ProductHelper::GetTitle($binding) ?></a></div>
                     <div class="clearBoth"></div>
                 </div>
-            <?php endif;
+           
 
-            ?>
-
-            <?php if (!empty($item['eancode'])&&(in_array($entity, array(/*Entity::SHEETMUSIC, */Entity::MUSIC)))) : ?>
-                <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 130px;" class="nameprop">EAN</div>
-                    <div style="padding-left: 140px;"><?=str_replace('-','',$item['eancode'])?></div>
-                    <div class="clearBoth"></div>
-                </div>
-            <?php endif; ?>
+            
 
             <?php
             if (!empty($item['inDescription'])) $txt = nl2br($item['inDescription']);
@@ -233,13 +213,6 @@ $entityKey = Entity::GetUrlKey($entity);
                 <div class="desc_text" style="margin-bottom: 10px;"><?= $txt ?></div>
             <?php endif; ?>
 
-            <?php if (($entity == Entity::BOOKS)&&!empty($item['numpages'])): ?>
-                <div class="authors" style="margin-top: 0;">
-                    <div style="float: left;width: 135px;" class="nameprop"><?= $ui->item('A_NEW_COUNT_PAGE') ?></div>
-                    <div style="padding-left: 140px;"><?= $item['numpages'] ?></div>
-                    <div class="clearBoth"></div>
-                </div>
-            <?php endif; ?>
             
             
 
@@ -247,6 +220,7 @@ $entityKey = Entity::GetUrlKey($entity);
             <?php if (!empty($item['binding_id'])) : ?>
                 <?php
                      $label = Yii::app()->ui->item('A_NEW_FILTER_TYPE2');
+                    
                     ?>
                     <div class="authors" style="margin-top: 0;">
                         <div style="float: left;width: 130px;" class="nameprop"><?= $label ?></div>
@@ -259,7 +233,7 @@ $entityKey = Entity::GetUrlKey($entity);
                     </div>
             <?php endif; ?>
 
-            
+           
             
             <?php /*if (($entity == Entity::BOOKS)&&!empty($item['Category']['BIC_categories'])): ?>
                 <div class="authors" style="margin-top: 0;">
@@ -284,24 +258,27 @@ $entityKey = Entity::GetUrlKey($entity);
 
             <?php if (Availability::GetStatus($item) != Availability::NOT_AVAIL_AT_ALL) : ?>
 
-                                    <?=
+                
+                    <?=
                     $this->renderPartial('/entity/_priceInfo', array('key' => 'ITEM',
                         'item' => $item,
                         'price' => $price));
                     ?>
 
-    
+               
 
             <?php endif; ?>
 
+         
                 <div class="mb5" style="color:#4e7eb5;">
                     <?= Availability::ToStr($item); ?>
                 </div>
+          
 
 
 
 
-            <?php $quantity = 1; ?>
+            <?php $quantity = ($item['entity'] == Entity::PERIODIC) ? 12 : 1; ?>
 
 
 
@@ -317,11 +294,60 @@ $entityKey = Entity::GetUrlKey($entity);
             ?>
 
             
-                <?php $style = '0'; echo '<div style="height: 20px;"></div>'; ?>
-                <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"
-                   data-id="<?= $item['id']; ?>" class="addmark cart-action" style="margin-left: <?=$style?>"><i class="fa fa-heart" aria-hidden="true"></i></a>
 
-            <?php endif; ?>
+            <?php if ($isAvail) : ?>
+                
+<?php /*if (empty($item['unitweight'])):?>
+                    <div class="free_delivery"><?= $ui->item('MSG_DELIVERY_TYPE_4') ?></div>
+<?php endif;*/ ?>
+                <form method="get" action="<?= Yii::app()->createUrl('cart/view') ?>" onsubmit="return false;">
+				
+					<!--<div class="already-in-cart already-in-cart<?=$item['id']?>" style="margin: 9px 0;">
+                    <?php if (isset($item['AlreadyInCart'])) : ?>
+
+                       
+                            <?= sprintf(Yii::app()->ui->item('ALREADY_IN_CART'), $item['AlreadyInCart']); ?>
+                        
+
+                    
+                    <?php endif; ?>
+                </div>-->
+				
+                    
+
+                        <div class="minus_plus">
+                            <a href="javascript:;" onclick="minus_plus($(this), 'minus')" style="margin-right: 9px;"><?php /*<img src="/new_img/cart_minus.png" class="grayscale"> */?></a> <input name="quantity[<?= (int) $item['id'] ?>]" type="text" size="3" class="cart1contents1 center" style="margin: 0; width: 36px;" value="1" onfocus="change_input_plus_minus($(this))" onkeydown="change_input_plus_minus($(this))" onblur="change_input_plus_minus($(this))"> <a href="javascript:;" style="margin-left: 9px;" onclick="minus_plus($(this), 'plus')"><?php /*<img src="/new_img/cart_plus.png"> */?></a>
+                        </div>
+                   
+
+
+
+                    <?php if (empty($count_add)) {
+                        $count_add = 1;
+                    }
+                    ?>
+                    <input type="hidden" name="entity[<?= (int) $item['id'] ?>]" value="<?= (int) $item['entity'] ?>">
+
+					<?php if (isset($item['AlreadyInCart'])) : ?>
+
+                    <a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="searchTargets('add_cart_listing');">
+                        <span><?= Yii::app()->ui->item('CARTNEW_IN_CART_BTN', $item['AlreadyInCart']) ?></span>
+                    </a>
+					
+					<? else : ?>
+					<a class="cart-action add_cart list_cart add_cart_plus add_cart_view cart<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="<?=$count_add?>" href="javascript:;" onclick="searchTargets('add_cart_listing');">
+                        <span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span>
+                    </a>
+					
+					<? endif; ?>
+					
+
+                    <?php $style = '0'; echo '<div style="height: 20px;"></div>'; ?>
+                    <a href="javascript:;" data-action="mark " data-entity="<?= $item['entity']; ?>"
+                       data-id="<?= $item['id']; ?>" class="addmark cart-action" style="margin-left: <?=$style?>"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                </form>
+
+            <?endif;?>
 
         </div>
 

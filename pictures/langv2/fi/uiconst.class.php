@@ -647,6 +647,7 @@ Danske Pankki, tilinumero FI80001470689309. Pyydämme mainitsemaan tilausnumeron
   'X_PAGES_1' => '%s sivu',
   'X_PAGES_2' => '%s sivua',
   'X_PAGES_3' => '%s sivua',
+    'PAGES_ALL' => 'Sivua',
   'Year from' => 'Ilmestynyt ennen vuotta',
   'Year to' => 'Ilmestynyt vuoden jälkeen',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Tilausohjeet',

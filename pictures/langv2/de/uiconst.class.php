@@ -649,6 +649,7 @@ Deaktivieren Sie "Adresse des Zahlers entspricht der Lieferadresse" und wählen 
   'X_PAGES_1' => '%s Seite',
   'X_PAGES_2' => '%s Seiten',
   'X_PAGES_3' => '%s Seiten',
+    'PAGES_ALL' => 'Seiten',
   'Year from' => 'Erschienen vor dem Jahr',
   'Year to' => 'Erschienen nach dem Jahr',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Bestellbedingungen',

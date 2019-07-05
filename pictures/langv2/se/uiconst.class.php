@@ -653,6 +653,7 @@ försändelsen eller skickas till faktureringadres. Obs! Endast <br>för kunder 
   'X_PAGES_1' => '%s sida',
   'X_PAGES_2' => '%s sidor',
   'X_PAGES_3' => '%s sidor',
+    'PAGES_ALL' => 'Sidor',
   'Year from' => 'Utgiven före',
   'Year to' => 'Utgiven efter',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Så här beställer du',

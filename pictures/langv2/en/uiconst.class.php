@@ -650,6 +650,7 @@ On the third order step, uncheck the checkbox “Payer\'s address is the same as
   'X_PAGES_1' => '%s page',
   'X_PAGES_2' => '%s pages',
   'X_PAGES_3' => '%s pages',
+    'PAGES_ALL' => 'Pages',
   'Year from' => 'Published before',
   'Year to' => 'Published after',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'How to place an order',

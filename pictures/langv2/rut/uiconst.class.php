@@ -664,6 +664,7 @@ Pri etom v tretem shage zakaza snimite galochku «Dannye Platelshchika sovpadaju
   'X_PAGES_1' => '%s stranitsa',
   'X_PAGES_2' => '%s stranitsy',
   'X_PAGES_3' => '%s stranits',
+    'PAGES_ALL' => 'Stranits',
   'Year from' => 'Izdan do goda',
   'Year to' => 'Izdan posle goda',
   'YM_CONTEXT_CONDITIONS_ORDER_ALL' => 'Kak sdelat zakaz',
