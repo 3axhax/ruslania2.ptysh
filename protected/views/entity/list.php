@@ -72,7 +72,9 @@ if (empty($h1)): ?>
 			<div style="margin: 5px 0 ;">
 			<?//=sprintf($ui->item('X items here'), $total)?>
 			</div>
-
+			
+			<?//=$entity?>
+			
             <ul class="items">
                 <?php //$start = microtime_float();
                 $i=0; foreach ($items as $item) : $i++;?>
@@ -84,7 +86,20 @@ if (empty($h1)): ?>
                     <li>
                         <?php
                         if ($entity == Entity::PERIODIC) $this->renderPartial('/entity/list/periodics', array('item' => $item, 'entity' => $entity, 'isList' => true, 'productModel' => $productModel));
-                        else $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $entity, 'isList' => true));
+                        else { 
+						
+						switch ($entity) {
+							
+							case 40 : $prefix = '_40'; break;
+							
+							default: $prefix = ''; break;
+							
+							
+						}
+						
+						//$prefix = '';
+						
+						$this->renderPartial('/entity/_common_item_2'.$prefix, array('item' => $item, 'entity' => $entity, 'isList' => true)); }
                         ?>
                     </li>
                     <?php if ($i == 2): ?>
