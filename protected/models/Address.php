@@ -84,6 +84,8 @@ class Address extends CActiveRecord
 
             array('type, receiver_first_name, receiver_last_name, country, city, streetaddress,'
                       . 'contact_phone, contact_email', 'required', 'on' => 'new'),
+            array('contact_phone, contact_email', 'required', 'on' => 'newPhone'),
+
             array('country', 'checkCountry', 'on' => 'new'),
             array('postindex', 'checkPostIndex', 'on' => 'new'),
             array('notes, state_id, receiver_middle_name, receiver_title_name, business_title, business_number1, verkkolaskuosoite, operaattoritunnus', 'safe', 'on' => 'new'),
@@ -263,12 +265,12 @@ class Address extends CActiveRecord
         }
     }
 
-    public function GetAddresses($uid)
+    public function GetAddresses($uid, $withCountry = false)
     {
         $sql = 'SELECT uas.*, ua.*, cl.title_en AS country_name, cl.*, IF(cl.id=68, 1, 0) AS is_finland, cl.code, tASL.title_long statesName, tASL.title_short statesNameShort '
             . 'FROM users_addresses AS uas '
-              .'JOIN user_address AS ua ON uas.address_id=ua.id '
-              .'LEFT JOIN country_list AS cl ON ua.country=cl.id '
+              .'JOIN user_address AS ua ON (uas.address_id=ua.id) '
+              .($withCountry?'':'LEFT ') . 'JOIN country_list AS cl ON ua.country=cl.id '
               . 'left join address_states_list tASL on (tASL.id = ua.state_id) and (tASL.country_id = ua.country) '
               .'WHERE uas.uid=:uid ORDER BY uas.if_default DESC';
 

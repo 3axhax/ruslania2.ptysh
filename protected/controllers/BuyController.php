@@ -289,16 +289,25 @@ class BuyController extends MyController {
 				$items = $cart->GetCart($this->uid, $this->sid);
 				if (Yii::app()->user->isGuest) {
 					if ($userId = $this->_regUser()) {
+						$addrAdd = false;
 						if (!Yii::app()->getRequest()->getParam('check_addressa')||$this->_existPereodic($items)) {
 							//не будет забирать в магазине или есть подписка
 							$addressModel = new Address('new');
 							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
 							$aid = $addressModel->InsertNew($userId, 1);
+							$addrAdd = true;
 						}
 						if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
 							$addressModel = new Address('new');
 							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Address'), false);
-							$bid = $addressModel->InsertNew($userId, 1);
+							$bid = $addressModel->InsertNew($userId, !$addrAdd);
+							$addrAdd = true;
+						}
+						if (!$addrAdd) {
+							$addressModel = new Address('newPhone');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
+							$aid = $addressModel->InsertNew($userId, 1);
+							$addrAdd = true;
 						}
 					}
 				}
@@ -318,7 +327,7 @@ class BuyController extends MyController {
 					'DeliveryMode' => $DeliveryMode,
 					'CurrencyID' => Yii::app()->currency,
 					'BillingAddressID' => $bid,
-					'Notes' => (string) Yii::app()->getRequest()->getParam('notes'),
+					'Notes' => (string) trim(Yii::app()->getRequest()->getParam('notes')),
 					'Mandate' => 0,
 					'SmartpostAddress' => Yii::app()->getRequest()->getParam('pickpoint_address')
 				);

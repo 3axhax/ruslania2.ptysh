@@ -241,7 +241,7 @@ class Order extends CMyActiveRecord
         $da = $a->GetAddress($uid, $order->DeliveryAddressID);
         list($itemsPrice, $deliveryPrice, $pricesValues, $discountKeys, $fullweight) = $this->getOrderPrice($uid, $sid, $items, $da, $order->DeliveryMode, $order->DeliveryTypeID, $order->CurrencyID, false);
 
-        $notes = $order->Notes;
+        $notes = trim((string)$order->Notes);
 
         $promocodeId = 0;
         $promocodes = array();

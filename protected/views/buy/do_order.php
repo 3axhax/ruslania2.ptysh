@@ -2,7 +2,7 @@
 /**@var $this MyController*/
 $PH = new ProductHelper();
 $addrModel = new Address();
-$addrList = Address::model()->GetAddresses($this->uid);
+$addrList = Address::model()->GetAddresses($this->uid, true);
 $user = User::model()->findByPk($this->uid);
 ?>
 <link rel="stylesheet" href="/new_style/order_buy.css?v=2106">
