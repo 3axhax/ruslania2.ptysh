@@ -12,6 +12,12 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter', $urlParams);
     <input type="hidden" name="entity_val" class="entity_val" value="<?= $entity ?>"/>
     <input type="hidden" name="cid_val" class="cid_val" value="<?= $cid ?>"/>
     <input type="hidden" name="sort" class="sort" value="<?= (Yii::app()->getRequest()->getParam('sort', isset($filterData['sort'])?$filterData['sort']:null)) ? Yii::app()->getRequest()->getParam('sort', isset($filterData['sort'])?$filterData['sort']:null) : SortOptions::GetDefaultSort() ?>"/>
+    <?php if (Yii::app()->getController()->action->id == 'bystudio'): ?>
+        <input type="hidden" name="sid" value="<?= Yii::app()->getRequest()->getParam('sid') ?>"/>
+    <?php endif; ?>
+    <?php if (($entity == Entity::SOFT)&&(Yii::app()->getController()->action->id == 'byauthor')): ?>
+        <input type="hidden" name="aid" value="<?= Yii::app()->getRequest()->getParam('aid') ?>"/>
+    <?php endif; ?>
 
     <!--Основной блок фильтров-->
     <div class="prod-filter__row">

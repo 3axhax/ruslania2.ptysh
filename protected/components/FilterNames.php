@@ -59,7 +59,7 @@ class FilterNames {
 			'entity/bydirector'       =>  'directors',
 			'entity/byaudiostream'    =>  'lang_video',
 			'entity/bysubtitle'       =>  'subtitles_video',
-	//		'entity/bystudio'
+			'entity/bystudio'         =>  'studio',
 		);
 		if (!empty($routes[$route])&&isset($this->_data[$routes[$route]])) {
 			$res = $this->$routes[$route];
@@ -190,6 +190,14 @@ class FilterNames {
 		if (empty($this->_data['performer'])) return '';
 		$item = CommonAuthor::model()->GetById($this->_data['performer']);
 		return mb_strtolower(Yii::app()->ui->item('A_NEW_FILTER_PERFORMER'), 'utf-8') . ': ' . ProductHelper::GetTitle($item);
+	}
+
+	private function _getStudio() {
+		if (empty($this->_data['studio'])) return '';
+		$item = VideoStudio::model()->findByPk($this->_data['studio']);
+		if (empty($item)) return '';
+
+		return mb_strtolower(Yii::app()->ui->item('A_NEW_STUDIO'), 'utf-8') . ': ' . ProductHelper::GetTitle($item->attributes);
 	}
 
 	private function _getLang_video() {

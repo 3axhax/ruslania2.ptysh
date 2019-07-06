@@ -487,14 +487,12 @@ class EntityController extends MyController {
 		}
         elseif (!empty($char)) {
 			list($list, $list_count) = $a->GetAuthorsByFirstChar($char, $lang, $entity);
-//			$list_count = count($a->GetAuthorsByFirstCharCount($char, $lang, $entity)); //TODO:: так делать нельзя или CALC_FOUND_ROWS или count(*), но не так
 		}
         else {
 //            $list = array();
             $char = 'А';
             list($list, $list_count) = $a->GetAuthorsByFirstChar($char, $lang, $entity);
         }
-		
         $this->breadcrumbs[Entity::GetTitle($entity)] = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
         $this->breadcrumbs[] = Yii::app()->ui->item('PROPERTYLIST_FOR_AUTHORS');
 
@@ -1552,6 +1550,7 @@ class EntityController extends MyController {
 
     private function _getItems($entity, $cid) {
         $data = FilterHelper::getFiltersData($entity, $cid);
+        Debug::staticRun(array($data));
         $lang = Yii::app()->getRequest()->getParam('lang');
         $cat = new Category();
         $totalItems = $cat->count_filter($entity, $cid, $data);

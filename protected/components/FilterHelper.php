@@ -27,7 +27,7 @@ class FilterHelper
      * 'actors'
      * 'release_year_min'
      * 'release_year_max'
-     *
+     * 'studio'
      */
 
     /**
@@ -48,6 +48,7 @@ class FilterHelper
         if (Entity::checkEntityParam($entity, 'series')) $filters['series'] = true;
         if (Entity::checkEntityParam($entity, 'years')) $filters['years'] = true;
         if (Entity::checkEntityParam($entity, 'performers')) $filters['performers'] = true;
+        if (Entity::checkEntityParam($entity, 'studios')) $filters['studios'] = true;
 
         if ($entity == Entity::SOFT) {
             unset($filters['author']);
@@ -137,6 +138,7 @@ class FilterHelper
             if (Entity::checkEntityParam($entity, 'subtitles')) self::getSubtitlesVideo();
             self::getPreSale();
             if (Entity::checkEntityParam($entity, 'performers')) self::getPerformer();
+            if (Entity::checkEntityParam($entity, 'studios')) self::getStudio();
             self::getCountry();
             if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
             if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
@@ -560,6 +562,22 @@ class FilterHelper
             return true;
         }
         self::$data['performer'] = false;
+        return false;
+    }
+
+    static private function getStudio() {
+//        $studio = false;
+//        if (Yii::app()->getController()->action->id == 'bystudio')
+        $studio = Yii::app()->getRequest()->getParam('sid', false);
+        if ($studio !== false) {
+            self::$data['studio'] = (int) $studio;
+            return true;
+        }
+        if (isset(self::$sessionData['studio']) && self::$sessionData['studio'] != '') {
+            self::$data['studio'] = (int) self::$sessionData['studio'];
+            return true;
+        }
+        self::$data['studio'] = false;
         return false;
     }
 

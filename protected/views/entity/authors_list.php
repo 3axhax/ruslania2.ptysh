@@ -63,7 +63,7 @@
             ?>
             <div class="text">
                 <ul class="list authors" id="al">
-                    <?php if (empty($url)) $url ='/entity/byauthor'; ?>
+                    <?php if (empty($url)) $url ='entity/byauthor'; ?>
                     <?php if (empty($idName)) $idName = 'aid';
                     $lang = Yii::app()->getLanguage();
                     if (!in_array($lang, HrefTitles::get()->getLangs($entity, $url))) $lang = 'en';

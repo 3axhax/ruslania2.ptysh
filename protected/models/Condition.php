@@ -73,6 +73,7 @@ class Condition {
 		$this->_subtitle();
 		$this->_pre_sale();
 		$this->_performer();
+		$this->_studio();
 		$this->_country();
 		$this->_director();
 		$this->_actor();
@@ -327,7 +328,16 @@ class Condition {
         }
     }
 
-    private function _country() {
+	private function _studio() {
+		if (Entity::checkEntityParam($this->_entity, 'studios')) {
+			$sid = (int) $this->g('studio');
+			if ($sid > 0) {
+				$this->_condition['studio'] = '(t.studio = ' . (int) $sid . ')';
+			}
+		}
+	}
+
+	private function _country() {
         if ($this->_entity == 30) {
             $country = $this->g('country');
             if (($country === 0) || ($country === '0')) return;
