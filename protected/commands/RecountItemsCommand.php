@@ -61,6 +61,9 @@ class RecountItemsCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 			$this->_updatePosition($entity, $params);
 		}
+
+		$this->_clearSimilar();
+		$this->_clearBanners();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
@@ -373,5 +376,23 @@ class RecountItemsCommand extends CConsoleCommand {
 			echo $sql . "\n";
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
+	}
+
+	/**
+	 * очистка таблицы _similar_items
+	 * удаляется все, что старее 14 дней
+	 */
+	private function _clearSimilar() {
+		$sql = 'delete from _similar_items where (date_add < ' . mktime(0, 0, 0, date('n'), date('j')-14, date('Y')) . ')';
+		Yii::app()->db->createCommand($sql)->query();
+	}
+
+	/**
+	 * очистка таблицы _banner_items
+	 * удаляется все, что старее 1 мес
+	 */
+	private function _clearBanners() {
+		$sql = 'delete from _banner_items where (date_add < ' . mktime(0, 0, 0, date('n')-1, date('j'), date('Y')) . ')';
+		Yii::app()->db->createCommand($sql)->query();
 	}
 }

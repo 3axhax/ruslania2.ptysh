@@ -97,54 +97,71 @@ class Similar extends CWidget {
 	}
 
 	private function _getCatalogIds() {
-		$limit = 10;
+		$refererRoute = '';
 		$referer = Yii::app()->getRequest()->getUrlReferrer();
-		$sql = $this->_sql($referer, $limit);
-		$ids = array();
-		if (!empty($sql)) {
-			$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+		if (!empty($referer)) {
+			$request = new MyRefererRequest();
+			$request->setFreePath($referer);
+			$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+		}
+
+		$sqlParams = array(':eid'=>$this->_params['entity'], ':id'=>$this->_params['item']['id'], 'route'=>$refererRoute);
+		$sql = 'select ids, date_add from _similar_items where (eid = :eid) and (id = :id) and (route = :route) limit 1';
+		$row = Yii::app()->db->createCommand($sql)->queryRow(true, $sqlParams);
+		if (!empty($row)) {
+			$ids = explode(',',$row['ids']);
 		}
 		else {
-			$sql = $this->_sqlByAuthors(null, 10);
-			if (!empty($sql)) {
-				$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+			$ids = null;
+			$limit = 10;
+			if (!empty($refererRoute)) {
+				$sql = $this->_sql($refererRoute, $limit);
+				if (!empty($sql)) {
+					$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+				}
 			}
-		}
-		if (count($ids) < $limit) {
-			$sql = $this->_sqlByCategory(null, $limit-count($ids));
-			$ids = array_merge($ids, Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item']))));
+			if ($ids === null) {
+				$ids = array();
+				$sql = $this->_sqlByAuthors(10);
+				if (!empty($sql)) {
+					$ids = Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item'])));
+				}
+			}
+
+			if (count($ids) < $limit) {
+				$sql = $this->_sqlByCategory($limit-count($ids));
+				$ids = array_merge($ids, Yii::app()->db->createCommand($sql)->queryColumn(array(':titleName'=>ProductHelper::GetTitle($this->_params['item']))));
+			}
+			$sql = 'insert ignore into _similar_items set eid = :eid, id = :id, route = :route, ids = :ids, date_add = :date';
+			$sqlParams[':ids'] = implode(',',$ids);
+			$sqlParams[':date'] = time();
+			Yii::app()->db->createCommand($sql)->query($sqlParams);
 		}
 		if (empty($ids)) return array();
 		return array($this->_params['entity']=>$ids);
 	}
 
 
-	private function _sql($referer, $limit) {
+	private function _sql($refererRoute, $limit) {
 		$sql = '';
-		if ($referer) {
-			$request = new MyRefererRequest();
-			$request->setFreePath($referer);
-			//$request->getParams();//здесь $entity (текстовый), id и другие параметры из адреса referer
-			$refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
-			switch ($refererRoute) {
-				case 'entity/categorylist':case 'entity/list': $sql = $this->_sqlByCategory($request, $limit); break;
-				case 'entity/serieslist':case 'entity/byseries': $sql = $this->_sqlBySeries($request, $limit); break;
-				case 'entity/publisherlist':case 'entity/bypublisher': $sql = $this->_sqlByPublisher($request, $limit); break;
-				case 'entity/authorlist':case 'entity/byauthor': $sql = $this->_sqlByAuthors($request, $limit); break;
-				case 'entity/performerlist':case 'entity/byperformer': $sql = $this->_sqlByPerformers($request, $limit); break;
-				case 'entity/actorlist':case 'entity/byactor': $sql = $this->_sqlByActors($request, $limit); break;
-				case 'entity/directorlist':case 'entity/bydirector': $sql = $this->_sqlByDirectors($request, $limit); break;
-				case 'entity/bindingslist':case 'entity/bybinding': $sql = $this->_sqlByBinding($request, $limit); break;
-				case 'entity/audiostreamslist':case 'entity/byaudiostream': $sql = $this->_sqlByAudiostream($request, $limit); break;
-				case 'entity/subtitleslist':case 'entity/bysubtitle': $sql = $this->_sqlBySubtitles($request, $limit); break;
-				case 'entity/medialist':case 'entity/bymedia': $sql = $this->_sqlByMedia($request, $limit); break;
-				case 'entity/typeslist':case 'entity/bymagazinetype': $sql = $this->_sqlByType($request, $limit); break;
-			}
+		switch ($refererRoute) {
+			case 'entity/categorylist':case 'entity/list': $sql = $this->_sqlByCategory($limit); break;
+			case 'entity/serieslist':case 'entity/byseries': $sql = $this->_sqlBySeries($limit); break;
+			case 'entity/publisherlist':case 'entity/bypublisher': $sql = $this->_sqlByPublisher($limit); break;
+			case 'entity/authorlist':case 'entity/byauthor': $sql = $this->_sqlByAuthors($limit); break;
+			case 'entity/performerlist':case 'entity/byperformer': $sql = $this->_sqlByPerformers($limit); break;
+			case 'entity/actorlist':case 'entity/byactor': $sql = $this->_sqlByActors($limit); break;
+			case 'entity/directorlist':case 'entity/bydirector': $sql = $this->_sqlByDirectors($limit); break;
+			case 'entity/bindingslist':case 'entity/bybinding': $sql = $this->_sqlByBinding($limit); break;
+			case 'entity/audiostreamslist':case 'entity/byaudiostream': $sql = $this->_sqlByAudiostream($limit); break;
+			case 'entity/subtitleslist':case 'entity/bysubtitle': $sql = $this->_sqlBySubtitles($limit); break;
+			case 'entity/medialist':case 'entity/bymedia': $sql = $this->_sqlByMedia($limit); break;
+			case 'entity/typeslist':case 'entity/bymagazinetype': $sql = $this->_sqlByType($limit); break;
 		}
 		return $sql;
 	}
 
-	private function _sqlByCategory($request = null, $limit) {
+	private function _sqlByCategory($limit) {
 		$entity = $this->_params['entity'];
 		$entityParam = Entity::GetEntitiesList()[$entity];
 
@@ -154,6 +171,20 @@ class Similar extends CWidget {
 		if (!empty($cid)) $catIds[] = $cid;
 		if (!empty($cidSub)) $catIds[] = $cidSub;
 
+		$jCond = '';
+		if (!empty($catIds)) $jCond = 'where ((code in (' . implode(',', $catIds) . ')) or (subcode in (' . implode(',', $catIds) . '))) ';
+
+		$order = $this->_getOrders($entity);
+		if (!empty($order['year'])) unset($order['add_date']);
+		$sql = ''.
+			'select t.id, t.image '.
+			'from ' . $entityParam['site_table'] . ' t '.
+				'join (select id, avail_for_order from books_catalog ' . $jCond . ' having (id <> ' . (int) $this->_params['item']['id'] . ') and (avail_for_order > 0) order by positionTimeHL limit 200) tCat using (id) '.
+			'where (t.image <> "") '.
+			'order by t.positionTimeHL '.
+			'limit ' . $limit . ''.
+		'';
+/*
 		$condition = array('avail'=>'(t.avail_for_order = 1)', );
 		if (!empty($catIds)) $condition['category'] = '((t.code in (' . implode(',', $catIds) . ')) or (t.subcode in (' . implode(',', $catIds) . ')))';
 
@@ -168,11 +199,11 @@ class Similar extends CWidget {
 			'having ' . implode(' and ', $having) . ' '.
 			'order by ' . implode(', ', $order) . ' '.
 			'limit ' . $limit . ' '.
-		'';
+		'';*/
 		return $sql;
 	}
 
-	private function _sqlByAuthors($request = null, $limit) {
+	private function _sqlByAuthors($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'authors')) return '';
 		if (empty($this->_params['item']['Authors'])) return '';
@@ -199,7 +230,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlBySeries(MyRefererRequest $request, $limit) {
+	private function _sqlBySeries($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'series')) return '';
 		if (empty($this->_params['item']['series_id'])) return '';
@@ -218,7 +249,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByPublisher(MyRefererRequest $request, $limit) {
+	private function _sqlByPublisher($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'publisher')) return '';
 		if (empty($this->_params['item']['publisher_id'])) return '';
@@ -237,7 +268,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByPerformers(MyRefererRequest $request, $limit) {
+	private function _sqlByPerformers($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'performers')) return '';
 		if (empty($this->_params['item']['Performers'])) return '';
@@ -264,7 +295,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByActors(MyRefererRequest $request, $limit) {
+	private function _sqlByActors($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'actors')) return '';
 		if (empty($this->_params['item']['Actors'])) return '';
@@ -291,7 +322,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByDirectors(MyRefererRequest $request, $limit) {
+	private function _sqlByDirectors($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'directors')) return '';
 		if (empty($this->_params['item']['Directors'])) return '';
@@ -318,7 +349,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByBinding(MyRefererRequest $request, $limit) {
+	private function _sqlByBinding($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'binding')) return '';
 		if (empty($this->_params['item']['binding_id'])) return '';
@@ -337,7 +368,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByAudiostream(MyRefererRequest $request, $limit) {
+	private function _sqlByAudiostream($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'audiostreams')) return '';
 
@@ -365,7 +396,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlBySubtitles(MyRefererRequest $request, $limit) {
+	private function _sqlBySubtitles($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'subtitles')) return '';
 
@@ -393,7 +424,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByMedia(MyRefererRequest $request, $limit) {
+	private function _sqlByMedia($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'media')) return '';
 		if (empty($this->_params['item']['media_id'])) return '';
@@ -412,7 +443,7 @@ class Similar extends CWidget {
 		return $sql;
 	}
 
-	private function _sqlByType(MyRefererRequest $request, $limit) {
+	private function _sqlByType($limit) {
 		$entity = $this->_params['entity'];
 		if (!Entity::checkEntityParam($entity, 'magazinetype')) return '';
 		if (empty($this->_params['item']['type'])) return '';

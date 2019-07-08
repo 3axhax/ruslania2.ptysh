@@ -253,31 +253,53 @@ class Banners extends MyWidget {
                 break;
             case 'slider':
                 $items = array();
-                switch ((int)$this->_params['item']['entity']) {
-                    case 10:
-                        foreach ($this->_get10Ids(10) as $id) $items[] = array('entity'=>10, 'id'=>$id);
-                        break;
-                    case 15:
-                        foreach ($this->_get15Ids(10) as $id) $items[] = array('entity'=>15, 'id'=>$id);
-                        break;
-                    case 22:
-                        foreach ($this->_get22Ids(10) as $id) $items[] = array('entity'=>22, 'id'=>$id);
-                        break;
-                    case 30:
-                        foreach ($this->_get30Ids(10) as $id) $items[] = array('entity'=>30, 'id'=>$id);
-                        break;
-                    case 50:
-                        foreach ($this->_get50Ids(10) as $id) $items[] = array('entity'=>50, 'id'=>$id);
-                        break;
-                    case 40:
-                        foreach ($this->_get40Ids(10) as $id) $items[] = array('entity'=>40, 'id'=>$id);
-                        break;
-                    case 60:
-                        foreach ($this->_get60Ids(10) as $id) $items[] = array('entity'=>60, 'id'=>$id);
-                        break;
-                    case 24:
-                        foreach ($this->_get24Ids(10) as $id) $items[] = array('entity'=>24, 'id'=>$id);
-                        break;
+                $sqlParams = array(':eid'=>$this->_params['item']['entity'], ':id'=>$this->_params['item']['id']);
+                $sql = 'select ids, date_add from _banner_items where (eid = :eid) and (id = :id) limit 1';
+                $row = Yii::app()->db->createCommand($sql)->queryRow(true, $sqlParams);
+                if (!empty($row)) {
+                    $ids = explode(',',$row['ids']);
+                    foreach ($ids as $id) $items[] = array('entity'=>(int)$this->_params['item']['entity'], 'id'=>$id);
+                }
+                else {
+                    $ids = array();
+                    switch ((int)$this->_params['item']['entity']) {
+                        case 10:
+                            $ids = $this->_get10Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>10, 'id'=>$id);
+                            break;
+                        case 15:
+                            $ids = $this->_get15Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>15, 'id'=>$id);
+                            break;
+                        case 22:
+                            $ids = $this->_get22Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>22, 'id'=>$id);
+                            break;
+                        case 30:
+                            $ids = $this->_get30Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>30, 'id'=>$id);
+                            break;
+                        case 50:
+                            $ids = $this->_get50Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>50, 'id'=>$id);
+                            break;
+                        case 40:
+                            $ids = $this->_get40Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>40, 'id'=>$id);
+                            break;
+                        case 60:
+                            $ids = $this->_get60Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>60, 'id'=>$id);
+                            break;
+                        case 24:
+                            $ids = $this->_get24Ids(10);
+                            foreach ($ids as $id) $items[] = array('entity'=>24, 'id'=>$id);
+                            break;
+                    }
+                    $sql = 'insert ignore into _banner_items set eid = :eid, id = :id, ids = :ids, date_add = :date';
+                    $sqlParams[':ids'] = implode(',',$ids);
+                    $sqlParams[':date'] = time();
+                    Yii::app()->db->createCommand($sql)->query($sqlParams);
                 }
                 $banners = $this->_getProducts($items);
                 foreach ($banners as $i=>$item) {
