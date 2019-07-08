@@ -35,7 +35,7 @@
                         <tr>
                             <th style="width:60px;">№</th>
                             <th><?=$ui->item('CART_COL_TITLE'); ?></th>
-                            <th>Last state</th>
+                            <th><?=$ui->item('LAST_STATE'); ?></th>
                         </tr>
                         <?php foreach($list as $request) : ?>
                             <?php $this->renderPartial('_one_request2', array('request' => $request)); ?>
