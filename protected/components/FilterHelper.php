@@ -469,8 +469,8 @@ class FilterHelper
 
     static private function getFormatVideo() {
         $format_video = false;
-        if (Yii::app()->getController()->action->id == 'byaudiostream')
-            $format_video = Yii::app()->getRequest()->getParam('sid', false);
+        if (Yii::app()->getController()->action->id == 'bymedia')
+            $format_video = Yii::app()->getRequest()->getParam('mid', false);
         if ($format_video !== false) {
             self::$data['format_video'] = (int) $format_video;
             return true;

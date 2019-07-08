@@ -1550,7 +1550,6 @@ class EntityController extends MyController {
 
     private function _getItems($entity, $cid) {
         $data = FilterHelper::getFiltersData($entity, $cid);
-        Debug::staticRun(array($data));
         $lang = Yii::app()->getRequest()->getParam('lang');
         $cat = new Category();
         $totalItems = $cat->count_filter($entity, $cid, $data);
