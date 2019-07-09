@@ -74,7 +74,7 @@ class HrefTitles {
 	function getByIds($entity, $route, $ids) { return []; }
 	private function _getByIds($entity, $route, $ids) {
 		$idTitles = array();
-		foreach ($ids as $id) $idTitles[$id] = array();
+/*		foreach ($ids as $id) $idTitles[$id] = array();
 		$table = $this->getTable($entity, $route);
 		if (empty($table)) return $idTitles; //если не нашел таблицу с title то дальше не ищу
 
@@ -102,7 +102,7 @@ class HrefTitles {
 		}
 		$withoutTitles = array_filter($idTitles, [$this, '_checkEmpty']);
 		if (empty($withoutTitles)) return $idTitles;
-
+*/
 		//далее, если есть ид без title
 
 		$table = $this->getTable($entity, $route);
@@ -114,7 +114,7 @@ class HrefTitles {
 			}
 			else $sql = 'select id, title_' . implode(', title_', $langs) . ' ';
 			$sql .= 'from ' . $table . ' '.
-				'where (id in (' . implode(',', array_keys($withoutTitles)) . ')) '.
+				'where (id in (' . implode(',', $ids/*array_keys($withoutTitles)*/) . ')) '.
 				(($table == 'all_media')?' and (entity = ' . (int) $entity . ')':'')
 			;
 

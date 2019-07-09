@@ -5,38 +5,63 @@ class ProductLang {
 
     static function getLangItems($entity, $cat) {
         if (self::$_langItems === null) {
-            $avail = Yii::app()->getController()->GetAvail(1);
-            $allChildren = array();
+            $conditionHandler = Condition::get($entity, empty($cat['id'])?0:$cat['id']);
+            $condition = $conditionHandler->getCondition();
+            $join = $conditionHandler->getJoin();
+            $avail = !empty($condition['avail']) || !empty($join['tL_support']);
             if (!empty($cat['id'])) {
                 $category = new Category();
                 $allChildren = $category->GetChildren($entity, $cat['id']);
                 $allChildren[] = $cat['id'];
+                if ($avail) {
+                    $condition['cid'] = '(tLang.category_id in (' . implode(',', $allChildren) . '))';
+                }
+            }
+            unset($join['tL_all'], $join['tL_support']);
+            if (!$avail) {
+                foreach ($join as $k => $v) {
+                    $join[$k] = str_replace('t.id', 'tLang.item_id', $v);
+                }
+            }
+            else {
+                foreach ($join as $k => $v) {
+                    $join[$k] = str_replace('t.id', 'tLang.id', $v);
+                }
             }
 
-            if (empty($avail)) {
-                $join = array();
-                if (!empty($cat)) {
+            if (!empty($condition)) {
+                if (!$avail||(count($condition) > 1)||empty($condition['cid'])) {
                     $entities = Entity::GetEntitiesList();
-                    $tbl = $entities[$entity]['site_table'];
-                    $join['tI'] = 'join ' . $tbl . ' tI on (tI.id = t.item_id) and ((tI.code in (' . implode(',', $allChildren) . ')) or (tI.subcode in (' . implode(',', $allChildren) . ')))';
+                    array_unshift($join, 'join ' . $entities[$entity]['site_table'] . ' t on (t.id = tLang.' . (!$avail?'item_id':'id') . ')');
                 }
+            }
+
+            if (!$avail) {
+                $condition['eid'] = '(tLang.entity = ' . (int) $entity . ')';
                 $sql = ''.
-                    'select t.language_id '.
-                    'from all_items_languages t '.
+                    'select tLang.language_id '.
+                    'from all_items_languages tLang '.
                     implode(' ', $join) . ' '.
-                    'where (t.entity = ' . (int) $entity . ') '.
-                    'group by t.language_id '.
-                    '';
+                    'where ' . implode(' and ', $condition) . ' '.
+                    'group by tLang.language_id '.
+                '';
                 $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
             }
             else {
+                unset($condition['avail']);
+                $condSupport = $conditionHandler->onlySupportCondition(false);
+                unset($condSupport['language_id'], $condSupport['cid']);
+                foreach ($condSupport as $k=>$v) {
+                    $condition[] = str_replace('(t.', '(tLang.', $v);
+                }
                 $entityStr = Entity::GetUrlKey($entity);
                 $supportTable = '_support_languages_' . $entityStr;
                 $sql = ''.
-                    'select t.language_id '.
-                    'from ' . $supportTable . ' t '.
-                    (empty($allChildren)?'':'where (t.category_id in (' . implode(',', $allChildren) . ')) ') .
-                    'group by t.language_id '.
+                    'select tLang.language_id '.
+                    'from ' . $supportTable . ' tLang '.
+                    implode(' ', $join) . ' '.
+                    (empty($condition)?'':'where ' . implode(' and ', $condition) . ' ') .
+                    'group by tLang.language_id '.
                 '';
                 $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
             }

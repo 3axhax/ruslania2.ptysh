@@ -220,13 +220,13 @@ class EntityUrlRule extends CBaseUrlRule {
 
 		if (empty(self::$_routes[$route]['useTitle'])) $url .= $id . '/';
 		else {
-/*			if (empty($title)) {
+			if (empty($title)) {
 				$titles = HrefTitles::get()->getById($entityId, $route, $id);
 				if (!empty($titles)) {
 					if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 					elseif (!empty($titles['en'])) $title = $titles['en'];
 				}
-			}*/
+			}
 			if (empty($title)) $url .= $id . '/';
 			else $url .= $id . '-' . $title . '/';
 		}

@@ -90,11 +90,11 @@ class StaticUrlRule extends CBaseUrlRule {
 			case 'offers/view':
 				if (isset($this->_pages['offers'])&&!empty($params['oid'])) {
 					$url = $this->_pages['offers'] . '/';
-/*					$titles = HrefTitles::get()->getById(0, $route, $params['oid']);
+					$titles = HrefTitles::get()->getById(0, $route, $params['oid']);
 					if (!empty($titles)) {
 						if (!empty($titles[$this->_language])) $title = $titles[$this->_language];
 						elseif (!empty($titles['en'])) $title = $titles['en'];
-					}*/
+					}
 					if (!empty($params['title'])) $title = $params['title'];
 					if (empty($title)) $url .= $params['oid'] . '/';
 					else $url .= $params['oid'] . '-' . $title . '/';
