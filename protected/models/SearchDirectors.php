@@ -164,7 +164,7 @@ class SearchDirectors {
 
 	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
 		$condition = array($q, 'mode=boolean');
-		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . '_director,1';
+		if (!empty($useAvail)) $condition[] = '!filter=is_' . $entity . '_director,0';
 		$condition['limit'] = 'limit=' . $limit;
 		$condition['maxmatches'] = 'maxmatches=' . $limit;
 		$sql = ''.

@@ -264,7 +264,7 @@ class SearchAuthors {
 
 	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
 		$condition = array($q, 'mode=boolean');
-		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . '_author,1';
+		if (!empty($useAvail)) $condition[] = '!filter=is_' . $entity . '_author,0';
 		$condition['limit'] = 'limit=' . $limit;
 		$condition['maxmatches'] = 'maxmatches=' . $limit;
 		$sql = ''.

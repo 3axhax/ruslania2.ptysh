@@ -212,7 +212,7 @@ class SearchPublishers {
 			        'from all_publishers t '.
 			            'join (select id from _se_publishers where (query=:q)) as tP using (id) '.
 		        '';
-		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;filter=is_' . $entity . ',1;limit=20;maxmatches=20;'));
+		        $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':q' => str_replace('"', '', $q) . ';mode=boolean;!filter=is_' . $entity . ',0;limit=20;maxmatches=20;'));
 	        }
         }
         $publishers = [];
@@ -248,7 +248,7 @@ class SearchPublishers {
 	            'FROM all_publishers as pt '.
 	                'JOIN (select publisher_id from ' . $tbl . ' WHERE (`code`=:code OR `subcode`=:code) GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id) '.
             '';
-	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' = 1)';
+	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' > 0)';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':code' => $cid));
         } else {
             $sql = ''.
@@ -256,7 +256,7 @@ class SearchPublishers {
 				'FROM all_publishers as pt '.
 					'JOIN (select publisher_id from ' . $tbl . ' WHERE (avail_for_order='.$filter_data['avail'].') GROUP BY publisher_id) as tc ON (tc.publisher_id=pt.id) '.
             '';
-	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' = 1)';
+	        if ($filter_data['avail']) $sql .= 'where (pt.is_' . $entity . ' > 0)';
             $rows = Yii::app()->db->createCommand($sql)->queryAll(true);
         }
         $publishers = [];
@@ -271,7 +271,7 @@ class SearchPublishers {
 
 	function getFromMorphy($entity, $q, $limit = 20, $useAvail = true) {
 		$condition = array($q, 'mode=boolean');
-		if (!empty($useAvail)) $condition[] = 'filter=is_' . $entity . ',1';
+		if (!empty($useAvail)) $condition[] = '!filter=is_' . $entity . ',0';
 		$condition['limit'] = 'limit=' . $limit;
 		$condition['maxmatches'] = 'maxmatches=' . $limit;
 		$sql = ''.

@@ -1,6 +1,6 @@
 <?php
 /*Created by Кирилл (15.09.2018 0:46)*/
-
+//indexer authors_boolean_mode --rotate --print-queries   для одной таблицы
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php beforesphinx
  * Class BeforeSphinxCommand
  */
@@ -61,7 +61,9 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
-
+	/** все авторы товара
+	 * @throws CDbException
+	 */
 	protected function _fillProductsAuthors() {
 		$sql = 'truncate _supprort_products_authors';
 		Yii::app()->db->createCommand()->setText($sql)->execute();

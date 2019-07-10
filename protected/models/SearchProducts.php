@@ -386,7 +386,10 @@ class SearchProducts {
 	}
 
 	private function _getAuthors($query) {
-		$result = $this->_queryIndex($query, 'authors', 0);
+		if (isset($_GET['ha'])) {
+			$result = $this->getBooleanAuthors($query);
+		}
+		else $result = $this->_queryIndex($query, 'authors', 0);
 
 		if (empty($result)) return array();
 
@@ -1054,4 +1057,31 @@ class SearchProducts {
 		$sql = 'insert into search_phrases set phrase = :q, date_add = :time';
 		Yii::app()->db->createCommand($sql)->execute(array(':q'=>$q, ':time'=>time()));
 	}
+
+	function getBooleanAuthors($q) {
+		$searchWords = $this->getNormalizedTransliteWord($q);
+		$condition = array();
+		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode('|', $searchWords)) . ')';
+		$condition['item_exist'] = '(item_exist > 0)';
+		$sql = ''.
+			'select * '.
+			'from authors_boolean_mode ' .
+			'where ' . implode(' and ', $condition) . ' '.
+			'group by real_id '.
+			'order by weight() desc, item_exist desc '.
+			'limit 20 '.
+			'option ranker=expr(\'top(word_count)\'), max_matches=10000 '.
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		if (empty($find)) return array();
+		$result = array();
+		foreach ($find as $a) {
+			$result[$a['real_id']] = $a;
+			$result[$a['real_id']]['key'] = $a['real_id'];
+			unset($result[$a['real_id']]['real_id']);
+		}
+		return $result;
+	}
+
+
 }

@@ -241,8 +241,8 @@ class RepairAuthorsCommand extends CConsoleCommand {
 			switch ((int)$entity) {
 				case 10:
 					$sql = ''.
-						'create temporary table _tmp_authors_books (id int, primary key(id)) '.
-						'select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by tIA.author_id'.
+						'create temporary table _tmp_authors_books (id int, counts int, primary key(id)) '.
+						'select tIA.author_id id, count(*) counts from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by tIA.author_id'.
 					'';
 					$this->_query($sql);
 					$sql = ''.
@@ -250,54 +250,54 @@ class RepairAuthorsCommand extends CConsoleCommand {
 							'left join _tmp_authors_books tI using (id)'.
 	//							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
 	//							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
-						'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+						'set is_' . $entity . '_author = if(tI.id is null, 0, tI.counts) '.
 					'';
 				$this->_query($sql);
 				break;
 				case 15: case 24:
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join (select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+							'left join (select tIA.author_id id, count(*) counts from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
 //							'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
 //							'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
-						'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+						'set is_' . $entity . '_author = if(tI.id is null, 0, tI.counts) '.
 					'';
 					$this->_query($sql);
 					break;
 				case 20:case 22:
 				$sql = ''.
 					'update ' . $this->_table . ' t '.
-						'left join (select tIA.author_id id from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+						'left join (select tIA.author_id id, count(*) counts from ' . $params['author_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
 //						'left join ' . $params['author_table'] . ' tIA on (tIA.author_id = t.id) '.
 //						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
-					'set is_' . $entity . '_author = if(tI.id is null, 0, 1) '.
+					'set is_' . $entity . '_author = if(tI.id is null, 0, tI.counts) '.
 //						'is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
 				'';
 				$this->_query($sql);
 				$sql = ''.
 					'update ' . $this->_table . ' t '.
-						'left join (select tIA.person_id id from ' . $params['performer_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+						'left join (select tIA.person_id id, count(*) counts from ' . $params['performer_table'] . ' tIA join ' . $params['site_table'] . ' tC on (tC.id = tIA.' . $params['author_entity_field'] . ') AND (tC.avail_for_order = 1) group by id) tI using (id)'.
 //						'left join ' . $params['performer_table'] . ' tIA on (tIA.person_id = t.id) '.
 //						'left join ' . $params['site_table'] . ' tI on (tI.id = tIA.' . $params['author_entity_field'] . ') AND (tI.avail_for_order = 1) '.
-					'set is_' . $entity . '_performer = if(tI.id is null, 0, 1) '.
+					'set is_' . $entity . '_performer = if(tI.id is null, 0, tI.counts) '.
 				'';
 				$this->_query($sql);
 					break;
 				case 40:
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join (select tIA.person_id id from video_directors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id)'.
+							'left join (select tIA.person_id id, count(*) counts from video_directors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id)'.
 //							'left join video_directors tID on (tID.person_id = t.id) '.
 //							'left join video_catalog tI on (tI.id = tID.video_id) AND (tI.avail_for_order = 1) '.
-						'set is_' . $entity . '_director = if(tI.id is null, 0, 1) '.
+						'set is_' . $entity . '_director = if(tI.id is null, 0, tI.counts) '.
 					'';
 					$this->_query($sql);
 					$sql = ''.
 						'update ' . $this->_table . ' t '.
-							'left join (select tIA.person_id id from video_actors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id) '.
+							'left join (select tIA.person_id id, count(*) counts from video_actors tIA join video_catalog tC on (tC.id = tIA.video_id) AND (tC.avail_for_order = 1) group by id) tI using (id) '.
 //							'left join video_actors tIA on (tIA.person_id = t.id) '.
 //							'left join video_catalog tI on (tI.id = tIA.video_id) AND (tI.avail_for_order = 1) '.
-						'set is_' . $entity . '_actor = if(tI.id is null, 0, 1) '.
+						'set is_' . $entity . '_actor = if(tI.id is null, 0, tI.counts) '.
 					'';
 					$this->_query($sql);
 					break;

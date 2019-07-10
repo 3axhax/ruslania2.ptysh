@@ -525,7 +525,7 @@ class SearchHelper
         }
         if (Entity::checkEntityParam($e, 'authors')&&!empty($author)) {
             $filter = array('query'=>$author, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
-            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_author,1';
+            if (!empty($only)) $filter['filter'] = '!filter=is_' . $e . '_author,0';
             else unset($filter['filter']);
             $sql = ''.
                 'select t.id '.
@@ -541,7 +541,7 @@ class SearchHelper
         }
         if (Entity::checkEntityParam($e, 'performers')&&!empty($perf)) {
             $filter = array('query'=>$perf, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
-            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_performer,1';
+            if (!empty($only)) $filter['filter'] = '!filter=is_' . $e . '_performer,0';
             else unset($filter['filter']);
             $sql = ''.
                 'select t.id '.
@@ -557,7 +557,7 @@ class SearchHelper
         }
         if (Entity::checkEntityParam($e, 'actors')&&!empty($perf)) {
             $filter = array('query'=>$perf, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
-            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_performer,1';
+            if (!empty($only)) $filter['filter'] = '!filter=is_' . $e . '_performer,0';
             else unset($filter['filter']);
             $sql = ''.
                 'select t.id '.
@@ -574,7 +574,7 @@ class SearchHelper
 
         if (Entity::checkEntityParam($e, 'directors')&&!empty($director)) {
             $filter = array('query'=>$director, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
-            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . '_director,1';
+            if (!empty($only)) $filter['filter'] = '!filter=is_' . $e . '_director,0';
             else unset($filter['filter']);
             $sql = ''.
                 'select t.id '.
@@ -591,7 +591,7 @@ class SearchHelper
 
         if (Entity::checkEntityParam($e, 'publisher')&&!empty($publisher)) {
             $filter = array('query'=>$publisher, 'mode'=>'mode=boolean', 'filter'=>'', 'limit'=>'limit=100', 'maxmatches'=>'maxmatches=100');
-            if (!empty($only)) $filter['filter'] = 'filter=is_' . $e . ',1';
+            if (!empty($only)) $filter['filter'] = '!filter=is_' . $e . ',0';
             else unset($filter['filter']);
             $sql = ''.
                 'select t.id '.

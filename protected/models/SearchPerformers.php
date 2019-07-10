@@ -36,7 +36,7 @@ class SearchPerformers {
 			'from ' . $tablePerformers . ' t '.
 //				'join ' . $tableItemsPerformers . ' tIA on (tIA.performer_id = t.id) '.
 //				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
-			'where (t.is_' . $entity . '_performer = 1) '.
+			'where (t.is_' . $entity . '_performer > 0) '.
 //			'group by t.id '.
 			'order by t.title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
@@ -128,7 +128,7 @@ class SearchPerformers {
         if ($cid > 0) {
             $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
                     FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
-                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    WHERE (is_22_performer > 0) AND ('.$whereLike.')) as ta
                     LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
                     LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
                     WHERE t.avail_for_order='.$filter_data['avail'].' AND (t.`code`=:code OR t.`subcode`=:code)
@@ -137,7 +137,7 @@ class SearchPerformers {
         } else {
             $sql = 'SELECT ta.id, ta.title_ru, ta.title_en, ta.title_rut, ta.title_fi
                     FROM (SELECT id, title_ru, title_en, title_rut, title_fi FROM '.$tbl_person.' 
-                    WHERE (is_22_performer = 1) AND ('.$whereLike.')) as ta
+                    WHERE (is_22_performer > 0) AND ('.$whereLike.')) as ta
                     LEFT JOIN '.$tbl_performers.' as tp ON (ta.id = tp.person_id) 
                     LEFT JOIN '.$tbl.' as t ON (t.id = tp.music_id) 
                     WHERE t.avail_for_order='.$filter_data['avail'].'
