@@ -13,7 +13,9 @@
 					
 					
 					$product = Product::GetProduct($actionItem['entity'], $actionItem['item_id']);
-					
+					$av = Availability::GetStatus($product);
+					if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
+
 					$url = ProductHelper::CreateUrl($product);						
 					$productTitle = ProductHelper::GetTitle($product, 'title');
 					$productTitleSmall = ProductHelper::GetTitle($product, 'title', 18);
