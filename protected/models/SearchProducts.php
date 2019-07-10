@@ -1060,6 +1060,14 @@ class SearchProducts {
 
 	function getBooleanAuthors($q) {
 		$searchWords = $this->getNormalizedTransliteWord($q);
+		if (count($searchWords) > 2) {
+			//когда много слов, убираю маленькие слова
+			$searchWordsOrig = $searchWords;
+			foreach ($searchWords as $i=>$w) {
+				if (mb_strlen($w, 'utf-8') < 3) unset($searchWords[$i]);
+			}
+			if (empty($searchWords)) $searchWords = $searchWordsOrig;
+		}
 		$condition = array();
 		$condition['morphy_name'] = 'match(' . SphinxQL::getDriver()->mest(implode('|', $searchWords)) . ')';
 		$condition['item_exist'] = '(item_exist > 0)';
