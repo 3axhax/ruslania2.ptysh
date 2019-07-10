@@ -91,7 +91,7 @@ class Offer extends CMyActiveRecord
                 $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $tmp);
             }
 
-            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCache']);
+            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCacheTime']);
         }
 
         return $fullInfo;
@@ -147,7 +147,7 @@ class Offer extends CMyActiveRecord
                 $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $tmp);
             }
 
-            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCache']);
+            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCacheTime']);
         }
 
         return $fullInfo;
@@ -195,7 +195,7 @@ class Offer extends CMyActiveRecord
                 $fullInfo = $tmp;
             }
 
-            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCache']);
+            Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCacheTime']);
         }
 
         return $fullInfo;

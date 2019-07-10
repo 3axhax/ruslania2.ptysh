@@ -16,7 +16,7 @@ class ProductOfDay extends MyWidget
             $id = $row['item_id'];
             $p = new Product();
             $item = $p->GetProduct($entity, $id);
-            Yii::app()->dbCache->set($key, $item, 600);
+            Yii::app()->dbCache->set($key, $item, Yii::app()->params['DbCacheTime']);
         }
 
         if (empty($item)) return;

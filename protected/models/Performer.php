@@ -25,7 +25,7 @@ class Performer
                   .'WHERE id IN (SELECT person_id FROM '.$data['performer_table'].') '
                  .' ORDER BY title_'.$lang;
             $rows = Yii::app()->db->createCommand($sql)->queryAll();
-            Yii::app()->dbCache->set($key, $rows, Yii::app()->params['DbCache']);
+            Yii::app()->dbCache->set($key, $rows, Yii::app()->params['DbCacheTime']);
         }
         return $rows;
     }
