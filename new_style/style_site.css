@@ -202,7 +202,7 @@ a:hover {
     position: absolute;
     right: 0;
     top: 0;
-    height: 49px;
+    height: 100%;
     cursor: pointer;
     border-radius: 0 4px 4px 0;
     background-color: #ed2024;
@@ -4098,3 +4098,10 @@ td.entity_select span.select2-container span.select2-selection--single .select2-
 .select2-container--default .select2-results > .select2-results__options{ max-height: 300px; }
 td.search_text {border-left: 1px solid #ececec; border-radius: 0; margin: 0; width: 100%; padding: 0 20px; box-shadow: none; height: 100%}
 td.search_text input.enable_virtual_keyboard {border: none; border-radius: 0; margin: 0; width: 100%; padding: 0; box-shadow: none; height: 100%;}
+
+
+.main-banner-content { border-radius: 4px; }
+.detail-banner-content { border-radius: 4px; }
+.status-block { border-radius: 4px; }
+.new_block { border-radius: 4px; }
+

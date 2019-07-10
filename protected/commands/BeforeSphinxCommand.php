@@ -11,8 +11,8 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
-		$this->_morphyAuthors();
-		return;
+//		$this->_morphyAuthors();
+//		return;
 
 		$this->_fillProductsAuthors();
 
@@ -219,7 +219,16 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
+	/** при поиске авторов морфология не должна учитываться, но должны быть учитаны окончания фамилий при склонении (или множественное/единственное чило)
+	 * еще есть авторы в транслите
+	 * по этому я решил в поиске использовать словарь stem_enru, а в индекс добавлять только транслит
+	 * при поиске нужно так же не забыть преобразовать в транслит
+	 * @throws CDbException
+	 */
 	private function _morphyAuthors() {
+		$sql = 'truncate _morphy_authors';
+		Yii::app()->db->createCommand($sql)->execute();
+
 		$insertSql = ''.
 			'insert into _morphy_authors (real_id, name, morphy_name) '.
 			'values(:real_id, :name, :morphy_name) '.
@@ -229,10 +238,11 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		$sqlItems = ''.
 			'select t.id, t.title_ru, t.title_en, t.title_fi, t.title_rut '.
 			'from all_authorslist t '.
+				'join (select id from all_authorslist order by id limit {start}, {end}) t1 using (id) '.
 		'';
 		$step = 0;
 		$sp = new SearchProducts(0);
-		while (($items = $this->_query($sqlItems . 'limit ' . $step*$this->_counts . ', ' . ($step+1)*$this->_counts))&&($items->count() > 0)) {
+		while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
 			$step++;
 			foreach ($items as $item) {
 				$name = array();
@@ -254,12 +264,12 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		}
 
 		$sqlItems = ''.
-			'select db_id id, xml_value '.
-			'from compliances '.
-			'where (type_id = 4) '.
+			'select t.db_id, t.xml_value '.
+			'from compliances t '.
+				'join (select id from compliances where (type_id = 4) order by id limit {start}, {end}) t1 using (id) '.
 		'';
 		$step = 0;
-		while (($items = $this->_query($sqlItems . 'limit ' . $step*$this->_counts . ', ' . ($step+1)*$this->_counts))&&($items->count() > 0)) {
+		while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
 			$step++;
 			foreach ($items as $item) {
 				$name = array();
@@ -272,7 +282,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 				}
 				$morphy = $sp->getNormalizedTransliteWord(implode(' ', $name));
 				$insertPDO->execute(array(
-					':real_id'=>$item['id'],
+					':real_id'=>$item['db_id'],
 					':name'=>implode(' ', $name),
 					':morphy_name'=>implode(' ', $morphy),
 				));
