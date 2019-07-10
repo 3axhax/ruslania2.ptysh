@@ -791,6 +791,27 @@ class SearchProducts {
 		return $this->_normalizedWords[$q];
 	}
 
+	function getNormalizedTransliteWord($q) {
+		$q = mb_strtolower($q, 'utf-8');
+
+		$words = $searchWords = array();
+		$words = array_merge($words, preg_split("/\W/ui", $q));
+		$words = array_unique($words);
+		foreach ($words as $i=>$w) {
+			if (is_numeric($w)) unset($words[$i]);
+			elseif (mb_strlen($w, 'utf-8') < 2) unset($words[$i]);
+			else $words[$i] = ProductHelper::ToAscii($w, array('onlyTranslite'=>true));
+		}
+
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forSnippet')");
+		foreach ($result as $r) {
+			if (mb_strpos($r['normalized'], '=') === 0) continue;
+			$searchWords[] = $r['normalized'];
+		}
+		$searchWords = array_unique($searchWords);
+		return $searchWords;
+	}
+
 	function isFromNumeric($normalizedWords) {
 		foreach ($normalizedWords as $w) {
 			if(!is_numeric($w)) return false;

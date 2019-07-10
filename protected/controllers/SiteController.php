@@ -348,7 +348,7 @@ class SiteController extends MyController {
         $titles = StaticUrlRule::getTitles();
 
         $this->breadcrumbs[] = Yii::app()->ui->item($titles[$page]);
-        $data = str_replace('ruslania.com/download', 'ruslania.com/pictures/download', $data);
+        $data = str_replace(array('beta.', '"ruslania.com', 'ruslania.com/download'), array('', '"//ruslania.com', 'ruslania.com/pictures/download'), $data);
         $this->render('static', array('data' => $data, 'entity' => 'static', 'page'=>$page, 'isWordpanel'=>$isWordpanel));
     }
 

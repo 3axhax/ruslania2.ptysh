@@ -11,6 +11,8 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+		$this->_morphyAuthors();
+		return;
 
 		$this->_fillProductsAuthors();
 
@@ -215,6 +217,69 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
+	}
+
+	private function _morphyAuthors() {
+		$insertSql = ''.
+			'insert into _morphy_authors (real_id, name, morphy_name) '.
+			'values(:real_id, :name, :morphy_name) '.
+		'';
+		$insertPDO = Yii::app()->db->createCommand($insertSql);
+		$insertPDO->prepare();
+		$sqlItems = ''.
+			'select t.id, t.title_ru, t.title_en, t.title_fi, t.title_rut '.
+			'from all_authorslist t '.
+		'';
+		$step = 0;
+		$sp = new SearchProducts(0);
+		while (($items = $this->_query($sqlItems . 'limit ' . $step*$this->_counts . ', ' . ($step+1)*$this->_counts))&&($items->count() > 0)) {
+			$step++;
+			foreach ($items as $item) {
+				$name = array();
+				$words = preg_split("/\W/ui", $item['title_ru'] . ' ' . $item['title_en'] . ' ' . $item['title_fi'] . ' ' . $item['title_rut']);
+				$words = array_unique($words);
+				foreach ($words as $k=>$v) {
+					if (is_numeric($v)) continue;
+					if (mb_strlen($v, 'utf-8') < 2) continue;
+					$name[] = $v;
+				}
+				$morphy = $sp->getNormalizedTransliteWord(implode(' ', $name));
+				$insertPDO->execute(array(
+					':real_id'=>$item['id'],
+					':name'=>implode(' ', $name),
+					':morphy_name'=>implode(' ', $morphy),
+				));
+			}
+			echo date('d.m.Y H:i:s') . "\n";
+		}
+
+		$sqlItems = ''.
+			'select db_id id, xml_value '.
+			'from compliances '.
+			'where (type_id = 4) '.
+		'';
+		$step = 0;
+		while (($items = $this->_query($sqlItems . 'limit ' . $step*$this->_counts . ', ' . ($step+1)*$this->_counts))&&($items->count() > 0)) {
+			$step++;
+			foreach ($items as $item) {
+				$name = array();
+				$words = preg_split("/\W/ui", $item['xml_value']);
+				$words = array_unique($words);
+				foreach ($words as $k=>$v) {
+					if (is_numeric($v)) continue;
+					if (mb_strlen($v, 'utf-8') < 2) continue;
+					$name[] = $v;
+				}
+				$morphy = $sp->getNormalizedTransliteWord(implode(' ', $name));
+				$insertPDO->execute(array(
+					':real_id'=>$item['id'],
+					':name'=>implode(' ', $name),
+					':morphy_name'=>implode(' ', $morphy),
+				));
+			}
+			echo date('d.m.Y H:i:s') . "\n";
+		}
+
 	}
 
 }
