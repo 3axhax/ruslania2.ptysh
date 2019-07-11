@@ -57,7 +57,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		}
 
 		$this->_morphy();
-		Yii::app()->memcache->flushValues();
+		Yii::app()->memcache->flush();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 

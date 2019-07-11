@@ -714,7 +714,7 @@ class Category {
             $dp->pagination = false;
             $data = $dp->getData();
             $dataFromCache = Product::FlatResult($data);
-            Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
+            if ($page < 5) Yii::app()->memcache->set($cacheKey, $dataFromCache, Yii::app()->params['listMemcacheTime']);
         }
         elseif (is_array($dataFromCache)) {
             $itemIds = array();
