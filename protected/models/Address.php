@@ -323,11 +323,11 @@ class Address extends CActiveRecord
         return false;
     }
 
-    public static function GetDefaultAddress($uid)
+    public static function GetDefaultAddress($uid, $withCountry = true)
     {
         $sql = 'SELECT ua.*, cl.*, cl.title_en AS country_name, cl.title_en AS country_str FROM users_addresses AS uas
                 JOIN user_address AS ua ON ua.id=uas.address_id
-                JOIN country_list AS cl ON ua.country=cl.id
+                ' . ($withCountry?'':'LEFT ') . 'JOIN country_list AS cl ON ua.country=cl.id
                 WHERE uid=:uid AND if_default=1';
         $address = Yii::app()->db->createCommand($sql)->queryRow(true, array(':uid' => $uid));
         if(!empty($address)) return $address;

@@ -307,15 +307,39 @@ class BuyController extends MyController {
 							$addressModel = new Address('newPhone');
 							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
 							$aid = $addressModel->InsertNew($userId, 1);
-							$addrAdd = true;
 						}
 					}
 				}
 				else {
-					$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
-					$bid = 0;
-					if (!Yii::app()->getRequest()->getParam('addr_buyer')) $bid = Yii::app()->getRequest()->getParam('billing_address_id');
 					$userId = $this->uid;
+					$addrList = Address::model()->GetAddresses($userId, true);
+					if (empty($addrList)) {
+						$defaultAddr = Address::GetDefaultAddress($userId, false);
+						$addrAdd = !empty($defaultAddr);
+						if (!Yii::app()->getRequest()->getParam('check_addressa')||$this->_existPereodic($items)) {
+							//не будет забирать в магазине или есть подписка
+							$addressModel = new Address('new');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
+							$aid = $addressModel->InsertNew($userId, !$addrAdd);
+							$addrAdd = true;
+						}
+						if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
+							$addressModel = new Address('new');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Address'), false);
+							$bid = $addressModel->InsertNew($userId, !$addrAdd);
+							$addrAdd = true;
+						}
+						if (!$addrAdd) {
+							$addressModel = new Address('newPhone');
+							$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
+							$aid = $addressModel->InsertNew($userId, 1);
+						}
+					}
+					else {
+						$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
+						$bid = 0;
+						if (!Yii::app()->getRequest()->getParam('addr_buyer')) $bid = Yii::app()->getRequest()->getParam('billing_address_id');
+					}
 				}
 				if (empty($bid)) $bid = $aid; //что бы адрес плательщика совпадал с адесом доставки, если плательщик не указан (адрес доставки и плательщика одинаковый)
 				$DeliveryMode = 0;
@@ -546,54 +570,57 @@ class BuyController extends MyController {
 		$errors = array();
 		if (!Yii::app()->getRequest()->getParam('confirm')) $errors['confirm'] = Yii::app()->ui->item('CHECKBOX_TERMS_OF_USE');
 		if (Yii::app()->user->isGuest) {
-			$requireFields = $this->_requireFieldsAddress($items, 'Reg');
-			if (!empty($requireFields)) {
-				/**@var $addressModel Address*/
+			$regAddrErrors = $this->_checkAddress($items, 'Reg');
+			if (empty($regAddrErrors)) {
 				$addressModel = new Address('edit');
 				$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
-				if (!$addressModel->validate()) {
-					$addrErrors = $addressModel->getErrors();
-					foreach ($requireFields as $field) {
-						if (!empty($addrErrors[$field])) {
-							if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
-							$errors['Reg_' . $field] = $addrErrors[$field];
-						}
-					}
-				}
-				if (empty($errors)) {
-					if(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
-						$errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
-					}
+				if(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
+					$errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
 				}
 			}
-			else $errors['Reg'] = 'error';
+			else $errors = array_merge($errors, $this->_checkAddress($items, 'Reg'));
+
 			if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
-				$requireFields = $this->_requireFieldsAddress($items, 'Address');
-				if (!empty($requireFields)) {
-					/**@var $addressModel Address*/
-					$addressModel = new Address('edit');
-					$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Address'), false);
-					if (!$addressModel->validate()) {
-						$addrErrors = $addressModel->getErrors();
-						foreach ($requireFields as $field) {
-							if (!empty($addrErrors[$field])) {
-								if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
-								$errors['Address_' . $field] = $addrErrors[$field];
-							}
-						}
-					}
-				}
-				else $errors['Address'] = 'error';
+				$errors = array_merge($errors, $this->_checkAddress($items, 'Address'));
 			}
 		}
 		else {
-			$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
-			$bid = Yii::app()->getRequest()->getParam('billing_address_id');
-			if (empty($aid)&&$this->_existPereodic($items)) $errors['delivery_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY');
-			if (!Yii::app()->getRequest()->getParam('addr_buyer')&&empty($bid)) {
-				$errors['billing_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER');
+			$addrList = Address::model()->GetAddresses($this->uid, true);
+			if (empty($addrList)) {
+				$errors = array_merge($errors, $this->_checkAddress($items, 'Reg'));
+				if (!Yii::app()->getRequest()->getParam('addr_buyer')) {
+					$errors = array_merge($errors, $this->_checkAddress($items, 'Address'));
+				}
+			}
+			else {
+				$aid = Yii::app()->getRequest()->getParam('delivery_address_id');
+				$bid = Yii::app()->getRequest()->getParam('billing_address_id');
+				if (empty($aid)&&$this->_existPereodic($items)) $errors['delivery_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_DELIVERY');
+				if (!Yii::app()->getRequest()->getParam('addr_buyer')&&empty($bid)) {
+					$errors['billing_address_id'] = Yii::app()->ui->item('CARTNEW_ERROR_SELECT_ADDR_BUYER');
+				}
 			}
 		}
+		return $errors;
+	}
+
+	private function _checkAddress($items, $nameForm) {
+		$errors = array();
+		$requireFields = $this->_requireFieldsAddress($items, $nameForm);
+		if (!empty($requireFields)) {
+			$addressModel = new Address('edit');
+			$addressModel->setAttributes(Yii::app()->getRequest()->getParam($nameForm), false);
+			if (!$addressModel->validate()) {
+				$addrErrors = $addressModel->getErrors();
+				foreach ($requireFields as $field) {
+					if (!empty($addrErrors[$field])) {
+						if (is_array($addrErrors[$field])) $addrErrors[$field] = array_unique($addrErrors[$field]);
+						$errors[$nameForm . '_' . $field] = $addrErrors[$field];
+					}
+				}
+			}
+		}
+		else $errors[$nameForm] = 'error';
 		return $errors;
 	}
 

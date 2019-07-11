@@ -17,6 +17,10 @@ switch ($userType) {
 	case 'payer': $userName = trim($ui->item("payer_type"),':'); break;
 	default: $userName = ''; break;
 }
+if (empty($onlyPereodic)) $onlyPereodic = false;
+if (empty($showTakeInStore)) $showTakeInStore = false;
+$showTakeInStore = (Yii::app()->user->isGuest||$showTakeInStore)&&($userType == 'destination')&&!$onlyPereodic;
+
 $form = $this->beginWidget('CActiveForm', array(
 	'action' => Yii::app()->createUrl($addrModel->getAttribute('id')?'buy/editaddr':'buy/newaddr'),
 	'id' => $alias,
@@ -40,7 +44,7 @@ if (empty($showNotes)) $showNotes = false;
 			</label>
 		</td>
 	</tr>
-<?php if (Yii::app()->user->isGuest&&($userType == 'destination')&&!$onlyPereodic): ?>
+<?php if ($showTakeInStore): ?>
 	<tr><?php //TODO:: если товары только подписка, то строку таблицы убрать?>
 		<td colspan="2"><label>
 			<input type="checkbox" name="check_addressa" id="check_addressa" value="1" class="check_addressa checkbox_custom" />

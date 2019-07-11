@@ -15,6 +15,11 @@ $user = User::model()->findByPk($this->uid);
 			<div class="items_list">
 				<?php $this->renderPartial('items', array('PH'=>$PH, 'total'=>$total, 'items'=>$items, 'countItems'=>$countItems)); ?>
 			</div>
+<?php if (empty($addrList)): ?>
+			<div class="form">
+				<?php $this->renderPartial('address_form', array('alias'=>'Reg', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic, 'existPereodic'=>$existPereodic, 'showTakeInStore'=>true)); ?>
+			</div>
+<?php else: ?>
 			<div class="choose_address">
 				<?php $this->renderPartial('addresses', array('fieldName'=>'delivery_address_id', 'addrList'=>$addrList)); ?>
 			</div>
@@ -25,7 +30,7 @@ $user = User::model()->findByPk($this->uid);
 					<a class="btn btn-success"><?=$ui->item('CARTNEW_BTN_ADD_ADDRESS')?></a>
 				</div>
 			</div>
-
+<?php endif; ?>
 			<div class="clearfix"></div>
 
 			<label for="confirm">
@@ -63,10 +68,18 @@ $user = User::model()->findByPk($this->uid);
 	</ol>
 
 </div>
-<?php $userData = array(
+<?php
+$userData = array(
 	'id' => $this->uid,
 	'email'	=> $user->getAttribute('login'),
 );
+if (empty($addrList)):
+	$userData['first_name'] = $user->getAttribute('first_name');
+	$userData['last_name'] = $user->getAttribute('last_name');
+	$defaultAddr = Address::GetDefaultAddress($this->uid, false);
+	if (!empty($defaultAddr['contact_phone']))$userData['contact_phone'] = $defaultAddr['contact_phone'];
+endif;
+Debug::staticRun(array($userData));
 ?>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script>

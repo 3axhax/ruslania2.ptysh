@@ -203,6 +203,9 @@ Stripe.applePay.checkAvailability(function(available) {
                 switch (userField) {
                     case 'users_socials_id': this.userSocialId = parseInt(userData['users_socials_id']); break;
                     case 'email': $('.js_contactEmail').val(userData['email']); break;
+                    case 'first_name': $('#Reg_receiver_first_name').val(userData['first_name']); break;
+                    case 'last_name': $('#Reg_receiver_last_name').val(userData['last_name']); break;
+                    case 'contact_phone': $('#Reg_contact_phone').val(userData['contact_phone']); break;
                     case 'is_business':
                         if (userData['is_business'] > 0) {
                             $('form#Reg').find('input.js_userType[value="1"]').get(0).checked = true;
@@ -277,6 +280,9 @@ Stripe.applePay.checkAvailability(function(available) {
                     self.$paymentsData.find('input[name=ptype][value="0"]').get(0).checked = true;
                     $('.js_orderPay').hide();
                     $('.js_orderSave').show();
+                }
+                else {
+                    self.$deliveryTypeData.find('input[name=dtype][value="3"]').get(0).checked = true;
                 }
                 self.showAddressFields('Reg');
                 self.deleveryForm();
@@ -424,12 +430,12 @@ Stripe.applePay.checkAvailability(function(available) {
             var userType = $form.find('input[type=radio].js_userType:checked').val();
             if (!userType) userType = 0;
             if (userType == '1') {
-                $('.js_userName').hide();
-                $('.js_firmName').show();
+                $form.find('.js_userName').hide();
+                $form.find('.js_firmName').show();
             }
             else {
-                $('.js_userName').show();
-                $('.js_firmName').hide();
+                $form.find('.js_userName').show();
+                $form.find('.js_firmName').hide();
             }
             var takeInStore = 0;
             if (this.takeInStore) {
@@ -578,6 +584,7 @@ Stripe.applePay.checkAvailability(function(available) {
                     else {
                         $adr.closest('div').hide();
                         $form.closest('div').show().find('.btn-cancel').hide();
+                        $form.closest('div').show().find('.btn-success').hide();
                     }
                 }
             }
@@ -640,7 +647,9 @@ Stripe.applePay.checkAvailability(function(available) {
                     $this.closest('.variant').siblings().find('label').removeClass('act');
                     $this.closest('label').addClass('act');
                     if (this.value == '0') {
-                        if (self.takeInStore) self.takeInStore.checked = true;
+                        if (self.takeInStore) {
+                            self.takeInStore.checked = true;
+                        }
                         if (self.delivery_address) {
                             $(self.delivery_address).find('option[value=0]').attr("selected", "selected");
                             $(this).closest('.variant').siblings('.variant').each(function(num, variant){
@@ -665,8 +674,12 @@ Stripe.applePay.checkAvailability(function(available) {
                         $('.js_orderSave').show();
                     }
                     else {
-                        if (self.takeInStore) self.takeInStore.checked = false;
+                        if (self.takeInStore) {
+                            self.takeInStore.checked = false;
+                        }
                     }
+                    self.showAddressFields('Reg');
+
                     self.paymentsForm();
                     if (self.activeSmartpost) {
                         if (this.value == '3') self.$smartpostBox.show();
