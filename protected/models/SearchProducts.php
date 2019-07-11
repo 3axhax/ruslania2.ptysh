@@ -386,10 +386,10 @@ class SearchProducts {
 	}
 
 	private function _getAuthors($query) {
-		if (isset($_GET['ha'])) {
+//		if (isset($_GET['ha'])) {
 			$result = $this->getBooleanAuthors($query);
-		}
-		else $result = $this->_queryIndex($query, 'authors', 0);
+//		}
+//		else $result = $this->_queryIndex($query, 'authors', 0);
 
 		if (empty($result)) return array();
 
@@ -1061,7 +1061,6 @@ class SearchProducts {
 	function getBooleanAuthors($q) {
 		$searchWords = $this->getNormalizedTransliteWord($q);
 		if (count($searchWords) > 2) {
-			//когда много слов, убираю маленькие слова
 			$searchWordsOrig = $searchWords;
 			foreach ($searchWords as $i=>$w) {
 				if (mb_strlen($w, 'utf-8') < 3) unset($searchWords[$i]);
