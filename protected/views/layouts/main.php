@@ -67,6 +67,7 @@ if (isset($_GET['avail'])) {
 ?><!DOCTYPE html><html>
 <head>
     <title><?= $this->pageTitle; ?></title>
+	<meta name="google-site-verification" content="KVL1M7Tp8F9rDwfNKDWb7rPvBQ1JDqp82BxalICYkwM" />
     <meta name="keywords" content="<?= $this->pageKeywords ?>">
     <?php if ($canonicalPath = $this->getCanonicalPath()): ?>
         <link rel="canonical" href="<?= $canonicalPath ?>"/>
@@ -675,7 +676,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                 .on('change', function(){ $('#Search').marcoPolo('search'); })
                 .select2({minimumResultsForSearch: Infinity});
         });
-        <?php if ($ctrl != 'cart'): ?>
+        <?php if (($ctrl != 'cart')/*&&(Yii::app()->getController()->action->id != 'register')*/): ?>
         var csrf = $('meta[name=csrf]').attr('content').split('=');
         $.ajax({
             url: '<?= Yii::app()->createUrl('cart/loadheader') ?>',
@@ -1026,14 +1027,14 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-   ym(53579293, "init", {
+   ym(48174647, "init", {
         clickmap:true,
         trackLinks:true,
         accurateTrackBounce:true,
         webvisor:true
    });
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/48174647" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
 
@@ -1049,8 +1050,8 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
 
 <script type="text/javascript" >
 function searchTargets(name) {
-    if (typeof (yaCounter53579293.reachGoal) === "function") {
-        yaCounter53579293.reachGoal(name);
+    if (typeof (yaCounter48174647.reachGoal) === "function") {
+        yaCounter48174647.reachGoal(name);
     }
 }
 </script>

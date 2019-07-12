@@ -7,24 +7,22 @@
 <?php else : ?>
 
     <?php $form = $this->beginWidget('KnockoutForm', array(
-                                                          'model' => $model,
-'class' =>'registr',                                                          'action' => Yii::app()->createUrl('site/register'),
-                                                          'id' => 'user-register',
-                                                          'viewModel' => 'registerVM',
-                                                          'beforeAjaxSubmit' => 'beforeRegister',
-                                                          'afterAjaxSubmit' => 'doRegister',
-                                                     )); ?>
+        'model' => $model,
+        'class' =>'registr',
+        'action' => Yii::app()->createUrl('site/register'),
+        'id' => 'user-register',
+        'viewModel' => 'registerVM',
+        'beforeAjaxSubmit' => 'beforeRegister',
+        'afterAjaxSubmit' => 'doRegister',
+    )); ?>
     <ul data-bind="foreach: errorStr">
         <li><span data-bind="text: $data"></span></li>
     </ul>
-		
-		
-		<?= $form->textField('login', array('placeholder'=>$ui->item("regform_email"))); ?>
+    <?= $form->textField('login', array('placeholder'=>$ui->item("regform_email"))); ?>
         <?= $form->passwordField('pwd', array('placeholder'=>$ui->item("regform_password"))); ?>
         <?= $form->passwordField('pwd2', array('placeholder'=>$ui->item("regform_repeat_password"))); ?>
         <?= $form->textField('first_name', array('placeholder'=>$ui->item("regform_firstname"))); ?>
         <?= $form->textField('last_name', array('placeholder'=>$ui->item("regform_lastname"))); ?>
-            
 
 
         <div><?= $form->submitButton($ui->item('A_REGISTER'), array('class' => 'sort')); ?>
@@ -42,7 +40,7 @@
             <?php if($refresh) : ?>
             window.location.reload();
             <?php else : ?>
-            window.location.href = '/me';
+            window.location.href = '<?= Yii::app()->createUrl('client/me') ?>';
             <?php endif; ?>
         }
     </script>

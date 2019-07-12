@@ -71,7 +71,7 @@
     $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
     $baseUrl = Yii::app()->assetManager->publish($assets);
 ?>
-<?php if ($refererRoute != 'site/advsearch' AND $refererRoute != 'site/login'): ?>
+<?php if (!in_array($refererRoute, array('site/advsearch', 'site/login', 'site/register'))): ?>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.mapping.js"></script>
 <script type="text/javascript" src="<?= $baseUrl ?>/knockoutPostObject.js"></script>
