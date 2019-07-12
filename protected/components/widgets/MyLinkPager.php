@@ -13,7 +13,8 @@ class MyLinkPager extends CLinkPager
 		$char = (isset($this->htmlOptions['char'])) ? $this->htmlOptions['char'] : '';
 		
 		$params = $this->getGetParams();
-		$params['page'] = $page;
+		if ($page > 1) $params['page'] = $page;
+		else unset($params['page']);
 		
 		if (isset($_GET['qa']) && ($_GET['qa'] == '')) {
 			$params['char'] = $char;
