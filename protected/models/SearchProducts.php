@@ -756,7 +756,7 @@ class SearchProducts {
 		return $math;
 	}
 
-	function getNormalizedWords($q) {
+	function getNormalizedWords($q, $deleteNumeric = true) {
 		$q = mb_strtolower($q, 'utf-8');
 		if (!isset($this->_normalizedWords[$q])) {
 			$searchWords = [];
@@ -768,23 +768,32 @@ class SearchProducts {
 			$words = array_merge($words, preg_split("/\W/ui", $q));
 			$words = array_unique($words);
 			foreach ($words as $i=>$w) {
-				if (is_numeric($w)||in_array($w, $this->_excludeWords)) {
+				if ((is_numeric($w)&&$deleteNumeric)||in_array($w, $this->_excludeWords)) {
 					$searchWords[] = $w;
 					$realWords[] = $w;
 					unset($words[$i]);
 				}
 			}
 
-			$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy')");
-			foreach ($result as $r) {
-				if (mb_strpos($r['normalized'], '=') === 0) continue;
+			foreach ($words as $w) {
+				if (is_numeric($w)) {
+					if ($deleteNumeric) {}
+					else $searchWords[] = $w;
+				}
+				else {
+					$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($w) . ", 'forMorphy')");
+					foreach ($result as $r) {
+						if (mb_strpos($r['normalized'], '=') === 0) continue;
 
-				if (is_numeric($r['tokenized'])) $normForm = $r['tokenized'];
-				else $normForm = $r['normalized'];
-				$searchWords[] = $normForm;
-				$realWords[] = $r['tokenized'];
-				if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
-				$equal = $equal&&($r['tokenized'] == $r['normalized']);
+						if (is_numeric($r['tokenized'])) $normForm = $r['tokenized'];
+						else $normForm = $r['normalized'];
+						$searchWords[] = $normForm;
+						$realWords[] = $r['tokenized'];
+						if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
+						$equal = $equal&&($r['tokenized'] == $r['normalized']);
+						break;
+					}
+				}
 			}
 			$searchWords = array_unique($searchWords);
 			$realWords = array_unique($realWords);
@@ -794,23 +803,29 @@ class SearchProducts {
 		return $this->_normalizedWords[$q];
 	}
 
-	function getNormalizedTransliteWord($q) {
+	function getNormalizedTransliteWord($q, $deleteNumeric = true) {
 		$q = mb_strtolower($q, 'utf-8');
 
 		$words = $searchWords = array();
 		$words = array_merge($words, preg_split("/\W/ui", $q));
 		$words = array_unique($words);
+		$searchWords = array();
 		foreach ($words as $i=>$w) {
-			if (is_numeric($w)) unset($words[$i]);
-			elseif (mb_strlen($w, 'utf-8') < 2) unset($words[$i]);
-			else $words[$i] = ProductHelper::ToAscii($w, array('onlyTranslite'=>true));
+			if (is_numeric($w)) {
+				if ($deleteNumeric) {}
+				else $searchWords[] = $w;
+			}
+			elseif (mb_strlen($w, 'utf-8') < 2) {}
+			else {
+				$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(ProductHelper::ToAscii($w, array('onlyTranslite'=>true))) . ", 'forSnippet')");
+				foreach ($result as $r) {
+					if (mb_strpos($r['normalized'], '=') === 0) continue;
+					$searchWords[] = $r['normalized'];
+					break;
+				}
+			}
 		}
 
-		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forSnippet')");
-		foreach ($result as $r) {
-			if (mb_strpos($r['normalized'], '=') === 0) continue;
-			$searchWords[] = $r['normalized'];
-		}
 		$searchWords = array_unique($searchWords);
 		return $searchWords;
 	}

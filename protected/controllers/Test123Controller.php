@@ -67,8 +67,11 @@ class Test123Controller extends MyController {
 	}
 
 	function actionMorphy() {
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest('цирк') . ", 'forSnippet')");
+		Debug::staticRun(array($result));
+
 		//Matryoshka Textbook + audio CD
-		$word = 'цирк';//'Schönberg';
+/*		$word = 'цирк';//'Schönberg';
 		$sp = new SearchProducts(1);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($word);
 		list($tables, $condition, $order, $option) = $sp->getSqlParam($searchWords, $realWords, $useRealWord, 0);
@@ -105,7 +108,7 @@ class Test123Controller extends MyController {
 			'group by entity '.
 			"option ranker=expr('top(word_count*user_weight)'), field_weights=(title=100,authors=90,description=80), max_matches=100000 ".
 		'';
-		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql), number_format(microtime(true)-$resulTime, 4)));
+		Debug::staticRun(array($sql, SphinxQL::getDriver()->multiSelect($sql), number_format(microtime(true)-$resulTime, 4)));*/
 	}
         
     function actionUrlencode() {
