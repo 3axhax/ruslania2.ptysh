@@ -97,9 +97,9 @@ class MorphyTransliteCommand extends CConsoleCommand {
 		$authors = array_diff($authors, $transliteTitleWithoutNumeric, $transliteDescWithoutNumeric);
 
 		$sp = new SearchProducts(0);
-		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruTitle) . ' ' . implode(' ', $fiTitle) . ' ' . implode(' ', $enTitle), false);
-		list($desc, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruDesc) . ' ' . implode(' ', $fiDesc) . ' ' . implode(' ', $enDesc), false);
-		list($authors, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $authors), false);
+		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruTitle) . ' ' . implode(' ', $fiTitle) . ' ' . implode(' ', $enTitle));
+		list($desc, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruDesc) . ' ' . implode(' ', $fiDesc) . ' ' . implode(' ', $enDesc));
+		list($authors, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $authors));
 
 //		$translite = array_merge($transliteTitle, $transliteDesc);
 
@@ -111,7 +111,9 @@ class MorphyTransliteCommand extends CConsoleCommand {
 			implode(' ', $desc)
 			, false
 		);
+
 		$txt = array_unique(array_merge($title, $authors, $desc));
+		$txt = array_diff($txt, $translite);
 		return array($txt, $translite);
 	}
 

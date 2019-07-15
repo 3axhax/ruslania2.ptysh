@@ -67,10 +67,45 @@ class Test123Controller extends MyController {
 	}
 
 	function actionMorphy() {
-		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest('цирк') . ", 'forSnippet')");
-		Debug::staticRun(array($result));
+		/*
+ * word_count - кол-во найденных слов
+ * lcs - максимальная длина слов по порядку
+ * min_hit_pos - позиция первого найденного слова
+ * min_gaps - минимальное расстояние между поисковыми словами
+ * exact_hit - точное соответствие (0/1)
+ * exact_order - найдены все слова в порядке поискового запроса
+ * bm25 - вес, который считает сфинкса для документа по поисковому запросу
+ */
 
-		//Matryoshka Textbook + audio CD
+		$q = 'Rimskij-Korsakov';
+		$sp = new SearchProducts(1);
+		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($q);
+		$searchWordsTranslite = $sp->getNormalizedTransliteWord($q, false);
+		Debug::staticRun(array($searchWordsTranslite));
+		list($searchWordsTranslite1, $a1, $a2) = $sp->getNormalizedWords(ProductHelper::ToAscii($q, array('onlyTranslite'=>true)));
+		$searchWordsTranslite = array_merge($searchWordsTranslite, $searchWordsTranslite1);
+		$searchWordsTranslite = array_unique($searchWordsTranslite);
+//		list($tables, $condition, $order, $option) = $sp->getSqlParam($searchWords, $realWords, $useRealWord, 22);
+		$sql = ''.
+			'select entity, real_id, weight() '.
+			'from music_boolean_with_translite ' .
+			'where match(\'(@txt_translite ' . implode(' ', $searchWordsTranslite) . ')|(@txt ' . implode(' ', $searchWords) . ')\') and (avail = 1) '.
+			//'where match(\'(@txt_translite ' . implode(' ', $searchWordsTranslite) . ')\') and (avail = 1) '.
+			//'where match(\'(@txt ' . implode(' ', $searchWords) . ')\') and (avail = 1) '.
+//			'where (match(\'(@txt ' . implode(' ', $searchWords) . ')\') or match(\'(@txt_translite ' . implode(' ', $searchWordsTranslite) . ')\')) and (avail = 1) '.
+			'order by weight() desc, position asc, time_position asc '.
+			'limit 0, 40 '.
+			'option ranker=expr(\'top((word_count + (lcs - 1)/5 + 1/(min_hit_pos*3 + 1) + (word_count > 1)/(min_gaps + 1) + exact_hit + exact_order)*user_weight)\'), field_weights=(txt=100,txt_translite=100), max_matches=100000 './/*(word_count > 2)
+		'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		Debug::staticRun(array($sql, $find));
+
+/*		$s = 'Matryoshka 12 Textbook + 3 юзефович audio CD';
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($s) . ", 'forSnippet')");
+		$sp = new SearchProducts(1);
+		Debug::staticRun(array($s, $result, $sp->getNormalizedWords($s)));*/
+
+		//Matryoshka 12 Textbook + 3 audio CD
 /*		$word = 'цирк';//'Schönberg';
 		$sp = new SearchProducts(1);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($word);

@@ -756,7 +756,68 @@ class SearchProducts {
 		return $math;
 	}
 
-	function getNormalizedWords($q, $deleteNumeric = true) {
+	function getNormalizedWords($q) {
+		$q = mb_strtolower($q, 'utf-8');
+		if (!isset($this->_normalizedWords[$q])) {
+			$searchWords = [];
+			$realWords = [];
+			$useRealWord = true;
+			$equal = true;
+
+			$words = array();
+			$words = array_merge($words, preg_split("/\W/ui", $q));
+			$words = array_unique($words);
+
+			$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(implode(' ', $words)) . ", 'forMorphy')");
+			foreach ($result as $r) {
+				if (mb_strpos($r['normalized'], '=') === 0) continue;
+
+				if (is_numeric($r['tokenized'])||in_array($r['tokenized'], $this->_excludeWords)) {
+					$normForm = $r['tokenized'];
+				}
+				elseif (mb_strlen($r['tokenized'], 'utf-8') < 2) $normForm = '';
+				else $normForm = $r['normalized'];
+				$realWords[] = $r['tokenized'];
+				if ($normForm !== '') $searchWords[] = $normForm;
+				if (preg_match("/[а-яё]/ui", $r['tokenized'])) $useRealWord = false;
+				$equal = $equal&&($r['tokenized'] == $r['normalized']);
+			}
+			$searchWords = array_unique($searchWords);
+			$realWords = array_unique($realWords);
+			if ($equal) $useRealWord = false;
+			$this->_normalizedWords[$q] = array($searchWords, $realWords, $useRealWord);
+		}
+		return $this->_normalizedWords[$q];
+	}
+
+	function getNormalizedTransliteWord($q, $deleteNumeric = true) {
+		$q = mb_strtolower($q, 'utf-8');
+
+		$words = $searchWords = array();
+		$words = array_merge($words, preg_split("/\W/ui", $q));
+		$words = array_unique($words);
+		$searchWords = array();
+		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest(ProductHelper::ToAscii(implode(' ', $words), array('onlyTranslite'=>true))) . ", 'forSnippet')");
+		foreach ($result as $r) {
+			if (mb_strpos($r['normalized'], '=') === 0) continue;
+
+			if (is_numeric($r['tokenized'])||in_array($r['tokenized'], $this->_excludeWords)) {
+				$normForm = $r['tokenized'];
+			}
+			elseif (mb_strlen($r['tokenized'], 'utf-8') < 2) $normForm = '';
+			else $normForm = $r['normalized'];
+			if ($normForm !== '') $searchWords[] = $normForm;
+		}
+
+		$searchWords = array_unique($searchWords);
+		return $searchWords;
+	}
+	/**
+	 * @param $q
+	 * @param bool|true $deleteNumeric ипользуется как признак куда вставлять цифры, если false, то цифры будут в том месте где лежат в оригинале, если true, то в начале.
+	 * @return mixed
+	 */
+/*	function getNormalizedWords($q, $deleteNumeric = true) {
 		$q = mb_strtolower($q, 'utf-8');
 		if (!isset($this->_normalizedWords[$q])) {
 			$searchWords = [];
@@ -801,9 +862,9 @@ class SearchProducts {
 			$this->_normalizedWords[$q] = array($searchWords, $realWords, $useRealWord);
 		}
 		return $this->_normalizedWords[$q];
-	}
+	}*/
 
-	function getNormalizedTransliteWord($q, $deleteNumeric = true) {
+/*	function getNormalizedTransliteWord($q, $deleteNumeric = true) {
 		$q = mb_strtolower($q, 'utf-8');
 
 		$words = $searchWords = array();
@@ -828,7 +889,7 @@ class SearchProducts {
 
 		$searchWords = array_unique($searchWords);
 		return $searchWords;
-	}
+	}*/
 
 	function isFromNumeric($normalizedWords) {
 		foreach ($normalizedWords as $w) {
