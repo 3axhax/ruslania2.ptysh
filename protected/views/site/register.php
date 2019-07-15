@@ -13,7 +13,7 @@
      <?php //echo $ui->item('REG_INFO_MESSAGE'); ?>
     <h1 class="h1_reg"><?= $h1 ?></h1>
     <?php $this->renderPartial('register_form', array('model' => $model)); ?>
-    <h2 class="h1_reg" style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;">Регистрация с помощью социальных сетей</h2>
+    <h2 class="h1_reg" style="margin-top: 0px; margin-bottom: 2px; font-size: 16px;"><?= Yii::app()->ui->item('REG_WITH_SOCIAL') ?></h2>
      <script src="/new_js/modules/social.js" type="text/javascript"></script>
      <div class="social_auth">
          <a href="<?= Yii::app()->createUrl('widgets/authInstagram') ?>" target="_blank" onclick="return instagramCom.getUserInfo(this);"><span class="fa instagram"></span></a>

@@ -1427,6 +1427,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'YOU_PURCHASED' => 'Usted compró este artículo el',
     'VIEW_THIS_ORDER' => 'Ver este pedido',
     'REDUCED_PRICES' => 'PRECIOS REDUCIDOS',
+    'REG_WITH_SOCIAL' => 'Registrate con tu cuenta en las redes sociales',
 
 
 );

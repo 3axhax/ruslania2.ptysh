@@ -34,7 +34,7 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 
 		<?= $form->textField('login', array('placeholder' => $ui->item('regform_email'))); ?>
 		<?= $form->passwordField('pwd', array('placeholder' => $ui->item('regform_password'))); ?>
-		<a href="<?= Yii::app()->createUrl('site/register'); ?>" title="Регистрация" class="reg_btn <?= Yii::app()->getLanguage() ?>"><?= $ui->item('A_REGISTER') ?></a>
+		<a href="<?= Yii::app()->createUrl('site/register'); ?>" title="<?= $ui->item('A_REGISTER') ?>" class="reg_btn <?= Yii::app()->getLanguage() ?>"><?= $ui->item('A_REGISTER') ?></a>
 		<a href="<?= Yii::app()->createUrl('site/forgot'); ?>" title="<?= $ui->item('A_REMIND_PASS'); ?>"><?= $ui->item('A_REMIND_PASS'); ?></a>
 
 		<div

@@ -1436,5 +1436,6 @@ IBAN DE79514303006474790001 <br>
     'SUBSRIBE_NEWS_BTN' => 'Подписаться',
     'SUBSRIBE_NEWS_PLACEHOLDER' => 'Введите ваш email',
     'SUBSRIBE_NEWS_LABEL' => 'Подписаться на новости',
+    'REG_WITH_SOCIAL' => 'Регистрация с помощью социальных сетей',
     
 );

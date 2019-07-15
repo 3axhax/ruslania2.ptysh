@@ -1431,4 +1431,5 @@ Nazhav na interesujushchuju vas kategoriju, vy smozhete uvidet vse tovary so ski
   'PIECES567890' => 'shtuk',
   'YOU_PURCHASED' => 'Vy zakazyvali eto',
   'VIEW_THIS_ORDER' => 'Posmotret etot zakaz',
+    'REG_WITH_SOCIAL' => 'Registracia s pomoshchju socialnih setei',
 );

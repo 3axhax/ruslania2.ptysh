@@ -1430,6 +1430,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'YOU_PURCHASED' => 'Du köpte det den',
     'VIEW_THIS_ORDER' => 'Visa denna beställning',
     'REDUCED_PRICES' => 'REAPRIS',
+    'REG_WITH_SOCIAL' => 'Registrering med ditt konto i sociala medier',
 
 
 );
