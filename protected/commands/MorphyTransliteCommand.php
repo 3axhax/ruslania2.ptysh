@@ -19,23 +19,28 @@ class MorphyTransliteCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			if ($entity != 22) continue;
-			$sql = 'truncate _morphy_' . $params['entity'] . '_translite';
+			if ($entity != 10) continue;
+			$sql = 'truncate _sphinx_' . $params['entity'];
 			Yii::app()->db->createCommand($sql)->execute();
+
+			$fields = array(
+				'title_ru', 'title_en', 'title_fi', 'title_rut', 'title_eco', //'title_original',
+				'description_ru', 'description_en', 'description_fi', 'description_de',
+				'description_fr', 'description_es', 'description_se', 'description_rut',
+			);
 
 			$insertPDO = null;
 			$insertSql = ''.
-				'insert into _morphy_' . $params['entity'] . '_translite (real_id, isbnnum, txt, txt_translite) '.
-				'values(:real_id, :isbnnum, :txt, :translite)'.
+				'insert into _sphinx_' . $params['entity'] . ' (real_id, isbnnum, ' . implode(', ', $fields) . ', authors) '.
+				'values(:real_id, :isbnnum, :' . implode(', :', $fields) . ', :authors)'.
 			'';
 			$insertPDO = Yii::app()->db->createCommand($insertSql);
 			$insertPDO->prepare();
 
 			$sqlItems = ''.
 				'select t.id, ' . ((in_array($entity, array(30, 40)))?'""':'t.isbn') . ' isbn, '.
-					't.title_ru, t.title_en, t.title_rut, t.title_fi, '.
-					'ifnull(tA.name, "") authors, '.
-					't.description_ru, t.description_en, t.description_fi, t.description_rut '.
+					't.' . implode(', t.', $fields) . ', '.
+					'ifnull(tA.name, "") authors '.
 				'from ' . $params['site_table'] . ' t '.
 					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . $entity . ') '.
 					'join (select t1.id from ' . $params['site_table'] . ' t1 order by t1.id limit {start}, {end}) t2 on (t2.id = t.id) '.
@@ -45,13 +50,27 @@ class MorphyTransliteCommand extends CConsoleCommand {
 			while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
 				$step++;
 				foreach ($items as $item) {
-					list($txt, $translite) = self::getMorphyNames($item);
-					$insertPDO->execute(array(
+					$authors = $this->getMorphy($item['authors']);
+					$data = array(
 						':real_id'=>$item['id'],
 						':isbnnum'=>self::getIsbn($item['isbn']),
-						':txt'=>implode(' ', $txt),
-						':translite'=>implode(' ', $translite),
-					));
+						':authors'=>array(),
+					);
+					if (!empty($authors)) {
+						$data[':authors'] = array_merge($authors, $this->getMorphy(ProductHelper::ToAscii($item['authors'], array('onlyTranslite'=>true))));
+						$data[':authors'] = array_merge($data[':authors'], $this->getMorphy(ProductHelper::ToAscii(implode(' ', $authors), array('onlyTranslite'=>true))));
+					}
+					foreach ($fields as $field) {
+						if (mb_strpos($field, 'title_') === 0) {
+							$data[':' . $field] = $this->getMorphy($item[$field]);
+							if (!empty($authors)) $data[':authors'] = array_merge($data[':' . $field], $data[':authors']);
+							$data[':' . $field] = implode(' ', $data[':' . $field]);
+						}
+						else $data[':' . $field] = implode(' ', $this->getMorphy($item[$field]));
+					}
+					$data[':authors'] = array_unique($data[':authors']);
+					$data[':authors'] = implode(' ', $data[':authors']);
+					$insertPDO->execute($data);
 				}
 				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
@@ -70,6 +89,14 @@ class MorphyTransliteCommand extends CConsoleCommand {
 		$pdo->prepare();
 		$pdo->getPdoStatement()->execute($params);
 		return new IteratorsPDO($pdo->getPdoStatement());
+	}
+
+	protected function getMorphy($s) {
+		if (empty($s)) return array();
+
+		$sp = new SearchProducts(0);
+		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords($s);
+		return $title;
 	}
 
 	static function getMorphyNames($item) {

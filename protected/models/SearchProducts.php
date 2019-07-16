@@ -2,21 +2,22 @@
 /*Created by Кирилл (18.02.2019 20:22)*/
 
 class SearchProducts {
-	private $_maxMatches = 100000;//это количество сфинкс перебирает в индексах
-	private $_avail, $_eid = 0;
-	private $_ranker = 'sph04';
+	protected $_maxMatches = 100000;//это количество сфинкс перебирает в индексах
+	protected $_avail, $_eid = 0;
+	protected $_ranker = 'sph04';
+	protected $_exactMatchNumber = 3; //в документе должно быть найдено столько слов, сколько в поисковом запросе или хотя _exactMatchNumber слов, если в поисковом запросе слов больше чем _exactMatchNumber
 	//слова-синонимы хранаятся здесь: /var/lib/sphinxsearch/data/wordforms
 	/**здесь должны быть слова, у которых не надо искать нормальную форму
 	 * если слов будет много, надо делать таблицу в БД и возможно сервис для управлением этой таблицей
 	 * @var array
 	 */
-	private $_excludeWords = array( 'юзефович', );
+	protected $_excludeWords = array( 'юзефович', );
 
 	/**
 	 * @var DGSphinxSearch
 	 */
-	private $_search;
-	private $_normalizedWords = array();
+	protected $_search;
+	protected $_normalizedWords = array();
 
 	function __construct($avail, $eid = 0) {
 		$this->_avail = $avail;
@@ -656,7 +657,7 @@ class SearchProducts {
 		return $ret;
 	}
 
-	private function _queryIndex($query, $index, $limit) {
+	protected function _queryIndex($query, $index, $limit) {
 		$result = array();
 		$query = trim($query);
 		$queryWords = preg_split("/\W+/ui", $query);
@@ -711,7 +712,7 @@ class SearchProducts {
 //		return $result + $resultWord;
 	}
 
-	private function _querySimple($query, $index, $limit) {
+	protected function _querySimple($query, $index, $limit) {
 		$this->_search->resetCriteria();
 		if ($limit > 0) $this->_search->SetLimits(0, $limit);
 //		if ($index == 'authors') $this->_search->SetFilter('');
@@ -1114,7 +1115,7 @@ class SearchProducts {
 		return array();
 	}
 
-	private function _prepareProducts($find) {
+	protected function _prepareProducts($find) {
 		$product = array();;
 		foreach ($find as $data) $product['e'.$data['entity']][] = $data['real_id'];
 		$prepareData =  SearchHelper::ProcessProducts2($product, false);
