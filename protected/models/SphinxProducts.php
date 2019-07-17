@@ -4,11 +4,11 @@ require_once dirname(__FILE__) . '/SearchProducts.php';
 class SphinxProducts extends SearchProducts {
 
 	function getSqlParam($searchWords, $realWords, $useRealWord = false, $eid, $useSe = false) {
-		$wTtitle = 100; $wAuthors = 90; $wDescription = 80;
+		$wTtitle = 100; $wAuthors = 100; $wDescription = 80;
 		$countWords = count($searchWords);
-		if ($countWords > 1) {
+		if ($countWords >= $this->_exactMatchNumber) {
 			$wDescription = ceil($wTtitle*($countWords - 1)/$countWords) + 1;
-			$wAuthors = ceil($wTtitle*($countWords - 1)/$countWords) + 2;
+//			$wAuthors = ceil($wTtitle*($countWords - 1)/$countWords) + 2;
 		}
 		$tables = array('books_catalog', 'pereodics_catalog', 'printed_catalog', 'music_catalog', 'musicsheets_catalog', 'video_catalog', 'maps_catalog', 'soft_catalog');
 		if (!empty($eid)) {

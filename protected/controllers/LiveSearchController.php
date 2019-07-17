@@ -8,7 +8,8 @@ class LiveSearchController extends MyController {
 	function actionGeneral() {
 		$availForOrder = $this->GetAvail(1);
 		$eId = (int) Yii::app()->getRequest()->getParam('e');
-		$model = new SearchProducts($availForOrder, $eId);
+		if (isset($_GET['old'])) $model = new SearchProducts($availForOrder, $eId);
+		else $model = new SphinxProducts($availForOrder, $eId);
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 		if (!empty($q)) {
@@ -44,7 +45,8 @@ class LiveSearchController extends MyController {
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
 				if ($availForOrder) {
 					$availForOrder = 0;
-					$model = new SearchProducts($availForOrder);
+					if (isset($_GET['old'])) $model = new SearchProducts($availForOrder);
+					else $model = new SphinxProducts($availForOrder);
 					$list = $model->getList($q, 1, 10, $eId);
 				}
 				if (empty($list)) $this->ResponseJson(array());
@@ -72,7 +74,8 @@ class LiveSearchController extends MyController {
 			}
 
 			if ($availForOrder&&(count($result) == 1)) {
-				$model = new SearchProducts(0);
+				if (isset($_GET['old'])) $model = new SearchProducts(0);
+				else $model = new SphinxProducts(0);
 				$list = $model->getList($q, 1, 10);
 				if (!empty($list)) {
 					$list = $model->inDescription($list, $q);
@@ -91,7 +94,8 @@ class LiveSearchController extends MyController {
 	function actionGeneralHa() {
 		$start = microtime_float();
 		$availForOrder = $this->GetAvail(1);
-		$model = new SearchProducts($availForOrder);
+		if (isset($_GET['old'])) $model = new SearchProducts($availForOrder);
+		else $model = new SphinxProducts($availForOrder);
 		$result = array();
 		$q = mb_strtolower(trim((string) Yii::app()->getRequest()->getParam('q')), 'utf-8');
 //		$this->_haList($q, $model);
@@ -133,7 +137,8 @@ class LiveSearchController extends MyController {
 			Debug::staticRun(array(4, number_format(microtime_float() - $start, 4)));
 			if (empty($list)&&empty($abstractInfo)&&empty($didYouMean)) {
 				if ($availForOrder) {
-					$model = new SearchProducts(0);
+					if (isset($_GET['old'])) $model = new SearchProducts(0);
+					else $model = new SphinxProducts(0);
 					$list = $model->getList($q, 1, 10);
 				}
 				if (empty($list)) $this->ResponseJson(array());
@@ -341,7 +346,7 @@ class LiveSearchController extends MyController {
     }
 
 
-	protected function _haList($q, SearchProducts $model) {
+	protected function _haList($q, $model) {
 		$model->getList($q, 1, 100);
 //		$text = 'вызывает столь громкий звук; есть ли различие между предметом и его отражением и во сколько раз лупа позволяет увеличить следы преступления? А главное, как знание физики помогло знаменитым сыщикам из произведений Артура Конан Дойла, Агаты Кристи, Джона Гришема, Жоржа Сименона, Найо Марш и других распутать десятки преступлений!';
 //		Debug::staticRun(array(SphinxQL::getDriver()->snippet($text, 'гришем')));

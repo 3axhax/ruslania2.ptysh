@@ -19,9 +19,8 @@ class SearchController extends MyController {
 
 		$availForOrder = $this->GetAvail(1);
 		$eId = (int) Yii::app()->getRequest()->getParam('e');
-		if (isset($_GET['ha'])) $model = new SphinxProducts($availForOrder, $eId);
-		else $model = new SearchProducts($availForOrder, $eId);
-		Debug::staticRun(array($model));
+		if (isset($_GET['old'])) $model = new SearchProducts($availForOrder, $eId);
+		else $model = new SphinxProducts($availForOrder, $eId);
 		$model->savePhrase($q);
 		$list = array();
 		$isCode = false;

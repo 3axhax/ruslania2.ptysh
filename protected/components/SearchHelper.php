@@ -641,7 +641,8 @@ class SearchHelper
 //            $sController->beforeAction(Yii::app()->getController()->getAction());
 //            $resultTable = $sController->fillDataTable($title);
 //            $join['tRes'] = 'join ' . $resultTable . ' tRes on (tRes.real_id = t.id) and (tRes.entity = ' . $e . ')';*/
-            $searchModel = new SearchProducts($only, $e);
+            if (isset($_GET['old'])) $searchModel = new SearchProducts($only, $e);
+            else $searchModel = new SphinxProducts($only, $e);
             $searchModel->savePhrase($title);
             $spxSql = $searchModel->getBooleanSql($title, $e);
             if (empty($spxSql)) return array('Items' => array(), 'Paginator' => new CPagination(0));

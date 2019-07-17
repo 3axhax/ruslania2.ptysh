@@ -20,7 +20,7 @@ class MorphyTransliteCommand extends CConsoleCommand {
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			if ($entity != 10) continue;
-			$sql = 'truncate _sphinx_' . $params['entity'];
+			$sql = 'create table __sphinx_' . $params['entity'] . ' like _sphinx_' . $params['entity'];
 			Yii::app()->db->createCommand($sql)->execute();
 
 			$fields = array(
@@ -31,7 +31,7 @@ class MorphyTransliteCommand extends CConsoleCommand {
 
 			$insertPDO = null;
 			$insertSql = ''.
-				'insert into _sphinx_' . $params['entity'] . ' (real_id, isbnnum, ' . implode(', ', $fields) . ', authors) '.
+				'insert into __sphinx_' . $params['entity'] . ' (real_id, isbnnum, ' . implode(', ', $fields) . ', authors) '.
 				'values(:real_id, :isbnnum, :' . implode(', :', $fields) . ', :authors)'.
 			'';
 			$insertPDO = Yii::app()->db->createCommand($insertSql);
@@ -43,7 +43,14 @@ class MorphyTransliteCommand extends CConsoleCommand {
 					'ifnull(tA.name, "") authors '.
 				'from ' . $params['site_table'] . ' t '.
 					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . $entity . ') '.
-					'join (select t1.id from ' . $params['site_table'] . ' t1 order by t1.id limit {start}, {end}) t2 on (t2.id = t.id) '.
+					'join ('.
+						'select t1.id '.
+						'from ' . $params['site_table'] . ' t1 '.
+//						'left join __sphinx_' . $params['entity'] . ' tS on (tS.real_id = t1.id) '.
+//						'where (tS.real_id is null) '.
+						'order by t1.id '.
+						'limit {start}, {end}'.
+					') t2 on (t2.id = t.id) '.
 			'';
 			echo $sqlItems . "\n";
 			$step = 0;
@@ -75,6 +82,10 @@ class MorphyTransliteCommand extends CConsoleCommand {
 				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
+			$sql = 'drop table if exists _sphinx_' . $params['entity'];
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+			$sql = 'RENAME TABLE __sphinx_' . $params['entity'] . ' TO _sphinx_' . $params['entity'];
+			Yii::app()->db->createCommand()->setText($sql)->execute();
 			echo date('d.m.Y H:i:s') . "\n";
 		}
 
