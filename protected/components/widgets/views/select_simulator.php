@@ -24,13 +24,14 @@
     </ul>
 	<div class="ss_selected" title="<?= htmlspecialchars($items[$selected]) ?>"><?= $items[$selected] ?></div>
 </div>
-<?php else: */?>
+<?php else: */
+?>
 <div class="select_simulator"<?php if (!empty($style)): ?> style="<?= $style ?>" <?php endif; ?>>
     <select name="<?= $paramName ?>" style="width: 100%;" onchange="if (this.options[this.selectedIndex].getAttribute('url')) window.location.href=this.options[this.selectedIndex].getAttribute('url');">
     <?php foreach ($items as $id=>$name):
         $href = '';
         $selectedStr = ' selected';
-        if ($selected !== $id) {
+        if ($selected != $id) {
             if (empty($id)) unset($dataParam[$paramName]);
             else $dataParam[$paramName] = $id;
             $href = Yii::app()->createUrl($route, $dataParam);
