@@ -12,9 +12,14 @@
 					$sCount = Cart::getCountCartItem($actionItem['item_id'], $actionItem['entity'], $this->uid, $this->sid);
 					
 					
-					$product = Product::GetProduct($actionItem['entity'], $actionItem['item_id']);
-					$av = Availability::GetStatus($product);
-					if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
+					if (empty($actionItem['product'])) {
+						$product = Product::GetProduct($actionItem['entity'], $actionItem['item_id']);
+						$av = Availability::GetStatus($product);
+						if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
+					}
+					else {
+						$product = $actionItem['product'];
+					}
 
 					$url = ProductHelper::CreateUrl($product);						
 					$productTitle = ProductHelper::GetTitle($product, 'title');
@@ -84,39 +89,21 @@
                 </span>
 									<?php endif; ?>
 								</div>
-								
-								
-								
+
 								<div class="nds"<?php if($product['entity'] == Entity::PERIODIC):?> style="<?=(($product['priceData'][DiscountManager::DISCOUNT] == '0') ? 'visibility: hidden; white-space: nowrap;' : 'display: none')?>" <?php endif; ?>><?= ProductHelper::FormatPrice($product['priceData'][DiscountManager::WITHOUT_VAT]); ?><?= $product['priceData']['unit'] ?> <?=Yii::app()->ui->item('WITHOUT_VAT'); ?></div>
 								<?php if ($product['entity'] == Entity::PERIODIC): ?>
-								
-									<?php /*<a href="<?=$url;?>" class="btn_yellow fa" style="width: 39px; float: right; border-radius: 4px;"><span style="width: auto; margin-left: 0;  border-radius: 4px;"></span></a> */?>
 									<a href="<?=$url;?>" class="btn_yellow fa" style="float: right; border-radius: 4px;" tabindex="0"><span class="lang-<?= Yii::app()->getLanguage() ?>"><?= Yii::app()->ui->item('A_NEW_MORE3') ?></span></a>
 								<?php else: ?>
 									<div class="addcart" style="margin-top: 10px;">
-								<?file_put_contents($_SERVER['DOCUMENT_ROOT'].'/protected/runtime/1.txt', print_r($product,1))?>	
-		
 <? if ($sCount > 0) : ?>
-
-	<a class="count<?=$sCount?> cart-action cart_add_slider add_cart list_cart<?//if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$product['id']?> green_cart" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 177px; " onclick="searchTargets('add_cart_index_slider');">
+	<a class="count<?=$sCount?> cart-action cart_add_slider add_cart list_cart add_cart_plus cartMini<?=$product['id']?> green_cart" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 177px; " onclick="searchTargets('add_cart_index_slider');">
 		<span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
 	</a>
-	<?php /*
-	<a class="cart-action cart_add_slider add_cart list_cart<?if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$product['id']?> green_cart" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 115px; float: right;  margin-top: 8px;">
-                        <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN2'), $sCount)?></span>
-                    </a>
-	*/ ?>
-	
-	
 <? else : ?>
-	<a class="cart-action add_cart_plus cartMini<?=$product['id']?>" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"  onclick="searchTargets('add_cart_index_slider');"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
-	<?php /*<a class="cart-action cart_add_slider add_cart add_cart_plus cartMini<?=$product['id']?>" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 40px; float: right;  margin-top: 8px;"></a> */ ?>
+	<a class="cart-action add_cart_plus cartMini<?=$product['id']?>" data-action="add" data-entity="<?= $product['entity']; ?>" data-id="<?= $product['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"  onclick="searchTargets('add_cart_index_slider');">
+		<span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span>
+	</a>
 <? endif; ?>
-		
-										
-										
-										
-										
 									</div>
 								<?php endif; ?>
 							</div>

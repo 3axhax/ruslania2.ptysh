@@ -614,6 +614,7 @@ class Cart extends CActiveRecord
 		
 		$c = new Cart;
         $cart = $c->GetCart($uid, $sid);
+        $count = 0;
        // foreach ($items as $idx => $item) {
             foreach ($cart as $cartItem) {
                 if ($cartItem['entity'] == $entity && $cartItem['id'] == $item) {

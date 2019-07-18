@@ -317,6 +317,12 @@ class SiteController extends MyController {
             $groups = $o->GetItems(Offer::INDEX_PAGE);
             Yii::app()->memcache->set('main_offer_groups', $groups, 3600);
         }
+        foreach ($groups as $group) {
+            $ids = array();
+            foreach ($group['items'] as $item) $ids[] = $item['id'];
+            Product::setOfferItems($group['entity'], $ids);
+            Product::setActionItems($group['entity'], $ids);
+        }
         $count = 1;
         Seo_settings::get();
         $this->render('index', array('groups' => $groups, 'cart' => $count,));

@@ -197,6 +197,7 @@ class HrefTitles {
 	}
 
 	private function _save($entity, $route, $item) {
+		return;
 		$titles = $this->_getTitles($entity, $route, $item);
 		$insertParams = array(
 			':entity'=>$entity,
