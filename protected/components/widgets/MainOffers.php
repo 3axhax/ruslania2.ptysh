@@ -1,6 +1,6 @@
 <?php
-/*Created by Кирилл (18.07.2019 22:02)*/
-class ActionItems extends CWidget {
+/*Created by Кирилл (19.07.2019 22:25)*/
+class MainOffers extends CWidget {
 	/**
 	 * @var array здесь массив начальных значений
 	 */
@@ -9,7 +9,6 @@ class ActionItems extends CWidget {
 		'sid' => '',
 
 	);
-	private $_items = null;
 
 	function init() {
 
@@ -20,7 +19,7 @@ class ActionItems extends CWidget {
 	}
 
 	function run() {
-		$file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainactions_' . Yii::app()->language . '.html.php';
+		$file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainoffers_' . Yii::app()->language . '.html.php';
 		if (file_exists($file)) {
 			//храним 1 час
 			if (filectime($file) < (time() - 3600)) unlink($file);
@@ -35,7 +34,48 @@ class ActionItems extends CWidget {
 		echo $this->_replace($txt);
 	}
 
+	function viewItem() {
+//		$entityStr = 'books';
+		$entityStr = Entity::GetUrlKey(Entity::BOOKS);
+		$categorys = $this->_categorys[$entityStr];
+//
+		$rows = array();
+		foreach ($categorys as $category) {
+			$rows[] = array(
+				'href'=>Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
+				'name'=>ProductHelper::GetTitle($category)
+			);
+		}
+		$category = $this->_relocated['sheetmusic'][47];
+		$rows[] = array(
+			'href'=>Yii::app()->createUrl('entity/list', array('entity' => 'sheetmusic', 'cid' => $category['id'], 'title'=>ProductHelper::ToAscii(ProductHelper::GetTitle($category)))),
+			'name'=>ProductHelper::GetTitle($category)
+		);
+		usort($rows, array($this, '_sort'));
+//		$result = array();
+//		foreach ($rows as $row) $result[] = $row;
+
+		$saleCategorys = $this->_sales[$entityStr];
+		$category = array_shift($saleCategorys);
+		$rows[] = array(
+			'href'=>Yii::app()->createUrl('entity/salelist', array('entity' => $entityStr)),//Yii::app()->createUrl('entity/list', array('entity' => $entityStr, 'cid' => $category['id'])),
+			'name'=>Yii::app()->ui->item('A_NEW_SALE')
+		);
+		$rows[] = array(
+			'href'=>Yii::app()->createUrl('entity/categorylist', array('entity' => $entityStr)),
+			'name'=>Yii::app()->ui->item('A_NEW_ALL_CATEGORIES')
+		);
+		$this->render('MainMenu/books_menu', array('rows'=>$rows));
+	}
+
+
 	private function _getProducts() {
+		/**@var $o Offer*/
+		$o = Offer::model();
+		$groups = $o->GetItems(Offer::INDEX_PAGE);
+
+
+
 		$actionItems = $this->_getItems();
 		if (!empty($actionItems)) {
 			$entityIds = array();
@@ -97,10 +137,7 @@ class ActionItems extends CWidget {
 	}
 
 	private function _getItems() {
-		if ($this->_items === null) {
-			$sql = 'SELECT * FROM action_items where (`type` <> 3) Order By id limit 50';
-			$this->_items = Yii::app()->db->createCommand($sql)->queryAll();
-		}
-		return $this->_items;
+		$sql = 'SELECT * FROM action_items where (`type` <> 3) Order By id limit 50';
+		return Yii::app()->db->createCommand($sql)->queryAll();
 	}
 }

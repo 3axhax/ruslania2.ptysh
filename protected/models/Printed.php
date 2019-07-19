@@ -28,4 +28,22 @@ class Printed extends CMyActiveRecord
 
         );
     }
+
+    function getPrices($ids) {
+        if (empty($ids)) return array();
+
+        $sql = ''.
+            'select id, ' . Entity::PRINTED . ' entity, brutto, vat, discount, unitweight_skip, code, subcode, publisher_id, year '.
+            'from ' . $this->tableName() . ' '.
+            'where (id in (' . implode(',', $ids) . ')) '.
+        '';
+        $items = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+            $items[$item['id']] = $item;
+            $items[$item['id']]['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            $items[$item['id']]['priceData']['unit'] = '';
+        }
+        return $items;
+    }
+
 }

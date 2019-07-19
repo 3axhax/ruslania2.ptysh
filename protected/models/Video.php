@@ -35,4 +35,23 @@ class Video extends CMyActiveRecord
             'videoStudio' => array(self::BELONGS_TO, 'VideoStudio', 'studio'),
         );
     }
+
+    function getPrices($ids) {
+        if (empty($ids)) return array();
+
+        $sql = ''.
+            'select id, ' . Entity::VIDEO . ' entity, brutto, vat, discount, unitweight_skip, code, subcode, year '.
+            'from ' . $this->tableName() . ' '.
+            'where (id in (' . implode(',', $ids) . ')) '.
+        '';
+        $items = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+            $items[$item['id']] = $item;
+            $items[$item['id']]['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            $items[$item['id']]['priceData']['unit'] = '';
+        }
+        return $items;
+    }
+
+
 }

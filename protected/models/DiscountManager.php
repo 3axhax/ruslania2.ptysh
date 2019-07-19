@@ -443,4 +443,21 @@ class DiscountManager
             default: return 'Непонятная скидка ID: '.$tid;
         }
     }
+
+    static function getPrices($eIds) {
+        $key = md5(serialize($eIds));
+        $result = Yii::app()->memcache->get($key);
+        if ($result === false) {
+            $result = array();
+            foreach ($eIds as $eid=>$ids) {
+                if (!Entity::IsValid($eid)) continue;
+
+                $model = Entity::GetEntitiesList()[$eid]['model'];
+                $model = new $model();
+                $result[$eid] = $model->getPrices($ids);
+            }
+            Yii::app()->memcache->set($key, $result, Yii::app()->params['listMemcacheTime']);
+        }
+        return $result;
+    }
 }

@@ -191,4 +191,42 @@ class Periodic extends CMyActiveRecord
         $ret = Product::FlatResult($data);
         return $ret;
     }
+
+    function getPrices($ids) {
+        if (empty($ids)) return array();
+
+        $sql = ''.
+            'select id, ' . Entity::PERIODIC . ' entity, sub_fin_year, sub_world_year, vat, discount, code, subcode '.
+            'from ' . $this->tableName() . ' '.
+            'where (id in (' . implode(',', $ids) . ')) '.
+        '';
+        $items = array();
+        foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+            $items[$item['id']] = $item;
+            $items[$item['id']]['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+            $items[$item['id']]['priceData']['unit'] = '';
+            $issues = Periodic::getCountIssues($item['issues_year']);
+            if (!empty($issues['show3Months'])) {
+                $items[$item['id']]['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                $items[$item['id']]['priceData'][DiscountManager::BRUTTO] = $items[$item['id']]['priceData'][DiscountManager::BRUTTO_FIN]/4;
+                $items[$item['id']]['priceData'][DiscountManager::WITH_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+                $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
+            }
+            elseif (!empty($issues['show6Months'])) {
+                $items[$item['id']]['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                $items[$item['id']]['priceData'][DiscountManager::BRUTTO] = $items[$item['id']]['priceData'][DiscountManager::BRUTTO_FIN]/2;
+                $items[$item['id']]['priceData'][DiscountManager::WITH_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+                $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
+            }
+            else {
+                $items[$item['id']]['priceData'][DiscountManager::BRUTTO] = $items[$item['id']]['priceData'][DiscountManager::BRUTTO_FIN];
+                $items[$item['id']]['priceData'][DiscountManager::WITH_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITH_VAT_FIN];
+                $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT] = $items[$item['id']]['priceData'][DiscountManager::WITHOUT_VAT_FIN];
+                $items[$item['id']]['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+            }
+        }
+        return $items;
+    }
+
+
 }

@@ -1,16 +1,21 @@
 <?php
+//ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
 
 class Banners extends MyWidget {
     public $entity;
     protected $_params = array();//здесь массив начальных значений
     static private $_listBanners = null;
     static private $_mainBanners = null;
+    private $_useFilecache = false;
 
     function __set($name, $value) {
         if ($value !== null) $this->_params[$name] = $value;
     }
 
     public function run() {
+        if (!empty($this->_params['useFilecache'])) $this->_useFilecache = true;
         $ctrl = $this->getController()->id;
         $action = $this->getController()->action->id;
         if (($ctrl == 'entity')/*&&($action == 'list')*/) {
@@ -106,26 +111,21 @@ class Banners extends MyWidget {
         $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');
         $lang = strtolower(Yii::app()->language);
         if (!in_array($lang, $langs)) $lang = 'en';
-        //TODO:: придумать автозамену для цен, потом включить файловый кеш
-/*        $file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainbanner' . $this->_params['type'] . '_' . Yii::app()->language . '.html.php';
+
+        $file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainbanner' . $this->_params['type'] . '_' . Yii::app()->language . '.html.php';
         if (file_exists($file)) {
             //храним 1 час
             if (filectime($file) < (time() - 3600)) unlink($file);
         }
-        if (!file_exists($file)) {
-            file_put_contents($file, '');*/
+        if (!file_exists($file)||!$this->_useFilecache) {
+            if ($this->_useFilecache) file_put_contents($file, '');
             $banners = $this->_getMainBanners($lang);
             switch ($this->_params['type']) {
                 case 'big':
-                    $file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainbannerbig_' . Yii::app()->language . '.html.php';
-                    if (file_exists($file)) {
-                        //храним 1 час
-                        if (filectime($file) < (time() - 3600)) unlink($file);
-                    }
-
                     if (!empty($banners[3])) {
                         $href = $this->_getBannerHref($banners[3]);
-                        file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''), true));
+                        if ($this->_useFilecache) file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''), true));
+                        else $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''));
                     }
                 break;
                 case 'small':
@@ -136,27 +136,29 @@ class Banners extends MyWidget {
                         $extraTxt = $offerDay['extra_txt'];
                         $p = new Product();
                         $offerDay = $p->GetProduct($entity, $offerDay['item_id']);
-                        $offerDay['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $offerDay);
-                        $offerDay['priceData']['unit'] = '';
-                        if ($entity == Entity::PERIODIC) {
-                            $issues = Periodic::getCountIssues($offerDay['issues_year']);
-                            if (!empty($issues['show3Months'])) {
-                                $offerDay['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
-                                $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/4;
-                                $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/4;
-                                $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
-                            }
-                            elseif (!empty($issues['show6Months'])) {
-                                $offerDay['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
-                                $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/2;
-                                $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/2;
-                                $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
-                            }
-                            else {
-                                $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN];
-                                $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN];
-                                $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN];
-                                $offerDay['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                        if (!$this->_useFilecache) {
+                            $offerDay['priceData'] = DiscountManager::GetPrice(Yii::app()->user->id, $offerDay);
+                            $offerDay['priceData']['unit'] = '';
+                            if ($entity == Entity::PERIODIC) {
+                                $issues = Periodic::getCountIssues($offerDay['issues_year']);
+                                if (!empty($issues['show3Months'])) {
+                                    $offerDay['priceData']['unit'] = ' / 3 ' . Yii::app()->ui->item('MONTH_SMALL');
+                                    $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/4;
+                                    $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/4;
+                                    $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/4;
+                                }
+                                elseif (!empty($issues['show6Months'])) {
+                                    $offerDay['priceData']['unit'] = ' / 6 ' . Yii::app()->ui->item('MONTH_SMALL');
+                                    $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN]/2;
+                                    $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN]/2;
+                                    $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN]/2;
+                                }
+                                else {
+                                    $offerDay['priceData'][DiscountManager::BRUTTO] = $offerDay['priceData'][DiscountManager::BRUTTO_FIN];
+                                    $offerDay['priceData'][DiscountManager::WITH_VAT] = $offerDay['priceData'][DiscountManager::WITH_VAT_FIN];
+                                    $offerDay['priceData'][DiscountManager::WITHOUT_VAT] = $offerDay['priceData'][DiscountManager::WITHOUT_VAT_FIN];
+                                    $offerDay['priceData']['unit'] = ' / 12 ' . Yii::app()->ui->item('MONTH_SMALL');
+                                }
                             }
                         }
                         if (empty($extraTxt[Yii::app()->language])) $offerDay['extraTxt'] = '';
@@ -183,13 +185,50 @@ class Banners extends MyWidget {
                         $leftBanner = array();
                     }
                     if (!empty($offerDay)||!empty($rightBanner)||!empty($leftBanner)) {
-                        $this->render('banners_main_small', array('offerDay' => $offerDay, 'leftBanner'=>$leftBanner, 'rightBanner'=>$rightBanner));
-//                        file_put_contents($file, $this->render('banners_main_small', array('offerDay' => $offerDay, 'leftBanner'=>$leftBanner, 'rightBanner'=>$rightBanner), true));
+                        if ($this->_useFilecache) file_put_contents($file, $this->render('for_fileCache/banners_main_small', array('offerDay' => $offerDay, 'leftBanner'=>$leftBanner, 'rightBanner'=>$rightBanner), true));
+                        else $this->render('banners_main_small', array('offerDay' => $offerDay, 'leftBanner'=>$leftBanner, 'rightBanner'=>$rightBanner));
                     }
                 break;
             }
-/*        }
-        readfile($file);*/
+        }
+        if ($this->_useFilecache) {
+            $txt = file_get_contents($file);
+            $eIds = array();
+            $replace = array();
+            if (preg_match_all("/{PRICE_(\d+)_(\d+)}/ui", $txt, $m)) {
+                foreach ($m[0] as $i=>$k) {
+                    $replace[$k] = '';
+                    if (empty($eIds[$m[1][$i]])) $eIds[$m[1][$i]] = array();
+                    $eIds[$m[1][$i]][] = $m[2][$i];
+                }
+            }
+            if (!empty($eIds)) {
+                $prices = DiscountManager::getPrices($eIds);
+                foreach ($eIds as $eid=>$ids) {
+                    foreach ($ids as $id) {
+                        $replace['{DISCOUNTPERCENT}'] = '';
+                        if (!empty($prices[$eid][$id])) {
+                            if (!empty($prices[$eid][$id]['priceData'][DiscountManager::DISCOUNT])) {
+                                $s = ''.
+                                    '<div class="discount"' . (($eid == Entity::PERIODIC)?' style="margin-top: 9px;"':'') . '>'.
+                                        Yii::app()->ui->item('PRODUCT_OF_DAY_INFO', $prices[$eid][$id]['priceData'][DiscountManager::DISCOUNT]) .
+                                    '</div>'.
+                                '';
+                                $replace['{DISCOUNTPERCENT}'] = $s;
+                            }
+                            $replace['{PRICE_' . $eid . '_' . $id . '}'] = ''.
+                                '<div class="cost_nds"' . (($eid == Entity::PERIODIC)?' style="line-height: 20px; width: 155px;"':'') . '>'.
+                                    ProductHelper::FormatPrice($prices[$eid][$id]['priceData'][DiscountManager::WITH_VAT]) . ' ' . $prices[$eid][$id]['priceData']['unit'] .
+                                    '<span>(<span>' . trim(ProductHelper::FormatPrice($prices[$eid][$id]['priceData'][DiscountManager::BRUTTO]) . ' ' . $prices[$eid][$id]['priceData']['unit']) . '</span>)</span>'.
+                                '</div>'.
+                            '';
+                        }
+                    }
+                }
+                $txt = str_replace(array_keys($replace), $replace, $txt);
+            }
+            echo $txt;
+        }
     }
 
     protected function _viewList() {
