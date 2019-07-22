@@ -141,7 +141,10 @@ class Offer extends CMyActiveRecord
                     $av = Availability::GetStatus($list[$iid]);
                     if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
 
-                    if(isset($list[$iid])) $tmp[] = $list[$iid];
+                    if(isset($list[$iid])) {
+                        $list[$iid]['status'] = $p->GetStatusProduct($entity, $iid);
+                        $tmp[] = $list[$iid];
+                    }
                 }
 
                 $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $tmp);

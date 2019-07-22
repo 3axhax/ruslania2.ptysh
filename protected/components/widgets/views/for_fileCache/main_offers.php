@@ -1,15 +1,17 @@
 <?php /*Created by Кирилл (19.07.2019 22:39)*/ ?>
 <?php
-foreach($groups as $entity=>$group):
-$eUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
-$eName = Entity::GetTitle($entity);
-if ($entity == Entity::PERIODIC) $eName = $ui->item('PEREODIC_NAME');
+foreach($groups as $group):
+	if (!empty($group['items'])):
+	$entity = $group['entity'];
+	$eUrl = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($entity)));
+	$eName = Entity::GetTitle($entity);
+	if ($entity == Entity::PERIODIC) $eName = Yii::app()->ui->item('PEREODIC_NAME');
 ?>
 
 <div class="news_box news_box_index nb<?= $entity ?>">
 	<div class="container">
 		<div class="title">
-			<?=$ui->item("A_NEW_RECOMMENDATIONS_CATEGORY")?>:
+			<?= Yii::app()->ui->item("A_NEW_RECOMMENDATIONS_CATEGORY")?>:
 			<a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= $eName; ?></span></a>
 			<div class="pult">
 				<a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span><?php /*<img src="/new_img/btn_left_news.png" alt=""/> */ ?></a>
@@ -20,8 +22,12 @@ if ($entity == Entity::PERIODIC) $eName = $ui->item('PEREODIC_NAME');
 	</div>
 	<div class="container cnt<?= $entity ?>">
 		<ul class="books">
-			<?php foreach ($group as $item) : ?>
-				<li><?php $widget->viewItem(); ?></li>
+			<?php foreach ($group['items'] as $item) :
+				$item['entity'] = $group['entity'];
+				?>
+				<li><?php
+					$widget->viewItem($item);
+				?></li>
 			<?php endforeach; ?>
 		</ul>
 	</div>
@@ -45,4 +51,4 @@ if ($entity == Entity::PERIODIC) $eName = $ui->item('PEREODIC_NAME');
 		});
 	});
 </script>
-<?php endforeach; ?>
+<?php endif; endforeach; ?>

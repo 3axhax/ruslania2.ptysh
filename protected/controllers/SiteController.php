@@ -311,17 +311,20 @@ class SiteController extends MyController {
                 }
             }
         }
-        $groups = Yii::app()->memcache->get('main_offer_groups');
-        if ($groups === false) {
-            $o = new Offer();
-            $groups = $o->GetItems(Offer::INDEX_PAGE);
-            Yii::app()->memcache->set('main_offer_groups', $groups, 3600);
-        }
-        foreach ($groups as $group) {
-            $ids = array();
-            foreach ($group['items'] as $item) $ids[] = $item['id'];
-            Product::setOfferItems($group['entity'], $ids);
-            Product::setActionItems($group['entity'], $ids);
+        $groups = array();
+        if (isset($_GET['showTime'])) {
+            $groups = Yii::app()->memcache->get('main_offer_groups');
+            if ($groups === false) {
+                $o = new Offer();
+                $groups = $o->GetItems(Offer::INDEX_PAGE);
+                Yii::app()->memcache->set('main_offer_groups', $groups, 3600);
+            }
+            foreach ($groups as $group) {
+                $ids = array();
+                foreach ($group['items'] as $item) $ids[] = $item['id'];
+                Product::setOfferItems($group['entity'], $ids);
+                Product::setActionItems($group['entity'], $ids);
+            }
         }
         $count = 1;
         Seo_settings::get();
