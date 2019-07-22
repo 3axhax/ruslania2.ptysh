@@ -11,7 +11,7 @@ $label = $productModel->GetStatusProduct($item['entity'], $item['id']);
 	<div class="image_item">
 		<?php $this->renderStatusLables($label) ?>
 		<a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
-			<img height="241" lazySrc="<?= Picture::Get($item, Picture::BIG); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+			<img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
 		</a>
 	</div>
 	<div class="info_item">

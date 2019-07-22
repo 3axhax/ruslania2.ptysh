@@ -9,7 +9,7 @@ $entityKey = Entity::GetUrlKey($entity);
             <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
             <?php if (isset($isList) && $isList) : ?>
                 <a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
-                    <img height="241" lazySrc="<?= Picture::Get($item, Picture::BIG); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+                    <img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
 <?php /*
                     <img height="241" src="<?= Picture::Get($item, Picture::BIG); ?>" alt="<?= ProductHelper::GetTitle($item); ?>">
 */ ?>
