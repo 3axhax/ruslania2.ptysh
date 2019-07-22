@@ -282,19 +282,19 @@ class FilterHelper
         if (isset($_REQUEST['avail']) && ($_REQUEST['avail'] === "1" || $_REQUEST['avail'] === "0")) {
             $avail = Yii::app()->getRequest()->getParam('avail', true);
             self::$data['avail'] = (int) $avail;
-            return true;
+            return;
         }
         if (isset(self::$sessionData['avail']) && (self::$sessionData['avail'] === 1 || self::$sessionData['avail'] === 0)) {
             self::$data['avail'] = (int) self::$sessionData['avail'];
-            return true;
+            return;
         }
-            $availCookie = Yii::app()->request->cookies['avail'];
-            if (!empty($availCookie)) {
-                $avail = $availCookie->value ? true : false;
-            } else {
-                $avail = true;
-            }
-        self::$data['avail'] = (int) $avail;
+/*        $availCookie = Yii::app()->request->cookies['avail'];
+        if (!empty($availCookie)) {
+            $avail = $availCookie->value ? true : false;
+        } else {
+            $avail = true;
+        }*/
+        self::$data['avail'] = 1;
     }
 
     static private function getLangSel(){
@@ -314,10 +314,10 @@ class FilterHelper
                 self::$data['sort'] = (int) $sort;
                 return true;
             }
-            if (isset(self::$sessionData['sort']) && self::$sessionData['sort'] != '') {
+/*            if (isset(self::$sessionData['sort']) && self::$sessionData['sort'] != '') {
                 self::$data['sort'] = (int) self::$sessionData['sort'];
                 return true;
-            }
+            }*/
             self::$data['sort'] = SortOptions::GetDefaultSort();
         }
         return false;
