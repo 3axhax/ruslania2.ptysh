@@ -45,7 +45,7 @@ class ProductLang {
                     'where ' . implode(' and ', $condition) . ' '.
                     'group by tLang.language_id '.
                 '';
-                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+//                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
             }
             else {
                 unset($condition['avail']);
@@ -63,17 +63,24 @@ class ProductLang {
                     (empty($condition)?'':'where ' . implode(' and ', $condition) . ' ') .
                     'group by tLang.language_id '.
                 '';
-                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+//                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
             }
-            if (empty($langIds)) return array();
-
-            $sql = ''.
-                'select tL.id, tL.title_'.Yii::app()->language . ' title, predl, country '.
-                'from languages tL ' .
-                'where (tL.id in (' . implode(',', $langIds) . ')) '.
-                'order by title '.
-            '';
-            self::$_langItems = Yii::app()->db->createCommand($sql)->queryAll();
+            $cacheKey = md5($sql);
+            self::$_langItems = Yii::app()->memcache->get($cacheKey);
+            if (self::$_langItems === false) {
+                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
+                if (empty($langIds)) self::$_langItems = array();
+                else {
+                    $sql = ''.
+                        'select tL.id, tL.title_'.Yii::app()->language . ' title, predl, country '.
+                        'from languages tL ' .
+                        'where (tL.id in (' . implode(',', $langIds) . ')) '.
+                        'order by title '.
+                    '';
+                    self::$_langItems = Yii::app()->db->createCommand($sql)->queryAll();
+                }
+                Yii::app()->memcache->set($cacheKey, self::$_langItems, Yii::app()->params['listMemcacheTime']);
+            }
         }
         return self::$_langItems;
     }
