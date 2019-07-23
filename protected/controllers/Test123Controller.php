@@ -188,4 +188,17 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 //		Yii::app()->memcache->set('123', 'sss', 1);
 		Debug::staticRun(array(Yii::app()->memcache->get('123')));
 	}
+
+	function actionCreatePhotos() {
+		/**@var $model ModelsPhotos*/
+		$model = Books_photos::model();
+		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/big/9785448413254.jpg', 1, '9785448413254');
+		echo '
+<picture>
+	<source srcset="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.webp" type="image/webp">
+	<source srcset="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.jpg" type="image/jpeg">
+	<img src="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.jpg" alt="описание" />
+</picture>
+';
+	}
 }
