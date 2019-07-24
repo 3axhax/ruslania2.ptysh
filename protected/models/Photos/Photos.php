@@ -9,15 +9,35 @@ class ModelsPhotos extends CActiveRecord {
 		'si'=>['width'=>200, 'height'=>150],//слайдер товаров
 	);
 
+	function getUnixDir() {
+		return Yii::getPathOfAlias('webroot') . '/pictures/' . $this->tableName() . '/';
+	}
+
+	function getHrefPath($idFoto, $label, $ean, $ext) {
+		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto) . $ean;
+		if (!empty($label)) $path .= '_' . $label;
+		switch ($ext) {
+			case 'jpg':case 'webp': $path .= '.' . $ext; break;
+//			case '': break;
+			default: return '/';
+		}
+		return $path;
+	}
+
+	function getRelativePath($idFoto) {
+		$ten = floor($idFoto / 10000);
+		return $ten . '/' . $idFoto . '/';
+	}
+
 	function createFotos($tmpName, $id, $ean){
-		$fotoDir = $this->_createFolderForFotos(Yii::getPathOfAlias('webroot') . '/pictures/' . $this->tableName() . '/', $id);
+		$fotoDir = $this->_createFolderForFotos($id);
 		foreach ($this->_lables as $label => $param) {
 			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height']);
 		}
 		return true;
 	}
 
-	protected function _createNewFoto($newTmp, $tmp, $newWidth, $newHeight) {
+	protected function _createNewFoto($newTmp, $tmp, $newWidth, $newHeight, $quality = 90) {
 		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp, $tmp);
 		$fotoParams = $this->_getFotoParams($tmp);
 		switch ($fotoParams['ext']) {
@@ -46,8 +66,8 @@ class ModelsPhotos extends CActiveRecord {
 			}
 
 			if (imagecopyresampled($dst, $src, 0, 0, 0, 0, $resultWidth, $resultHeight, $fotoParams['width'], $fotoParams['height'])){
-				imagewebp($dst, $newTmp . '.webp', 90);
-				imagejpeg($dst, $newTmp . '.jpg', 90);
+				imagewebp($dst, $newTmp . '.webp', $quality);
+				imagejpeg($dst, $newTmp . '.jpg', $quality);
 				imagedestroy($dst);
 				@chmod($newTmp . '.jpg', 0644);
 				return true;
@@ -64,19 +84,19 @@ class ModelsPhotos extends CActiveRecord {
 		return false;
 	}
 
-	protected function _createFolderForFotos($directory, $idFoto = null) {
+	protected function _createFolderForFotos($idFoto = null) {
+		$directory = $this->getUnixDir();
 		if ($idFoto !== null){
-			$ten = floor($idFoto / 10000);
-			$directory .= $ten . '/' . $idFoto;
+			$directory .= $this->getRelativePath($idFoto);
 			if (file_exists($directory) && is_dir($directory)) $this->_removeDirWithFotos($directory);
 		}
 		$this->_mkDirRecursive($directory);
-		return $directory . '/';
+		return $directory;
 	}
 
-	private function _mkDirRecursive($directory){
+	protected function _mkDirRecursive($directory){
 		if (!file_exists($directory) || !is_dir($directory)){
-			$dir = Yii::getPathOfAlias('webroot') . '/pictures/' . $this->tableName() . '/';
+			$dir = $this->getUnixDir();
 			$directory = mb_substr($directory, mb_strlen($dir, 'utf-8'), null, 'utf-8');
 			foreach (explode('/', $directory) as $part) {
 				$dir .= $part . '/';
@@ -91,7 +111,7 @@ class ModelsPhotos extends CActiveRecord {
 		}
 	}
 
-	private function _removeDirWithFotos($dirPath) {
+	protected function _removeDirWithFotos($dirPath) {
 		if (file_exists($dirPath) && is_dir($dirPath)){
 			$dirHandle = opendir($dirPath);
 			$hasFolders = false;
@@ -109,7 +129,7 @@ class ModelsPhotos extends CActiveRecord {
 		return false;
 	}
 
-	private function _getFotoParams($addFoto) {
+	protected function _getFotoParams($addFoto) {
 		static $result = array();
 		$hash = md5($addFoto);
 		if (!isset($result[$hash])){

@@ -15,7 +15,7 @@ class Banners extends MyWidget {
     }
 
     public function run() {
-        if (!empty($this->_params['useFilecache'])) $this->_useFilecache = true;
+        if (!empty($this->_params['useFilecache'])&&!isset($_GET['ha'])) $this->_useFilecache = true;
         $ctrl = $this->getController()->id;
         $action = $this->getController()->action->id;
         if (($ctrl == 'entity')/*&&($action == 'list')*/) {
@@ -52,13 +52,19 @@ class Banners extends MyWidget {
             $page = 1;
             if (!empty($this->_params['page'])) $page = $this->_params['page'];
             $sql = ''.
-                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
+                'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params, tAB.webp_' . $lang . ' webp_exists '.
                 'from banners_entity t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'where (t.entity_id = ' . (int) $this->entity . ') '.
                 'order by t.position '.
             '';
             $banners = Yii::app()->db->createCommand($sql)->queryAll();
+            foreach ($banners as $banner) {
+                if (empty($banner['webp_exists'])) {
+                    self::_createWebp($banner['bannerId'], $lang);
+                }
+                unset($banner['webp_exists']);
+            }
             self::$_listBanners = array();
             if (!empty($banners)) {
                 if (count($banners) == 1) {
@@ -75,10 +81,10 @@ class Banners extends MyWidget {
         return self::$_listBanners;
     }
 
-    private function _getMainBanners($lang) {
+    static private function _getMainBanners($lang) {
         if (self::$_mainBanners === null) {
             $sql = ''.
-                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
+                'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params, tAB.webp_' . $lang . ' webp_exists '.
                 'from banners_main t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
                 'order by t.position, t.id desc '.
@@ -86,6 +92,10 @@ class Banners extends MyWidget {
             $banners = Yii::app()->db->createCommand($sql)->queryAll();
             self::$_mainBanners = array();
             foreach ($banners as $banner) {
+                if (empty($banner['webp_exists'])) {
+                    self::_createWebp($banner['bannerId'], $lang);
+                }
+                unset($banner['webp_exists']);
                 if (empty(self::$_mainBanners[$banner['location']])) {
                     $location = $banner['location'];
                     unset($banner['location']);
@@ -119,13 +129,13 @@ class Banners extends MyWidget {
         }
         if (!file_exists($file)||!$this->_useFilecache) {
             if ($this->_useFilecache) file_put_contents($file, '');
-            $banners = $this->_getMainBanners($lang);
+            $banners = self::_getMainBanners($lang);
             switch ($this->_params['type']) {
                 case 'big':
                     if (!empty($banners[3])) {
                         $href = $this->_getBannerHref($banners[3]);
-                        if ($this->_useFilecache) file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''), true));
-                        else $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>''));
+                        if ($this->_useFilecache) file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $banners[3]['bannerId'],), true));
+                        else $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $banners[3]['bannerId'],));
                     }
                 break;
                 case 'small':
@@ -171,6 +181,8 @@ class Banners extends MyWidget {
                             'href' => $this->_getBannerHref($banners[1]),
                             'img'=>$this->_getBannerFilePath($banners[1]['bannerId'], $lang),
                             'title'=>'',
+                            'lang' => $lang,
+                            'bannerId' => $banners[1]['bannerId'],
                         );
                     }
                     if (!empty($banners[2])) {
@@ -178,6 +190,8 @@ class Banners extends MyWidget {
                             'href' => $this->_getBannerHref($banners[2]),
                             'img'=>$this->_getBannerFilePath($banners[2]['bannerId'], $lang),
                             'title'=>'',
+                            'lang' => $lang,
+                            'bannerId' => $banners[2]['bannerId'],
                         );
                     }
                     elseif (!empty($leftBanner)&&!empty($offerDay)) {
@@ -294,7 +308,7 @@ class Banners extends MyWidget {
                 $lang = strtolower(Yii::app()->language);
                 if (!in_array($lang, $langs)) $lang = 'en';
                 $sql = ''.
-                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params '.
+                    'select t.id, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params, tAB.webp_' . $lang . ' webp_exists '.
                     'from banners_entity t '.
                         'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1) '.
                     'where (t.entity_id = ' . (int) $this->entity . ') '.
@@ -303,6 +317,10 @@ class Banners extends MyWidget {
                 '';
                 $banner = Yii::app()->db->createCommand($sql)->queryRow();
                 if (!empty($banner)) {
+                    if (empty($banner['webp_exists'])) {
+                        self::_createWebp($banner['bannerId'], $lang);
+                    }
+                    unset($banner['webp_exists']);
                     $href = $this->_getBannerHref($banner);
                     $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
                 }
@@ -913,5 +931,11 @@ class Banners extends MyWidget {
             $ids = array_merge($ids, $result);
         }
         return $ids;
+    }
+
+    static protected function _createWebp($bannerId, $lang) {
+        /**@var $modelPhotos All_banners*/
+        $modelPhotos = All_banners::model();
+        $modelPhotos->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/banners/' . $bannerId . '_banner_' . $lang . '.jpg', $bannerId, $lang);
     }
 }

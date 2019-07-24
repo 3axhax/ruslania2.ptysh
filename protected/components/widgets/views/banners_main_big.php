@@ -1,4 +1,4 @@
-<?php /*Created by Êèðèëë (26.09.2018 20:11)*/ ?>
+<?php /*Created by ÐšÐ¸Ñ€Ð¸Ð»Ð» (26.09.2018 20:11)*/ ?>
 <div class="slider_bg">
 	<div class="container slider_container">
 		<div class="overflow_box">

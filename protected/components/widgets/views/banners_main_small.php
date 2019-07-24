@@ -23,10 +23,30 @@
 			<?php endif; ?>
 		</div></a>
 <?php elseif (!empty($leftBanner)): ?>
-		<div class="span6 main-banner-content"><a href="<?= $leftBanner['href'] ?>"><img class="main-bannerImg" src="<?= $leftBanner['img'] ?>" alt="<?= htmlspecialchars($leftBanner['title']) ?>"/></a></div>
+		<div class="span6 main-banner-content">< href="<?= $leftBanner['href'] ?>">
+	<?php if (isset($_GET['ha'])): ?>
+		<picture class="main-bannerImg">
+			<source srcset="<?= All_banners::model()->getHrefPath($leftBanner['bannerId'], '', $leftBanner['lang'], 'webp') ?>" type="image/webp">
+			<source srcset="<?= All_banners::model()->getHrefPath($leftBanner['bannerId'], '', $leftBanner['lang'], 'jpg') ?>" type="image/jpeg">
+			<img src="<?= $leftBanner['img'] ?>" alt="<?= htmlspecialchars($leftBanner['title']) ?>"/>
+		</picture>
+	<?php else: ?>
+			<img class="main-bannerImg" src="<?= $leftBanner['img'] ?>" alt="<?= htmlspecialchars($leftBanner['title']) ?>"/>
+	<?php endif; ?>
+		</a></div>
 <?php endif; ?>
 <?php if (!empty($rightBanner)): ?>
-		<div class="span6 main-banner-content"><a href="<?= $rightBanner['href'] ?>"><img class="main-bannerImg" src="<?= $rightBanner['img'] ?>" alt="<?= htmlspecialchars($rightBanner['title']) ?>"/></a></div>
+		<div class="span6 main-banner-content"><a href="<?= $rightBanner['href'] ?>">
+	<?php if (isset($_GET['ha'])): ?>
+		<picture class="main-bannerImg">
+			<source srcset="<?= All_banners::model()->getHrefPath($rightBanner['bannerId'], '', $rightBanner['lang'], 'webp') ?>" type="image/webp">
+			<source srcset="<?= All_banners::model()->getHrefPath($rightBanner['bannerId'], '', $rightBanner['lang'], 'jpg') ?>" type="image/jpeg">
+			<img src="<?= $rightBanner['img'] ?>" alt="<?= htmlspecialchars($rightBanner['title']) ?>"/>
+		</picture>
+	<?php else: ?>
+			<img class="main-bannerImg" src="<?= $rightBanner['img'] ?>" alt="<?= htmlspecialchars($rightBanner['title']) ?>"/>
+	<?php endif; ?>
+		</a></div>
 <?php endif; ?>
 	</div>
 </div>

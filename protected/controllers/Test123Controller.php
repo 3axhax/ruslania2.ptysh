@@ -191,14 +191,24 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 
 	function actionCreatePhotos() {
 		/**@var $model ModelsPhotos*/
-		$model = Books_photos::model();
-		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/big/9785448413254.jpg', 1, '9785448413254');
+//		$model = Books_photos::model();
+//		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/big/9785448413254.jpg', 1, '9785448413254');
+		//
 		echo '
+<!--
 <picture>
 	<source srcset="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.webp" type="image/webp">
 	<source srcset="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.jpg" type="image/jpeg">
 	<img src="https://ruslania.com/pictures/books_photos/0/1/9785448413254_d.jpg" alt="описание" />
 </picture>
+-->
+<picture>
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru.webp" type="image/webp">
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" type="image/jpeg">
+	<img src="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" alt="">
+</picture>
+<img src="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" alt="">
+<img src="https://ruslania.com/pictures/banners/41_banner_ru.jpg" alt="">
 ';
 	}
 }
