@@ -158,4 +158,21 @@ class ModelsPhotos extends CActiveRecord {
 		return $result[$hash];
 	}
 
+	function getPhotos($ids) {
+		if (empty($ids)) return array();
+
+		$result = array();
+		foreach ($ids as $id) $result[$id] = array();
+		$sql = ''.
+			'select id, iid, href, is_upload '.
+			'from ' . $this->tableName() . ' '.
+			'where (iid in (' . implode(',',$ids) . ')) '.
+			'order by iid, position '.
+		'';
+		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
+			if ($photo['is_upload'] == 2) continue;
+			$result[$photo['iid']][] = $photo;
+		}
+		return $result;
+	}
 }
