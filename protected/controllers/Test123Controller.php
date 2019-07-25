@@ -191,8 +191,8 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 
 	function actionCreatePhotos() {
 		/**@var $model ModelsPhotos*/
-		$model = All_banners::model();
-		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/banners/41_banner_ru.jpg', 41, 'ru');
+//		$model = All_banners::model();
+//		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/banners/41_banner_ru.jpg', 41, 'ru');
 
 		echo '
 <!--
