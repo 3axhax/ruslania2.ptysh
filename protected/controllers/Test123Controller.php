@@ -191,9 +191,9 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 
 	function actionCreatePhotos() {
 		/**@var $model ModelsPhotos*/
-//		$model = Books_photos::model();
-//		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/big/9785448413254.jpg', 1, '9785448413254');
-		//
+		$model = All_banners::model();
+		$model->createFotos(Yii::getPathOfAlias('webroot') . '/pictures/banners/41_banner_ru.jpg', 41, 'ru');
+
 		echo '
 <!--
 <picture>
@@ -203,10 +203,22 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 </picture>
 -->
 <picture>
-	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru.webp" type="image/webp">
-	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" type="image/jpeg">
-	<img src="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" alt="">
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru_mb.webp" type="image/webp">
+	<img src="https://ruslania.com/pictures/all_banners/0/41/ru_mb.jpg" alt="">
 </picture>
+<picture>
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru_ms.webp" type="image/webp">
+	<img src="https://ruslania.com/pictures/all_banners/0/41/ru_ms.jpg" alt="">
+</picture>
+<picture>
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru_l.webp" type="image/webp">
+	<img src="https://ruslania.com/pictures/all_banners/0/41/ru_l.jpg" alt="">
+</picture>
+<picture>
+	<source srcset="https://ruslania.com/pictures/all_banners/0/41/ru_o.webp" type="image/webp">
+	<img src="https://ruslania.com/pictures/all_banners/0/41/ru_o.jpg" alt="">
+</picture>
+<img src="https://ruslania.com/pictures/all_banners/0/1/ru2.webp" alt="">
 <img src="https://ruslania.com/pictures/all_banners/0/41/ru.jpg" alt="">
 <img src="https://ruslania.com/pictures/banners/41_banner_ru.jpg" alt="">
 ';

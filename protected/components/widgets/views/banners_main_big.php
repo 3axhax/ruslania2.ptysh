@@ -4,7 +4,12 @@
 		<div class="overflow_box">
 			<div class="container_slides" style="width: 1170px;height: 100%;text-align: center;">
 				<a href="<?= $href ?>" title="<?= htmlspecialchars($title) ?>">
-					<img class="main-bannerImg" class="list-bannerImg" src="<?= $img ?>" alt="<?= htmlspecialchars($title) ?>">
+					<picture class="main-bannerImg">
+						<source srcset="<?= All_banners::model()->getHrefPath($bannerId, 'mb', $lang, 'webp') ?>" type="image/webp">
+						<source srcset="<?= All_banners::model()->getHrefPath($bannerId, 'mb', $lang, 'jpg') ?>" type="image/jpeg">
+						<img class="main-bannerImg" src="<?= $img ?>" alt="<?= htmlspecialchars(htmlspecialchars($title)) ?>"/>
+					</picture>
+					<?php /*<img class="main-bannerImg" class="list-bannerImg" src="<?= $img ?>" alt="<?= htmlspecialchars($title) ?>">*/?>
 				</a>
 			</div>
 		</div>

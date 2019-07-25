@@ -133,9 +133,10 @@ class Banners extends MyWidget {
             switch ($this->_params['type']) {
                 case 'big':
                     if (!empty($banners[3])) {
-                        $href = $this->_getBannerHref($banners[3]);
-                        if ($this->_useFilecache) file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $banners[3]['bannerId'],), true));
-                        else $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($banners[3]['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $banners[3]['bannerId'],));
+                        $bigBanner = $banners[3];
+                        $href = $this->_getBannerHref($bigBanner);
+                        if ($this->_useFilecache) file_put_contents($file, $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($bigBanner['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $bigBanner['bannerId'],), true));
+                        else $this->render('banners_main_big', array('href' => $href, 'img'=>$this->_getBannerFilePath($bigBanner['bannerId'], $lang), 'title'=>'', 'lang' => $lang, 'bannerId' => $bigBanner['bannerId'],));
                     }
                 break;
                 case 'small':
@@ -300,8 +301,6 @@ class Banners extends MyWidget {
         $type = 'image';
         if (!empty($this->_params['type'])) $type = $this->_params['type'];
 		
-		//var_dump();
-
         switch ($type) {
             case 'image':
                 $langs = array('ru', 'en', 'fi', 'de', 'fr', 'se', 'es');

@@ -3,6 +3,13 @@
 require_once dirname(__FILE__) . '/Photos/Photos.php';
 class All_banners extends ModelsPhotos {
 
+	protected $_lables = array(
+		'orig'=>['width'=>0, 'height'=>0],//оригинальный размер
+		'mb'=>['width'=>1170, 'height'=>261],//Большой на главной (вместо слайдера акционных товаров)
+		'ms'=>['width'=>570, 'height'=>157],//Маленький на главной справа/слева (вместо товара дня)
+		'l'=>['width'=>900, 'height'=>247],//в карточке или в списке
+	);
+
 	static function model($className = __CLASS__) {
 		return parent::model($className);
 	}
@@ -10,16 +17,8 @@ class All_banners extends ModelsPhotos {
 		return 'all_banners';
 	}
 
-	/**
-	 * @param $tmpName
-	 * @param $id
-	 * @param $ean string язык сайта
-	 * @return bool
-	 */
 	function createFotos($tmpName, $id, $ean){
-		$param = $this->_getFotoParams($tmpName);
-		$fotoDir = $this->_createFolderForFotos($id);
-		$this->_createNewFoto($fotoDir . $ean, $tmpName, $param['width'], $param['height'], 75);
+		parent::createFotos($tmpName, $id, $ean);
 		$sql = 'update ' . $this->tableName() . ' set webp_' . $ean . ' = 1 where (id = ' . (int)$id . ') limit 1';
 		Yii::app()->db->createCommand($sql)->execute();
 		return true;

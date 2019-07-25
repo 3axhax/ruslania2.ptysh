@@ -29,17 +29,22 @@ class ModelsPhotos extends CActiveRecord {
 		return $ten . '/' . $idFoto . '/';
 	}
 
-	function createFotos($tmpName, $id, $ean){
+	function createFotos($tmpName, $id, $ean, $quality = 80){
 		$fotoDir = $this->_createFolderForFotos($id);
 		foreach ($this->_lables as $label => $param) {
-			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height']);
+			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+			if ($label == 'orig') {
+				$param = $this->_getFotoParams($tmpName);
+				$label = 'o';
+				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+			}
 		}
 		return true;
 	}
 
-	protected function _createNewFoto($newTmp, $tmp, $newWidth, $newHeight, $quality = 90) {
-		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp, $tmp);
+	protected function _createNewFoto($newTmp, $tmp, $newWidth, $newHeight, $quality) {
 		$fotoParams = $this->_getFotoParams($tmp);
+		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp . '.' . $fotoParams['ext'], $tmp);
 		switch ($fotoParams['ext']) {
 			case 'gif': $src = @imagecreatefromgif($tmp); break;
 			case 'jpg': case 'jpeg': $src = @imagecreatefromjpeg($tmp); break;
@@ -66,21 +71,23 @@ class ModelsPhotos extends CActiveRecord {
 			}
 
 			if (imagecopyresampled($dst, $src, 0, 0, 0, 0, $resultWidth, $resultHeight, $fotoParams['width'], $fotoParams['height'])){
-				imagewebp($dst, $newTmp . '.webp', $quality);
+				imagedestroy($src);
 				imagejpeg($dst, $newTmp . '.jpg', $quality);
+				imagewebp($dst, $newTmp . '.webp', $quality);
 				imagedestroy($dst);
-				@chmod($newTmp . '.jpg', 0644);
-				return true;
+				if (filesize($newTmp . '.webp') % 2 == 1) {
+					file_put_contents($newTmp . '.webp', "\0", FILE_APPEND);
+				}
 			}
 			else {
-				return $this->_copyFoto($newTmp, $tmp);
+				return $this->_copyFoto($newTmp . '.' . $fotoParams['ext'], $tmp);
 			}
 		}
 		return false;
 	}
 
 	protected function _copyFoto($newTmp, $tmp){
-		if (file_exists($tmp)) return copy($tmp, $newTmp.'.jpg') && chmod($newTmp.'.jpg', 0644);
+		if (file_exists($tmp)) return copy($tmp, $newTmp) && chmod($newTmp, 0644);
 		return false;
 	}
 
