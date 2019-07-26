@@ -552,7 +552,9 @@ div.footer {
 .slider_bg .slider_container .container_slides ul li .span2.text .cost .n { color: #ed1d24; }
 .slider_bg .slider_container .container_slides ul li .span2.text .cost .z { text-decoration: line-through; }
 .slider_bg .slider_container .container_slides ul li .span2.text .nds { font-size: 13px; color: rgb(116, 116, 116); }
-.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow, .slick-slide a.btn_yellow {  color: #fff; display: inline-block; padding: 5px 16px; background-color: #ecad0a; margin-top: 18px; border-radius: 4px; text-decoration: none; width: 144px; text-align: center; }
+.slider_bg .slider_container .container_slides ul li .span2.text a.btn_yellow, .slick-slide a.btn_yellow,
+.news_box ul.books li.you_view_content a.btn_yellow
+{  color: #fff; display: inline-block; padding: 5px 16px; background-color: #ecad0a; margin-top: 18px; border-radius: 4px; text-decoration: none; width: 144px; text-align: center; }
 
 .banners { margin-top: 35px; margin-bottom: 62px; }
 .banners .span6 { width: 570px; margin-left: 30px; }
@@ -576,6 +578,7 @@ div.footer {
 
 .news_box ul.books { margin: 0; margin-top: 30px; padding: 0; list-style: none;}
 .news_box ul.books li { max-width: 214px; float: left; margin-left: 30px; }
+.news_box ul.books li.you_view_content { width: 230px; max-width: 230px; float: left; margin-left: 0; }
 .news_box ul.books li:first-child { margin-left: 0; }
 .news_box ul.books li .title_book {
     margin-top: 10px;
@@ -1582,15 +1585,15 @@ a.read_book {
 
 
 
-.slick-slide a.btn_yellow {
+.slick-slide a.btn_yellow, .news_box ul.books li.you_view_content a.btn_yellow {
 	
 	background-color: #ed9321;
 	
 }
 
-.slick-slide a.btn_yellow { padding: 0; width: auto; position: relative; }
+.slick-slide a.btn_yellow, .news_box ul.books li.you_view_content a.btn_yellow { padding: 0; width: auto; position: relative; }
 
-.slick-slide a.btn_yellow:before {
+.slick-slide a.btn_yellow:before, .news_box ul.books li.you_view_content a.btn_yellow:before {
 	
 	content: "\f05a";
     position: absolute;
@@ -1601,7 +1604,7 @@ a.read_book {
 	
 }
 
-.slick-slide a.btn_yellow span {
+.slick-slide a.btn_yellow span, .news_box ul.books li.you_view_content a.btn_yellow span {
 	border-radius: 0 4px 4px 0;
 	background-color: #ecad0a;
 	margin-left: 39px;

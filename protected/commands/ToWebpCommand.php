@@ -15,24 +15,38 @@ class ToWebpCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			if ($entity == 10) continue;
+			if ($entity != 10) continue;
 
-			$sql = 'truncate ' . $params['photo_table'];
+			$sql = 'create table if not exists _tmp_' . $params['photo_table'] . ' (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+
+			$sql = 'truncate _tmp_' . $params['photo_table'];
 			Yii::app()->db->createCommand($sql)->execute();
+
+			$sql = ''.
+				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
+				'select t.id, t.eancode, t.image '.
+				'from ' . $params['site_table'] . ' t '.
+				'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
+				'where (tF.iid is null) '.
+			'';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+
 			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 			/**@var $model ModelsPhotos*/
 			$model = $modelName::model();
 			$sqlItems = ''.
-				'select t.id, eancode, image '.
+				'select t.id, t.eancode, t.image '.
 				'from ' . $params['site_table'] . ' t '.
-				'join (select t1.id from ' . $params['site_table'] . ' t1 limit {start}, {end}) t2 on (t2.id = t.id) '.
+				'join (select t1.id from _tmp_' . $params['photo_table'] . ' t1 order by t1.id asc limit ' . $this->_counts . ') t2 on (t2.id = t.id) '.
 			'';
 //			echo $sqlItems . "\n";
 			$step = 0;
-			while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
-//			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
+			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
 				$step++;
 				foreach ($items as $item) {
+					$sql = 'delete from _tmp_' . $params['photo_table'] . ' where (id = ' . (int) $item['id'] . ')';
+					Yii::app()->db->createCommand()->setText($sql)->execute();
 					if (empty($item['image'])) continue;
 
 					$filePhoto = Yii::getPathOfAlias('webroot') . '/pictures/big/' . $item['image'];

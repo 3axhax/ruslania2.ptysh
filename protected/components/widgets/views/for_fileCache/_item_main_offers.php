@@ -1,8 +1,21 @@
 <?php /*Created by Кирилл (19.07.2019 22:46)*/ ?>
-<?php $url = ProductHelper::CreateUrl($item); ?>
+<?php
+$url = ProductHelper::CreateUrl($item);
+$photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
+$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+/**@var $model ModelsPhotos*/
+$model = $modelName::model();
+?>
 <div class="img" style="position: relative">
 	<?php Yii::app()->getController()->renderStatusLables($item['status'], $size = '-sm', true)?>
-	<a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" /></a>
+	<a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>">
+		<picture class="main-bannerImg">
+			<source srcset="<?= $model->getHrefPath($leftBanner['bannerId'], 'ms', $leftBanner['lang'], 'webp') ?>" type="image/webp">
+			<source srcset="<?= $model->getHrefPath($leftBanner['bannerId'], 'ms', $leftBanner['lang'], 'jpg') ?>" type="image/jpeg">
+			<img class="main-bannerImg" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($item, Picture::SMALL) ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item, 'title')) ?>"/>
+		</picture>
+		<img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" />
+	</a>
 </div>
 <div class="title_book">
 	<a href="<?=$url; ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>">

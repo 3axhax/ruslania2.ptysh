@@ -12,7 +12,7 @@
 				$title = ProductHelper::GetTitle($product, 'title');
 				$url = ProductHelper::CreateUrl($product);
 				$isAvail = ProductHelper::IsAvailableForOrder($product);				?>
-				<li>
+				<li class="you_view_content">
 					<div class="img" style="min-height: 130px; position: relative">
 						<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
 						<a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
