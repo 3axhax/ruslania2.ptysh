@@ -5,6 +5,9 @@ $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
 $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
+/**@var $photoModel ModelsPhotos*/
+$photoModel = Pereodics_photos::model();
+$photoId = $photoModel->getFirstId($item['id']);
 //$item['issues_year'] = Periodic::getCountIssues($item['issues_year']);
 ?>
 <div class="container view_product">
@@ -12,7 +15,15 @@ $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 		<div class="detail_block">
 			<div class="image_item">
 				<?php $this->renderStatusLables($item['status']); ?>
+				<?php if (empty($photoId)): ?>
 				<img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+				<?php else: ?>
+				<picture class="main-bannerImg">
+					<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'webp') ?>" type="image/webp">
+					<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+					<img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+				</picture>
+				<?php endif; ?>
 				<?php if (!empty($item['Lookinside'])) $this->renderPartial('lookinside', array('item' => $item, 'entity' => $entity)); ?>
 			</div>
 			<div class="info_item">

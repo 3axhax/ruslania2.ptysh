@@ -3,6 +3,11 @@ Yii::beginProfile($item['id']);
 $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
+$photoTable = Entity::GetEntitiesList()[$entity]['photo_table'];
+$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+/**@var $photoModel ModelsPhotos*/
+$photoModel = $modelName::model();
+$photoId = $photoModel->getFirstId($item['id']);
 
 
 /* перенес в контроллер
@@ -33,7 +38,15 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
 <div class="row">
     <div class="span1" style="position: relative">
         <?php $this->renderStatusLables($item['status']); ?>
-        <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <?php if (empty($photoId)): ?>
+            <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <?php else: ?>
+        <picture class="main-bannerImg">
+            <source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'webp') ?>" type="image/webp">
+            <source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+            <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        </picture>
+        <?php endif; ?>
         <?php if (!empty($item['Lookinside'])) : ?>
             <div style="text-align: left;background-color: #fff; margin-top: -10px;">
                 <?php
@@ -1038,7 +1051,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if(!empty($item['presaleMessage'])): ?>
                 <div class="presale" style="padding: 10px; margin-bottom: 20px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
             <?php endif; ?>
-            <?= nl2br(ProductHelper::GetDescription($item)); ?>
+            <?= nl2br(strip_tags(ProductHelper::GetDescription($item))); ?>
 
         <?php endif; ?>
 

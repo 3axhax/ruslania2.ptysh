@@ -1,5 +1,4 @@
 <?php
-
 class ProductController extends MyController
 {
     public function actionView($entity, $id)

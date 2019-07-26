@@ -1,6 +1,8 @@
 <?php
 /*Created by Кирилл (23.07.2019 21:31)*/
 class ModelsPhotos extends CActiveRecord {
+	protected $_photos = array();
+
 	protected $_lables = array(
 		'orig'=>['width'=>0, 'height'=>0],//оригинальный размер
 		'l'=>['width'=>150, 'height'=>250],//в списке
@@ -158,21 +160,37 @@ class ModelsPhotos extends CActiveRecord {
 		return $result[$hash];
 	}
 
-	function getPhotos($ids) {
-		if (empty($ids)) return array();
+	function getFirstId($id) {
+		if (!isset($this->_photos[$id])) $this->getPhotos(array($id));
+		if (empty($this->_photos[$id])) return 0;
+		return $this->_photos[$id][0]['id'];
+	}
 
-		$result = array();
-		foreach ($ids as $id) $result[$id] = array();
-		$sql = ''.
-			'select id, iid, href, is_upload '.
-			'from ' . $this->tableName() . ' '.
-			'where (iid in (' . implode(',',$ids) . ')) '.
-			'order by iid, position '.
-		'';
-		foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
-			if ($photo['is_upload'] == 2) continue;
-			$result[$photo['iid']][] = $photo;
+	function getPhotoIds($id) {
+		if (!isset($this->_photos[$id])) $this->getPhotos(array($id));
+		return $this->_photos[$id];
+	}
+
+	function getPhotos($ids) {
+		foreach ($ids as $i=>$id) {
+			if (!isset($this->_photos[$id])) $this->_photos[$id] = array();
+			else unset($ids[$i]);
 		}
-		return $result;
+		if (!empty($ids)) {
+			$sql = ''.
+				'select id, iid, href, is_upload '.
+				'from ' . $this->tableName() . ' '.
+				'where (iid in (' . implode(',',$ids) . ')) '.
+				'order by iid, position '.
+			'';
+			foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
+				if ($photo['is_upload'] == 2) {
+					$this->_photos[$photo['iid']][] = array();
+					continue;
+				}
+				$this->_photos[$photo['iid']][] = $photo;
+			}
+		}
+		return $this->_photos;
 	}
 }

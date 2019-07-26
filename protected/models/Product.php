@@ -206,6 +206,11 @@ class Product
                     if ($route == 'product/view') {
                         Product::setActionItems($entity, $ids);
                         Product::setOfferItems($entity, $ids);
+                        $photoTable = Entity::GetEntitiesList()[$entity]['photo_table'];
+                        $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+                        /**@var $photoModel ModelsPhotos*/
+                        $photoModel = $modelName::model();
+                        $photoModel->getPhotos($ids);
                     }
                     HrefTitles::get()->getByIds($entity, $route, $ids);
                 }

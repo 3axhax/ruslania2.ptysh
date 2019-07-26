@@ -23,11 +23,26 @@
 		$actionTitle = '<div class="new_block">'.Yii::app()->ui->item('IN_OFFERS').'</div>';
 		$actionTitleClass = ' rec';
 	}
+	$photoTable = Entity::GetEntitiesList()[$product['entity']]['photo_table'];
+	$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+	/**@var $photoModel ModelsPhotos*/
+	$photoModel = $modelName::model();
+	$photoId = $photoModel->getFirstId($product['id']);
 ?>
 			<li>
 				<div class="span1 photo<?=$actionTitleClass;?>">
 					<?=$actionTitle;?>
-					<a title="<?= htmlspecialchars($productTitle) ?>" href="<?=$url;?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/></a>
+					<a title="<?= htmlspecialchars($productTitle) ?>" href="<?=$url;?>">
+						<?php if (empty($photoId)): ?>
+							<img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/>
+						<?php else: ?>
+							<picture class="main-bannerImg">
+								<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $product['eancode'], 'webp') ?>" type="image/webp">
+								<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $product['eancode'], 'jpg') ?>" type="image/jpeg">
+								<img src="<?= $productPicture ?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/>
+							</picture>
+						<?php endif; ?>
+					</a>
 				</div>
 				<div class="span2 text">
 					<div class="title"><a title="<?= htmlspecialchars($productTitle) ?>" href="<?=$url;?>"><?=$productTitleSmall;?></a></div>

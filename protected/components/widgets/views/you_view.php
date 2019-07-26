@@ -5,11 +5,26 @@
 <?php foreach ($items as $item):
 	$url = ProductHelper::CreateUrl($item);
 	$title = ProductHelper::GetTitle($item, 'title', 30);
+	$photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
+	$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+	/**@var $photoModel ModelsPhotos*/
+	$photoModel = $modelName::model();
+	$photoId = $photoModel->getFirstId($item['id']);
 	?>
 	<li>
 		<div class="span1 photo new">
 			<?php $url = ProductHelper::CreateUrl($item); ?>
-			<a href="<?=$url; ?>" title="<?= htmlspecialchars($title) ?>"><img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" lazySrc="<?=Picture::Get($item, Picture::SMALL); ?>" /></a>
+			<a href="<?=$url; ?>" title="<?= htmlspecialchars($title) ?>">
+				<?php if (empty($photoId)): ?>
+					<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" lazySrc="<?=Picture::Get($item, Picture::SMALL); ?>" />
+				<?php else: ?>
+					<picture class="main-bannerImg">
+						<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
+						<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::Get($item, Picture::SMALL) ?>"/>
+					</picture>
+				<?php endif; ?>
+			</a>
 		</div>
 		<div class="span2 text">
 			<div class="title"><a href="<?= $url; ?>" title="<?=htmlspecialchars($title); ?>"><?= $title; ?></a></div>

@@ -3,16 +3,26 @@
 $url = ProductHelper::CreateUrl($item);
 $hideButtons = isset($hideButtons) && $hideButtons;
 $entityKey = Entity::GetUrlKey($entity);
+$photoTable = Entity::GetEntitiesList()[$entity]['photo_table'];
+$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+/**@var $photoModel ModelsPhotos*/
+$photoModel = $modelName::model();
+$photoId = $photoModel->getFirstId($item['id']);
 ?>
     <div class="row" xmlns="http://www.w3.org/1999/html">
         <div class="span1 image_item" style="position: relative">
             <?php $this->renderStatusLables(Product::GetStatusProduct($item['entity'], $item['id']))?>
             <?php if (isset($isList) && $isList) : ?>
                 <a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
-                    <img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
-<?php /*
-                    <img height="241" src="<?= Picture::Get($item, Picture::BIG); ?>" alt="<?= ProductHelper::GetTitle($item); ?>">
-*/ ?>
+                    <?php if (empty($photoId)): ?>
+                        <img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+                    <?php else: ?>
+                        <picture class="main-bannerImg">
+                            <source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'webp') ?>" type="image/webp">
+                            <source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+                            <img src="<?= Picture::Get($item, Picture::SMALL) ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+                        </picture>
+                    <?php endif; ?>
                 </a>
             <?php else : ?>
                 <a href="<?= Picture::Get($item, Picture::BIG); ?>" id="img<?= $item['id']; ?>">

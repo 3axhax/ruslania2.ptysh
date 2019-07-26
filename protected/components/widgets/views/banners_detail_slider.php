@@ -29,8 +29,21 @@
 	
 					<li>
 						<div class="span1 photo">
-							<a href="<?= $url ?>">
+							<a href="<?= $url ?>"><?php
+								$photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
+								$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+								/**@var $photoModel ModelsPhotos*/
+								$photoModel = $modelName::model();
+								$photoId = $photoModel->getFirstId($item['id']);
+								if (empty($photoId)): ?>
 								<img class="maxh130" src="<?= Picture::srcLoad() ?>" <?= ((count($items) > 3)?'data-lazy':'lazySrc') ?>="<?= Picture::Get($item, Picture::SMALL) ?>"/>
+								<?php else: ?>
+									<picture class="main-bannerImg">
+										<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $item['eancode'], 'webp') ?>" type="image/webp">
+										<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+										<img class="maxh130" src="<?= Picture::Get($item, Picture::SMALL) ?>"/>
+									</picture>
+								<?php endif; ?>
 							</a>
 						</div>
 						<div class="span2 text">
@@ -64,7 +77,7 @@
 								
 								<? if ($sCount > 0) : ?>
 	
-	<a class="count<?=$sCount?> cart-action cart_add_slider add_cart list_cart<?//if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 177px; ">
+	<a class="count<?=$sCount?> cart-action cart_add_slider add_cart list_cart<?//if (Yii::app()->language == 'es') echo ' no_img';?> add_cart_plus cartMini<?=$item['id']?> green_cart" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 177px; " onclick="yaCounter53579293.reachGoal('add_cart_slider_product');">
                         <span style="width: auto;"><?=sprintf($ui->item('CARTNEW_IN_CART_BTN'), $sCount)?></span>
                     </a>
 	
@@ -73,7 +86,7 @@
 <? else : ?>
 	
 	
-	                                <a class="cart-action add_cart_plus cartMini<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
+	                                <a class="cart-action add_cart_plus cartMini<?=$item['id']?>" data-action="add" data-entity="<?= $item['entity']; ?>" data-id="<?= $item['id']; ?>" data-quantity="1" href="javascript:;" style="width: 135px;" onclick="yaCounter53579293.reachGoal('add_cart_slider_product');"><span><?=$ui->item('CART_COL_ITEM_MOVE_TO_SHOPCART');?></span></a>
 	
 <? endif; ?>
 								

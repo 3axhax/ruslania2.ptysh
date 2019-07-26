@@ -11,12 +11,26 @@
 				$titleSmall = ProductHelper::GetTitle($product, 'title', 42);
 				$title = ProductHelper::GetTitle($product, 'title');
 				$url = ProductHelper::CreateUrl($product);
-				$isAvail = ProductHelper::IsAvailableForOrder($product);				?>
+				$isAvail = ProductHelper::IsAvailableForOrder($product);
+				$photoTable = Entity::GetEntitiesList()[$product['entity']]['photo_table'];
+				$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+				/**@var $photoModel ModelsPhotos*/
+				$photoModel = $modelName::model();
+				$photoId = $photoModel->getFirstId($product['id']);
+				?>
 				<li class="you_view_content">
 					<div class="img" style="min-height: 130px; position: relative">
 						<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
 						<a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
+							<?php if (empty($photoId)): ?>
 							<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" lazySrc="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+							<?php else: ?>
+								<picture class="main-bannerImg">
+									<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'webp') ?>" type="image/webp">
+									<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'jpg') ?>" type="image/jpeg">
+									<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+								</picture>
+							<?php endif; ?>
 						</a>
 					</div>
 

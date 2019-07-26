@@ -33,4 +33,16 @@ class All_banners extends ModelsPhotos {
 		return $directory;
 	}
 
+	function getFirstId($id) {
+		return $id;
+	}
+
+	function getPhotoIds($id) {
+		return array($id);
+	}
+
+	function getPhotos($ids) {
+		return array();
+	}
+
 }

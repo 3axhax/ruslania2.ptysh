@@ -6,12 +6,23 @@ $binding = PereodicsTypes::model()->GetBinding($entity, $item['type']);
 $price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 $item['issues_year'] = Periodic::getCountIssues($item['issues_year']);
 $label = $productModel->GetStatusProduct($item['entity'], $item['id']);
+/**@var $photoModel ModelsPhotos*/
+$photoModel = Pereodics_photos::model();
+$photoId = $photoModel->getFirstId($item['id']);
 ?>
 <div class="row <?= Entity::GetUrlKey(Entity::PERIODIC) ?>">
 	<div class="image_item">
 		<?php $this->renderStatusLables($label) ?>
 		<a href="<?= $url; ?>" title="<?= ProductHelper::GetTitle($item); ?>">
-			<img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+			<?php if (empty($photoId)): ?>
+				<img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+			<?php else: ?>
+				<picture class="main-bannerImg">
+					<source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'webp') ?>" type="image/webp">
+					<source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+					<img src="<?= Picture::Get($item, Picture::SMALL) ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+				</picture>
+			<?php endif; ?>
 		</a>
 	</div>
 	<div class="info_item">

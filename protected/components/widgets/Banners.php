@@ -257,11 +257,11 @@ class Banners extends MyWidget {
             switch ($location) {
                 case 'topInList':
                     $href = $this->_getBannerHref($listBanners[0]);
-                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[0]['bannerId'], $lang), 'title'=>''));
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[0]['bannerId'], $lang), 'title'=>'', 'lang'=>$lang, 'bannerId'=>$listBanners[0]['bannerId']));
                     break;
                 case 'centerInList':
                     $href = $this->_getBannerHref($listBanners[1]);
-                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[1]['bannerId'], $lang), 'title'=>''));
+                    $this->render('banners_list', array('href' => $href, 'img'=>$this->_getBannerFilePath($listBanners[1]['bannerId'], $lang), 'title'=>'', 'lang'=>$lang, 'bannerId'=>$listBanners[1]['bannerId']));
                     break;
             }
 
@@ -321,7 +321,7 @@ class Banners extends MyWidget {
                     }
                     unset($banner['webp_exists']);
                     $href = $this->_getBannerHref($banner);
-                    $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>''));
+                    $this->render('banners_detail', array('href' => $href, 'img'=>$this->_getBannerFilePath($banner['bannerId'], $lang), 'title'=>'', 'lang'=>$lang, 'bannerId'=>$banner['bannerId']));
                 }
                 break;
             case 'slider':
@@ -433,6 +433,7 @@ class Banners extends MyWidget {
             'id'=>'id',
             'title'=>'title_' . $titleLang,
             'image'=>'image',
+            'eancode'=>'eancode',
             'vat'=>'vat',
             'discount'=>'discount',
             'unitweight_skip'=>'unitweight_skip',
@@ -447,6 +448,12 @@ class Banners extends MyWidget {
         );
         foreach ($entityIds as $entity=>$ids) {
             HrefTitles::get()->getByIds($entity, 'product/view', $ids);
+            $photoTable = Entity::GetEntitiesList()[$entity]['photo_table'];
+            $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+            /**@var $photoModel ModelsPhotos*/
+            $photoModel = $modelName::model();
+            $photoModel->getPhotos($ids);
+
             $fields['entity'] = $entity . ' entity';
             if ($entity == Entity::PERIODIC) {
                 if (isset($fields['sub_fin_year'])) $fields['sub_fin_year'] = 'sub_fin_year';
