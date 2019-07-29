@@ -304,6 +304,20 @@ class Order extends CMyActiveRecord
                     $hiddenNotes = 'Smartpost: ' . $spAdderss . '. ' . "\r\n\r\n";
                 }
             }
+            $user = User::model()->findAllByPk($uid);
+            if (!empty($user[0])&&($user = $user[0]->getAttributes())) {
+                //'contact_email'=>$user['login'], 'first_name'=>$user['first_name'], 'last_name'=>$user['last_name']
+                $ba = array('contact_email'=>'', 'first_name'=>'', 'last_name'=>'');
+                if (!empty($order->BillingAddressID)) $ba = $a->GetAddress($uid, $order->BillingAddressID);
+                $client = array();
+                if (($user['first_name'] != $da['first_name'])&&($user['first_name'] != $ba['first_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
+                elseif (($user['last_name'] != $da['last_name'])&&($user['last_name'] != $ba['last_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
+                if (($user['login'] != $da['contact_email'])&&($user['login'] != $ba['contact_email'])) {
+                    $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
+                    $client['email'] = $user['login'] . "\r\n";
+                }
+                if (!empty($client)) $hiddenNotes .= 'Заказ оформил: ' . implode(' ', $client) . '. ' . "\r\n\r\n";
+            }
             /*if (!empty($data['verkkolaskuosoite'])||!empty($data['operaattoritunnus'])) {
                 if (!empty($data['verkkolaskuosoite']))
                     $hiddenNotes .= 'verkkolaskuosoite: ' . $data['verkkolaskuosoite'] . "\r\n";

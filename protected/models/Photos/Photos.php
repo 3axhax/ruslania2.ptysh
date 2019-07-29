@@ -32,11 +32,13 @@ class ModelsPhotos extends CActiveRecord {
 	}
 
 	function createFotos($tmpName, $id, $ean, $quality = 80){
+		$param = $this->_getFotoParams($tmpName);
+		if (empty($param)) return false;
+
 		$fotoDir = $this->_createFolderForFotos($id);
 		foreach ($this->_lables as $label => $param) {
 			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
 			if ($label == 'orig') {
-				$param = $this->_getFotoParams($tmpName);
 				$label = 'o';
 				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
 			}
@@ -46,6 +48,8 @@ class ModelsPhotos extends CActiveRecord {
 
 	protected function _createNewFoto($newTmp, $tmp, $newWidth, $newHeight, $quality) {
 		$fotoParams = $this->_getFotoParams($tmp);
+		if (empty($fotoParams)) return false;
+
 		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp . '.' . $fotoParams['ext'], $tmp);
 		switch ($fotoParams['ext']) {
 			case 'gif': $src = @imagecreatefromgif($tmp); break;
@@ -89,7 +93,7 @@ class ModelsPhotos extends CActiveRecord {
 	}
 
 	protected function _copyFoto($newTmp, $tmp){
-		if (file_exists($tmp)) return copy($tmp, $newTmp) && chmod($newTmp, 0644);
+		if (file_exists($tmp)) return @copy($tmp, $newTmp) && @chmod($newTmp, 0644);
 		return false;
 	}
 
@@ -144,15 +148,17 @@ class ModelsPhotos extends CActiveRecord {
 		if (!isset($result[$hash])){
 			$photoParams = array();
 			if (file_exists($addFoto)) {
-				$size = getimagesize($addFoto);
-				$photoParams['width'] = $size[0];
-				$photoParams['height'] = $size[1];
-				$photoParams['type'] = $size[2];
-				$photoParams['ext'] = null;
-				switch ($photoParams['type']) {
-					case 1: $photoParams['ext'] = 'gif'; break;
-					case 2: $photoParams['ext'] = 'jpg'; break;
-					case 3: $photoParams['ext'] = 'png'; break;
+				$size = @getimagesize($addFoto);
+				if ($size) {
+					$photoParams['width'] = $size[0];
+					$photoParams['height'] = $size[1];
+					$photoParams['type'] = $size[2];
+					$photoParams['ext'] = null;
+					switch ($photoParams['type']) {
+						case 1: $photoParams['ext'] = 'gif'; break;
+						case 2: $photoParams['ext'] = 'jpg'; break;
+						case 3: $photoParams['ext'] = 'png'; break;
+					}
 				}
 			}
 			$result[$hash] = $photoParams;

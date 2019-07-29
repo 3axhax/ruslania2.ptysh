@@ -37,8 +37,9 @@ class ToWebpCommand extends CConsoleCommand {
 			$model = $modelName::model();
 			$sqlItems = ''.
 				'select t.id, t.eancode, t.image '.
-				'from ' . $params['site_table'] . ' t '.
-				'join (select t1.id from _tmp_' . $params['photo_table'] . ' t1 order by t1.id asc limit ' . $this->_counts . ') t2 on (t2.id = t.id) '.
+				'from _tmp_' . $params['photo_table'] . ' t '.
+				'order by t.id desc '.
+				'limit ' . $this->_counts . ' '.
 			'';
 //			echo $sqlItems . "\n";
 			$step = 0;
@@ -55,7 +56,12 @@ class ToWebpCommand extends CConsoleCommand {
 						$model->setIsNewRecord(true);
 						$model->id = null;
 						$model->insert();
-						$model->createFotos($filePhoto, $model->id, $item['eancode']);
+						if ($model->createFotos($filePhoto, $model->id, $item['eancode'])) {
+							$model->setAttribute('is_upload', 2);
+							$model->update();
+							$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
+							Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
+						}
 					}
 					else {
 						$model->setAttributes(array('iid'=>$item['id'], 'is_upload'=>2), false);

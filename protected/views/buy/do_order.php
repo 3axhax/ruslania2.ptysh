@@ -88,7 +88,7 @@ Debug::staticRun(array($userData));
 
 		ym(53579293, 'reachGoal', 'cart_step3');
 		
-		scriptLoader('/new_js/modules/cart.js?v1107').callFunction(function() {
+		scriptLoader('/new_js/modules/cart.js?v2907').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userData) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
@@ -97,7 +97,8 @@ Debug::staticRun(array($userData));
 				urlChangeCountry: '<?= Yii::app()->createUrl('buy/deliveryInfo') ?>',
 				urlGetCountry: '<?= Yii::app()->createUrl('buy/getCountry') ?>',
 				urlLoadStates: '<?= Yii::app()->createUrl('buy/loadstates') ?>',
-				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>'
+				urlSubmit: '<?= Yii::app()->createUrl('buy/orderAdd') ?>',
+				urlCheckEmail: '<?= Yii::app()->createUrl('buy/checkEmail') ?>'
 			});
 		});
 	});

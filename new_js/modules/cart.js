@@ -239,6 +239,7 @@ Stripe.applePay.checkAvailability(function(available) {
             this.urlGetCountry = options.urlGetCountry;
             this.urlLoadStates = options.urlLoadStates;
             this.urlSubmit = options.urlSubmit;
+            this.urlCheckEmail = options.urlCheckEmail;
 
             if (this.delivery_address) {
                 if (this.onlyPereodic) $(this.delivery_address).find('option[value="0"]').remove();
@@ -406,6 +407,26 @@ Stripe.applePay.checkAvailability(function(available) {
                 });
             });
             this.changeLangOrCurrency();
+
+            $('#Reg_contact_email').on('blur', function() {
+                var t = this;
+                var $t = $(this);
+                var data = {'email':this.value};
+                data[self.csrf[0]] = self.csrf[1];
+                $.ajax({
+                    url : self.urlCheckEmail,
+                    data: data,
+                    type: 'post',
+                    success: function(r) {
+                        if (r != '') {
+                            var errors = [];
+                            $t.siblings('.info_box').html(r).toggle();
+                            errors.push(t);
+                            self.viewErrors(errors);
+                        }
+                    }
+                });
+            });
         },
 
         fillPhoneCode: function(t) {

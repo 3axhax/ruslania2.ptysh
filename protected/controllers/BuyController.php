@@ -604,6 +604,18 @@ class BuyController extends MyController {
 		return $errors;
 	}
 
+	function actionCheckEmail() {
+		if (Yii::app()->request->isPostRequest) {
+			if (Yii::app()->user->isGuest) {
+				$record = User::model()->findByAttributes(array('login' => Yii::app()->request->getParam('email'), 'is_closed' => 0));
+				if ($record) {
+					$this->renderPartial('forgot_button', array('email' => Yii::app()->request->getPost('email')));
+				}
+			}
+		}
+		Yii::app()->end();
+	}
+
 	private function _checkAddress($items, $nameForm) {
 		$errors = array();
 		$requireFields = $this->_requireFieldsAddress($items, $nameForm);

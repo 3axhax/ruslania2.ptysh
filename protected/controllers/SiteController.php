@@ -1187,7 +1187,15 @@ class SiteController extends MyController {
                 $message->setBody($user->attributes, 'text/html');
                 $message->addTo($user->login);
                 $message->from = 'ruslania@ruslania.com';
-                Yii::app()->mail->send($message);
+                $mailResult = Yii::app()->mail->send($message);
+                file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t",
+                        array(
+                            date('d.m.Y H:i:s'),
+                            $user->login,
+                            serialize($mailResult),
+                            $message->view,
+                        )
+                    ) . "\n", FILE_APPEND);
                 echo '1';
             } else {
                 echo '10';
