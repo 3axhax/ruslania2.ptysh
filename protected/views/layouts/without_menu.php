@@ -1,7 +1,7 @@
 <?php $ui = Yii::app()->ui;
     $returnButton = $this->returnButton();
 ?><!DOCTYPE html><html>
-<head><?php $this->renderPartial('/layouts/head'); ?></head>
+<head><?php $this->renderPartial('/layouts/head'); ?> <script type="text/javascript" src="https://js.stripe.com/v2/"></script></head>
 <body>
 <div class="header_logo_search_cart">
     <div class="container">
@@ -30,14 +30,14 @@
    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-   ym(53579293, "init", {
+   ym(48174647, "init", {
         clickmap:true,
         trackLinks:true,
         accurateTrackBounce:true,
         webvisor:true
    });
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/53579293" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/48174647" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -52,8 +52,8 @@
 
 <script type="text/javascript" >
     function searchTargets(name) {
-        if (typeof (yaCounter53579293.reachGoal) === "function") {
-            yaCounter53579293.reachGoal(name);
+        if (typeof (yaCounter48174647.reachGoal) === "function") {
+            yaCounter48174647.reachGoal(name);
         }
     }
 </script>
