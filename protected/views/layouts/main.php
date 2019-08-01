@@ -290,12 +290,12 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                     <td class="search_text">
                         <div class="loading"><?= $ui->item('A_NEW_SEARCHING_RUR'); ?></div>
                         <input type="text" name="q" class="enable_virtual_keyboard" placeholder="<?= $ui->item('A_NEW_PLACEHOLDER_SEARCH'); ?>" id="Search" value="<?= Yii::app()->getRequest()->getParam('q') ?>"/>
-                        <span class="search_run fa"><input type="submit" value=""></span>
                         <div class="trigger_keyboard">
                             <img src="/new_img/keyboard.png" width="20px" class="keyboard_off_img"/>
                             <span class="keyboard_on" hidden><?= $ui->item('A_NEW_KEYBOARD_ON')?></span>
                             <span class="keyboard_off"><?= $ui->item('A_NEW_KEYBOARD_OFF')?></span>
                         </div>
+                        <span class="search_run fa"><input type="submit" value=""></span>
                     </td>
                 </tr>
             </table>

@@ -3577,10 +3577,12 @@ div.detail-prop .prop-value li { list-style-type: none; }
 
 .trigger_keyboard {
     position: absolute;
-    max-width: 100px;
+    width: 85px;
     bottom: 14px;
-    left: 620px;
+    left: 615px;
     cursor: pointer;
+    background-color: #fff;
+    padding-left: 5px;
     /*float: right;*/
     /*margin-right: 80px;*/
 }

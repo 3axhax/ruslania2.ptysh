@@ -629,7 +629,7 @@ On the third order step, uncheck the checkbox “Payer\'s address is the same as
   'TYPE_OF' => '%s',
   'USER_ADDRESS_TYPE_BUSINESS' => 'Company',
   'USER_ADDRESS_TYPE_PERSONAL' => 'Private person',
-  'USER_LOGIN_ALT' => 'Enter',
+  'USER_LOGIN_ALT' => 'Sign in',
   'USER_LOGIN_PICTURE' => 'li_en.png',
   'Video catalog' => 'Video-DVD',
   'VIDEO_ACTOR_IS' => 'Actors: %s',

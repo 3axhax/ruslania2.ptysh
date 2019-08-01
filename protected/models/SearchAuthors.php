@@ -32,6 +32,9 @@ class SearchAuthors {
 		if (mb_strlen($q, 'utf-8') == 1) $authors = $this->getBegin($entity, $q, array(), $limit, $count, true);
 		else {
 			$count = false;
+			$authors = $this->useSphinx($entity, $q, array(), $limit, true, $count, true);
+			if (!empty($authors)) return $authors;
+
 			$authors = $this->getLike($entity, $q, array(), $limit, true, $count, true);
 			$count = false;
 			if (empty($authors)) $authors = $this->getFromCompliances($entity, $q, array(), $limit, $count, true);
@@ -131,10 +134,10 @@ class SearchAuthors {
 		if (!Entity::checkEntityParam($entity, 'authors')) return array();
 
 		$entityParam = Entity::GetEntitiesList()[$entity];
-		$tableItems = $entityParam['site_table'];
+//		$tableItems = $entityParam['site_table'];
 		$tableItemsAuthors = $entityParam['author_table'];
 		$tableAuthors = 'all_authorslist';
-		$fieldIdItem = $entityParam['author_entity_field'];
+//		$fieldIdItem = $entityParam['author_entity_field'];
 
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
@@ -273,6 +276,58 @@ class SearchAuthors {
 			'where (query=:condition)'.
 		'';
 		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+	}
+
+	function useSphinx($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false, $useAvail = true) {
+		if ($q == '') return array();
+		if (!Entity::checkEntityParam($entity, 'authors')) return array();
+
+		$words = preg_split("/\W/ui", $q);
+		$words = array_filter($words);
+		if (empty($words)) return array();
+
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableItemsAuthors = $entityParam['author_table'];
+		$tableAuthors = 'all_authorslist';
+
+		$filter = array();
+		if ($useAvail) $filter['avail'] = '!filter=is_' . $entity . '_author,0';
+		if (!empty($excludes)) $filter['id'] = '!filter=id,' . implode(',', $excludes) . '';
+
+		$condition = array();
+		$condition['morphy_name'] = '(^' . implode(' ', $words) . '*)|(' . implode(' ', $words) . ')';
+		$condition['mode'] = 'mode=extended';
+		$condition['ranker'] = 'ranker=expr:top((word_count + (lcs - 1)/5 + 1/min_hit_pos + (word_count > 1)/(min_gaps + 1) + exact_hit + exact_order))';
+		if (!empty($filter)) $condition['filter'] = implode(';', $filter);
+//		$condition['fieldweights'] = 'fieldweights=100' . implode(',',$fieldWeights);
+		$condition['limit'] = 'limit=50000';
+		$condition['maxmatches'] = 'maxmatches=50000';
+
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
+				'if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ', '.
+				'is_' . $entity . '_author availItems '.
+			'from ' . $tableAuthors . ' t '.
+				'join ( ' .
+					'select t1.id ' .
+					'from _se_authors t1 ' .
+					'where (t1.query = ' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
+				') tMN using (id) ' .
+				(!$useAvail?'join ' . $tableItemsAuthors . ' tA on (tA.author_id = t.id) ':'').
+			(!$useAvail?'group by t.id ':'').
+			(empty($limit)?'':'limit ' . $limit . ' ').
+		'';
+		$authors = Yii::app()->db->createCommand($sql)->queryAll();
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byauthor', $ids);
+		}
+		return $authors;
 	}
 
 }
