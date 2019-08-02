@@ -381,6 +381,7 @@ return array (
   'MSG_PAYMENT_RESULTS_CLOSE_WIN' => 'Cerrar la ventana.',
   'MSG_PAYMENT_RESULTS_DECLINED_2' => 'Su pago ha sido rechazado por el sistema o un error ha ocurrido en el proceso de pago.',
   'MSG_PAYMENT_RESULTS_DECLINED_3' => 'Por favor, intente nuevamente más tarde o contáctenos.',
+    'MSG_PAYMENT_RESULTS_DECLINED_PAYPAL' => 'El pago de PayPal siempre está disponible. Elija "Enviar pago" (Es para pagar un artículo o servicio) al destinatario paypal@ruslania.com. Por favor escriba su número de pedido como mensaje.<br>Tel. +358 92727070',
   'MSG_PAYMENT_TYPE_0' => '',
   'MSG_PAYMENT_TYPE_1' => 'Factura',
   'MSG_PAYMENT_TYPE_10' => 'Pay by check ( only in USD )',

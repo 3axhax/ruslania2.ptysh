@@ -381,6 +381,7 @@ return array (
   'MSG_PAYMENT_RESULTS_CLOSE_WIN' => 'Fenster schlie&szlig;en.',
   'MSG_PAYMENT_RESULTS_DECLINED_2' => 'Das Zahlungssystem hat Ihre Zahlung abgewiesen oder während des Zahlungsvorgangs ist ein Fehler aufgetreten.',
   'MSG_PAYMENT_RESULTS_DECLINED_3' => 'Bitte versuchen Sie die Zahlung später durchzuführen, oder setzen Sie sich mit uns in Verbindung.',
+    'MSG_PAYMENT_RESULTS_DECLINED_PAYPAL' => 'Paypal-Zahlung ist immer verfügbar. Wählen Sie "Geld senden" (für Waren und Dienstleistungen) an den Empfänger paypal@ruslania.com. Bitte schreiben Sie Ihre Bestellnummer als Nachricht.<br>Tel. +358 92727070',
   'MSG_PAYMENT_TYPE_0' => 'Payment type hasn\'t been chosen',
   'MSG_PAYMENT_TYPE_1' => 'Rechnung (Achtung! Das gilt nur für die Kunden von Finland und die Firmen innerhalb der EU.)',
   'MSG_PAYMENT_TYPE_10' => 'Pay by check ( only in USD )',

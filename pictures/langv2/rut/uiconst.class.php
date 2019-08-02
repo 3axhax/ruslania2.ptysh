@@ -390,6 +390,7 @@ return array (
   'MSG_PAYMENT_RESULTS_CLOSE_WIN' => 'Zakryt okno',
   'MSG_PAYMENT_RESULTS_DECLINED_2' => 'Vash platezh byl otklonen platezhnoj sistemoj ili v protsesse oplaty proizoshla oshibka.',
   'MSG_PAYMENT_RESULTS_DECLINED_3' => 'Pozhalujsta, poprobujte oplatit Vash zakaz pozzhe ili svjazhites s nami.',
+    'MSG_PAYMENT_RESULTS_DECLINED_PAYPAL' => 'Oplata cherez sistemu PayPal vsegda dostupna. Vyberite «Otpravit dengi» (za tovary ili uslugi) poluchatelyu paypal@ruslania.com. Pozhaluysta, napishite nomer vashego zakaza v primechaniyakh.<br>Tel. +358 92727070',
   'MSG_PAYMENT_TYPE_0' => 'Tip oplaty ne vybran',
   'MSG_PAYMENT_TYPE_00' => 'Oplata v magazine',
   'MSG_PAYMENT_TYPE_1' => 'Oplata v magazine',

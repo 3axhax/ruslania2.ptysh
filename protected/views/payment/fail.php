@@ -8,7 +8,8 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
 			<div class="info-box warning" style="border: none;     background-color: #edb421;     color: #333333;">
 				<h2><?=$ui->item('A_SAMPO_PAYMENT_DECLINED'); ?></h2>
 				<p><?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_2'); ?><br/>
-					<?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_3'); ?>
+					<?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_3'); ?><br/>
+					<?=$ui->item('MSG_PAYMENT_RESULTS_DECLINED_PAYPAL'); ?>
 				</p>
 			</div>
 

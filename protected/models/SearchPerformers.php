@@ -59,7 +59,11 @@ class SearchPerformers {
 		$items = array();
 		//сначала ищу если начанается
 		if (mb_strlen($q, 'utf-8') == 1) $items = $this->getBegin($entity, $q, array(), $limit);
-		else $items = $this->getLike($entity, $q, array(), $limit, true);
+		else {
+			$items = $this->useSphinx($entity, $q, array(), $limit, true);
+			if (!empty($items)) return $items;
+			$items = $this->getLike($entity, $q, array(), $limit, true);
+		}
 		//сначала ищу если начанается
 
 		//потом добавляю тем, что содержит
@@ -84,13 +88,13 @@ class SearchPerformers {
 		$entityParam = Entity::GetEntitiesList()[$entity];
 		$tableItems = $entityParam['site_table'];
 		$tableItemsPerformers = $entityParam['performer_table'];
-		$tablePerformers = $entityParam['performer_table_list'];
+		$tablePerformers = 'all_authorslist';
 		$fieldIdItem = $entityParam['performer_field'];
 
 		$sql = ''.
 			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ' '.
 			'from ' . $tablePerformers . ' t '.
-				'join ' . $tableItemsPerformers . ' tIA on (tIA.performer_id = t.id) '.
+				'join ' . $tableItemsPerformers . ' tIA on (tIA.person_id = t.id) '.
 				'join ' . $tableItems . ' tI on (tI.id = tIA.' . $fieldIdItem . ') and (tI.avail_for_order = 1) '.
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
@@ -186,6 +190,58 @@ class SearchPerformers {
 			'where (query=:condition)'.
 			'';
 		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
+	}
+
+	function useSphinx($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false, $useAvail = 1) {
+		if ($q == '') return array();
+		if (!Entity::checkEntityParam($entity, 'performers')) return array();
+
+		$words = preg_split("/\W/ui", $q);
+		$words = array_filter($words);
+		if (empty($words)) return array();
+
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableItemsAuthors = $entityParam['author_table'];
+		$tableAuthors = 'all_authorslist';
+
+		$filter = array();
+		if ($useAvail) $filter['avail'] = '!filter=is_' . $entity . '_performer,0';
+		if (!empty($excludes)) $filter['id'] = '!filter=id,' . implode(',', $excludes) . '';
+
+		$condition = array();
+		$condition['morphy_name'] = '(^' . implode(' ', $words) . '*)|(' . implode(' ', $words) . ')';
+		$condition['mode'] = 'mode=extended';
+		$condition['ranker'] = 'ranker=expr:top((word_count + (lcs - 1)/5 + 1/min_hit_pos + (word_count > 1)/(min_gaps + 1) + exact_hit + exact_order))';
+		if (!empty($filter)) $condition['filter'] = implode(';', $filter);
+//		$condition['fieldweights'] = 'fieldweights=100' . implode(',',$fieldWeights);
+		$condition['limit'] = 'limit=50000';
+		$condition['maxmatches'] = 'maxmatches=50000';
+
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, '.
+			'if (t.repair_title_' . $this->_siteLang . ' <> "", t.repair_title_' . $this->_siteLang . ', t.title_' . $this->_siteLang . ') title_' . $this->_siteLang . ', '.
+			'is_' . $entity . '_performer availItems '.
+			'from ' . $tableAuthors . ' t '.
+			'join ( ' .
+			'select t1.id ' .
+			'from _se_authors t1 ' .
+			'where (t1.query = ' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
+			') tMN using (id) ' .
+			(!$useAvail?'join ' . $tableItemsAuthors . ' tA on (tA.person_id = t.id) ':'').
+			(!$useAvail?'group by t.id ':'').
+			(empty($limit)?'':'limit ' . $limit . ' ').
+			'';
+		$authors = Yii::app()->db->createCommand($sql)->queryAll();
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/byperformer', $ids);
+		}
+		return $authors;
 	}
 
 }

@@ -381,6 +381,7 @@ return array (
   'MSG_PAYMENT_RESULTS_CLOSE_WIN' => 'Stäng',
   'MSG_PAYMENT_RESULTS_DECLINED_2' => ' Betalningen har avvisats eller ett fel har uppstått i betalningssystemet. ',
   'MSG_PAYMENT_RESULTS_DECLINED_3' => 'Försök betala på nytt eller kontakta oss.',
+    'MSG_PAYMENT_RESULTS_DECLINED_PAYPAL' => 'Paypal-betalning är alltid tillgänglig. Välj "Send Money" (for goods and services) till mottagaren paypal@ruslania.com. Skriv ditt beställningsnummer som meddelandet.<br>Tel. +358 92727070',
   'MSG_PAYMENT_TYPE_0' => 'Du har inte valt betälningssättet',
   'MSG_PAYMENT_TYPE_1' => 'Faktura',
   'MSG_PAYMENT_TYPE_10' => 'Betala med check (endast i USD)',

@@ -28,7 +28,11 @@ class SearchPublishers {
 
 		//сначала ищу если начанается
 		if (mb_strlen($q, 'utf-8') == 1) $publishers = $this->getBegin($entity, $q, array(), $limit);
-		else $publishers = $this->getLike($entity, $q, array(), $limit, true);
+		else {
+			$publishers = $this->useSphinx($entity, $q, array(), $limit, true);
+			if (!empty($publishers)) return $publishers;
+			$publishers = $this->getLike($entity, $q, array(), $limit, true);
+		}
 		//сначала ищу если начанается
 
 		//потом добавляю тем, что содержит
@@ -101,7 +105,6 @@ class SearchPublishers {
 			'where (t.title_' . $this->_siteLang . ' like :q) '.
 				'and (is_' . $entity . ' > 0) '.
 				(empty($excludes)?'':' and (t.id not in (' . implode(', ', $excludes) . ')) ').
-			'group by t.id '.
 			'order by title_' . $this->_siteLang . ' '.
 			(empty($limit)?'':'limit ' . $limit . ' ').
 		'';
@@ -282,4 +285,52 @@ class SearchPublishers {
 		return Yii::app()->db->createCommand($sql)->queryColumn(array(':condition'=>implode(';', $condition)));
 	}
 
+	function useSphinx($entity, $q, $excludes = array(), $limit = '', $isBegin = false, &$count = false, $useAvail = 1) {
+		if ($q == '') return array();
+		if (!Entity::checkEntityParam($entity, 'publisher')) return array();
+
+		$words = preg_split("/\W/ui", $q);
+		$words = array_filter($words);
+		if (empty($words)) return array();
+
+		$entityParam = Entity::GetEntitiesList()[$entity];
+		$tableAuthors = 'all_publishers';
+
+		$filter = array();
+		if ($useAvail) $filter['avail'] = '!filter=is_' . $entity . ',0';
+		if (!empty($excludes)) $filter['id'] = '!filter=id,' . implode(',', $excludes) . '';
+
+		$condition = array();
+		$condition['morphy_name'] = '(^' . implode(' ', $words) . '*)|(' . implode(' ', $words) . ')';
+		$condition['mode'] = 'mode=extended';
+		$condition['ranker'] = 'ranker=expr:top((word_count + (lcs - 1)/5 + 1/min_hit_pos + (word_count > 1)/(min_gaps + 1) + exact_hit + exact_order))';
+		if (!empty($filter)) $condition['filter'] = implode(';', $filter);
+//		$condition['fieldweights'] = 'fieldweights=100' . implode(',',$fieldWeights);
+		$condition['limit'] = 'limit=50000';
+		$condition['maxmatches'] = 'maxmatches=50000';
+
+		$sql = ''.
+			'select ' . (($count !== false)?'sql_calc_found_rows ':'') . 't.id, t.title_' . $this->_siteLang . ', '.
+			'is_' . $entity . ' availItems '.
+			'from ' . $tableAuthors . ' t '.
+				'join ( ' .
+					'select t1.id ' .
+					'from _se_publishers t1 ' .
+					'where (t1.query = ' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
+				') tMN using (id) ' .
+			(empty($limit)?'':'limit ' . $limit . ' ').
+			'';
+		Debug::staticRun(array($sql));
+		$authors = Yii::app()->db->createCommand($sql)->queryAll();
+		if ($count !== false) {
+			$sql = 'select found_rows();';
+			$count = Yii::app()->db->createCommand($sql)->queryScalar();
+		}
+		$ids = array();
+		foreach ($authors as $item) $ids[] = $item['id'];
+		if (!empty($ids)) {
+			HrefTitles::get()->getByIds($entity, 'entity/publisher', $ids);
+		}
+		return $authors;
+	}
 }

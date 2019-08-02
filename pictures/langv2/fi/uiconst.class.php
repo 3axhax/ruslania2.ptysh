@@ -382,6 +382,7 @@ return array (
   'MSG_PAYMENT_RESULTS_CLOSE_WIN' => 'Sulje ikkuna.',
   'MSG_PAYMENT_RESULTS_DECLINED_2' => 'Maksujärjestelmä on hylännyt maksun tai maksun aikana on tapahtunut virhe.',
   'MSG_PAYMENT_RESULTS_DECLINED_3' => 'Ole hyvä ja yritä maksaa myöhemmin tai ota yhteyttä meihin.',
+    'MSG_PAYMENT_RESULTS_DECLINED_PAYPAL' => 'Paypal-maksu on aina käytettävissä. Valitse "Lähetä rahaa" (Maksu tuotteesta tai palvelusta) vastaanottajalle paypal@ruslania.com. Kirjoita tilauksen numero viestikenttään.<br>Puh. +358 92727070',
   'MSG_PAYMENT_TYPE_0' => 'Maksutapaa ei ole valittu',
   'MSG_PAYMENT_TYPE_1' => 'Lasku',
   'MSG_PAYMENT_TYPE_10' => 'Pay by check ( only in USD )',

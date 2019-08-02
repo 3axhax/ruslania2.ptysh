@@ -104,7 +104,7 @@
                 minChars:1,
                 cache : false,
                 hideOnSelect: false,
-                url:'/liveSearch/<?= $liveAction ?>',
+                url:'<?= Yii::app()->createUrl('liveSearch/' . $liveAction)  ?>',
                 data:dataPost,
                 formatItem:function (data, $item, q) {
                     return '<a class="page_detail_link" href="' + data.href + '">' + data.title + '</a>';
