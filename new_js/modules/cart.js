@@ -421,8 +421,8 @@ Stripe.applePay.checkAvailability(function(available) {
                         if (r != '') {
                             var errors = [];
                             $t.siblings('.info_box').html(r).toggle();
-                            errors.push(t);
-                            self.viewErrors(errors);
+                            //errors.push(t);
+                            //self.viewErrors(errors);
                         }
                     }
                 });
@@ -913,6 +913,7 @@ Stripe.applePay.checkAvailability(function(available) {
 
             $('.error').removeClass('error');
             $('.texterror').hide();
+            $('#Reg').find('.info_box').hide();
 
             var self = this;
             var fd = {};
@@ -1005,8 +1006,14 @@ Stripe.applePay.checkAvailability(function(available) {
                     if (firstErrorPos == 0) firstErrorPos = parseInt($f.offset().top) - 10;
                     else firstErrorPos = Math.min(firstErrorPos, parseInt($f.offset().top) - 10);
                     if ($f.is(':visible')) errorVisible = true;
-                    $f.addClass('error')
-                        .siblings('.texterror').show();
+                    if ($f.siblings('.info_box:visible').length > 0) {
+                        $f.addClass('error')
+                            .siblings('.texterror').hide();
+                    }
+                    else {
+                        $f.addClass('error')
+                            .siblings('.texterror').show();
+                    }
                 }
             }
             if (!errorVisible) {
