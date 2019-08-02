@@ -4,10 +4,26 @@
 		<tr>
 			<td class="pic">
 <?php
+$photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
+$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+/**@var $photoModel ModelsPhotos*/
+$photoModel = $modelName::model();
+$photoId = $photoModel->getFirstId($item['id']);
+
 $url = ProductHelper::CreateUrl($item);
 $urlPicture = ProductHelper::Link2Picture($item, true);
 if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/')): ?>
-				<a href="<?= $url ?>"><img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" /></a>
+				<a href="<?= $url ?>">
+					<?php if (empty($photoId)): ?>
+						<img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" />
+					<?php else: ?>
+						<picture>
+							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
+							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+							<img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" />
+						</picture>
+					<?php endif; ?>
+				</a>
 <?php endif; ?>
 			</td>
 			<td class="name">
