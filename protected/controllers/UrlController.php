@@ -188,4 +188,38 @@ class UrlController extends MyController {
 		var_dump($_GET);
 		exit;
 	}
+
+	function actionItemPhoto() {
+		$eid = (int)Yii::app()->getRequest()->getParam('eid');
+		$iid = (int)Yii::app()->getRequest()->getParam('iid');
+		$result = array('errors'=>array('неудалось закачать фото'));
+		if (($iid > 0)&&Entity::IsValid($eid)) {
+			$params = Entity::GetEntitiesList()[$eid];
+			$sql = 'select eancode from ' . $params['site_table'] . ' where (id = :id) limit 1';
+			$ean = Yii::app()->db->createCommand($sql)->queryScalar(array(':id'=>$iid));
+
+			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+			/**@var $model ModelsPhotos*/
+			$model = $modelName::model();
+			$model->setAttributes(array('iid'=>$iid, 'is_upload'=>1, 'position'=>1), false);
+			$model->setIsNewRecord(true);
+			$model->id = null;
+			$model->insert();
+
+			$files = $_FILES['files'];
+			foreach($files['tmp_name'] as $k => $tmp) {
+				if ($model->createFotos($tmp, $model->id, $ean)) {
+					$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)';
+					Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid, ':id'=>$model->id));
+					$result['errors'] = array();
+					$result['src'] = $model->getHrefPath($model->id, 'd', $ean, 'webp');
+					$this->ResponseJson($result);
+					return;
+				}
+			}
+			$sql = 'delete from ' . $params['photo_table'] . ' where (id = :id)';
+			Yii::app()->db->createCommand($sql)->execute(array(':id'=>$model->id));
+		}
+		$this->ResponseJson($result);
+	}
 }

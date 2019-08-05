@@ -56,7 +56,7 @@ class ToWebpCommand extends CConsoleCommand {
 						$model->setIsNewRecord(true);
 						$model->id = null;
 						$model->insert();
-						if ($model->createFotos($filePhoto, $model->id, $item['eancode'])) {
+						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
 							$model->setAttribute('is_upload', 2);
 							$model->update();
 							$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';

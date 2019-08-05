@@ -31,11 +31,11 @@ class ModelsPhotos extends CActiveRecord {
 		return $ten . '/' . $idFoto . '/';
 	}
 
-	function createFotos($tmpName, $id, $ean, $quality = 80){
+	function createFotos($tmpName, $idFoto, $ean, $quality = 80){
 		$param = $this->_getFotoParams($tmpName);
 		if (empty($param)) return false;
 
-		$fotoDir = $this->_createFolderForFotos($id);
+		$fotoDir = $this->_createFolderForFotos($idFoto);
 		foreach ($this->_lables as $label => $param) {
 			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
 			if ($label == 'orig') {
@@ -199,4 +199,36 @@ class ModelsPhotos extends CActiveRecord {
 		}
 		return $this->_photos;
 	}
+
+	/** Через курл пытается загрузить фотографию. В случае успеха возвращает путь до файла, иначе - false
+	 * @return mixed */
+	function downloadFile($url, $idFoto){
+		$dir = $this->_createFolderForFotos($idFoto);
+		$file = $dir . '_foto_' . ceil(microtime(true) * 1000);
+
+		$fp = fopen($file, 'w');
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_HEADER, false); //не записывать в файл заголовки
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);//Максимально позволенное количество секунд для выполнения cURL-функций.
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);//Количество секунд ожидания при попытке соединения. Используйте 0 для бесконечного ожидания.
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);//следовать за редиректами
+		curl_setopt($ch, CURLOPT_MAXREDIRS, 3);//3 редиректа - максимум
+		curl_setopt($ch, CURLOPT_FILE, $fp);//записываем в файл
+		curl_exec($ch);
+
+		$curlInfo = curl_getinfo($ch);
+		$errors = curl_errno($ch) || ($curlInfo['http_code'] >= 300);
+
+		curl_close($ch);
+		fclose($fp);
+
+		if ($errors || !@filesize($file)){
+			unlink($file);
+			return false;
+		}
+
+		return $file;
+	}
+
 }

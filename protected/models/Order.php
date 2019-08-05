@@ -310,9 +310,9 @@ class Order extends CMyActiveRecord
                 $ba = array('contact_email'=>'', 'first_name'=>'', 'last_name'=>'');
                 if (!empty($order->BillingAddressID)) $ba = $a->GetAddress($uid, $order->BillingAddressID);
                 $client = array();
-                if (($user['first_name'] != $da['first_name'])&&($user['first_name'] != $ba['first_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
-                elseif (($user['last_name'] != $da['last_name'])&&($user['last_name'] != $ba['last_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
-                if (($user['login'] != $da['contact_email'])&&($user['login'] != $ba['contact_email'])) {
+                if (($user['first_name'] != $da['receiver_first_name'])&&($user['first_name'] != $ba['receiver_first_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
+                elseif (($user['last_name'] != $da['receiver_last_name'])&&($user['last_name'] != $ba['receiver_last_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
+                if (($user['login'] != $da['contact_email'])&&($user['login'] != $ba['contact_email'])&&(!empty($da['contact_email'])||!empty($ba['contact_email']))) {
                     $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
                     $client['email'] = $user['login'] . "\r\n";
                 }

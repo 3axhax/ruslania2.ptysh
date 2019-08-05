@@ -22,6 +22,64 @@ class RemovePhotosCommand extends CConsoleCommand {
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
             if ($entity != 10) continue;
 
+            $modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+            /**@var $model ModelsPhotos*/
+            $model = $modelName::model();
+
+            $sql = 'drop table if exists _tmp_' . $params['photo_table'] . '_to_update';
+            Yii::app()->db->createCommand()->setText($sql)->execute();
+
+            $sql = 'create table if not exists _tmp_' . $params['photo_table'] . '_to_update (`id_foto` int, `id` int, key(id_foto)) engine=myisam';
+            Yii::app()->db->createCommand()->setText($sql)->execute();
+
+            $sql = 'truncate _tmp_' . $params['photo_table'] . '_to_update';
+            Yii::app()->db->createCommand($sql)->execute();
+
+            $sql = ''.
+                'insert into _tmp_' . $params['photo_table'] . '_to_update (id_foto, id) '.
+                'select t.id id_foto, t.iid id '.
+                'from ' . $params['photo_table'] . ' t '.
+                'where (t.is_upload = 2) '.
+            '';
+            Yii::app()->db->createCommand()->setText($sql)->execute();
+
+            $sqlItems = ''.
+                'select t.id_foto, t.id '.
+                'from _tmp_' . $params['photo_table'] . '_to_update t '.
+                'order by t.id_foto desc '.
+                'limit ' . $this->_counts . ' '.
+            '';
+//			echo $sqlItems . "\n";
+            $step = 0;
+            while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
+                $step++;
+                foreach ($items as $item) {
+                    $sql = 'delete from _tmp_' . $params['photo_table'] . '_to_update where (id_foto = ' . (int) $item['id_foto'] . ')';
+                    Yii::app()->db->createCommand()->setText($sql)->execute();
+
+                    $filePhoto = $model->getUnixDir() . $model->getRelativePath($item['id_foto']);
+                    if (file_exists($filePhoto)) {
+                        $sql = 'update ' . $params['photo_table'] . ' set is_upload = 1 where (id = ' . (int) $item['id_foto'] . ')';
+                        Yii::app()->db->createCommand($sql)->execute();
+                        $sql = 'delete from _no_photo where (eid = :eid) and (id = :id)';
+                        Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id']));
+                    }
+                }
+                if (!($step%10)) echo $step . ' ' . $params['photo_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
+            }
+//			echo date('d.m.Y H:i:s') . "\n";
+        }
+
+
+        echo 'end ' . date('d.m.Y H:i:s') . "\n";
+    }
+
+    /*    public function actionIndex() {
+        echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+
+        foreach (Entity::GetEntitiesList() as $entity=>$params) {
+            if ($entity != 10) continue;
+
             $sql = 'create table if not exists _tmp_' . $params['photo_table'] . '_to_remove (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
             Yii::app()->db->createCommand()->setText($sql)->execute();
 
@@ -80,7 +138,7 @@ class RemovePhotosCommand extends CConsoleCommand {
 
 
         echo 'end ' . date('d.m.Y H:i:s') . "\n";
-    }
+    }*/
 
 
     private function _query($sql, $params = null) {
