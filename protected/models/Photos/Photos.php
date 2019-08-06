@@ -36,6 +36,8 @@ class ModelsPhotos extends CActiveRecord {
 		if (empty($param)) return false;
 
 		$fotoDir = $this->_createFolderForFotos($idFoto);
+		if (!file_exists($fotoDir)) return false;
+
 		foreach ($this->_lables as $label => $param) {
 			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
 			if ($label == 'orig') {
@@ -198,6 +200,11 @@ class ModelsPhotos extends CActiveRecord {
 			}
 		}
 		return $this->_photos;
+	}
+
+	function remove($idPhoto) {
+		$directory = $this->getUnixDir() . $this->getRelativePath($idPhoto);
+		$this->_removeDirWithFotos($directory);
 	}
 
 	/** Через курл пытается загрузить фотографию. В случае успеха возвращает путь до файла, иначе - false

@@ -16,14 +16,13 @@ define('cronAction', 1);
 class RemovePhotosCommand extends CConsoleCommand {
     private $_counts = 100;
 
-    public function actionIndex() {
+/*    public function actionIndex() {
         echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
             if ($entity != 10) continue;
 
             $modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
-            /**@var $model ModelsPhotos*/
             $model = $modelName::model();
 
             $sql = 'drop table if exists _tmp_' . $params['photo_table'] . '_to_update';
@@ -72,9 +71,9 @@ class RemovePhotosCommand extends CConsoleCommand {
 
 
         echo 'end ' . date('d.m.Y H:i:s') . "\n";
-    }
+    }*/
 
-    /*    public function actionIndex() {
+        public function actionIndex() {
         echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
@@ -93,7 +92,7 @@ class RemovePhotosCommand extends CConsoleCommand {
                 'insert into _tmp_' . $params['photo_table'] . '_to_remove (id, eancode, image) '.
                 'select t.id, t.eancode, t.image '.
                 'from ' . $params['site_table'] . ' t '.
-                    'join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
+                    'join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) and (tF.is_upload = 1) '.
                     'left join _tmp_' . $params['photo_table'] . '_remove tR on (tR.id = t.id) '.
                 'where (tR.id is null) '.
             '';
@@ -138,7 +137,7 @@ class RemovePhotosCommand extends CConsoleCommand {
 
 
         echo 'end ' . date('d.m.Y H:i:s') . "\n";
-    }*/
+    }
 
 
     private function _query($sql, $params = null) {

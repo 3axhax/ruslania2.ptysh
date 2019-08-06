@@ -164,4 +164,34 @@ class WidgetsController extends MyController {
 		if ($page === 'register') Yii::app()->createUrl('client/me');
 		return $url;
 	}
+
+	function actionPhoto() {
+		$options = array(
+			'iid' => (int)Yii::app()->getRequest()->getParam('iid'),
+			'eid' => (int)Yii::app()->getRequest()->getParam('eid'),
+			'urlUpload' => 'https://ruslania.com/ru/url/itemPhotoAdd/',
+			'urlClear' => 'https://ruslania.com/ru/url/itemPhotoClear/',
+		);
+		$src = '';
+		if (($options['iid'] > 0)&&Entity::IsValid($options['eid'])) {
+			$params = Entity::GetEntitiesList()[$options['eid']];
+			$sql = 'select eancode, image from ' . $params['site_table'] . ' where (id = :id) limit 1';
+			$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id'=>$options['iid']));
+			if (!empty($row)) {
+				$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) and (is_upload = 1) order by position asc limit 1';
+				$idFoto = (int)Yii::app()->db->createCommand($sql)->queryScalar(array(':iid'=>$options['iid']));
+
+				if ($idFoto > 0) {
+					$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+					/**@var $model ModelsPhotos*/
+					$model = $modelName::model();
+					$src = $model->getHrefPath($idFoto, Yii::app()->getRequest()->getParam('label', 'd'), $row['eancode'], 'jpg');
+				}
+				elseif(!empty($row['image'])) $src = Picture::Get($row, Picture::BIG);
+			}
+
+		}
+		$this->renderPartial('photo', array('src'=>$src, 'options'=>$options));
+	}
+
 }

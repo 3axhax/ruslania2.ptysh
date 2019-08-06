@@ -189,37 +189,86 @@ class UrlController extends MyController {
 		exit;
 	}
 
-	function actionItemPhoto() {
+	function actionItemPhotoAdd() {
 		$eid = (int)Yii::app()->getRequest()->getParam('eid');
 		$iid = (int)Yii::app()->getRequest()->getParam('iid');
 		$result = array('errors'=>array('неудалось закачать фото'));
 		if (($iid > 0)&&Entity::IsValid($eid)) {
-			$params = Entity::GetEntitiesList()[$eid];
-			$sql = 'select eancode from ' . $params['site_table'] . ' where (id = :id) limit 1';
-			$ean = Yii::app()->db->createCommand($sql)->queryScalar(array(':id'=>$iid));
+			$file = CUploadedFile::getInstanceByName('inputImg');
+			if (!empty($file)) {
+				if(!preg_match('|image|', $file->type)) {
+					$result['errors'] = array('Это не картинка');
+					@unlink($file->tempName);
+				}
+				else {
+					$params = Entity::GetEntitiesList()[$eid];
+					$sql = 'select eancode from ' . $params['site_table'] . ' where (id = :id) limit 1';
+					$ean = Yii::app()->db->createCommand($sql)->queryScalar(array(':id'=>$iid));
 
-			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
-			/**@var $model ModelsPhotos*/
-			$model = $modelName::model();
-			$model->setAttributes(array('iid'=>$iid, 'is_upload'=>1, 'position'=>1), false);
-			$model->setIsNewRecord(true);
-			$model->id = null;
-			$model->insert();
-
-			$files = $_FILES['files'];
-			foreach($files['tmp_name'] as $k => $tmp) {
-				if ($model->createFotos($tmp, $model->id, $ean)) {
-					$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)';
-					Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid, ':id'=>$model->id));
-					$result['errors'] = array();
-					$result['src'] = $model->getHrefPath($model->id, 'd', $ean, 'webp');
-					$this->ResponseJson($result);
-					return;
+					$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+					/**@var $model ModelsPhotos*/
+					$model = $modelName::model();
+					$model->setAttributes(array('iid'=>$iid, 'is_upload'=>1, 'position'=>1), false);
+					$model->setIsNewRecord(true);
+					$model->id = null;
+					$model->insert();
+					if ($model->createFotos($file->tempName, $model->id, $ean)) {
+						$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)';
+						Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid, ':id'=>$model->id));
+						unset($result['errors']);
+						$result['src'] = $model->getHrefPath($model->id, 'd', $ean, 'jpg');
+						$this->ResponseJson($result);
+						return;
+					}
+					$sql = 'delete from ' . $params['photo_table'] . ' where (id = :id)';
+					Yii::app()->db->createCommand($sql)->execute(array(':id'=>$model->id));
 				}
 			}
-			$sql = 'delete from ' . $params['photo_table'] . ' where (id = :id)';
-			Yii::app()->db->createCommand($sql)->execute(array(':id'=>$model->id));
 		}
 		$this->ResponseJson($result);
+	}
+
+	function actionItemPhotoClear() {
+		$eid = (int)Yii::app()->getRequest()->getParam('eid');
+		$iid = (int)Yii::app()->getRequest()->getParam('iid');
+		$result = array('errors'=>array('неудалось удалить фото'));
+		if (($iid > 0)&&Entity::IsValid($eid)) {
+			$params = Entity::GetEntitiesList()[$eid];
+			$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) order by position asc';
+			$fotoIds = Yii::app()->db->createCommand($sql)->queryColumn(array(':iid'=>$iid));
+			if (!empty($fotoIds)) {
+				$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid)';
+				Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid));
+				$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+				/**@var $model ModelsPhotos*/
+				$model = $modelName::model();
+				foreach ($fotoIds as $idFoto) $model->remove($idFoto);
+				unset($result['errors']);
+			}
+		}
+		$this->ResponseJson($result);
+	}
+
+	function actionItemPhotoSrc() {
+		$eid = (int)Yii::app()->getRequest()->getParam('eid');
+		$iid = (int)Yii::app()->getRequest()->getParam('iid');
+		if (($iid > 0)&&Entity::IsValid($eid)) {
+			$params = Entity::GetEntitiesList()[$eid];
+			$sql = 'select eancode, image from ' . $params['site_table'] . ' where (id = :id) limit 1';
+			$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id'=>$iid));
+			if (empty($row)) return;
+
+			$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) and (is_upload = 1) order by position asc limit 1';
+			$idFoto = (int)Yii::app()->db->createCommand($sql)->queryScalar(array(':iid'=>$iid));
+
+			if ($idFoto > 0) {
+				$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+				/**@var $model ModelsPhotos*/
+				$model = $modelName::model();
+				echo $model->getHrefPath($idFoto, Yii::app()->getRequest()->getParam('label', 'd'), $row['eancode'], 'jpg');
+			}
+			else echo Picture::Get($row, Picture::BIG);
+		}
+		return;
 	}
 }

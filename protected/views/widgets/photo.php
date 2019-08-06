@@ -1,0 +1,129 @@
+<?php /** Created by Кирилл rkv@dfaktor.ru 06.08.2019 22:41*/ ?>
+<!DOCTYPE html><html>
+<head>
+    <meta name="csrf" content="<?= MyHTML::csrf(); ?>"/>
+    <script src="/new_js/jquery.js" type="text/javascript"></script>
+    <style>
+        #js_photo {
+            position: relative;
+            width: 200px;
+            height: 300px;
+        }
+        div.photo {
+            width: initial;
+            height: inherit;
+        }
+        #photoImg {
+            width: 100%;
+        }
+        #clearImg {
+            background-color: red;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        #inputImg {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="js_photo">
+    <div class="photo"><img class="photo" id="photoImg" <?= (empty($src)?'':'src="' . $src . '"') ?>/></div>
+    <div class="clearPhoto" id="clearImg">X</div>
+    <input type="file" name="inputImg" id="inputImg" />
+</div>
+
+<script type="text/javascript">
+    (function() {
+        img = function() {
+            return new _Img();
+        };
+
+        function _Img() {}
+        _Img.prototype = {
+            urlUpload: '', urlClear: '',
+            //$img=null, $input=null, $clear=null,
+            //eid=0, iid=0,
+
+            init: function(options){
+                this.setConst(options);
+                this.setEvents();
+            },
+            setConst: function(options) {
+                this.csrf = $('meta[name=csrf]').attr('content').split('=');
+                this.urlUpload = options.urlUpload;
+                this.urlClear = options.urlClear;
+                this.eid = options.eid;
+                this.iid = options.iid;
+                this.$img = $('#photoImg');
+                this.$input = $('#inputImg');
+                this.$clear = $('#clearImg');
+            },
+            setEvents: function() {
+                var self = this;
+                self.$img.closest('div').on('click', function() { self.$input.click(); });
+                self.$input.on('change', function() {
+                    var fd = new FormData();
+                    var f = self.$input.get(0);
+                    fd.append(f.name, f.files[0]);
+                    fd.append('eid', self.eid);
+                    fd.append('iid', self.iid);
+                    fd.append(self.csrf[0], self.csrf[1]);
+
+                    $.ajax({
+                        url : self.urlUpload,
+                        type: 'POST',
+                        data : fd,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response) {
+                                response = JSON.parse(response);
+                                if ('errors' in response) alert(response['errors'].join("\n"));
+                                else if ('src' in response) self.$img.attr('src', response['src']);
+                            }
+                            else alert('upload fail');
+                        }
+                    });
+//                    readURL(this, self.$img);
+                });
+                self.$clear.on('click', function() {
+                    var fd = new FormData();
+                    fd.append('eid', self.eid);
+                    fd.append('iid', self.iid);
+                    fd.append(self.csrf[0], self.csrf[1]);
+
+                    $.ajax({
+                        url : self.urlClear,
+                        type: 'POST',
+                        data : fd,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response) {
+                                response = JSON.parse(response);
+                                if ('errors' in response) alert(response['errors'].join("\n"));
+                                else {
+                                    self.$input.get(0).value = null;
+                                    self.$img.attr('src', '');
+                                }
+                            }
+                            else alert('error');
+                        }
+                    });
+                });
+            }
+        }
+    }());
+    $(document).ready(function() {
+        img().init(<?= json_encode($options) ?>);
+    });
+</script>
+</body>
+</html>
