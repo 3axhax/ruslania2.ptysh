@@ -17,7 +17,7 @@ class DownloadPhotosCommand extends CConsoleCommand {
             /**@var $model ModelsPhotos*/
             $model = $modelName::model();
             $sqlItems = ''.
-                'select tF.id, tF.href, t.eancode '.
+                'select tF.id, tF.href, tF.crop, t.eancode '.
                 'from ' . $params['photo_table'] . ' tF '.
                     'join ' . $params['site_table'] . ' t on (t.id = tF.iid) '.
                 'where (tF.is_upload = 0) and (tF.href <> "") '.
@@ -30,9 +30,8 @@ class DownloadPhotosCommand extends CConsoleCommand {
             if ($items->count() > 0) {
                 $step++;
                 foreach ($items as $item) {
-                    $filePhoto = $model->downloadFile($item['href'], $item['id'], $item['eancode']);
-                    var_dump($filePhoto, file_exists($filePhoto)); echo "\n";
-                    if ($filePhoto&&file_exists($filePhoto)&&$model->createFotos($filePhoto, $item['id'], $item['eancode'], 80, false)) {
+                    $filePhoto = $model->downloadFile($item['href'], $item['id'], $item['eancode'], $item['crop']);
+                    if ($filePhoto&&file_exists($filePhoto)&&$model->createFotos($filePhoto, $item['id'], $item['eancode'], 80, false, false)) {
                         $sql = 'update ' . $params['photo_table'] . ' set is_upload = 1 where (id = ' . (int) $item['id'] . ')';
                         Yii::app()->db->createCommand()->setText($sql)->execute();
                     }

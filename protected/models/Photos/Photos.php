@@ -40,9 +40,10 @@ class ModelsPhotos extends CActiveRecord {
 	 * @param string $ean ean товара, нужен для названия файла
 	 * @param int $quality качество картинки-копии
 	 * @param bool|true $removeExistsFiles если false, то не будет удалять существующие файлы из папки
+	 * @param bool|true $createOrig если false, то не будет делаться копия оригинала
 	 * @return bool
 	 */
-	function createFotos($tmpName, $idFoto, $ean, $quality = 80, $removeExistsFiles = true){
+	function createFotos($tmpName, $idFoto, $ean, $quality = 80, $removeExistsFiles = true, $createOrig = true){
 		$paramOrig = $this->_getFotoParams($tmpName);
 		if (empty($paramOrig)) return false;
 
@@ -50,7 +51,10 @@ class ModelsPhotos extends CActiveRecord {
 		if (!file_exists($fotoDir)) return false;
 
 		foreach ($this->_lables as $label => $param) {
-			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+			if (($label == 'orig')&&$createOrig) {
+				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+			}
+			elseif ($label != 'orig') $this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
 //			if ($label == 'orig') {
 //				$label = 'o';
 //				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $paramOrig['width'], $paramOrig['height'], $quality);
@@ -97,6 +101,7 @@ class ModelsPhotos extends CActiveRecord {
 				if (filesize($newTmp . '.webp') % 2 == 1) {
 					file_put_contents($newTmp . '.webp', "\0", FILE_APPEND);
 				}
+				return true;
 			}
 			else {
 				return $this->_copyFoto($newTmp . '.' . $fotoParams['ext'], $tmp);
@@ -221,7 +226,7 @@ class ModelsPhotos extends CActiveRecord {
 
 	/** Через курл пытается загрузить фотографию. В случае успеха возвращает путь до файла, иначе - false
 	 * @return mixed */
-	function downloadFile($url, $idFoto, $ean){
+	function downloadFile($url, $idFoto, $ean, $crop = 0){
 		$dir = $this->_createFolderForFotos($idFoto);
 		$file = $dir . $ean . '_orig.jpg';
 
@@ -247,7 +252,43 @@ class ModelsPhotos extends CActiveRecord {
 			return false;
 		}
 
+		if ($crop > 0) {
+			$fileCrop = $dir . $ean . '_crop.jpg';
+			if ($this->_cropFoto($fileCrop, $file, $crop)) return $fileCrop;
+		}
+
 		return $file;
+	}
+
+	protected function _cropFoto($newTmp, $tmp, $crop) {
+		$fotoParams = $this->_getFotoParams($tmp);
+		if (empty($fotoParams)) return false;
+
+		switch ($fotoParams['ext']) {
+			case 'gif': $src = @imagecreatefromgif($tmp); break;
+			case 'jpg': case 'jpeg': $src = @imagecreatefromjpeg($tmp); break;
+			case 'png': $src = @imagecreatefrompng($tmp); break;
+			default: $src = false; break;
+		}
+
+		if (!empty($src)){
+			$resultWidth = $fotoParams['width'];
+			$resultHeight = $fotoParams['height'] - $crop;
+			$dst = imagecreatetruecolor($resultWidth, $resultHeight);
+
+			if (($fotoParams['ext'] == 'gif')||($fotoParams['ext'] == 'png')) {
+				$bgc = imagecolorallocate($dst, 255, 255, 255);
+				imagefilledrectangle($dst, 0, 0, $resultWidth, $resultHeight, $bgc);
+			}
+
+			if (imagecopyresampled($dst, $src, 0, 0, 0, 0, $resultWidth, $resultHeight, $resultWidth, $resultHeight)){
+				imagedestroy($src);
+				imagejpeg($dst, $newTmp);
+				imagedestroy($dst);
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

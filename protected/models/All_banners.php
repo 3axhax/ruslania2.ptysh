@@ -17,20 +17,11 @@ class All_banners extends ModelsPhotos {
 		return 'all_banners';
 	}
 
-	function createFotos($tmpName, $id, $ean){
-		parent::createFotos($tmpName, $id, $ean);
+	function createFotos($tmpName, $id, $ean, $quality = 80, $removeExistsFiles = false, $createOrig = true){
+		parent::createFotos($tmpName, $id, $ean, $quality, $removeExistsFiles, $createOrig);
 		$sql = 'update ' . $this->tableName() . ' set webp_' . $ean . ' = 1 where (id = ' . (int)$id . ') limit 1';
 		Yii::app()->db->createCommand($sql)->execute();
 		return true;
-	}
-
-	protected function _createFolderForFotos($idFoto = null, $removeExistsFiles = false) {
-		$directory = $this->getUnixDir();
-		if ($idFoto !== null){
-			$directory .= $this->getRelativePath($idFoto);
-		}
-		$this->_mkDirRecursive($directory);
-		return $directory;
 	}
 
 	function getFirstId($id) {
