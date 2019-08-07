@@ -24,7 +24,7 @@ class All_banners extends ModelsPhotos {
 		return true;
 	}
 
-	protected function _createFolderForFotos($idFoto = null) {
+	protected function _createFolderForFotos($idFoto = null, $removeExistsFiles = false) {
 		$directory = $this->getUnixDir();
 		if ($idFoto !== null){
 			$directory .= $this->getRelativePath($idFoto);

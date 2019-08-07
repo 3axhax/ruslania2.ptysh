@@ -2,9 +2,10 @@
 /*Created by Кирилл (23.07.2019 21:31)*/
 class ModelsPhotos extends CActiveRecord {
 	protected $_photos = array();
+	protected $_externalPhotos = array();
 
 	protected $_lables = array(
-		'orig'=>['width'=>0, 'height'=>0],//оригинальный размер
+		'o'=>['width'=>0, 'height'=>0],//оригинальный размер
 		'l'=>['width'=>150, 'height'=>250],//в списке
 		'd'=>['width'=>300, 'height'=>500],//в карточке
 		'sb'=>['width'=>150, 'height'=>130],//слайдер-баннеров
@@ -16,6 +17,8 @@ class ModelsPhotos extends CActiveRecord {
 	}
 
 	function getHrefPath($idFoto, $label, $ean, $ext) {
+		if (!empty($this->_externalPhotos[$idFoto])) return $this->_externalPhotos[$idFoto];
+
 		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto) . $ean;
 		if (!empty($label)) $path .= '_' . $label;
 		switch ($ext) {
@@ -31,19 +34,27 @@ class ModelsPhotos extends CActiveRecord {
 		return $ten . '/' . $idFoto . '/';
 	}
 
-	function createFotos($tmpName, $idFoto, $ean, $quality = 80){
-		$param = $this->_getFotoParams($tmpName);
-		if (empty($param)) return false;
+	/**
+	 * @param string $tmpName путь до файла оригинала
+	 * @param int $idFoto ключевое поле из таблицы ..._photos
+	 * @param string $ean ean товара, нужен для названия файла
+	 * @param int $quality качество картинки-копии
+	 * @param bool|true $removeExistsFiles если false, то не будет удалять существующие файлы из папки
+	 * @return bool
+	 */
+	function createFotos($tmpName, $idFoto, $ean, $quality = 80, $removeExistsFiles = true){
+		$paramOrig = $this->_getFotoParams($tmpName);
+		if (empty($paramOrig)) return false;
 
-		$fotoDir = $this->_createFolderForFotos($idFoto);
+		$fotoDir = $this->_createFolderForFotos($idFoto, $removeExistsFiles);
 		if (!file_exists($fotoDir)) return false;
 
 		foreach ($this->_lables as $label => $param) {
 			$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
-			if ($label == 'orig') {
-				$label = 'o';
-				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
-			}
+//			if ($label == 'orig') {
+//				$label = 'o';
+//				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $paramOrig['width'], $paramOrig['height'], $quality);
+//			}
 		}
 		return true;
 	}
@@ -99,11 +110,11 @@ class ModelsPhotos extends CActiveRecord {
 		return false;
 	}
 
-	protected function _createFolderForFotos($idFoto = null) {
+	protected function _createFolderForFotos($idFoto = null, $removeExistsFiles = true) {
 		$directory = $this->getUnixDir();
 		if ($idFoto !== null){
 			$directory .= $this->getRelativePath($idFoto);
-			if (file_exists($directory) && is_dir($directory)) $this->_removeDirWithFotos($directory);
+			if ($removeExistsFiles&&file_exists($directory) && is_dir($directory)) $this->_removeDirWithFotos($directory);
 		}
 		$this->_mkDirRecursive($directory);
 		return $directory;
@@ -192,9 +203,10 @@ class ModelsPhotos extends CActiveRecord {
 				'order by iid, position '.
 			'';
 			foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
-				if ($photo['is_upload'] == 2) {
-					$this->_photos[$photo['iid']][] = array();
-					continue;
+				if ($photo['is_upload'] > 2) continue;
+				if ($photo['is_upload'] == 0) {
+					if (empty($photo['href']))  continue;
+					$this->_externalPhotos[$photo['id']] = $photo['href'];
 				}
 				$this->_photos[$photo['iid']][] = $photo;
 			}
@@ -209,9 +221,9 @@ class ModelsPhotos extends CActiveRecord {
 
 	/** Через курл пытается загрузить фотографию. В случае успеха возвращает путь до файла, иначе - false
 	 * @return mixed */
-	function downloadFile($url, $idFoto){
+	function downloadFile($url, $idFoto, $ean){
 		$dir = $this->_createFolderForFotos($idFoto);
-		$file = $dir . '_foto_' . ceil(microtime(true) * 1000);
+		$file = $dir . $ean . '_orig.jpg';
 
 		$fp = fopen($file, 'w');
 		$ch = curl_init();
