@@ -21,10 +21,10 @@
 				<?php if (empty($photoId)): ?>
 					<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" lazySrc="<?=Picture::Get($item, Picture::SMALL); ?>" />
 				<?php else: ?>
-					<picture class="main-bannerImg">
+					<picture>
 						<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
 						<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::Get($item, Picture::SMALL) ?>"/>
+						<img alt="<?= htmlspecialchars($title) ?>" src="<?= $photoModel->getHrefPath($photoId, '0', $item['eancode'], 'jpg') ?>"/>
 					</picture>
 				<?php endif; ?>
 			</a>

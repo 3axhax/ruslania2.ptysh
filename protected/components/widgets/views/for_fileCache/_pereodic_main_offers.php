@@ -10,10 +10,10 @@ $photoId = $photoModel->getFirstId($item['id']);
 		<?php if (empty($photoId)): ?>
 			<img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" />
 		<?php else: ?>
-			<picture class="main-bannerImg">
+			<picture>
 				<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
 				<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-				<img src="<?= Picture::Get($item, Picture::SMALL) ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" />
+				<img src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>" title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" />
 			</picture>
 		<?php endif; ?>
 	</a>

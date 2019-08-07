@@ -36,10 +36,10 @@
 						<?php if (empty($photoId)): ?>
 							<img src="<?= Picture::srcLoad() ?>" data-lazy="<?=$productPicture;?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/>
 						<?php else: ?>
-							<picture class="main-bannerImg">
+							<picture>
 								<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $product['eancode'], 'webp') ?>" type="image/webp">
 								<source srcset="<?= $photoModel->getHrefPath($photoId, 'sb', $product['eancode'], 'jpg') ?>" type="image/jpeg">
-								<img src="<?= $productPicture ?>" alt="<?= htmlspecialchars($productTitle) ?>" style="max-height: 130px;"/>
+								<img src="<?= $productPicture ?>" alt="<?= $photoModel->getHrefPath($photoId, 'o', $product['eancode'], 'jpg') ?>" style="max-height: 130px;"/>
 							</picture>
 						<?php endif; ?>
 					</a>

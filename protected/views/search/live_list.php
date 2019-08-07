@@ -20,7 +20,7 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 						<picture>
 							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
 							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-							<img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" />
+							<img style="max-width: 100%;max-height:86px;" src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>" />
 						</picture>
 					<?php endif; ?>
 				</a>

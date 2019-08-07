@@ -17,10 +17,10 @@ $photoId = $photoModel->getFirstId($item['id']);
 			<?php if (empty($photoId)): ?>
 				<img height="241" lazySrc="<?= Picture::Get($item, Picture::SMALL); ?>" src="<?= Picture::srcLoad() ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
 			<?php else: ?>
-				<picture class="main-bannerImg">
+				<picture>
 					<source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'webp') ?>" type="image/webp">
 					<source srcset="<?= $photoModel->getHrefPath($photoId, 'l', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-					<img src="<?= Picture::Get($item, Picture::SMALL) ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+					<img src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
 				</picture>
 			<?php endif; ?>
 		</a>

@@ -18,10 +18,10 @@ $photoId = $photoModel->getFirstId($item['id']);
 				<?php if (empty($photoId)): ?>
 				<img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
 				<?php else: ?>
-				<picture class="main-bannerImg">
+				<picture>
 					<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'webp') ?>" type="image/webp">
 					<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-					<img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+					<img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>">
 				</picture>
 				<?php endif; ?>
 				<?php if (!empty($item['Lookinside'])) $this->renderPartial('lookinside', array('item' => $item, 'entity' => $entity)); ?>
