@@ -34,26 +34,41 @@
 								echo '<div class="items_goods_recomends">';
 								echo '<div class="slider_recomend custom-slider">';
 								foreach ($offer as $offer_entity) {
-                                    foreach ($offer_entity['items'] as $of) {
-                                        //if (empty($of['image'])): ?>
+										$photoTable = Entity::GetEntitiesList()[$offer_entity['entity']]['photo_table'];
+										$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+										/**@var $photoModel ModelsPhotos*/
+										$photoModel = $modelName::model();
+									foreach ($offer_entity['items'] as $of) {
+										$photoId = $photoModel->getFirstId($of['id']);
+										$itemUrl = ProductHelper::createUrl($of);
+										?>
 	                                        <div class="item slider_recomend__item">
 		                                        <div class="img slider__img">
-			                                        <a href="<?= ProductHelper::createUrl($of) ?>">
-				                                        <img src="<?= Picture::Get($of, Picture::BIG) ?>" data-lazy="<?= Picture::Get($of, Picture::BIG) ?>">
+			                                        <a href="<?= $itemUrl ?>">
+														<?php if (empty($photoId)): ?>
+															<img src="<?= Picture::Get($of, Picture::BIG) ?>" data-lazy="<?= Picture::Get($of, Picture::BIG) ?>">
+														<?php else: ?>
+															<picture>
+																<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'webp') ?>" type="image/webp">
+																<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'jpg') ?>" type="image/jpeg">
+																<img src="<?= $photoModel->getHrefPath($photoId, 'o', $of['eancode'], 'jpg') ?>" />
+															</picture>
+														<?php endif; ?>
+
 			                                        </a>
 		                                        </div>
 	                                        </div>
-                                        <?php //endif;
+                                        <?php
                                     }
                                 }
 								echo '</div><div class="clearfix"></div></div>';
 							}
 							?><div style="margin-top: 15px;"></div>
-						<a href="<?= $href ?>" class="button_view list">
-                           <span class="fa"></span> <span><?=$ui->item('VIEW_LIST'); ?></span>
-                            
-		                    <span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"></span>
-	                    </a>
+							<a href="<?= $href ?>" class="button_view list">
+							   <span class="fa"></span> <span><?=$ui->item('VIEW_LIST'); ?></span>
+								
+								<span style="border: none; background: none; padding: 0; color:#fff; font-weight: bold;"></span>
+							</a>
 							<a title="<?=htmlspecialchars($ui->item('DOWNLOAD_EXCEL_FILE')); ?>" rel="nofollow" class="download excel" href="<?=Yii::app()->createUrl('offers/download', array('oid' => $item['id'])); ?>">
 							<span class="fa"></span>
 								<span><?=$ui->item('DOWNLOAD_EXCEL_FILE'); ?></span>
