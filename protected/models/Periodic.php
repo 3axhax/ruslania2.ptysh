@@ -196,7 +196,7 @@ class Periodic extends CMyActiveRecord
         if (empty($ids)) return array();
 
         $sql = ''.
-            'select id, ' . Entity::PERIODIC . ' entity, sub_fin_year, sub_world_year, vat, discount, code, subcode '.
+            'select id, ' . Entity::PERIODIC . ' entity, sub_fin_year, sub_world_year, vat, discount, code, subcode, issues_year '.
             'from ' . $this->tableName() . ' '.
             'where (id in (' . implode(',', $ids) . ')) '.
         '';

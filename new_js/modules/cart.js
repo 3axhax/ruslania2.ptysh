@@ -427,6 +427,16 @@ Stripe.applePay.checkAvailability(function(available) {
                     }
                 });
             });
+
+            scriptLoader('/new_js/modules/select2.full.js').callFunction(function(){
+                $('.address_select')
+                    .select2({
+                        minimumResultsForSearch: Infinity,
+                        dropdownAutoWidth : true,
+                        width: 'auto'
+                    });
+            });
+
         },
 
         fillPhoneCode: function(t) {

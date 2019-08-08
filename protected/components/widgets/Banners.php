@@ -15,7 +15,7 @@ class Banners extends MyWidget {
     }
 
     public function run() {
-        if (!empty($this->_params['useFilecache'])&&!isset($_GET['ha'])) $this->_useFilecache = true;
+        if (!empty($this->_params['useFilecache'])) $this->_useFilecache = true;
         $ctrl = $this->getController()->id;
         $action = $this->getController()->action->id;
         if (($ctrl == 'entity')/*&&($action == 'list')*/) {
@@ -208,6 +208,7 @@ class Banners extends MyWidget {
         }
         if ($this->_useFilecache) {
             $txt = file_get_contents($file);
+            $extraTxtExist = mb_strpos($txt, 'extra-txt', null, 'utf-8');
             $eIds = array();
             $replace = array();
             if (preg_match_all("/{PRICE_(\d+)_(\d+)}/ui", $txt, $m)) {
@@ -232,8 +233,8 @@ class Banners extends MyWidget {
                                 $replace['{DISCOUNTPERCENT}'] = $s;
                             }
                             $replace['{PRICE_' . $eid . '_' . $id . '}'] = ''.
-                                '<div class="cost_nds"' . (($eid == Entity::PERIODIC)?' style="line-height: 20px; width: 155px;"':'') . '>'.
-                                    ProductHelper::FormatPrice($prices[$eid][$id]['priceData'][DiscountManager::WITH_VAT]) . ' ' . $prices[$eid][$id]['priceData']['unit'] .
+                                '<div class="cost_nds"' . (($extraTxtExist&&($eid == Entity::PERIODIC))?' style="line-height: 20px; width: 155px;"':'') . '>'.
+                                    ProductHelper::FormatPrice($prices[$eid][$id]['priceData'][DiscountManager::WITH_VAT]) . ' ' . $prices[$eid][$id]['priceData']['unit'] . ' '.
                                     '<span>(<span>' . trim(ProductHelper::FormatPrice($prices[$eid][$id]['priceData'][DiscountManager::BRUTTO]) . ' ' . $prices[$eid][$id]['priceData']['unit']) . '</span>)</span>'.
                                 '</div>'.
                             '';

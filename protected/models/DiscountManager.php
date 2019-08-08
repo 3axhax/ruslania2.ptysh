@@ -445,7 +445,7 @@ class DiscountManager
     }
 
     static function getPrices($eIds) {
-        $key = md5(serialize($eIds));
+        $key = md5(serialize($eIds)) . '_' . Yii::app()->getLanguage();
         $result = Yii::app()->memcache->get($key);
         if ($result === false) {
             $result = array();
