@@ -17,18 +17,29 @@ class ToWebpCommand extends CConsoleCommand {
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			if ($entity != 10) continue;
 
+			$sql = 'create table if not exists _no_photo_1 like _no_photo';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+
 			$sql = 'create table if not exists _tmp_' . $params['photo_table'] . ' (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'truncate _tmp_' . $params['photo_table'];
 			Yii::app()->db->createCommand($sql)->execute();
 
-			$sql = ''.
+/*			$sql = ''.
 				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
 				'select t.id, t.eancode, t.image '.
 				'from ' . $params['site_table'] . ' t '.
 				'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
 				'where (tF.iid is null) '.
+			'';
+			Yii::app()->db->createCommand()->setText($sql)->execute();*/
+
+			$sql = ''.
+				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
+				'select t.id, t.eancode, t.image '.
+				'from ' . $params['site_table'] . ' t '.
+					'join _no_photo tF on (tF.id = t.id) and (tF.eid = ' . (int) $entity . ') '.
 			'';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
@@ -36,8 +47,9 @@ class ToWebpCommand extends CConsoleCommand {
 			/**@var $model ModelsPhotos*/
 			$model = $modelName::model();
 			$sqlItems = ''.
-				'select t.id, t.eancode, t.image '.
+				'select t.id, t.eancode, t.image, tF.id id_foto '.
 				'from _tmp_' . $params['photo_table'] . ' t '.
+					'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
 				'order by t.id desc '.
 				'limit ' . $this->_counts . ' '.
 			'';
@@ -48,27 +60,38 @@ class ToWebpCommand extends CConsoleCommand {
 				foreach ($items as $item) {
 					$sql = 'delete from _tmp_' . $params['photo_table'] . ' where (id = ' . (int) $item['id'] . ')';
 					Yii::app()->db->createCommand()->setText($sql)->execute();
-					if (empty($item['image'])) continue;
+//					if (empty($item['image'])) continue;
 
 					$filePhoto = Yii::getPathOfAlias('webroot') . '/pictures/big/' . $item['image'];
+					if (empty($item['image'])||!file_exists($filePhoto)) $filePhoto = Yii::getPathOfAlias('webroot') . '/pictures/big/' . $item['eancode'] . '.jpg';
+
+					$model->setAttributes(array('iid'=>$item['id'], 'is_upload'=>1), false);
+					$model->setIsNewRecord(true);
 					if (file_exists($filePhoto)) {
-						$model->setAttributes(array('iid'=>$item['id'], 'is_upload'=>1), false);
-						$model->setIsNewRecord(true);
-						$model->id = null;
-						$model->insert();
+						if (empty($item['id_foto'])) {
+							$model->id = null;
+							$model->insert();
+						}
+						else {
+							$model->id = $item['id_foto'];
+						}
 						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
 							$model->setAttribute('is_upload', 2);
 							$model->update();
-							$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
+							$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
 							Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
 						}
 					}
 					else {
-						$model->setAttributes(array('iid'=>$item['id'], 'is_upload'=>2), false);
-						$model->setIsNewRecord(true);
-						$model->id = null;
-						$model->insert();
-						$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
+						$model->setAttribute('is_upload', 2);
+						if (empty($item['id_foto'])) {
+							$model->id = null;
+							$model->insert();
+						}
+						else {
+							$model->id = $item['id_foto'];
+						}
+						$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
 						Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
 					}
 //					echo $model->id . ' ' . $item['image'] . "\n\r";

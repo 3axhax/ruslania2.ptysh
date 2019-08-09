@@ -8,7 +8,6 @@
 
 ini_set('max_execution_time', 99600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php removePhotos
- * удаление старых фоток
  * Class RemovePhotosCommand
  */
 
@@ -16,11 +15,31 @@ define('cronAction', 1);
 class RemovePhotosCommand extends CConsoleCommand {
     private $_counts = 100;
 
+    public function actionIndex() {
+        echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+
+//select t.id, t.last_modification_date, t.eancode
+//from books_catalog t
+//where (t.last_modification_date > '2019-07-25')
+//order by t.last_modification_date
+        foreach (Entity::GetEntitiesList() as $entity=>$params) {
+            $sql = '' .
+                'insert ignore into _no_photo (eid, id, ean) ' .
+                'select ' . (int)$entity . ', t.id, t.eancode ' .
+                'from ' . $params['site_table'] . ' t ' .
+                'where (t.last_modification_date > "2019-07-25") ' .
+            '';
+            echo $sql . "\n";
+            Yii::app()->db->createCommand($sql)->execute();
+        }
+
+        echo 'end ' . date('d.m.Y H:i:s') . "\n";
+    }
 /*    public function actionIndex() {
         echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
-            if ($entity != 10) continue;
+            if ($entity == 10) continue;
 
             $modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
             $model = $modelName::model();
@@ -28,52 +47,61 @@ class RemovePhotosCommand extends CConsoleCommand {
             $sql = 'drop table if exists _tmp_' . $params['photo_table'] . '_to_update';
             Yii::app()->db->createCommand()->setText($sql)->execute();
 
-            $sql = 'create table if not exists _tmp_' . $params['photo_table'] . '_to_update (`id_foto` int, `id` int, key(id_foto)) engine=myisam';
+            $sql = 'create table if not exists _tmp_' . $params['photo_table'] . '_to_update (`id_foto` int, `id` int, `is_upload` int, `href` varchar(250), `eancode` varchar(250), key(id)) engine=myisam';
             Yii::app()->db->createCommand()->setText($sql)->execute();
 
             $sql = 'truncate _tmp_' . $params['photo_table'] . '_to_update';
             Yii::app()->db->createCommand($sql)->execute();
 
             $sql = ''.
-                'insert into _tmp_' . $params['photo_table'] . '_to_update (id_foto, id) '.
-                'select t.id id_foto, t.iid id '.
-                'from ' . $params['photo_table'] . ' t '.
-                'where (t.is_upload = 2) '.
+                'insert into _tmp_' . $params['photo_table'] . '_to_update (id_foto, id, is_upload, href, eancode) '.
+                'select tF.id id_foto, t.id, tF.is_upload, tF.href, t.eancode '.
+                'from ' . $params['site_table'] . ' t '.
+                    'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
             '';
+            echo $sql . "\n";
             Yii::app()->db->createCommand()->setText($sql)->execute();
 
             $sqlItems = ''.
-                'select t.id_foto, t.id '.
+                'select t.id_foto, t.id, t.is_upload, t.href, t.eancode '.
                 'from _tmp_' . $params['photo_table'] . '_to_update t '.
-                'order by t.id_foto desc '.
+                'order by t.id '.
                 'limit ' . $this->_counts . ' '.
             '';
-//			echo $sqlItems . "\n";
+			echo $sqlItems . "\n";
             $step = 0;
             while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
                 $step++;
                 foreach ($items as $item) {
-                    $sql = 'delete from _tmp_' . $params['photo_table'] . '_to_update where (id_foto = ' . (int) $item['id_foto'] . ')';
+                    $sql = 'delete from _tmp_' . $params['photo_table'] . '_to_update where (id = ' . (int) $item['id'] . ')';
+//                    var_dump($item); echo $sql . "\n";
                     Yii::app()->db->createCommand()->setText($sql)->execute();
 
                     $filePhoto = $model->getUnixDir() . $model->getRelativePath($item['id_foto']);
-                    if (file_exists($filePhoto)) {
-                        $sql = 'update ' . $params['photo_table'] . ' set is_upload = 1 where (id = ' . (int) $item['id_foto'] . ')';
-                        Yii::app()->db->createCommand($sql)->execute();
-                        $sql = 'delete from _no_photo where (eid = :eid) and (id = :id)';
-                        Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id']));
+                    switch ((int) $item['is_upload']) {
+                        case 0: break;
+                        case 1:
+                            $this->_renameFotos($filePhoto);
+                            break;
+                        default:
+                            $this->_renameFotos($filePhoto);
+                            $sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
+                            Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
+                            break;
                     }
+//                    exit;
                 }
-                if (!($step%10)) echo $step . ' ' . $params['photo_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
+                if (!($step%100)) echo $step . ' ' . $params['photo_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
             }
-//			echo date('d.m.Y H:i:s') . "\n";
+			echo $params['photo_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
         }
 
 
         echo 'end ' . date('d.m.Y H:i:s') . "\n";
     }*/
 
-        public function actionIndex() {
+
+/*        public function actionIndex() {
         echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
@@ -137,7 +165,7 @@ class RemovePhotosCommand extends CConsoleCommand {
 
 
         echo 'end ' . date('d.m.Y H:i:s') . "\n";
-    }
+    }*/
 
 
     private function _query($sql, $params = null) {
@@ -147,5 +175,30 @@ class RemovePhotosCommand extends CConsoleCommand {
         $pdo->getPdoStatement()->execute($params);
         return new IteratorsPDO($pdo->getPdoStatement());
     }
+
+    protected function _renameFotos($dirPath) {
+        if (file_exists($dirPath) && is_dir($dirPath)){
+            $dirHandle = opendir($dirPath);
+            while (false !== ($file = readdir($dirHandle))) {
+                if ($file != '.' && $file != '..') {
+                    $newName = explode('_', $file);
+                    if (count($newName) > 1) {
+                        $newName = array_pop($newName);
+                        if ($newName === 'orig.jpg') {
+                            unlink($dirPath . '/' . $file);
+                        }
+                        else {
+                            rename($dirPath . '/' . $file, $dirPath . '/' . $newName);
+                        }
+                    }
+                }
+            }
+            closedir($dirHandle);
+            return true;
+        }
+        return false;
+    }
+
+
 
 }

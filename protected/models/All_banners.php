@@ -17,6 +17,19 @@ class All_banners extends ModelsPhotos {
 		return 'all_banners';
 	}
 
+	function getHrefPath($idFoto, $label, $ean, $ext) {
+		if (!empty($this->_externalPhotos[$idFoto])) return $this->_externalPhotos[$idFoto];
+
+		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto) . $ean;
+		if (!empty($label)) $path .= '_' . $label;
+		switch ($ext) {
+			case 'jpg':case 'webp': $path .= '.' . $ext; break;
+//			case '': break;
+			default: return '/';
+		}
+		return $path;
+	}
+
 	function createFotos($tmpName, $id, $ean, $quality = 80, $removeExistsFiles = false, $createOrig = true){
 		parent::createFotos($tmpName, $id, $ean, $quality, $removeExistsFiles, $createOrig);
 		$sql = 'update ' . $this->tableName() . ' set webp_' . $ean . ' = 1 where (id = ' . (int)$id . ') limit 1';

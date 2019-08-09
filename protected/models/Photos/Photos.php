@@ -19,8 +19,18 @@ class ModelsPhotos extends CActiveRecord {
 	function getHrefPath($idFoto, $label, $ean, $ext) {
 		if (!empty($this->_externalPhotos[$idFoto])) return $this->_externalPhotos[$idFoto];
 
-		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto) . $ean;
-		if (!empty($label)) $path .= '_' . $label;
+/*		$unixPath = $this->getUnixDir() . $this->getRelativePath($idFoto) . $ean . '_d.webp';
+		if (file_exists($unixPath)) {
+			$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto) . $ean;
+			if (!empty($label)) $path .= '_' . $label;
+		}
+		else {
+			$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto);
+			$path .= $label;
+		}*/
+
+		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto);
+		$path .= $label;
 		switch ($ext) {
 			case 'jpg':case 'webp': $path .= '.' . $ext; break;
 //			case '': break;
@@ -52,9 +62,9 @@ class ModelsPhotos extends CActiveRecord {
 
 		foreach ($this->_lables as $label => $param) {
 			if (($label == 'orig')&&$createOrig) {
-				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+				$this->_createNewFoto($fotoDir . $label, $tmpName, $param['width'], $param['height'], $quality);
 			}
-			elseif ($label != 'orig') $this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $param['width'], $param['height'], $quality);
+			elseif ($label != 'orig') $this->_createNewFoto($fotoDir . $label, $tmpName, $param['width'], $param['height'], $quality);
 //			if ($label == 'orig') {
 //				$label = 'o';
 //				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $paramOrig['width'], $paramOrig['height'], $quality);
