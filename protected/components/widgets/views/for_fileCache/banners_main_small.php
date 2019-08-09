@@ -5,10 +5,25 @@
 	$url = ProductHelper::CreateUrl($offerDay);
 	$productPicture = Picture::Get($offerDay, Picture::SMALL);
 	$productTitle = ProductHelper::GetTitle($offerDay, 'title');
+	$photoTable = Entity::GetEntitiesList()[$offerDay['entity']]['photo_table'];
+	$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+	/**@var $photoModel ModelsPhotos*/
+	$photoModel = $modelName::model();
+	$photoId = $photoModel->getFirstId($offerDay['id']);
 	?>
 		<a href="<?= $url ?>"><div class="span6 main-banner-content" style="background: url(/new_img/day_fon.jpg) 100% 100% no-repeat; background-size: contain;">
 			<div class="photo">
-				<div><img src="<?= $productPicture ?>" alt=""/></div>
+				<div>
+					<?php if (empty($photoId)): ?>
+						<img src="<?= $productPicture ?>" alt="<?=htmlspecialchars(ProductHelper::GetTitle($offerDay, 'title')); ?>"/>
+					<?php else: ?>
+						<picture>
+							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $offerDay['eancode'], 'webp') ?>" type="image/webp">
+							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $offerDay['eancode'], 'jpg') ?>" type="image/jpeg">
+							<img src="<?= $photoModel->getHrefPath($photoId, 'o', $offerDay['eancode'], 'jpg') ?>" alt="<?=htmlspecialchars(ProductHelper::GetTitle($offerDay, 'title')); ?>" />
+						</picture>
+					<?php endif; ?>
+				</div>
 			</div>
 			{DISCOUNTPERCENT}
 			<div class="title"><div id="js_offerDay"><?= $productTitle ?></div></div>
