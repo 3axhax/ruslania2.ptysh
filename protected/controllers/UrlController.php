@@ -213,10 +213,16 @@ class UrlController extends MyController {
 					$model->id = null;
 					$model->insert();
 					if ($model->createFotos($file->tempName, $model->id, $ean)) {
-						$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)';
-						Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid, ':id'=>$model->id));
+						$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)  order by position asc';
+						$fotoIds = Yii::app()->db->createCommand($sql)->queryColumn(array(':iid'=>$iid, ':id'=>$model->id));
+						if (!empty($fotoIds)) {
+							$sql = 'delete from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)';
+							Yii::app()->db->createCommand($sql)->execute(array(':iid'=>$iid, ':id'=>$model->id));
+							foreach ($fotoIds as $idFoto) $model->remove($idFoto);
+						}
 						unset($result['errors']);
 						$result['src'] = $model->getHrefPath($model->id, 'd', $ean, 'jpg');
+						$result['idFoto'] = $model->id;
 						$this->ResponseJson($result);
 						return;
 					}

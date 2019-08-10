@@ -14,7 +14,9 @@
             height: inherit;
         }
         #photoImg {
-            width: 100%;
+            width: 200px;
+            height: 300px;
+            object-fit: contain;
         }
         #clearImg {
             background-color: red;
@@ -25,7 +27,18 @@
             cursor: pointer;
             position: absolute;
             top: 0;
-            right: 0;
+            right: -20px;
+        }
+        #pasteImg {
+            background-color: #3d3d3d;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            color: #fff;
+            cursor: pointer;
+            position: absolute;
+            bottom: 0;
+            right: -20px;
         }
         #inputImg {
             display: none;
@@ -36,6 +49,7 @@
 <div id="js_photo">
     <div class="photo js_dropzone"><img class="photo" id="photoImg" <?= (empty($src)?'':'src="' . $src . '"') ?>/></div>
     <div class="clearPhoto" id="clearImg">X</div>
+    <div class="pastePhoto" id="pasteImg">V</div>
     <input type="file" name="inputImg" id="inputImg" />
 </div>
 
@@ -47,7 +61,7 @@
 
         function _Img() {}
         _Img.prototype = {
-            urlUpload: '', urlClear: '',
+            urlUpload: '', urlClear: '', reloadUrl: '',
             //$img=null, $input=null, $clear=null,
             //eid=0, iid=0,
 
@@ -65,6 +79,7 @@
                 this.$img = $('#photoImg');
                 this.$input = $('#inputImg');
                 this.$clear = $('#clearImg');
+                if ('reloadUrl' in options) this.reloadUrl = options.reloadUrl;
             },
             setEvents: function() {
                 var self = this;
@@ -72,7 +87,7 @@
                 var dropZones = $('.js_dropzone');
                 dropZones[0].ondrop = function(event) {
                     <?php if (isset($_GET['ha'])):?>
-                    console.log(event);
+                    console.log(console.log(event.dataTransfer.types));
                     <?php else: ?>
                     self.uploadFile(event.dataTransfer.files);
                     <?php endif; ?>
@@ -103,12 +118,26 @@
                                 else {
                                     self.$input.get(0).value = null;
                                     self.$img.attr('src', '');
-//                                    window.parent.savePicture('');
+                                    if ((self.reloadUrl != '')&&('idFoto' in response)) {
+                                        document.location.href = self.reloadUrl + '&action=remove';
+                                    }
                                 }
                             }
                             else alert('error');
                         }
                     });
+                });
+
+                document.getElementById('pasteImg').addEventListener("paste", function(e) {
+                    var items = e.clipboardData.items;
+                    var files = [];
+                    for( var i = 0, len = items.length; i < len; ++i ) {
+                        var item = items[i];
+                        if( item.kind === "file" ) {
+                            files.push(item.getAsFile());
+                        }
+                    }
+                    self.uploadFile(files);
                 });
             },
 
@@ -131,8 +160,11 @@
                             response = JSON.parse(response);
                             if ('errors' in response) alert(response['errors'].join("\n"));
                             else if ('src' in response) {
+                                console.log(response);
                                 self.$img.attr('src', response['src']);
-//                                window.parent.savePicture('1');
+                                if ((self.reloadUrl != '')&&('idFoto' in response)) {
+                                    document.location.href = self.reloadUrl + '&action=new&idFoto=' + response['idFoto'];
+                                }
                             }
                         }
                         else alert('upload fail');
@@ -140,7 +172,6 @@
                 });
 //                    readURL(this, self.$img);
             },
-
             initDrag: function(){
                 var $doc = $(document);
                 /**css стили при наведение файла в зону*/

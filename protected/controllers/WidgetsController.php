@@ -172,6 +172,8 @@ class WidgetsController extends MyController {
 			'urlUpload' => 'https://ruslania.com/ru/url/itemPhotoAdd/',
 			'urlClear' => 'https://ruslania.com/ru/url/itemPhotoClear/',
 		);
+		$options['reloadUrl'] = (string)Yii::app()->getRequest()->getParam('url');
+		if (empty($options['reloadUrl'])) unset($options['reloadUrl']);
 		$src = '';
 		if (($options['iid'] > 0)&&Entity::IsValid($options['eid'])) {
 			$params = Entity::GetEntitiesList()[$options['eid']];
