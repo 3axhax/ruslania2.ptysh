@@ -84,10 +84,9 @@ class PayTrail
                 $ret[] = $data[$field];
         }
 
-//        $env = (($env === 'test') ? PayTrail::ENV_TEST : PayTrail::ENV_PROD);
-//        $ret[] = $this->GetSecret($env);
+        if ((int)Yii::app()->user->id === 77925) $ret[] = $this->GetSecret(PayTrail::ENV_TEST);
+        else $ret[] = $this->GetSecret(PayTrail::ENV_PROD);
 
-        $ret[] = $this->GetSecret(PayTrail::ENV_PROD);
         $line = implode('|', $ret);
 
         $checkSum = mb_strtoupper(md5($line), 'utf-8');

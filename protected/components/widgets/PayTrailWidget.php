@@ -9,6 +9,12 @@ class PayTrailWidget extends CWidget
         $notifyUrl = 'payment/notify';
 
     var $tpl = 'paytrail';
+
+    function __construct($owner=null) {
+        parent::__construct($owner);
+        if ((int)Yii::app()->user->id === 77925) $this->env = PayTrail::ENV_TEST;
+    }
+
     public function run()
     {
         $provider = new PayTrail();
