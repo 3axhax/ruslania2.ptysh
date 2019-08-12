@@ -15,12 +15,25 @@
 			$titleSmall = ProductHelper::GetTitle($product, 'title', 42);
 			$title = ProductHelper::GetTitle($product, 'title');
 			$url = ProductHelper::CreateUrl($product);
+			$photoTable = Entity::GetEntitiesList()[$product['entity']]['photo_table'];
+			$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+			/**@var $photoModel ModelsPhotos*/
+			$photoModel = $modelName::model();
+			$photoId = $photoModel->getFirstId($product['id']);
 			?>
 			<li>
 				<div class="img" style="min-height: 130px; position: relative">
 					<?php Yii::app()->getController()->renderStatusLables($product['status']); ?>
 					<div style="display: table-cell;vertical-align: middle; height: 150px;"><a href="<?= $url ?>" title="<?= htmlspecialchars($title) ?>">
-						<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+							<?php if (empty($photoId)): ?>
+								<img alt="<?= htmlspecialchars($title) ?>" src="<?= Picture::srcLoad() ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+							<?php else: ?>
+								<picture>
+									<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'webp') ?>" type="image/webp">
+									<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'jpg') ?>" type="image/jpeg">
+									<img src="<?= $photoModel->getHrefPath($photoId, 'o', $product['eancode'], 'jpg') ?>" alt="<?=htmlspecialchars($title); ?>" />
+								</picture>
+							<?php endif; ?>
 					</a></div>
 				</div>
 

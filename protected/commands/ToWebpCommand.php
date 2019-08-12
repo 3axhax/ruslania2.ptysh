@@ -15,7 +15,7 @@ class ToWebpCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			if ($entity != 10) continue;
+			if ($entity == 10) continue;
 
 			$sql = 'create table if not exists _no_photo_1 like _no_photo';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -24,7 +24,7 @@ class ToWebpCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'truncate _tmp_' . $params['photo_table'];
-//			Yii::app()->db->createCommand($sql)->execute();
+			Yii::app()->db->createCommand($sql)->execute();
 
 /*			$sql = ''.
 				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
@@ -41,7 +41,7 @@ class ToWebpCommand extends CConsoleCommand {
 				'from ' . $params['site_table'] . ' t '.
 					'join _no_photo tF on (tF.id = t.id) and (tF.eid = ' . (int) $entity . ') '.
 			'';
-//			Yii::app()->db->createCommand()->setText($sql)->execute();
+			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 			/**@var $model ModelsPhotos*/
@@ -77,7 +77,7 @@ class ToWebpCommand extends CConsoleCommand {
 							$model->setIsNewRecord(false);
 						}
 						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
-							if (!empty($item['id_foto'])&&(empty($item['is_upload'])||($item['is_upload'] == 1))) {
+							if (!empty($item['id_foto'])) {
 								continue;
 							}
 							$model->setAttribute('is_upload', 2);

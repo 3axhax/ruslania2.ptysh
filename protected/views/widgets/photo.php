@@ -118,8 +118,10 @@
                                 else {
                                     self.$input.get(0).value = null;
                                     self.$img.attr('src', '');
-                                    if ((self.reloadUrl != '')&&('idFoto' in response)) {
-                                        document.location.href = self.reloadUrl + '&action=remove';
+                                    if (self.reloadUrl != '') {
+                                        var urlRedirect = self.reloadUrl + '&action=remove';
+                                        if ('image' in response) urlRedirect = urlRedirect + '&image=' + response['image'];
+                                        document.location.href = urlRedirect;
                                     }
                                 }
                             }
@@ -166,7 +168,9 @@
                                 console.log(response);
                                 self.$img.attr('src', response['src']);
                                 if ((self.reloadUrl != '')&&('idFoto' in response)) {
-                                    document.location.href = self.reloadUrl + '&action=new&idFoto=' + response['idFoto'];
+                                    var urlRedirect = self.reloadUrl + '&action=new&idFoto=' + response['idFoto'];
+                                    if ('image' in response) urlRedirect = urlRedirect + '&image=' + response['image'];
+                                    document.location.href = urlRedirect + '&src=' + response['src'];
                                 }
                             }
                         }

@@ -187,7 +187,7 @@ class WidgetsController extends MyController {
 					$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 					/**@var $model ModelsPhotos*/
 					$model = $modelName::model();
-					$src = $model->getHrefPath($idFoto, Yii::app()->getRequest()->getParam('label', 'd'), $row['eancode'], 'jpg');
+					$src = $model->getHrefPath($idFoto, Yii::app()->getRequest()->getParam('label', 'o'), '', 'jpg');
 				}
 				elseif(!empty($row['image'])) $src = Picture::Get($row, Picture::BIG);
 			}

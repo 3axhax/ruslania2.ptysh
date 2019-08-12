@@ -48,6 +48,7 @@ class UrlController extends MyController {
 			$row['item_id'] = $find['id'];
 			$row['title_ru'] = $find['title_ru'];
 			$row['image'] = $find['image'];
+			$row['eancode'] = $find['eancode'];
 		}
 		else {
 			$row = DiscountManager::getOfferDay();
@@ -56,7 +57,7 @@ class UrlController extends MyController {
 			if (!Entity::IsValid($row['entity_id'])) Yii::app()->end();
 
 			$sql = ''.
-				'select title_ru, image '.
+				'select title_ru, image, eancode '.
 				'from ' . Entity::GetEntitiesList()[$row['entity_id']]['site_table'] . ' '.
 				'where (id = ' . (int) $row['item_id'] . ') '.
 				'limit 1 '.
@@ -65,7 +66,24 @@ class UrlController extends MyController {
 		}
 		$row['image'] = Picture::Get($row, Picture::BIG);
 		$row['url'] = Yii::app()->createUrl('product/view', array('entity'=>$row['entity_id'], 'id'=>$row['item_id']));
+		$photoTable = Entity::GetEntitiesList()[$row['entity_id']]['photo_table'];
+		$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+		/**@var $photoModel ModelsPhotos*/
+		$photoModel = $modelName::model();
+		$idPhoto = (int)$photoModel->getFirstId($row['item_id']);
+		$row['photo_table'] = $photoTable;
+		if ($idPhoto > 0) {
+			$row['image'] = $photoModel->getHrefPath($idPhoto, 'd', $row['eancode'], 'jpg');
+		}
+
 		$this->ResponseJson($row);
+	}
+
+	function actionOfferDayCacheClear() {
+		foreach (Yii::app()->params['ValidLanguages'] as $lang) {
+			$file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainbannersmall_' . $lang . '.html.php';
+			if (file_exists($file)) @unlink($file);
+		}
 	}
 
 	function actionInfoText() {
@@ -221,8 +239,9 @@ class UrlController extends MyController {
 							foreach ($fotoIds as $idFoto) $model->remove($idFoto);
 						}
 						unset($result['errors']);
-						$result['src'] = $model->getHrefPath($model->id, 'd', $ean, 'jpg');
+						$result['src'] = $model->getHrefPath($model->id, 'o', '', 'jpg');
 						$result['idFoto'] = $model->id;
+						$result['image'] = $ean . '.jpg';
 						$this->ResponseJson($result);
 						return;
 					}
@@ -250,6 +269,9 @@ class UrlController extends MyController {
 				$model = $modelName::model();
 				foreach ($fotoIds as $idFoto) $model->remove($idFoto);
 				unset($result['errors']);
+				$sql = 'select eancode from ' . $params['site_table'] . ' where (id = :id) limit 1';
+				$ean = Yii::app()->db->createCommand($sql)->queryScalar(array(':id'=>$iid));
+				if (!empty($ean)) $result['image'] = $ean . '.jpg';
 			}
 		}
 		$this->ResponseJson($result);

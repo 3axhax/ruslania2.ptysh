@@ -30,6 +30,7 @@ class ModelsPhotos extends CActiveRecord {
 		}*/
 
 		$path = Yii::app()->params['PicDomain'] . '/pictures/' . $this->tableName() . '/' . $this->getRelativePath($idFoto);
+		if ($ean != '') $path .= $ean . '_';
 		$path .= $label;
 		switch ($ext) {
 			case 'jpg':case 'webp': $path .= '.' . $ext; break;
@@ -77,7 +78,7 @@ class ModelsPhotos extends CActiveRecord {
 		$fotoParams = $this->_getFotoParams($tmp);
 		if (empty($fotoParams)) return false;
 
-		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp . '.' . $fotoParams['ext'], $tmp);
+		if (empty($newWidth) && empty($newHeight)) return $this->_copyFoto($newTmp . '.jpg', $tmp);
 		switch ($fotoParams['ext']) {
 			case 'gif': $src = @imagecreatefromgif($tmp); break;
 			case 'jpg': case 'jpeg': $src = @imagecreatefromjpeg($tmp); break;
