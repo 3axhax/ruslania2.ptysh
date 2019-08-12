@@ -74,6 +74,7 @@ class ToWebpCommand extends CConsoleCommand {
 						}
 						else {
 							$model->id = $item['id_foto'];
+							$model->setIsNewRecord(false);
 						}
 						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
 							if (!empty($item['id_foto'])&&(empty($item['is_upload'])||($item['is_upload'] == 1))) {
@@ -94,6 +95,7 @@ class ToWebpCommand extends CConsoleCommand {
 						else {
 							$model->id = $item['id_foto'];
 							if (empty($item['is_upload'])||($item['is_upload'] == 1)) continue;
+							$model->setIsNewRecord(false);
 						}
 						$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
 						Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
