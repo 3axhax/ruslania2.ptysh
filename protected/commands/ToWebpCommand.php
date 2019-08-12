@@ -24,7 +24,7 @@ class ToWebpCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'truncate _tmp_' . $params['photo_table'];
-			Yii::app()->db->createCommand($sql)->execute();
+//			Yii::app()->db->createCommand($sql)->execute();
 
 /*			$sql = ''.
 				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
@@ -41,13 +41,13 @@ class ToWebpCommand extends CConsoleCommand {
 				'from ' . $params['site_table'] . ' t '.
 					'join _no_photo tF on (tF.id = t.id) and (tF.eid = ' . (int) $entity . ') '.
 			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();
+//			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 			/**@var $model ModelsPhotos*/
 			$model = $modelName::model();
 			$sqlItems = ''.
-				'select t.id, t.eancode, t.image, tF.id id_foto '.
+				'select t.id, t.eancode, t.image, tF.id id_foto, tF.is_upload '.
 				'from _tmp_' . $params['photo_table'] . ' t '.
 					'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
 				'order by t.id desc '.
@@ -76,6 +76,9 @@ class ToWebpCommand extends CConsoleCommand {
 							$model->id = $item['id_foto'];
 						}
 						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
+							if (!empty($item['id_foto'])&&(empty($item['is_upload'])||($item['is_upload'] == 1))) {
+								continue;
+							}
 							$model->setAttribute('is_upload', 2);
 							$model->update();
 							$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
@@ -90,6 +93,7 @@ class ToWebpCommand extends CConsoleCommand {
 						}
 						else {
 							$model->id = $item['id_foto'];
+							if (empty($item['is_upload'])||($item['is_upload'] == 1)) continue;
 						}
 						$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
 						Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));

@@ -155,6 +155,9 @@
                     data : fd,
                     processData: false,
                     contentType: false,
+                    beforeSend: function(){
+                        self.$img.attr('src', '<?= Picture::srcLoad() ?>');
+                    },
                     success: function(response) {
                         if (response) {
                             response = JSON.parse(response);

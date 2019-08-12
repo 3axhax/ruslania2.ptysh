@@ -10,4 +10,5 @@ index.php
 new 11.txt
 triggers.txt
 *.git
+*.xml
 protected/doc/111
