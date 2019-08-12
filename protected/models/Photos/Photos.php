@@ -219,7 +219,7 @@ class ModelsPhotos extends CActiveRecord {
 				'order by iid, position '.
 			'';
 			foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
-				if ($photo['is_upload'] > 2) continue;
+				if ($photo['is_upload'] > 1) continue;
 				if ($photo['is_upload'] == 0) {
 					if (empty($photo['href']))  continue;
 					$this->_externalPhotos[$photo['id']] = $photo['href'];
