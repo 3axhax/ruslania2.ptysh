@@ -215,7 +215,9 @@ class UrlController extends MyController {
 			$file = CUploadedFile::getInstanceByName('inputImg');
 			if (!empty($file)) {
 				if(!preg_match('|image|', $file->type)) {
+					$failfile = Yii::getPathOfAlias('webroot') . '/protected/runtime/failfile/' . basename($file->tempName);
 					$result['errors'] = array('Это не картинка');
+					copy($file->tempName, $failfile);
 					@unlink($file->tempName);
 				}
 				else {
