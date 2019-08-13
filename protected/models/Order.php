@@ -309,6 +309,7 @@ class Order extends CMyActiveRecord
                 //'contact_email'=>$user['login'], 'first_name'=>$user['first_name'], 'last_name'=>$user['last_name']
                 $ba = array('contact_email'=>'', 'receiver_first_name'=>'', 'receiver_last_name'=>'');
                 if (!empty($order->BillingAddressID)) $ba = $a->GetAddress($uid, $order->BillingAddressID);
+                else $ba = $da;
                 $client = array();
                 if (($user['first_name'] != $da['receiver_first_name'])&&($user['first_name'] != $ba['receiver_first_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
                 elseif (($user['last_name'] != $da['receiver_last_name'])&&($user['last_name'] != $ba['receiver_last_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
