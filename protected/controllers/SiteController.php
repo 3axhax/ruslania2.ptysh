@@ -1202,7 +1202,6 @@ class SiteController extends MyController {
             }
 
             return;
-
         }
 
         if (Yii::app()->request->isPostRequest) {
@@ -1219,6 +1218,18 @@ class SiteController extends MyController {
                 $message->setBody($user->attributes, 'text/html');
                 $message->addTo($user->login);
                 $message->from = 'ruslania@ruslania.com';
+				
+				// Yii::app()->mail->transportType = 'smtp';
+				// Yii::app()->mail->transportOptions = array(
+				
+					// 'host'=> 'smtp.gmail.com',
+					// 'encryption'=>'ssl',
+					// 'port'=>465,
+					// 'username'=>'supersan89@gmail.com',
+					// 'password'=>''
+				// );
+				
+				
                 Yii::app()->mail->send($message);
             }
         }

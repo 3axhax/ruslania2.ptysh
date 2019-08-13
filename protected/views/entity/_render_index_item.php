@@ -1,8 +1,24 @@
-<?php $url = ProductHelper::CreateUrl($item); ?>
+<?php $url = ProductHelper::CreateUrl($item);
+$photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
+$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+/**@var $photoModel ModelsPhotos*/
+$photoModel = $modelName::model();
+$photoId = $photoModel->getFirstId($item['id']);
+?>
 
 <div class="img" style="position: relative">
     <?php $this->renderStatusLables($item['status'], $size = '-sm', true)?>
-    <a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>"><img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>"  фде="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" /></a>
+    <a title="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" href="<?=$url; ?>">
+        <?php if (empty($photoId)): ?>
+            <img src="<?= Picture::srcLoad() ?>" data-lazy="<?=Picture::Get($item, Picture::SMALL); ?>"  alt="<?=htmlspecialchars(ProductHelper::GetTitle($item, 'title')); ?>" />
+        <?php else: ?>
+            <picture>
+                <source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">
+                <source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'jpg') ?>" type="image/jpeg">
+                <img src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($item)); ?>">
+            </picture>
+        <?php endif; ?>
+    </a>
  </div>
  
     <div class="title_book">

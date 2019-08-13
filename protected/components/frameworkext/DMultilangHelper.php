@@ -84,11 +84,58 @@ class DMultilangHelper
                             $url = preg_replace(array("/[&]{2,}/ui", "/\?&/ui"), array('&', '?'), $url);
                             $url = preg_replace("/\?+$/ui", '', $url);
                         }
-                        $url = '/' . implode('/', array(Yii::app()->language, ltrim($url, '/')));
-                        Yii::app()->getRequest()->redirect($url,true,301);
+                        $url = ltrim($url, '/');
+                        self::_photoRedirect($url);
+                        $url = '/' . implode('/', array(Yii::app()->language, $url));
+                        Yii::app()->getRequest()->redirect($url, true, 301);
                         break;
                 }
                 return;
+            }
+        }
+    }
+
+    protected function _photoRedirect($url) {
+        $ean = '';
+        $label = 'o';
+        if (mb_strpos($url, 'pictures/big/', null, 'utf-8') === 0) {
+            $ean = mb_substr($url, mb_strlen('pictures/big/', 'utf-8'), null, 'utf-8');
+        }
+        elseif (mb_strpos($url, 'pictures/small/', null, 'utf-8') === 0) {
+            $ean = mb_substr($url, mb_strlen('pictures/small/', 'utf-8'), null, 'utf-8');
+            $label = 'l';
+        }
+        if (!empty($ean)) {
+            $ean = explode('.', $ean);
+            $ean = array_shift($ean);
+            if (!preg_match("/\D/ui", $ean)) {
+                $model = new SearchProducts(1, 0);
+                $code = $model->isCode($ean);
+                if (!empty($code)) {
+                    $find = $model->getByCode($code, $ean);
+                    if (!empty($find)) {
+                        $find = array_shift($find);
+                        $photoTable = Entity::GetEntitiesList()[$find['entity']]['photo_table'];
+                        $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+                        /**@var $photoModel ModelsPhotos*/
+                        $photoModel = $modelName::model();
+                        $photoId = $photoModel->getFirstId($find['id']);
+                        if ($photoId > 0) {
+                            $photoPath = $photoModel->getUnixDir() . $photoModel->getRelativePath($photoId) . $label . '.jpg';
+                            if (($label === 'o')&&(!file_exists($photoPath))) {
+                                $label = 'd';
+                                $photoPath = $photoModel->getUnixDir() . $photoModel->getRelativePath($photoId) . $label . '.jpg';
+                            }
+                            if (file_exists($photoPath)) {
+//                                Yii::app()->getRequest()->redirect($photoModel->getHrefPath($photoId, $label, '', 'jpg'), true, 301);
+                                header("Content-type:image/jpeg");
+                                header('Content-Length:' . filesize($photoPath));
+                                readfile($photoPath);
+                                exit;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
