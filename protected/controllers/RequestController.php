@@ -19,4 +19,8 @@ class RequestController extends MyController
     function actionCallForm() {
         $this->renderPartial('call_form', array('model'=>SendCalls::model()));
     }
+
+    function actionMailingForm() {
+        $this->renderPartial('mailing_form', array('model'=>SendCalls::model()));
+    }
 }

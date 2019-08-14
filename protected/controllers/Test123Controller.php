@@ -190,16 +190,19 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 	}
 
 	function actionCreatePhotos() {
+		require_once dirname(dirname(__FILE__)) . '/models/Photos/Convert.php';
+		$model = new PhotosConvert();
+		$model->createFotos('', 0, '');
+
 		$src = '/var/www/www-root/data/ruslania2.ptysh.ru/pictures/books_photos/9/93530/9785699586813_orig.jpg';
 		$dst = '/var/www/www-root/data/ruslania2.ptysh.ru/pictures/books_photos/9/93530/9785699586813_crop.jpg';
 
 		/**@var $model ModelsPhotos*/
-		$model = Books_photos::model();
-		$model->cropFoto($dst, $src, 100);
-
+//		$model = Books_photos::model();
+//		$model->cropFoto($dst, $src, 100);
 		echo '
-	<img src="https://ruslania.com/pictures/books_photos/9/93530/9785699586813_orig.jpg" alt="">
-	<img src="https://ruslania.com/pictures/books_photos/9/93530/9785699586813_crop.jpg" alt="">
+	<img src="https://ruslania.com//new_img/pay/paytrail.jpg" alt="">
+	<img src="https://ruslania.com//new_img/pay/paytrail.webp" alt="">
 ';
 	}
 }

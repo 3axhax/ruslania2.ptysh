@@ -458,7 +458,8 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
     <div class="footer">
 
         <div class="container">
-
+            <?php $this->widget('SiteFooter'); ?>
+            <?php /*
             <div class="row">
                 <div class="span1">
                     <a href="" title="Ruslania"><img src="/new_img/logo_footer.png" alt="Ruslania" /></a>
@@ -471,11 +472,6 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                         <div class="ico-circle"><span class="icons"><span class="fa location"></span></span><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
                         <div class="ico-circle"><span class="icons"><span class="fa phone"></span></span><a href="tel:+35892727070">+358 9 2727070</a></div>
                         <div class="ico-circle"><span class="icons"><span class="fa email"></span></span><a href="mailto:info@ruslania.com">info@ruslania.com</a></div>
-                        <?php /*
-                        <div class="maps_ico"><a href="https://www.google.ru/maps/place/Bulevardi+7,+00120+Helsinki,+%D0%A4%D0%B8%D0%BD%D0%BB%D1%8F%D0%BD%D0%B4%D0%B8%D1%8F/@60.1647306,24.9368011,17z/data=!4m13!1m7!3m6!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!2zQnVsZXZhcmRpIDcsIDAwMTIwIEhlbHNpbmtpLCDQpNC40L3Qu9GP0L3QtNC40Y8!3b1!8m2!3d60.1650084!4d24.9382766!3m4!1s0x468df4ac3683d5f5:0x726f6797fa44dde1!8m2!3d60.1650084!4d24.9382766" target="_blank">Ruslania Books Corp. Bulevardi 7, FI-00120 Helsinki, Finland</a></div>
-                        <div class="phone_ico"><a href="tel:+35892727070">+358 9 2727070</a></div>
-                        <div class="mail_ico">generalsupports@ruslania.com</div>
-*/ ?>
                     </div>
                     <div class="social_icons">
 
@@ -493,12 +489,6 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
         <div><a target="_blank" href="https://www.twitter.com/RuslaniaMusic/" class="icons"><span class="fa twitter"></span> Sheetmusic / Ноты</a></div>
     </span>
 </span>
-                        <?php /*
-                        <a href="https://vk.com/ruslaniabooks"><img src="/new_img/vk.png" alt="" /></a>
-                        <a href="https://www.facebook.com/RuslaniaBooks/"><img src="/new_img/fb.png" alt="" /></a>
-                        <a href="https://twitter.com/RuslaniaKnigi"><img src="/new_img/tw.png" alt="" /></a>
-                        <!--<a href=""><img src="/new_img/gp.png" alt="" /></a>-->
-*/ ?>
                     </div>
                 </div>
                 <div class="span2">
@@ -578,10 +568,6 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                     <img src="https://img.paytrail.com/?id=34135&type=horizontal&cols=18&text=0&auth=b6c2c7566147a60e" width="770" alt="Ruslania, PayTrail" />
                 </div>
                 <div class="span2">
-                    <?php /*
-                        <img src="/new_img/payment2.png" alt="secures by thawte" />
-                                                <!-- <img src="https://seal.thawte.com/getthawteseal?at=0&sealid=1&dn=RUSLANIA.COM&lang=en&gmtoff=-180" alt="" /> -->
-*/ ?>
                     <img src="/new_img/gls_square.png" alt="FlexDeliveryService" style="width: 80px;" />
                     <a href="<?= Yii::app()->createUrl('site/static', array('page'=>'paypal')) ?>"><img src="/new_img/payment3.png" alt="PayPal verified" /></a>
                     <img src="/new_img/buyer_protection.jpg" alt="PayPal buyer protection" />
@@ -596,7 +582,7 @@ if ((!Yii::app()->getRequest()->cookies['showSelLang']->value)&&(Yii::app()->get
                <?=date('Y')?> © <span class="title__bold">Ruslania</span> - All rights Reserved
 
             </div>
-
+*/ ?>
         </div>
 
     </div>

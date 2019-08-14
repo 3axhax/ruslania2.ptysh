@@ -3227,7 +3227,7 @@ input.prod-filter__input:focus,
 }
 /* Clearable text inputs */
 .clearable{
-    background: #fff url(http://i.stack.imgur.com/mJotv.gif) no-repeat right -10px center;
+    background: #fff url(https://i.stack.imgur.com/mJotv.gif) no-repeat right -10px center;
     border: 1px solid #999;
     padding: 3px 18px 3px 4px;     /* Use the same right padding (18) in jQ! */
     border-radius: 4px;
@@ -3669,7 +3669,7 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
     z-index: 1000;
 }
 .notes:hover .notes-block{display:inline-block; white-space: normal;}
-.notes-block:before {content: url(../new_img/tarrow.png); position: absolute; left: -6px; top: 15px;}
+.notes-block:before {content: url(../new_img/tarrow.png); position: absolute; left: -6px; top: 130px;}
 /*.notes-block{text-align:left;padding:7px 10px;position:absolute;z-index:1000;top:0;left:0;border-radius:3px;display:inline-block;color:#fff;background-color:#ed1d24;}*/
 /*.notes-block:before,.notes-block:after{content:'';position:absolute;left:35px;top:23px;border:5px solid transparent;border-right: 20px solid #525252;/!*border-left: 12px solid #ed1d24;transform: rotate(31deg);*!/}*/
 /*.notes-block:after{border-top: 20px solid #fff;top:22px;}*/
@@ -3719,7 +3719,7 @@ span.notes span.notes-circle:after { content: '\f1db'; color: #edb421; font-size
 .social_icons a.icons span.tripadvisor:before { content: "\f262"; color: #cecece; font-size: 20px; }
 .social_icons a.icons span.tripadvisor { position:absolute; top: 6px; left: 2.4px; }
 
-.social_icons .notes-block { width: auto; left: 40px; top: -10px; }
+.social_icons .notes-block { width: auto; left: 40px; top: -125px; }
 .social_icons .notes-block a.icons {width: auto; border: none; padding-left: 35px; padding-top: 9px; white-space: nowrap; top: 0;}
 .social_icons .notes-block a.icons span.twitter:before {color: #1DA1F2; }
 
