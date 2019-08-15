@@ -375,7 +375,10 @@ $ctrl = Yii::app()->getController()->id;
 <? } ?>
 
 <script type="text/javascript">
-
+	
+	
+	
+	
     var csrf = $('meta[name=csrf]').attr('content').split('=');
 
     var cartVM = function ()
@@ -551,6 +554,7 @@ $ctrl = Yii::app()->getController()->id;
                     if (json.origQuantity == 0) {
                         $(event.target).closest('tr').find('.alerthtml').show();
                         $('.opacity.alerthtml').show();
+						$('.box_btns .btn_yes').focus();
                     }
                 }
                 else {
@@ -565,6 +569,7 @@ $ctrl = Yii::app()->getController()->id;
             else {
                 $(event.target).closest('tr').find('.alerthtml').show();
                 $('.opacity.alerthtml').show();
+				$('.box_btns .btn_yes').focus()
             }
         };
 		
@@ -677,6 +682,48 @@ $ctrl = Yii::app()->getController()->id;
     //}
 
     $(document).ready(function () {
+		
+		
+		$('body').keydown(function(e) {
+			
+			if ($('.alerthtml').css('display') == 'block') {
+			
+				//37 и 39
+				
+				if (e.keyCode == 37) {
+					
+					if ($('.btn_yes:focus').css('border') == undefined) {
+						
+						$('.btn_yes').focus();
+						
+					} else {
+						
+						$('.btn_no').focus();
+						
+					}
+					
+				}
+				
+				if (e.keyCode == 39) {
+					
+					if ($('.btn_no:focus').css('border') == undefined) {
+						
+						$('.btn_no').focus();
+						
+					} else {
+						
+						$('.btn_yes').focus();
+						
+					}
+					
+				}
+			
+			}
+			
+			
+		})
+		
+		
 		
 		ym(53579293, 'reachGoal', 'cart_step1');
 		
