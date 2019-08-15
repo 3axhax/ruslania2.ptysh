@@ -30,6 +30,7 @@ class SiteController extends MyController {
 	function actionCallSend() {
 		
 		$email = 'andreasagopov@hotmail.com';
+		//$email = 'sankes@list.ru';
 		
 		//var_dump($_POST);
 		
@@ -45,11 +46,28 @@ class SiteController extends MyController {
 		
 		$message = new YiiMailMessage('Call. Ruslania.com');
                         $message->view = 'feedback';
-                        $message->setBody(array(
+						
+						$msg_arr = array(
                             'name' => $_POST['SendCalls']['face'],
                             'country_code' => $_POST['Send_calls']['code'],
-                            'phone' => $_POST['SendCalls']['phone']
-                        ), 'text/html');
+                            'phone' => $_POST['SendCalls']['phone'],
+							'city'=>Yii::app()->getLanguage()
+                        );
+						
+						//var_dump(Yii::app()->user);
+						
+						if (!Yii::app()->user->isGuest) {
+							
+							$user = User::model()->findByPk(Yii::app()->user->id);
+							
+							$msg_arr['id'] = $user['id'];
+							$msg_arr['email'] = $user['login'];
+							
+						}
+						
+						
+						
+                        $message->setBody($msg_arr, 'text/html');
                         $message->addTo($email);
                         $message->from = 'noreply@ruslania.com';
                         $mailResult = Yii::app()->mail->send($message);
