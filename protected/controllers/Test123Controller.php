@@ -205,4 +205,8 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 	<img src="https://ruslania.com//new_img/pay/paytrail.webp" alt="">
 ';
 	}
+
+	function actionClearCache() {
+		Yii::app()->memcache->flush();
+	}
 }
