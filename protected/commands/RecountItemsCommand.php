@@ -441,7 +441,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			 *внутри них: дата вписывания, свежая дата вперед
 		*/
 		$sql = ''.
-			'insert into _tmp_position_' . $sort . ' (id) '.
+			'insert ignore into _tmp_position_' . $sort . ' (id) '.
 			'select t.id '.
 			'from ' . $params['site_table'] . ' t '.
 				'join action_items tAI on (tAI.item_id = t.id) and (tAI.entity = ' . (int) $entity . ') and (tAI.type = 1) '. //3-товар дня, 1-новинка
@@ -455,7 +455,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			 *внутри них: дата вписывания, свежая дата вперед
 		*/
 		$sql = ''.
-			'insert into _tmp_position_' . $sort . ' (id) '.
+			'insert ignore into _tmp_position_' . $sort . ' (id) '.
 			'select t.id '.
 			'from ' . $params['site_table'] . ' t '.
 				'join offer_items tAI on (tAI.item_id = t.id) and (tAI.entity_id = ' . (int) $entity . ') ' .
