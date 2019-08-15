@@ -1051,7 +1051,7 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
             <?php if(!empty($item['presaleMessage'])): ?>
                 <div class="presale" style="padding: 10px; margin-bottom: 20px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
             <?php endif; ?>
-            <?= nl2br(strip_tags(ProductHelper::GetDescription($item))); ?>
+            <?= nl2br(ProductHelper::GetDescription($item)); ?>
 
         <?php endif; ?>
 
