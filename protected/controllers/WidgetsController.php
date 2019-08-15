@@ -166,6 +166,8 @@ class WidgetsController extends MyController {
 	}
 
 	function actionPhoto() {
+		$idPhoto = (int)Yii::app()->getRequest()->getParam('idPhoto');
+//		var_dump($idPhoto);
 		$options = array(
 			'iid' => (int)Yii::app()->getRequest()->getParam('iid'),
 			'eid' => (int)Yii::app()->getRequest()->getParam('eid'),
@@ -191,7 +193,13 @@ class WidgetsController extends MyController {
 				}
 				elseif(!empty($row['image'])) $src = Picture::Get($row, Picture::BIG);
 			}
-
+			elseif (!empty($idPhoto)) {
+				$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+				/**@var $model ModelsPhotos*/
+				$model = $modelName::model();
+				$src = $model->getHrefPath($idPhoto, Yii::app()->getRequest()->getParam('label', 'o'), '', 'jpg');
+//				var_dump($src);
+			}
 		}
 		$this->renderPartial('photo', array('src'=>$src, 'options'=>$options));
 	}
