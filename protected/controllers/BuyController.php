@@ -281,12 +281,12 @@ class BuyController extends MyController {
 
 	function actionOrderAdd() {
 		$ret = array();
-		if (Yii::app()->getRequest()->isPostRequest||isset($_GET['ha'])) {
+		$cart = Cart::model();
+		$items = $cart->GetCart($this->uid, $this->sid);
+		if ((!empty($items)&&Yii::app()->getRequest()->isPostRequest)||isset($_GET['ha'])) {
 			$ret['errors'] = $this->_checkForm();
 			if (empty($ret['errors'])) {
 				$aid = $bid = 0;
-				$cart = Cart::model();
-				$items = $cart->GetCart($this->uid, $this->sid);
 				if (Yii::app()->user->isGuest) {
 					if ($userId = $this->_regUser()) {
 						$addrAdd = false;
