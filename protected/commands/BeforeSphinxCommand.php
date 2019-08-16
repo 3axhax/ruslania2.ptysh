@@ -7,7 +7,7 @@
 require_once dirname(__FILE__) . '/MorphyCommand.php';
 if (!defined('cronAction')) define('cronAction', 1);
 class BeforeSphinxCommand extends CConsoleCommand {
-	private $_counts = 10000;
+	protected $_counts = 10000;
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
@@ -148,7 +148,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	}
 
-	private function _query($sql, $params = null) {
+	protected function _query($sql, $params = null) {
 		require_once Yii::getPathOfAlias('webroot') . '/protected/iterators/PDO.php';
 		$pdo = Yii::app()->db->createCommand($sql);
 		$pdo->prepare();
@@ -156,7 +156,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		return new IteratorsPDO($pdo->getPdoStatement());
 	}
 
-	private function _getAuthorNames($persons) {
+	protected function _getAuthorNames($persons) {
 		$names = array();
 		foreach ($persons as $person) {
 			$names = array_merge($names, preg_split("/\W/ui", $person['title_ru']));
@@ -172,7 +172,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		return array_unique($names);
 	}
 
-	private function _morphy() {
+	protected function _morphy() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
@@ -266,7 +266,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	 * при поиске нужно так же не забыть преобразовать в транслит
 	 * @throws CDbException
 	 */
-	private function _morphyAuthors() {
+	protected function _morphyAuthors() {
 		$sql = 'truncate _morphy_authors';
 		Yii::app()->db->createCommand($sql)->execute();
 
