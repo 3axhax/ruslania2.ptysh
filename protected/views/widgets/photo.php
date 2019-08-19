@@ -151,6 +151,8 @@
                 fd.append('iid', self.iid);
                 fd.append(self.csrf[0], self.csrf[1]);
 
+                var curSrc = self.$img.attr('src');
+
                 $.ajax({
                     url : self.urlUpload,
                     type: 'POST',
@@ -162,8 +164,15 @@
                     },
                     success: function(response) {
                         if (response) {
-                            response = JSON.parse(response);
-                            if ('errors' in response) alert(response['errors'].join("\n"));
+                            response = self.jsonParse(response);
+                            if (response == false) {
+                                alert('upload fail');
+                                self.$img.attr('src', curSrc);
+                            }
+                            else if ('errors' in response) {
+                                alert(response['errors'].join("\n"));
+                                self.$img.attr('src', curSrc);
+                            }
                             else if ('src' in response) {
                                 console.log(response);
                                 self.$img.attr('src', response['src']);
@@ -173,8 +182,15 @@
                                     document.location.href = urlRedirect + '&src=' + response['src'];
                                 }
                             }
+                            else {
+                                alert('upload fail');
+                                self.$img.attr('src', curSrc);
+                            }
                         }
-                        else alert('upload fail');
+                        else {
+                            alert('upload fail');
+                            self.$img.attr('src', curSrc);
+                        }
                     }
                 });
 //                    readURL(this, self.$img);
@@ -207,6 +223,15 @@
                 $doc.bind('drop dragover', function (e) {
                     e.preventDefault();
                 });
+            },
+            jsonParse: function(str) {
+                var data = false;
+                try {
+                    data = JSON.parse(str);
+                } catch (e) {
+                    return false;
+                }
+                return data;
             }
          }
     }());
