@@ -122,6 +122,30 @@ class RecountItemsCommand extends CConsoleCommand {
 
 	}
 
+	/** очистка подборок от товаров, которых не должно быть
+	 * @param $entity
+	 * @param $params
+	 */
+	private function _offers($entity, $params) {
+		if ($entity == Entity::PERIODIC) return;
+
+		$sql = ''.
+			'delete t '.
+			'from offer_items t '.
+				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (((tI.brutto > 2) and (tI.discount = 0)) or (tI.discount > 2)) '.
+			'where (t.offer_id = 999) and (t.entity_id = ' . (int) $entity . ') '.
+		'';
+		//Yii::app()->db->createCommand()->setText($sql)->execute();
+
+		$sql = ''.
+			'delete t '.
+			'from offer_items t '.
+				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and ((tI.unitweight_skip > 0) or (tI.unitweight = 0)) '.
+			'where (t.offer_id = 777) and (t.entity_id = ' . (int) $entity . ') '.
+		'';
+		//Yii::app()->db->createCommand()->setText($sql)->execute();
+	}
+
 	private function _periodikTypes($catTable, $itemTable) {
 		$sql = 'update ' . $catTable . ' set avail_items_type_1 = 0,avail_items_type_2 = 0, avail_items_type_3 = 0, avail_items_type_4 = 0';
 		Yii::app()->db->createCommand()->setText($sql)->execute();

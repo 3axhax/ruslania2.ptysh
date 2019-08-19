@@ -439,7 +439,7 @@ class Product
         if (!Entity::IsValid($entity)) return;
 
         $sql = 'select oi.* from offer_items as oi
-        join offers as o on (o.id = oi.offer_id)
+        join offers as o on (o.id = oi.offer_id) and (o.id not in (777, 999))
         where (o.is_active = 1) and (oi.entity_id = ' . (int) $entity . ') and (oi.item_id in (' . implode(',', $ids) . '))';
         if (!isset(self::$_offerItems[$entity])) self::$_offerItems[$entity] = array();
         foreach ($ids as $id) self::$_offerItems[$entity][$id] = array();
@@ -485,7 +485,7 @@ class Product
             //$sql = 'SELECT * FROM `offer_items` WHERE `item_id` = '.$id.' AND `entity_id` = '.$entity;
             $sql = sprintf("SELECT oi.id
                         FROM `offer_items` as oi
-                        JOIN (select id from offers where is_active = 1) as of ON of.id = oi.offer_id
+                        JOIN (select id from offers where (is_active = 1) and (id not in (777, 999))) as of ON of.id = oi.offer_id
                         WHERE `item_id` = %d AND `entity_id` = %d",
                 $id, $entity);
             $row = Yii::app()->db->createCommand($sql)->queryAll();
