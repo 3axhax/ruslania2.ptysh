@@ -11,14 +11,12 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	public function actionIndex() {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
-//		$this->_morphyAuthors();
-//		return;
 
 		$this->_fillProductsAuthors();
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity_id, item_id, 2 from offer_items';
+		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity_id, item_id, 2 from offer_items where (offer_id not in (777, 999))';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity entity_id, item_id, 1 from action_items';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -57,6 +55,9 @@ class BeforeSphinxCommand extends CConsoleCommand {
 		}
 
 		$this->_morphy();
+
+		$this->_morphyAuthors();
+
 		Yii::app()->memcache->flush();
 		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
@@ -77,71 +78,69 @@ class BeforeSphinxCommand extends CConsoleCommand {
 			$step = 0;
 			while (($items = $this->_query($sqlItems . $this->_counts*$step . ', ' . $this->_counts))&&($items->count() > 0)) {
 				$step++;
-				switch (true) {
-					case Entity::checkEntityParam($entity, 'authors'):
-						foreach ($items as $item) {
-							$sql = ''.
-								'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
-								'from all_authorslist tA '.
-									'join ' . $params['author_table'] . ' t on (t.author_id = tA.id) '.
-										'and (t.author_id > 0)'.
-										'and (t.' . $params['author_entity_field'] . ' = ' . (int)$item['id'] . ') '.
+				if (Entity::checkEntityParam($entity, 'authors')) {
+					foreach ($items as $item) {
+						$sql = '' .
+							'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi ' .
+							'from all_authorslist tA ' .
+							'join ' . $params['author_table'] . ' t on (t.author_id = tA.id) ' .
+							'and (t.author_id > 0)' .
+							'and (t.' . $params['author_entity_field'] . ' = ' . (int)$item['id'] . ') ' .
 							'';
-							$persons = $this->_query($sql);
-							$names = $this->_getAuthorNames($persons);
-							if (!empty($names)) {
-								$insertPDO->execute(array(':id'=>$item['id'], ':eid'=>$entity, ':name'=>implode(' ', $names), ':pos'=>$item['pos']));
-							}
+						$persons = $this->_query($sql);
+						$names = $this->_getAuthorNames($persons);
+						if (!empty($names)) {
+							$insertPDO->execute(array(':id' => $item['id'], ':eid' => $entity, ':name' => implode(' ', $names), ':pos' => $item['pos']));
 						}
-						break;
-					case Entity::checkEntityParam($entity, 'actors'):
-						foreach ($items as $item) {
-							$sql = ''.
-								'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
-								'from all_authorslist tA '.
-								'join ' . $params['actors_table'] . ' t on (t.person_id = tA.id) '.
-									'and (t.person_id > 0) '.
-									'and (t.video_id = ' . (int)$item['id'] . ') '.
+					}
+				}
+				if (Entity::checkEntityParam($entity, 'actors')) {
+					foreach ($items as $item) {
+						$sql = '' .
+							'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi ' .
+							'from all_authorslist tA ' .
+							'join ' . $params['actors_table'] . ' t on (t.person_id = tA.id) ' .
+							'and (t.person_id > 0) ' .
+							'and (t.video_id = ' . (int)$item['id'] . ') ' .
 							'';
-							$persons = $this->_query($sql);
-							$names = $this->_getAuthorNames($persons);
-							if (!empty($names)) {
-								$insertPDO->execute(array(':id'=>$item['id'], ':eid'=>$entity, ':name'=>implode(' ', $names), ':pos'=>$item['pos']));
-							}
+						$persons = $this->_query($sql);
+						$names = $this->_getAuthorNames($persons);
+						if (!empty($names)) {
+							$insertPDO->execute(array(':id' => $item['id'], ':eid' => $entity, ':name' => implode(' ', $names), ':pos' => $item['pos']));
 						}
-						break;
-					case Entity::checkEntityParam($entity, 'directors'):
-						foreach ($items as $item) {
-							$sql = ''.
-								'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
-								'from all_authorslist tA '.
-								'join ' . $params['directors_table'] . ' t on (t.person_id = tA.id) '.
-									'and (t.person_id > 0) '.
-									'and (t.video_id = ' . (int)$item['id'] . ') '.
+					}
+				}
+				if (Entity::checkEntityParam($entity, 'directors')) {
+					foreach ($items as $item) {
+						$sql = '' .
+							'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi ' .
+							'from all_authorslist tA ' .
+							'join ' . $params['directors_table'] . ' t on (t.person_id = tA.id) ' .
+							'and (t.person_id > 0) ' .
+							'and (t.video_id = ' . (int)$item['id'] . ') ' .
 							'';
-							$persons = $this->_query($sql);
-							$names = $this->_getAuthorNames($persons);
-							if (!empty($names)) {
-								$insertPDO->execute(array(':id'=>$item['id'], ':eid'=>$entity, ':name'=>implode(' ', $names), ':pos'=>$item['pos']));
-							}
+						$persons = $this->_query($sql);
+						$names = $this->_getAuthorNames($persons);
+						if (!empty($names)) {
+							$insertPDO->execute(array(':id' => $item['id'], ':eid' => $entity, ':name' => implode(' ', $names), ':pos' => $item['pos']));
 						}
-						break;
-					case Entity::checkEntityParam($entity, 'performers'):
-						foreach ($items as $item) {
-							$sql = ''.
-								'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
-								'from all_authorslist tA '.
-								'join ' . $params['performer_table'] . ' t on (t.person_id = tA.id) '.
-								'and (t.person_id > 0) '.
-								'and (t.' . $params['performer_field'] . ' = ' . (int)$item['id'] . ') '.
+					}
+				}
+				if (Entity::checkEntityParam($entity, 'performers')) {
+					foreach ($items as $item) {
+						$sql = '' .
+							'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi ' .
+							'from all_authorslist tA ' .
+							'join ' . $params['performer_table'] . ' t on (t.person_id = tA.id) ' .
+							'and (t.person_id > 0) ' .
+							'and (t.' . $params['performer_field'] . ' = ' . (int)$item['id'] . ') ' .
 							'';
-							$persons = $this->_query($sql);
-							$names = $this->_getAuthorNames($persons);
-							if (!empty($names)) {
-								$insertPDO->execute(array(':id'=>$item['id'], ':eid'=>$entity, ':name'=>implode(' ', $names), ':pos'=>$item['pos']));
-							}
+						$persons = $this->_query($sql);
+						$names = $this->_getAuthorNames($persons);
+						if (!empty($names)) {
+							$insertPDO->execute(array(':id' => $item['id'], ':eid' => $entity, ':name' => implode(' ', $names), ':pos' => $item['pos']));
 						}
-						break;
+					}
 				}
 			}
 		}
