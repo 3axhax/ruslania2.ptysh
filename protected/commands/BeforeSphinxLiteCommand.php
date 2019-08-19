@@ -21,7 +21,11 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
         $insertPDO->prepare();
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
             //$sqlItems = 'select id, title_ru, positionDefault pos from ' . $params['site_table'] . ' where (avail_for_order > 0) limit ';
-            $sqlItems = 'select t.id, t.title_ru, t.positionDefault pos from ' . $params['site_table'] . ' t join _change_items tCI on (tCI.id = t.id) and (tCI.eid = ' . (int) $entity . ') limit ';
+            $sqlItems = ''.
+                'select t.id, t.title_ru, t.positionDefault pos from ' . $params['site_table'] . ' t '.
+                'join _change_items tCI on (tCI.id = t.id) and (tCI.eid = ' . (int) $entity . ') '.
+                'limit '.
+            '';
             $step = 0;
             while (($items = $this->_query($sqlItems . $this->_counts*$step . ', ' . $this->_counts))&&($items->count() > 0)) {
                 $step++;
@@ -32,8 +36,8 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                                 'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
                                 'from all_authorslist tA '.
                                 'join ' . $params['author_table'] . ' t on (t.author_id = tA.id) '.
-                                'and (t.author_id > 0)'.
-                                'and (t.' . $params['author_entity_field'] . ' = ' . (int)$item['id'] . ') '.
+                                    'and (t.author_id > 0)'.
+                                    'and (t.' . $params['author_entity_field'] . ' = ' . (int)$item['id'] . ') '.
                             '';
                             $persons = $this->_query($sql);
                             $names = $this->_getAuthorNames($persons);
@@ -48,8 +52,8 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                                 'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
                                 'from all_authorslist tA '.
                                 'join ' . $params['actors_table'] . ' t on (t.person_id = tA.id) '.
-                                'and (t.person_id > 0) '.
-                                'and (t.video_id = ' . (int)$item['id'] . ') '.
+                                    'and (t.person_id > 0) '.
+                                    'and (t.video_id = ' . (int)$item['id'] . ') '.
                             '';
                             $persons = $this->_query($sql);
                             $names = $this->_getAuthorNames($persons);
@@ -64,8 +68,8 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                                 'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
                                 'from all_authorslist tA '.
                                 'join ' . $params['directors_table'] . ' t on (t.person_id = tA.id) '.
-                                'and (t.person_id > 0) '.
-                                'and (t.video_id = ' . (int)$item['id'] . ') '.
+                                    'and (t.person_id > 0) '.
+                                    'and (t.video_id = ' . (int)$item['id'] . ') '.
                             '';
                             $persons = $this->_query($sql);
                             $names = $this->_getAuthorNames($persons);
@@ -80,8 +84,8 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                                 'select tA.id, tA.title_ru, tA.title_rut, tA.title_en, tA.title_fi '.
                                 'from all_authorslist tA '.
                                 'join ' . $params['performer_table'] . ' t on (t.person_id = tA.id) '.
-                                'and (t.person_id > 0) '.
-                                'and (t.' . $params['performer_field'] . ' = ' . (int)$item['id'] . ') '.
+                                    'and (t.person_id > 0) '.
+                                    'and (t.' . $params['performer_field'] . ' = ' . (int)$item['id'] . ') '.
                             '';
                             $persons = $this->_query($sql);
                             $names = $this->_getAuthorNames($persons);

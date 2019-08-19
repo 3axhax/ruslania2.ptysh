@@ -458,7 +458,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			'insert ignore into _tmp_position_' . $sort . ' (id) '.
 			'select t.id '.
 			'from ' . $params['site_table'] . ' t '.
-				'join offer_items tAI on (tAI.item_id = t.id) and (tAI.entity_id = ' . (int) $entity . ') ' .
+				'join offer_items tAI on (tAI.item_id = t.id) and (tAI.entity_id = ' . (int) $entity . ') and (tAI.offer_id not in (777, 999)) ' .
 			'where (t.avail_for_order = 1) '.
 			'order by t.add_date desc ' .
 		'';
