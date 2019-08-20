@@ -40,6 +40,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
+			$this->_offers($entity, $params);
 			$this->_years($entity, $params);
 			if ($entity == 20) continue;
 			$sql = 'update ' . $params['site_category_table'] . ' set items_count = 0, avail_items_count = 0';
@@ -135,15 +136,15 @@ class RecountItemsCommand extends CConsoleCommand {
 				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (((tI.brutto > 2) and (tI.discount = 0)) or (tI.discount > 2)) '.
 			'where (t.offer_id = 999) and (t.entity_id = ' . (int) $entity . ') '.
 		'';
-		//Yii::app()->db->createCommand()->setText($sql)->execute();
+		Yii::app()->db->createCommand()->setText($sql)->execute();
 
 		$sql = ''.
 			'delete t '.
 			'from offer_items t '.
-				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and ((tI.unitweight_skip > 0) or (tI.unitweight = 0)) '.
+				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.unitweight_skip = 0) and (tI.unitweight > 0) '.
 			'where (t.offer_id = 777) and (t.entity_id = ' . (int) $entity . ') '.
 		'';
-		//Yii::app()->db->createCommand()->setText($sql)->execute();
+		Yii::app()->db->createCommand()->setText($sql)->execute();
 	}
 
 	private function _periodikTypes($catTable, $itemTable) {
@@ -482,7 +483,8 @@ class RecountItemsCommand extends CConsoleCommand {
 			'insert ignore into _tmp_position_' . $sort . ' (id) '.
 			'select t.id '.
 			'from ' . $params['site_table'] . ' t '.
-				'join offer_items tAI on (tAI.item_id = t.id) and (tAI.entity_id = ' . (int) $entity . ') and (tAI.offer_id not in (777, 999)) ' .
+				'join offer_items tAI on (tAI.item_id = t.id) and (tAI.entity_id = ' . (int) $entity . ') ' .
+				'join offers tOf on (tOf.id = tAI.offer_id) and (tOf.is_active > 0) and (tOf.id not in (777, 999)) '.
 			'where (t.avail_for_order = 1) '.
 			'order by t.add_date desc ' .
 		'';
