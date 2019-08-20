@@ -16,7 +16,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 		$sql = 'truncate _items_with_label';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
-		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity_id, item_id, 2 from offer_items where (offer_id not in (777, 999))';
+		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select t.entity_id, t.item_id, 2 from offer_items t join offers tOf on (tOf.id = t.offer_id) and (tOf.id not in (777, 999)) and (tOf.is_active > 0)';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 		$sql = 'insert ignore into _items_with_label (entity_id, item_id, type) select entity entity_id, item_id, 1 from action_items';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -208,7 +208,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . (int)$entity . ') '.
 				'join _change_items tCI on (tCI.id = t.id) and (tCI.eid = ' . (int)$entity . ') '.
 			'';
-			echo $sqlItems . "\n";
+//			echo $sqlItems . "\n";
 			$step = 0;
 			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
 				$step++;

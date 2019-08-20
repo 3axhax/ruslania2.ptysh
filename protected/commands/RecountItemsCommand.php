@@ -382,7 +382,7 @@ class RecountItemsCommand extends CConsoleCommand {
 				'where (t.year is not null) and (t.year > 0) and (t.avail_for_order > 0) '.
 				'group by t.year '.
 			'';
-			echo $sql . "\n";
+//			echo $sql . "\n";
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
 	}

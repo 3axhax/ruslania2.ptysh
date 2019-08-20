@@ -159,7 +159,7 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
     }
 
     protected function _morphy() {
-        echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+        echo "\n" . 'morphy  ' . date('d.m.Y H:i:s') . "\n";
 
         foreach (Entity::GetEntitiesList() as $entity=>$params) {
             $fields = array(
@@ -187,7 +187,7 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                     'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . (int)$entity . ') '.
                 'where (tCI.eid = ' . (int)$entity . ') '.
             '';
-            echo $sqlItems . "\n";
+//            echo $sqlItems . "\n";
             $step = 0;
             while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
                 $step++;
@@ -218,14 +218,14 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                     $sql = 'delete from _change_items where (eid = ' . (int)$entity . ') and (id = ' . (int) $item['changeId'] . ')';
                     Yii::app()->db->createCommand($sql)->execute();
                 }
-                echo date('d.m.Y H:i:s') . "\n";
+//                echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
             }
-            echo date('d.m.Y H:i:s') . "\n";
+            echo $params['site_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
         }
 
 
-        echo 'end ' . date('d.m.Y H:i:s') . "\n";
+        echo 'morphy ' . date('d.m.Y H:i:s') . "\n";
     }
 
     /** при поиске авторов морфология не должна учитываться, но должны быть учитаны окончания фамилий при склонении (или множественное/единственное чило)
@@ -269,13 +269,14 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                     ':morphy_name'=>implode(' ', $morphy),
                 ));
             }
-            echo date('d.m.Y H:i:s') . "\n";
         }
+        echo 'authors ' . date('d.m.Y H:i:s') . "\n";
 
         $sqlItems = ''.
             'select t.db_id, t.xml_value '.
             'from compliances t '.
                 'join (select id from compliances where (type_id = 4) order by id limit {start}, {end}) t1 using (id) '.
+                'join _change_authors tCA on (tCA.id = t.db_id) '.
         '';
         $step = 0;
         while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
@@ -296,8 +297,8 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
                     ':morphy_name'=>implode(' ', $morphy),
                 ));
             }
-            echo date('d.m.Y H:i:s') . "\n";
         }
+        echo 'compliances ' . date('d.m.Y H:i:s') . "\n";
 
         $sql = 'truncate _change_authors';
         Yii::app()->db->createCommand($sql)->execute();
