@@ -245,17 +245,19 @@ class EntityUrlRule extends CBaseUrlRule {
 
 	private function _parseLevel1($urlParam, $request) {
 		if ($entity = array_search($urlParam, $this->_entitys)) {
-			$_REQUEST['entity'] = $_GET['entity'] = $entity;
 			if (method_exists($request, 'setParam')) $request->setParam('entity', $entity);
+			else $_REQUEST['entity'] = $_GET['entity'] = $entity;
 			return 'entity';
 		}
 		return false;
 	}
 
 	private function _parseLevel2($urlParam, $request) {
-		if (empty($_GET['entity'])) return false;
+		if (method_exists($request, 'setParam')) $entity = $request->getParam('entity');
+		else $entity = empty($_GET['entity'])?0:$_GET['entity'];
+		if (empty($entity)) return false;
 
-		if ($nameLevel2 = array_search($urlParam, $this->_level2[$_GET['entity']])) {
+		if ($nameLevel2 = array_search($urlParam, $this->_level2[$entity])) {
 			if (isset($this->_routesLevel2[$nameLevel2]))
 				return explode('/', $this->_routesLevel2[$nameLevel2]);
 		}
@@ -265,9 +267,11 @@ class EntityUrlRule extends CBaseUrlRule {
 	}
 
 	private function _parseLevel3($urlParam, $urlParamPrev, $route = '', $request) {
-		if (empty($_GET['entity'])) return false;
+		if (method_exists($request, 'setParam')) $entity = $request->getParam('entity');
+		else $entity = empty($_GET['entity'])?0:$_GET['entity'];
+		if (empty($entity)) return false;
 		if (empty($route)) {
-			if ($nameLevel2 = array_search($urlParamPrev, $this->_level2[$_GET['entity']])) {
+			if ($nameLevel2 = array_search($urlParamPrev, $this->_level2[$entity])) {
 				if (isset($this->_routesLevel3[$nameLevel2])) $route = $this->_routesLevel3[$nameLevel2];
 			}
 		}

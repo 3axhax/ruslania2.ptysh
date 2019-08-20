@@ -86,7 +86,7 @@ class FilterHelper
     }
 
     static function setFiltersData ($entity, $cid = 0, $data) {
-        self::normalizeData($data);
+        self::normalizeData($data, $entity);
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
         if (Yii::app()->request->cookies[$key]->value != serialize(self::$data)) {
             Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(self::$data));
@@ -118,7 +118,7 @@ class FilterHelper
                 if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
             }
             unset($data);
-            self::getEntity();
+            self::getEntity($entity);
             if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
                 self::$data = [];
                 return self::$data;
@@ -182,9 +182,9 @@ class FilterHelper
         if ($roure == $refererRoute) self::deleteEntityFilter ($entity, $cid);
     }
 
-    static private function normalizeData ($data) {
+    static private function normalizeData ($data, $entity) {
         self::$data = [];
-        self::getEntity();
+        self::getEntity($entity);
         if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
             self::$data = [];
             return;
@@ -223,10 +223,12 @@ class FilterHelper
         if (!empty($data['new_publisher'])&&(mb_strlen($data['new_publisher'], 'utf-8') > 2)) self::$data['publishersStr'] = $data['new_publisher'];
     }
 
-    static private function getEntity(){
-        $entity = Yii::app()->getRequest()->getParam('entity', false);
-        if ($entity !== false) {
-            if (!ctype_digit($entity)) {
+    static private function getEntity($entity){
+        //фиг знает зачем эта функция, $entity уже есть
+        //не знаю зачем это все но на всякия случай оставлю
+        if (empty($entity)) $entity = Yii::app()->getRequest()->getParam('entity', false);
+        if (!empty($entity)) {
+            if (!is_numeric($entity)) {
                 $entity = Entity::ParseFromString($entity);
             }
             self::$data['entity'] = (int) $entity;
