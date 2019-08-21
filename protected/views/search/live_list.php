@@ -16,6 +16,8 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 				<a href="<?= $url ?>">
 					<?php if (empty($photoId)): ?>
 						<img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" />
+					<?php elseif ($photoModel->isExternal($photoId)): ?>
+						<img style="max-width: 100%;max-height:86px;" src="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>">
 					<?php else: ?>
 						<picture>
 							<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $item['eancode'], 'webp') ?>" type="image/webp">

@@ -105,4 +105,72 @@ class SphinxProducts extends SearchProducts {
 		return array($tables, array_filter($condition), $order, $option);
 	}
 
+	function getBooleanByCode($code, $q) {
+		foreach ($code as $codeName) {
+			switch ($codeName) {
+				case 'catalogue':
+					$sql = ''.
+						'select entity, real_id '.
+						'from music_catalog ' .
+						'where (catalogue = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+						'';
+					$find = SphinxQL::getDriver()->multiSelect($sql);
+
+					$sql = ''.
+						'select entity, real_id '.
+						'from pereodics_catalog ' .
+						'where (issn = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+						'';
+					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
+
+					$sql = ''.
+						'select entity, real_id '.
+						'from pereodics_catalog ' .
+						'where (index = ' . SphinxQL::getDriver()->mest($q) . ') '.
+						'option ranker=none '.
+						'';
+					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
+					if (!empty($find)) return $this->_prepareProducts($find);
+					break;
+				case 'real_id':
+					$num = explode('-', $q);
+					if (count($num) == 2) {
+						$sql = ''.
+							'select entity, real_id '.
+							'from books_catalog, pereodics_catalog, printed_catalog, music_catalog, musicsheets_catalog, video_catalog, maps_catalog, soft_catalog ' .
+							'where (' . $codeName . ' = ' . $num[1] . ') and (entity = ' . $num[0] . ') '.
+							'option ranker=none '.
+							'';
+						$find = SphinxQL::getDriver()->multiSelect($sql);
+						if (!empty($find)) return $this->_prepareProducts($find);
+					}
+					break;
+				default:
+					$qCode = preg_replace("/\D/iu", '', $q);
+					if (!empty($qCode)) {
+						$sql = ''.
+							'select entity, real_id '.
+							'from books_catalog, pereodics_catalog, printed_catalog, music_catalog, musicsheets_catalog, video_catalog, maps_catalog, soft_catalog ' .
+							'where (' . $codeName . ' = ' . $qCode . ') '.
+							'option ranker=none '.
+							'';
+						$find = SphinxQL::getDriver()->multiSelect($sql);
+						if (!empty($find)) return $this->_prepareProducts($find);
+					}
+					break;
+			}
+		}
+		$sql = ''.
+			'select entity, real_id '.
+			'from wrong_isbn ' .
+			'where match(' . SphinxQL::getDriver()->mest($q) . ') '.
+			'option ranker=none '.
+			'';
+		$find = SphinxQL::getDriver()->multiSelect($sql);
+		if (!empty($find)) return $this->_prepareProducts($find);
+		return array();
+	}
+
 }

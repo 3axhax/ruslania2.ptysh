@@ -16,8 +16,12 @@ class ModelsPhotos extends CActiveRecord {
 		return Yii::getPathOfAlias('webroot') . '/pictures/' . $this->tableName() . '/';
 	}
 
+	function isExternal($idFoto) {
+		return !empty($this->_externalPhotos[$idFoto]);
+	}
+
 	function getHrefPath($idFoto, $label, $ean, $ext) {
-		if (!empty($this->_externalPhotos[$idFoto])) return $this->_externalPhotos[$idFoto];
+		if ($this->isExternal($idFoto)) return $this->_externalPhotos[$idFoto];
 
 /*		$unixPath = $this->getUnixDir() . $this->getRelativePath($idFoto) . $ean . '_d.webp';
 		if (file_exists($unixPath)) {

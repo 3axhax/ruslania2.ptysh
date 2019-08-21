@@ -209,4 +209,26 @@ require_once Yii::getPathOfAlias('webroot') . '/protected/config/command-local.p
 	function actionClearCache() {
 		Yii::app()->memcache->flush();
 	}
+
+	function actionEmail() {
+//		require_once Yii::getPathOfAlias('webroot') . '/protected/components/MailSender.php';
+/*		$handler = new MailSender();
+		$handler->send();*/
+		$message = new YiiMailMessage('Ruslania.com password');
+		$message->view = 'forgot';
+		$message->setBody('тестовое письмо', 'text/html');
+		$message->addTo('kirill.ruh@gmail.com');
+		$message->from = 'ruslania@ruslania.com';
+
+		 Yii::app()->mail->transportType = 'smtp';
+		 Yii::app()->mail->transportOptions = array(
+
+		 'host'=> 'smtp.gmail.com',
+		 'encryption'=>'ssl',
+		 'port'=>465,
+		 'username'=>'rkv@dfaktor.ru',
+		 'password'=>''
+		 );
+		Yii::app()->mail->send($message);
+	}
 }

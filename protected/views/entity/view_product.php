@@ -40,6 +40,8 @@ if (!in_array($item['id'] . '_' . $entity, $arrGoods)) {
         <?php $this->renderStatusLables($item['status']); ?>
         <?php if (empty($photoId)): ?>
             <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= Picture::Get($item, Picture::BIG); ?>">
+        <?php elseif ($photoModel->isExternal($photoId)): ?>
+            <img class="img-view_product" alt="<?= ProductHelper::GetTitle($item); ?>" title="<?= ProductHelper::GetTitle($item); ?>" src="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>">
         <?php else: ?>
         <picture>
             <source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'webp') ?>" type="image/webp">
