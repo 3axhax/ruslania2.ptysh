@@ -32,7 +32,7 @@ class UrlController extends MyController {
 
 	function actionOfferDay() {
 		if ($num = Yii::app()->getRequest()->getParam('num')) {
-			$model = new SearchProducts(1, 0);
+			$model = new SphinxProducts(1, 0);
 			$code = $model->isCode($num);
 			$find = $model->getByCode($code, $num);
 

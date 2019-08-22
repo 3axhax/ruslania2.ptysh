@@ -250,7 +250,7 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
             'join _change_authors tCA on (tCA.id = t.id) '.
         '';
         $step = 0;
-        $sp = new SearchProducts(0);
+        $sp = new SphinxProducts(0);
         while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
             $step++;
             foreach ($items as $item) {

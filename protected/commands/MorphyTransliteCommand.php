@@ -105,7 +105,7 @@ class MorphyTransliteCommand extends CConsoleCommand {
 	protected function getMorphy($s) {
 		if (empty($s)) return array();
 
-		$sp = new SearchProducts(0);
+		$sp = new SphinxProducts(0);
 		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords($s);
 		return $title;
 	}
@@ -134,7 +134,7 @@ class MorphyTransliteCommand extends CConsoleCommand {
 		$authors = array_unique(preg_split("/\W/ui", $item['authors']));
 		$authors = array_diff($authors, $transliteTitleWithoutNumeric, $transliteDescWithoutNumeric);
 
-		$sp = new SearchProducts(0);
+		$sp = new SphinxProducts(0);
 		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruTitle) . ' ' . implode(' ', $fiTitle) . ' ' . implode(' ', $enTitle));
 		list($desc, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $ruDesc) . ' ' . implode(' ', $fiDesc) . ' ' . implode(' ', $enDesc));
 		list($authors, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $authors));

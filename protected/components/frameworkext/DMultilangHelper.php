@@ -109,7 +109,7 @@ class DMultilangHelper
             $ean = explode('.', $ean);
             $ean = array_shift($ean);
             if (!preg_match("/\D/ui", $ean)) {
-                $model = new SearchProducts(1, 0);
+                $model = new SphinxProducts(1, 0);
                 $code = $model->isCode($ean);
                 if (!empty($code)) {
                     $find = $model->getByCode($code, $ean);

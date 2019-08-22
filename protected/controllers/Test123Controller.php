@@ -78,7 +78,7 @@ class Test123Controller extends MyController {
  */
 
 		$q = 'Rimsky-Korsakov';
-		$sp = new SearchProducts(1);
+		$sp = new SphinxProducts(1);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($q);
 		Debug::staticRun(array($searchWords));
 		$field_weights = array(
@@ -111,12 +111,12 @@ class Test123Controller extends MyController {
 
 /*		$s = 'Matryoshka 12 Textbook + 3 юзефович audio CD';
 		$result = SphinxQL::getDriver()->multiSelect("call keywords (" . SphinxQL::getDriver()->mest($s) . ", 'forSnippet')");
-		$sp = new SearchProducts(1);
+		$sp = new SphinxProducts(1);
 		Debug::staticRun(array($s, $result, $sp->getNormalizedWords($s)));*/
 
 		//Matryoshka 12 Textbook + 3 audio CD
 /*		$word = 'цирк';//'Schönberg';
-		$sp = new SearchProducts(1);
+		$sp = new SphinxProducts(1);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords($word);
 		list($tables, $condition, $order, $option) = $sp->getSqlParam($searchWords, $realWords, $useRealWord, 0);
 		$resulTime = microtime(true);

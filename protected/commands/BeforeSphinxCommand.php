@@ -281,7 +281,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 				'join (select id from all_authorslist order by id limit {start}, {end}) t1 using (id) '.
 		'';
 		$step = 0;
-		$sp = new SearchProducts(0);
+		$sp = new SphinxProducts(0);
 		while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
 			$step++;
 			foreach ($items as $item) {
@@ -335,7 +335,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	protected function getMorphy($s) {
 		if (empty($s)) return array();
 
-		$sp = new SearchProducts(0);
+		$sp = new SphinxProducts(0);
 		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords($s);
 		return $title;
 	}

@@ -90,7 +90,7 @@ class MorphyCommand extends CConsoleCommand {
 		$allWords = array_unique($allWords);
 		if (!empty($addWords)&&empty($allWords)) return array();
 
-		$sp = new SearchProducts(0);
+		$sp = new SphinxProducts(0);
 		list($searchWords, $realWords, $useRealWord) = $sp->getNormalizedWords(implode(' ', $allWords));
 		return $searchWords;
 	}
