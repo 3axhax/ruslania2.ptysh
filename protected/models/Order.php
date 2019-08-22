@@ -309,6 +309,7 @@ class Order extends CMyActiveRecord
                 //'contact_email'=>$user['login'], 'first_name'=>$user['first_name'], 'last_name'=>$user['last_name']
                 $ba = array('contact_email'=>'', 'receiver_first_name'=>'', 'receiver_last_name'=>'');
                 if (!empty($order->BillingAddressID)) $ba = $a->GetAddress($uid, $order->BillingAddressID);
+                else $ba = $da;
                 $client = array();
                 if (($user['first_name'] != $da['receiver_first_name'])&&($user['first_name'] != $ba['receiver_first_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
                 elseif (($user['last_name'] != $da['receiver_last_name'])&&($user['last_name'] != $ba['receiver_last_name'])) $client['name'] = $user['last_name'] . ' ' . $user['first_name'];
@@ -318,13 +319,13 @@ class Order extends CMyActiveRecord
                 }
                 if (!empty($client)) $hiddenNotes .= 'Заказ оформил: ' . implode(' ', $client) . '. ' . "\r\n\r\n";
             }
-            /*if (!empty($data['verkkolaskuosoite'])||!empty($data['operaattoritunnus'])) {
-                if (!empty($data['verkkolaskuosoite']))
-                    $hiddenNotes .= 'verkkolaskuosoite: ' . $data['verkkolaskuosoite'] . "\r\n";
-                if (!empty($data['operaattoritunnus']))
-                    $hiddenNotes .= 'operaattoritunnus: ' . $data['operaattoritunnus'] . "\r\n";
+            if (!empty($ba['verkkolaskuosoite'])||!empty($ba['operaattoritunnus'])) {
+                if (!empty($ba['verkkolaskuosoite']))
+                    $hiddenNotes .= 'verkkolaskuosoite: ' . $ba['verkkolaskuosoite'] . "\r\n";
+                if (!empty($ba['operaattoritunnus']))
+                    $hiddenNotes .= 'operaattoritunnus: ' . $ba['operaattoritunnus'] . "\r\n";
                 $hiddenNotes .= "\r\n";
-            }*/
+            }
 
             $sql = 'INSERT INTO users_orders (uid, delivery_address_id, billing_address_id, delivery_type_id, '
                 . 'payment_type_id, currency_id, is_reserved, full_price, items_price, delivery_price, notes, mandate, promocode_id, smartpost_address, promocodes, hidden_notes) VALUES '

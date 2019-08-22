@@ -17,7 +17,7 @@
                 <div class="mbt10 info_order">
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_DELIVERY_ADDRESS"); ?>:</span> <div class="span11"><?=CommonHelper::FormatAddress($order['DeliveryAddress']); ?></div></div>
                     <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_DELIVERY_TYPE"); ?>:</span> <div class="span11"><?=CommonHelper::FormatDeliveryType($order['delivery_type_id']); ?></div></div>
-                    <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_BILLING_ADDRESS"); ?>:</span> <div class="span11"><?=CommonHelper::FormatAddress($order['BillingAddress']); ?></div></div>
+                    <div class="row"><span class="span1"><?=$ui->item("ORDER_MSG_BILLING_ADDRESS"); ?>:</span> <div class="span11"><?=CommonHelper::FormatAddress($order['BillingAddress'], true); ?></div></div>
                     <?php if(!$onlyContent) : ?>
                         <div class="row">
                             <span class="span1"><?=$ui->item("ORDER_MSG_PAYMENT_TYPE"); ?>:</span>

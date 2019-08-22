@@ -113,7 +113,7 @@ if (empty($showNotes)) $showNotes = false;
 			<span class="texterror" style="display: none;"><?= $ui->item('CARTNEW_INPUT_ERROR') ?></span>
 		</td>
 	</tr>
-<?php if ($userType != 'destination'): ?>
+<?php //if ($userType != 'destination'): ?>
 	<tr class="js_firm verkkolasku">
 		<td nowrap="" class="maintxt city_lbl">
 			Verkkolaskuosoite
@@ -130,7 +130,7 @@ if (empty($showNotes)) $showNotes = false;
 			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[operaattoritunnus]')); ?>
 		</td>
 	</tr>
-<?php endif; ?>
+<?php //endif; ?>
 	<tr class="js_delivery">
 		<td nowrap="" class="maintxt city_lbl">
 	<?php if (!$addrModel->getAttribute('id')): ?>

@@ -48,7 +48,7 @@ class CommonHelper
     }
 
     // TODO: Organization
-    public static function FormatAddress($address)
+    public static function FormatAddress($address, $showVerkkolaskuosoite = false)
     {
         $ui = Yii::app()->ui;
         if(empty($address)) return $ui->item('NO_DATA');
@@ -65,23 +65,29 @@ class CommonHelper
         $arr_labels = array();
 		if ($org) $arr_labels[] = $org;
 		if ($name) $arr_labels[] = $name;
-		if (!empty($address['streetaddress'])) $arr_labels[] = $address['streetaddress'];
-		if (!empty($address['postindex'])) $arr_labels[] = $address['postindex'];
-		if (!empty($address['city'])) $arr_labels[] = $address['city'];
-		if (!empty($address['country_name'])) {
-            if (!empty($address['statesNameShort'])) $arr_labels[] = $address['statesNameShort'];
-            elseif (!empty($address['state_id'])&&!empty($address['country'])) {
-                $countryStates = Country::model()->GetStatesList($address['country']);
-                foreach ($countryStates as $countryState) {
-                    if ($countryState['id'] == $address['state_id']) {
-                        $arr_labels[] = $countryState['title_short'];
-                        break;
+        if ($showVerkkolaskuosoite&&(!empty($address['verkkolaskuosoite'])||!empty($address['operaattoritunnus']))) {
+            if (!empty($address['verkkolaskuosoite'])) $arr_labels[] = 'verkkolaskuosoite: ' . $address['verkkolaskuosoite'];
+            if (!empty($address['operaattoritunnus'])) $arr_labels[] = 'operaattoritunnus: ' . $address['operaattoritunnus'];
+        }
+        else {
+            if (!empty($address['streetaddress'])) $arr_labels[] = $address['streetaddress'];
+            if (!empty($address['postindex'])) $arr_labels[] = $address['postindex'];
+            if (!empty($address['city'])) $arr_labels[] = $address['city'];
+            if (!empty($address['country_name'])) {
+                if (!empty($address['statesNameShort'])) $arr_labels[] = $address['statesNameShort'];
+                elseif (!empty($address['state_id'])&&!empty($address['country'])) {
+                    $countryStates = Country::model()->GetStatesList($address['country']);
+                    foreach ($countryStates as $countryState) {
+                        if ($countryState['id'] == $address['state_id']) {
+                            $arr_labels[] = $countryState['title_short'];
+                            break;
+                        }
                     }
                 }
+                $arr_labels[] = $address['country_name'];
             }
-            $arr_labels[] = $address['country_name'];
         }
-		
+
         // $ret = $org.$name.', '
              // .$address['streetaddress'].', '
              // .$address['postindex'].' '.$address['city'].', '

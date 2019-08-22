@@ -322,6 +322,7 @@ Stripe.applePay.checkAvailability(function(available) {
                 self.blockPay();
                 self.changeCountry();
                 self.fillPhoneCode(this);
+                self.showAddressFields('Reg');
             });
 
             $(this.oneAddr).on('click', function() {
@@ -480,8 +481,8 @@ Stripe.applePay.checkAvailability(function(available) {
                     case '1':
                         //проверка для verkkolasku
                         if ($elem.hasClass('js_firm')) {
-                            if ((idForm == 'Address')&&$elem.hasClass('verkkolasku')) {
-                                if ($('#Address_country').val() == '68') $elem.show();
+                            if (/*(idForm == 'Address')&&*/$elem.hasClass('verkkolasku')) {
+                                if ($('#' + idForm + '_country').val() == '68') $elem.show();
                                 else $elem.hide();
                             }
                             else $elem.show();
