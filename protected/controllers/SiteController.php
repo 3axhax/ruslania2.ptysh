@@ -71,6 +71,15 @@ class SiteController extends MyController {
                         $message->addTo($email);
                         $message->from = 'noreply@ruslania.com';
                         $mailResult = Yii::app()->mail->send($message);
+						
+						file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail_call.log', implode("\t",
+                        array(
+                            date('d.m.Y H:i:s'),
+                            $user->login,
+                            serialize($mailResult),
+                            $message->view,
+                        )
+                    ) . "\n", FILE_APPEND);
 		
 			echo '1';
 		

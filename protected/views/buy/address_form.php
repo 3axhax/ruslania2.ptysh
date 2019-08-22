@@ -119,7 +119,7 @@ if (empty($showNotes)) $showNotes = false;
 			Verkkolaskuosoite
 		</td>
 		<td colspan="2" class="maintxt-vat">
-			<?= $form->textField($addrModel, 'verkkolaskuosoite', array('name'=>'' . $alias . '[verkkolaskuosoite]')); ?>
+			<?= $form->textField($addrModel, 'verkkolaskuosoite', array('name'=>'' . $alias . '[verkkolaskuosoite]', 'placeholder'=>($userType == 'destination')?$ui->item('BILLING_VERKKOLASKU'):'')); ?>
 		</td>
 	</tr>
 	<tr class="js_firm verkkolasku">
@@ -127,7 +127,7 @@ if (empty($showNotes)) $showNotes = false;
 			Operaattoritunnus
 		</td>
 		<td colspan="2" class="maintxt-vat">
-			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[operaattoritunnus]')); ?>
+			<?= $form->textField($addrModel, 'operaattoritunnus', array('name'=>'' . $alias . '[operaattoritunnus]', 'placeholder'=>($userType == 'destination')?$ui->item('BILLING_VERKKOLASKU'):'')); ?>
 		</td>
 	</tr>
 <?php //endif; ?>

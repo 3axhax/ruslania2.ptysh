@@ -1430,6 +1430,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'VIEW_THIS_ORDER' => 'Näytä tämä tilaus',
     'REDUCED_PRICES' => 'ALENNUSMYYNTI',
     'REG_WITH_SOCIAL' => 'Rekisteröidy some-tilisi avulla',
+    'BILLING_VERKKOLASKU' => 'Jätä tyhjäksi, jos olet täyttämässä toimitusosoitetta',
 
 
 );

@@ -1418,6 +1418,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'VIEW_THIS_ORDER' => 'Voir cette commande',
     'REDUCED_PRICES' => 'SOLDES',
     'REG_WITH_SOCIAL' => 'Inscrivez-vous avec votre compte de média social',
+    'BILLING_VERKKOLASKU' => 'Laissez vide, si vous remplissez l\'adresse de livraison',
 
 
 );

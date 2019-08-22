@@ -250,79 +250,151 @@ class SearchProducts {
 				22=>array(),
 			),
 		);
+		$publishers = array();
 		$countAll = 0;
 		foreach ($didYouMean as $i=>$item) {
+			switch ($item['didYouMeanType']) {
+				case 'authors':
+					if (!empty($item['orig_data']['is_10_author'])) {
+						$sql = 'select t.id from books_catalog t join books_authors tA on (tA.book_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['authors'][10][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_22_author'])) {
+						$sql = 'select t.id from music_catalog t join music_authors tA on (tA.music_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['authors'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_24_author'])) {
+						$sql = 'select t.id from soft_catalog t join soft_authors tA on (tA.soft_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['authors'][24][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_40_actor'])) {
+						$sql = 'select t.id from video_catalog t join video_actors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['actors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_40_director'])) {
+						$sql = 'select t.id from video_catalog t join video_directors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['directors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_22_performer'])) {
+						$sql = 'select t.id from music_catalog t join music_performers tA on (tA.music_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
+						$peoples['performers'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					break;
+				case 'publishers':
+					if (!empty($item['orig_data']['is_10'])) {
+						$sql = 'select t.id from books_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[10][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_15'])) {
+						$sql = 'select t.id from musicsheets_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[15][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_22'])) {
+						$sql = 'select t.id from music_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[22][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_24'])) {
+						$sql = 'select t.id from soft_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[24][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_50'])) {
+						$sql = 'select t.id from printed_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[50][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					if (!empty($item['orig_data']['is_60'])) {
+						$sql = 'select t.id from maps_catalog t where (t.publisher_id = ' . (int) $item['orig_data']['id'] . ') and (t.avail_for_order = 1) limit 10';
+						$publishers[60][$item['orig_data']['id']] = Yii::app()->db->createCommand($sql)->queryColumn();
+						$countAll++;
+					}
+					break;
+			}
 			if ($item['didYouMeanType'] == 'authors') {
-				if (!empty($item['orig_data']['is_10_author'])) {
-					$sql = 'select t.id from books_catalog t join books_authors tA on (tA.book_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['authors'][10][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
-				if (!empty($item['orig_data']['is_22_author'])) {
-					$sql = 'select t.id from music_catalog t join music_authors tA on (tA.music_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['authors'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
-				if (!empty($item['orig_data']['is_24_author'])) {
-					$sql = 'select t.id from soft_catalog t join soft_authors tA on (tA.soft_id = t.id) and (tA.author_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['authors'][24][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
-				if (!empty($item['orig_data']['is_40_actor'])) {
-					$sql = 'select t.id from video_catalog t join video_actors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['actors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
-				if (!empty($item['orig_data']['is_40_director'])) {
-					$sql = 'select t.id from video_catalog t join video_directors tA on (tA.video_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['directors'][40][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
-				if (!empty($item['orig_data']['is_22_performer'])) {
-					$sql = 'select t.id from music_catalog t join music_performers tA on (tA.music_id = t.id) and (tA.person_id = ' . (int) $item['real_id'] . ') where (t.avail_for_order = 1) limit 10';
-					$peoples['performers'][22][$item['real_id']] = Yii::app()->db->createCommand($sql)->queryColumn();
-					$countAll++;
-				}
 			}
 		}
-		if (empty($countAll)) return array();
+		if (!empty($countAll)) {
+			$count = max(1, floor(10/$countAll));
+			$ids = array(
+				'e10' => array(),
+				'e22' => array(),
+				'e24' => array(),
+				'e40' => array(),
+				'e50' => array(),
+				'e60' => array(),
+				'e15' => array(),
+			);
+			foreach ($peoples['authors'][10] as $aId=>$items) {
+				shuffle($items);
+				$ids['e10'] = array_merge($ids['e10'], array_slice($items, 0, $count));
+			}
+			foreach ($peoples['authors'][22] as $aId=>$items) {
+				shuffle($items);
+				$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
+			}
+			foreach ($peoples['authors'][24] as $aId=>$items) {
+				shuffle($items);
+				$ids['e24'] = array_merge($ids['e24'], array_slice($items, 0, $count));
+			}
+			foreach ($peoples['actors'][40] as $aId=>$items) {
+				shuffle($items);
+				$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
+			}
+			foreach ($peoples['directors'][40] as $aId=>$items) {
+				shuffle($items);
+				$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
+			}
+			foreach ($peoples['performers'][22] as $aId=>$items) {
+				shuffle($items);
+				$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
+			}
 
-		$count = max(1, floor(10/$countAll));
-		$ids = array(
-			'e10' => array(),
-			'e22' => array(),
-			'e24' => array(),
-			'e40' => array(),
-		);
-		foreach ($peoples['authors'][10] as $aId=>$items) {
-			shuffle($items);
-			$ids['e10'] = array_merge($ids['e10'], array_slice($items, 0, $count));
+			foreach ($publishers[10] as $aId=>$items) {
+				shuffle($items);
+				$ids['e10'] = array_merge($ids['e10'], array_slice($items, 0, $count));
+			}
+			foreach ($publishers[15] as $aId=>$items) {
+				shuffle($items);
+				$ids['e15'] = array_merge($ids['e15'], array_slice($items, 0, $count));
+			}
+			foreach ($publishers[22] as $aId=>$items) {
+				shuffle($items);
+				$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
+			}
+			foreach ($publishers[24] as $aId=>$items) {
+				shuffle($items);
+				$ids['e24'] = array_merge($ids['e24'], array_slice($items, 0, $count));
+			}
+			foreach ($publishers[50] as $aId=>$items) {
+				shuffle($items);
+				$ids['e50'] = array_merge($ids['e50'], array_slice($items, 0, $count));
+			}
+			foreach ($publishers[60] as $aId=>$items) {
+				shuffle($items);
+				$ids['e60'] = array_merge($ids['e60'], array_slice($items, 0, $count));
+			}
+
+			if (empty($ids['e10'])) unset($ids['e10']);
+			if (empty($ids['e22'])) unset($ids['e22']);
+			if (empty($ids['e24'])) unset($ids['e24']);
+			if (empty($ids['e40'])) unset($ids['e40']);
+			if (empty($ids['e50'])) unset($ids['e50']);
+			if (empty($ids['e60'])) unset($ids['e60']);
+			if (empty($ids['e15'])) unset($ids['e15']);
+
+			return SearchHelper::ProcessProducts2($ids, false);
 		}
-		foreach ($peoples['authors'][22] as $aId=>$items) {
-			shuffle($items);
-			$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
-		}
-		foreach ($peoples['authors'][24] as $aId=>$items) {
-			shuffle($items);
-			$ids['e24'] = array_merge($ids['e24'], array_slice($items, 0, $count));
-		}
-		foreach ($peoples['actors'][40] as $aId=>$items) {
-			shuffle($items);
-			$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
-		}
-		foreach ($peoples['directors'][40] as $aId=>$items) {
-			shuffle($items);
-			$ids['e40'] = array_merge($ids['e40'], array_slice($items, 0, $count));
-		}
-		foreach ($peoples['performers'][22] as $aId=>$items) {
-			shuffle($items);
-			$ids['e22'] = array_merge($ids['e22'], array_slice($items, 0, $count));
-		}
-		if (empty($ids['e10'])) unset($ids['e10']);
-		if (empty($ids['e22'])) unset($ids['e22']);
-		if (empty($ids['e24'])) unset($ids['e24']);
-		if (empty($ids['e40'])) unset($ids['e40']);
-		return SearchHelper::ProcessProducts2($ids, false);
+
+		return array();
 //		if (!empty($result)) $result = arr_sl
 	}
 
