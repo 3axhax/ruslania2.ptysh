@@ -1213,6 +1213,17 @@ class SiteController extends MyController {
                 $message->setBody($user->attributes, 'text/html');
                 $message->addTo($user->login);
                 $message->from = 'ruslania@ruslania.com';
+//                if ($user->id == 77925) {
+                    Yii::app()->mail->transportType = 'smtp';
+                    Yii::app()->mail->transportOptions = array(
+
+                        'host'=> 'smtp.gmail.com',
+                        'encryption'=>'ssl',
+                        'port'=>465,
+                        'username'=>'ruslania.helsinki@gmail.com',
+                        'password'=>'He1sinki'
+                    );
+//                }
                 $mailResult = Yii::app()->mail->send($message);
                 file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t",
                         array(
@@ -1252,7 +1263,18 @@ class SiteController extends MyController {
                 $message->setBody($user->attributes, 'text/html');
                 $message->addTo($user->login);
                 $message->from = 'ruslania@ruslania.com';
-				
+
+//                if ($user->id == 77925) {
+                    Yii::app()->mail->transportType = 'smtp';
+                    Yii::app()->mail->transportOptions = array(
+
+                        'host' => 'smtp.gmail.com',
+                        'encryption' => 'ssl',
+                        'port' => 465,
+                        'username' => 'ruslania.helsinki@gmail.com',
+                        'password' => 'He1sinki'
+                    );
+//                }
 				// Yii::app()->mail->transportType = 'smtp';
 				// Yii::app()->mail->transportOptions = array(
 				
