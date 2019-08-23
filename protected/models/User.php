@@ -4,6 +4,7 @@ class User extends CActiveRecord
 {
     public $pwd2;
     public $nothing;
+    private $_secret = 'ainalsur';
 
     public static function model($className = __CLASS__)
     {
@@ -21,9 +22,11 @@ class User extends CActiveRecord
             array('login', 'checkLatin'),
             array('login, pwd', 'required', 'on' => 'login'),
             array('login, pwd, pwd2, first_name, last_name', 'required', 'on' => 'register'),
+            array('login, pwd, pwd2', 'required', 'on' => 'newpwd'),
             array('login', 'email', 'on' => 'register'),
             array('login', 'unique', 'on' => 'register'),
             array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'register'),
+            array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'newpwd'),
 
             array('pwd, pwd2, title_name, nothing, '
                  .'mail_books_news, mail_musicsheets_news, mail_music_news, '
@@ -117,5 +120,8 @@ class User extends CActiveRecord
         $sql = 'SELECT 1 FROM `users` WHERE (login = :email) limit 1';
         return (bool) Yii::app()->db->createCommand($sql)->queryScalar(array(':email'=>$email));
     }
-    
+
+    function getUrlCache($email, $pwd) {
+        return md5($email . '_' . $pwd . '_' . $this->_secret);
+    }
 }

@@ -5,6 +5,7 @@ class SiteController extends MyController {
     private $searchResults = 0;
     private $searchFilters = array();
 
+
     public function accessRules() {
         return array(array('allow',
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail','callsend',
@@ -1187,6 +1188,28 @@ class SiteController extends MyController {
         $data = SearchHelper::AdvancedSearch($e, $cid, $title, $author, $perf, $publisher, $only, $l, $year, Yii::app()->params['ItemsPerPage'], $page, $_GET['binding_id'.$e], $director);
         $this->breadcrumbs[] = Yii::app()->ui->item('Advanced search');
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
+    }
+
+    function actionPassword() {
+        $model = new User('newpwd');
+        if (Yii::app()->request->isPostRequest) {
+            $model->attributes = $_POST['User'];
+            if ($model->validate()) {
+                $user = User::model()->findByAttributes(array('login' => $model->login));
+                if (empty($user)) {
+                    $this->render('forgot', array('model' => $model, 'user' => $user, 'notFound' => true));
+                    return;
+                }
+            }
+        }
+        $email = Yii::app()->getRequest()->getParam('email');
+        $user = User::model()->findByAttributes(array('login' => $email));
+        $urlCache = Yii::app()->getRequest()->getParam('cache');
+        $cache = $user->getUrlCache($email, $user->pwd);
+        if ($cache !== $urlCache) throw new CHttpException(404);
+
+        $this->render('password', array('model' => $model, 'user' => $user));
+
     }
 
     public function actionForgot() {
