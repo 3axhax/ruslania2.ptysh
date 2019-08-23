@@ -15,7 +15,7 @@ class ToWebpCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-			if ($entity == 10) continue;
+			if ($entity != 10) continue;
 
 			$sql = 'create table if not exists _no_photo_1 like _no_photo';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
@@ -39,9 +39,10 @@ class ToWebpCommand extends CConsoleCommand {
 				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
 				'select t.id, t.eancode, t.image '.
 				'from ' . $params['site_table'] . ' t '.
-					'join _no_photo tF on (tF.id = t.id) and (tF.eid = ' . (int) $entity . ') '.
+					'join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) and (tF.is_upload = 2) '.
 			'';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
+//			exit;
 
 			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 			/**@var $model ModelsPhotos*/
@@ -84,6 +85,10 @@ class ToWebpCommand extends CConsoleCommand {
 							$model->update();
 							$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
 							Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
+						}
+						elseif (!empty($item['id_foto'])) {
+							$sql = 'update ' . $params['photo_table'] . ' set is_upload=1 where id = :id';
+							Yii::app()->db->createCommand($sql)->execute(array(':id'=>$item['id']));
 						}
 					}
 					else {

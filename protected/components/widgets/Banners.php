@@ -87,7 +87,7 @@ class Banners extends MyWidget {
                 'select t.location, tAB.id bannerId, tAB.url, tAB.path_entity, tAB.path_route, tAB.path_id, tAB.path_params, tAB.webp_' . $lang . ' webp_exists '.
                 'from banners_main t '.
                     'join all_banners tAB on (tAB.id = t.banner_id) and (tAB.img_' . $lang . ' = 1)'.
-                'order by t.position, t.id desc '.
+                'order by t.position, t.id asc '.
             '';
             $banners = Yii::app()->db->createCommand($sql)->queryAll();
             self::$_mainBanners = array();
