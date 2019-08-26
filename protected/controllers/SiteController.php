@@ -1,4 +1,7 @@
 <?php
+/*ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);*/
 class SiteController extends MyController {
 
     private $searchQuery = '';
@@ -11,7 +14,7 @@ class SiteController extends MyController {
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail','callsend',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
-                'certificate', 'charges', 'closesite'
+                'certificate', 'charges', 'closesite', 'password',
             ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
@@ -1191,22 +1194,40 @@ class SiteController extends MyController {
     }
 
     function actionPassword() {
+        $this->_checkUrl(array());
+        $this->breadcrumbs[] = Yii::app()->ui->item('FORGOT_PASS_PATH');
+
         $model = new User('newpwd');
+//        $this->PerformAjaxValidation($model, 'remind-form');
+        $user = null;
+
         if (Yii::app()->request->isPostRequest) {
             $model->attributes = $_POST['User'];
-            if ($model->validate()) {
-                $user = User::model()->findByAttributes(array('login' => $model->login));
-                if (empty($user)) {
-                    $this->render('forgot', array('model' => $model, 'user' => $user, 'notFound' => true));
-                    return;
-                }
-            }
+            $email = $model->login;
+            $user = User::model()->findByAttributes(array('login' => $email));
         }
-        $email = Yii::app()->getRequest()->getParam('email');
-        $user = User::model()->findByAttributes(array('login' => $email));
-        $urlCache = Yii::app()->getRequest()->getParam('cache');
+        else {
+            $email = Yii::app()->getRequest()->getParam('email');
+            $user = User::model()->findByAttributes(array('login' => $email));
+        }
+
+        $urlCache = Yii::app()->getRequest()->getParam('token');
         $cache = $user->getUrlCache($email, $user->pwd);
-        if ($cache !== $urlCache) throw new CHttpException(404);
+//        if ($cache !== $urlCache) throw new CHttpException(404);
+
+        if (empty($user)) {
+            $this->render('password', array('model' => $model, 'user' => $user, 'notFound' => true));
+            return;
+        }
+
+        if ($user->getAttribute('is_closed')) {
+            $this->render('password', array('model' => $model, 'isClosed' => true));
+            return;
+        }
+
+        if (Yii::app()->request->isPostRequest&&$model->validate()) {
+
+        }
 
         $this->render('password', array('model' => $model, 'user' => $user));
 
