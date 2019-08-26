@@ -24,7 +24,7 @@ class User extends CActiveRecord
             array('login, pwd, pwd2, first_name, last_name', 'required', 'on' => 'register'),
             array('login, pwd, pwd2', 'required', 'on' => 'newpwd'),
             array('login', 'email', 'on' => 'register'),
-            array('login', 'unique', 'on' => 'register'),
+            array('login', 'uniqueLogin', 'on' => 'register'),
             array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'register'),
             array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'newpwd'),
 
@@ -41,6 +41,15 @@ class User extends CActiveRecord
             array('login', 'email', 'on' => 'forgot'),
 
         );
+    }
+
+    function uniqueLogin($attribute, $params) {
+        $value = trim($this->$attribute);
+        $user = User::model()->findByAttributes(array('login' => $value));
+        if (empty($user)) return;
+
+        if ($user->getAttribute('is_closed')) $this->addError($attribute, Yii::app()->ui->item('USER_CLOSED'));
+        else $this->addError($attribute, Yii::app()->ui->item('REGISTER_ERROR_LOGIN_IS_EXISTS'));
     }
 
     public function checkLatin($attribute, $params)

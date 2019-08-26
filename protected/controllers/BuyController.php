@@ -574,8 +574,11 @@ class BuyController extends MyController {
 			if (empty($regAddrErrors)) {
 				$addressModel = new Address('edit');
 				$addressModel->setAttributes(Yii::app()->getRequest()->getParam('Reg'), false);
-				if(User::model()->checkLogin($addressModel->getAttribute('contact_email'))) {
-					$errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
+				$userFind = User::model()->findByAttributes(array('login' => $addressModel->getAttribute('contact_email')));
+				if(!empty($userFind)) {
+					if ($userFind->getAttribute('is_closed')) $errors['forgot_button'] = $this->renderPartial('user_closed', array('email' => $addressModel->getAttribute('contact_email')), true);
+					else $errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);
+//					$errors['forgot_button'] = $this->renderPartial('forgot_button', array('email' => $addressModel->getAttribute('contact_email')), true);//Yii::app()->ui->item('CARTNEW_ERROR_MAIL_FIND_OK');
 				}
 			}
 			else $errors = array_merge($errors, $this->_checkAddress($items, 'Reg'));
@@ -607,9 +610,10 @@ class BuyController extends MyController {
 	function actionCheckEmail() {
 		if (Yii::app()->request->isPostRequest) {
 			if (Yii::app()->user->isGuest) {
-				$record = User::model()->findByAttributes(array('login' => Yii::app()->request->getParam('email'), 'is_closed' => 0));
-				if ($record) {
-					$this->renderPartial('forgot_button', array('email' => Yii::app()->request->getPost('email')));
+				$record = User::model()->findByAttributes(array('login' => Yii::app()->request->getParam('email')/*, 'is_closed' => 0*/));
+				if (!empty($record)) {
+					if ($record->getAttribute('is_closed')) $this->renderPartial('user_closed', array('email' => Yii::app()->request->getPost('email')));
+					else $this->renderPartial('forgot_button', array('email' => Yii::app()->request->getPost('email')));
 				}
 			}
 		}

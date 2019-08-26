@@ -65,11 +65,12 @@ class ModelsPhotos extends CActiveRecord {
 		$fotoDir = $this->_createFolderForFotos($idFoto, $removeExistsFiles);
 		if (!file_exists($fotoDir)) return false;
 
+		if ($ean !== '') $ean .= '_';
 		foreach ($this->_lables as $label => $param) {
 			if (($label == 'orig')&&$createOrig) {
-				$this->_createNewFoto($fotoDir . $label, $tmpName, $param['width'], $param['height'], $quality);
+				$this->_createNewFoto($fotoDir . $ean . $label, $tmpName, $param['width'], $param['height'], $quality);
 			}
-			elseif ($label != 'orig') $this->_createNewFoto($fotoDir . $label, $tmpName, $param['width'], $param['height'], $quality);
+			else $this->_createNewFoto($fotoDir . $ean . $label, $tmpName, $param['width'], $param['height'], $quality);
 //			if ($label == 'orig') {
 //				$label = 'o';
 //				$this->_createNewFoto($fotoDir . $ean . '_' . $label, $tmpName, $paramOrig['width'], $paramOrig['height'], $quality);

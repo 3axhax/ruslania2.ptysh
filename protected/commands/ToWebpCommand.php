@@ -77,7 +77,7 @@ class ToWebpCommand extends CConsoleCommand {
 							$model->id = $item['id_foto'];
 							$model->setIsNewRecord(false);
 						}
-						if (!$model->createFotos($filePhoto, $model->id, $item['eancode'])) {
+						if (!$model->createFotos($filePhoto, $model->id, '')) {
 							if (!empty($item['id_foto'])) {
 								continue;
 							}

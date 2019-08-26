@@ -1444,6 +1444,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'REDUCED_PRICES' => 'REDUCED PRICES',
     'REG_WITH_SOCIAL' => 'Register with your social media account',
     'BILLING_VERKKOLASKU' => 'Leave empty, if you\'re filling delivery address or if N/A',
+    'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
 
 
 );

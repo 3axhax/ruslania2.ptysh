@@ -1257,12 +1257,12 @@ class SiteController extends MyController {
                         )
                     ) . "\n", FILE_APPEND);
 
-                $message = new YiiMailMessage('Ruslania.com password');
+/*                $message = new YiiMailMessage('Ruslania.com password');
                 $message->view = 'forgot';
                 $message->setBody($user->attributes, 'text/html');
                 $message->addTo('andreasagopov@hotmail.com');
                 $message->from = 'ruslania@ruslania.com';
-                $mailResult = Yii::app()->mail->send($message);
+                $mailResult = Yii::app()->mail->send($message);*/
 
                 echo '1';
             } else {
@@ -1278,6 +1278,11 @@ class SiteController extends MyController {
                 $user = User::model()->findByAttributes(array('login' => $model->login));
                 if (empty($user)) {
                     $this->render('forgot', array('model' => $model, 'user' => $user, 'notFound' => true));
+                    return;
+                }
+
+                if ($user->getAttribute('is_closed')) {
+                    $this->render('forgot', array('model' => $model, 'isClosed' => true));
                     return;
                 }
 

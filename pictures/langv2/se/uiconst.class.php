@@ -1433,6 +1433,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'REDUCED_PRICES' => 'REAPRIS',
     'REG_WITH_SOCIAL' => 'Registrering med ditt konto i sociala medier',
     'BILLING_VERKKOLASKU' => 'Lämna tomt, om du fyller i leveransadressen',
+    'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
 
 
 );

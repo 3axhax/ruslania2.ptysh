@@ -31,7 +31,7 @@ class DownloadPhotosCommand extends CConsoleCommand {
                 $step++;
                 foreach ($items as $item) {
                     $filePhoto = $model->downloadFile($item['href'], $item['id'], $item['eancode'], $item['crop']);
-                    if ($filePhoto&&file_exists($filePhoto)&&$model->createFotos($filePhoto, $item['id'], $item['eancode'], 80, false, false)) {
+                    if ($filePhoto&&file_exists($filePhoto)&&$model->createFotos($filePhoto, $item['id'], '', 80, false, false)) {
                         $sql = 'update ' . $params['photo_table'] . ' set is_upload = 1 where (id = ' . (int) $item['id'] . ')';
                         Yii::app()->db->createCommand()->setText($sql)->execute();
                     }

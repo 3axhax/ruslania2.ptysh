@@ -232,7 +232,7 @@ class UrlController extends MyController {
 					$model->setIsNewRecord(true);
 					$model->id = null;
 					$model->insert();
-					if ($model->createFotos($file->tempName, $model->id, $ean)) {
+					if ($model->createFotos($file->tempName, $model->id, '')) {
 						$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) and (id <> :id)  order by position asc';
 						$fotoIds = Yii::app()->db->createCommand($sql)->queryColumn(array(':iid'=>$iid, ':id'=>$model->id));
 						if (!empty($fotoIds)) {
