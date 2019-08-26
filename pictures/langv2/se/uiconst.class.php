@@ -417,7 +417,7 @@ IBAN Fi40-80001470689309, BIC/SWIFT: DABAFIHH <br> Var god ange beställningsnum
   'MSG_PEREODICALS_NOTE' => '',
   'MSG_PEREODICALS_NOTE_2' => 'Var god läs Prenumerationsvillkor.',
   'MSG_PERSNAL_INDEX_GREETEING_AUTH' => 'Välkommen till Ruslania,  %s, ',
-  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Om du vill beställa så att mottagaren är en annan person än du (när du beställer till exempel som gåva): 1. du måste ge mottagares adress som ny adress (Mitt Ruslania -> Min adress) 2. och välja mottagaren i "Mottagarens namn och leveransadress" i den första skiften när du beställer. 3. I det tredje ordersteget avmarkerar du kryssrutan "Betalarens adress är densamma som leveransadressen" och väljer dig själv i menyn "Välj en betalare och betalningsmetod".',
+  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Om du vill beställa så att mottagaren är en annan person än du (när du beställer till exempel som gåva): 1. du måste ge mottagares adress som ny adress (Mitt Ruslania -> Min adress) 2. och välja mottagaren i "Mottagarens namn och leveransadress" i den första skiften när du beställer. 3. I det tredje ordersteget avmarkerar du kryssrutan "Betalarens adress är densamma som leveransadressen" och väljer dig själv i menyn "Välj en betalare och betalningsmetod".<br><br>Om fakturan går till en organisation med verkkolasku-systemet, måste du ändra webbplatsspråk till finska, då kommer fälten för verkkolasku & operaattoritunnus att visas i formuläret.',
   'MSG_PERSONAL_ADDRESS_COMMENT_1' => 'Namn på kontaktperson (företag eller organisationer)',
   'MSG_PERSONAL_ADDRESS_COMMENT_2' => 'Postort, gatuadress',
   'MSG_PERSONAL_ADDRESS_COMMENT_3' => '&nbsp;',

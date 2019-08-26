@@ -414,7 +414,18 @@ Danske Pankki, tilinumero FI80001470689309. Pyydämme mainitsemaan tilausnumeron
   'MSG_PEREODICALS_NOTE' => 'Lehtitilaushinnat sisältävät lähetyskulut maailmanlaajuisesti.',
   'MSG_PEREODICALS_NOTE_2' => 'Pyydämme tutustumaan lehtivuosikertojen tilausohjeisiin.',
   'MSG_PERSNAL_INDEX_GREETEING_AUTH' => 'Tervetuloa Ruslaniaan,  %s, ',
-  'MSG_PERSONAL_FORM_DESCRIPTION' => 'Jos haluat tilata toiselle vastaanottajalle (kun tilaat esimerkiksi lahjaksi), lisää ensin vastaanottaja osoitetietoihisi kohdassa ”Osoitteeni” Minun Ruslaniassa. Jos tilaat yritykselle/yhteisölle, jolla on eri laskutus- ja toimitusosoitteet, lisää niistä kumpikin osoitetietoihisi. Kun teet tilausta, valitse ensimmäisessä kohdassa tilauksen vastaanottaja pudotusvalikosta kohdassa "Saaja ja toimitusosoite". Tilauksen kolmannessa kohdassa ”Maksaja ja maksutapa”, poista rasti ruudusta ”Laskutusosoite on sama kuin toimitusosoite”<br><br>Valitse pudotusvalikosta maksajan osoite, yrityksen/yhteisön laskutusosoite tai verkkolasku.',
+  'MSG_PERSONAL_FORM_DESCRIPTION' => //'Jos haluat tilata toiselle vastaanottajalle (kun tilaat esimerkiksi lahjaksi), lisää ensin vastaanottaja osoitetietoihisi kohdassa ”Osoitteeni” Minun Ruslaniassa. Jos tilaat yritykselle/yhteisölle, jolla on eri laskutus- ja toimitusosoitteet, lisää niistä kumpikin osoitetietoihisi. Kun teet tilausta, valitse ensimmäisessä kohdassa tilauksen vastaanottaja pudotusvalikosta kohdassa "Saaja ja toimitusosoite". Tilauksen kolmannessa kohdassa ”Maksaja ja maksutapa”, poista rasti ruudusta ”Laskutusosoite on sama kuin toimitusosoite”<br><br>Valitse pudotusvalikosta maksajan osoite, yrityksen/yhteisön laskutusosoite tai verkkolasku.',
+  'Jos haluat tilata toiselle vastaanottajalle (kun tilaat esimerkiksi lahjaksi)<br>
+*lisää ensin vastaanottaja osoitetietoihisi kohdassa ”Osoitteeni” Minun Ruslaniassa<br><br>
+Jos tilaat yritykselle/yhteisölle, jolla on eri laskutus- ja toimitusosoitteet<br>
+*lisää niistä kumpikin osoitetietoihisi<br>
+*verkkolasku- ja operaattoritunnuskentät tulevat esiin, kun valitset maaksi Suomen ja laitat pallukan "yhteisö"-kenttään<br><br>
+Kun teet tilausta<br>
+*valitse ensimmäisessä kohdassa tilauksen vastaanottaja pudotusvalikosta kohdassa "Saaja ja toimitusosoite"<br>
+*tilauksen kolmannessa kohdassa ”Maksaja ja maksutapa”, poista rasti ruudusta ”Laskutusosoite on sama kuin toimitusosoite”<br>
+*valitse esiin tulevasta pudotusvalikosta maksajan osoite tai yrityksen/yhteisön laskutusosoite<br><br>
+Jos tilaat lahjaksi<br>
+*laita maininta "Tilausta koskeviin toivomuksiin"',
   'MSG_PERSONAL_ADDRESS_COMMENT_1' => 'Yhteisön kontaktihenkilön nimi',
   'MSG_PERSONAL_ADDRESS_COMMENT_2' => 'Katuosoite tai laskutusosoite (PL)',
   'MSG_PERSONAL_ADDRESS_COMMENT_3' => '&nbsp;',

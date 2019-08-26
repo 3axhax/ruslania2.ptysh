@@ -415,7 +415,7 @@ IBAN Fi4080001470689309, BIC/SWIFT: DABAFIHH <br> Please mention the order numbe
   'MSG_PEREODICALS_NOTE' => 'The subscription rates include shipping costs worldwide.',
   'MSG_PEREODICALS_NOTE_2' => 'Please read Terms of subscriptions',
   'MSG_PERSNAL_INDEX_GREETEING_AUTH' => 'Welcome to Ruslania,  %s, ',
-  'MSG_PERSONAL_FORM_DESCRIPTION' => 'If you want to place an order with delivery to another person, enter his data in “My Addresses”, and select him in the first step of placing an order at “Recipient name and delivery address”.
+  'MSG_PERSONAL_FORM_DESCRIPTION' => 'If you want to place an order with delivery to another person, enter his data in “My Addresses”, and select him in the first step of placing an order at “Recipient name and delivery address”.<br><br>If the invoice for your purchase goes to a Finnish organization with the verkkolasku system, you need to change the site language to Finnish, then the fields for verkkolasku & operaattoritunnus will appear in the form.
 On the third order step, uncheck the checkbox “Payer\'s address is the same as the delivery address”, and choose yourself in the drop-down menu “Payer and payment method”.',
   'MSG_PERSONAL_ADDRESS_COMMENT_1' => 'The name of the contact person for organizations',
   'MSG_PERSONAL_ADDRESS_COMMENT_2' => 'Postal address, street address',
