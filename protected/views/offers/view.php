@@ -17,7 +17,9 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
                 <p class="text"><?=nl2br($desc); ?></p>
             <?php endif; ?>
 
-            <?php foreach($groups as $group=>$data) : ?>
+            <?php foreach($groups as $group=>$data) :
+                //$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($data['entity'])));
+                ?>
                 <table height="30" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top" class="text">
                     <tr>
                         <td colspan="3">
@@ -31,7 +33,7 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
                             <img width="31" height="31" border="0" src="/pic1/cart_ibook.gif">
  */ ?>
                         </td>
-                        <td width="100%" class="maintxt" style="padding: 2px;"><a href="<?=Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($data['entity']))); ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a></td>
+                        <td width="100%" class="maintxt" style="padding: 2px;"><a href="<?= $url ?>?eid=<?= $data['entity'] ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a></td>
                     </tr>
                 </table>
 

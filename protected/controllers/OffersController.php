@@ -4,7 +4,8 @@ class OffersController extends MyController
 {
     public function actionSpecial($mode)
     {
-        $this->_checkUrl(['mode'=>$mode]);
+        $urlData = ['mode'=>$mode];
+        $this->_checkUrl($urlData);
         $o = new Offer;
         switch($mode)
         {
@@ -31,8 +32,10 @@ class OffersController extends MyController
 
 //        $this->breadcrumbs[Yii::app()->ui->item('RUSLANIA_RECOMMENDS')] = Yii::app()->createUrl('offers/list');
         $this->breadcrumbs[] = $title;
-        $groups = $o->GetItems($oid);
-        $this->render('view', array('offer' => $offer, 'groups' => $groups));
+//        $groups = $o->GetItems($oid);
+//        $this->render('view', array('offer' => $offer, 'groups' => $groups));
+        list($groups, $paginator) = OfferItem::model()->getList($oid, Yii::app()->getRequest()->getParam('eid'));
+        $this->render('view', array('offer' => $offer, 'groups' => $groups, 'paginator' => $paginator, 'url'=>Yii::app()->createUrl('offers/' . $this->action->id, $urlData)));
     }
 
     public function actionList()
@@ -48,8 +51,9 @@ class OffersController extends MyController
 
     public function actionView($oid) {
         if(empty($oid)) $this->redirect(Yii::app()->createUrl('offers/list'));
-		
-		$this->_checkUrl(['oid' => $oid]);
+
+        $urlData = ['oid' => $oid];
+		$this->_checkUrl($urlData);
 		
 		$mode = '';
         switch($oid)
@@ -79,7 +83,7 @@ class OffersController extends MyController
         $this->breadcrumbs[] = ProductHelper::GetTitle($offer);
 
 		list($groups, $paginator) = OfferItem::model()->getList($oid);
-        $this->render('view', array('offer' => $offer, 'groups' => $groups, 'paginator' => $paginator));
+        $this->render('view', array('offer' => $offer, 'groups' => $groups, 'paginator' => $paginator, 'url'=>Yii::app()->createUrl('offers/' . $this->action->id, $urlData)));
     }
 
     public function actionDownload($oid)

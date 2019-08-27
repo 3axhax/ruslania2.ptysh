@@ -12,11 +12,13 @@ class OfferItem extends CMyActiveRecord
         return 'offer_items';
     }
 
-    function getList($oid) {
+    function getList($oid, $eid = 0) {
         $criteria = new CDbCriteria();
-        $criteria->condition = '(t.offer_id = :oid)';
+        if ((int)$eid > 0) $criteria->condition = '(t.offer_id = :oid) and (t.entity_id = :eid)';
+        else $criteria->condition = '(t.offer_id = :oid)';
         $criteria->order = 't.group_order asc, t.sort_order asc';
-        $criteria->params = array(':oid'=>$oid);
+        if ((int)$eid > 0) $criteria->params = array(':oid'=>$oid, ':eid'=>$eid);
+        else $criteria->params = array(':oid'=>$oid);
 
         $cnt = $this->count($criteria);
 

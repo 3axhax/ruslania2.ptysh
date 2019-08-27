@@ -39,6 +39,42 @@ class MyLinkPager extends CLinkPager
 
 		if (!$label) return '';
 		$u = $this->getPages()->route;
+		if ($class == $this->previousPageCssClass) {
+			$s = '<li class="'.$class.'">'.CHtml::link($label,$url).'</li>';
+			if (empty($params['page'])) $params['page'] = 0;
+			if ($params['page'] > (floor($this->maxButtonCount/2)+1)) {
+				$urlParams = '';
+				unset($params['page']);
+				foreach($params as $key => $val) {
+					if(!empty($urlParams)) $urlParams .= '&';
+					$urlParams .= $key.'='.$val;
+				}
+				if(!empty($urlParams)) $urlParams = '?'.$urlParams;
+				$s .= '<li class="page" style="margin-left: 4px; margin-right: 4px;">'.CHtml::link(1, $arrUrl[0].$urlParams).'</li>';
+				$s .= '<li>...</li>';
+			}
+			return $s;
+		}
+		elseif ($class == $this->nextPageCssClass) {
+			$lastPage = (int) $this->getPages()->getPageCount();
+//			$params['page'] = $lastPage;
+			foreach($params as $key => $val) {
+				if(!empty($urlParams)) $urlParams .= '&';
+				if ($key === 'page') $urlParams .= $key.'='.$lastPage;
+				else $urlParams .= $key.'='.$val;
+			}
+			$urlParams = '?'.$urlParams;
+			$s = '';
+			if ((int) $params['page'] <= ($lastPage - floor($this->maxButtonCount/2))) {
+				$s .= '<li>...</li>';
+				$s .= '<li class="page" style="margin-left: 4px; margin-right: 4px;">'.CHtml::link($lastPage, $arrUrl[0].$urlParams).'</li>';
+			}
+			else {
+				$s .= '<li class="page" style="margin-right: 4px;">'.CHtml::link($lastPage, $arrUrl[0].$urlParams).'</li>';
+			}
+			$s .= '<li class="'.$class.'">'.CHtml::link($label,$url).'</li>';
+			return $s;
+		}
 		return '<li class="'.$class.'">'.CHtml::link($label,$url).'</li>';
 	}	
 	
