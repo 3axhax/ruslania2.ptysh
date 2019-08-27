@@ -198,50 +198,50 @@ class SiteController extends MyController {
                 'Entity'=>Entity::BOOKS,
                 'cid'=>213,
                 'name' =>Yii::app()->ui->item('A_NEW_SALE_BOOKS'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::BOOKS), 'cid' => 213))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::BOOKS)))
             ),
             '15'=> array(
                 'Entity'=>Entity::SHEETMUSIC,
                 'cid'=>217,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_SHEETMUSIC'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC), 'cid' => 217))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::SHEETMUSIC)))
             ),
             '60'=> array(
                 'Entity'=>Entity::MAPS,
                 'cid'=>8,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_MAPS'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::MAPS), 'cid' => 8))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::MAPS)))
             ),
             '22'=> array(
                 'Entity'=>Entity::MUSIC,
                 'cid'=>21,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_MUSIC'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::MUSIC), 'cid' => 21))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::MUSIC)))
             ),
             '24'=> array(
                 'Entity'=>Entity::SOFT,
                 'cid'=>16,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_SOFT'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::SOFT), 'cid' => 16))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::SOFT)))
             ),
             '40'=> array(
                 'Entity'=>Entity::VIDEO,
                 'cid'=>43,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_DVD'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::VIDEO), 'cid' => 43))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::VIDEO)))
             ),
             '30'=> array(
                 'Entity'=>Entity::PERIODIC,
                 'cid'=>100,
                 'name'=>Yii::app()->ui->item('A_NEW_SALE_PERIODIC'),
-                'url'=>Yii::app()->createUrl('entity/list',
-                    array('entity' => Entity::GetUrlKey(Entity::PERIODIC), 'cid' => 100))
+                'url'=>Yii::app()->createUrl('entity/salelist',
+                    array('entity' => Entity::GetUrlKey(Entity::PERIODIC)))
             )
 
         );
@@ -249,11 +249,16 @@ class SiteController extends MyController {
         $category = new Category();
 
         foreach ($arSales as $entity=>$row) {
+            $data = array('entity'=>$entity, 'cid'=>0, 'avail'=>1, 'sale'=>1);
+            FilterHelper::setFiltersData($entity, 0, $data, 0);
+            $lang = Yii::app()->getRequest()->getParam('lang');
+            $cat = new Category();
+            $items = $cat->result_filter($data, $lang, 0);
 
-            $totalItems = $category->GetTotalItems($entity, $row['cid'], true);
-            $paginatorInfo = new CPagination($totalItems);
-            $paginatorInfo->setPageSize(40);
-            $items = $category->GetItems($entity, $row['cid'], $paginatorInfo, 11, Yii::app()->language, true, '');
+//            $totalItems = $category->GetTotalItems($entity, $row['cid'], true);
+//            $paginatorInfo = new CPagination($totalItems);
+//            $paginatorInfo->setPageSize(40);
+//            $items = $category->GetItems($entity, $row['cid'], $paginatorInfo, 11, Yii::app()->language, true, '');
 
             $arSales[(string)$entity]['items'] = $items;
 
@@ -1198,7 +1203,7 @@ class SiteController extends MyController {
         $this->breadcrumbs[] = Yii::app()->ui->item('FORGOT_PASS_PATH');
 
         $model = new User('newpwd');
-//        $this->PerformAjaxValidation($model, 'remind-form');
+        $this->PerformAjaxValidation($model, 'remind-form');
         $user = null;
 
         if (Yii::app()->request->isPostRequest) {

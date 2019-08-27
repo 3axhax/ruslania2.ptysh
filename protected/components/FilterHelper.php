@@ -85,15 +85,18 @@ class FilterHelper
         return $filters;
     }
 
-    static function setFiltersData ($entity, $cid = 0, $data) {
+    static function setFiltersData ($entity, $cid = 0, $data, $saveDataInSession = 1) {
         self::normalizeData($data, $entity);
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
-        if (Yii::app()->request->cookies[$key]->value != serialize(self::$data)) {
-            Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(self::$data));
+        if ($saveDataInSession) {
+            if (Yii::app()->request->cookies[$key]->value != serialize(self::$data)) {
+                Yii::app()->request->cookies[$key] = new CHttpCookie($key, serialize(self::$data));
+            }
+            if (Yii::app()->session[$key] != serialize(self::$data)) {
+                Yii::app()->session[$key] = serialize(self::$data);
+            }
         }
-        if (Yii::app()->session[$key] != serialize(self::$data)) {
-            Yii::app()->session[$key] = serialize(self::$data);
-        }
+        self::$_data[$key] = self::$data;
         $filtersData = FiltersData::instance();
         $filtersData->setFiltersData($key, self::$data);
     }
@@ -224,8 +227,6 @@ class FilterHelper
     }
 
     static private function getEntity($entity){
-        //фиг знает зачем эта функция, $entity уже есть
-        //не знаю зачем это все но на всякия случай оставлю
         if (empty($entity)) $entity = Yii::app()->getRequest()->getParam('entity', false);
         if (!empty($entity)) {
             if (!is_numeric($entity)) {
