@@ -66,7 +66,6 @@ class Certificate extends CActiveRecord {
 			self::$_certificates[$certificate['id']]['promocode_id'] = $promocodeId;
 			self::$_certificates[$certificate['id']]['date_pay'] = date('Y-m-d H:i:s');
 		}
-		//TODO:: добавить отправку писем
 		$pathCertificate = $this->_createPhoto($code, $certificate['maket_id']);
 		$urlCertificate = Yii::app()->params['PicDomain'] . '/new_img/gift_certificates/' . $code . '.jpg';
 		$this->_sendMail($certificate, $code, $pathCertificate, $urlCertificate);
