@@ -311,7 +311,24 @@ $ctrl = Yii::app()->getController()->id;
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
-    echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank"><img alt="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" src="'.Picture::Get($product, Picture::SMALL).'" data-lazy="'.Picture::Get($product, Picture::SMALL).'" alt=""  style="max-height: 130px;"/></a>
+    echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">';
+        $photoTable = Entity::GetEntitiesList()[$product['entity']]['photo_table'];
+        $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
+        /**@var $photoModel ModelsPhotos*/
+        $photoModel = $modelName::model();
+        $photoId = $photoModel->getFirstId($product['id']);
+        ?>
+        <?php if (empty($photoId)): ?>
+        <img alt="<?= htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)) ?>" src="<?= Picture::Get($product, Picture::SMALL) ?>" data-lazy="<?= Picture::Get($product, Picture::SMALL) ?>" style="max-height: 130px;"/>
+        <?php else: ?>
+        <picture>
+            <source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'webp') ?>" type="image/webp">
+            <source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $product['eancode'], 'jpg') ?>" type="image/jpeg">
+            <img src="<?= $photoModel->getHrefPath($photoId, 'o', $product['eancode'], 'jpg') ?>" alt="<?= htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)) ?>"  style="max-height: 130px;"/>
+        </picture>
+        <?php endif; ?>
+
+    <?php echo '</a>
     </div>
  
 	<div class="title_book"><a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
