@@ -177,8 +177,8 @@ class Offer extends CMyActiveRecord
                                 LEFT JOIN pereodics_catalog as pc ON oi.entity_id = 30 AND oi.item_id = pc.id AND pc.avail_for_order = 1
                                 LEFT JOIN video_catalog as vc ON oi.entity_id = 40 AND oi.item_id = vc.id AND vc.avail_for_order = 1
                                 LEFT JOIN printed_catalog as prc ON oi.entity_id = 50 AND oi.item_id = prc.id AND prc.avail_for_order = 1
-                                LEFT JOIN maps_catalog as mac ON oi.entity_id = 50 AND oi.item_id = mac.id AND mac.avail_for_order = 1
-                            WHERE oi.offer_id=:id AND (bc.id IS NOT NULL OR muc.id IS NOT NULL OR mc.id IS NOT NULL OR sc.id IS NOT NULL OR pc.id IS NOT NULL OR vc.id IS NOT NULL OR prc.id IS NOT NULL OR mac.id)
+                                LEFT JOIN maps_catalog as mac ON oi.entity_id = 60 AND oi.item_id = mac.id AND mac.avail_for_order = 1
+                            WHERE oi.offer_id=:id AND (bc.id IS NOT NULL OR muc.id IS NOT NULL OR mc.id IS NOT NULL OR sc.id IS NOT NULL OR pc.id IS NOT NULL OR vc.id IS NOT NULL OR prc.id IS NOT NULL OR mac.id IS NOT NULL)
                             ORDER BY RAND() LIMIT 15";
                 }
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
