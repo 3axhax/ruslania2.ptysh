@@ -695,6 +695,7 @@ class Category {
             'order by ' . $criteria->order . ' '.
             'limit ' . $page * $criteria->limit . ', ' . $criteria->limit . ' '.
         '';
+        Debug::staticRun(array($sql, Condition::get($entity, 0)->getBruttoWithDiscount(false)));
 
         $dataFromCache = false;
         $cacheKey = md5($sql);

@@ -173,7 +173,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 
 	protected function _morphy() {
 		return;
-		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
+//		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			$fields = array(
@@ -231,14 +231,14 @@ class BeforeSphinxCommand extends CConsoleCommand {
 					$sql = 'delete from _change_items where (eid = ' . (int)$entity . ') and (id = ' . (int) $item['id'] . ')';
 					Yii::app()->db->createCommand($sql)->execute();
 				}
-				echo date('d.m.Y H:i:s') . "\n";
+//				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
-			echo date('d.m.Y H:i:s') . "\n";
+//			echo date('d.m.Y H:i:s') . "\n";
 		}
 
 
-		echo 'end ' . date('d.m.Y H:i:s') . "\n";
+//		echo 'end ' . date('d.m.Y H:i:s') . "\n";
 	}
 
 	/** при поиске авторов морфология не должна учитываться, но должны быть учитаны окончания фамилий при склонении (или множественное/единственное чило)
@@ -282,7 +282,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 					':morphy_name'=>implode(' ', $morphy),
 				));
 			}
-			echo date('d.m.Y H:i:s') . "\n";
+//			echo date('d.m.Y H:i:s') . "\n";
 		}
 
 		$sqlItems = ''.
@@ -309,7 +309,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 					':morphy_name'=>implode(' ', $morphy),
 				));
 			}
-			echo date('d.m.Y H:i:s') . "\n";
+//			echo date('d.m.Y H:i:s') . "\n";
 		}
 
 	}

@@ -104,50 +104,58 @@ class FilterHelper
     static function getFiltersData ($entity, $cid = 0) {
         $key = 'filter_e' . (int) $entity . '_c_' . (int) $cid;
         if (!isset(self::$_data[$key])) {
-            if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
-                self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+            if (defined('cronAction')&&cronAction) {
+                self::$_data = array();
+                self::$_data[$key] = array();
+                self::$_data[$key]['entity'] = $entity;
+                self::$_data[$key]['cid'] = (int) $cid;
             }
-            if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
-                self::$sessionData = unserialize(Yii::app()->session[$key]);
-            }
-            $filtersData = FiltersData::instance();
-            if ($filtersData->isSetKey($key)) {
-                self::$sessionData = $filtersData->getFiltersData($key);
-            }
+            else {
+                if (isset(Yii::app()->request->cookies[$key]->value) && Yii::app()->request->cookies[$key]->value != '') {
+                    self::$sessionData = unserialize(Yii::app()->request->cookies[$key]->value);
+                }
+                if (isset(Yii::app()->session[$key]) && Yii::app()->session[$key] != '') {
+                    self::$sessionData = unserialize(Yii::app()->session[$key]);
+                }
+                $filtersData = FiltersData::instance();
+                if ($filtersData->isSetKey($key)) {
+                    self::$sessionData = $filtersData->getFiltersData($key);
+                }
 
-            $data = self::$data;
-            self::$data = [];
-            foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
-                if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
-            }
-            unset($data);
-            self::getEntity($entity);
-            if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
+                $data = self::$data;
                 self::$data = [];
-                return self::$data;
+                foreach (array('authorStr', 'actorsStr', 'directorsStr', 'seriesStr', 'publishersStr', 'performersStr') as $strName) {
+                    if (!empty($data[$strName])) self::$data[$strName] = $data[$strName];
+                }
+                unset($data);
+                self::getEntity($entity);
+                if (!isset(self::$data['entity']) || self::$data['entity'] == '') {
+                    self::$data = [];
+                    return self::$data;
+                }
+                self::getCid();
+                self::getAvail();
+                self::getLangSel();
+                self::getSort();
+                self::getYears();
+                self::getCost();
+                if (Entity::checkEntityParam($entity, 'authors')) self::getAuthor();
+                if (Entity::checkEntityParam($entity, 'publisher')) self::getPublisher();
+                if (Entity::checkEntityParam($entity, 'series')) self::getSeries();
+                self::getBinding();
+                self::getFormatVideo();
+                self::getLangVideo();
+                if (Entity::checkEntityParam($entity, 'subtitles')) self::getSubtitlesVideo();
+                self::getPreSale();
+                if (Entity::checkEntityParam($entity, 'performers')) self::getPerformer();
+                if (Entity::checkEntityParam($entity, 'studios')) self::getStudio();
+                self::getCountry();
+                if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
+                if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
+                self::getReleaseYears();
+                self::getSale();
+                self::$_data[$key] = self::$data;
             }
-            self::getCid();
-            self::getAvail();
-            self::getLangSel();
-            self::getSort();
-            self::getYears();
-            self::getCost();
-            if (Entity::checkEntityParam($entity, 'authors')) self::getAuthor();
-            if (Entity::checkEntityParam($entity, 'publisher')) self::getPublisher();
-            if (Entity::checkEntityParam($entity, 'series')) self::getSeries();
-            self::getBinding();
-            self::getFormatVideo();
-            self::getLangVideo();
-            if (Entity::checkEntityParam($entity, 'subtitles')) self::getSubtitlesVideo();
-            self::getPreSale();
-            if (Entity::checkEntityParam($entity, 'performers')) self::getPerformer();
-            if (Entity::checkEntityParam($entity, 'studios')) self::getStudio();
-            self::getCountry();
-            if (Entity::checkEntityParam($entity, 'directors')) self::getDirector();
-            if (Entity::checkEntityParam($entity, 'actors')) self::getActor();
-            self::getReleaseYears();
-            self::getSale();
-            self::$_data[$key] = self::$data;
         }
 
         return self::$_data[$key];
