@@ -64,7 +64,6 @@ class TradedoublerPixel extends CWidget
         else return false;
 
         if ($this->orderValue == '') return false;
-        if ($this->currency == '') return false;
         if ($this->orderNumber == '') return false;
 
         return true;
