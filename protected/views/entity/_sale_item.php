@@ -1,7 +1,7 @@
 <div class="news_box nb<?= $entity ?> sale_item">
     <div class="container">
         <div class="title">
-            <a href="<?=$link?>" style="color: #1257ab;"><?= $title?></a></span>
+            <a href="<?=$link?>" style="color: #1257ab; font-size: 16px; font-weight: bold"><?= $title?></a></span>
             <div class="pult">
                 <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span><?php /*<img src="/new_img/btn_left_news.png" alt=""/> */ ?></a>
                 <a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><?php /*<img src="/new_img/btn_right_news.png" alt=""/>*/ ?><span class="fa"></span></a>
