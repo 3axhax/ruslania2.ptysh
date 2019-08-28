@@ -15,7 +15,81 @@ class MorphyCommand extends CConsoleCommand {
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
-//			if ($entity == 10) continue;
+			$sql = 'create table if not exists _tmp_' . $params['site_table'] . ' (`id` int, key(id)) engine=myisam';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+
+			$sql = 'truncate _tmp_' . $params['site_table'];
+			Yii::app()->db->createCommand($sql)->execute();
+
+			$sql = ''.
+				'insert into _tmp_' . $params['site_table'] . ' (id) '.
+				'select t.id '.
+				'from ' . $params['site_table'] . ' t '.
+			'';
+			Yii::app()->db->createCommand()->setText($sql)->execute();
+
+			$fields = array(
+				'title_ru', 'title_en', 'title_fi', 'title_rut', 'title_eco', //'title_original',
+				'description_ru', 'description_en', 'description_fi', 'description_de',
+				'description_fr', 'description_es', 'description_se', 'description_rut',
+			);
+			if ($entity == Entity::BOOKS) $fields[] = 'title_original';
+
+			$sphynxPDO = null;
+			$sphynxSql = ''.
+				'insert into _sphinx_' . $params['entity'] . ' (real_id, isbnnum, ' . implode(', ', $fields) . ', authors) '.
+				'values(:real_id, :isbnnum, :' . implode(', :', $fields) . ', :authors)'.
+				'on duplicate key update isbnnum = :isbnnum'.
+			'';
+			foreach ($fields as $f) $sphynxSql .= ', ' . $f . ' = :' . $f;
+			$sphynxPDO = Yii::app()->db->createCommand($sphynxSql);
+			$sphynxPDO->prepare();
+
+			$sqlItems = ''.
+				'select t.id, ' . ((in_array($entity, array(30, 40)))?'""':'t.isbn') . ' isbn, '.
+				't.' . implode(', t.', $fields) . ', '.
+				'ifnull(tA.name, "") authors '.
+				'from ' . $params['site_table'] . ' t '.
+					'left join _supprort_products_authors tA on (tA.id = t.id) and (tA.eid = ' . (int)$entity . ') '.
+					'join _tmp_' . $params['site_table'] . ' tCI on (tCI.id = t.id) '.
+				'limit ' . $this->_counts .
+			'';
+//			echo $sqlItems . "\n";
+			$step = 0;
+			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
+				$step++;
+				foreach ($items as $item) {
+					$authors = self::getMorphy($item['authors']);
+					$data = array(
+						':real_id'=>$item['id'],
+						':isbnnum'=>self::getIsbn($item['isbn']),
+						':authors'=>array(),
+					);
+					if (!empty($authors)) {
+						$data[':authors'] = array_merge($authors, self::getMorphy(ProductHelper::ToAscii($item['authors'], array('onlyTranslite'=>true))));
+						$data[':authors'] = array_merge($data[':authors'], self::getMorphy(ProductHelper::ToAscii(implode(' ', $authors), array('onlyTranslite'=>true))));
+					}
+					foreach ($fields as $field) {
+						if (mb_strpos($field, 'title_') === 0) {
+							$data[':' . $field] = self::getMorphy($item[$field]);
+							if (!empty($authors)) $data[':authors'] = array_merge($data[':' . $field], $data[':authors']);
+							$data[':' . $field] = implode(' ', $data[':' . $field]);
+						}
+						else $data[':' . $field] = implode(' ', self::getMorphy($item[$field]));
+					}
+					$data[':authors'] = array_unique($data[':authors']);
+					$data[':authors'] = implode(' ', $data[':authors']);
+					$sphynxPDO->execute($data);
+
+					$sql = 'delete from _tmp_' . $params['site_table'] . ' where (id = ' . (int) $item['id'] . ')';
+					Yii::app()->db->createCommand($sql)->execute();
+				}
+				echo date('d.m.Y H:i:s') . "\n";
+//			if ($step > 1) break;
+			}
+			echo date('d.m.Y H:i:s') . "\n";
+
+/*//			if ($entity == 10) continue;
 //			if ($entity == 15) continue;
 //			if ($entity == 22) continue;
 //			if ($entity == 24) continue;
@@ -55,7 +129,7 @@ class MorphyCommand extends CConsoleCommand {
 //				echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
 			}
-//			echo date('d.m.Y H:i:s') . "\n";
+//			echo date('d.m.Y H:i:s') . "\n";*/
 		}
 
 
@@ -112,4 +186,14 @@ class MorphyCommand extends CConsoleCommand {
 		if (empty($s)) return '';
 		return preg_replace("/\D/ui", '', $s);
 	}
+
+	static function getMorphy($s) {
+		if (empty($s)) return array();
+
+		$sp = new SphinxProducts(0);
+		list($title, $realWords, $useRealWord) = $sp->getNormalizedWords($s);
+		return $title;
+	}
+
+
 }

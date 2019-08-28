@@ -172,6 +172,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	}
 
 	protected function _morphy() {
+		return;
 		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
@@ -180,15 +181,7 @@ class BeforeSphinxCommand extends CConsoleCommand {
 				'description_ru', 'description_en', 'description_fi', 'description_de',
 				'description_fr', 'description_es', 'description_se', 'description_rut',
 			);
-
-			$insertPDO = null;
-			$insertSql = ''.
-				'insert into _morphy_' . $params['entity'] . ' (real_id, isbnnum, title, authors, description) '.
-				'values(:real_id, :isbnnum, :title, :authors, :description) '.
-				'on duplicate key update isbnnum = :isbnnum, title = :title, authors = :authors, description = :description '.
-			'';
-			$insertPDO = Yii::app()->db->createCommand($insertSql);
-			$insertPDO->prepare();
+			if ($entity == Entity::BOOKS) $fields[] = 'title_original';
 
 			$sphynxPDO = null;
 			$sphynxSql = ''.
@@ -213,34 +206,23 @@ class BeforeSphinxCommand extends CConsoleCommand {
 			while (($items = $this->_query($sqlItems))&&($items->count() > 0)) {
 				$step++;
 				foreach ($items as $item) {
-					$title = MorphyCommand::getMorphyNames(array('ru'=>$item['title_ru'],'en'=>$item['title_en'],'fi'=>$item['title_fi'],'rut'=>$item['title_rut'],));
-					$desc = MorphyCommand::getMorphyNames(array('ru'=>$item['description_ru'],'en'=>$item['description_en'],'fi'=>$item['description_fi'],'rut'=>$item['description_rut'],), $title);
-					$insertPDO->execute(array(
-						':real_id'=>$item['id'],
-						':isbnnum'=>MorphyCommand::getIsbn($item['isbn']),
-						':title'=>implode(' ', $title),
-						':authors'=>implode(' ', MorphyCommand::getAuthorsMorphy($item['authors'], $title)),
-						':description'=>implode(' ', $desc),
-					));
-
-
-					$authors = $this->getMorphy($item['authors']);
+					$authors = MorphyCommand::getMorphy($item['authors']);
 					$data = array(
 						':real_id'=>$item['id'],
 						':isbnnum'=>MorphyCommand::getIsbn($item['isbn']),
 						':authors'=>array(),
 					);
 					if (!empty($authors)) {
-						$data[':authors'] = array_merge($authors, $this->getMorphy(ProductHelper::ToAscii($item['authors'], array('onlyTranslite'=>true))));
-						$data[':authors'] = array_merge($data[':authors'], $this->getMorphy(ProductHelper::ToAscii(implode(' ', $authors), array('onlyTranslite'=>true))));
+						$data[':authors'] = array_merge($authors, MorphyCommand::getMorphy(ProductHelper::ToAscii($item['authors'], array('onlyTranslite'=>true))));
+						$data[':authors'] = array_merge($data[':authors'], MorphyCommand::getMorphy(ProductHelper::ToAscii(implode(' ', $authors), array('onlyTranslite'=>true))));
 					}
 					foreach ($fields as $field) {
 						if (mb_strpos($field, 'title_') === 0) {
-							$data[':' . $field] = $this->getMorphy($item[$field]);
+							$data[':' . $field] = MorphyCommand::getMorphy($item[$field]);
 							if (!empty($authors)) $data[':authors'] = array_merge($data[':' . $field], $data[':authors']);
 							$data[':' . $field] = implode(' ', $data[':' . $field]);
 						}
-						else $data[':' . $field] = implode(' ', $this->getMorphy($item[$field]));
+						else $data[':' . $field] = implode(' ', MorphyCommand::getMorphy($item[$field]));
 					}
 					$data[':authors'] = array_unique($data[':authors']);
 					$data[':authors'] = implode(' ', $data[':authors']);
