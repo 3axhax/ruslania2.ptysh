@@ -162,11 +162,25 @@ class Offer extends CMyActiveRecord
 
         $fullInfo = Yii::app()->dbCache->get($key);
 
-        if($fullInfo === false)
+        if($fullInfo === false || $oid == 999)
         {
             //вместо * достаточно entity_id, item_id
             if (!$entity) {
                 $sql = 'SELECT sql_calc_found_rows * FROM offer_items WHERE offer_id=:id ORDER BY group_order, sort_order limit 30';
+                if ($oid == 999) {
+                    $sql = "SELECT entity_id, item_id
+                            FROM offer_items as oi
+                                LEFT JOIN books_catalog as bc ON oi.entity_id = 10 AND oi.item_id = bc.id AND bc.avail_for_order = 1
+                                LEFT JOIN musicsheets_catalog as muc ON oi.entity_id = 15 AND oi.item_id = muc.id AND muc.avail_for_order = 1
+                                LEFT JOIN music_catalog as mc ON oi.entity_id = 22 AND oi.item_id = mc.id AND mc.avail_for_order = 1
+                                LEFT JOIN soft_catalog as sc ON oi.entity_id = 24 AND oi.item_id = sc.id AND sc.avail_for_order = 1
+                                LEFT JOIN pereodics_catalog as pc ON oi.entity_id = 30 AND oi.item_id = pc.id AND pc.avail_for_order = 1
+                                LEFT JOIN video_catalog as vc ON oi.entity_id = 40 AND oi.item_id = vc.id AND vc.avail_for_order = 1
+                                LEFT JOIN printed_catalog as prc ON oi.entity_id = 50 AND oi.item_id = prc.id AND prc.avail_for_order = 1
+                                LEFT JOIN maps_catalog as mac ON oi.entity_id = 50 AND oi.item_id = mac.id AND mac.avail_for_order = 1
+                            WHERE oi.offer_id=:id AND (bc.id IS NOT NULL OR muc.id IS NOT NULL OR mc.id IS NOT NULL OR sc.id IS NOT NULL OR pc.id IS NOT NULL OR vc.id IS NOT NULL OR prc.id IS NOT NULL OR mac.id)
+                            ORDER BY RAND() LIMIT 15";
+                }
                 $rows = Yii::app()->db->createCommand($sql)->queryAll(true, array(':id' => $oid));
             }
             else {
@@ -195,12 +209,13 @@ class Offer extends CMyActiveRecord
                     if(isset($list[$iid])) $tmp[] = $list[$iid];
                 }
 
-                $fullInfo = $tmp;
+                $fullInfo = array_merge($fullInfo, $tmp);
             }
 
             Yii::app()->dbCache->set($key, $fullInfo, Yii::app()->params['DbCacheTime']);
         }
 
+        shuffle($fullInfo);
         return $fullInfo;
     }
 

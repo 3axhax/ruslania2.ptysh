@@ -747,8 +747,8 @@ $ctrl = Yii::app()->getController()->id;
         scriptLoader('/new_js/slick.js').callFunction(function() {
             $('.more_goods ul').slick({
                 lazyLoad: 'ondemand',
-                slidesToShow: 4,
-                slidesToScroll: 4
+                slidesToShow: 5,
+                slidesToScroll: 5
             }).on('lazyLoadError', function(event, slick, image, imageSource){
                 image.attr('src', '<?= Picture::srcNoPhoto() ?>');
             });

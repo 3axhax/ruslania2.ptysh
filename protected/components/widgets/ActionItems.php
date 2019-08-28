@@ -22,12 +22,13 @@ class ActionItems extends CWidget {
 	function run() {
 		$file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainactions_' . Yii::app()->language . '.html.php';
 		if (file_exists($file)) {
-			//храним 1 час
-			if (filectime($file) < (time() - 3600)) unlink($file);
+			//храним 5 минут
+			if (filectime($file) < (time() - 5*60)) unlink($file);
 		}
 
 		if (!file_exists($file)) {
 			$products = $this->_getProducts();
+			shuffle($products);
 			if (empty($products)) file_put_contents($file, '');
 			else file_put_contents($file, $this->render('for_fileCache/action_items', array('actionItems'=>$products), true));
 		}
