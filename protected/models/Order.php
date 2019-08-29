@@ -135,6 +135,7 @@ class Order extends CMyActiveRecord
             {
                 $ord['States'][] = $state->attributes;
             }
+            usort($ord['States'], function($a, $b){ if ($a['timestamp'] == $b['timestamp']) return 0; return ($a['timestamp'] > $b['timestamp']) ? -1 : 1; });
 
             $ret[] = $ord;
         }
@@ -154,7 +155,6 @@ class Order extends CMyActiveRecord
         $list = $this->FlatOrderList($list);
 
         if (!empty($list)) {
-            usort($list[0]['States'], function($a, $b){ if ($a['timestamp'] == $b['timestamp']) return 0; return ($a['timestamp'] > $b['timestamp']) ? -1 : 1; });
             return $list[0];
         }
         return false;

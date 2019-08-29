@@ -3,7 +3,7 @@
 $PH = new ProductHelper();
 $addrModel = new Address();
 ?>
-<link rel="stylesheet" href="/new_style/order_buy.css">
+<link rel="stylesheet" href="/new_style/order_buy.css?v=2908">
 <hr />
 
 <div class="container cartorder" id="js_orderForm" style="margin-bottom: 20px;">
@@ -35,7 +35,12 @@ $addrModel = new Address();
 		<li id="paymentsData">
 			<div class="op"></div>
 			<span class="step_header"><?=$ui->item('PAYMENT_METHOD_PAYER')?></span>
-			<div><label class="addr_buyer"><input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked><span class="checkbox-custom"></span> <?= $ui->item('DELIVERY_EQUALLY_PAYER') ?></label>
+			<div>
+				<div class="info" style="float: right"><span class="fa notes-circle"></span> <?= $ui->item('OTHER_BILLING_ADDRESS') ?></div>
+				<label class="addr_buyer">
+					<input type="checkbox" class="checkbox_custom" value="1" name="addr_buyer" id="addr_buyer" checked>
+					<span class="checkbox-custom"></span> <?= $ui->item('DELIVERY_EQUALLY_PAYER') ?>
+				</label>
 			<div class="form">
 			<?php $this->renderPartial('address_form', array('alias'=>'Address', 'userType'=>'payer', 'addrModel'=>$addrModel, 'onlyPereodic'=>$onlyPereodic)); ?>
 			</div>

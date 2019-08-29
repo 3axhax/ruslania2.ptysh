@@ -1443,6 +1443,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'REG_WITH_SOCIAL' => 'Rekisteröidy some-tilisi avulla',
     'BILLING_VERKKOLASKU' => 'Jätä tyhjäksi, jos olet täyttämässä toimitusosoitetta',
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
-
+    'OTHER_BILLING_ADDRESS' => 'Etsitkö paikkaa laskutusosoitteelle? Poista pallukka vasemmalta kohdasta Laskutusosoite...',
 
 );

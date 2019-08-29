@@ -296,3 +296,8 @@ label.error { background-color: #fff !important; border: solid 1px red !importan
 }
 
 .cart_certificate { display: none; margin-top: 10px;}
+
+div.info { position: relative; }
+div.info span.notes-circle { position:absolute; left: -20px }
+div.info span.notes-circle:before { content: '\f129'; color: #edb421; font-size: 16px; font-weight: 100; position: relative; top: -4px}
+div.info span.notes-circle:after { content: '\f1db'; color: #edb421; font-size: 25px; font-weight: 100; position: relative; left: -14px; top: -1px;}

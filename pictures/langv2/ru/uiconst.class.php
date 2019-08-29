@@ -1440,5 +1440,6 @@ IBAN DE79514303006474790001 <br>
     'REG_WITH_SOCIAL' => 'Регистрация с помощью социальных сетей',
     'BILLING_VERKKOLASKU' => 'Оставьте пустым, если вы заполняете адрес доставки',
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
+    'OTHER_BILLING_ADDRESS' => 'Адрес плательщика отличается от получателя? Снимите галочку слева',
 
 );
