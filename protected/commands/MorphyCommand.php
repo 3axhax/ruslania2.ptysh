@@ -1,6 +1,6 @@
 <?php
 /*Created by Кирилл (14.05.2019 17:32)*/
-ini_set('max_execution_time', 9600);
+ini_set('max_execution_time', 99600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php morphy
  * готовлю тоблицу для сфинкса
  * для каждого товара оставляю только уникальные слова в нормальной форме
@@ -19,14 +19,14 @@ class MorphyCommand extends CConsoleCommand {
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'truncate _tmp_' . $params['site_table'];
-			Yii::app()->db->createCommand($sql)->execute();
+//			Yii::app()->db->createCommand($sql)->execute();
 
 			$sql = ''.
 				'insert into _tmp_' . $params['site_table'] . ' (id) '.
 				'select t.id '.
 				'from ' . $params['site_table'] . ' t '.
 			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();
+//			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$fields = array(
 				'title_ru', 'title_en', 'title_fi', 'title_rut', 'title_eco', //'title_original',
