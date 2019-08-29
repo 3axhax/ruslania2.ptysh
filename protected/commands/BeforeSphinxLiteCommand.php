@@ -221,7 +221,7 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
 //                echo date('d.m.Y H:i:s') . "\n";
 //			if ($step > 1) break;
             }
-            echo $params['site_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
+//            echo $params['site_table'] . ' ' . date('d.m.Y H:i:s') . "\n";
         }
 
 

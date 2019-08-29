@@ -172,7 +172,6 @@ class BeforeSphinxCommand extends CConsoleCommand {
 	}
 
 	protected function _morphy() {
-		return;
 //		echo "\n" . 'start ' . date('d.m.Y H:i:s') . "\n";
 
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
