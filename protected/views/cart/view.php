@@ -307,7 +307,7 @@ $ctrl = Yii::app()->getController()->id;
 	$url = ProductHelper::CreateUrl($product);
 	
 	
-	echo  '	<li>
+	echo  '<li>
         
     <div class="img" style="min-height: 130px; position: relative">';
         $this->renderStatusLables($product['status']);
@@ -331,7 +331,7 @@ $ctrl = Yii::app()->getController()->id;
     <?php echo '</a>
     </div>
  
-	<div class="title_book"><a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
+	<div class="title_book" style="width: auto;"><a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">'.ProductHelper::GetTitle($product, 'title', 42).'</a></div>';
 		
 		if ($product['isbn']) {
 			echo '<div>ISBN: '.str_replace('-', '' ,$product['isbn']).'</div>';

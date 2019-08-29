@@ -39,6 +39,7 @@ class RecountItemsCommand extends CConsoleCommand {
 			$sql = 'truncate _tmp_position_' . $sort . '';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 		}
+
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			$this->_offers($entity, $params);
 			$this->_years($entity, $params);
@@ -138,11 +139,32 @@ class RecountItemsCommand extends CConsoleCommand {
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
+		$sql = 'select group_order from offer_items where (offer_id = 999) limit 1';
+		$groupOrder = (int)Yii::app()->db->createCommand()->setText($sql)->queryScalar();
+		$brutto = Condition::get($entity, 0)->getBruttoWithDiscount(false);
+		$sql = ''.
+			'insert ignore into offer_items (offer_id, entity_id, item_id, group_order, sort_order) '.
+			'select 999, ' . (int) $entity . ', t.id, ' . $groupOrder . ', 1 '.
+			'from ' . $params['site_table'] . ' t '.
+			'where (' . $brutto . ' > 0) and (' . $brutto . ' <= 2) '.
+		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
 		$sql = ''.
 			'delete t '.
 			'from offer_items t '.
 				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.unitweight_skip = 0) and (tI.unitweight > 0) '.
 			'where (t.offer_id = 777) and (t.entity_id = ' . (int) $entity . ') '.
+		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
+		$sql = 'select group_order from offer_items where (offer_id = 777) limit 1';
+		$groupOrder = (int)Yii::app()->db->createCommand()->setText($sql)->queryScalar();
+		$sql = ''.
+			'insert ignore into offer_items (offer_id, entity_id, item_id, group_order, sort_order) '.
+			'select 777, ' . (int) $entity . ', t.id, ' . $groupOrder . ', 1 '.
+			'from ' . $params['site_table'] . ' t '.
+			'where (t.unitweight_skip > 0) or (t.unitweight = 0) '.
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 	}
