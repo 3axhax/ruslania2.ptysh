@@ -15,14 +15,8 @@
                     ?>
                     <li class="iconentity-<?=$item['icon_entity']; ?>">
 						<?php
-							$o = new Offer;
-							$offer = $o->GetItems($item['id']);
-							
-							foreach($offer as $k) {
-								$entity = $k['entity'];
-								break;
-							}
-							$href = Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title)));
+						$offerItems = OfferItem::model()->forSlider($item['id']);
+						$href = Yii::app()->createUrl('offers/view', array('oid' => $item['id'], 'title' => ProductHelper::ToAscii($title)));
 						?>
                         <div>
 <a class="title_item_recomend" href="<?= $href ?>"><?= CHtml::encode($title) ?></a>
@@ -30,31 +24,25 @@
                         </div>
 <?= ProductHelper::GetDescription($item->attributes); ?>
 							<?
-							if (count($offer[Entity::GetTitle($entity)]['items'])) {
 								echo '<div class="items_goods_recomends">';
 								echo '<div class="slider_recomend custom-slider">';
-								foreach ($offer as $offer_entity) {
-										$photoTable = Entity::GetEntitiesList()[$offer_entity['entity']]['photo_table'];
+								foreach ($offerItems as $eid=>$offerData) {
+										$photoTable = Entity::GetEntitiesList()[$eid]['photo_table'];
 										$modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
 										/**@var $photoModel ModelsPhotos*/
 										$photoModel = $modelName::model();
-									foreach ($offer_entity['items'] as $of) {
-										$photoId = $photoModel->getFirstId($of['id']);
+									foreach ($offerData as $of) {
+										$photoId = $of['idPhoto'];
 										$itemUrl = ProductHelper::createUrl($of);
 										?>
 	                                        <div class="item slider_recomend__item">
 		                                        <div class="img slider__img">
-			                                        <a href="<?= $itemUrl ?>">
-														<?php if (empty($photoId)): ?>
-															<img src="<?= Picture::Get($of, Picture::BIG) ?>" data-lazy="<?= Picture::Get($of, Picture::BIG) ?>">
-														<?php else: ?>
-															<picture>
-																<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'webp') ?>" type="image/webp">
-																<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'jpg') ?>" type="image/jpeg">
-																<img src="<?= $photoModel->getHrefPath($photoId, 'o', $of['eancode'], 'jpg') ?>" />
-															</picture>
-														<?php endif; ?>
-
+			                                        <a href="<?= $itemUrl ?>" title="<?= ProductHelper::GetTitle($of) ?>">
+														<picture>
+															<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'webp') ?>" type="image/webp">
+															<source srcset="<?= $photoModel->getHrefPath($photoId, 'si', $of['eancode'], 'jpg') ?>" type="image/jpeg">
+															<img src="<?= $photoModel->getHrefPath($photoId, 'o', $of['eancode'], 'jpg') ?>" alt="<?= ProductHelper::GetTitle($of) ?>"/>
+														</picture>
 			                                        </a>
 		                                        </div>
 	                                        </div>
@@ -62,7 +50,6 @@
                                     }
                                 }
 								echo '</div><div class="clearfix"></div></div>';
-							}
 							?><div style="margin-top: 15px;"></div>
 							<a href="<?= $href ?>" class="button_view list">
 							   <span class="fa"></span> <span><?=$ui->item('VIEW_LIST'); ?></span>
@@ -89,17 +76,12 @@
 	$(document).ready(function () {
 		scriptLoader('/new_js/slick.js').callFunction(function() {
 			$('.slider_recomend').slick({
-				lazyLoad: 'ondemand',
 				infinite: true,
 				slidesToShow: 5,
 				slidesToScroll: 5,
 				speed: 800,
 				prevArrow: "<div class=\"btn_left slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>",
 				nextArrow: "<div class=\"btn_right slick-arrow\" style=\"display: block;\"><span class=\"fa\"></span></div>"
-			}).on('lazyLoadError', function(event, slick, image, imageSource){
-				image.closest('div.slider_recomend__item').remove();
-//				slick.slickGoTo(0, true);
-				slick.next();
 			});
 		});
 	});

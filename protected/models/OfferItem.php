@@ -54,5 +54,60 @@ class OfferItem extends CMyActiveRecord
         return Yii::app()->db->createCommand($sql)->queryColumn(array(':oid'=>$oid));
     }
 
+    function forSlider($oid) {
+/*
+select tAll.item_id, tAll.eid, rand, tAll.idItem from (
+select t.item_id, 10 eid, rand() rand, tI.id idItem from offer_items t left join books_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 10)
+union
+select t.item_id, 15 eid, rand() rand, tI.id idItem from offer_items t left join musicsheets_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 15)
+union
+select t.item_id, 22 eid, rand() rand, tI.id idItem from offer_items t left join music_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 22)
+union
+select t.item_id, 24 eid, rand() rand, tI.id idItem from offer_items t left join soft_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 24)
+union
+select t.item_id, 30 eid, rand() rand, tI.id idItem from offer_items t left join pereodics_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 30)
+union
+select t.item_id, 40 eid, rand() rand, tI.id idItem from offer_items t left join video_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 40)
+union
+select t.item_id, 60 eid, rand() rand, tI.id idItem from offer_items t left join maps_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 60)
+union
+select t.item_id, 50 eid, rand() rand, tI.id idItem from offer_items t left join printed_catalog tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) where (t.offer_id = 999) and (t.entity_id = 50)
+) tAll
+where (tAll.idItem is not null)
+order by tAll.rand
+*/
+        $subquery = array();
+        foreach (Entity::GetEntitiesList() as $eid=>$params) {
+            $subquery[] = ''.
+                'select t.item_id, ' . $eid . ' eid, rand() rand, tI.id idItem, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
+                'from offer_items t '.
+                    'left join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
+                'where (t.offer_id = ' . (int) $oid . ') and (t.entity_id = ' . $eid . ')' .
+            '';
+        }
+        $sql = ''.
+            'select tAll.item_id id, tAll.eid entity, tAll.idPhoto '.
+            'from (' . implode(' union ', $subquery) . ') tAll '.
+            'where (tAll.idItem is not null) and (tAll.idPhoto is not null) and (tAll.idPhoto > 0) '.
+            'order by tAll.rand '.
+            'limit 15 '.
+        '';
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        $items = array();
+        foreach($rows as $row) {
+            if (empty($items[$row['entity']])) $items[$row['entity']] = array();
+            $items[$row['entity']][$row['id']] = $row;
+        }
+
+        $fields = array('id', 'title_ru', 'title_rut', 'title_en', 'title_fi');
+        foreach($items as $entity=>$ids) {
+            $sql = 'select ' . implode(',', $fields) . ' from ' . Entity::GetEntitiesList()[$entity]['site_table'] . ' where (id in (' . implode(',',array_keys($ids)) . '))';
+            foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+                $items[$entity][$item['id']] = array_merge($items[$entity][$item['id']], $item);
+            }
+        }
+
+        return $items;
+    }
 
 }
