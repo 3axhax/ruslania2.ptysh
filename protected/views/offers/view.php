@@ -16,7 +16,16 @@ $this->widget('TopBar', array('breadcrumbs' => $this->breadcrumbs)); ?>
             <?php if(!empty($desc)) : ?>
                 <p class="text"><?=nl2br($desc); ?></p>
             <?php endif; ?>
-
+<?php
+if (!isset($entitys)||!is_array($entitys)) $entitys = array();
+if (count($entitys) < 2) $entitys = array();
+if (!empty($entitys)): ?>
+    <div class="tab-container"><?php foreach ($entitys as $eid): ?>
+        <div<?php if ((int)$eid === (int)Yii::app()->getRequest()->getParam('eid')): ?> class="act"<?php endif; ?>><a href="<?= $url ?>?eid=<?= $eid ?>"><?= Entity::GetTitle($eid) ?></a></div>
+    <?php endforeach; ?>
+    </div>
+    <div class="clearBoth"></div>
+<?php endif; ?>
             <?php foreach($groups as $group=>$data) :
                 //$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($data['entity'])));
                 ?>

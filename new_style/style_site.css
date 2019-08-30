@@ -4116,3 +4116,13 @@ td.search_text input.enable_virtual_keyboard {border: none; border-radius: 0; ma
 .status-block { border-radius: 4px; }
 .new_block { border-radius: 4px; }
 
+.tab-container div {
+    float: left;
+    padding: 5px 10px;
+    background-color: #eee;
+    border: solid 1px #747474;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+.tab-container div.act {background-color: #fff;}
+.tab-container div a {color: #333333;}

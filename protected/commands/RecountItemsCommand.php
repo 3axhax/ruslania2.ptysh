@@ -139,14 +139,22 @@ class RecountItemsCommand extends CConsoleCommand {
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
-		$sql = 'select group_order from offer_items where (offer_id = 999) limit 1';
+		$sql = ''.
+			'delete t '.
+			'from offer_items t '.
+				'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 0) '.
+			'where (t.offer_id = 999) and (t.entity_id = ' . (int) $entity . ') '.
+		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
+		$sql = 'select group_order from offer_items where (offer_id = 999) and (entity_id = ' . (int) $entity . ') limit 1';
 		$groupOrder = (int)Yii::app()->db->createCommand()->setText($sql)->queryScalar();
 		$brutto = Condition::get($entity, 0)->getBruttoWithDiscount(false);
 		$sql = ''.
 			'insert ignore into offer_items (offer_id, entity_id, item_id, group_order, sort_order) '.
 			'select 999, ' . (int) $entity . ', t.id, ' . $groupOrder . ', 1 '.
 			'from ' . $params['site_table'] . ' t '.
-			'where (' . $brutto . ' > 0) and (' . $brutto . ' <= 2) '.
+			'where (' . $brutto . ' > 0) and (' . $brutto . ' <= 2) and (t.avail_for_order > 0) '.
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
@@ -158,13 +166,21 @@ class RecountItemsCommand extends CConsoleCommand {
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
-		$sql = 'select group_order from offer_items where (offer_id = 777) limit 1';
+		$sql = ''.
+			'delete t '.
+			'from offer_items t '.
+			'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 0) '.
+			'where (t.offer_id = 777) and (t.entity_id = ' . (int) $entity . ') '.
+		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
+		$sql = 'select group_order from offer_items where (offer_id = 777) and (entity_id = ' . (int) $entity . ') limit 1';
 		$groupOrder = (int)Yii::app()->db->createCommand()->setText($sql)->queryScalar();
 		$sql = ''.
 			'insert ignore into offer_items (offer_id, entity_id, item_id, group_order, sort_order) '.
 			'select 777, ' . (int) $entity . ', t.id, ' . $groupOrder . ', 1 '.
 			'from ' . $params['site_table'] . ' t '.
-			'where (t.unitweight_skip > 0) or (t.unitweight = 0) '.
+			'where ((t.unitweight_skip > 0) or (t.unitweight = 0)) and (t.avail_for_order > 0) '.
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 	}

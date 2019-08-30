@@ -49,5 +49,10 @@ class OfferItem extends CMyActiveRecord
         return array($fullInfo, $paginator);
     }
 
+    function getEntitys($oid) {
+        $sql = 'select entity_id from ' . $this->tableName() . ' where (offer_id = :oid) group by entity_id order by group_order asc';
+        return Yii::app()->db->createCommand($sql)->queryColumn(array(':oid'=>$oid));
+    }
+
 
 }
