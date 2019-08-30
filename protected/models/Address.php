@@ -370,10 +370,19 @@ class Address extends CActiveRecord
             'uid' => $uid,
             'all' => $allAddresses,
         ), 'text/html');
-//        $toEmail = 'periodicals@ruslania.com';
-        $toEmail = 'andreasagopov@hotmail.com';
+        $toEmail = 'periodicals@ruslania.com';
+//        $toEmail = 'andreasagopov@hotmail.com';
         $message->addTo($toEmail);
         $message->from = $toEmail;
+        Yii::app()->mail->transportType = 'smtp';
+        Yii::app()->mail->transportOptions = array(
+
+            'host'=> 'smtp.gmail.com',
+            'encryption'=>'ssl',
+            'port'=>465,
+            'username'=>'ruslania.helsinki@gmail.com',
+            'password'=>'He1sinki'
+        );
         $ret = @Yii::app()->mail->send($message);
     }
 
