@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="/css/jquery.bootstrap-touchspin.min.css">
 <link rel="stylesheet" href="/css/opentip.css">
 <link rel="stylesheet" type="text/css" href="/css/jquery-bubble-popup-v3.css"/>
-<link href="/new_style/style_site.css?v=2908" rel="stylesheet" type="text/css"/>
+<link href="/new_style/style_site.css?v=0209" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" type="text/css" href="/css/prettyPhoto.css"/>
 <script src="/new_js/jquery.js" type="text/javascript"></script>
 <script src="/new_js/jquery.mousewheel.min.js" type="text/javascript"></script>

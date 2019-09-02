@@ -79,6 +79,41 @@ order by tAll.rand
         $subquery = array();
         foreach (Entity::GetEntitiesList() as $eid=>$params) {
             $subquery[] = ''.
+                'select t.item_id, ' . $eid . ' eid, t.sort_order, t.group_order, tI.id idItem, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
+                'from offer_items t '.
+                    'left join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
+                'where (t.offer_id = ' . (int) $oid . ') and (t.entity_id = ' . $eid . ')' .
+            '';
+        }
+        $sql = ''.
+            'select tAll.item_id id, tAll.eid entity, tAll.idPhoto '.
+            'from (' . implode(' union ', $subquery) . ') tAll '.
+            'where (tAll.idItem is not null) and (tAll.idPhoto is not null) and (tAll.idPhoto > 0) '.
+            'order by tAll.group_order, tAll.sort_order '.
+            'limit 30 '.
+        '';
+        $rows = Yii::app()->db->createCommand($sql)->queryAll();
+        $items = array();
+        foreach($rows as $row) {
+            if (empty($items[$row['entity']])) $items[$row['entity']] = array();
+            $items[$row['entity']][$row['id']] = $row;
+        }
+
+        $fields = array('id', 'title_ru', 'title_rut', 'title_en', 'title_fi');
+        foreach($items as $entity=>$ids) {
+            $sql = 'select ' . implode(',', $fields) . ' from ' . Entity::GetEntitiesList()[$entity]['site_table'] . ' where (id in (' . implode(',',array_keys($ids)) . '))';
+            foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+                $items[$entity][$item['id']] = array_merge($items[$entity][$item['id']], $item);
+            }
+        }
+
+        return $items;
+    }
+
+    function forSliderAllData($oid) {
+        $subquery = array();
+        foreach (Entity::GetEntitiesList() as $eid=>$params) {
+            $subquery[] = ''.
                 'select t.item_id, ' . $eid . ' eid, rand() rand, tI.id idItem, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
                 'from offer_items t '.
                     'left join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
@@ -99,15 +134,15 @@ order by tAll.rand
             $items[$row['entity']][$row['id']] = $row;
         }
 
-        $fields = array('id', 'title_ru', 'title_rut', 'title_en', 'title_fi');
+        $p = new Product();
+        $fullInfo = array();
         foreach($items as $entity=>$ids) {
-            $sql = 'select ' . implode(',', $fields) . ' from ' . Entity::GetEntitiesList()[$entity]['site_table'] . ' where (id in (' . implode(',',array_keys($ids)) . '))';
-            foreach (Yii::app()->db->createCommand($sql)->queryAll() as $item) {
+            foreach($p->GetProductsV2($entity, array_keys($ids), true) as $item) {
                 $items[$entity][$item['id']] = array_merge($items[$entity][$item['id']], $item);
             }
+            $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $items[$entity]);
         }
-
-        return $items;
+        return $fullInfo;
     }
 
 }
