@@ -1434,6 +1434,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'REG_WITH_SOCIAL' => 'Registrieren Sie sich mit Ihrem Konto in den sozialen Medien an',
     'BILLING_VERKKOLASKU' => 'Leer lassen, wenn Lieferadresse angegeben wird',
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
-    'OTHER_BILLING_ADDRESS' => 'Looking for a place to give invoice address? Remove the tick on the left: Payer\'s address...',
+    'OTHER_BILLING_ADDRESS' => 'Haben Sie andere Rechnungsadresse? Deaktivieren Sie bitte das Häkchen links.',
 
 );
