@@ -1732,9 +1732,11 @@ div.poht {margin-top: 0; margin-bottom: 20px; font-weight: bold; line-height: 40
 
 .more_goods ul.books { margin: 0; margin-top: 30px; padding: 0; list-style: none;}
 .more_goods ul.books li { width: 130px; float: left; margin-left: 30px; }
-.more_goods ul.books li.slick-active { margin-left: 26px  !important; }
+/*.more_goods ul.books li.slick-active { margin-left: 26px  !important; }*/
+.more_goods ul.books.basket li { width: 130px; float: left; margin-left: 0; margin-right: 30px; }
 .more_goods ul.books li:first-child { margin-left: 0; }
 .more_goods ul.books li .title_book { margin-top: 15px; margin-bottom: 15px; min-height: 40px; padding-right: 10px;}
+.more_goods ul.books.basket li.slick-active .title_book { margin-top: 15px; margin-bottom: 15px; min-height: 40px; padding-right: 22px;}
 .more_goods ul.books li .title_book a { text-decoration: none; font-size: 13px; color: #1257ab; font-weight: 600;}
 .more_goods ul.books li .author { font-size: 14.483px; color: rgb(136, 136, 136); min-height: 40px; }
 .more_goods ul.books li .cost { font-size: 15px; color: rgb(48, 28, 83); font-weight: bold;}

@@ -249,10 +249,9 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
             'from all_authorslist t '.
             'join _change_authors tCA on (tCA.id = t.id) '.
         '';
-        $step = 0;
         $sp = new SphinxProducts(0);
-        while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
-            $step++;
+        $items = $this->_query($sqlItems);
+        if ($items->count() > 0) {
             foreach ($items as $item) {
                 $name = array();
                 $words = preg_split("/\W/ui", $item['title_ru'] . ' ' . $item['title_en'] . ' ' . $item['title_fi'] . ' ' . $item['title_rut']);
@@ -275,12 +274,12 @@ class BeforeSphinxLiteCommand extends BeforeSphinxCommand {
         $sqlItems = ''.
             'select t.db_id, t.xml_value '.
             'from compliances t '.
-                'join (select id from compliances where (type_id = 4) order by id limit {start}, {end}) t1 using (id) '.
+//                'join (select id from compliances where (type_id = 4) order by id limit {start}, {end}) t1 using (id) '.
                 'join _change_authors tCA on (tCA.id = t.db_id) '.
+            'where (t.type_id = 4) '.
         '';
-        $step = 0;
-        while (($items = $this->_query(str_replace(array('{start}', '{end}'), array($step*$this->_counts, $this->_counts), $sqlItems)))&&($items->count() > 0)) {
-            $step++;
+        $items = $this->_query($sqlItems);
+        if ($items->count() > 0) {
             foreach ($items as $item) {
                 $name = array();
                 $words = preg_split("/\W/ui", $item['xml_value']);

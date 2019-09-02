@@ -21,7 +21,7 @@ $ctrl = Yii::app()->getController()->id;
 			
 <div class="container cabinet">
 			
-			<div class="row">
+			<div class="row" style="margin-left: 0">
 
 			<div class=" <? if ($ctrl != 'cart') : ?>span10<? else : ?><? endif; ?>">
 			
@@ -292,10 +292,9 @@ $ctrl = Yii::app()->getController()->id;
 		</div>
     
     <div class="more_goods" style="overflow: hidden">
-    <ul class="books">
+    <ul class="books basket">
     <?php
-
-	foreach ($groups as $k) : 
+	foreach ($groups as $k) :
 	
 	if ($k['entity'] == '') { $k['entity'] = 10; }
 	
@@ -304,12 +303,11 @@ $ctrl = Yii::app()->getController()->id;
 	<?php
 	
 	$product = Product::GetProduct($k['entity'], $k['id']);
-	$url = ProductHelper::CreateUrl($product);
+	$url = ProductHelper::CreateUrl($product); ?>
 	
 	
-	echo  '<li>
-        
-    <div class="img" style="min-height: 130px; position: relative">';
+	<li>
+    <div class="img" style="min-height: 130px; position: relative"><?php
         $this->renderStatusLables($product['status']);
     echo '<a href="'.$url.'" title="'.htmlspecialchars(ProductHelper::GetTitle($product, 'title', 42)).'" target="_blank">';
         $photoTable = Entity::GetEntitiesList()[$product['entity']]['photo_table'];
@@ -345,6 +343,9 @@ $ctrl = Yii::app()->getController()->id;
 			echo '<div>'.$ui->item('A_NEW_YEAR') . ': ' . $product['year'].'</div>';
 			
 		}
+        else {
+        echo '<div style="visibility: hidden;">YEAR</div>';
+        }
 		
 		if ($product['binding_id']) {
 		
@@ -352,7 +353,10 @@ $ctrl = Yii::app()->getController()->id;
 		echo $row['title_' . Yii::app()->language];	
 		
 		}
-		
+        else {
+        echo '<div style="visibility: hidden;">binding</div>';
+        }
+
 		$price = DiscountManager::GetPrice(Yii::app()->user->id, $product);
 		echo '
         
@@ -381,7 +385,7 @@ $ctrl = Yii::app()->getController()->id;
 
 					
 					
-		<?php endforeach; ?>			
+		<?php endforeach; ?>
 </ul>
 </div>
 
