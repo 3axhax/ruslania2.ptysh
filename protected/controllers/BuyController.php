@@ -280,6 +280,7 @@ class BuyController extends MyController {
 	}
 
 	function actionOrderAdd() {
+		$startTime = microtime(true);
 		$ret = array();
 		$cart = Cart::model();
 		$items = $cart->GetCart($this->uid, $this->sid);
@@ -365,16 +366,15 @@ class BuyController extends MyController {
 				$o = new Order;
 				$o->setPromocode(Yii::app()->getRequest()->getParam('promocode'), Yii::app()->getRequest()->getParam('certificate'));
 				$id = $o->CreateNewOrder($userId, $this->sid, $order, $orderItems, Yii::app()->getRequest()->getParam('ptype'));
-				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
-
-				$this->_log(array('type'=>'order_add', 'id'=>$id, 'data'=>serialize($_POST)));
-
 				Yii::app()->user->setFlash('order', Yii::app()->ui->item('ORDER_MSG_DONE'));
 				$cookieOrderId = new CHttpCookie('lastOrderId', $id);
 				$cookieOrderId->expire = time() + 300;
 				Yii::app()->getRequest()->cookies['lastOrderId'] = $cookieOrderId;
+				$this->_mailOrder($id, $cart->BeautifyCart($items, $this->uid));
 				$orderBaseData = $o->GetOrder($id);
 				$ret = $this->_paySystemResult($orderBaseData, (int) Yii::app()->getRequest()->getParam('ptype'));
+				$resulTime = microtime(true) - $startTime;
+				$this->_log(array('type'=>'order_add', 'id'=>$id, 'data'=>serialize(array('formData'=>$_POST, 'resultTime'=>number_format($resulTime, 4).' сек', 'result'=>$ret))));
 			}
 		}
 		$this->ResponseJson($ret);
