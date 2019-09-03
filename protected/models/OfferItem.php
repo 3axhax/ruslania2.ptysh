@@ -16,15 +16,20 @@ class OfferItem extends CMyActiveRecord
         $criteria = new CDbCriteria();
         if ((int)$eid > 0) $criteria->condition = '(t.offer_id = :oid) and (t.entity_id = :eid)';
         else $criteria->condition = '(t.offer_id = :oid)';
-        $criteria->order = 't.group_order asc, t.sort_order asc';
         if ((int)$eid > 0) $criteria->params = array(':oid'=>$oid, ':eid'=>$eid);
         else $criteria->params = array(':oid'=>$oid);
-
         $cnt = $this->count($criteria);
 
-        $paginator = new CPagination($cnt);
-        $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
-        $paginator->applyLimit($criteria);
+        if (Yii::app()->getRequest()->getParam('all')) {
+            $criteria->order = 'rand()';
+            $paginator = null;
+        }
+        else {
+            $criteria->order = 't.group_order asc, t.sort_order asc';
+            $paginator = new CPagination($cnt);
+            $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
+            $paginator->applyLimit($criteria);
+        }
 
         $rows = $this->findAll($criteria);
         $items = array();

@@ -343,13 +343,13 @@ class Address extends CActiveRecord
 
     public function NotifyIfAddressChanged($uid, $oldID, $newAddress)
     {
-        $sql = 'SELECT COUNT(*) AS cnt
+        /*$sql = 'SELECT COUNT(*) AS cnt
  FROM users_orders AS uo
  JOIN users_orders_items AS uoi ON uo.id=uoi.oid
  WHERE uo.uid=:uid AND uoi.entity=:entity';
 
         $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array(':uid' => $uid, ':entity' => Entity::PERIODIC));
-        if($cnt == 0) return;
+        if($cnt == 0) return;*/
 
 
         $allAddresses = $this->GetAddresses($uid);
