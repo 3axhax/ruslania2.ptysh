@@ -4,7 +4,7 @@ $photoTable = Entity::GetEntitiesList()[$item['entity']]['photo_table'];
 $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
 /**@var $photoModel ModelsPhotos*/
 $photoModel = $modelName::model();
-$photoId = $photoModel->getFirstId($item['id']);
+$photoId = empty($item['idPhoto'])?$photoModel->getFirstId($item['id']):$item['idPhoto'];
 ?>
 <div class="img" style="position: relative">
 	<?php Yii::app()->getController()->renderStatusLables($item['status'], $size = '-sm', true)?>

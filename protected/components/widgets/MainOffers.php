@@ -44,12 +44,12 @@ class MainOffers extends CWidget {
 
 
 	private function _getProducts() {
-//		$of = OfferItem::model();
-//		$groups = $of->forSliderAllData(Offer::INDEX_PAGE);
+		$of = OfferItem::model();
+		$groups = $of->forSliderAllData(Offer::INDEX_PAGE);
 //		Debug::staticRun(array($groups));
 		/**@var $o Offer*/
-		$o = Offer::model();
-		$groups = $o->GetItems(Offer::INDEX_PAGE);
+//		$o = Offer::model();
+//		$groups = $o->GetItems(Offer::INDEX_PAGE);
 		return $groups;
 	}
 

@@ -116,29 +116,24 @@ order by tAll.rand
     }
 
     function forSliderAllData($oid) {
-        $subquery = array();
-        foreach (Entity::GetEntitiesList() as $eid=>$params) {
-            $subquery[] = ''.
-                'select t.item_id, ' . $eid . ' eid, rand() rand, tI.id idItem, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
+        $entitys = $this->getEntitys($oid);
+        $items = array();
+        foreach ($entitys as $eid) {
+            $params = Entity::GetEntitiesList()[$eid];
+            $subquery = ''.
+                'select t.item_id id, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
                 'from offer_items t '.
                     'left join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
-                'where (t.offer_id = ' . (int) $oid . ') and (t.entity_id = ' . $eid . ')' .
+                'where (t.offer_id = ' . (int) $oid . ') and (t.entity_id = ' . $eid . ') ' .
+                'having (idPhoto > 0) '.
+                'limit 30 '.
             '';
+            foreach (Yii::app()->db->createCommand($subquery)->queryAll() as $item) {
+                if (empty($items[$eid])) $items[$eid] = array();
+                $item['entity'] = $eid;
+                $items[$eid][$item['id']] = $item;
+            }
         }
-        $sql = ''.
-            'select tAll.item_id id, tAll.eid entity, tAll.idPhoto '.
-            'from (' . implode(' union ', $subquery) . ') tAll '.
-            'where (tAll.idItem is not null) and (tAll.idPhoto is not null) and (tAll.idPhoto > 0) '.
-            'order by tAll.rand '.
-            'limit 15 '.
-        '';
-        $rows = Yii::app()->db->createCommand($sql)->queryAll();
-        $items = array();
-        foreach($rows as $row) {
-            if (empty($items[$row['entity']])) $items[$row['entity']] = array();
-            $items[$row['entity']][$row['id']] = $row;
-        }
-
         $p = new Product();
         $fullInfo = array();
         foreach($items as $entity=>$ids) {
