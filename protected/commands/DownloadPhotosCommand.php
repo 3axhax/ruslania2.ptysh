@@ -2,7 +2,7 @@
 ini_set('max_execution_time', 99600);
 /** /usr/bin/php /var/www/www-root/data/ruslania2.ptysh.ru/command.php downloadphotos
  * закачка картинок с других сайтов
- * Class MorphyCommand
+ * Class DownloadPhotosCommand
  */
 
 define('cronAction', 1);

@@ -250,8 +250,8 @@ class ModelsPhotos extends CActiveRecord {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
 		curl_setopt($ch, CURLOPT_HEADER, false); //не записывать в файл заголовки
-		curl_setopt($ch, CURLOPT_TIMEOUT, 5);//Максимально позволенное количество секунд для выполнения cURL-функций.
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);//Количество секунд ожидания при попытке соединения. Используйте 0 для бесконечного ожидания.
+		curl_setopt($ch, CURLOPT_TIMEOUT, 60);//Максимально позволенное количество секунд для выполнения cURL-функций.
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);//Количество секунд ожидания при попытке соединения. Используйте 0 для бесконечного ожидания.
 		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);//следовать за редиректами
 		curl_setopt($ch, CURLOPT_MAXREDIRS, 3);//3 редиректа - максимум
 		curl_setopt($ch, CURLOPT_FILE, $fp);//записываем в файл

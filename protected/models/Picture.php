@@ -7,7 +7,7 @@ class Picture
 
     public static function Get($item, $type)
     {
-        if(empty($item['image'])) return '/pic1/nophoto.gif';
+        /*if(empty($item['image'])) */return '/pic1/nophoto.gif';
         $ret = '/pictures/'.(($type == self::BIG) ? 'big' : 'small').'/'.$item['image'];
 //        $ret = '/pictures/small/'.$item['image'];
         return Yii::app()->params['PicDomain'].$ret;

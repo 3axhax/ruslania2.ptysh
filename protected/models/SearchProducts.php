@@ -1070,6 +1070,7 @@ class SearchProducts {
 
 		list($searchWords, $realWords, $useRealWord) = $this->getNormalizedWords($q);
 		list($tables, $condition, $order, $option) = $this->getSqlParam($searchWords, $realWords, $useRealWord, $eid, true);
+		unset($condition['weight']);
 		$sql = ''.
 			'SELECT real_id, weight, position, time_position '.
 			'FROM ' . implode(', ', $tables) . ' '.

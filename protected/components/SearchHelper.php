@@ -646,7 +646,7 @@ class SearchHelper
             $searchModel->savePhrase($title);
             $spxSql = $searchModel->getBooleanSql($title, $e);
             if (empty($spxSql)) return array('Items' => array(), 'Paginator' => new CPagination(0));
-            $join['tSpx'] = 'join (' . $spxSql . ') tSpx on (tSpx.real_id = t.id)';
+            $join['tSpx'] = 'join (' . $spxSql . ') tSpx on (tSpx.real_id = t.id) and (tSpx.weight > 0)';
             if (!empty($only)) {
                 $order = 'order by tSpx.weight desc, tSpx.position, tSpx.time_position';;
             }
