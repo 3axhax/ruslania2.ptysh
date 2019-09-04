@@ -10,12 +10,10 @@ $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_
 $photoModel = $modelName::model();
 $photoId = $photoModel->getFirstId($item['id']);
 
-$url = ProductHelper::CreateUrl($item);
-$urlPicture = ProductHelper::Link2Picture($item, true);
-if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/')): ?>
+$url = ProductHelper::CreateUrl($item); ?>
 				<a href="<?= $url ?>">
 					<?php if (empty($photoId)): ?>
-						<img style="max-width: 100%;max-height:86px;" src="<?= $urlPicture ?>" />
+						<img style="max-width: 100%;max-height:86px;" src="<?= Picture::srcNoPhoto() ?>" />
 					<?php elseif ($photoModel->isExternal($photoId)): ?>
 						<img style="max-width: 100%;max-height:86px;" src="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>">
 					<?php else: ?>
@@ -26,7 +24,6 @@ if (!empty($urlPicture)&&($urlPicture != 'http://ruslania.com/pictures/small/'))
 						</picture>
 					<?php endif; ?>
 				</a>
-<?php endif; ?>
 			</td>
 			<td class="name">
 				<a href="<?= $url ?>"><?= ProductHelper::GetTitle($item) ?></a>
