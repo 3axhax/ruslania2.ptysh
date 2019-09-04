@@ -1180,7 +1180,7 @@ class SearchProducts {
 		$sql = ''.
 			'select entity, real_id '.
 			'from wrong_isbn ' .
-			'where match(' . SphinxQL::getDriver()->mest($q) . ') '.
+			'where match(' . SphinxQL::getDriver()->mest(str_replace(array('-', 'x'), array('',''), $q)) . ') '.
 			'option ranker=none '.
 		'';
 		$find = SphinxQL::getDriver()->multiSelect($sql);
