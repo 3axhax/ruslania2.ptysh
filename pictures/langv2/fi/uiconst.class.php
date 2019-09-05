@@ -1217,8 +1217,8 @@ Klikkaa sinua kiinnostavan osaston kohdalla ja pääset suoraan selaamaan alennu
   'HEADER_PAYTYPE13' => 'Ennakkomaksu Ruslanian suomalaiselle pankkitilille.',
   'HEADER_PAYTYPE14' => 'Ennakkomaksu Ruslanian venäläiselle  pankkitilille.',
   'HEADER_PAYTYPE999' => 'Оплата в магазине',
-  'DESC_PAYTRAIL' => 'Pankki- ja luottokortit sekä suomalaiset pankit',
-  'DESC_PAYPAL' => 'Оплата с помощью карт VISA или MASTERCARD',
+  'DESC_PAYTRAIL' => 'Pankki- ja luottokortit sekä suomalaiset pankit. Hinnat USD-dollareissa ja GBP-punnissa ovat arvioita. Pankkisi veloittaa summan valitsemansa valuutanvaihtokurssin mukaan.',
+  'DESC_PAYPAL' => 'Kaikki valuutat. Tarkka summa euroissa €, dollareissa USD $ tai punnissa GBP £. Muut valuutat PayPalin valuuttakurssin mukaan. Maksu PayPal-tilisi varoista tai veloittaen tiliin linkitettyä Visaa, MasterCardia, Discoveria tai American Expressiä.',
 
     'DESC_ALIPAY' => 'Please follow the instructions on the image. After you have submitted the payment, please send an e-mail "order N%d has been paid via Alipay" to <a href="mailto:orders@ruslania.com">orders@ruslania.com</a>',
 //    'DESC_ALIPAY' => 'Payment with Alipay. Please send an e-mail stating that <order number %s had been paid via Alipay> to orders@ruslania.com',

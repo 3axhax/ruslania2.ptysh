@@ -35,7 +35,8 @@
 		<?= $ui->item('DESC_PAYPAL') ?>
 	</div>
 <label class="selp span3">
-	<img src="/images/pp.jpg" width="150" />
+	<img style="margin-top: -20px;" src="/images/pp.jpg" width="150" />
+	<div style="margin-top: 5px;">EUR, USD, GBP etc.</div>
 	<div class="red_checkbox">
 		<input type="radio" value="8" name="ptype" class="checkbox_custom" />
 		<span class="checkbox-custom"></span>
