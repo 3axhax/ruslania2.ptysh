@@ -123,9 +123,10 @@ order by tAll.rand
             $subquery = ''.
                 'select t.item_id id, (select id from ' . $params['photo_table'] . ' where (iid = t.item_id) and (is_upload = 1) and (position = 1) limit 1) idPhoto '.
                 'from offer_items t '.
-                    'left join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
+                    'join ' . $params['site_table'] . ' tI on (tI.id = t.item_id) and (tI.avail_for_order = 1) '.
                 'where (t.offer_id = ' . (int) $oid . ') and (t.entity_id = ' . $eid . ') ' .
                 'having (idPhoto > 0) '.
+                'order by t.sort_order asc '.
                 'limit 30 '.
             '';
             foreach (Yii::app()->db->createCommand($subquery)->queryAll() as $item) {

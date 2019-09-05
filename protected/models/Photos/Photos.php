@@ -37,7 +37,10 @@ class ModelsPhotos extends CActiveRecord {
 		if ($ean != '') $path .= $ean . '_';
 		$path .= $label;
 		switch ($ext) {
-			case 'jpg':case 'webp': $path .= '.' . $ext; break;
+			case 'jpg':case 'webp':
+				$ext = 'jpg';
+				$path .= '.' . $ext;
+			break;
 //			case '': break;
 			default: return '/';
 		}

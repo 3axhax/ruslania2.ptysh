@@ -24,7 +24,7 @@ class MainOffers extends CWidget {
 		$file = Yii::getPathOfAlias('webroot') . '/protected/runtime/fileCache/mainoffers_' . Yii::app()->language . '.html.php';
 		if (file_exists($file)) {
 			//храним 1 час
-			if (filectime($file) < (time() - 3600)) unlink($file);
+			if ((filectime($file) < (time() - 3600))||isset($_GET['ha'])) unlink($file);
 		}
 
 		if (!file_exists($file)) {
