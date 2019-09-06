@@ -1059,7 +1059,6 @@ class SearchProducts {
 			'option ' . implode(', ', $option) . ' '.
 		'';
 		$find = SphinxQL::getDriver()->multiSelect($sql);
-		Debug::staticRun(array($sql, $find));
 		if (empty($find)) return array();
 
 		return $this->_prepareProducts($find);
@@ -1076,7 +1075,6 @@ class SearchProducts {
 			'FROM ' . implode(', ', $tables) . ' '.
 			'where (query=' . SphinxQL::getDriver()->mest(implode(';', $condition)) . ') '.
 		'';
-		Debug::staticRun(array($sql));
 		return $sql;
 	}
 
@@ -1121,7 +1119,6 @@ class SearchProducts {
 	}
 
 	function getBooleanByCode($code, $q) {
-		Debug::staticRun(array($code, $q));
 		foreach ($code as $codeName) {
 			switch ($codeName) {
 				case 'catalogue':
