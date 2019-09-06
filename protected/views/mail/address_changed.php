@@ -1,18 +1,25 @@
 <p>Пользователь сайта с ID: <?=$uid; ?> сменил адрес.</p>
 <p>Старый адрес:</p>
 <p>
-<?=$old['receiver_first_name']; ?> <?=$old['receiver_last_name']; ?><br/>
-<?=$old['streetaddress']; ?><br/>
-<?=$old['postindex']; ?> <?=$old['city']; ?> <br/>
-<?=$old['country_name']; ?>
+<?php foreach ($old as $kName=>$v):
+    switch ($kName):
+        case 'type': ?><?= $kName ?>: <b><?= ($v == 1)?'Организация':'Частное лицо' ?></b><br/><?php break;
+        case 'country': case 'state_id': case 'beta_id': case 'is_unloaded': break;
+        default: ?><?= $kName ?>: <b><?= $v?:'N/A' ?></b><br/><?php break;
+    endswitch;
+endforeach; ?>
 </p>
 
 <p>Новый адрес:</p>
 <p>
-<?=$new['receiver_first_name']; ?> <?=$new['receiver_last_name']; ?><br/>
-<?=$new['streetaddress']; ?><br/>
-<?=$new['postindex']; ?> <?=$new['city'];?><br/>
-<?=$new['country_name']; ?>
+<?php foreach ($old as $kName=>$v):
+    $v = $new[$kName];
+    switch ($kName):
+        case 'type': ?><?= $kName ?>: <b><?= ($v == 1)?'Организация':'Частное лицо' ?></b><br/><?php break;
+        case 'country': case 'state_id': case 'beta_id': case 'is_unloaded': break;
+        default: ?><?= $kName ?>: <b><?= $v?:'N/A' ?></b><br/><?php
+    endswitch;
+endforeach; ?>
 </p>
 
 <?php if(count($all) > 1) : ?>

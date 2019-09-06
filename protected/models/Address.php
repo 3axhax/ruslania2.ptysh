@@ -359,8 +359,29 @@ class Address extends CActiveRecord
         $old = $oldAddress->attributes;
         $oldCountry = Country::GetCountryById($oldAddress['country']);
         $old['country_name'] = $oldCountry['title_en'];
+        $old['Shtat'] = 'N/A';
+        if (!empty($old['state_id'])) {
+            $states = Country::GetStatesList($old['country']);
+            foreach ($states as $state) {
+                if ($state['id'] == $old['state_id']) {
+                    $old['Shtat'] = $state['title_long'];
+                    break;
+                }
+            }
+        }
         $newCountry = Country::GetCountryById($newAddress['country']);
         $newAddress['country_name'] = $newCountry['title_en'];
+        $newAddress['Shtat'] = 'N/A';
+        if (!empty($newAddress['state_id'])) {
+            $states = Country::GetStatesList($newAddress['country']);
+            foreach ($states as $state) {
+                if ($state['id'] == $newAddress['state_id']) {
+                    $newAddress['Shtat'] = $state['title_long'];
+                    break;
+                }
+            }
+        }
+
 
         $message = new YiiMailMessage('Ruslania: Address changed');
         $message->view = 'address_changed';
@@ -373,6 +394,7 @@ class Address extends CActiveRecord
         $toEmail = 'periodicals@ruslania.com';
 //        $toEmail = 'andreasagopov@hotmail.com';
         $message->addTo($toEmail);
+//        $message->addTo('rkv@dfaktor.ru');
         $message->from = $toEmail;
         Yii::app()->mail->transportType = 'smtp';
         Yii::app()->mail->transportOptions = array(
