@@ -114,7 +114,7 @@ class SphinxProducts extends SearchProducts {
 						'from music_catalog ' .
 						'where (catalogue = ' . SphinxQL::getDriver()->mest($q) . ') '.
 						'option ranker=none '.
-						'';
+					'';
 					$find = SphinxQL::getDriver()->multiSelect($sql);
 
 					$sql = ''.
@@ -122,7 +122,7 @@ class SphinxProducts extends SearchProducts {
 						'from pereodics_catalog ' .
 						'where (issn = ' . SphinxQL::getDriver()->mest($q) . ') '.
 						'option ranker=none '.
-						'';
+					'';
 					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
 
 					$sql = ''.
@@ -130,7 +130,7 @@ class SphinxProducts extends SearchProducts {
 						'from pereodics_catalog ' .
 						'where (index = ' . SphinxQL::getDriver()->mest($q) . ') '.
 						'option ranker=none '.
-						'';
+					'';
 					$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
 					if (!empty($find)) return $this->_prepareProducts($find);
 					break;
@@ -142,11 +142,24 @@ class SphinxProducts extends SearchProducts {
 							'from books_catalog, pereodics_catalog, printed_catalog, music_catalog, musicsheets_catalog, video_catalog, maps_catalog, soft_catalog ' .
 							'where (' . $codeName . ' = ' . $num[1] . ') and (entity = ' . $num[0] . ') '.
 							'option ranker=none '.
-							'';
+						'';
 						$find = SphinxQL::getDriver()->multiSelect($sql);
 						if (!empty($find)) return $this->_prepareProducts($find);
 					}
 					break;
+				case 'eancode': case 'isbnnum':
+					$qCode = preg_replace("/\D/iu", '', $q);
+					if (!empty($qCode)) {
+						$sql = ''.
+							'select entity, real_id '.
+							'from books_catalog, pereodics_catalog, printed_catalog, music_catalog, musicsheets_catalog, video_catalog, maps_catalog, soft_catalog ' .
+							'where (' . $codeName . ' = ' . $qCode . ') '.
+							'option ranker=none '.
+						'';
+						$find = SphinxQL::getDriver()->multiSelect($sql);
+//						if (!empty($find)) return $this->_prepareProducts($find); закоментировал, что бы искать еще в wrong_isbn
+					}
+					break 2;
 				default:
 					$qCode = preg_replace("/\D/iu", '', $q);
 					if (!empty($qCode)) {
@@ -155,20 +168,21 @@ class SphinxProducts extends SearchProducts {
 							'from books_catalog, pereodics_catalog, printed_catalog, music_catalog, musicsheets_catalog, video_catalog, maps_catalog, soft_catalog ' .
 							'where (' . $codeName . ' = ' . $qCode . ') '.
 							'option ranker=none '.
-							'';
+						'';
 						$find = SphinxQL::getDriver()->multiSelect($sql);
 						if (!empty($find)) return $this->_prepareProducts($find);
 					}
 					break;
 			}
 		}
+		if (empty($find)) $find = array();
 		$sql = ''.
 			'select entity, real_id '.
 			'from wrong_isbn ' .
-			'where match(' . SphinxQL::getDriver()->mest($q) . ') '.
+			'where match(' . SphinxQL::getDriver()->mest(str_replace(array('-', 'x'), array('',''), $q)) . ') '.
 			'option ranker=none '.
-			'';
-		$find = SphinxQL::getDriver()->multiSelect($sql);
+		'';
+		$find = array_merge($find, SphinxQL::getDriver()->multiSelect($sql));
 		if (!empty($find)) return $this->_prepareProducts($find);
 		return array();
 	}

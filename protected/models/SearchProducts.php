@@ -1121,6 +1121,7 @@ class SearchProducts {
 	}
 
 	function getBooleanByCode($code, $q) {
+		Debug::staticRun(array($code, $q));
 		foreach ($code as $codeName) {
 			switch ($codeName) {
 				case 'catalogue':
