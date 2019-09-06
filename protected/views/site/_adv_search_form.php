@@ -100,7 +100,7 @@
         </tr>
         <tr data-bind="visible: Entity()!=<?=Entity::PERIODIC?>">
             <td><?= $ui->item('A_NEW_SEARCH_AVAIL'); ?>:</td>
-            <td class="red_checkbox" onclick="check_search($(this));" style="height: 42px;">
+            <td class="red_checkbox" onclick="check_search($(this));" style="height: 42px;" data-bind="click: $root.changeCategory">
                 <span class="checkbox">
                     <span class="check<?= $only?' active':'' ?>"></span>
                 </span>
@@ -126,17 +126,13 @@
         self.CID = ko.observable();
         self.LANG = ko.observable();
         self.FirstLoad = ko.observable(false);
+        self.only = document.getElementById('only');
 
         self.Entity.subscribe(function (e) {
             if (e > 0) {
                 self.Categories.removeAll();
                 self.CID(0);
-                $.getJSON('<?= Yii::app()->createUrl('site/categorylistjson') ?>', { e: e }, function (json) {
-                    ko.mapping.fromJS(json, {}, self.Categories);
-                    if (firstTime && <?=$cid; ?> > 0 && e == <?=$e; ?>) self.CID(<?=$cid; ?>);
-                    else self.changeLangs(e, self.CID());
-                    firstTime = false;
-                });
+                self.changeCategory();
             }
         });
 
@@ -150,6 +146,20 @@
         self.CID.subscribe(function (cid) {
             if (cid > 0) self.changeLangs(self.Entity(), cid);
         });
+
+        self.changeCategory = function () {
+            var only = self.only.value;
+            var e = self.Entity();
+            if (e == <?= Entity::PERIODIC ?>) only = 0;
+            if (only == "") only = 0;
+
+            $.getJSON('<?= Yii::app()->createUrl('site/categorylistjson') ?>', { e: e, only: only }, function (json) {
+                ko.mapping.fromJS(json, {}, self.Categories);
+                if (firstTime && <?=$cid; ?> > 0 && e == <?=$e; ?>) self.CID(<?=$cid; ?>);
+                else self.changeLangs(e, self.CID());
+                firstTime = false;
+            });
+        };
 
         self.changeLangs = function(eid, cid) {
             self.Langs.removeAll();

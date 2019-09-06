@@ -1361,8 +1361,10 @@ class SiteController extends MyController {
     public function actioncategorylistjson($e) {
         $entity = (Entity::IsValid($e)) ? $e : Entity::BOOKS;
 
+        $avail = (bool)Yii::app()->getRequest()->getParam('only');
+
         $c = new Category();
-        $tree = $c->GetCategoriesTree($entity);
+        $tree = $c->GetCategoriesTree($entity, $avail);
         $ret = array();
         $this->formatTree($tree, 0, $ret);
         $this->ResponseJson($ret);
