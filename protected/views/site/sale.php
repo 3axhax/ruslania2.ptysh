@@ -36,22 +36,30 @@ if ($serGoods) {
                     <div><?=$ui->item('A_NEW_SALE_PAGE_DESC')?></div>
                 </div>
             </div>
-<?php /*
+
+            <?php /*
         <h1><?=$ui->item('A_NEW_SALE_H1')?><br><?=$ui->item('A_NEW_SALE_COUNT')?></h1>
 		<?=$ui->item('A_NEW_SALE_PAGE_TITLE')?><br><?=$ui->item('A_NEW_SALE_PAGE_DESC')?>
                 <br /><br /> */?>
                 <?php
-                if ($items) {
-                    foreach ($items as $row) {
-                        if (count($row['items']) == 0) {
-                            continue;
-                        }
-
-
-                        $this->renderPartial('/entity/_sale_item', array('items' => $row['items'], 'entity' => $row['Entity'], 'title' => $row['name'], 'link' => $row['url']));
-
+            if (!empty($items)) {
+                $i = 0;
+                if (count($items) > 1): ?>
+                    <div class="tab-container" style="margin-top: 40px;"><?php foreach ($items as $eid=>$row): ?>
+                            <div><a href="<?= $row['url'] ?>"><?= Entity::GetTitle($eid) ?></a></div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="clearBoth"></div>
+                <?php else: $i = 1; ?>
+                <?php endif;
+                foreach ($items as $row) {
+                    if (count($row['items']) == 0) {
+                        continue;
                     }
+                    $this->renderPartial('/entity/_sale_item', array('items' => $row['items'], 'entity' => $row['Entity'], 'title' => $row['name'], 'link' => $row['url'], 'i'=>$i));
+                    $i++;
                 }
+            }
                 ?>
                 
     </div>

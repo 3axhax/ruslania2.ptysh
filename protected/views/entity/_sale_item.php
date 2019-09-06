@@ -1,4 +1,4 @@
-<div class="news_box nb<?= $entity ?> sale_item">
+<div class="news_box nb<?= $entity ?> sale_item"<?php if (isset($i)&&empty($i)): ?> style="margin-top: 40px;" <?php endif; ?>>
     <div class="container">
         <div class="title">
             <a href="<?=$link?>" style="color: #1257ab; font-size: 16px; font-weight: bold"><?= $title?></a></span>
