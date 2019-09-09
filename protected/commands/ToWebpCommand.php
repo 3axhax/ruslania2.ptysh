@@ -17,7 +17,7 @@ class ToWebpCommand extends CConsoleCommand {
 		foreach (Entity::GetEntitiesList() as $entity=>$params) {
 			if ($entity != 10) continue;
 
-			$sql = 'create table if not exists _no_photo_1 like _no_photo';
+			$sql = 'truncate _no_photo';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'create table if not exists _tmp_' . $params['photo_table'] . ' (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
@@ -26,20 +26,12 @@ class ToWebpCommand extends CConsoleCommand {
 			$sql = 'truncate _tmp_' . $params['photo_table'];
 			Yii::app()->db->createCommand($sql)->execute();
 
-/*			$sql = ''.
-				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
-				'select t.id, t.eancode, t.image '.
-				'from ' . $params['site_table'] . ' t '.
-				'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
-				'where (tF.iid is null) '.
-			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();*/
-
 			$sql = ''.
 				'insert into _tmp_' . $params['photo_table'] . ' (id, eancode, image) '.
 				'select t.id, t.eancode, t.image '.
 				'from ' . $params['site_table'] . ' t '.
-					'join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) and (tF.is_upload = 2) '.
+					'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
+				'where (tF.iid is null) or (tF.is_upload = 2) '.
 			'';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 //			exit;
@@ -83,7 +75,7 @@ class ToWebpCommand extends CConsoleCommand {
 							}
 							$model->setAttribute('is_upload', 2);
 							$model->update();
-							$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
+							$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
 							Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
 						}
 						elseif (!empty($item['id_foto'])) {
@@ -102,7 +94,7 @@ class ToWebpCommand extends CConsoleCommand {
 							if (empty($item['is_upload'])||($item['is_upload'] == 1)) continue;
 							$model->setIsNewRecord(false);
 						}
-						$sql = 'insert ignore into _no_photo_1 (eid, id, ean) values (:eid, :id, :ean)';
+						$sql = 'insert ignore into _no_photo (eid, id, ean) values (:eid, :id, :ean)';
 						Yii::app()->db->createCommand($sql)->execute(array(':eid'=>$entity, ':id'=>$item['id'], ':ean'=>$item['eancode']));
 					}
 //					echo $model->id . ' ' . $item['image'] . "\n\r";

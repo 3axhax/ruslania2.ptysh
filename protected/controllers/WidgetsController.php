@@ -201,7 +201,7 @@ class WidgetsController extends MyController {
 //				var_dump($src);
 			}
 		}
-		$this->renderPartial('photo', array('src'=>$src, 'options'=>$options));
+		$this->renderPartial('photo', array('src'=>$src, 'options'=>$options, 'noCopyPhotoRM'=>(int)Yii::app()->getRequest()->getParam('noCopyPhotoRM', 1)));
 	}
 
 }

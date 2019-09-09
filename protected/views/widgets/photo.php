@@ -237,6 +237,7 @@
     }());
     $(document).ready(function() {
         img().init(<?= json_encode($options) ?>);
+        <?php if (!empty($noCopyPhotoRM)): ?>alert('Не удалось загрузить картинку в "Солнышко". Закачайте картинку в "Солнышко"!!!');<?php endif; ?>
     });
 </script>
 </body>
