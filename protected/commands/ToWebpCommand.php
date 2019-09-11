@@ -20,7 +20,7 @@ class ToWebpCommand extends CConsoleCommand {
 			$sql = 'truncate _no_photo';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
-			$sql = 'create table if not exists _tmp_' . $params['photo_table'] . ' (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
+/*			$sql = 'create table if not exists _tmp_' . $params['photo_table'] . ' (`id` int, `eancode` varchar(100), `image` varchar(100), key(id)) engine=myisam';
 			Yii::app()->db->createCommand()->setText($sql)->execute();
 
 			$sql = 'truncate _tmp_' . $params['photo_table'];
@@ -33,8 +33,22 @@ class ToWebpCommand extends CConsoleCommand {
 					'left join ' . $params['photo_table'] . ' tF on (tF.iid = t.id) '.
 				'where (tF.iid is null) or (tF.is_upload = 2) '.
 			'';
-			Yii::app()->db->createCommand()->setText($sql)->execute();
-//			exit;
+			//Yii::app()->db->createCommand()->setText($sql)->execute();
+			foreach (file(dirname(__FILE__) . '/pictures.txt') as $row) {
+				$row = explode("\t", $row);
+				$sql = ''.
+					'insert ignore into _tmp_' . $params['photo_table'] . ' set '.
+					'id = ' . (int) $row[0] . ', '.
+					'eancode = "' . $row[1] . '", '.
+					'image = "' . $row[2] . '" '.
+				'';
+				Yii::app()->db->createCommand()->setText($sql)->execute();
+			}*/
+			/*$sql = ''.
+				'LOAD DATA INFILE "' . dirname(__FILE__) . '/pictures.txt" '.
+				'INTO TABLE _tmp_' . $params['photo_table'] . ' '.
+				'fields terminated by "\t" lines terminated by "\n" '.
+			'';*/
 
 			$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 			/**@var $model ModelsPhotos*/

@@ -13,7 +13,7 @@ foreach($groups as $group):
 		<div class="title">
 			<?= Yii::app()->ui->item("A_NEW_RECOMMENDATIONS_CATEGORY")?>:
 			<a href="<?= $eUrl; ?>" id="enity<?= $entity ?>"><span class="title__bold"><?= $eName; ?></span></a>
-			<div class="pult">
+			<div class="pult"<?php if (count($group['items']) < 6): ?> style="display: none;" <?php endif; ?>>
 				<a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_left.slick-arrow').click()" class="btn_left"><span class="fa"></span><?php /*<img src="/new_img/btn_left_news.png" alt=""/> */ ?></a>
 				<a href="javascript:;" onclick="$('.nb<?= $entity ?> .btn_right.slick-arrow').click()" class="btn_right"><span class="fa"></span><?php /*<img src="/new_img/btn_right_news.png" alt=""/> */ ?></a>
 			</div>

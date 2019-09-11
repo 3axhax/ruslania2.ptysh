@@ -32,6 +32,7 @@ class ClearPhotosCommand extends CConsoleCommand {
      * @param $tableCatalog
      */
     private function _clearTable($tablePhoto, $tableCatalog) {
+        return; //таблицу чистить нельзя потому, что есть товары, которых нет на сайте, но есть в базе mssql
         $sql = ''.
             'delete t '.
             'from ' . $tablePhoto . ' tF '.
