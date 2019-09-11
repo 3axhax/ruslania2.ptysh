@@ -1,4 +1,4 @@
-<?php /**Created by Êèðèëë kirill.ruh@gmail.com 11.09.2019 8:35 */ ?>
+<?php /**Created by ÐšÐ¸Ñ€Ð¸Ð»Ð» kirill.ruh@gmail.com 11.09.2019 8:35 */ ?>
 <?php
 $photoTable = Entity::GetEntitiesList()[$entity]['photo_table'];
 $modelName = mb_strtoupper(mb_substr($photoTable, 0, 1, 'utf-8'), 'utf-8') . mb_substr($photoTable, 1, null, 'utf-8');
