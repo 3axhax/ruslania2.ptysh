@@ -238,6 +238,26 @@ class ModelsPhotos extends CActiveRecord {
 		return $this->_photos;
 	}
 
+	function getPhotosByPhotoIds($photoIds) {
+		if (!empty($photoIds)) {
+			$sql = ''.
+				'select id, iid, href, is_upload '.
+				'from ' . $this->tableName() . ' '.
+				'where (id in (' . implode(',',$photoIds) . ')) '.
+				'order by iid, position '.
+			'';
+			foreach (Yii::app()->db->createCommand($sql)->queryAll() as $photo) {
+				if ($photo['is_upload'] > 1) continue;
+				if ($photo['is_upload'] == 0) {
+					if (empty($photo['href']))  continue;
+					$this->_externalPhotos[$photo['id']] = $photo['href'];
+				}
+				$this->_photos[$photo['iid']][] = $photo;
+			}
+		}
+		return $this->_photos;
+	}
+
 	function remove($idPhoto) {
 		$directory = $this->getUnixDir() . $this->getRelativePath($idPhoto);
 		$this->_removeDirWithFotos($directory);

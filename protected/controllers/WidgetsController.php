@@ -182,13 +182,14 @@ class WidgetsController extends MyController {
 			$sql = 'select eancode, image from ' . $params['site_table'] . ' where (id = :id) limit 1';
 			$row = Yii::app()->db->createCommand($sql)->queryRow(true, array(':id'=>$options['iid']));
 			if (!empty($row)) {
-				$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) and (is_upload = 1) order by position asc limit 1';
-				$idFoto = (int)Yii::app()->db->createCommand($sql)->queryScalar(array(':iid'=>$options['iid']));
+//				$sql = 'select id from ' . $params['photo_table'] . ' where (iid = :iid) order by position asc limit 1';
+//				$idFoto = (int)Yii::app()->db->createCommand($sql)->queryScalar(array(':iid'=>$options['iid']));
 
+				$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
+				/**@var $model ModelsPhotos*/
+				$model = $modelName::model();
+				$idFoto = $model->getFirstId($options['iid']);
 				if ($idFoto > 0) {
-					$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
-					/**@var $model ModelsPhotos*/
-					$model = $modelName::model();
 					$src = $model->getHrefPath($idFoto, Yii::app()->getRequest()->getParam('label', 'o'), '', 'jpg');
 				}
 				elseif(!empty($row['image'])) $src = Picture::Get($row, Picture::BIG);
@@ -197,8 +198,8 @@ class WidgetsController extends MyController {
 				$modelName = mb_strtoupper(mb_substr($params['photo_table'], 0, 1, 'utf-8'), 'utf-8') . mb_substr($params['photo_table'], 1, null, 'utf-8');
 				/**@var $model ModelsPhotos*/
 				$model = $modelName::model();
+				$photos = $model->getPhotosByPhotoIds(array($idPhoto));
 				$src = $model->getHrefPath($idPhoto, Yii::app()->getRequest()->getParam('label', 'o'), '', 'jpg');
-//				var_dump($src);
 			}
 		}
 		$this->renderPartial('photo', array('src'=>$src, 'options'=>$options, 'noCopyPhotoRM'=>(int)Yii::app()->getRequest()->getParam('noCopyPhotoRM', 1)));
