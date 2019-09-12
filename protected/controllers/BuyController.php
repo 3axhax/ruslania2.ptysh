@@ -21,7 +21,7 @@ class BuyController extends MyController {
 		return array(
 			array('allow',
 				'actions' => array('noregister','loadstates','checkpromocode','deliveryinfo','orderadd','loadsp',
-					'orderok','newaddr'),
+					'orderok','newaddr', 'log'),
 				'users' => array('*')
 			),
 //			array('allow',
@@ -687,5 +687,11 @@ class BuyController extends MyController {
 	private function _log($data) {
 		array_unshift($data, date('d.m.Y H:i:s'));
 		file_put_contents(Yii::getPathOfAlias('webroot') . '/test/order.log', implode("\t", $data) . "\n", FILE_APPEND);
+	}
+
+	function actionLog() {
+		var_dump($_POST);
+		/*if (Yii::app()->request->isPostRequest) */$this->_log($_POST);
+		Yii::app()->end();
 	}
 }

@@ -65,7 +65,7 @@ class ProductLang {
                 '';
 //                $langIds = Yii::app()->db->createCommand($sql)->queryColumn();
             }
-            $cacheKey = md5($sql);
+            $cacheKey = md5($sql . Yii::app()->getLanguage());
             self::$_langItems = Yii::app()->memcache->get($cacheKey);
             if (self::$_langItems === false) {
                 $langIds = Yii::app()->db->createCommand($sql)->queryColumn();

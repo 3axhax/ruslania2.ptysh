@@ -1,14 +1,18 @@
-Stripe.setPublishableKey('pk_test_B8MwXuaz10DDZVcF6QJQTki0');
+$(document).ready(function() {
+	
+	Stripe.setPublishableKey('pk_test_B8MwXuaz10DDZVcF6QJQTki0');
 
-Stripe.applePay.checkAvailability(function(available) {
-    if (available) {
-    }
-    else {
-        $('input[type=radio][name=ptype][value="27"]')
-            .attr("disabled", "disabled")
-            .closest('label')
-            .find('.not_supported').show();
-    }
+	Stripe.applePay.checkAvailability(function(available) {
+		if (available) {
+		}
+		else {
+			$('input[type=radio][name=ptype][value="27"]')
+				.attr("disabled", "disabled")
+				.closest('label')
+				.find('.not_supported').show();
+		}
+	});
+
 });
 
 (function() {
@@ -987,6 +991,13 @@ Stripe.applePay.checkAvailability(function(available) {
                         }
                         else {
                             searchTargets('start_order');
+                            var dataToLog = r;
+                            dataToLog[self.csrf[0]] = self.csrf[1];
+                            $.ajax({
+                                url: '/ru/buy/log/',
+                                data: dataToLog,
+                                type: 'post'
+                            });
                             switch (parseInt(fd['ptype'])) {
                                 case 8: self.paypal(r.form); break;
                                 //case 25: self.paytrail(r.form); break;
