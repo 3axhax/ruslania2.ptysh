@@ -22,7 +22,7 @@ class User extends CActiveRecord
             array('login', 'checkLatin'),
             array('login, pwd', 'required', 'on' => 'login'),
             array('login, pwd, pwd2, first_name, last_name', 'required', 'on' => 'register'),
-            array('login, pwd, pwd2', 'required', 'on' => 'newpwd'),
+            array('pwd, pwd2', 'required', 'on' => 'newpwd'),
             array('login', 'email', 'on' => 'register'),
             array('login', 'uniqueLogin', 'on' => 'register'),
             array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'register'),

@@ -14,7 +14,7 @@ class SiteController extends MyController {
             'actions' => array('update', 'error', 'index', 'categorylistjson', 'langslistjson', 'static','AllSearch','CheckEmail','callsend',
                 'redirect', 'test', 'sale', 'landingpage', 'mload', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
                 'login', 'forgot', 'register', 'logout', 'search', 'advsearch', 'gtfilter', 'ggfilter'/*, 'ourstore'*/, 'addcomments', 'loadhistorysubs',
-                'certificate', 'charges', 'closesite', 'password',
+                'certificate', 'charges', 'closesite', 'password', 'passwordok',
             ),
             'users' => array('*')),
             array('allow', 'actions' => array('AddAddress', 'EditAddress', 'GetDeliveryTypes', 'loaditemsauthors', 'loaditemsizda', 'loaditemsseria',
@@ -1198,13 +1198,25 @@ class SiteController extends MyController {
         $this->render('adv_search', array('items' => $data['Items'], 'paginatorInfo' => $data['Paginator']));
     }
 
+    function actionPasswordOk() {
+        $this->_checkUrl(array());
+        $txt = null;
+        $page = 'password_restore';
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage($page);
+        if (!empty($item)) $txt = $item['description_' . Yii::app()->language];
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
+
+        $this->render('password_ok', array('txt' => $txt, 'entity' => 'static', 'page'=>$page, 'isWordpanel'=>$isWordpanel));
+    }
+
     function actionPassword() {
         $this->_checkUrl(array());
         $this->breadcrumbs[] = Yii::app()->ui->item('FORGOT_PASS_PATH');
 
         $model = new User('newpwd');
         $this->PerformAjaxValidation($model, 'remind-form');
-        $user = null;
+/*        $user = null;
 
         if (Yii::app()->request->isPostRequest) {
             $model->attributes = $_POST['User'];
@@ -1214,11 +1226,16 @@ class SiteController extends MyController {
         else {
             $email = Yii::app()->getRequest()->getParam('email');
             $user = User::model()->findByAttributes(array('login' => $email));
-        }
+        }*/
+        $email = Yii::app()->getRequest()->getParam('email');
+        if (empty($email)) throw new CHttpException(404);
 
-        $urlCache = Yii::app()->getRequest()->getParam('token');
+        $user = User::model()->findByAttributes(array('login' => $email));
+        if (empty($user)) throw new CHttpException(404);
+
+        $urlCache = (string)Yii::app()->getRequest()->getParam('token');
         $cache = $user->getUrlCache($email, $user->pwd);
-//        if ($cache !== $urlCache) throw new CHttpException(404);
+        if ($cache !== $urlCache) throw new CHttpException(404);
 
         if (empty($user)) {
             $this->render('password', array('model' => $model, 'user' => $user, 'notFound' => true));
@@ -1230,8 +1247,12 @@ class SiteController extends MyController {
             return;
         }
 
-        if (Yii::app()->request->isPostRequest&&$model->validate()) {
-
+        if (Yii::app()->request->isPostRequest) {
+            $model->setAttributes(Yii::app()->getRequest()->getParam('User'));
+            if ($model->validate()) {
+                $user->updateByPk($user->id, array('pwd'=>$model->pwd));
+                $this->redirect(Yii::app()->createUrl('site/passwordok'), true, 301);
+            }
         }
 
         $this->render('password', array('model' => $model, 'user' => $user));
@@ -1274,15 +1295,6 @@ class SiteController extends MyController {
                     );
 //                }
                 $mailResult = Yii::app()->mail->send($message);
-                file_put_contents(Yii::getPathOfAlias('webroot') . '/test/mail.log', implode("\t",
-                        array(
-                            date('d.m.Y H:i:s'),
-                            $user->login,
-                            serialize($mailResult),
-                            $message->view,
-                        )
-                    ) . "\n", FILE_APPEND);
-
 /*                $message = new YiiMailMessage('Ruslania.com password');
                 $message->view = 'forgot';
                 $message->setBody($user->attributes, 'text/html');
@@ -1312,9 +1324,13 @@ class SiteController extends MyController {
                     return;
                 }
 
+                //$cache = $user->getUrlCache($email, $user->pwd);
+                $dataMail = $user->attributes;
+                $dataRestore = array('email'=>$user->login, 'token'=>$user->getUrlCache($user->login, $user->pwd));
+                $dataMail['urlRestore'] = Yii::app()->createUrl('site/password', $dataRestore);
                 $message = new YiiMailMessage('Ruslania.com password');
                 $message->view = 'forgot';
-                $message->setBody($user->attributes, 'text/html');
+                $message->setBody($dataMail, 'text/html');
                 $message->addTo($user->login);
                 $message->from = 'ruslania@ruslania.com';
 

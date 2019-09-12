@@ -22,17 +22,18 @@
         <div class="info-box information"><?= $user->login ?></div>
         <?php $form = $this->beginWidget('CActiveForm', array(
             'id' => 'User',
+//            'action'=>Yii::app()->createUrl('site/password', array('email'=>))
 //            'enableAjaxValidation' => true,
 //            'clientOptions' => array(
 //                'validateOnChange' => false,
 //                'validateOnSubmit' => true,
 //            )
         )); ?>
-
-        <p><?=$form->error($model, 'login'); ?></p>
-        <div><?= $form->passwordField($model, 'pwd', array('placeholder'=>$ui->item("regform_password"))); ?></div>
-        <div><?= $form->passwordField($model, 'pwd2', array('placeholder'=>$ui->item("regform_repeat_password"))); ?></div>
-        <div><input type="submit" class="sort" value="<?=$ui->item('A_TITLE_REMIND_PASS'); ?>" /></div>
+        <?=$form->error($model, 'pwd'); ?>
+        <?=$form->error($model, 'pwd2'); ?>
+        <div><?= $form->passwordField($model, 'pwd', array('placeholder'=>$ui->item("regform_password"), 'autocomplete'=>'off')); ?></div>
+        <div><?= $form->passwordField($model, 'pwd2', array('placeholder'=>$ui->item("regform_repeat_password"), 'autocomplete'=>'off')); ?></div>
+        <div><input type="submit" class="sort" value="<?=$ui->item('CHANGE'); ?>" /></div>
 
         <?php $this->endWidget(); ?>
     <?php endif; ?>
