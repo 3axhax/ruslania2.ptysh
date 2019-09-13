@@ -969,6 +969,13 @@ $(document).ready(function() {
                     dataType : 'json',
                     complete: function() {$pleasewait.hide();},
                     success: function(r) {
+                        var dataToLog = r;
+                        dataToLog[self.csrf[0]] = self.csrf[1];
+                        $.ajax({
+                            url: '/ru/buy/log/',
+                            data: dataToLog,
+                            type: 'post'
+                        });
                         var errors = [];
                         if ('errors' in r) {
                             for (field in r.errors) {
@@ -990,9 +997,14 @@ $(document).ready(function() {
                             self.viewErrors(errors);
                         }
                         else {
+                            dataToLog['afterSearchTargets'] = 0;
+                            $.ajax({
+                                url: '/ru/buy/log/',
+                                data: dataToLog,
+                                type: 'post'
+                            });
                             searchTargets('start_order');
-                            var dataToLog = r;
-                            dataToLog[self.csrf[0]] = self.csrf[1];
+                            dataToLog['afterSearchTargets'] = 1;
                             $.ajax({
                                 url: '/ru/buy/log/',
                                 data: dataToLog,

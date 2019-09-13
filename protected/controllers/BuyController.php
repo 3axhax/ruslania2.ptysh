@@ -685,6 +685,9 @@ class BuyController extends MyController {
 	}
 
 	private function _log($data) {
+		foreach ($data as $k=>$v) {
+			if (!is_scalar($v)) $data[$k] = serialize($v);
+		}
 		array_unshift($data, date('d.m.Y H:i:s'));
 		file_put_contents(Yii::getPathOfAlias('webroot') . '/test/order.log', implode("\t", $data) . "\n", FILE_APPEND);
 	}
