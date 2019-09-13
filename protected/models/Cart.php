@@ -67,28 +67,39 @@ class Cart extends CActiveRecord
         }
     }
 
-    public function AddToCart($entity, $id, $quantity, $type, $uid, $sid, $finOrWorldPrice)
+    function getCountInCart($entity, $id, $type, $uid, $sid) {
+        $params = array(':entity' => Entity::ConvertToSite($entity), ':iid' => $id);
+        $sql = 'SELECT SUM(quantity) FROM shopcarts '
+            . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
+
+        list($where, $p2) = $this->GetFilter($uid, $sid);
+        $sql .= $where;
+
+        return (int) Yii::app()->db->createCommand($sql)->queryScalar(array_merge($params, $p2));
+    }
+
+    public function AddToCart($entity, $id, $quantity, $type, $uid, $sid, $finOrWorldPrice, $checkCounts = true)
     {
         $params = array(':entity' => Entity::ConvertToSite($entity), ':iid' => $id);
         // Проверить, нет ли уже такого в корзине
 
-        $sql = 'SELECT SUM(quantity) FROM shopcarts '
-            . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
+        $cnt = 0;
+        if ($checkCounts) {
+            $cnt = $this->getCountInCart($entity, $id, $type, $uid, $sid);
 
-        list($where, $p2) = $this->GetFilter($uid, $sid);        
-		$sql .= $where;
+            if ($cnt > 0) {
+                $sql2 = 'DELETE FROM shopcarts '
+                    . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
 
-        $cnt = Yii::app()->db->createCommand($sql)->queryScalar(array_merge($params, $p2));        
-		
-		$sql2 = 'DELETE FROM shopcarts '
-            . 'WHERE entity=:entity AND iid=:iid AND '.self::CartType($type).' AND ';
+                list($where, $p2) = $this->GetFilter($uid, $sid);
+                $sql2 .= $where;
 
-        list($where, $p2) = $this->GetFilter($uid, $sid);        
-		$sql2 .= $where;
-		
-		//удаляем товар с корзины и добавляем заново
-        Yii::app()->db->createCommand($sql2)->query(array_merge($params, $p2));
-			
+                //удаляем товар с корзины и добавляем заново
+                Yii::app()->db->createCommand($sql2)->query(array_merge($params, $p2));
+            }
+            else $cnt = 0;
+        }
+
 		//static::deleteAll(['iid'=>$id, 'uid'=>$uid, 'sidv2'=>$sid]);
 		
 		//if (!$cart) { $cart = new Cart; }
@@ -632,6 +643,75 @@ class Cart extends CActiveRecord
         
         if (!empty($lang)&&($lang !== Yii::app()->language)&&!defined('OLD_PAGES')) $params['__langForUrl'] = $lang;
         return Yii::app()->createUrl('cart/view', $params);
+    }
+
+    function checkQuantity($entity, $id, $quantity, $product, $originalQuantity) {
+        $p = new Product;
+        $availCount = $p->IsQuantityAvailForOrder($entity, $id, $quantity);
+        $changed = false;
+        $changedStr = '';
+        if ($availCount != $originalQuantity) {
+            $changed = true;
+            if ($entity == Entity::PERIODIC) {
+                $product['issues_year'] = Periodic::getCountIssues($product['issues_year']);
+                $show3Months = $product['issues_year']['show3Months'];
+                $show6Months = $product['issues_year']['show6Months'];
+                if (!empty($_POST['decrement'])) {
+                    if ($originalQuantity < 3) {
+                        $availCount = 3;
+                        $originalQuantity = 0;
+                    }
+                    elseif ($originalQuantity < 6) {
+                        if ($show3Months) $availCount = 3;
+//                        else $availCount = 0;
+                        elseif ($show6Months) {
+                            $originalQuantity = 0;
+                            $availCount = 6;
+                        }
+                        else {
+                            $originalQuantity = 0;
+                            $availCount = 12;
+                        }
+                    }
+                    elseif ($originalQuantity < 12) {
+                        if ($show6Months) $availCount = 6;
+//                        else $availCount = 0;
+                        else {
+                            $availCount = 12;
+                            $originalQuantity = 0;
+                        }
+                    } else
+                        $availCount = 12;
+                }
+                else {
+                    if ($originalQuantity <= 3) {
+                        if ($show3Months)
+                            $availCount = 3;
+                        elseif ($show6Months)
+                            $availCount = 6;
+                        else
+                            $availCount = 12;
+                    }
+                    if ($originalQuantity > 3 AND $originalQuantity <= 6) {
+                        if ($show6Months)
+                            $availCount = 6;
+                        else
+                            $availCount = 12;
+                    }
+                }
+            }
+            $quantity = $availCount;
+            if ($entity != 30) $changedStr = sprintf(Yii::app()->ui->item('COUNTS_IN_ORDER_MAX'), $quantity, $quantity);
+            elseif (!empty($originalQuantity)) {
+                $changedStr = Yii::app()->ui->item('REAL_PEREODIC_COUNTS');
+            }
+        }
+        return array(
+            $quantity,
+            $originalQuantity,
+            $changed,
+            $changedStr,
+        );
     }
 	
 }

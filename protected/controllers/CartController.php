@@ -1249,13 +1249,23 @@ class CartController extends MyController {
         }
         if ($data === false)
             throw new CHttpException('Please do AJAX request');
+
         list($entity, $id, $quantity, $product, $origQuantity, $finOrWorld) = $data;
         $type = ProductHelper::IsAvailableForOrder($product) ? Cart::TYPE_ORDER : Cart::TYPE_REQUEST;
         if ($type == Cart::TYPE_REQUEST) {
             // TODO:
         } else {
             $cart = new Cart;
-            $alreadyInCart = $cart->AddToCart($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorld);
+            $cnt = $cart->getCountInCart($entity, $id, $type, $this->uid, $this->sid);
+            if ($cnt > 0) {
+                $quantity += $cnt;
+                $origQuantity = $quantity;
+//                list($entity, $id, $quantity, $product, $origQuantity, $finOrWorld) = $data; //так надо потому, что изменилось $quantity
+            }
+//            var_dump($quantity, $cnt);
+            list($quantity, $originalQuantity, $changed, $changedStr) = $cart->checkQuantity($entity, $id, $quantity, $product, $origQuantity);
+            $cart->Remove($entity, $id, $type, $this->uid, $this->sid);
+            $alreadyInCart = $cart->AddToCart($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorld, false);
 
             $message = $entity == Entity::PERIODIC
                 ? Yii::app()->ui->item('ADDED_TO_CART', Yii::app()->createUrl('cart/view'))
@@ -1268,6 +1278,9 @@ class CartController extends MyController {
 				$message = str_replace($already, '', $message);
 				
 			}
+            if ($changed&&!empty($changedStr)&&($entity != Entity::PERIODIC)) {
+                $message .= '<div style="margin-top: 5px;">' . $changedStr . '</div>';
+            }
 			
 			
             if (Yii::app()->request->isAjaxRequest) {
@@ -1328,7 +1341,7 @@ class CartController extends MyController {
             throw new CHttpException('Please do AJAX request');
         list($entity, $id, $quantity, $product, $originalQuantity, $finOrWorldPrice) = $data;
         $type = ProductHelper::IsAvailableForOrder($product) ? Cart::TYPE_ORDER : Cart::TYPE_REQUEST;
-        $quantity2 = $originalQuantity;
+/*        $quantity2 = $originalQuantity;
         // Проверить на SKIP и InternetKolvo
         $p = new Product;
         $availCount = $p->IsQuantityAvailForOrder($entity, $id, $quantity);
@@ -1389,8 +1402,9 @@ class CartController extends MyController {
             elseif (!empty($originalQuantity)) {
                 $changedStr = Yii::app()->ui->item('REAL_PEREODIC_COUNTS');
             }
-        }
+        }*/
         $cart = new Cart;
+        list($quantity, $originalQuantity, $changed, $changedStr) = $cart->checkQuantity($entity, $id, $quantity, $product, $originalQuantity);
         $ret = $cart->ChangeQuantity($entity, $id, $quantity, $type, $this->uid, $this->sid, $finOrWorldPrice);
         if ($returnJson) {
             $this->ResponseJson(array('hasError' => false, 'quantity' => $ret, 'origQuantity' => $originalQuantity,
