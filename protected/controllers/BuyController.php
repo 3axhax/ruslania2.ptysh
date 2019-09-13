@@ -693,8 +693,9 @@ class BuyController extends MyController {
 	}
 
 	function actionLog() {
-		var_dump($_POST);
-		/*if (Yii::app()->request->isPostRequest) */$this->_log($_POST);
+		$data = $_POST;
+		unset($data['form']);
+		/*if (Yii::app()->request->isPostRequest) */$this->_log($data);
 		Yii::app()->end();
 	}
 }
