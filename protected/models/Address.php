@@ -394,7 +394,7 @@ class Address extends CActiveRecord
         $toEmail = 'periodicals@ruslania.com';
 //        $toEmail = 'andreasagopov@hotmail.com';
         $message->addTo($toEmail);
-//        $message->addTo('rkv@dfaktor.ru');
+        $message->addTo('rkv@dfaktor.ru');
         $message->from = $toEmail;
         Yii::app()->mail->transportType = 'smtp';
         Yii::app()->mail->transportOptions = array(

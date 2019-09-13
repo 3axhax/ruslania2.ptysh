@@ -1,4 +1,37 @@
 <p>Пользователь сайта с ID: <?=$uid; ?> сменил адрес.</p>
+<p>Изменения:</p>
+<table>
+    <tr>
+        <th style="border-top: 1px solid; border-bottom: 1px solid; border-right: 1px solid; padding: 2px 5px; width: 50%;">Старый адрес</th>
+        <th style="border-top: 1px solid; border-bottom: 1px solid; padding: 2px 5px; width: 50%;">Новый адрес</th>
+    </tr>
+    <?php $change = false; foreach ($old as $kName=>$v):
+        if ($v != $new[$kName]):
+            switch ($kName):
+                case 'type': $change = true; ?><tr>
+                    <td style="border-bottom: 1px solid; border-right: 1px solid; padding: 2px 5px; width: 50%;"><?= ($v == 1)?'Организация':'Частное лицо' ?></td>
+                    <td style="border-bottom: 1px solid; padding: 2px 5px; width: 50%;"><?= ($new[$kName] == 1)?'Организация':'Частное лицо' ?></td>
+                </tr><?php break;
+                case 'country': case 'state_id': case 'beta_id': case 'is_unloaded': case 'id': break;
+                default: $change = true; ?><tr>
+                    <td style="border-bottom: 1px solid; border-right: 1px solid; padding: 2px 5px; width: 50%;"><?= $v?:'N/A' ?></td>
+                    <td style="border-bottom: 1px solid; padding: 2px 5px; width: 50%;"><?= $new[$kName]?:'N/A' ?></td>
+                </tr><?php break;
+            endswitch;
+        elseif (!empty($v)):
+            switch ($kName):
+                case 'receiver_first_name': case 'receiver_last_name': case 'streetaddress': case 'postindex': case 'city': case 'country_name': ?><tr>
+                    <td colspan="2" style="border-bottom: 1px solid; padding: 2px 5px; text-align: center"><?= $v ?></td>
+                </tr><?php break;
+            endswitch;
+        endif;
+    endforeach; ?>
+</table>
+<?php /*
+if (!$change): ?>
+    <p>Изменений не обнаружено</p>
+<? endif;
+
 <p>Старый адрес:</p>
 <p>
 <?php foreach ($old as $kName=>$v):
@@ -38,3 +71,4 @@ endforeach; ?>
 </p>
 
 <?php endif; ?>
+ <?php */
