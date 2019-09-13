@@ -33,7 +33,7 @@
         <?=$form->error($model, 'pwd2'); ?>
         <div><?= $form->passwordField($model, 'pwd', array('placeholder'=>$ui->item("regform_password"), 'autocomplete'=>'off')); ?></div>
         <div><?= $form->passwordField($model, 'pwd2', array('placeholder'=>$ui->item("regform_repeat_password"), 'autocomplete'=>'off')); ?></div>
-        <div><input type="submit" class="sort" value="<?=$ui->item('CHANGE'); ?>" /></div>
+        <div><input type="submit" class="sort order_start" value="<?=$ui->item('CHANGE'); ?>" style="background-color: #5bb75b;"/></div>
 
         <?php $this->endWidget(); ?>
     <?php endif; ?>

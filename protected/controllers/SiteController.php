@@ -1359,8 +1359,14 @@ class SiteController extends MyController {
                 Yii::app()->mail->send($message);
             }
         }
+        $page = 'forgot';
+        $staticPage = new StaticPages();
+        $item = $staticPage->getPage($page);
+        if (!empty($item['description_' . Yii::app()->language])) $txt = $item['description_' . Yii::app()->language];
+        else $txt = sprintf(Yii::app()->ui->item('MSG_PERSONAL_REMIND_PASS'), Yii::app()->ui->item('A_TITLE_REMIND_PASS'));
+        $isWordpanel = $staticPage->isWordpanel((int)$this->uid);
 
-        $this->render('forgot', array('model' => $model, 'user' => $user));
+        $this->render('forgot', array('model' => $model, 'user' => $user, 'txt' => $txt, 'page'=>$page, 'isWordpanel'=>$isWordpanel));
     }
 
     private function formatTree($tree, $depth, &$ret) {
