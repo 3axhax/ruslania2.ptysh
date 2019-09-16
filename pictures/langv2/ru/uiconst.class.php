@@ -1442,5 +1442,8 @@ IBAN DE79514303006474790001 <br>
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Адрес плательщика отличается от получателя? Снимите галочку слева',
     'CASHBACKWORLD'=>'Cashbackworld',
+    'FILTER_IN_DISCOUNT_H' => 'Цены',
+    'IN_DISCOUNT' => 'В распродаже',
+
 
 );

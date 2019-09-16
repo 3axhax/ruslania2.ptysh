@@ -1437,4 +1437,7 @@ Nazhav na interesujushchuju vas kategoriju, vy smozhete uvidet vse tovary so ski
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Adres platelshchika otlichayetsya ot poluchatelya? Snimite galochku sleva',
     'CASHBACKWORLD'=>'Cashbackworld',
+    'FILTER_IN_DISCOUNT_H' => 'Tseny',
+    'IN_DISCOUNT' => 'V rasprodazhe',
+
 );

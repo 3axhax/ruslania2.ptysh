@@ -1447,5 +1447,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Looking for a place to give invoice address? Remove the tick on the left: Payer\'s address...',
     'CASHBACKWORLD'=>'Cashbackworld',
+    'FILTER_IN_DISCOUNT_H' => 'Prices',
+    'IN_DISCOUNT' => 'Discounted items',
 
 );

@@ -1436,5 +1436,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'CARTNEW_SMARTPOST_SUBTITLE' => 'Leave the box blank if you want delivery to your nearest post office. <br /><br />You can choose a suitable pick-up point. Enter your zip code in the box and click "Search". Get a list of pickup points and SmartPost automats. If you can\'t find a suitable pick-up point, you can try another zip code. <br /><br />',
     'CARTNEW_SMARTPOST_INPUT_INDEX_PLACEHOLDER' => 'Give postal index code',
     'CASHBACKWORLD'=>'Cashbackworld',
+    'FILTER_IN_DISCOUNT_H' => 'Precios',
+    'IN_DISCOUNT' => 'Precios reducidos',
 
 );

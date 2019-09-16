@@ -323,7 +323,7 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter', $urlParams);
         <?php if (isset($filters['binding']) && !empty($filters['binding']) && (count($filters['binding']) > 1)):
             ?>
             <!--Фильтр по типу/переплету-->
-        <div class="prod-filter__col--grow" id="binding_div">
+        <div class="prod-filter__col<?php /*--grow*/ ?>" id="binding_div">
             <label class="prod-filter__label" for="">
                 <?php if ($entity == Entity::BOOKS OR $entity == Entity::SHEETMUSIC) $label_binding = $ui->item('A_NEW_FILTER_TYPE1');
                 elseif ($entity == Entity::MUSIC) $label_binding = $ui->item('A_NEW_FILTER_TYPE3');
@@ -365,6 +365,16 @@ $urls['recount'] = Yii::app()->createUrl('site/gtfilter', $urlParams);
                     typeDiv.insertBefore($('#filter_apply'));
                 </script>
             <?php endif;?>
+        </div>
+        <?php endif;?>
+        <?php if (($entity == Entity::SHEETMUSIC)&&(Yii::app()->getController()->action->id !== 'salelist')):?>
+        <!--Фильтр по скидке-->
+        <div class="prod-filter__col">
+            <label class="prod-filter__label" for=""><?=$ui->item('FILTER_IN_DISCOUNT_H')?>:</label>
+            <select class="select2_periodic prod-filter__input prod-filter__input__select--m" name="sale">
+                <option value="0"<?= empty($filter_data['sale']) ? ' selected' : ''?>><?=$ui->item('A_NEW_FILTER_ALL'); ?></option>
+                <option value="1"<?= (!empty($filter_data['sale'])) ? ' selected' : ''?>><?= Yii::app()->ui->item('IN_DISCOUNT') ?></option>
+            </select>
         </div>
         <?php endif;?>
 

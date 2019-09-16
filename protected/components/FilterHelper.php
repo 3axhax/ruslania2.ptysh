@@ -281,7 +281,7 @@ class FilterHelper
         }
 
         $sale = (int)Yii::app()->getRequest()->getParam('sale');
-        if (($sale > 0)&&(Yii::app()->request->isPostRequest||isset($_GET['ha']))) {
+        if (($sale > 0)/*&&(Yii::app()->request->isPostRequest)*/) {
             self::$data['sale'] = 1;
             return true;
         }

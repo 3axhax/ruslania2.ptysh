@@ -1445,5 +1445,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Etsitkö paikkaa laskutusosoitteelle? Poista pallukka vasemmalta kohdasta Laskutusosoite...',
     'CASHBACKWORLD'=>'Cashbackworld',
+    'FILTER_IN_DISCOUNT_H' => 'Hinnat',
+    'IN_DISCOUNT' => 'Alennushintaiset',
 
 );
