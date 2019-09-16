@@ -86,16 +86,16 @@ if (empty($h1)): ?>
                     <li>
                         <?php
                         if ($entity == Entity::PERIODIC) $this->renderPartial('/entity/list/periodics', array('item' => $item, 'entity' => $entity, 'isList' => true, 'productModel' => $productModel));
-                        else { 
-						
-						switch ($entity) {
+                        else {
+                            $prefix = '';
+						/*switch ($entity) {
 							
 							case 40 : $prefix = '_40'; break;
 							
 							default: $prefix = ''; break;
 							
 							
-						}
+						}*/
 						
 						//$prefix = '';
 						
