@@ -12,7 +12,7 @@ class OfferItem extends CMyActiveRecord
         return 'offer_items';
     }
 
-    function getList($oid, $eid = 0) {
+    function getList($oid, $eid = 0, $withoutGroups = false) {
         $criteria = new CDbCriteria();
         if ((int)$eid > 0) $criteria->condition = '(t.offer_id = :oid) and (t.entity_id = :eid)';
         else $criteria->condition = '(t.offer_id = :oid)';
@@ -25,7 +25,8 @@ class OfferItem extends CMyActiveRecord
             $paginator = null;
         }
         else {
-            $criteria->order = 't.group_order asc, t.sort_order asc';
+            if ($withoutGroups) $criteria->order = 't.sort_order asc';
+            else $criteria->order = 't.group_order asc, t.sort_order asc';
             $paginator = new CPagination($cnt);
             $paginator->setPageSize(Yii::app()->params['ItemsPerPage']);
             $paginator->applyLimit($criteria);
@@ -33,7 +34,13 @@ class OfferItem extends CMyActiveRecord
 
         $rows = $this->findAll($criteria);
         $items = array();
-        foreach($rows as $row) $items[$row['entity_id']][] = $row['item_id'];
+        $allItems = array(); //массив для товаров по порядку из подборки
+        foreach($rows as $row) {
+            $eid = $row['entity_id'];
+            if (empty($items[$eid])) $items[$eid] = array();
+            $items[$eid][] = $row['item_id'];
+            $allItems[$eid . '_' . $row['item_id']] = array();
+        }
 
         $p = new Product();
         $fullInfo = array();
@@ -41,17 +48,28 @@ class OfferItem extends CMyActiveRecord
             $tmp = array();
             $list = $p->GetProductsV2($entity, $ids, true);
             foreach($items[$entity] as $iid) {
-                if(!isset($list[$iid])) continue;
+                if(!isset($list[$iid])) {
+                    unset($allItems[$entity . '_' . $iid]);
+                    continue;
+                }
                 $av = Availability::GetStatus($list[$iid]);
-                if($av == Availability::NOT_AVAIL_AT_ALL) continue; // В подборках нет товаров, которых не заказать
-
-                if(isset($list[$iid])) $tmp[] = $list[$iid];
+                if($av == Availability::NOT_AVAIL_AT_ALL) {
+                    unset($allItems[$entity . '_' . $iid]);
+                    continue;
+                } // В подборках нет товаров, которых не заказать
+                $allItems[$entity . '_' . $iid] = $list[$iid];
+                $tmp[] = $list[$iid];
             }
 
             $fullInfo[Entity::GetTitle($entity)] = array('entity' => $entity, 'items' => $tmp);
         }
 
-        return array($fullInfo, $paginator);
+        if (!$withoutGroups) return array($fullInfo, $paginator);
+
+        $result = array(
+            0=>array('entity' => 0, 'items' => array_values($allItems)),
+        );
+        return array($result, $paginator);
     }
 
     function getEntitys($oid) {

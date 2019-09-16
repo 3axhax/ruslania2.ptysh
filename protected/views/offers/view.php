@@ -27,7 +27,7 @@ if (!empty($entitys)): ?>
     <div class="clearBoth"></div>
 <?php endif; ?>
             <?php foreach($groups as $group=>$data) :
-                //$url = Yii::app()->createUrl('entity/list', array('entity' => Entity::GetUrlKey($data['entity'])));
+                if (!empty($group)):
                 ?>
                 <table height="30" cellspacing="0" cellpadding="0" border="0" style="vertical-align:top" class="text">
                     <tr>
@@ -38,24 +38,19 @@ if (!empty($entitys)): ?>
                     <tr>
                         <td width="31" class="maintxt" style="padding-top: 2px;padding-bottom: 2px;padding-left: 2px;padding-right: 5px;">
                             <span class="entity_icons"><i class="fa e<?= $data['entity'] ?>"></i></span>
-                            <?php /*
-                            <img width="31" height="31" border="0" src="/pic1/cart_ibook.gif">
- */ ?>
                         </td>
                         <td width="100%" class="maintxt" style="padding: 2px;"><a href="<?= $url ?>?eid=<?= $data['entity'] ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a></td>
                     </tr>
                 </table>
-
+                <?php endif; ?>
                 <ul class="items">
                     <?php foreach($data['items'] as $item) : ?>
                         <?php
-                            $item['entity'] = $data['entity'];
+//                            $item['entity'] = $data['entity'];
                             $item['status'] = Product::GetStatusProduct($item['entity'], $item['id']);
                         ?>
                         <li>
-                            <?php $this->renderPartial('/entity/_common_item_2',
-                                array('item' => $item,
-                                      'entity' => $data['entity'], 'isList' => true)); ?>
+                            <?php $this->renderPartial('/entity/_common_item_2', array('item' => $item, 'entity' => $item['entity'], 'isList' => true)); ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>

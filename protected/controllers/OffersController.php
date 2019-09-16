@@ -34,8 +34,10 @@ class OffersController extends MyController
         $this->breadcrumbs[] = $title;
 //        $groups = $o->GetItems($oid);
 //        $this->render('view', array('offer' => $offer, 'groups' => $groups));
+        $eid = (int) Yii::app()->getRequest()->getParam('eid');
+        if ($eid <= 0) $eid = 0;
         $o = OfferItem::model();
-        list($groups, $paginator) = $o->getList($oid, Yii::app()->getRequest()->getParam('eid'));
+        list($groups, $paginator) = $o->getList($oid, $eid, (in_array($oid, array(777, 999))&&($eid === 0)));
         $this->render('view', array('offer' => $offer, 'groups' => $groups, 'entitys'=>$o->getEntitys($oid), 'paginator' => $paginator, 'url'=>Yii::app()->createUrl('offers/' . $this->action->id, $urlData)));
     }
 

@@ -158,6 +158,16 @@ class RecountItemsCommand extends CConsoleCommand {
 		'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 
+		$sql = 'set @pos:=0;';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+		$sql = ''.
+			'update offer_items '.
+			'set sort_order = @pos:=(@pos+1) '.
+			'where (offer_id = 999) '.
+			'order by rand() '.
+		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
 		$sql = ''.
 			'delete t '.
 			'from offer_items t '.
@@ -182,6 +192,17 @@ class RecountItemsCommand extends CConsoleCommand {
 			'from ' . $params['site_table'] . ' t '.
 			'where ((t.unitweight_skip > 0) or (t.unitweight = 0)) and (t.avail_for_order > 0) '.
 		'';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+
+
+		$sql = 'set @pos:=0;';
+		Yii::app()->db->createCommand()->setText($sql)->execute();
+		$sql = ''.
+			'update offer_items '.
+			'set sort_order = @pos:=(@pos+1) '.
+			'where (offer_id = 777) '.
+			'order by rand() '.
+			'';
 		Yii::app()->db->createCommand()->setText($sql)->execute();
 	}
 
