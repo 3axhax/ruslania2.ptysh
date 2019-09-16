@@ -913,7 +913,7 @@ Please send the transaction number (8 digits) via e-mail as a reply to this e-ma
   'PRODUCT_OF_DAY_TITLE_50' => '',
   'ORDER_MSG_STATE_18' => 'Ruslania has sent an e-mail message to the customer',
   'ORDER_MSG_STATE_19' => 'The previous invoice hasn\'t been paid',
-  'MSG_WHAT_IS_PAYPAL' => 'Chto takoe PayPal?',
+  'MSG_WHAT_IS_PAYPAL' => 'What is PayPal?',
   'MSG_PAYMENT_RESULTS_DECLINED_LUOTTOKUNTA' => 'Dear user!<br/>
 An error has occurred and the Luottokunta payment system has blocked your order number.<br/><br/>
 
@@ -1446,5 +1446,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'BILLING_VERKKOLASKU' => 'Leave empty, if you\'re filling delivery address or if N/A',
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Looking for a place to give invoice address? Remove the tick on the left: Payer\'s address...',
+    'CASHBACKWORLD'=>'Cashbackworld',
 
 );

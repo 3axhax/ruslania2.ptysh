@@ -120,6 +120,7 @@ return array(
 	'delivery'=>'versand',
 	'news'=>'nachrichten',
 	'certificate'=>'geschenkgutschein',
+	'cashbackworld'=>'cashbackworld',
 
 	'offers'=>'empfehlungen',
 	'for-firms'=>'spezielle-angebote-fur-unternehmen',

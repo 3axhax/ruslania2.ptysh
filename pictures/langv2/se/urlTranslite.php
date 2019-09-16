@@ -120,6 +120,7 @@ return array(
 	'delivery'=>'leverans',
 	'news'=>'nyheter',
 	'certificate'=>'presentkort',
+	'cashbackworld'=>'cashbackworld',
 
 
 	'offers'=>'rekommendationer',

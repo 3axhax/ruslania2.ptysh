@@ -911,7 +911,7 @@ Please send the transaction number (8 digits) via e-mail as a reply to this e-ma
   'PRODUCT_OF_DAY_TITLE_50' => '',
   'ORDER_MSG_STATE_18' => 'Ruslania on lähettänyt sähköpostiviestin asiakkaalle.',
   'ORDER_MSG_STATE_19' => 'Edellinen lasku on maksamatta',
-  'MSG_WHAT_IS_PAYPAL' => 'Chto takoe PayPal?',
+  'MSG_WHAT_IS_PAYPAL' => 'Mikä on PayPal',
   'MSG_PAYMENT_RESULTS_DECLINED_LUOTTOKUNTA' => 'Arvoisa asiakas!<br/>
 Virheestä johtuen Luottokunnan maksuohjelma on estänyt tilauksesi maksun ja numero on nyt lukittu.<br/><br/>
 
@@ -1425,8 +1425,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'CONTINUE_PLACING_ORDER' => 'Jatka tilauksen tekemistä',
     'ALREADY_REGISTERED'=>'Olet jo rekisteröitynyt',
     'WITHOUT_VAT_FULL' => 'ilman alvia',
-    'FORGOT_PASS_HEADER' => 'Tilaa salasanamuistutus sähköpostiisi',
-    'FORGOT_PASS_PATH' => 'Tilaa salasanamuistutus',
+    'FORGOT_PASS_HEADER' => 'Nollaa salasanasi',
+    'FORGOT_PASS_PATH' => 'Nollaa salasanasi',
 	'CALL_FORM_ERROR_PHONE'=>'Tähän voi kirjoittaa vain numeroita',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Soittopyyntö on tallennettu</b><br />Soittopyyntösi on tallennettu ja soitamme sinulle mahdollisimman pian.',
     'CATEGORY_POPULAR' => 'Suositut kategoriat',
@@ -1444,5 +1444,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'BILLING_VERKKOLASKU' => 'Jätä tyhjäksi, jos olet täyttämässä toimitusosoitetta',
     'USER_CLOSED' => 'The user account under this e-mail address is closed. If you wish to renew the account, please contact ruslania@ruslania.com or call +358 9 2727070.',
     'OTHER_BILLING_ADDRESS' => 'Etsitkö paikkaa laskutusosoitteelle? Poista pallukka vasemmalta kohdasta Laskutusosoite...',
+    'CASHBACKWORLD'=>'Cashbackworld',
 
 );

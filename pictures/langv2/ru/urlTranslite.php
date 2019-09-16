@@ -120,6 +120,7 @@ return array(
 	'delivery'=>'delivery',
 	'news'=>'novosti',
 	'certificate'=>'podarochnyj_sertifikat',
+	'cashbackworld'=>'cashbackworld',
 
 	'offers'=>'rekomendatsii',
 	'for-firms'=>'specialnye-predlozhenija-dlja-firm',

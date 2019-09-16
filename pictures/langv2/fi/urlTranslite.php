@@ -116,10 +116,11 @@ return array(
 	'sitemap'=>'sivustokartta',
 	'me'=>'tili',
 	'advsearch'=>'haku',
-	'forgot'=>'salasanan-palautus',
+	'forgot'=>'salasanan-nollaus',
 	'delivery'=>'toimitus',
 	'news'=>'uutisia',
 	'certificate'=>'lahjakortti',
+	'cashbackworld'=>'cashbackworld',
 
 
 	'offers'=>'suosituksia',

@@ -25,6 +25,7 @@ class StaticUrlRule extends CBaseUrlRule {
 		'delivery' => 'CART_COL_SUBTOTAL_DELIVERY',
 		'news' => 'NEWS',
 		'sitemap' => 'A_SITEMAP',
+		'cashbackworld'=>'CASHBACKWORLD',
 	);
 
 	static function getTitles() { return self::$_files; }

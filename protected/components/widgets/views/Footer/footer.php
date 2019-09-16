@@ -116,10 +116,10 @@
                 <source srcset="/new_img/pay/diners.webp" type="image/webp">
                 <img src="/new_img/pay/diners.jpg">
             </picture></div>
-        <div style="float: left; margin: 0 35px 35px 0;"><picture>
+        <div style="float: left; margin: 0 35px 35px 0;"><a href="<?= Yii::app()->createUrl('site/static', array('page'=>'cashbackworld')) ?>"><picture>
                 <source srcset="/new_img/pay/cache.webp" type="image/webp">
                 <img src="/new_img/pay/cache.jpg">
-            </picture></div>
+            </picture></a></div>
         <div style="float: left; margin: 0 35px 35px 0;"><picture>
                 <source srcset="/new_img/pay/gls.webp" type="image/webp">
                 <img src="/new_img/pay/gls.jpg">
