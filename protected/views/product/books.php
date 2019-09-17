@@ -38,13 +38,13 @@
 						</div>
 					<?php endif; ?>
 
-					<?php if (!empty($item['Languages']) && empty($item['AudioStreams'])&&($entity != Entity::MUSIC)) :
+					<?php if (!empty($item['Languages'])) :
 						$langs = array();
 						foreach ($item['Languages'] as $lang) {
 							if (!empty($lang['language_id'])) $langs[] = '<a href="' . Yii::app()->createUrl('entity/list', array(
 									'entity' => $entityKey,
 									'lang' => $lang['language_id'])) .
-								'"><span class="title__bold">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span></a>';
+								'"><span class="title__bold" itemprop="inLanguage">' . (($entity != Entity::PRINTED)?Language::GetTitleByID($lang['language_id']):Language::GetTitleByID_country($lang['language_id'])) . '</span></a>';
 						}
 						if (!empty($langs)):
 							?>
@@ -77,7 +77,7 @@
 								<a class="cprop" href="<?= Yii::app()->createUrl('entity/bypublisher', array('entity' => $entityKey,
 									'pid' => $item['Publisher']['id'],
 									'title' => ProductHelper::ToAscii($pubTitle)));
-								?>"><?= $pubTitle; ?></a>
+								?>" itemprop="publisher"><?= $pubTitle; ?></a>
 							</div>
 							<div class="clearBoth"></div>
 						</div>
@@ -90,7 +90,7 @@
 								<a href="<?= Yii::app()->createUrl('entity/byyear', array(
 									'entity' => $entityKey,
 									'year' => $item['year']));
-								?>"><?=$item['year']?></a>
+								?>" itemprop="datePublished"><?=$item['year']?></a>
 							</div>
 							<div class="clearBoth"></div>
 						</div>
@@ -113,7 +113,7 @@
 					<?php if (!empty($item['numpages'])) : ?>
 						<div class="authors" style="margin-bottom:5px;">
 							<div style="float: left;" class="nameprop"><?= str_replace(':', '', $ui->item("A_NEW_COUNT_PAGE")); ?></div>
-							<div style="padding-left: 253px;"><?= $item['numpages'] ?></div>
+							<div style="padding-left: 253px;" itemprop="numberOfPages"><?= $item['numpages'] ?></div>
 							<div class="clearBoth"></div>
 						</div>
 					<?php endif; ?>
@@ -123,7 +123,7 @@
 					?>
 						<div class="authors" style="margin-bottom:5px;">
 							<div style="float: left;" class="nameprop"><?= str_replace(':', '', $name) ?></div>
-							<div style="padding-left: 253px;"><?= $item['isbn'] ?></div>
+							<div style="padding-left: 253px;" itemprop="isbn"><?= $item['isbn'] ?></div>
 							<div class="clearBoth"></div>
 						</div>
 					<?php endif; ?>
@@ -132,22 +132,26 @@
 					$price = DiscountManager::GetPrice(Yii::app()->user->id, $item);
 					$isAvail = ProductHelper::IsAvailableForOrder($item);
 					?>
-
+					<div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 					<?php if (Availability::GetStatus($item) != Availability::NOT_AVAIL_AT_ALL) :
 						$this->renderPartial('/entity/_priceInfo_notperiodica', array('key' => 'ITEM',
 							'item' => $item,
 							'price' => $price)
 						);
-					endif; ?>
+					?>
+						<meta itemprop="price" content="<?= $price[DiscountManager::BRUTTO_WORLD] ?>">
+						<meta itemprop="priceCurrency" content="<?= Currency::ToStr(Yii::app()->currency) ?>">
+					<?php endif; ?>
 
 
 					<div class="already-in-cart" style="margin-top: 30px; float: left; margin-left: 33px; position: relative;">
-
 						<div class="price_h">&nbsp;</div>
 						<div class="price_h">&nbsp;</div>
 						<div class="mb5" style="color:#4e7eb5; width: 200px; font-size: 13px; ">
 							<span style="position: absolute; bottom: 0px; left: 0;"><?= Availability::ToStr($item); ?></span>
 						</div>
+						<link itemprop="availability" href="http://schema.org/<?= Availability::toSchema($item); ?>">
+					</div>
 					</div>
 					<div class="clearfix"></div>
 					<?php $quantity = 1; ?>
@@ -199,7 +203,7 @@
 					<?php if(!empty($item['presaleMessage'])): ?>
 						<div class="presale" style="padding: 10px; margin-bottom: 20px; background-color: #edb421; color: #fff;"><?= $item['presaleMessage'] ?></div>
 					<?php endif; ?>
-					<?= nl2br(ProductHelper::GetDescription($item)); ?>
+					<span itemprop="description"><?= nl2br(ProductHelper::GetDescription($item)); ?></span>
 					<?php
 					$cat = array();
 					if (!empty($item['Category'])) $cat[] = $item['Category'];
@@ -217,7 +221,7 @@
 											'cid' => $c['id'],
 											'title' => ProductHelper::ToAscii($catTitle)
 										));
-										?>" class="catlist"><?= $catTitle; ?></a><?if ($i < count($cat)) { ?><br /><? } ?>
+										?>" class="catlist" itemprop="genre"><?= $catTitle; ?></a><?if ($i < count($cat)) { ?><br /><? } ?>
 									<?php endforeach; ?></div>
 								<div class="clearBoth"></div>
 							</div>
@@ -244,7 +248,7 @@
 						<?php if (!empty($item['stock_id'])) : ?>
 							<div class="detail-prop">
 								<div class="prop-name"><?= str_replace(':', '', $ui->item('Stock_id')); ?></div>
-								<div class="prop-value"><?= $item['stock_id']; ?></div>
+								<div class="prop-value" itemprop="identifier"><?= $item['stock_id']; ?></div>
 								<div class="clearBoth"></div>
 							</div>
 						<?php endif; ?>

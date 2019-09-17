@@ -116,7 +116,7 @@ class ProductController extends MyController
 	    }
 
 	    if ($entity == Entity::PERIODIC) $this->render('periodics', array('item' => $data, 'entity' => $entity));
-		elseif($entity == Entity::BOOKS && isset($_GET['ha'])) $this->render('books', array('item' => $data, 'entity' => $entity));
+		elseif($entity == Entity::BOOKS) $this->render('books', array('item' => $data, 'entity' => $entity));
         else $this->render('view', array('item' => $data, 'entity' => $entity));
     }
 

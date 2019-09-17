@@ -107,6 +107,19 @@ class Availability
         }
     }
 
+    static function toSchema($item) {
+        $code = self::GetStatus($item);
+        switch ($code) {
+            case self::AVAIL_IN_SHOP :
+            case self::ENDING_IN_SHOP :
+                return 'InStock';
+            case self::TEMPORARY_OUT :
+            case self::NOT_AVAIL_AT_ALL :
+                return 'SoldOut';
+        }
+        return 'PreOrder';
+    }
+
     public static function ItemsSort($a, $b)
     {
         $codeA = self::GetStatus($a);

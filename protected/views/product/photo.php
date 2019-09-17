@@ -14,7 +14,7 @@ $this->renderStatusLables($item['status']); ?>
 	<picture>
 		<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'webp') ?>" type="image/webp">
 		<source srcset="<?= $photoModel->getHrefPath($photoId, 'd', $item['eancode'], 'jpg') ?>" type="image/jpeg">
-		<img class="img-view_product" alt="<?= $title ?>" src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>">
+		<img itemprop="image" class="img-view_product" alt="<?= $title ?>" src="<?= $photoModel->getHrefPath($photoId, 'o', $item['eancode'], 'jpg') ?>">
 	</picture>
 <?php endif; ?>
 
