@@ -454,7 +454,7 @@ Jos tilaat lahjaksi<br>
   'MSG_PERSONAL_PAYMENT_TIME_LIMIT_ATTENTION' => '<b>Ole hyvä ja maksa tilauksesi kahden päivän sisällä sen tallentamisesta.</b><br><br>Tilauksen käsittely alkaa maksun saavuttua. Jos tilausta ei ole maksettu kahden päivän sisällä, se poistuu järjestelmästä.<br><br><font color=red>Tallentamasi tilauksen voit maksaa painamalla "Maksa tilaus" kohdassa "Tilaukseni".</font>',
   'MSG_PERSONAL_REMIND_PASS' => 'Saadaksesi salasanasi, anna sähköpostiosoite, jota käytit rekisteröityessäsi. Paina "%s". Salasana lähetetään sähköpostiisi',
   'MSG_PERSONAL_REMIND_PASS_ERROR' => 'Sähköpostiosoite ei ole oikein',
-  'MSG_PERSONAL_REMIND_PASS_SEND' => 'Nollaa salasana',
+  'MSG_PERSONAL_REMIND_PASS_SEND' => 'Linkki on lähetetty sähköpostiisi. Avaa viesti, jonka sait Ruslanialta sähköpostiisi. Jos sitä ei kuulu, tarkista roskapostikansio',
   'MSG_PERSONAL_REQUEST_PHASE_1_COMMENTS' => 'Saatavuuden seurantaa koskevat toivomukset -kenttään voidaan kirjoittaa toivomuksia, esim. yhteydenottotapa. "Tallenna" - painamisen jälkeen kyselysi tallentuu järjestelmään. Myöhemmin henkilökohtaisessa "Saatavuuden seurantapyynnöt" -osiossa näkyy, milloin tuote on tilattavissa. Huomaa, että tuotteiden ulkonäkö ja hinnat ovat voineet muuttua.',
   'MSG_PERSONAL_REQUEST_USER_COMMENTS' => 'Saatavuuden seurantaa koskevat toivomukset',
   'MSG_PERSONAL_WAS_LOGOUT' => 'Olet onnistuneesti poistunut järjestelmästä.',
@@ -1447,5 +1447,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Hinnat',
     'IN_DISCOUNT' => 'Alennushintaiset',
+    'CANNOT_BE_BLANK' => 'kenttä ei voi jäädä tyhjäksi.'
 
 );

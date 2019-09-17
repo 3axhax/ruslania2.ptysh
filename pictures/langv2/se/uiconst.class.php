@@ -1438,5 +1438,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Pris',
     'IN_DISCOUNT' => 'Reapris',
+    'CANNOT_BE_BLANK' => 'får inte vara blankt.'
 
 );

@@ -1427,5 +1427,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Prix',
     'IN_DISCOUNT' => 'Soldes',
+    'CANNOT_BE_BLANK' => 'ne peut être vide.'
 
 );

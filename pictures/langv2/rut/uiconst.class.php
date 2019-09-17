@@ -1439,5 +1439,6 @@ Nazhav na interesujushchuju vas kategoriju, vy smozhete uvidet vse tovary so ski
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Tseny',
     'IN_DISCOUNT' => 'V rasprodazhe',
+    'CANNOT_BE_BLANK' => 'pole ne mozhet byt\' pustym.',
 
 );

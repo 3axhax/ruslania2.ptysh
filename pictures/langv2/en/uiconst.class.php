@@ -445,7 +445,7 @@ On the third order step, uncheck the checkbox “Payer\'s address is the same as
   'MSG_PERSONAL_PAYMENT_TIME_LIMIT_ATTENTION' => '<b>Please pay for your order within two days of its confirming.</b><br><br>We will not be able to start processing your order before receiving the payment. If the order is not paid within two days, it will be removed from the system.<br><br><font color=red>You can pay your unpaid orders by clicking the "Pay for your order" -button in "My orders".</font>',
   'MSG_PERSONAL_REMIND_PASS' => 'In order to receive your password, please give the e-mail address that you used upon registration. Then click on "%s". The password will be sent to your e-mail address.',
   'MSG_PERSONAL_REMIND_PASS_ERROR' => 'Incorrect e-mail address',
-  'MSG_PERSONAL_REMIND_PASS_SEND' => 'Your password has been sent to the e-mail address that you have given upon registration.',
+  'MSG_PERSONAL_REMIND_PASS_SEND' => 'The link has been sent to your e-mail. Open the message, that you received from Ruslania. If you don\'t receive it, check your spam folder.',
   'MSG_PERSONAL_REQUEST_PHASE_1_COMMENTS' => 'In the field Wishes concerning the request you may enter wishes as for e.g. which kind of communication you prefer. By clicking "Submit" the request will be saved in the system. In the personal field "My Waiting List" you may later follow the availability of the goods you have requested. Please note, that the price and the appearance of the goods may have changed by the time they become available.',
   'MSG_PERSONAL_REQUEST_USER_COMMENTS' => 'Wishes concerning the request',
   'MSG_PERSONAL_WAS_LOGOUT' => 'You have been successfully logged out.',
@@ -1449,5 +1449,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Prices',
     'IN_DISCOUNT' => 'Discounted items',
+    'CANNOT_BE_BLANK' => 'cannot be blank.'
 
 );

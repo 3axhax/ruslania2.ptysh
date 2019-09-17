@@ -1441,5 +1441,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Preis',
     'IN_DISCOUNT' => 'Sonderpreis',
+    'CANNOT_BE_BLANK' => 'darf nicht leer sein.'
 
 );

@@ -1,6 +1,7 @@
 <?php
 $assets = Yii::getPathOfAlias('webroot') . '/protected/extensions/knockout-form/assets';
 $baseUrl = Yii::app()->assetManager->publish($assets);
+
 ?>
 
 <script type="text/javascript" src="<?= $baseUrl ?>/knockout.js"></script>
@@ -55,8 +56,19 @@ $baseUrl = Yii::app()->assetManager->publish($assets);
     {
         <?php if($refresh) : ?>
         window.location.reload();
-        <?php else : ?>
-        window.location.href = '<?=$_SERVER['HTTP_REFERER'];?>';
+        <?php else :
+            $url = Yii::app()->createUrl('client/me');
+            $referer = Yii::app()->getRequest()->getUrlReferrer();
+            if (!empty($referer)) {
+                $request = new MyRefererRequest();
+                $request->setFreePath($referer);
+                $refererRoute = Yii::app()->getUrlManager()->parseUrl($request);
+                if (mb_strpos($refererRoute, 'passwordok', null, 'utf-8') === false) {
+                    $url = $_SERVER['HTTP_REFERER'];
+                }
+            }
+        ?>
+        window.location.href = '<?= $url ?>';
         <?php endif; ?>
     }
 </script>

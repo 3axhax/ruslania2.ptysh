@@ -1444,6 +1444,6 @@ IBAN DE79514303006474790001 <br>
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Цены',
     'IN_DISCOUNT' => 'В распродаже',
-
+    'CANNOT_BE_BLANK' => 'поле не может быть пустым.'
 
 );
