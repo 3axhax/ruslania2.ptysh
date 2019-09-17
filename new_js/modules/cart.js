@@ -993,6 +993,12 @@ $(document).ready(function() {
                                 }
                             }
                         }
+                        dataToLog['afterSearchTargets'] = errors;
+                        $.ajax({
+                            url: '/ru/buy/log/',
+                            data: dataToLog,
+                            type: 'post'
+                        });
                         if (errors.length) {
                             self.viewErrors(errors);
                         }
