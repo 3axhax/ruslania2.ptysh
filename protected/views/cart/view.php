@@ -746,7 +746,7 @@ $ctrl = Yii::app()->getController()->id;
 		
 		
 		
-		ym(53579293, 'reachGoal', 'cart_step1');
+		//ym(53579293, 'reachGoal', 'cart_step1');
 		
         scriptLoader('/new_js/slick.js').callFunction(function() {
             $('.more_goods ul').slick({

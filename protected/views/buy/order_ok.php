@@ -103,7 +103,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 
-		ym(53579293, 'reachGoal', 'step_success');
+		//ym(53579293, 'reachGoal', 'step_success');
 	})
 
 

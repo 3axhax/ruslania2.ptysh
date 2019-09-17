@@ -1003,7 +1003,7 @@ $(document).ready(function() {
                                 data: dataToLog,
                                 type: 'post'
                             });
-                            searchTargets('start_order');
+                            //searchTargets('start_order');
                             dataToLog['afterSearchTargets'] = 1;
                             $.ajax({
                                 url: '/ru/buy/log/',

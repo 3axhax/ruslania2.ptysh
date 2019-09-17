@@ -91,9 +91,9 @@ Debug::staticRun(array($userData));
 	$(function(){
 		
 
-		ym(53579293, 'reachGoal', 'cart_step3');
+		//ym(53579293, 'reachGoal', 'cart_step3');
 		
-		scriptLoader('/new_js/modules/cart.js?v=1309').callFunction(function() {
+		scriptLoader('/new_js/modules/cart.js?v=1709').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userData) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,

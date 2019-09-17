@@ -49,7 +49,7 @@
 	
 		if (typeof (ym) === "function") {
 			
-			ym(53579293, 'reachGoal', ident);
+			//ym(53579293, 'reachGoal', ident);
 							
 		}
 	
