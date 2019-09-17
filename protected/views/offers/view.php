@@ -39,7 +39,13 @@ if (!empty($entitys)): ?>
                         <td width="31" class="maintxt" style="padding-top: 2px;padding-bottom: 2px;padding-left: 2px;padding-right: 5px;">
                             <span class="entity_icons"><i class="fa e<?= $data['entity'] ?>"></i></span>
                         </td>
-                        <td width="100%" class="maintxt" style="padding: 2px;"><a href="<?= $url ?>?eid=<?= $data['entity'] ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a></td>
+                        <td width="100%" class="maintxt" style="padding: 2px;">
+                            <?php if (in_array($offer['id'], array(777, 999))): ?>
+                            <h4><?=Entity::GetTitle($data['entity']); ?></h4>
+                            <?php else: ?>
+                            <a href="<?= $url ?>?eid=<?= $data['entity'] ?>" class="ctitle"><?=Entity::GetTitle($data['entity']); ?></a>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 </table>
                 <?php endif; ?>
