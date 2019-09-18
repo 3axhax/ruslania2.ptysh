@@ -1447,6 +1447,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Hinnat',
     'IN_DISCOUNT' => 'Alennushintaiset',
-    'CANNOT_BE_BLANK' => 'kenttä ei voi jäädä tyhjäksi.'
+    'CANNOT_BE_BLANK' => 'kenttä ei voi jäädä tyhjäksi.',
+    'NEW_PASSWORD_MESSAGE' => 'Kirjoita tähän uusi salasana, tai anna sama kuin ennen, ja klikkaa Muuta',
 
 );

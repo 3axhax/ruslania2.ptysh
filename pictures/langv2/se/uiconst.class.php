@@ -1438,6 +1438,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Pris',
     'IN_DISCOUNT' => 'Reapris',
-    'CANNOT_BE_BLANK' => 'får inte vara blankt.'
+    'CANNOT_BE_BLANK' => 'får inte vara blankt.',
+    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
 
 );

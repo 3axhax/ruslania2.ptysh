@@ -116,7 +116,7 @@ return array(
 	'sitemap'=>'sitemap',
 	'me'=>'account',
 	'advsearch'=>'search',
-	'forgot'=>'password-recovery',
+	'forgot'=>'reset-password',
 	'delivery'=>'delivery',
 	'news'=>'news',
 	'certificate'=>'gift_certificate',

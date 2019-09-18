@@ -19,7 +19,10 @@
     <?php endif; ?>
 
     <?php if(!empty($user)) : ?>
-        <div class="info-box information"><?= $user->login ?></div>
+        <div class="info-box information">
+            <div><?= $user->login ?></div>
+            <div><?= $ui->item("NEW_PASSWORD_MESSAGE") ?></div>
+        </div>
         <?php $form = $this->beginWidget('CActiveForm', array(
             'id' => 'User',
 //            'action'=>Yii::app()->createUrl('site/password', array('email'=>))

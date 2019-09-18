@@ -1441,6 +1441,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Bitte die Bestellnummer bei de
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Preis',
     'IN_DISCOUNT' => 'Sonderpreis',
-    'CANNOT_BE_BLANK' => 'darf nicht leer sein.'
+    'CANNOT_BE_BLANK' => 'darf nicht leer sein.',
+    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
 
 );

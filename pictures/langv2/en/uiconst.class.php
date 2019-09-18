@@ -112,7 +112,7 @@ return array (
   'A_TITLE_GOTOSOFT' => 'Go to the software products catalogue',
   'A_TITLE_GOTOVIDEO' => 'Go to video-DVD',
   'A_TITLE_HOME' => 'Home',
-  'A_TITLE_REMIND_PASS' => 'Get password',
+  'A_TITLE_REMIND_PASS' => 'Reset password',
   'Actor' => 'Actors:',
   'ADD_ADDRESS_ALT' => 'Add address',
   'ADD_ADDRESS_PICTURE' => 'addaddr_en.png',
@@ -1427,8 +1427,8 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'CONTINUE_PLACING_ORDER' => 'Continue placing an order',
     'ALREADY_REGISTERED'=>'You\'re already registered',
     'WITHOUT_VAT_FULL' => 'without VAT',
-    'FORGOT_PASS_HEADER' => 'Get a password reminder to your e-mail',
-    'FORGOT_PASS_PATH' => 'Get a password reminder',
+    'FORGOT_PASS_HEADER' => 'Reset your password',
+    'FORGOT_PASS_PATH' => 'Reset your password',
 	'CALL_FORM_ERROR_PHONE'=>'Only numeric data is accepted here',
 	'CALL_FORM_OK_ALERT'=>'<div style="height: 156px;"></div><b style="font-size: 16px">Your request has been sent</b><br />Your request has been sent and one of our support staff will call you as soon as possible.',
     'CATEGORY_POPULAR' => 'Popular categories',
@@ -1449,6 +1449,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Please mention the order numbe
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Prices',
     'IN_DISCOUNT' => 'Discounted items',
-    'CANNOT_BE_BLANK' => 'cannot be blank.'
+    'CANNOT_BE_BLANK' => 'cannot be blank.',
+    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
 
 );

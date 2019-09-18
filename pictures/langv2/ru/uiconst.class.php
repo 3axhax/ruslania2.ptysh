@@ -115,7 +115,7 @@ return array (
   'A_TITLE_GOTOSOFT' => 'Перейти к каталогу программного обеспечения',
   'A_TITLE_GOTOVIDEO' => 'Перейти к каталогу Видео-DVD',
   'A_TITLE_HOME' => 'Главная страница',
-  'A_TITLE_REMIND_PASS' => 'Получить пароль',
+  'A_TITLE_REMIND_PASS' => 'Восстановить пароль',
   'Actor' => 'Актер',
   'ADD_ADDRESS_ALT' => 'Добавить адрес',
   'ADD_ADDRESS_PICTURE' => 'addaddr_ru.png',
@@ -1444,6 +1444,7 @@ IBAN DE79514303006474790001 <br>
     'CASHBACKWORLD'=>'Cashbackworld',
     'FILTER_IN_DISCOUNT_H' => 'Цены',
     'IN_DISCOUNT' => 'В распродаже',
-    'CANNOT_BE_BLANK' => 'поле не может быть пустым.'
+    'CANNOT_BE_BLANK' => 'поле не может быть пустым.',
+    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
 
 );
