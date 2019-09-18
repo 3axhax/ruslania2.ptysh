@@ -98,7 +98,7 @@ $key = isset($uiKey) ? $uiKey : 'MSG_USER_LOGIN';
 	$(document).ready(function() {
 		
 		//yaCounter53579293.reachGoal('cart_step2');
-		//ym(53579293, 'reachGoal', 'cart_step2');
+		ym(53579293, 'reachGoal', 'cart_step2');
 	})
 </script>
 

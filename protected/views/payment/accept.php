@@ -4,7 +4,7 @@
 	
 	$(document).ready(function() {
 		
-		//ym(53579293, 'reachGoal', 'oplata_true');
+		ym(53579293, 'reachGoal', 'oplata_true');
 	})
 	
 	</script>
