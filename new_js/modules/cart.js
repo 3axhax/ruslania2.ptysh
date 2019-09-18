@@ -974,7 +974,8 @@ $(document).ready(function() {
                         $.ajax({
                             url: '/ru/buy/log/',
                             data: dataToLog,
-                            type: 'post'
+                            type: 'post',
+                            async: false
                         });
                         if ('errors' in r) {
                             var errors = [];
@@ -998,18 +999,22 @@ $(document).ready(function() {
                                 return;
                             }
                         }
-                        dataToLog['afterSearchTargets'] = 0;
+                        var data1ToLog = {};
+                        data1ToLog[self.csrf[0]] = self.csrf[1];
+                        data1ToLog['afterSearchTargets'] = 0;
                         $.ajax({
                             url: '/ru/buy/log/',
-                            data: dataToLog,
-                            type: 'post'
+                            data: data1ToLog,
+                            type: 'post',
+                            async: false
                         });
                         searchTargets('start_order');
-                        dataToLog['afterSearchTargets'] = 1;
+                        data1ToLog['afterSearchTargets'] = 1;
                         $.ajax({
                             url: '/ru/buy/log/',
-                            data: dataToLog,
-                            type: 'post'
+                            data: data1ToLog,
+                            type: 'post',
+                            async: false
                         });
                         switch (parseInt(fd['ptype'])) {
                             case 8: self.paypal(r.form); break;
