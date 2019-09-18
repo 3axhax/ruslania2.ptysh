@@ -976,8 +976,8 @@ $(document).ready(function() {
                             data: dataToLog,
                             type: 'post'
                         });
-                        var errors = [];
                         if ('errors' in r) {
+                            var errors = [];
                             for (field in r.errors) {
                                 var t = document.getElementById(field);
                                 if (t) {
@@ -992,36 +992,30 @@ $(document).ready(function() {
                                     errors.push(t);
                                 }
                             }
+                            if (errors.length) {
+                                self.viewErrors(errors);
+                                $pleasewait.hide();
+                                return;
+                            }
                         }
-                        dataToLog['afterSearchTargets'] = errors;
+                        dataToLog['afterSearchTargets'] = 0;
                         $.ajax({
                             url: '/ru/buy/log/',
                             data: dataToLog,
                             type: 'post'
                         });
-                        if (errors.length) {
-                            self.viewErrors(errors);
-                        }
-                        else {
-                            dataToLog['afterSearchTargets'] = 0;
-                            $.ajax({
-                                url: '/ru/buy/log/',
-                                data: dataToLog,
-                                type: 'post'
-                            });
-                            searchTargets('start_order');
-                            dataToLog['afterSearchTargets'] = 1;
-                            $.ajax({
-                                url: '/ru/buy/log/',
-                                data: dataToLog,
-                                type: 'post'
-                            });
-                            switch (parseInt(fd['ptype'])) {
-                                case 8: self.paypal(r.form); break;
-                                //case 25: self.paytrail(r.form); break;
-                                case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
-                                default: document.location.href = r.url; break;
-                            }
+                        searchTargets('start_order');
+                        dataToLog['afterSearchTargets'] = 1;
+                        $.ajax({
+                            url: '/ru/buy/log/',
+                            data: dataToLog,
+                            type: 'post'
+                        });
+                        switch (parseInt(fd['ptype'])) {
+                            case 8: self.paypal(r.form); break;
+                            //case 25: self.paytrail(r.form); break;
+                            case 27: self.applepay(r.idOrder, r.urls, r.paymentRequest); break;
+                            default: document.location.href = r.url; break;
                         }
                     }
                 });
