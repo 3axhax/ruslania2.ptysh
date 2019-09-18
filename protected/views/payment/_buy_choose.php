@@ -40,7 +40,7 @@
 	<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	<script>
 		$(function(){
-			scriptLoader('/new_js/modules/cart.js?v=1709').callFunction(function() {
+			scriptLoader('/new_js/modules/cart.js?v=1809').callFunction(function() {
 				repay().init({
 					orderId: <?= $order['id'] ?>,
 					dtype: <?= $dtype ?>,

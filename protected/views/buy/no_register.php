@@ -59,7 +59,7 @@ $addrModel = new Address();
 	$(function(){
 		
 		ym(53579293, 'reachGoal', 'cart_step3');
-		scriptLoader('/new_js/modules/cart.js?v=1709').callFunction(function() {
+		scriptLoader('/new_js/modules/cart.js?v=1809').callFunction(function() {
 			cart().init({
 				userData: <?= json_encode($userInfo) ?>,
 				onlyPereodic: <?= (int) $onlyPereodic ?>,
