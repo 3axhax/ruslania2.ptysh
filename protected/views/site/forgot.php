@@ -19,7 +19,7 @@
 
     <?php if(empty($user)) : ?>
 
-        <div class="info-box information">
+        <div class="info-box information" style="margin-bottom: 0;">
             <?php if (!empty($isWordpanel)): ?><div style="padding-left: 10px" class="text" id="js_wordpanel"><?php endif; ?>
                 <?= $txt; ?>
             <?php if (!empty($isWordpanel)): ?></div><?php endif; ?>
@@ -28,7 +28,7 @@
 
     <?php else : ?>
 
-        <div class="info-box information">
+        <div class="info-box information" style="margin-bottom: 0;">
             <?=$ui->item('MSG_PERSONAL_REMIND_PASS_SEND'); ?>
         </div>
 

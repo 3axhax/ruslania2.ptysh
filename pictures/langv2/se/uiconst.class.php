@@ -566,7 +566,7 @@ försändelsen eller skickas till faktureringadres. Obs! Endast <br>för kunder 
   'regform_firstname' => 'Förnamn',
   'regform_lastname' => 'Efternamn',
   'regform_middlename' => 'Andranamn ',
-  'regform_password' => 'Lösenord',
+  'regform_password' => 'Lösenordet',
   'regform_repeat_password' => 'Upprepa lösenordet',
   'regform_titlename' => 'Titel',
   'REGISTER_ERROR_LOGIN_IS_EXISTS' => 'Användare med denna e-postadress finns redan.',
@@ -1439,6 +1439,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Var god ange beställningsnumer
     'FILTER_IN_DISCOUNT_H' => 'Pris',
     'IN_DISCOUNT' => 'Reapris',
     'CANNOT_BE_BLANK' => 'får inte vara blankt.',
-    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
+    'NEW_PASSWORD_MESSAGE' => 'Skriv här ett nytt lösenord, eller ge det du trodde skulle vara lösenordet till Ruslania och klicka på Växla',
+    'MUST_BE_REPEATED_EXACTLY' => 'måste upprepas exakt',
 
 );

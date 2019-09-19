@@ -557,7 +557,7 @@ return array (
   'regform_firstname' => 'Prénom',
   'regform_lastname' => 'Nom de famille',
   'regform_middlename' => 'Second prénom',
-  'regform_password' => 'Mot de passe',
+  'regform_password' => 'Le mot de passe',
   'regform_repeat_password' => 'Répéter le mot de passe',
   'regform_titlename' => 'Titre',
   'REGISTER_ERROR_LOGIN_IS_EXISTS' => 'cette adresse électronique figure déjà dans notre registre',
@@ -1428,6 +1428,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH <br> Veuillez mentionner le numéro
     'FILTER_IN_DISCOUNT_H' => 'Prix',
     'IN_DISCOUNT' => 'Soldes',
     'CANNOT_BE_BLANK' => 'ne peut être vide.',
-    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
+    'NEW_PASSWORD_MESSAGE' => 'Veuillez taper ici un nouveau mot de passe ou donnez celui que vous pensiez être le mot de passe pour Ruslania et cliquez sur Changer',
+    'MUST_BE_REPEATED_EXACTLY' => 'doit être répété à l\'identique',
 
 );

@@ -2,7 +2,7 @@
 <? if (Yii::app()->language == 'ru') :  ?>
 Уважаемый пользователь!
 <br>На сайт <a href="https://www.ruslania.com/ru/">ruslania.com</a>поступил запрос о обнулении пароля.
-<br>Нажмите на ссылку <a href="https://www.ruslania.com<?= $urlRestore ?>">Сбросить пароль</a>
+<br>Нажмите на ссылку <a href="https://www.ruslania.com<?= $urlRestore ?>">Восстановить пароль</a>
 <br>По этой ссылке вы перейдете на сайт Ruslania.com, где вы сможете обнулить пароль.
 <br>С уважением, Руслания
 
@@ -10,7 +10,7 @@
 <? elseif (Yii::app()->language == 'rut') : ?>
 Uvazhayemyy pol'zovatel'!
 <br>Na sayt <a href="https://www.ruslania.com/ru/">ruslania.com</a>postupil zapros o obnulenii parolya.
-<br>Nazhmite na ssylku <a href="https://www.ruslania.com<?= $urlRestore ?>">Sbrosit parol</a>
+<br>Nazhmite na ssylku <a href="https://www.ruslania.com<?= $urlRestore ?>">Vosstanovit parol</a>
 <br>Po etoy ssylke vy pereydete na sayt Ruslania.com, gde vy smozhete obnulit parol.
 <br>S uvazheniyem, Ruslaniya
 
@@ -34,7 +34,7 @@ Arvoisa asiakas!
 <? else/*if (Yii::app()->language == 'en')*/ : ?>
 Dear customer!
 <br>We have received to <a href="https://www.ruslania.com/ru/">ruslania.com</a> a request to reset your password.
-<br>Click the link <a href="https://www.ruslania.com<?= $urlRestore ?>">new password</a>
+<br>Click the link <a href="https://www.ruslania.com<?= $urlRestore ?>">Reset password</a>
 <br>The link will take you to the page at Ruslania.com where you can reset your password.
 <br>Best Regards, Ruslania
 <?php /*

@@ -26,8 +26,8 @@ class User extends CActiveRecord
             array('pwd2', 'required', 'on' => 'newpwd', 'message'=>Yii::app()->ui->item("regform_repeat_password") .  ' - ' . Yii::app()->ui->item('CANNOT_BE_BLANK')),
             array('login', 'email', 'on' => 'register'),
             array('login', 'uniqueLogin', 'on' => 'register'),
-            array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'register'),
-            array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'newpwd'),
+            array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'register', 'message'=>Yii::app()->ui->item("regform_password") .  ' ' . Yii::app()->ui->item('MUST_BE_REPEATED_EXACTLY') . '.'),
+            array('pwd', 'compare', 'compareAttribute' => 'pwd2', 'on' => 'newpwd', 'message'=>Yii::app()->ui->item("regform_password") .  ' ' . Yii::app()->ui->item('MUST_BE_REPEATED_EXACTLY') . '.'),
 
             array('pwd, pwd2, title_name, nothing, '
                  .'mail_books_news, mail_musicsheets_news, mail_music_news, '

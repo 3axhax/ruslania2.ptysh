@@ -1823,7 +1823,7 @@ form.registr input[type=submit] {
 form#remind-form {
 	width: 248px;
 	margin: 0 auto;
-	padding: 30px 32px;
+	padding: 10px 32px 20px 32px;
 	background-color: #f8f8f8;
 }
 

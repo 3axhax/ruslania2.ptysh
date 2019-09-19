@@ -36,7 +36,7 @@
         <?=$form->error($model, 'pwd2'); ?>
         <div><?= $form->passwordField($model, 'pwd', array('placeholder'=>$ui->item("regform_password"), 'autocomplete'=>'off')); ?></div>
         <div><?= $form->passwordField($model, 'pwd2', array('placeholder'=>$ui->item("regform_repeat_password"), 'autocomplete'=>'off')); ?></div>
-        <div><input type="submit" class="sort order_start" value="<?=$ui->item('CHANGE'); ?>" style="background-color: #5bb75b;"/></div>
+        <div><input type="submit" class="sort order_start" value="<?= mb_strtoupper(mb_substr($ui->item('CHANGE'), 0, 1, 'utf-8'), 'utf-8') . mb_substr($ui->item('CHANGE'), 1, null, 'utf-8') ?>" style="background-color: #5bb75b;"/></div>
 
         <?php $this->endWidget(); ?>
     <?php endif; ?>

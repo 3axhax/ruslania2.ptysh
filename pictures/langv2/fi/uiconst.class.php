@@ -1449,5 +1449,6 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH. Pyydämme mainitsemaan tilausnumer
     'IN_DISCOUNT' => 'Alennushintaiset',
     'CANNOT_BE_BLANK' => 'kenttä ei voi jäädä tyhjäksi.',
     'NEW_PASSWORD_MESSAGE' => 'Kirjoita tähän uusi salasana, tai anna sama kuin ennen, ja klikkaa Muuta',
+    'MUST_BE_REPEATED_EXACTLY' => 'on toistettava täsmällisesti',
 
 );

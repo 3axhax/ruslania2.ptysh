@@ -1445,6 +1445,7 @@ IBAN DE79514303006474790001 <br>
     'FILTER_IN_DISCOUNT_H' => 'Цены',
     'IN_DISCOUNT' => 'В распродаже',
     'CANNOT_BE_BLANK' => 'поле не может быть пустым.',
-    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
+    'NEW_PASSWORD_MESSAGE' => 'Пожалуйста, введите здесь новый пароль или дайте тот, который вы думали, был паролем Руслании, и нажмите «Изменить»',
+    'MUST_BE_REPEATED_EXACTLY' => 'должен быть повторен в точности',
 
 );

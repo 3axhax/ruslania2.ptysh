@@ -1441,5 +1441,6 @@ Nazhav na interesujushchuju vas kategoriju, vy smozhete uvidet vse tovary so ski
     'IN_DISCOUNT' => 'V rasprodazhe',
     'CANNOT_BE_BLANK' => 'pole ne mozhet byt\' pustym.',
     'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
+    'MUST_BE_REPEATED_EXACTLY' => 'dolzhen byt povtoren v tochnosti',
 
 );

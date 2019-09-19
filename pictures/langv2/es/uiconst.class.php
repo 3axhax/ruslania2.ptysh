@@ -1439,6 +1439,7 @@ IBAN FI5512393000604210, BIC/SWIFT: NDEAFIHH<br> Por favor infórmenos del núme
     'FILTER_IN_DISCOUNT_H' => 'Precios',
     'IN_DISCOUNT' => 'Precios reducidos',
     'CANNOT_BE_BLANK' => 'no puede ser nulo.',
-    'NEW_PASSWORD_MESSAGE' => 'Please type here a new password, or give the one you thought would be the password to Ruslania and click on Change',
+    'NEW_PASSWORD_MESSAGE' => 'Escriba aquí una nueva contraseña o dar la que pensó que sería la contraseña de Ruslania y haga clic en Cambiar',
+    'MUST_BE_REPEATED_EXACTLY' => 'must be repeated exactly',
 
 );
