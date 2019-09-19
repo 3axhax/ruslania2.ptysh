@@ -116,7 +116,7 @@ return array(
 	'sitemap'=>'sitemap',
 	'me'=>'konto',
 	'advsearch'=>'suche',
-	'forgot'=>'passwort-wiederherstellung',
+	'forgot'=>'passwort-zurucksetzen',
 	'delivery'=>'versand',
 	'news'=>'nachrichten',
 	'certificate'=>'geschenkgutschein',

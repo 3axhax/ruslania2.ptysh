@@ -30,24 +30,36 @@ Arvoisa asiakas!
 <br>Linkistä pääset Ruslania.com-verkkokaupan sivulle, jolla voit keksiä itsellesi uuden salasanan.
 <br>Terveisin, Ruslania
 
-<!-- English -->
+<!-- France -->
+<? elseif (Yii::app()->language == 'fr') : ?>
+Cher client!
+<br>Nous avons reçu sur <a href="https://www.ruslania.com/ru/">ruslania.com</a> une demande de réinitialisation de votre mot de passe.
+<br>Cliquez sur le lien <a href="https://www.ruslania.com<?= $urlRestore ?>">Réinitialiser le mot de passe</a>
+<br>Le lien vous mènera à la page du site Ruslania.com où vous pourrez réinitialiser votre mot de passe.
+<br>Cordialement, Ruslania
+
+    <!-- Espanol -->
+<? elseif (Yii::app()->language == 'es') : ?>
+¡Estimado cliente!
+<br>Hemos recibido en <a href="https://www.ruslania.com/ru/">ruslania.com</a> una solicitud para recuperar la contraseña
+<br>Haga clic en el enlace <a href="https://www.ruslania.com<?= $urlRestore ?>">Recuperar la contraseña</a>
+<br>El enlace lo llevará a la página en Ruslania.com donde puede recuperar la contraseña
+<br>Saludos cordiales, Ruslania
+
+<!-- SWE -->
+<? elseif (Yii::app()->language == 'se') : ?>
+Kära kund!
+<br>Vi har fått en begäran om att återställa ditt lösenord till <a href="https://www.ruslania.com/ru/">ruslania.com</a>.
+<br>Klicka på länken <a href="https://www.ruslania.com<?= $urlRestore ?>">Återställ lösenordet</a>
+<br>Länken tar dig till sidan på Ruslania.com där du kan återställa ditt lösenord.
+<br>Vänliga hälsningar, Ruslania
+
 <? else/*if (Yii::app()->language == 'en')*/ : ?>
 Dear customer!
 <br>We have received to <a href="https://www.ruslania.com/ru/">ruslania.com</a> a request to reset your password.
 <br>Click the link <a href="https://www.ruslania.com<?= $urlRestore ?>">Reset password</a>
 <br>The link will take you to the page at Ruslania.com where you can reset your password.
 <br>Best Regards, Ruslania
-<?php /*
-<!-- France -->
-<? elseif (Yii::app()->language == 'fr') : ?>
-Dear customer!<br>We have received to https://www.ruslania.com a request to deliver your password. The password has been sent to the e-mail address that you used upon registration.<br><br>Login: <?=$login; ?><br>Password: <?=$pwd; ?>
-
-<!-- Espanol -->
-<? elseif (Yii::app()->language == 'es') : ?>
-Dear customer!<br>We have received to https://www.ruslania.com a request to deliver your password. The password has been sent to the e-mail address that you used upon registration.<br><br>Login: <?=$login; ?><br>Password: <?=$pwd; ?>
-<? else : ?>
-Dear customer!<br>We have received to https://www.ruslania.com a request to deliver your password. The password has been sent to the e-mail address that you used upon registration.<br><br>Login: <?=$login; ?><br>Password: <?=$pwd; ?>
-*/ ?>
 <? endif; ?>
 
 <br><br>
