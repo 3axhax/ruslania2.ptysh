@@ -1,5 +1,5 @@
 <?php /*Created by Кирилл (18.03.2019 22:32)*/ ?>
-<span class="telephone-circle js-slide-toggle call-request" data-slidetoggle=".send_call_form" data-slideeffect="fade"><a class="icons"><span class="fa phone"></span></a></span>
+<span class="telephone-circle js-slide-toggle call-request" data-slidetoggle=".send_call_form" data-slideeffect="fade" title="<?=Yii::app()->ui->item('BUTTON_CALL')?>"><a class="icons"><span class="fa phone"></span></a></span>
 <div class="send_call_form"></div>
 <script>
 	$(function(){
