@@ -396,8 +396,8 @@ class BuyController extends MyController {
 		else {
 			$this->render('order_ok', array('order' => $order));
 		}
-		
-		
+
+
 	}
 
 	function actionGetCountry() {
