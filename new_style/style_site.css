@@ -4128,3 +4128,10 @@ td.search_text input.enable_virtual_keyboard {border: none; border-radius: 0; ma
 }
 .tab-container div.act {background-color: #fff;}
 .tab-container div a {color: #333333;}
+
+a:hover .fa.vk { color: #4a76a8; }
+a:hover .fa.facebook { color: #1877f2; }
+a:hover .fa.instagram { color: #ed4c62; }
+a:hover .fa.tripadvisor { color: #5a8e47; }
+a:hover .fa.twitter { color: #4a76a8; }
+
